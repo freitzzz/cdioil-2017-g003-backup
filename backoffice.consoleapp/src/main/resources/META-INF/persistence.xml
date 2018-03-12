@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence">
+  <persistence-unit name="eapli.demo-application-PU">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>eapli.demoapplication.domain.meals.DishType</class>
+    <class>eapli.demoapplication.domain.cafeteria.OrganicUnit</class>
+    <class>eapli.demoapplication.domain.cafeteria.CafeteriaUser</class>
+    <class>eapli.demoapplication.domain.authz.SystemUser</class>
+    <class>eapli.demoapplication.domain.cafeteria.SignupRequest</class>
+    <class>eapli.demoapplication.domain.authz.Role</class>
+    <class>eapli.demoapplication.domain.authz.RoleSet</class>
+    <class>eapli.demoapplication.domain.cafeteria.Cafeteria</class>
+    <class>eapli.demoapplication.domain.cafeteria.CafeteriaUser</class>
+    <class>eapli.demoapplication.domain.cafeteria.SignupRequest</class>
+    <properties>
+      <!--            <property name="javax.persistence.jdbc.url" value="jdbc:h2:../db/demoapplication;MV_STORE=FALSE"/>-->
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:..\db\demo-application;MV_STORE=FALSE"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <property name="javax.persistence.jdbc.user" value=""/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <!--<property name="eclipselink.logging.level" value="FINE"/>-->
+    </properties>
+  </persistence-unit>
+</persistence>
