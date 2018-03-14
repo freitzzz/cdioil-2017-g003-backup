@@ -1,7 +1,7 @@
 package eapli.demoapplication.domain.meals;
 
 import eapli.framework.domain.AggregateRoot;
-import eapli.util.Strings;
+import cdioil.util.Strings;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
