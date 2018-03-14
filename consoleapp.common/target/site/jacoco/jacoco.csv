@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+consoleapp.common,eapli.demoapplication.consoleapp.presentation,MyUserMenu,48,0,0,0,8,0,2,0,2,0
+consoleapp.common,eapli.demoapplication.consoleapp.presentation,ExitWithMessageAction,8,0,0,0,3,0,2,0,2,0
+consoleapp.common,eapli.demoapplication.consoleapp.presentation.authz,ValidateLoginAction,29,0,4,0,9,0,4,0,2,0
+consoleapp.common,eapli.demoapplication.consoleapp.presentation.authz,LoginAction,8,0,0,0,2,0,2,0,2,0
+consoleapp.common,eapli.demoapplication.consoleapp.presentation.authz,LoginUI,35,0,0,0,12,0,4,0,4,0
+consoleapp.common,eapli.demoapplication.consoleapp.presentation.authz,LogoutAction,8,0,0,0,2,0,2,0,2,0
