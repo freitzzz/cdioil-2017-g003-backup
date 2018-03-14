@@ -5,7 +5,7 @@
  */
 package eapli.demoapplication.consoleapp.presentation;
 
-import eapli.framework.actions.Action;
+import cdioil.actions.Action;
 
 /**
  *

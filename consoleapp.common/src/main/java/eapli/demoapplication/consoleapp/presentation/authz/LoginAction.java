@@ -1,6 +1,6 @@
 package eapli.demoapplication.consoleapp.presentation.authz;
 
-import eapli.framework.actions.Action;
+import cdioil.actions.Action;
 
 /**
  * Menu action for user login.

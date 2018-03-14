@@ -2,8 +2,8 @@ package eapli.demoapplication.consoleapp.presentation.authz;
 
 import eapli.demoapplication.application.authz.LoginController;
 import eapli.demoapplication.domain.authz.UnableToAuthenticateException;
-import eapli.framework.application.Controller;
-import eapli.framework.presentation.console.AbstractUI;
+import cdioil.application.Controller;
+import cdioil.presentation.console.AbstractUI;
 import eapli.util.Console;
 
 /**

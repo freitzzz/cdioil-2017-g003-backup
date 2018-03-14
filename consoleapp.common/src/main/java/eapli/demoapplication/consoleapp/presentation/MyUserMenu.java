@@ -2,10 +2,10 @@ package eapli.demoapplication.consoleapp.presentation;
 
 import eapli.demoapplication.consoleapp.presentation.authz.LoginAction;
 import eapli.demoapplication.consoleapp.presentation.authz.LogoutAction;
-import eapli.framework.actions.ReturnAction;
-import eapli.framework.actions.ShowMessageAction;
-import eapli.framework.presentation.console.Menu;
-import eapli.framework.presentation.console.MenuItem;
+import cdioil.actions.ReturnAction;
+import cdioil.actions.ShowMessageAction;
+import cdioil.presentation.console.Menu;
+import cdioil.presentation.console.MenuItem;
 
 public class MyUserMenu extends Menu {
 

@@ -7,8 +7,8 @@ package eapli.demoapplication.consoleapp.presentation.authz;
 
 import eapli.demoapplication.Application;
 import eapli.demoapplication.domain.authz.ActionRight;
-import eapli.framework.actions.Action;
-import eapli.framework.actions.CompoundAction;
+import cdioil.actions.Action;
+import cdioil.actions.CompoundAction;
 
 /**
  *
