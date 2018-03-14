@@ -4,7 +4,7 @@
 package eapli.demoapplication.domain.authz;
 
 import eapli.framework.domain.ValueObject;
-import eapli.util.DateTime;
+import cdioil.util.DateTime;
 import java.io.Serializable;
 import java.util.Calendar;
 import javax.persistence.Entity;

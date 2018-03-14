@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>eapli</groupId>
-    <artifactId>frontoffice.consoleapp</artifactId>
+    <artifactId>frontoffice</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>frontoffice.consoleapp</name>
+    <name>frontoffice</name>
     <url>http://maven.apache.org</url>
 
     <properties>

@@ -1,7 +1,7 @@
 package eapli.demoapplication.domain.authz;
 
 import eapli.framework.domain.ValueObject;
-import eapli.util.Strings;
+import cdioil.util.Strings;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

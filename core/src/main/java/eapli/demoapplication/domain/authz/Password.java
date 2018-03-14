@@ -4,7 +4,7 @@
 package eapli.demoapplication.domain.authz;
 
 import eapli.framework.domain.ValueObject;
-import eapli.util.Strings;
+import cdioil.util.Strings;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;

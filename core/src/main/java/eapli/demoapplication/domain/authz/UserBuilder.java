@@ -1,7 +1,7 @@
 package eapli.demoapplication.domain.authz;
 
 import eapli.framework.domain.Factory;
-import eapli.util.Strings;
+import cdioil.util.Strings;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
