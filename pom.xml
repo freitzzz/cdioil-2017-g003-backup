@@ -24,10 +24,8 @@
         <module>util</module>
         <module>framework</module>
         <module>bootstrap</module>
-        <module>frontoffice.consoleapp</module>
-        <module>backoffice</module>
-        <module>backoffice.consoleapp</module>
         <module>frontoffice</module>
+        <module>backoffice</module>
         <module>app.common</module>
     </modules>
 
