@@ -1,5 +1,6 @@
-package cdioil.application.domain;
+package cdioil.domain.authz;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,17 +8,23 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.persistence.Embeddable;
 
 /**
  * Classe que representa o conceito de password
  *
  * @author Joana Pinheiro
  */
-public class Password {
-
+@Embeddable
+public class Password implements Serializable {
+    private static final long serialVersionUID=10l;
     private static final String WEAK_PASSWORD = "Fraca!!!";
     private static final String AVERAGE_PASSWORD = "Média";
     private static final String STRONG_PASSWORD = "Forte";
+    /**
+     * Password default atribuida aos utilizadores importados pelo administrador
+     */
+    public static final String DEFAULT_PASSWORD="Password123";
 
     /**
      * Constante que representa un conjunto aleatório de bytes com o objetivo de defender contra ataques à password
@@ -28,20 +35,24 @@ public class Password {
      * Constante que representa uma password encriptada
      */
     private String password;
-
-
+    
     /**
      * Construtor de password
      *
      * @param password
-     * @throws NoSuchAlgorithmException
      */
-    public Password(String password) throws NoSuchAlgorithmException {
+    public Password(String password) {
         if (strength(password).equalsIgnoreCase(WEAK_PASSWORD)) {
             throw new IllegalArgumentException(WEAK_PASSWORD);
         }
-        salt = generateSalt();
-        this.password = generateHash(password + salt);
+
+        try {
+            salt = generateSalt();
+            this.password = generateHash(password + salt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -88,10 +99,10 @@ public class Password {
      * @return força da password
      */
     private static String strength(String password) {
-        Pattern patternAverage = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{9,}$|^(?=.*[a-z])(?=.*\\d)[a-z\\d]{9,}$");
+        Pattern patternAverage = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])[a-zA-Z\\d]{9,}$");
         Matcher matcherAverage = patternAverage.matcher(password);
 
-        Pattern patternStrong = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])[a-zA-Z\\d]{9,}$");
+        Pattern patternStrong = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])([a-zA-Z\\d]|[^a-zA-Z\\d]){9,}$");
         Matcher matcherStrong = patternStrong.matcher(password);
 
         if (matcherAverage.matches()) {
@@ -103,5 +114,21 @@ public class Password {
         return WEAK_PASSWORD;
     }
 
+    /**
+     * Verifica de a password inserida é a correcta
+     * @param password password do utilizador
+     * @return retorna true se a password está correcta e false se está incorreta
+     */
+    public boolean verifyPassword(String password) {
+        String hash = " ";
+        try {
+            hash = generateHash(password + salt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return hash.equals(this.password);
+    }
+    protected Password(){}
 }
 
