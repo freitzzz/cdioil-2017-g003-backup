@@ -5,9 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
@@ -30,6 +32,8 @@ public class Password implements Serializable {
      * Constante que representa un conjunto aleatório de bytes com o objetivo de defender contra ataques à password
      */
     private static byte[] salt;
+    @Column(name="Gominhos")
+    private String saltInString;
 
     /**
      * Constante que representa uma password encriptada
@@ -48,7 +52,8 @@ public class Password implements Serializable {
 
         try {
             salt = generateSalt();
-            this.password = generateHash(password + salt);
+            this.saltInString=unirBytes(salt);
+            this.password = generateHash(password + this.saltInString);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -113,7 +118,11 @@ public class Password implements Serializable {
 
         return WEAK_PASSWORD;
     }
-
+    private String unirBytes(byte[] bytes){
+        String bytesUnidos="";
+        for(int i=0;i<bytes.length;i++)bytesUnidos+=bytes[i];
+        return bytesUnidos;
+    }
     /**
      * Verifica de a password inserida é a correcta
      * @param password password do utilizador
@@ -122,11 +131,10 @@ public class Password implements Serializable {
     public boolean verifyPassword(String password) {
         String hash = " ";
         try {
-            hash = generateHash(password + salt);
+            hash = generateHash(password + this.saltInString);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
         return hash.equals(this.password);
     }
     protected Password(){}
