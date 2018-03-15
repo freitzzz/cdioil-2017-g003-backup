@@ -6,17 +6,13 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.console.utils.Console;
-import cdioil.domain.authz.SystemUser;
-
 /**
  *
  * @author Ana Guerra (1161191)
  */
 public class MainMenu {
-
     public static void mainLoop() {
         int opcao = 0;
-        new BackOfficeLogin();
         do {
             opcao = menu();
 
