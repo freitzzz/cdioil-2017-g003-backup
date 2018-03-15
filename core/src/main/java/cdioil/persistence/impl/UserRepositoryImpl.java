@@ -1,9 +1,13 @@
 package cdioil.persistence.impl;
 
+import cdioil.domain.authz.Email;
 import cdioil.persistence.RepositorioBaseJPA;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserRepository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -11,7 +15,8 @@ import java.util.List;
  * na base de dados
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Long> implements UserRepository{
+public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Email> implements UserRepository{
+
     /**
      * Método que devolve o nome da unidade de persistência usada no modulo em 
      * que está a ser feita a implementação
@@ -21,6 +26,7 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Long> impl
     protected String nomeUnidadePersistencia() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
+
     /**
      * Método que diante uma determinada lista de utilizadores, persiste-os na 
      * base de dados
@@ -34,5 +40,22 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Long> impl
             if(add(users.get(i))==null)return false;
         }
         return true;
+    }
+
+    /**
+     * Procura um SystemUser através de um dado email
+     * @param email email dado
+     * @return system user encontrado. No caso de não encontrar nenhum system user,
+     * retorna null
+     */
+    @Override
+    public SystemUser findByEmail(Email email) {
+        EntityManager em = entityManager();
+
+        Query q =
+                em.createQuery("SELECT u from SystemUser u where u.email = :email");
+        q.setParameter("email", email);
+
+        return (SystemUser) q.getSingleResult();
     }
 }

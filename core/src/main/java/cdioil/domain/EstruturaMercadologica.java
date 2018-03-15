@@ -2,10 +2,10 @@ package cdioil.domain;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Classe que representa a Estrutura Mercadologica que agrega as categorias de
- * produtos.
+ * Classe que representa a Estrutura Mercadologica que agrega as categorias de produtos.
  *
  * @author António Sousa [1161371]
  */
@@ -62,12 +62,48 @@ public class EstruturaMercadologica {
          * Adiciona um node ao conjunto de filhos deste node.
          *
          * @param filho node que se pretende adicionar aos filhos
-         * @return true - caso tenha sido possível adicionar ao conjunto de
-         * filhos<p>
+         * @return true - caso tenha sido possível adicionar ao conjunto de filhos<p>
          * false - caso contrario
          */
         public boolean addFilho(Node filho) {
+            if (getFilhos().contains(filho)) {
+                return false;
+            }
             return filhos.add(filho);
+        }
+
+        /**
+         * Gera um índice a partir da Categoria do Node.
+         *
+         * @return o valor de hash gerado
+         */
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 79 * hash + Objects.hashCode(this.elemento);
+            return hash;
+        }
+
+        /**
+         * Compara o Node com outro objeto.
+         *
+         * @param obj Objeto a comparar
+         * @return true, se os dois objetos tiverem a mesma Categoria. Caso contrário, retorna false
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+
+            Node other = (Node) obj;
+            if (!Objects.equals(this.elemento, other.elemento)) {
+                return false;
+            }
+            return true;
         }
 
     }
@@ -88,7 +124,7 @@ public class EstruturaMercadologica {
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Categoria("Todos os Produtos", -1));
+        raiz = new Node(null, new Categoria("Todos os Produtos", "-1"));
         tamanho = 1;
     }
 
@@ -106,7 +142,7 @@ public class EstruturaMercadologica {
     public boolean adicionarCategoriaRaiz(Categoria c) {
 
         if (c == null) {
-            throw new IllegalArgumentException("O argumento nao pode ser null");
+            throw new IllegalArgumentException("O argumento não pode ser null");
         }
 
         return adicionarCategoria(raiz.getElemento(), c);
@@ -121,15 +157,14 @@ public class EstruturaMercadologica {
      * false - caso contrário
      */
     public boolean adicionarCategoria(Categoria pai, Categoria c) {
-
         if (pai == null || c == null) {
-            throw new IllegalArgumentException("O argumentos nao podem ser null");
+            throw new IllegalArgumentException("O argumentos não podem ser null");
         }
 
         Node nodePai = procuraNode(raiz, pai);
+        Node nodeFilho = procuraNode(raiz, c);
 
-        if (nodePai != null) {
-
+        if (nodePai != null && nodeFilho == null) {
             tamanho++;
             return nodePai.addFilho(new Node(nodePai, c));
         }
@@ -143,21 +178,17 @@ public class EstruturaMercadologica {
      * @param c categoria a remover
      */
     public void removerCategoria(Categoria c) {
-
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Método recursivo usado para para procurar uma dada Categoria na Estrutura
-     * Mercadologica.
+     * Método recursivo usado para para procurar uma dada Categoria na Estrutura Mercadologica.
      *
      * @param node node a partir do qual se pretende iniciar a procura
      * @param c Categoria a procurar
-     * @return o node em que a categoria se encontra, null caso não seja
-     * encontrada
+     * @return o node em que a categoria se encontra, null caso não seja encontrada
      */
     private Node procuraNode(Node node, Categoria c) {
-
         if (node == null) {
             return null;
         }
@@ -176,10 +207,8 @@ public class EstruturaMercadologica {
     }
 
     /**
-     * Método para verificar se um Node é uma folha da Estrutura
-     * Mercadologica.<p>
-     * Uma Categoria folha é uma categoria que não alberga sub-categorias,
-     * podendo conter produtos.
+     * Método para verificar se um Node é uma folha da Estrutura Mercadologica.<p>
+     * Uma Categoria folha é uma categoria que não alberga sub-categorias, podendo conter produtos.
      *
      * @param node node a verificar se é folha
      * @return true se o node não tiver nodes filhos, false caso tenha
@@ -189,8 +218,7 @@ public class EstruturaMercadologica {
     }
 
     /**
-     * Devolve uma coleção de todos os nodes da Estrutura Mercadologica que
-     * sejam folhas.
+     * Devolve uma coleção de todos os nodes da Estrutura Mercadologica que sejam folhas.
      *
      * @return
      */
@@ -204,8 +232,7 @@ public class EstruturaMercadologica {
     }
 
     /**
-     * Pesquisa recursivamente por todos os nodes que nao tenham filhos e
-     * adiciona-os a lista.
+     * Pesquisa recursivamente por todos os nodes que nao tenham filhos e adiciona-os a lista.
      *
      * @param folhas lista de nodes que não tenham nodes filhos
      * @param node node atual
@@ -227,8 +254,7 @@ public class EstruturaMercadologica {
     }
 
     /**
-     * Adiciona um Produto a Categoria pretendida, podendo apenas adicionar-se a
-     * categorias que sejam folhas.
+     * Adiciona um Produto a Categoria pretendida, podendo apenas adicionar-se a categorias que sejam folhas.
      *
      * @param p produto que se pretende adicionar
      * @param c categoria a qual se pretende adicionar o produto
@@ -237,7 +263,7 @@ public class EstruturaMercadologica {
     public boolean adicionarProduto(Produto p, Categoria c) {
 
         if (p == null || c == null) {
-            throw new IllegalArgumentException("Os argumentos nao podem ser null");
+            throw new IllegalArgumentException("Os argumentos não podem ser null");
         }
 
         Node node = procuraNode(raiz, c);
@@ -259,13 +285,12 @@ public class EstruturaMercadologica {
      * @param pai categoria pai
      * @param filho categoria filho
      * @return true - se o pai estiver ligado e o filho ligado ao pai<p>
-     * false - caso uma das ligacoes nao se verifique ou se uma das categorias
-     * nao se encontrar na estrutura mercadologica
+     * false - caso uma das ligacoes nao se verifique ou se uma das categorias nao se encontrar na estrutura mercadologica
      */
     public boolean verificaLigados(Categoria pai, Categoria filho) {
 
         if (pai == null || filho == null) {
-            throw new IllegalArgumentException("Os argumentos nao podem ser null");
+            throw new IllegalArgumentException("Os argumentos não podem ser null");
         }
 
         Node nodePai = procuraNode(raiz, pai);

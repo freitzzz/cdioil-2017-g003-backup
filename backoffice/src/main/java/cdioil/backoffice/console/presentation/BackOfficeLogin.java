@@ -8,8 +8,9 @@ import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 
 /**
- *
- * @author ricar
+ * Classe responsável pelo login no BackOffice da aplicação.
+ * 
+ * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class BackOfficeLogin {
     

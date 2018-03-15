@@ -1,5 +1,6 @@
 package cdioil.persistence;
 
+import cdioil.domain.authz.Email;
 import cdioil.domain.authz.SystemUser;
 import java.util.List;
 
@@ -15,4 +16,12 @@ public interface UserRepository {
      * @return boolean true se operação ocorreu com successo, false caso contrário
      */
     public abstract boolean saveAll(List<SystemUser> users);
+
+    /**
+     * Procura um SystemUser através de um dado email
+     * @param email email dado
+     * @return system user encontrado. No caso de não encontrar nenhum system user,
+     * retorna null
+     */
+    SystemUser findByEmail(Email email);
 }

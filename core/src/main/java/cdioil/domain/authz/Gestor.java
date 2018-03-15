@@ -1,16 +1,30 @@
 package cdioil.domain.authz;
 
+import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Version;
+
 /**
  * Gestor de Inquéritos
  *
  * Responsável pela criação e configuração de inquéritos
  * de uma dada estrutura mercadológica
  */
-public class Gestor {
-
+@Entity
+public class Gestor implements Serializable {
+    @Id
+    @GeneratedValue
+    private long id;
+    @Version
+    private Long version;
     /**
      * Conta de SystemUser associada a esta instância de Gestor
      */
+    @OneToOne(cascade = CascadeType.PERSIST)
     private SystemUser su;
 
     /**
@@ -37,7 +51,7 @@ public class Gestor {
 
         Gestor gestor = (Gestor) o;
 
-        return su.equals(gestor.su);
+        return su.equals(gestor.su) || su.equals(o);
     }
 
     /**
@@ -48,4 +62,5 @@ public class Gestor {
     public int hashCode() {
         return su.hashCode();
     }
+    protected Gestor(){}
 }

@@ -23,7 +23,7 @@ public class Nome implements Serializable {
     @Version
     private Long version;
 
-    public static final Pattern NOME_VALIDO_REGEX = Pattern.compile("^[A-Z]+[a-zA-Z ]+$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern NOME_VALIDO_REGEX = Pattern.compile("^([A-Z]+[a-zA-Z ]+|\\p{L}+)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * Primeiro nome do utilizador

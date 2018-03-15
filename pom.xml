@@ -10,7 +10,7 @@
 
     <packaging>pom</packaging>
 
-    <!--<name>eapli-demo-application</name>-->
+    <name>cdioil-2017-g003</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -192,5 +192,4 @@
             </releases>
         </repository>
     </repositories>
-    <name>cdioil-2017-g003</name>
 </project>

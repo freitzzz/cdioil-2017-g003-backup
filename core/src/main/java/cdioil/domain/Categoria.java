@@ -15,27 +15,25 @@ public class Categoria {
     String nome;
 
     /**
-     * Inteiro que identifica a categoria.
+     * String que identifica a categoria (descritor + DC/UN/CAT/SCAT).
      */
-    int descritor;
+    String descritor;
 
     /**
      * Conjunto de produtos contidos nesta categoria.
      */
     Set<Produto> produtos;
 
-    public Categoria(String nome, int descritor) {
-
+    public Categoria(String nome, String descritor) {
         this.nome = nome;
 
         this.descritor = descritor;
 
         produtos = new HashSet<>();
-
     }
 
     /**
-     * Adiciona um produto ao conjunto de produtos desta categoria
+     * Adiciona um produto ao conjunto de produtos desta Categoria.
      *
      * @param p produto a adicionar
      * @return true - se o produto tiver sido adicionado com sucesso<p>
@@ -45,37 +43,47 @@ public class Categoria {
         return produtos.add(p);
     }
 
+    /**
+     * Descreve a Categoria através do seu nome e descritor.
+     *
+     * @return a descrição textual da Categoria.
+     */
+    @Override
+    public String toString() {
+        return String.format("Nome: %s\nDescritor: %s\n", nome, descritor);
+    }
+
+    /**
+     * Gera um índice a partir do dos atributos da Categoria.
+     *
+     * @return o valor de hash gerado
+     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.nome);
-        hash = 79 * hash + this.descritor;
-        hash = 79 * hash + Objects.hashCode(this.produtos);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.descritor);
         return hash;
     }
 
+    /**
+     * Compara a Categoria com outro objeto.
+     *
+     * @param obj Objeto a comparar
+     * @return true, se os dois objetos tiverem os mesmos atributos. Caso contrário, retorna false
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Categoria other = (Categoria) obj;
-        if (this.descritor != other.descritor) {
-            return false;
-        }
-        if (!Objects.equals(this.nome, other.nome)) {
-            return false;
-        }
-        if (!Objects.equals(this.produtos, other.produtos)) {
+
+        Categoria other = (Categoria) obj;
+        if (!Objects.equals(this.descritor, other.descritor)) {
             return false;
         }
         return true;
     }
-
 }
