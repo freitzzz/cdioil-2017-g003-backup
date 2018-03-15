@@ -1,0 +1,8 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+frontoffice.consoleapp,eapli.demoapplication.frontoffice.consoleapp,FrontOfficeApp,14,0,0,0,5,0,2,0,2,0
+frontoffice.consoleapp,eapli.demoapplication.frontoffice.consoleapp.presentation.authz,SignupRequestAction,8,0,0,0,2,0,2,0,2,0
+frontoffice.consoleapp,eapli.demoapplication.frontoffice.consoleapp.presentation.authz,OrganicUnitUIVisitor,28,0,0,0,6,0,4,0,4,0
+frontoffice.consoleapp,eapli.demoapplication.frontoffice.consoleapp.presentation.authz,SignupRequestUI,65,0,0,0,16,0,4,0,4,0
+frontoffice.consoleapp,eapli.demoapplication.frontoffice.consoleapp.presentation.authz,UserDataWidget,39,0,0,0,12,0,7,0,7,0
+frontoffice.consoleapp,eapli.demoapplication.frontoffice.consoleapp.presentation,MainMenu,70,0,0,0,15,0,5,0,5,0
+frontoffice.consoleapp,eapli.demoapplication.frontoffice.consoleapp.presentation,FrontMenu,61,0,0,0,11,0,4,0,4,0
