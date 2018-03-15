@@ -140,7 +140,6 @@ public class EstruturaMercadologica {
      * false - caso contrário
      */
     public boolean adicionarCategoriaRaiz(Categoria c) {
-
         if (c == null) {
             throw new IllegalArgumentException("O argumento não pode ser null");
         }
@@ -160,15 +159,13 @@ public class EstruturaMercadologica {
         if (pai == null || c == null) {
             throw new IllegalArgumentException("O argumentos não podem ser null");
         }
-
+        
         Node nodePai = procuraNode(raiz, pai);
-        Node nodeFilho = procuraNode(raiz, c);
 
-        if (nodePai != null && nodeFilho == null) {
+        if (nodePai != null) {
             tamanho++;
             return nodePai.addFilho(new Node(nodePai, c));
         }
-
         return false;
     }
 
