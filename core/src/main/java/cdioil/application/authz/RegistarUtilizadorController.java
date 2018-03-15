@@ -1,12 +1,12 @@
 package cdioil.application.authz;
 
-import cdioil.application.persistence.RepositorioUtilizadoresJPA;
+import cdioil.persistence.impl.RepositorioUtilizadoresImpl;
 import cdioil.domain.authz.*;
 
 
 public class RegistarUtilizadorController {
 
-    private RepositorioUtilizadoresJPA repositorioUtilizadoresJPA = new RepositorioUtilizadoresJPA();
+    private RepositorioUtilizadoresImpl repositorioUtilizadoresJPA = new RepositorioUtilizadoresImpl();
 
 
     public void criarUtilizadorRegistado(String primeiroNome, String apelido, String email, String password) {
