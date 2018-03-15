@@ -1,49 +1,52 @@
 package cdioil.application.authz;
 
-import cdioil.application.persistence.RepositorioAdminJPA;
-import cdioil.application.persistence.RepositorioBaseJPA;
-import cdioil.application.persistence.RepositorioGestorJPA;
-import cdioil.application.persistence.RepositorioSystemUserJPA;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Gestor;
 import cdioil.domain.authz.SystemUser;
+import cdioil.persistence.impl.AdminRepositoryImpl;
+import cdioil.persistence.impl.GestorRepositoryImpl;
+import cdioil.persistence.impl.UserRepositoryImpl;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AtribuirPerfilGestorController {
 
-    RepositorioBaseJPA repoSystemUser;
-    RepositorioBaseJPA repoAdmin;
-    RepositorioBaseJPA repoGestor;
+    private UserRepositoryImpl systemUserRepository;
+    private GestorRepositoryImpl gestorRepository;
+    private AdminRepositoryImpl adminRepository;
 
     public AtribuirPerfilGestorController() {
-        repoSystemUser = new RepositorioSystemUserJPA();
-        repoAdmin = new RepositorioAdminJPA();
-        repoGestor = new RepositorioGestorJPA();
+        this.systemUserRepository = new UserRepositoryImpl();
+        this.gestorRepository = new GestorRepositoryImpl();
+        this.adminRepository = new AdminRepositoryImpl();
     }
 
     public ArrayList<String> getListaUsersRegistados() {
 
-        List<SystemUser> systemUsers =
-                (ArrayList<SystemUser>) repoSystemUser.findAll();
-        List<Gestor> gestores =
-                (ArrayList<Gestor>) repoGestor.findAll();
-        List<Admin> admins =
-                (ArrayList<Admin>) repoAdmin.findAll();
+        // Lista de System user
+        ArrayList<SystemUser> systemUsers =
+                (ArrayList<SystemUser>) systemUserRepository.findAll();
+
+        // Lista de gestores
+        ArrayList<Gestor> gestores =
+                (ArrayList<Gestor>) gestorRepository.findAll();
+
+        // Lista de admins
+        ArrayList<Admin> admins =
+                (ArrayList<Admin>) adminRepository.findAll();
 
         /*
         Contem todos os utilizadores que nao sao gestores nem admins
          */
-        ArrayList<String> resultado = new ArrayList<>();
+        ArrayList<String> usersValidos = new ArrayList<>();
 
         for (SystemUser su : systemUsers) {
             if (!gestores.contains(su) && !admins.contains(su)) {
-                resultado.add(su.toString());
+                usersValidos.add(su.toString());
             }
         }
 
-        return resultado;
+        return usersValidos;
     }
 
     public void atribuirGestor(String email) {
