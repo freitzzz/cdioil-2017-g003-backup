@@ -67,14 +67,13 @@ public class ImportarCategoriasUI {
     /**
      * Método que trata da interação entre o administrador e a importação das categorias.
      */
-    public void importarCategorias() {
+    private void importarCategorias() {
         System.out.println(MENSAGEM_SAIDA);
         boolean catched = false;
         while (!catched) {
             String filePath = Console.readLine(MENSAGEM_CAMINHO_FICHEIRO);
-            if (filePath.equalsIgnoreCase(EXIT_CODE)) {
-                return;
-            }
+            if (filePath.equalsIgnoreCase(EXIT_CODE))return;
+            
             List<Categoria> categorias = ctrl.lerFicheiro(filePath);
             if (categorias == null) {
                 String opcao = Console.readLine(MENSAGEM_CAMINHO_FICHEIRO_NAO_ENCONTRADO);
@@ -87,7 +86,7 @@ public class ImportarCategoriasUI {
                 } else {
                     System.out.println(MENSAGEM_CATEGORIAS_IMPORTADAS[0]);
                     categorias.forEach((c) -> {
-                        System.out.println(c.toString());
+                     //   System.out.println(c.toString());
                     });
                     System.out.println(MENSAGEM_CATEGORIAS_IMPORTADAS[1]);
                     catched = true;

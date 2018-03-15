@@ -20,9 +20,9 @@ import static cdioil.application.utils.FileReader.readFile;
 public class CSVCategoriasReader implements CategoriasReader {
 
     /**
-     * Nome do ficheiro a ler.
+     * File com o ficheiro a ler.
      */
-    private String filename;
+    private File file;
 
     /**
      * Divisória entre as colunas do ficheiro.
@@ -35,7 +35,7 @@ public class CSVCategoriasReader implements CategoriasReader {
      * @param filename Nome do ficheiro a ler
      */
     public CSVCategoriasReader(String filename) {
-        this.filename = filename;
+        this.file = new File(filename);
     }
 
     /**
@@ -45,49 +45,43 @@ public class CSVCategoriasReader implements CategoriasReader {
      */
     @Override
     public List<Categoria> lerFicheiro() {
-        List<String> conteudoFicheiro = readFile(new File(filename));
+        List<String> conteudoFicheiro = readFile(file);
 
-        if (conteudoFicheiro == null) {
-            return null;
-        }
+        if (conteudoFicheiro == null) return null;
 
         List<Categoria> categorias = new LinkedList<>();
 
         EstruturaMercadologica em = new EstruturaMercadologica();
 
-        boolean header = true; //Para não ser lido o cabeçalho
-
-        for (int i = 0; i < conteudoFicheiro.size(); i++) {
-            if (!header) {
-                String[] line = conteudoFicheiro.get(i).split(SPLITTER);
-                if (line.length != 0) { //Termina a leitura quando não existirem mais linhas com informação
-                    Categoria pai = new Categoria(line[1], line[0] + "DC");
-                    boolean added = em.adicionarCategoriaRaiz(pai);
-                    if (added) {
-                        categorias.add(pai);
-                    }
-
-                    Categoria filha1 = new Categoria(line[3], line[2] + "UN");
-                    added = em.adicionarCategoria(pai, filha1);
-                    if (added) {
-                        categorias.add(filha1);
-                    }
-
-                    Categoria filha2 = new Categoria(line[5], line[4] + "CAT");
-                    added = em.adicionarCategoria(filha1, filha2);
-                    if (added) {
-                        categorias.add(filha2);
-                    }
-
-                    Categoria filha3 = new Categoria(line[7], line[6] + "SCAT");
-                    added = em.adicionarCategoria(filha2, filha3);
-                    if (added) {
-                        categorias.add(filha3);
-                    }
-
+        for (int i = 1; i < conteudoFicheiro.size(); i++) {
+            String[] line = conteudoFicheiro.get(i).split(SPLITTER);
+            if (line.length != 0) { //Termina a leitura quando não existirem mais linhas com informação
+                Categoria pai = new Categoria(line[1], line[0] + "DC");
+                boolean added = em.adicionarCategoriaRaiz(pai);
+                if (added) {
+                    categorias.add(pai);
                 }
-            }
-            header = false;
+
+                Categoria filha1 = new Categoria(line[3], line[2] + "UN");
+                added = em.adicionarCategoria(pai, filha1);
+                if (added) {
+                    System.out.println(filha1);
+                    categorias.add(filha1);
+                }
+
+                Categoria filha2 = new Categoria(line[5], line[4] + "CAT");
+                added = em.adicionarCategoria(filha1, filha2);
+                if (added) {
+                    categorias.add(filha2);
+                }
+
+                Categoria filha3 = new Categoria(line[7], line[6] + "SCAT");
+                added = em.adicionarCategoria(filha2, filha3);
+                if (added) {
+                    categorias.add(filha3);
+                }
+
+           }
         }
         return categorias;
     }
