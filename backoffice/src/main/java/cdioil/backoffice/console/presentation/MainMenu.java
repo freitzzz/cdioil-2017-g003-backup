@@ -6,7 +6,6 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.console.utils.Console;
-import cdioil.domain.authz.SystemUser;
 
 /**
  *
@@ -16,7 +15,7 @@ public class MainMenu {
 
     public static void mainLoop() {
         int opcao = 0;
-        new BackOfficeLogin();
+
         do {
             opcao = menu();
 
@@ -43,6 +42,7 @@ public class MainMenu {
                     
                     break;
                 case 7:
+                    new ImportarCategoriasUI();
                     
                     break;
                 case 8:
@@ -73,5 +73,8 @@ public class MainMenu {
         option = Console.readInteger("Por favor escolha opção");
         return option;
     }
-
+    
+    public static void main(String[] args){
+        mainLoop();
+    }
 }
