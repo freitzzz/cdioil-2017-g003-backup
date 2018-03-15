@@ -93,10 +93,10 @@ public class Password {
      * @return força da password
      */
     private static String strength(String password) {
-        Pattern patternAverage = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{9,}$|^(?=.*[a-z])(?=.*\\d)[a-z\\d]{9,}$");
+        Pattern patternAverage = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])[a-zA-Z\\d]{9,}$");
         Matcher matcherAverage = patternAverage.matcher(password);
 
-        Pattern patternStrong = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])[a-zA-Z\\d]{9,}$");
+        Pattern patternStrong = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])([a-zA-Z\\d]|[^a-zA-Z\\d]){9,}$");
         Matcher matcherStrong = patternStrong.matcher(password);
 
         if (matcherAverage.matches()) {
