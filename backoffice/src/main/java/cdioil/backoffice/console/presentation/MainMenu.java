@@ -12,7 +12,7 @@ import cdioil.backoffice.console.utils.Console;
  * @author Ana Guerra (1161191)
  */
 public class MainMenu {
-
+    public static void main(String[] args){mainLoop();}
     public static void mainLoop() {
         int opcao = 0;
         do {
@@ -29,7 +29,7 @@ public class MainMenu {
                     
                     break;
                 case 3:
-                    
+                    new ImportarUtilizadoresFicheirosUI();
                     break;
                 case 4:
                     

@@ -25,11 +25,8 @@ public final class UtilizadoresReaderFactory {
     public static UtilizadoresReader create(String ficheiro){
         if(ficheiro.endsWith(CSV_EXTENSION)){
             return new CSVUtilizadoresReader(ficheiro);
-        }else if(ficheiro.endsWith(CSV_EXTENSION)){
-            throw new UnsupportedOperationException();
-        }else{
-            throw new UnsupportedOperationException();
         }
+        return null;
     }
     /**
      * Esconde o construtor privado

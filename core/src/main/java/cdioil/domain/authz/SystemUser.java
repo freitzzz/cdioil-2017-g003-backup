@@ -17,9 +17,10 @@ import javax.persistence.*;
 public class SystemUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Version
-    private Long version;
+    
+//    @Transient
+//    @Version //PERGUTNAR O PORQUE DISTO DAR O BERRO
+//    private Long version;
 
     /**
      * Email do utilizador (username)

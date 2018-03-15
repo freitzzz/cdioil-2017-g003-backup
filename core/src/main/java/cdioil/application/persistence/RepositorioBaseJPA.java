@@ -27,11 +27,11 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
     private final Class<T> classeEntidade;
 
     public RepositorioBaseJPA() {
-
         ParameterizedType genericSuperclass
                 = (ParameterizedType) getClass().getGenericSuperclass();
         this.classeEntidade
                 = (Class<T>) genericSuperclass.getActualTypeArguments()[0];
+        entityManagerFactory();
     }
 
     /**
@@ -49,8 +49,10 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
      */
     protected EntityManagerFactory entityManagerFactory() {
         if (factory == null) {
+            System.out.println(nomeUnidadePersistencia());
             factory = Persistence
                     .createEntityManagerFactory(nomeUnidadePersistencia());
+            System.out.println(factory);
         }
         return factory;
     }
