@@ -1,4 +1,4 @@
-package org.grupo3.cdioil.isep.feedback_monkey.domain;
+package cdioil.domain.authz;
 
 import org.junit.Assert;
 import org.junit.Test;

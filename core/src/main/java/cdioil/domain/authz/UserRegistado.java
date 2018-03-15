@@ -1,32 +1,30 @@
-package org.grupo3.cdioil.isep.feedback_monkey.domain;
+package cdioil.domain.authz;
 
 /**
- * Gestor de Inquéritos
+ * O utilizador que pertence ao publico-alvo da aplicação
  *
- * Responsável pela criação e configuração de inquéritos
- * de uma dada estrutura mercadológica
+ * É o responsável por avaliar produtos e fornecer feedback
  */
-public class Gestor {
+public class UserRegistado {
 
     /**
-     * Conta de SystemUser associada a esta instância de Gestor
+     * Conta de SystemUser associada a esta instância de UserRegistado
      */
     private SystemUser su;
 
     /**
-     * Cria uma nova instância de Gestor
+     * Cria uma nova instância de UserRegistado
      * @param su conta de SystemUser a associar
      */
-    public Gestor(SystemUser su) {
+    public UserRegistado(SystemUser su) {
         if (su == null) {
             throw new IllegalArgumentException("Instância de SystemUser atribuida é null");
         }
-
         this.su = su;
     }
 
     /**
-     * Compara esta instância de Gestor a outro Objeto arbitrário
+     * Compara esta instância de UserRegistado a outro Objeto arbitrário
      * @param o outro objeto a comparar
      * @return true se os dois elementos da comparação forem iguais
      */
@@ -35,14 +33,14 @@ public class Gestor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Gestor gestor = (Gestor) o;
+        UserRegistado that = (UserRegistado) o;
 
-        return su.equals(gestor.su);
+        return su.equals(that.su);
     }
 
     /**
-     * Calcula o hashcode desta instância de Gestor
-     * @return o valor inteiro do hashcode do SystemUser associado
+     * Calcula o hashcode desta instancia de UserRegistado
+     * @return hashcode
      */
     @Override
     public int hashCode() {

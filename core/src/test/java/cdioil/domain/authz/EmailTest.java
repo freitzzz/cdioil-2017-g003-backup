@@ -1,6 +1,5 @@
-package cdioil.application.domain.authz;
+package cdioil.domain.authz;
 
-import cdioil.domain.authz.Email;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
