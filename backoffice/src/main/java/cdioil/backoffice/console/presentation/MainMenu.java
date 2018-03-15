@@ -6,15 +6,17 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.console.utils.Console;
+import cdioil.domain.authz.SystemUser;
 
 /**
  *
  * @author Ana Guerra (1161191)
  */
 public class MainMenu {
-
+    
     public static void mainLoop() {
         int opcao = 0;
+        new BackOfficeLogin();
         do {
             opcao = menu();
 
@@ -62,7 +64,7 @@ public class MainMenu {
         System.out.println("3. Importar Lista de Utilizadores");
         System.out.println("4. Listar Todos os Utilizadores");
         System.out.println("5. Registar no Sistema");
-        System.out.println("6. Atualizadar dados");
+        System.out.println("6. Atualizar dados");
         System.out.println("7. Importar Categorias");
         System.out.println("8. Importar Questões para novo Template");
 
