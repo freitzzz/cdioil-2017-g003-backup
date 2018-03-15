@@ -5,7 +5,6 @@
  */
 package cdioil.domain;
 
-import cdioil.domain.CodigoQR;
 import org.junit.*;
 import static org.junit.Assert.*;
 
