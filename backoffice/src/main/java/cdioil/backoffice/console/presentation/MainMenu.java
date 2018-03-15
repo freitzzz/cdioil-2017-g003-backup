@@ -30,7 +30,7 @@ public class MainMenu {
                     new ImportarUtilizadoresFicheirosUI();
                     break;
                 case 4:
-                    
+                    new ListarUsersUI().listarUtilizadores();
                     break;
                 case 5:
                     
