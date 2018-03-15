@@ -34,7 +34,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c = new Categoria("Bricolage", 1);
+        Categoria c = new Categoria("Bricolage", "1");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -48,7 +48,7 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Categoria c = new Categoria("Bens Alimentares", 1);
+        Categoria c = new Categoria("Bens Alimentares", "1");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
@@ -65,13 +65,13 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Categoria c = new Categoria("Bens Alimentares", 1);
+        Categoria c = new Categoria("Bens Alimentares", "1");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
         assertEquals("A estrutura deverá conter dois nodes", 2, struct.tamanho());
 
-        Categoria c2 = new Categoria("Bebidas", 2);
+        Categoria c2 = new Categoria("Bebidas", "2");
 
         assertTrue(struct.adicionarCategoria(c, c2));
 
@@ -86,9 +86,9 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c1 = new Categoria("Casa e Decoracao", 1);
+        Categoria c1 = new Categoria("Casa e Decoracao", "1");
 
-        Categoria c2 = new Categoria("Roupa", 2);
+        Categoria c2 = new Categoria("Roupa", "2");
 
         struct.adicionarCategoriaRaiz(c1);
         struct.adicionarCategoriaRaiz(c2);
@@ -116,7 +116,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c = new Categoria("Higiene", 1);
+        Categoria c = new Categoria("Higiene", "1");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -136,11 +136,11 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c1 = new Categoria("Categoria pai", 1);
+        Categoria c1 = new Categoria("Categoria pai", "1");
 
         struct.adicionarCategoriaRaiz(c1);
 
-        Categoria c2 = new Categoria("Categoria filho", 2);
+        Categoria c2 = new Categoria("Categoria filho", "2");
 
         struct.adicionarCategoria(c1, c2);
 
