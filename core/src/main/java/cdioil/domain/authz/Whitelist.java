@@ -1,4 +1,4 @@
-package cdioil.domain;
+package cdioil.domain.authz;
 
 import java.io.Serializable;
 import java.util.Objects;

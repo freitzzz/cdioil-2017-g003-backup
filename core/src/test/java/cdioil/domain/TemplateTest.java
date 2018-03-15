@@ -13,14 +13,15 @@ import org.junit.Test;
 
 /**
  * Teste da classe Template.
+ *
  * @author Ana Guerra (1161191)
  */
 public class TemplateTest {
-    
+
     Categoria cat = new Categoria("Pai", "10");
     List<Questao> listaQuestoes = new ArrayList<>();
     List<Inquerito> listaInqueritos = new ArrayList<>();
-    
+
     /**
      * Instância de EAN para testes.
      */
@@ -32,7 +33,7 @@ public class TemplateTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("Os identificadores são iguais", 
+        assertEquals("Os identificadores são iguais",
                 "\nCategoria: Nome: Pai\nDescritor: 10\n\nLista de Questoes: []", template.toString());
     }
 
@@ -42,7 +43,10 @@ public class TemplateTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        assertEquals("Hash codes iguais", 134750548, template.hashCode());
+
+        Template template2 = new Template(listaQuestoes, listaInqueritos, cat);
+
+        assertEquals("Hash codes iguais", template2.hashCode(), template.hashCode());
     }
 
     /**

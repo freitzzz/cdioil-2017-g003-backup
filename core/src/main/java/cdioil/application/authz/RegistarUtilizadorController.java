@@ -9,7 +9,7 @@ public class RegistarUtilizadorController {
     private RepositorioUtilizadoresImpl repositorioUtilizadoresJPA = new RepositorioUtilizadoresImpl();
 
 
-    public void criarUtilizadorRgistado(String primeiroNome, String apelido, String email, String password) {
+    public void criarUtilizadorRegistado(String primeiroNome, String apelido, String email, String password) {
         SystemUser systemUser = new SystemUser(new Email(email), new Nome(primeiroNome, apelido), new Password(password));
         UserRegistado userRegistado = new UserRegistado(systemUser);
 

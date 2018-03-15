@@ -51,8 +51,6 @@ public class CSVCategoriasReader implements CategoriasReader {
             return null;
         }
 
-        System.out.println(conteudoFicheiro.size());
-
         List<Categoria> categorias = new LinkedList<>();
 
         EstruturaMercadologica em = new EstruturaMercadologica();
