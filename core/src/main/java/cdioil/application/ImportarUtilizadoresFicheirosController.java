@@ -12,10 +12,12 @@ import java.util.List;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public class ImportarUtilizadoresFicheirosController {
+
     /**
      * List com todos os utilizadores lidos
      */
     private List<SystemUser> usersLidos;
+
     /**
      * Método que importa uma lista de utilizadores diante um determinado ficheiro 
      * @param ficheiro String com o caminho do ficheiro com a lista de utilizadores
@@ -26,6 +28,7 @@ public class ImportarUtilizadoresFicheirosController {
         UtilizadoresReader usersReader=UtilizadoresReaderFactory.create(ficheiro);
         return usersReader!=null?usersLidos=UtilizadoresReaderFactory.create(ficheiro).read() : null;
     }
+
     /**
      * Método que persiste na base de dados todos os utilizadores importados 
      * previamente pelos ficheiros
