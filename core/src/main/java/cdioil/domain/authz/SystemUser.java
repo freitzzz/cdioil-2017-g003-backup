@@ -107,7 +107,7 @@ public class SystemUser implements Serializable {
      *
      * @param novoCampo informação introduzida pelo utilizador
      * @param opcao inteiro que indica qual campo de informação vai ser alterado
-     * @return
+     * @return true se campo for alterado com sucesso, false se nova informação for inválida
      */
     public boolean alterarCampoInformacao(String novoCampo, int opcao) {
         try {
