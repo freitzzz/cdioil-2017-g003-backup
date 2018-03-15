@@ -3,6 +3,7 @@
   <persistence-unit name="cdioil-2017-g003_PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>cdioil.application.domain.Produto</class>
+    <class>cdioil.application.domain.authz.SystemUser</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/Documents/database_connections/feedback_monkey"/>
       <property name="javax.persistence.jdbc.user" value=""/>
