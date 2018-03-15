@@ -5,6 +5,7 @@
  */
 package cdioil.domain.authz;
 
+import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -14,7 +15,7 @@ import javax.persistence.*;
  * @author Gil Durão
  */
 @Entity
-public class SystemUser implements Serializable {
+public class SystemUser implements Serializable,Identifiable<Email>{
 
     private static final long serialVersionUID = 1L;
     
@@ -135,6 +136,11 @@ public class SystemUser implements Serializable {
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    @Override
+    public Email getID() {
+        return email;
     }
 
 }

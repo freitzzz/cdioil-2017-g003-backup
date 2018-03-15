@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="ADMINISTRADOR")
-public class Admin implements Serializable {
+public class Admin implements Serializable,Identifiable<Long> {
     @Id
     @GeneratedValue
     private long id;
@@ -80,6 +81,11 @@ public class Admin implements Serializable {
     @Override
     public String toString() {
         return this.sysUser.toString();
+    }
+
+    @Override
+    public Long getID(){
+        return id;
     }
 
 }

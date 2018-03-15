@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import javax.persistence.Version;
  * É o responsável por avaliar produtos e fornecer feedback
  */
 @Entity
-public class UserRegistado implements Serializable {
+public class UserRegistado implements Serializable,Identifiable<Long> {
     @Id
     @GeneratedValue
     private long id;
@@ -61,4 +62,9 @@ public class UserRegistado implements Serializable {
         return su.hashCode();
     }
     protected UserRegistado(){}
+
+    @Override
+    public Long getID() {
+        return id;
+    }
 }

@@ -1,12 +1,11 @@
 package cdioil.persistence.impl;
 
-import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.RepositorioBaseJPA;
 import cdioil.domain.authz.UserRegistado;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserRegistadoRepository;
 
-public class RepositorioUtilizadoresImpl extends RepositorioBaseJPA<UserRegistado, SystemUser> implements UserRegistadoRepository {
+public class RepositorioUtilizadoresImpl extends RepositorioBaseJPA<UserRegistado,Long> implements UserRegistadoRepository {
 
     @Override
     protected String nomeUnidadePersistencia() {
@@ -22,4 +21,5 @@ public class RepositorioUtilizadoresImpl extends RepositorioBaseJPA<UserRegistad
         if(exists(user))return user;
         return super.add(user);
     }
+    public boolean exists(UserRegistado user){return find(user.getID())!=null;}
 }

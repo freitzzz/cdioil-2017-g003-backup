@@ -119,11 +119,11 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
      * @param entity
      * @return 
      */
-    public boolean exists(T entity){
-        if(entity==null)return false;
+    public T getEntity(T entity){
+        if(entity==null)return null;
         Iterator<T> iteratorEntities=findAll().iterator();
-        while(iteratorEntities.hasNext())if(iteratorEntities.next().equals(entity))return true;
-        return false;
+        while(iteratorEntities.hasNext())if(iteratorEntities.next().equals(entity))return entity;
+        return null;
     }
     
 }
