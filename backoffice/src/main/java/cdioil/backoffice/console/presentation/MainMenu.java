@@ -13,7 +13,7 @@ import cdioil.domain.authz.SystemUser;
  * @author Ana Guerra (1161191)
  */
 public class MainMenu {
-    
+
     public static void mainLoop() {
         int opcao = 0;
         new BackOfficeLogin();
@@ -31,7 +31,7 @@ public class MainMenu {
                     
                     break;
                 case 3:
-                    
+                    new ImportarUtilizadoresFicheirosUI();
                     break;
                 case 4:
                     

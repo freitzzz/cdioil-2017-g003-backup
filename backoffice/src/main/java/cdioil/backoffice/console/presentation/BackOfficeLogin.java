@@ -1,6 +1,5 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.persistence.RepositorioUtilizadores;
 import cdioil.backoffice.console.utils.Console;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;

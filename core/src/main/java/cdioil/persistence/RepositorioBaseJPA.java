@@ -1,4 +1,4 @@
-package cdioil.application.persistence;
+package cdioil.persistence;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -8,6 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import cdioil.persistence.UserRegistadoRepositorioImpl;
 
 /**
  * Classe utilitária abstrata para implementar repositórios. Baseada na classe
@@ -18,7 +19,7 @@ import javax.persistence.Query;
  * @param <T> tipo de entidades as quais se destina este repositorio
  * @param <K> identificador da entidade
  */
-public abstract class RepositorioBaseJPA<T, K extends Serializable> implements RepositorioDados<T, K> {
+public abstract class RepositorioBaseJPA<T, K extends Serializable> implements UserRegistadoRepositorioImpl<T, K> {
 
     //Expressa a dependência de uma unidade de persistencia.
     @PersistenceUnit
@@ -27,11 +28,11 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
     private final Class<T> classeEntidade;
 
     public RepositorioBaseJPA() {
-
         ParameterizedType genericSuperclass
                 = (ParameterizedType) getClass().getGenericSuperclass();
         this.classeEntidade
                 = (Class<T>) genericSuperclass.getActualTypeArguments()[0];
+        entityManagerFactory();
     }
 
     /**
@@ -49,8 +50,10 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
      */
     protected EntityManagerFactory entityManagerFactory() {
         if (factory == null) {
+            System.out.println(nomeUnidadePersistencia());
             factory = Persistence
                     .createEntityManagerFactory(nomeUnidadePersistencia());
+            System.out.println(factory);
         }
         return factory;
     }
