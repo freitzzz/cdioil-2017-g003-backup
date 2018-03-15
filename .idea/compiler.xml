@@ -6,41 +6,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="backoffice.consoleapp" />
+        <module name="app.common" />
+        <module name="backoffice" />
         <module name="bootstrap" />
-        <module name="consoleapp" />
-        <module name="consoleapp.common" />
         <module name="core" />
-        <module name="ecafeteria.backoffice.consoleapp" />
-        <module name="ecafeteria.bootstrapapp" />
-        <module name="ecafeteria.consoleapp" />
-        <module name="ecafeteria.core" />
-        <module name="ecafeteria.utente.consoleapp" />
         <module name="framework" />
-        <module name="frontoffice.consoleapp" />
-        <module name="system.core" />
-        <module name="utente.consoleapp" />
+        <module name="frontoffice" />
         <module name="util" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="backoffice.consoleapp" target="1.8" />
+      <module name="app.common" target="1.8" />
+      <module name="backoffice" target="1.8" />
       <module name="bootstrap" target="1.8" />
-      <module name="consoleapp.common" target="1.8" />
+      <module name="cdioil-2017-g003" target="1.8" />
       <module name="core" target="1.8" />
-      <module name="eapli-2016-ecafeteria" target="1.8" />
-      <module name="eapli-demo-application" target="1.8" />
-      <module name="ecafeteria" target="1.8" />
-      <module name="ecafeteria.backoffice.consoleapp" target="1.8" />
-      <module name="ecafeteria.bootstrapapp" target="1.8" />
-      <module name="ecafeteria.consoleapp" target="1.8" />
-      <module name="ecafeteria.core" target="1.8" />
-      <module name="ecafeteria.persistence.impl.jpa" target="1.8" />
-      <module name="ecafeteria.utente.consoleapp" target="1.8" />
       <module name="framework" target="1.8" />
-      <module name="frontoffice.consoleapp" target="1.8" />
-      <module name="system.core" target="1.8" />
-      <module name="utente.consoleapp" target="1.8" />
+      <module name="frontoffice" target="1.8" />
       <module name="util" target="1.8" />
     </bytecodeTargetLevel>
   </component>
