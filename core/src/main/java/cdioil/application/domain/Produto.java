@@ -38,4 +38,8 @@ public class Produto implements Serializable {
 
     }
 
+    public Produto(String nome) {
+        this.nome = nome;
+    }
+
 }
