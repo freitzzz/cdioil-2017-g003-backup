@@ -1,4 +1,4 @@
-package cdioil.application.domain;
+package cdioil.application.domain.authz;
 
 import cdioil.domain.authz.Email;
 import java.util.ArrayList;
