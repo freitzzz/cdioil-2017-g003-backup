@@ -5,4 +5,4 @@
  * @author Paulo Gandra Sousa
  *
  */
-package cdioil.application.domain.authz;
+package cdioil.domain.authz;

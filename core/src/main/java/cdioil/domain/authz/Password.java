@@ -1,5 +1,6 @@
-package cdioil.application.domain;
+package cdioil.domain.authz;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,17 +8,23 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.persistence.Embeddable;
 
 /**
  * Classe que representa o conceito de password
  *
  * @author Joana Pinheiro
  */
-public class Password {
-
+@Embeddable
+public class Password implements Serializable {
+    private static final long serialVersionUID=10l;
     private static final String WEAK_PASSWORD = "Fraca!!!";
     private static final String AVERAGE_PASSWORD = "Média";
     private static final String STRONG_PASSWORD = "Forte";
+    /**
+     * Password default atribuida aos utilizadores importados pelo administrador
+     */
+    public static final String DEFAULT_PASSWORD="Password123";
 
     /**
      * Constante que representa un conjunto aleatório de bytes com o objetivo de defender contra ataques à password
@@ -28,8 +35,7 @@ public class Password {
      * Constante que representa uma password encriptada
      */
     private String password;
-
-
+    
     /**
      * Construtor de password
      *
@@ -123,6 +129,6 @@ public class Password {
 
         return hash.equals(this.password);
     }
-
+    protected Password(){}
 }
 

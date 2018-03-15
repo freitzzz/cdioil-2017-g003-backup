@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.application.domain.authz;
+package cdioil.domain.authz;
 
-import cdioil.application.domain.Email;
-import cdioil.application.domain.Password;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -35,6 +33,7 @@ public class SystemUser implements Serializable {
     /**
      * Password do utilizador
      */
+    @Embedded
     private Password password;
 
     /**
