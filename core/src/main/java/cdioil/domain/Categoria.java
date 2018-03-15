@@ -61,9 +61,7 @@ public class Categoria {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.nome);
-        hash = 41 * hash + Objects.hashCode(this.descritor);
-        hash = 41 * hash + Objects.hashCode(this.produtos);
+        hash = 67 * hash + Objects.hashCode(this.descritor);
         return hash;
     }
 
@@ -78,20 +76,12 @@ public class Categoria {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Categoria other = (Categoria) obj;
+
+        Categoria other = (Categoria) obj;
         if (!Objects.equals(this.descritor, other.descritor)) {
-            return false;
-        }
-        if (!Objects.equals(this.nome, other.nome)) {
-            return false;
-        }
-        if (!Objects.equals(this.produtos, other.produtos)) {
             return false;
         }
         return true;
