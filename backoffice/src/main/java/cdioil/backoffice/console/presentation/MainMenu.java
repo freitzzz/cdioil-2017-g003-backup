@@ -13,7 +13,7 @@ import cdioil.backoffice.console.utils.Console;
  */
 public class MainMenu {
 
-    public static void mainLoop() {
+    public static void main(String[] args) {
         int opcao = 0;
         do {
             opcao = menu();
@@ -23,7 +23,7 @@ public class MainMenu {
                     System.out.println("Fim");
                     break;
                 case 1:
-                    
+                    new AtribuirPerfilGestorUI();
                     break;
                 case 2:
                     
@@ -55,8 +55,9 @@ public class MainMenu {
 
     private static int menu() {
         int option = -1;
-        System.out.println("");
-        System.out.println("=============================\n");
+        System.out.println("=============================");
+        System.out.println("        Back Office");
+        System.out.println("=============================");
         System.out.println("1. Atribuir Perfil de Gestor");
         System.out.println("2. Adicionar Dominios/Subdomínios Autorizados");
         System.out.println("3. Importar Lista de Utilizadores");
@@ -65,10 +66,9 @@ public class MainMenu {
         System.out.println("6. Atualizadar dados");
         System.out.println("7. Importar Categorias");
         System.out.println("8. Importar Questões para novo Template");
-
         System.out.println("=============================");
-        System.out.println("0. Sair\n\n");
-        option = Console.readInteger("Por favor escolha opção");
+        System.out.println("0. Sair\n");
+        option = Console.readInteger("Por favor escolha uma opção:");
         return option;
     }
 

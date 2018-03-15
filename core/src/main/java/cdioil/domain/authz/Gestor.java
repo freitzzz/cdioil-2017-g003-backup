@@ -37,7 +37,7 @@ public class Gestor {
 
         Gestor gestor = (Gestor) o;
 
-        return su.equals(gestor.su);
+        return su.equals(gestor.su) || su.equals(o);
     }
 
     /**
