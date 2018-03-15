@@ -11,6 +11,6 @@ public class RepositorioUtilizadoresJPA extends RepositorioBaseJPA<UserRegistado
 
     @Override
     public UserRegistado addUserRegistado(UserRegistado userRegistado) {
-        return (UserRegistado) super.add(userRegistado);
+        return super.add(userRegistado);
     }
 }
