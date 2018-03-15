@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.application.domain.authz;
+package cdioil.domain.authz;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

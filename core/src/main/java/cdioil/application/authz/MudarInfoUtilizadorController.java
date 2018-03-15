@@ -19,6 +19,12 @@ public class MudarInfoUtilizadorController {
      */
     private SystemUser su;
 
+    /**
+     * Cria uma instância de MudarInfoUtilizadorController a partir de um
+     * SystemUser
+     *
+     * @param su Logged-in user
+     */
     public MudarInfoUtilizadorController(SystemUser su) {
         this.su = su;
     }
