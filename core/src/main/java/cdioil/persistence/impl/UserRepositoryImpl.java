@@ -1,5 +1,6 @@
 package cdioil.persistence.impl;
 
+import cdioil.domain.authz.Email;
 import cdioil.persistence.RepositorioBaseJPA;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.PersistenceUnitNameCore;
@@ -11,7 +12,7 @@ import java.util.List;
  * na base de dados
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Long> implements UserRepository{
+public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Email> implements UserRepository{
     /**
      * Método que devolve o nome da unidade de persistência usada no modulo em 
      * que está a ser feita a implementação
