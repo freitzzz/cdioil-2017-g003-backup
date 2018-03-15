@@ -34,14 +34,19 @@ public class Password {
      * Construtor de password
      *
      * @param password
-     * @throws NoSuchAlgorithmException
      */
-    public Password(String password) throws NoSuchAlgorithmException {
+    public Password(String password) {
         if (strength(password).equalsIgnoreCase(WEAK_PASSWORD)) {
             throw new IllegalArgumentException(WEAK_PASSWORD);
         }
-        salt = generateSalt();
-        this.password = generateHash(password + salt);
+
+        try {
+            salt = generateSalt();
+            this.password = generateHash(password + salt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
