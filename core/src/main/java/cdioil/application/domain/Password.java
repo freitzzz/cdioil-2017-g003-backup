@@ -108,5 +108,21 @@ public class Password {
         return WEAK_PASSWORD;
     }
 
+    /**
+     * Verifica de a password inserida é a correcta
+     * @param password password do utilizador
+     * @return retorna true se a password está correcta e false se está incorreta
+     */
+    public boolean verifyPassword(String password) {
+        String hash = " ";
+        try {
+            hash = generateHash(password + salt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return hash.equals(this.password);
+    }
+
 }
 
