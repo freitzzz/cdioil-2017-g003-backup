@@ -5,7 +5,7 @@ import cdioil.domain.authz.UserRegistado;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserRegistadoRepository;
 
-public class RepositorioUtilizadoresJPA extends RepositorioBaseJPA<UserRegistado, Long> implements UserRegistadoRepository {
+public class RepositorioUtilizadoresImpl extends RepositorioBaseJPA<UserRegistado, Long> implements UserRegistadoRepository {
 
     @Override
     protected String nomeUnidadePersistencia() {

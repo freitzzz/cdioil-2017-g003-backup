@@ -8,7 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
-import cdioil.persistence.UserRegistadoRepositorioImpl;
+import cdioil.persistence.RepositoryDados;
 
 /**
  * Classe utilitária abstrata para implementar repositórios. Baseada na classe
@@ -19,7 +19,7 @@ import cdioil.persistence.UserRegistadoRepositorioImpl;
  * @param <T> tipo de entidades as quais se destina este repositorio
  * @param <K> identificador da entidade
  */
-public abstract class RepositorioBaseJPA<T, K extends Serializable> implements UserRegistadoRepositorioImpl<T, K> {
+public abstract class RepositorioBaseJPA<T, K extends Serializable> implements RepositoryDados<T, K> {
 
     //Expressa a dependência de uma unidade de persistencia.
     @PersistenceUnit

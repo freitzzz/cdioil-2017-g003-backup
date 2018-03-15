@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author António Sousa [1161371]
  */
-public interface UserRegistadoRepositorioImpl<T, K extends Serializable> {
+public interface RepositoryDados<T, K extends Serializable> {
 
     /**
      * Devolve todas as entidades no repositorio.
