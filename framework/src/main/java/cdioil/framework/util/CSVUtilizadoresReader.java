@@ -76,7 +76,7 @@ public final class CSVUtilizadoresReader implements UtilizadoresReader{
         
         if(camposFicheiro.length!=NUMERO_IDENTIFICADORES)return null;
         identificarCampos(camposFicheiro);
-        for(int i=0;i<fileContent.size();i++){
+        for(int i=1;i<fileContent.size();i++){
             String[] nextCampos=fileContent.get(i).split(IDENTIFICADOR_DELIMITADOR);
             if(nextCampos.length==NUMERO_IDENTIFICADORES){
                 try{

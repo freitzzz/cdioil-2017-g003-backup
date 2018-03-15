@@ -1,4 +1,4 @@
-package cdioil.application.persistence;
+package cdioil.persistence;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author António Sousa [1161371]
  */
-public interface RepositorioDados<T, K extends Serializable> {
+public interface UserRegistadoRepositorioImpl<T, K extends Serializable> {
 
     /**
      * Devolve todas as entidades no repositorio.

@@ -1,6 +1,6 @@
 package cdioil.application.authz;
 
-import cdioil.application.persistence.RepositorioUtilizadoresJPA;
+import cdioil.persistence.impl.RepositorioUtilizadoresJPA;
 import cdioil.domain.authz.*;
 
 

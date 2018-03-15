@@ -3,12 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.application.domain.authz;
+package cdioil.domain.authz;
 
-import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Nome;
-import cdioil.domain.authz.Password;
-import cdioil.domain.authz.SystemUser;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 
 /**
  * Classe que representa um endereço de email
@@ -55,11 +54,6 @@ public class Email implements Serializable {
      * Constante que representa a expressão regular que identifica o dominio de um endereço de Yahoo
      */
     private static final String REGEX_DOMONIO_YAHOO="(yahoo|ymail|rocketmail)[.][com|in|co[.]uk]$";
-    /**
-     * Long com o ID que representa a identidade da tabela na base de dados
-     */
-    @Id
-    private long idEmail;
     /**
      * String que representa a indentificação do email
      */
