@@ -1,8 +1,8 @@
 package cdioil.application;
 
 import cdioil.domain.authz.SystemUser;
-import cdioil.framework.util.UtilizadoresReader;
-import cdioil.framework.util.UtilizadoresReaderFactory;
+import cdioil.application.utils.UtilizadoresReader;
+import cdioil.application.utils.UtilizadoresReaderFactory;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import java.util.List;
 

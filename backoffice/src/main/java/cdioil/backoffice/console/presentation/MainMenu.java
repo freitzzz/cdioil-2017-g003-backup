@@ -39,6 +39,7 @@ public class MainMenu {
                     
                     break;
                 case 7:
+                    new ImportarCategoriasUI();
                     
                     break;
                 case 8:
@@ -69,5 +70,8 @@ public class MainMenu {
         option = Console.readInteger("Por favor escolha opção");
         return option;
     }
-
+    
+    public static void main(String[] args){
+        mainLoop();
+    }
 }

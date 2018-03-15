@@ -1,4 +1,4 @@
-package cdioil.framework.util;
+package cdioil.application.utils;
 
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Nome;

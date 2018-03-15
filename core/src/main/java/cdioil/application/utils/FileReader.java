@@ -1,4 +1,4 @@
-package cdioil.framework.util;
+package cdioil.application.utils;
 
 import java.io.File;
 import java.io.IOException;

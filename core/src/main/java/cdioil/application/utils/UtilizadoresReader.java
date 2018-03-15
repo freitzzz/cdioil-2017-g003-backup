@@ -1,4 +1,4 @@
-package cdioil.framework.util;
+package cdioil.application.utils;
 
 import cdioil.domain.authz.SystemUser;
 import java.util.List;
