@@ -9,17 +9,21 @@ import javax.persistence.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
+@Table(name="ADMINISTRADOR")
 public class Admin implements Serializable {
-
+    @Id
+    @GeneratedValue
+    private long id;
     private static final long serialVersionUID = 1L;
-
+    
     @Version
     private Long version;
 
     /**
      * Conta de utilizador associada ao Admin
      */
-    @EmbeddedId
+    
+    @OneToOne(cascade = CascadeType.PERSIST)
     private SystemUser sysUser;
 
     /**

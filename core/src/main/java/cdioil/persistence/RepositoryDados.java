@@ -30,5 +30,11 @@ public interface RepositoryDados<T, K extends Serializable> {
      * @return entidade persistida.
      */
     T add(T entidade);
-
+    
+    /**
+     * Atualiza a entidade
+     * @param entity T com a entidade a ser atualizada
+     * @return T com a entidade alterada, ou null caso tenha ocorrido
+     */
+    T merge(T entity);
 }

@@ -3,31 +3,51 @@ package cdioil.backoffice.console.presentation;
 import cdioil.application.authz.AtribuirPerfilGestorController;
 import cdioil.backoffice.console.utils.Console;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 
+/**
+ * Atribui um perfil de Gestor a um utilizador registado
+ */
 public class AtribuirPerfilGestorUI {
 
+    /**
+     * Controller
+     */
     private AtribuirPerfilGestorController controller;
 
+    /**
+     * Separador
+     */
     private static final String LINE_SEPARATOR =
             "==========================================";
 
+    /**
+     * Máximo de users mostrados por página
+     */
     private static final int MAX_USERS_PAGINA = 10;
 
+    /**
+     * Construtor
+     */
     public AtribuirPerfilGestorUI() {
         controller = new AtribuirPerfilGestorController();
 
         mostrarMenu();
     }
 
+    /**
+     * Menu Principal da User Storie
+     */
     private void mostrarMenu() {
-        System.out.println(LINE_SEPARATOR);
-        System.out.println("Atribuir Perfil de Gestor");
-        System.out.println(LINE_SEPARATOR);
 
         int opcao = -1;
 
         while (true) {
+            System.out.println(LINE_SEPARATOR);
+            System.out.println("Atribuir Perfil de Gestor");
+            System.out.println(LINE_SEPARATOR);
+
             System.out.println("1 - Ver Lista de Utilizadores Registados");
             System.out.println("2 - Registar Gestor");
             System.out.println("3 - Sair");
@@ -40,11 +60,20 @@ public class AtribuirPerfilGestorUI {
                     mostrarListaUtilizadoresRegistados();
                     break;
                 case 2:
-                    atribuirGestor();
+                    try {
+                        atribuirGestor();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(LINE_SEPARATOR);
+                        System.out.println("ERRO: Email inválido!");
+                    } catch (NoResultException e) {
+                        System.out.println(LINE_SEPARATOR);
+                        System.out.println("ERRO: Email não existe");
+                    }
                     break;
                 case 3:
                     return;
                 default:
+                    System.out.println(LINE_SEPARATOR);
                     System.out.println("ERRO: Opção inválida");
                     break;
             }
@@ -52,6 +81,11 @@ public class AtribuirPerfilGestorUI {
 
     }
 
+    /**
+     * Mostra na consola uma lista de utilizadores registados
+     * A lista apresentada nao contem contas de System user associadas
+     * a gestores ou admins
+     */
     private void mostrarListaUtilizadoresRegistados() {
         // Get lista users
         ArrayList<String> listaUsers = getListaUsersRegistados();
@@ -103,14 +137,27 @@ public class AtribuirPerfilGestorUI {
 
     }
 
+    /**
+     *
+     * @return Lista com os nomes de todos os utilizadores registados
+     * que nao sejam admins/gestores
+     */
     private ArrayList<String> getListaUsersRegistados() {
         return controller.getListaUsersRegistados();
     }
 
+    /**
+     * Conta o numero de paginas necessario para mostrar todos os users
+     * @param numeroUsers numero users total
+     * @return numero de paginas necessario
+     */
     private int numeroPaginas(int numeroUsers) {
         return numeroUsers / MAX_USERS_PAGINA + 1;
     }
 
+    /**
+     * Atribui um gestor a um utilizador registado
+     */
     private void atribuirGestor() {
         String email = Console.readLine("Introduza o email desejado");
 

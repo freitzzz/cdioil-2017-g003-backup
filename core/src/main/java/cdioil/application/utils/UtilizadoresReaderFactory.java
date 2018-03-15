@@ -1,4 +1,4 @@
-package cdioil.framework.util;
+package cdioil.application.utils;
 
 /**
  * Factory de UtilizadoresReader

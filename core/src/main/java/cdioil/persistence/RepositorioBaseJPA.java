@@ -103,5 +103,16 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
 
         return entidade;
     }
+    @Override
+    public T merge(T entity){
+        if(entity==null)return null;
+        EntityManager em = entityManager();
+        EntityTransaction transacao = em.getTransaction();
+        transacao.begin();
+        em.merge(entity);
+        transacao.commit();
+        em.close();
+        return entity;
+    }
 
 }

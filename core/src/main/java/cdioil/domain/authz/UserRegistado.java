@@ -1,15 +1,29 @@
 package cdioil.domain.authz;
 
+import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Version;
+
 /**
  * O utilizador que pertence ao publico-alvo da aplicação
  *
  * É o responsável por avaliar produtos e fornecer feedback
  */
-public class UserRegistado {
-
+@Entity
+public class UserRegistado implements Serializable {
+    @Id
+    @GeneratedValue
+    private long id;
+    @Version
+    private Long version;
     /**
      * Conta de SystemUser associada a esta instância de UserRegistado
      */
+    @OneToOne(cascade = CascadeType.PERSIST)
     private SystemUser su;
 
     /**
@@ -46,4 +60,5 @@ public class UserRegistado {
     public int hashCode() {
         return su.hashCode();
     }
+    protected UserRegistado(){}
 }

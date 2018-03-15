@@ -88,7 +88,7 @@ public class EstruturaMercadologica {
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Categoria("Todos os Produtos", -1));
+        raiz = new Node(null, new Categoria("Todos os Produtos", "-1"));
         tamanho = 1;
     }
 
