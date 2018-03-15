@@ -76,7 +76,7 @@ public class Password {
      */
     private static byte[] generateSalt() {
         final Random random = new SecureRandom();
-        byte[] salt = new byte[64];
+        byte[] salt = new byte[10];
         random.nextBytes(salt);
         return salt;
     }
