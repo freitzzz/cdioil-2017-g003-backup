@@ -10,7 +10,7 @@ import cdioil.persistence.RepositorioBaseJPA;
  * na base de dados
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class AdminRepositoryImpl extends RepositorioBaseJPA<Admin,SystemUser>{
+public class AdminRepositoryImpl extends RepositorioBaseJPA<Admin,Long>{
     /**
      * Método que devolve o nome da unidade de persistência usada no modulo em 
      * que está a ser feita a implementação
@@ -25,5 +25,6 @@ public class AdminRepositoryImpl extends RepositorioBaseJPA<Admin,SystemUser>{
         if(exists(admin))return admin;
         return super.add(admin);
     }
+    public boolean exists(Admin admin){return find(admin.getID())!=null;}
     
 }

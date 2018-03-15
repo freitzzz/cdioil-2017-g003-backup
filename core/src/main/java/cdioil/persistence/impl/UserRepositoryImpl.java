@@ -65,4 +65,5 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Email> imp
 
         return (SystemUser) q.getSingleResult();
     }
+    public boolean exists(SystemUser user){return find(user.getID())!=null;}
 }

@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import javax.persistence.Version;
  * de uma dada estrutura mercadológica
  */
 @Entity
-public class Gestor implements Serializable {
+public class Gestor implements Serializable,Identifiable<Long>{
     @Id
     @GeneratedValue
     private long id;
@@ -51,7 +52,7 @@ public class Gestor implements Serializable {
 
         Gestor gestor = (Gestor) o;
 
-        return su.equals(gestor.su) || su.equals(o);
+        return su.equals(gestor.su);
     }
 
     /**
@@ -63,4 +64,9 @@ public class Gestor implements Serializable {
         return su.hashCode();
     }
     protected Gestor(){}
+
+    @Override
+    public Long getID() {
+       return id;
+    }
 }
