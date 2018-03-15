@@ -5,6 +5,7 @@
  */
 package cdioil.application.domain.authz;
 
+import cdioil.domain.authz.Nome;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
