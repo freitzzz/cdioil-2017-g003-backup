@@ -20,5 +20,10 @@ public class AdminRepositoryImpl extends RepositorioBaseJPA<Admin,SystemUser>{
     protected String nomeUnidadePersistencia() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
+    @Override
+    public Admin add(Admin admin){
+        if(exists(admin))return admin;
+        return super.add(admin);
+    }
     
 }

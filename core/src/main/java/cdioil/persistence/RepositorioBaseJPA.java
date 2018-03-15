@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import cdioil.persistence.RepositoryDados;
+import java.util.Iterator;
 
 /**
  * Classe utilitária abstrata para implementar repositórios. Baseada na classe
@@ -50,10 +51,8 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
      */
     protected EntityManagerFactory entityManagerFactory() {
         if (factory == null) {
-            System.out.println(nomeUnidadePersistencia());
             factory = Persistence
                     .createEntityManagerFactory(nomeUnidadePersistencia());
-            System.out.println(factory);
         }
         return factory;
     }
@@ -92,7 +91,7 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
         if (entidade == null) {
             throw new IllegalArgumentException("A entidade a persistir não pode ser nula");
         }
-
+        
         EntityManager em = entityManager();
         EntityTransaction transacao = em.getTransaction();
 
@@ -114,5 +113,17 @@ public abstract class RepositorioBaseJPA<T, K extends Serializable> implements R
         em.close();
         return entity;
     }
-
+    /**
+     * <b>SOLUCAO TEMPORARIA</b>
+     * <br>Não me julguem
+     * @param entity
+     * @return 
+     */
+    public boolean exists(T entity){
+        if(entity==null)return false;
+        Iterator<T> iteratorEntities=findAll().iterator();
+        while(iteratorEntities.hasNext())if(iteratorEntities.next().equals(entity))return true;
+        return false;
+    }
+    
 }

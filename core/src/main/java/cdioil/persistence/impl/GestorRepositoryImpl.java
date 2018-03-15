@@ -20,5 +20,10 @@ public class GestorRepositoryImpl extends RepositorioBaseJPA<Gestor,SystemUser>{
     protected String nomeUnidadePersistencia() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
+    @Override
+    public Gestor add(Gestor gestor){
+        if(exists(gestor))return gestor;
+        return super.add(gestor);
+    }
     
 }

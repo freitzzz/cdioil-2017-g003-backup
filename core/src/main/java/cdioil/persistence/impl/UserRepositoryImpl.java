@@ -1,5 +1,6 @@
 package cdioil.persistence.impl;
 
+import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
 import cdioil.persistence.RepositorioBaseJPA;
 import cdioil.domain.authz.SystemUser;
@@ -31,9 +32,15 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Email> imp
     @Override
     public boolean saveAll(List<SystemUser> users) {
         if(users==null||users.isEmpty())return false;
+        int usersAdded=users.size();
         for(int i=0;i<users.size();i++){
-            if(add(users.get(i))==null)return false;
+            if(add(users.get(i))==null)usersAdded--;
         }
-        return true;
+        return usersAdded!=0;
+    }
+    @Override
+    public SystemUser add(SystemUser user){
+        if(exists(user))return user;
+        return super.add(user);
     }
 }
