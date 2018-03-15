@@ -54,22 +54,13 @@ public class SystemUser implements Serializable {
     }
 
     /**
-     * Devolve o email do utilizador
-     *
-     * @return email
-     */
-    public Email email() {
-        return this.email;
-    }
-
-    /**
      * Verifica se uma password recebida é igual à de um utilizador
      *
      * @param password pwd recebida
      * @return true se forem iguals, false se forem diferentes
      */
-    public boolean passwordIgual(Password password) {
-        return this.password.equals(password);
+    public boolean passwordIgual(String password) {
+        return this.password.verifyPassword(password);
     }
 
     /**
@@ -109,6 +100,40 @@ public class SystemUser implements Serializable {
     @Override
     public String toString() {
         return "Nome: " + nome + "\n" + "Email: " + email + "\n";
+    }
+
+    /**
+     * Altera um campo de informação do utilizador
+     *
+     * @param novoCampo informação introduzida pelo utilizador
+     * @param opcao inteiro que indica qual campo de informação vai ser alterado
+     * @return true se campo for alterado com sucesso, false se nova informação for inválida
+     */
+    public boolean alterarCampoInformacao(String novoCampo, int opcao) {
+        try {
+            switch (opcao) {
+                case 1://muda o nome do utilizador
+                    String[] nome = novoCampo.split(" ");
+                    if (nome.length != 2) {
+                        throw new IllegalArgumentException();
+                    }
+                    this.nome = new Nome(nome[0], nome[1]);
+                    break;
+                case 2://muda o email do utilizador
+                    Email email = new Email(novoCampo);
+                    this.email = email;
+                    break;
+                case 3://muda a password do utilizador
+                    Password password = new Password(novoCampo);
+                    this.password = password;
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
 }
