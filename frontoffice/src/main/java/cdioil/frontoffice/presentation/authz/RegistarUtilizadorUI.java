@@ -15,6 +15,6 @@ public class RegistarUtilizadorUI {
         String apelido = Console.readLine("\nApelido: ");
         String email = Console.readLine("\nEmail: ");
 
-        controller.criarUtilizadorRgistado(primeiroNome, apelido, email, Console.readLine("\nPassword: "));
+        controller.criarUtilizadorRegistado(primeiroNome, apelido, email, Console.readLine("\nPassword: "));
     }
 }
