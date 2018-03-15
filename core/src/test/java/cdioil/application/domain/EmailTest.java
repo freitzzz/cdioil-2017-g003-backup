@@ -1,6 +1,6 @@
 package cdioil.application.domain;
 
-import cdioil.domain.Email;
+import cdioil.domain.authz.Email;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -61,8 +61,8 @@ public class EmailTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Email instance = new Email();
-        int expResult = 445;
+        Email instance = new Email("1111@isep.ipp.pt");
+        int expResult = 705951839;
         int result = instance.hashCode();
         assertEquals("A condição deve acertar pois os valores são iguais",expResult,result);
     }

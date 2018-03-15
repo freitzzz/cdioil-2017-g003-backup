@@ -5,6 +5,8 @@
  */
 package cdioil.application.domain;
 
+import cdioil.domain.CodigoQR;
+import cdioil.domain.EAN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;

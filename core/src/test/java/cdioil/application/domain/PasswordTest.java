@@ -1,5 +1,6 @@
 package cdioil.application.domain;
 
+import cdioil.domain.authz.Password;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
