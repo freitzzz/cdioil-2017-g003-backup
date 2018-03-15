@@ -34,14 +34,19 @@ public class Password {
      * Construtor de password
      *
      * @param password
-     * @throws NoSuchAlgorithmException
      */
-    public Password(String password) throws NoSuchAlgorithmException {
+    public Password(String password) {
         if (strength(password).equalsIgnoreCase(WEAK_PASSWORD)) {
             throw new IllegalArgumentException(WEAK_PASSWORD);
         }
-        salt = generateSalt();
-        this.password = generateHash(password + salt);
+
+        try {
+            salt = generateSalt();
+            this.password = generateHash(password + salt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -101,6 +106,22 @@ public class Password {
         }
 
         return WEAK_PASSWORD;
+    }
+
+    /**
+     * Verifica de a password inserida é a correcta
+     * @param password password do utilizador
+     * @return retorna true se a password está correcta e false se está incorreta
+     */
+    public boolean verifyPassword(String password) {
+        String hash = " ";
+        try {
+            hash = generateHash(password + salt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return hash.equals(this.password);
     }
 
 }
