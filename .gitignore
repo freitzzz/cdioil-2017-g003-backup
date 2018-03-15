@@ -167,3 +167,4 @@ core/target
 .idea/libraries
 .idea/sonarSettings.xml
 /core/nbproject/
+/framework/nbproject/
