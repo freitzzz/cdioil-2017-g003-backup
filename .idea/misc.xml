@@ -3,7 +3,16 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
+        <option value="$PROJECT_DIR$/core/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/util/target/maven-archiver/pom.properties" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/bootstrap/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/framework/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/app.common/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/backoffice/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/frontoffice/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/consoleapp.common/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/frontoffice.consoleapp/target/maven-archiver/pom.properties" />
       </list>
     </option>
   </component>

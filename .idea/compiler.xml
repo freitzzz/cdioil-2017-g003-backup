@@ -12,6 +12,16 @@
         <module name="core" />
         <module name="framework" />
         <module name="frontoffice" />
+        <module name="maven-archiver" />
+        <module name="maven-archiver (1)" />
+        <module name="maven-archiver (2)" />
+        <module name="maven-archiver (3)" />
+        <module name="maven-archiver (4)" />
+        <module name="maven-archiver (5)" />
+        <module name="maven-archiver (6)" />
+        <module name="maven-archiver (7)" />
+        <module name="maven-archiver (8)" />
+        <module name="maven-archiver (9)" />
         <module name="util" />
       </profile>
     </annotationProcessing>
@@ -23,6 +33,16 @@
       <module name="core" target="1.8" />
       <module name="framework" target="1.8" />
       <module name="frontoffice" target="1.8" />
+      <module name="maven-archiver" target="1.5" />
+      <module name="maven-archiver (1)" target="1.5" />
+      <module name="maven-archiver (2)" target="1.5" />
+      <module name="maven-archiver (3)" target="1.5" />
+      <module name="maven-archiver (4)" target="1.5" />
+      <module name="maven-archiver (5)" target="1.5" />
+      <module name="maven-archiver (6)" target="1.5" />
+      <module name="maven-archiver (7)" target="1.5" />
+      <module name="maven-archiver (8)" target="1.5" />
+      <module name="maven-archiver (9)" target="1.5" />
       <module name="util" target="1.8" />
     </bytecodeTargetLevel>
   </component>

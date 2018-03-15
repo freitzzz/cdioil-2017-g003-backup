@@ -1,6 +1,6 @@
 package cdioil.persistence.impl;
 
-import cdioil.application.persistence.RepositorioBaseJPA;
+import cdioil.persistence.RepositorioBaseJPA;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserRepository;
