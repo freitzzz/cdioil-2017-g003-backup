@@ -1,9 +1,7 @@
 package cdioil.application.domain;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Classe que representa a Estrutura Mercadologica que agrega as categorias de
@@ -23,23 +21,23 @@ public class EstruturaMercadologica {
         /**
          * Node que se situa acima do node atual na estrutura.
          */
-        Node pai;
+        private Node pai;
 
         /**
          * Todos os nodes que se encontrem abaixo do atual.
          */
-        Set<Node> filhos;
+        private List<Node> filhos;
 
         /**
          * Categoria de produtos contida no node.
          */
-        Categoria elemento;
+        private Categoria elemento;
 
         protected Node(Node pai, Categoria elemento) {
 
             this.pai = pai;
             this.elemento = elemento;
-            this.filhos = new HashSet<>();
+            this.filhos = new LinkedList<>();
         }
 
         /**
@@ -47,7 +45,7 @@ public class EstruturaMercadologica {
          *
          * @return a categoria contida no node
          */
-        private Categoria getElemento() {
+        public Categoria getElemento() {
             return elemento;
         }
 
@@ -56,7 +54,7 @@ public class EstruturaMercadologica {
          *
          * @return conjunto de nodes filhos
          */
-        private Set<Node> getFilhos() {
+        public List<Node> getFilhos() {
             return filhos;
         }
 
@@ -68,7 +66,7 @@ public class EstruturaMercadologica {
          * filhos<p>
          * false - caso contrario
          */
-        private boolean addFilho(Node filho) {
+        public boolean addFilho(Node filho) {
             return filhos.add(filho);
         }
 
@@ -168,7 +166,7 @@ public class EstruturaMercadologica {
             return node;
         }
 
-        Set<Node> filhos = node.getFilhos();
+        List<Node> filhos = node.getFilhos();
 
         for (Node n : filhos) {
             return procuraNode(n, c);
@@ -214,7 +212,7 @@ public class EstruturaMercadologica {
      */
     private void procuraFolhas(List<Categoria> folhas, Node node) {
 
-        Set<Node> filhos = node.getFilhos();
+        List<Node> filhos = node.getFilhos();
 
         if (isLeaf(node)) {
             folhas.add(node.getElemento());
@@ -234,8 +232,9 @@ public class EstruturaMercadologica {
      *
      * @param p produto que se pretende adicionar
      * @param c categoria a qual se pretende adicionar o produto
+     * @return true - se a categoria for uma folha<p>
      */
-    public void adicionarProduto(Produto p, Categoria c) {
+    public boolean adicionarProduto(Produto p, Categoria c) {
 
         if (p == null || c == null) {
             throw new IllegalArgumentException("Os argumentos nao podem ser null");
@@ -244,9 +243,10 @@ public class EstruturaMercadologica {
         Node node = procuraNode(raiz, c);
 
         if (isLeaf(node)) {
-            c.adicionarProduto(p);
+            return c.adicionarProduto(p);
         }
 
+        return false;
     }
 
     public int tamanho() {
