@@ -5,6 +5,7 @@ import cdioil.backoffice.console.utils.Console;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Atribui um perfil de Gestor a um utilizador registado
@@ -99,7 +100,7 @@ public class AtribuirPerfilGestorUI {
 
         int currentPage = 1;
         int opcao = -1;
-        ArrayList<String> usersPagina = null;
+        List<String> usersPagina = null;
 
         System.out.println(LINE_SEPARATOR);
         System.out.println("Lista Utilizadores");
@@ -113,7 +114,7 @@ public class AtribuirPerfilGestorUI {
                 idxFinal = numeroUsers - 1;
             }
 
-            usersPagina.subList(idxInicial, idxFinal + 1);
+            usersPagina = listaUsers.subList(idxInicial, idxFinal + 1);
 
             for (String user : usersPagina) {
                 System.out.println(user);
