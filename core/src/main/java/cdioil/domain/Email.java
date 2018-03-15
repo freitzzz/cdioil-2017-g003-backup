@@ -1,4 +1,4 @@
-package cdioil.application.domain;
+package cdioil.domain;
 
 import java.io.Serializable;
 import java.util.Objects;

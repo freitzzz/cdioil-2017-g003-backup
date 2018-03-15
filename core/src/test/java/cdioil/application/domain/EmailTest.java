@@ -1,5 +1,6 @@
 package cdioil.application.domain;
 
+import cdioil.domain.Email;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
