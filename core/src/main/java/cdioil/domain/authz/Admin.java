@@ -28,6 +28,10 @@ public class Admin implements Serializable {
      * @param sysUser conta de utilizador associada ao admin
      */
     public Admin(SystemUser sysUser) {
+        if (sysUser == null) {
+            throw new IllegalArgumentException("O utilizador atribuido ao admin "
+                    + "não deve ser null.");
+        }
         this.sysUser = sysUser;
     }
 
