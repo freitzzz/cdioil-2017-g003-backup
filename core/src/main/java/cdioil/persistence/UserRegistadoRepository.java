@@ -1,8 +1,8 @@
-package cdioil.application.persistence;
+package cdioil.persistence;
 
 import cdioil.domain.authz.UserRegistado;
 
-public interface RepositorioUtilizadores {
+public interface UserRegistadoRepository {
 
     public UserRegistado addUserRegistado(UserRegistado userRegistado);
 }
