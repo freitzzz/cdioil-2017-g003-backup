@@ -3,39 +3,25 @@ package cdioil.frontoffice.presentation;
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.presentation.authz.MudarInfoUtilizadorUI;
 import cdioil.frontoffice.presentation.authz.RegistarUtilizadorUI;
-import cdioil.frontoffice.utils.Console;
 
 public class MainMenu {
 
     /**
-     * Main Menu para o front office.
+     * Metodo que invoca a UI responsavel pela US183.
+     *
      * @param loggedUser user com sessao iniciada
      */
-    public void main(SystemUser loggedUser) {
-        int opcao = 0;
-        do {
-            opcao = menu();
-
-            switch (opcao) {
-                case 0:
-                    System.out.println("Fim");
-                    break;
-                case 1:
-                    RegistarUtilizadorUI registarUtilizadorUI = new RegistarUtilizadorUI();
-                    registarUtilizadorUI.registarUtilizadorUI();
-                    break;
-                case 2:
-                    MudarInfoUtilizadorUI mui = new MudarInfoUtilizadorUI(loggedUser);
-                    mui.mudarInformacao();
-                    break;
-            }
-        } while (opcao != 0);
+    public void mainAlterarDados(SystemUser loggedUser) {
+        MudarInfoUtilizadorUI mui = new MudarInfoUtilizadorUI(loggedUser);
+        mui.mudarInformacao();
     }
-
-    private static int menu() {
-        System.out.println("\n=============================\n"
-                + "1. Registar Utilizador\n"
-                + "2. Atualizar dados");
-        return Console.readInteger("Escolha a opção desejada: ");
+    
+    
+    /**
+     * Metodo que invoca a UI responsavel pela US180.
+     */
+    public void mainRegistoUser() {
+        RegistarUtilizadorUI registarUtilizadorUI = new RegistarUtilizadorUI();
+        registarUtilizadorUI.registarUtilizadorUI();
     }
 }
