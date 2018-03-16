@@ -19,8 +19,8 @@ public class SystemUser implements Serializable, Identifiable<Email> {
 
     private static final long serialVersionUID = 1L;
 
-    @Version
-    private Long version;
+    //@Version
+    //private Long version;
 
     /**
      * Email do utilizador (username)
