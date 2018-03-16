@@ -144,11 +144,48 @@ public class EstruturaMercadologicaTest {
 
         struct.adicionarCategoria(c1, c2);
 
-        Produto p = new Produto();
+        Produto p = new Produto("Produto", new Preco("0.32€"));
 
         assertFalse("A categoria nao e uma folha", struct.adicionarProduto(p, c1));
 
         assertTrue(struct.adicionarProduto(p, c2));
+    }
+
+       @Test
+    public void testAdicionarSubCategorias() {
+
+        EstruturaMercadologica struct = new EstruturaMercadologica();
+
+        Categoria mae = new Categoria("Roupa", "DC20");
+
+        struct.adicionarCategoriaRaiz(mae);
+
+        for (int i = 0; i < 30; i++) {
+
+            Categoria pai = new Categoria("Alimentar", "DC10");
+
+            struct.adicionarCategoriaRaiz(pai);
+
+            Categoria filho = new Categoria("Bens Essenciais", "UN10");
+
+            struct.adicionarCategoria(pai, filho);
+
+            Categoria filho2 = new Categoria("Gorduras Liquidas", "CAT1000");
+
+            struct.adicionarCategoria(filho, filho2);
+
+            Categoria filho3 = new Categoria("Sub-Categoria " + i, "SCAT0" + i);
+
+            struct.adicionarCategoria(filho2, filho3);
+
+            Produto p = new Produto("Produto " + i, new Preco("1.40€"));
+
+            struct.adicionarProduto(p, filho3);
+
+        }
+
+        assertEquals(35, struct.tamanho());
+
     }
 
 }
