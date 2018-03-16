@@ -36,6 +36,11 @@ public class MudarInfoUtilizadorUI {
     public void mudarInformacao() {
         int opcao = Console.readInteger("Que campo de informação deseja alterar?\n1.Nome\n2.Email\n3.Password\n");
         String novaInfo = Console.readLine("Introduza a nova informação:\n");
-        ctrl.alterarCampoInformacao(novaInfo, opcao);
+        boolean b = ctrl.alterarCampoInformacao(novaInfo, opcao);
+        if(b){
+            System.out.println("Informação alterada com sucesso.\n");
+        }else{
+            System.out.println("Dados inválidos!");
+        }
     }
 }
