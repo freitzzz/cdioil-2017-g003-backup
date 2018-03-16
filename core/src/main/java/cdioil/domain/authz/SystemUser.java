@@ -15,13 +15,12 @@ import javax.persistence.*;
  * @author Gil Durão
  */
 @Entity
-public class SystemUser implements Serializable,Identifiable<Email>{
+public class SystemUser implements Serializable, Identifiable<Email> {
 
     private static final long serialVersionUID = 1L;
-    
-//    @Transient
-//    @Version //PERGUTNAR O PORQUE DISTO DAR O BERRO
-//    private Long version;
+
+    @Version
+    private Long version;
 
     /**
      * Email do utilizador (username)
@@ -109,7 +108,8 @@ public class SystemUser implements Serializable,Identifiable<Email>{
      *
      * @param novoCampo informação introduzida pelo utilizador
      * @param opcao inteiro que indica qual campo de informação vai ser alterado
-     * @return true se campo for alterado com sucesso, false se nova informação for inválida
+     * @return true se campo for alterado com sucesso, false se nova informação
+     * for inválida
      */
     public boolean alterarCampoInformacao(String novoCampo, int opcao) {
         try {

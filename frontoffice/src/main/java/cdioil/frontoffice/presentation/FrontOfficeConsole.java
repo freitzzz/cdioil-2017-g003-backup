@@ -10,7 +10,11 @@ import cdioil.domain.authz.SystemUser;
 public class FrontOfficeConsole {
     
     public FrontOfficeConsole(SystemUser loggedUser){
-        new MainMenu().main(loggedUser);
+        new MainMenu().mainAlterarDados(loggedUser);
+    }
+    
+    public FrontOfficeConsole(){
+        new MainMenu().mainRegistoUser();
     }
     
 }

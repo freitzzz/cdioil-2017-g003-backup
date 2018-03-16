@@ -6,6 +6,9 @@
 package cdioil.application.authz;
 
 import cdioil.domain.authz.SystemUser;
+import cdioil.persistence.UserRepository;
+import cdioil.persistence.impl.UserRepositoryImpl;
+import cdioil.persistence.RepositorioBaseJPA;
 
 /**
  * Controller do UC Mudar Informação do Utilizador
@@ -38,6 +41,11 @@ public class MudarInfoUtilizadorController {
      * informação for inválida
      */
     public boolean alterarCampoInformacao(String novaInfo, int opcao) {
-        return su.alterarCampoInformacao(novaInfo, opcao);
+        boolean b = su.alterarCampoInformacao(novaInfo, opcao);
+        if (b) {
+            RepositorioBaseJPA repo = new UserRepositoryImpl();
+            repo.merge(su);
+        }
+        return b;
     }
 }
