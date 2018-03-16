@@ -10,6 +10,7 @@
     <class>cdioil.domain.authz.SystemUser</class>
     <class>cdioil.domain.authz.Gestor</class>
     <class>cdioil.domain.authz.UserRegistado</class>
+    <class>cdioil.domain.authz.Whitelist</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
