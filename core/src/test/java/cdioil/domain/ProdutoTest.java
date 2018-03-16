@@ -50,7 +50,6 @@ public class ProdutoTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        System.out.println(p.toString());
         assertEquals("Deveriam ser iguais", "Nome: ProdutoTeste\nPreço: 7.0 EUR\nCódigo de Barras: \nID: 33312113\nCódigo QR: \nSem código QR\n", p.toString());
     }
 
