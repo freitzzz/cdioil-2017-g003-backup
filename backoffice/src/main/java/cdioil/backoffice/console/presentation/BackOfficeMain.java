@@ -6,12 +6,6 @@ package cdioil.backoffice.console.presentation;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class BackOfficeMain {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        new BackOfficeLogin();
-    }
+    public static void main(String[] args){new BackOfficeLogin().backofficeLogin();}
     
 }

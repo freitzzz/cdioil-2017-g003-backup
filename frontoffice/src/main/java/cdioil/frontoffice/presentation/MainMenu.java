@@ -8,11 +8,10 @@ import cdioil.frontoffice.utils.Console;
 public class MainMenu {
 
     /**
-     * Logged-in User
+     * Main Menu para o front office.
+     * @param loggedUser user com sessao iniciada
      */
-    private static SystemUser loggedUser;
-
-    public static void main(String[] args) {
+    public void main(SystemUser loggedUser) {
         int opcao = 0;
         do {
             opcao = menu();
