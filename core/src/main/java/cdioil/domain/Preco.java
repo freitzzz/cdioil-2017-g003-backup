@@ -28,7 +28,7 @@ public class Preco implements Serializable {
      * Constante que representa a expressão regular que valida o valor de um
      * preço
      */
-    private static final String REGEX_VALORES = "[0-9]+(.|,)?[0-9]+";
+    private static final String REGEX_VALORES = "([0-9]{1,}([.]|,)[0-9]{1,2})|([0-9]+)";
     /**
      * Constante que representa a expressão regular que identifica espaços
      */
