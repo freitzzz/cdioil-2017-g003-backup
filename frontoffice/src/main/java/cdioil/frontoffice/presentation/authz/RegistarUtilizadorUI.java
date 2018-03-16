@@ -14,7 +14,10 @@ public class RegistarUtilizadorUI {
         String primeiroNome = Console.readLine("\nNome: ");
         String apelido = Console.readLine("\nApelido: ");
         String email = Console.readLine("\nEmail: ");
-
-        controller.criarUtilizadorRegistado(primeiroNome, apelido, email, Console.readLine("\nPassword: "));
+        try {
+            controller.criarUtilizadorRegistado(primeiroNome, apelido, email, Console.readLine("\nPassword: "));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

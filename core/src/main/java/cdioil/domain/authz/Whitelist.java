@@ -33,8 +33,12 @@ public class Whitelist implements Serializable {
     /**
      * Constrói uma nova instância de Dominio de um determinado email
      * @param dominio String com o dominio que contém um certo dominio
+     * @param subDominio 
      */
-    public Whitelist(String dominio){/*Ainda precisa de ser discutido*/}
+    public Whitelist(String dominio,String subDominio){
+        this.dominio=dominio;
+        this.subDominio=subDominio;
+    }
     /**
      * Método que verifica se dois Dominios são iguais
      * @param obj Whitelist com o dominio de um email a ser comparado com o Whitelist atual
