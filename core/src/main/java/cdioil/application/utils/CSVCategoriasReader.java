@@ -65,7 +65,6 @@ public class CSVCategoriasReader implements CategoriasReader {
                 Categoria filha1 = new Categoria(line[3], line[2] + "UN");
                 added = em.adicionarCategoria(pai, filha1);
                 if (added) {
-                    System.out.println(filha1);
                     categorias.add(filha1);
                 }
 
