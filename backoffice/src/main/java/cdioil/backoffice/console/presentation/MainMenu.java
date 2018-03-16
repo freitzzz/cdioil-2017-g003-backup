@@ -51,7 +51,7 @@ public class MainMenu {
                     new AtribuirPerfilGestorUI();
                     break;
                 case 2:
-
+                    new AdicionarWhitelistUI();
                     break;
                 case 3:
                     new ImportarUtilizadoresFicheirosUI();
@@ -60,17 +60,17 @@ public class MainMenu {
                     new ListarUsersUI().listarUtilizadores();
                     break;
                 case 5:
-                    
+
                     break;
                 case 6:
-                    
+
                     break;
                 case 7:
                     new ImportarCategoriasUI();
-                    
+
                     break;
                 case 8:
-                    
+
                     break;
                 default:
                     System.out.println("Opção não reconhecida");
