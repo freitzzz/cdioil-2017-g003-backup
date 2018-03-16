@@ -27,5 +27,6 @@ public class WhitelistBootstrap {
         whiteRepo.add(new Whitelist("sonae.pt","admin"));
         whiteRepo.add(new Whitelist("sonae.pt","continente"));
         whiteRepo.add(new Whitelist("sonae.pt","worten"));
+        whiteRepo.add(new Whitelist("sonae.pt",""));
     }
 }
