@@ -5,8 +5,6 @@
  */
 package cdioil.domain;
 
-import cdioil.domain.Categoria;
-import cdioil.domain.EstruturaMercadologica;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;
@@ -144,7 +142,7 @@ public class EstruturaMercadologicaTest {
 
         struct.adicionarCategoria(c1, c2);
 
-        Produto p = new Produto("Produto", new Preco("0.32€"), new EAN(1));
+        Produto p = new Produto("Produto", new EAN(1));
 
         assertFalse("A categoria nao e uma folha", struct.adicionarProduto(p, c1));
 
@@ -178,7 +176,7 @@ public class EstruturaMercadologicaTest {
 
             struct.adicionarCategoria(filho2, filho3);
 
-            Produto p = new Produto("Produto " + i, new Preco("1.40€"), new EAN(i));
+            Produto p = new Produto("Produto " + i, new EAN(i));
 
             struct.adicionarProduto(p, filho3);
 
