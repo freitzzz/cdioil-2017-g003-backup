@@ -5,6 +5,7 @@
  */
 package cdioil.domain;
 
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,7 +38,7 @@ public class InqueritoTest {
 
     @Before
     public void setUp() {
-        this.i = new Inquerito(new Produto("UmProduto", new Preco("3€"), new EAN(73292)));
+        this.i = new Inquerito(new Produto("UmProduto", new EAN(73292)));
     }
 
     @After
@@ -61,8 +62,8 @@ public class InqueritoTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
         assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100FC"), i);
-        assertNotEquals("Instância de Inquerito diferente", new Inquerito(new Produto("OutroProduto", new Preco("8€"), new EAN(123))), i);
-        assertEquals("Instância de Inquerito igual", new Inquerito(new Produto("UmProduto", new Preco("3€"), new EAN(73292))), i);
+        assertNotEquals("Instância de Inquerito diferente", new Inquerito(new Produto("OutroProduto", new EAN(123))), i);
+        assertEquals("Instância de Inquerito igual", new Inquerito(new Produto("UmProduto", new EAN(73292))), i);
     }
 
     /**
@@ -70,8 +71,10 @@ public class InqueritoTest {
      */
     @Test
     public void testToString() {
-        System.out.println("toString");
-        System.out.println(i.toString());
+        System.out.println("toString");System.out.println(i.toString());
+        assertEquals("A condição deve acertar pois o conteudo das Strings são iguais",i.toString()
+                ,"Inquerito sobre o produto:\n"+new Produto("UmProduto", new EAN(73292))
+                        +"\nLista de Questões:\n"+new ArrayList<>());
     }
 
     /**

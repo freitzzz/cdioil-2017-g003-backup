@@ -37,7 +37,7 @@ public class ProdutoTest {
 
     @Before
     public void setUp() {
-        this.p = new Produto("ProdutoTeste", new Preco("7€"), new EAN(33312113));
+        this.p = new Produto("ProdutoTeste", new EAN(33312113));
     }
 
     @After
@@ -50,7 +50,7 @@ public class ProdutoTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("Deveriam ser iguais", "Nome: ProdutoTeste\nPreço: 7.0 EUR\nCódigo de Barras: \nID: 33312113\nCódigo QR: \nSem código QR\n", p.toString());
+        assertEquals("Deveriam ser iguais", "Nome: ProdutoTeste\nImagem: Produto sem Imagem\nCódigo de Barras: \nID: 33312113\nCódigo QR: \nSem código QR\n", p.toString());
     }
 
     /**
@@ -71,6 +71,19 @@ public class ProdutoTest {
         assertNotEquals("Objeto null não é igual", null, p);
         assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100FC"), p);
         assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new Preco("7€"), new EAN(33312118), new CodigoQR(552671)), p);
-        assertEquals("Instância de CodigoQR igual", new Produto("ProdutoTeste", new Preco("7€"), new EAN(33312113)), p);
+        assertEquals("Instância de CodigoQR igual", new Produto("ProdutoTeste", new EAN(33312113)), p);
+    }
+
+    /**
+     * Test of alterarImagemProduto method, of class Produto.
+     */
+    @Test
+    public void testAlterarImagemProduto() {
+        System.out.println("alterarImagemProduto");
+        byte[] imagem = "Nova Imagem".getBytes();
+        p.alterarImagemProduto(imagem);
+        boolean expResult = true;
+        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo",p.alterarImagemProduto(imagem));
+        assertFalse("A condição acertar pois a Imagem do produto é invalida",p.alterarImagemProduto(null));
     }
 }

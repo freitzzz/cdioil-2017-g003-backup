@@ -1,7 +1,6 @@
 package cdioil.domain;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +15,11 @@ import javax.persistence.Id;
  */
 @Entity
 public class Produto implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    /**
+     * Constante que representa o conteudo da imagem do produto por default
+     */
+    private static final String IMAGEM_PRODUTO_DEFAULT="Produto sem Imagem";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "IDPRODUTO")
@@ -42,8 +44,12 @@ public class Produto implements Serializable {
     /**
      * Preço unitário do produto.
      */
-    @Column(name = "PRECOUNITARIO")
-    private Preco precoUnitario;
+    //@Column(name = "PRECOUNITARIO")
+    //private Preco precoUnitario;
+    /**
+     * Imagem com a imagem do produto
+     */
+    private Imagem imagemProduto;
 
     /**
      * Construtor protegido apenas para uso de JPA.
@@ -52,17 +58,16 @@ public class Produto implements Serializable {
     }
 
     /**
-     * Constrói uma nova instância com um dado nome, preço unitário e código de barras.
+     * Constrói uma nova instância com um dado nome,código de barras
      *
      * @param nome nome do produto
-     * @param preco preço unitário do produto
      * @param codBarras código de barras
      */
-    public Produto(String nome, Preco preco, EAN codBarras) {
+    public Produto(String nome, EAN codBarras) {
         this.nome = nome;
-        this.precoUnitario = preco;
         this.codigoBarras = codBarras;
         this.codigoQR = null;
+        this.imagemProduto=new Imagem(IMAGEM_PRODUTO_DEFAULT.getBytes());
     }
 
     /**
@@ -75,11 +80,25 @@ public class Produto implements Serializable {
      */
     public Produto(String nome, Preco preco, EAN codBarras, CodigoQR codQR) {
         this.nome = nome;
-        this.precoUnitario = preco;
         this.codigoBarras = codBarras;
         this.codigoQR = codQR;
+        this.imagemProduto=new Imagem(IMAGEM_PRODUTO_DEFAULT.getBytes());
     }
-
+    /**
+     * Método que alterar a imagem atual do produto
+     * @param imagem Byte Array com o conteudo da imagem
+     * @return boolean true se a Imagem foi alterada com succeso, ou false caso 
+     * tenha ocorrido um erro
+     */
+    public boolean alterarImagemProduto(byte[] imagem){
+        try{
+            imagemProduto=new Imagem(imagem);
+            return true;
+        }catch(IllegalArgumentException e){
+            return false;
+        }
+    }
+    
     /**
      * Descreve o Produto através dos seus atributos.
      *
@@ -87,8 +106,8 @@ public class Produto implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("Nome: %s\nPreço: %s\nCódigo de Barras: \n%sCódigo QR: \n%s",
-                nome, precoUnitario, codigoBarras.toString(), codigoQR != null ? codigoQR.toString()
+        return String.format("Nome: %s\nImagem: %s\nCódigo de Barras: \n%sCódigo QR: \n%s",
+                nome,imagemProduto, codigoBarras.toString(), codigoQR != null ? codigoQR.toString()
                 : "Sem código QR\n");
     }
 
@@ -119,10 +138,7 @@ public class Produto implements Serializable {
             return false;
         }
         final Produto other = (Produto) obj;
-        if (!Objects.equals(this.codigoBarras, other.codigoBarras)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.codigoBarras, other.codigoBarras);
     }
 
 }
