@@ -36,6 +36,16 @@ public class EmailTest {
                 + "os argumentos são inválidos",createEmail(t));});
     }
     /**
+     * Test of verificarEmail method, of class Email.
+     */
+    @Test
+    public void testVerificarEmail() {
+        System.out.println("verificarEmail");
+        String email = "i.really.want.my.email.to.be.safe@securitas.pt";
+        Email instance = new Email(email);
+        assertTrue("A condição deve acertar pois os emails são iguais",instance.verificarEmail(email));
+    }
+    /**
      * Test of equals method, of class Email.
      */
     @Test
@@ -108,6 +118,5 @@ public class EmailTest {
      * @param email String com o email
      * @return Email com um determinado email ou null caso tenha ocurrido alguma excecão
      */
-    private Email createEmail(String email){try{return new Email(email);}catch(IllegalArgumentException e){return null;}}
-    
+    private Email createEmail(String email){try{return new Email(email);}catch(IllegalArgumentException e){return null;}}    
 }

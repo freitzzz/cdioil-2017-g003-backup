@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.application.utils.OperatorsEncryption;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -64,7 +65,15 @@ public class Email implements Serializable {
      */
     public Email(String email){
         validaEmail(email);
-        this.email=email;
+        this.email=encryptEmail(email);
+    }
+    /**
+     * Método que verifica se um certo email é igual ao Email atual
+     * @param email String com o email a ser comparado
+     * @return boolean true se os emails são iguais, false caso nao sejam
+     */
+    public boolean verificarEmail(String email){
+        return decryptEmail().equalsIgnoreCase(email);
     }
     /**
      * Método que verifica se dois Emails são iguais
@@ -75,7 +84,7 @@ public class Email implements Serializable {
     public boolean equals(Object obj){
         if(this==obj)return true;
         if(obj==null||this.getClass()!=obj.getClass())return false;
-        return email.equalsIgnoreCase(((Email)obj).email);
+        return decryptEmail().equalsIgnoreCase(((Email)obj).decryptEmail());
     }
     /**
      * Hashcode do Email
@@ -84,7 +93,7 @@ public class Email implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.email);
+        hash = 89 * hash + Objects.hashCode(decryptEmail());
         return hash;
     }
     /**
@@ -92,7 +101,7 @@ public class Email implements Serializable {
      * @return String com a informação textual do Email atual
      */
     @Override
-    public String toString(){return "Email: "+email;}
+    public String toString(){return "Email: "+decryptEmail();}
     /**
      * Método que valida se um email é válido ou não
      * @param email String com o email a ser validado
@@ -125,6 +134,17 @@ public class Email implements Serializable {
     private boolean checkEmail(String email,String regexEmail){
         return Pattern.compile(regexEmail,Pattern.CASE_INSENSITIVE).matcher(email).matches();
     }
+    /**
+     * Método que encripta um certo email
+     * @param email String com o email a ser encriptado
+     * @return String com o email encriptado
+     */
+    private String encryptEmail(String email){return OperatorsEncryption.encrypt(email);}
+    /**
+     * Método que decripta o email atual
+     * @return String com o email decriptado
+     */
+    private String decryptEmail(){return OperatorsEncryption.decrypt(email);}
     /**
      * Construtor protegido de modo a permitir a persistencia com o JPA
      */
