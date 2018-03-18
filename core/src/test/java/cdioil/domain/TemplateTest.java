@@ -5,6 +5,8 @@
  */
 package cdioil.domain;
 
+import cdioil.domain.authz.GrupoUtilizadores;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +23,7 @@ import org.junit.Test;
 public class TemplateTest {
 
     Categoria cat = new Categoria("Pai", "10");
+    Calendar data = Calendar.getInstance();
     List<Questao> listaQuestoes = new LinkedList<>();
     List<Inquerito> listaInqueritos = new LinkedList<>();
 
@@ -46,7 +49,7 @@ public class TemplateTest {
     @Test
     public void testAdicionarInquerito() {
         System.out.println("adicionarInquerito");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)));
+        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
         assertTrue("Deveria ser possível adicionar", template.adicionarInquerito(i));
         template.adicionarInquerito(i);
         assertFalse("Inquerito null", template.adicionarInquerito(null));
@@ -72,7 +75,7 @@ public class TemplateTest {
     @Test
     public void testarRemoverInquerito() {
         System.out.println("removerInquerito");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)));
+        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
         template.adicionarInquerito(i);
         assertTrue("Deveria ser possível remover", template.removerInquerito(i));
         template.removerInquerito(i);
@@ -99,7 +102,7 @@ public class TemplateTest {
     @Test
     public void testarIsInqueritoValido() {
         System.out.println("isInqueritoValido");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)));
+        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
         template.adicionarInquerito(i);
         assertTrue("Deveria ser válida", template.isInqueritoValido(i));
         template.removerInquerito(i);

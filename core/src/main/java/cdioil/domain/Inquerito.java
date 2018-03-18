@@ -1,6 +1,8 @@
 package cdioil.domain;
 
+import cdioil.domain.authz.GrupoUtilizadores;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.*;
@@ -11,7 +13,7 @@ import javax.persistence.*;
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class Inquerito implements Serializable {
+public class Inquerito implements Serializable, Evento {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,6 +31,15 @@ public class Inquerito implements Serializable {
      * Produto associado ao inquerito
      */
     private Produto produto;
+    /**
+     * Utilizadores aos quais o Inquerito se destina.
+     */
+    private GrupoUtilizadores publicoAlvo;
+    /**
+     * Data de realização do Inquerito.
+     */
+    @Temporal(TemporalType.DATE)
+    private Calendar data;
 
     /**
      * Lista de questoes do inquerito
@@ -39,10 +50,20 @@ public class Inquerito implements Serializable {
      * Constroi uma instancia de inquerito recebendo um produto e uma lista de questoes
      *
      * @param produto produto associado ao inquerito
+     * @param data  Data de realização do inqueito
+     * @param publicoAlvo Utilizadores aos quais o Inquerito se destina
      */
-    public Inquerito(Produto produto) {
+    public Inquerito(Produto produto, Calendar data, GrupoUtilizadores publicoAlvo) {
+        if (produto == null) {
+            throw new IllegalArgumentException("O inquérito tem que ter um produto");
+        }
         this.produto = produto;
         this.listaQuestoes = new LinkedList<>();
+        this.publicoAlvo = publicoAlvo;
+        if (data == null) {
+            throw new IllegalArgumentException("O inquérito tem que ter uma data");
+        }
+        this.data = data;
     }
 
     protected Inquerito() {
@@ -93,7 +114,7 @@ public class Inquerito implements Serializable {
     @Override
     public String toString() {
         return "Inquerito sobre o produto:\n" + produto.toString()
-                + "\nLista de Questões:\n" + listaQuestoes.toString();
+                + "\nData:\n" + data;
     }
 
     /**
@@ -125,5 +146,25 @@ public class Inquerito implements Serializable {
             return false;
         }
         return this.listaQuestoes.equals(other.listaQuestoes);
+    }
+
+     /**
+     * Devolve a informacao de um inquerito.
+     *
+     * @return info de um inquerito numa String
+     */
+    @Override
+    public String info() {
+        return toString();
+    }
+
+    /**
+     * Devolve o grupo de utilizadores a quem o inquerito se destina
+     *
+     * @return grupo de utilizadores
+     */
+    @Override
+    public GrupoUtilizadores publicoAlvo() {
+        return publicoAlvo;
     }
 }
