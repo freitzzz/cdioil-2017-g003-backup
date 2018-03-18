@@ -56,25 +56,30 @@ public class CSVCategoriasReader implements CategoriasReader {
         for (int i = 1; i < conteudoFicheiro.size(); i++) {
             String[] line = conteudoFicheiro.get(i).split(SPLITTER);
             if (line.length != 0) { //Termina a leitura quando não existirem mais linhas com informação
+                
+                /*Os identificadores das categorias têm de ser compostos pelo 
+                identificador da categoria pai de modo a evitar colisões quando 
+                se adiciona novas categorias.*/
+
                 Categoria pai = new Categoria(line[1], line[0] + "DC");
                 boolean added = em.adicionarCategoriaRaiz(pai);
                 if (added) {
                     categorias.add(pai);
                 }
 
-                Categoria filha1 = new Categoria(line[3], line[2] + "UN");
+                Categoria filha1 = new Categoria(line[3], line[0] + "DC" + line[2] + "UN");
                 added = em.adicionarCategoria(pai, filha1);
                 if (added) {
                     categorias.add(filha1);
                 }
 
-                Categoria filha2 = new Categoria(line[5], line[4] + "CAT");
+                Categoria filha2 = new Categoria(line[5], line[0] + "DC" + line[2] + "UN" + line[4] + "CAT");
                 added = em.adicionarCategoria(filha1, filha2);
                 if (added) {
                     categorias.add(filha2);
                 }
 
-                Categoria filha3 = new Categoria(line[7], line[6] + "SCAT");
+                Categoria filha3 = new Categoria(line[7], line[0] + "DC" + line[2] + "UN" + line[4] + "CAT" + line[6] + "SCAT");
                 added = em.adicionarCategoria(filha2, filha3);
                 if (added) {
                     categorias.add(filha3);
