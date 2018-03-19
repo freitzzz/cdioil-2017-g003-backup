@@ -1,6 +1,11 @@
 package cdioil.domain;
 
+import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Gestor;
 import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.Nome;
+import cdioil.domain.authz.Password;
+import cdioil.domain.authz.SystemUser;
 import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +26,8 @@ public class ConcursoTest {
     @Before
     public void setUp() {
         descricao = "Concurso Teste";
-        gu = new GrupoUtilizadores();
+        gu = new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Nome("Quim",
+                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         dataInicio = Calendar.getInstance();
         dataFim = Calendar.getInstance();
     }
@@ -30,16 +36,16 @@ public class ConcursoTest {
      * Testes relacionados com o construtor da classe Concurso.
      */
     @Test
-    public void testeConstrutor(){
+    public void testeConstrutor() {
         System.out.println("Testes Construtor");
         assertNull("A condição deve acertar pois os argumentos são inválidos",
-                createConcurso(null, gu,dataInicio,dataFim));
+                createConcurso(null, gu, dataInicio, dataFim));
         assertNull("A condição deve acertar pois os argumentos são inválidos",
-                createConcurso(descricao,gu,null,dataFim));
+                createConcurso(descricao, gu, null, dataFim));
         assertNull("A condição deve acertar pois os argumentos são inválidos",
-                createConcurso(descricao,gu,dataInicio,null));
+                createConcurso(descricao, gu, dataInicio, null));
         assertNotNull("A condição deve acertar pois os argumentos são válidos",
-                createConcurso(descricao,gu,dataInicio,dataFim));
+                createConcurso(descricao, gu, dataInicio, dataFim));
     }
 
     /**
@@ -48,10 +54,10 @@ public class ConcursoTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Concurso instance = createConcurso(descricao,gu,dataInicio,dataFim);
+        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
         int expResult = descricao.hashCode();
         int result = instance.hashCode();
-        assertEquals(expResult,result);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -60,9 +66,9 @@ public class ConcursoTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Concurso instance = createConcurso(descricao,gu,dataInicio,dataFim);
-        Concurso instance2 = createConcurso(descricao,gu,dataInicio,dataFim);
-        Concurso instance3 = createConcurso("Concurso 3",gu,dataInicio,dataFim);
+        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
+        Concurso instance2 = createConcurso(descricao, gu, dataInicio, dataFim);
+        Concurso instance3 = createConcurso("Concurso 3", gu, dataInicio, dataFim);
         assertEquals("A condição deve acertar pois estamos a comparar"
                 + "as mesmas instancias", instance, instance);
         assertNotEquals("A condição deve acertar pois estamos a comparar"
@@ -81,10 +87,10 @@ public class ConcursoTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Concurso instance = createConcurso(descricao,gu,dataInicio,dataFim);
+        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
         String expResult = "Concurso Teste";
         String result = instance.toString();
-        assertEquals(expResult,result);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -93,7 +99,7 @@ public class ConcursoTest {
     @Test
     public void testInfo() {
         System.out.println("info");
-        Concurso instance = createConcurso(descricao,gu,dataInicio,dataFim);
+        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
         String expResult = "Concurso Teste";
         String result = instance.info();
         assertEquals(expResult, result);
@@ -105,15 +111,15 @@ public class ConcursoTest {
     @Test
     public void testPublicoAlvo() {
         System.out.println("publicoAlvo");
-        Concurso instance = createConcurso(descricao,gu,dataInicio,dataFim);
+        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
         GrupoUtilizadores expResult = gu;
         GrupoUtilizadores result = instance.publicoAlvo();
         assertEquals(expResult, result);
     }
 
     /**
-     * Cria um novo objeto Concurso com uma descricao, grupo de utilizadores,
-     * data de inicio e data de fim.
+     * Cria um novo objeto Concurso com uma descricao, grupo de utilizadores, data de inicio e data de fim.
+     *
      * @param descricao
      * @param gu
      * @param dataInicio
