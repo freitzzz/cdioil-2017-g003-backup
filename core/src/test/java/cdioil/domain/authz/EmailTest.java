@@ -7,12 +7,16 @@ import static org.junit.Assert.*;
 
 /**
  * Testes unitários relativo a classe Email
+ * @see cdioil.domain.authz.Email
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public class EmailTest {
     
     public EmailTest(){}
     @Test
+    /**
+     * Teste unitário relativamente à construção de um Email
+     */
     public void testConstrucao(){
         assertNull("A condição deve acertar pois os argumentos são inválidos"
                 ,createEmail(null));
@@ -34,6 +38,102 @@ public class EmailTest {
                 + "os argumentos são válidos",createEmail(t));});
         gmailInvalidos.forEach((t) -> {assertNull("A condição deve acertar pois "
                 + "os argumentos são inválidos",createEmail(t));});
+    }
+    /**
+     * Testes unitários relativamente à criacao dos emails de dominio Gmail
+     * <br>Ver constante da regex de um email do dominio de Gmail para informações 
+     * mais detalhadas
+     */
+    @Test
+    public void testEmailGmail(){
+        String emailComecarPonto=".aaaaaa@gmail.com";
+        String emailAcabarPonto="aaaaa.@gmail.com";
+        String emailDoisPontosConsecutivos="aa..aa@gmail.com";
+        String emailCarateresEspeciais="aaaaa_a@gmail.com";
+        String emailMenorSeisCarateres="aaaaa@gmail.com";
+        String emailMaiorTrintaCarateres="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@gmail.com";
+        String emailValido="a.a.a.b.d.r.ew.a.d.waaaa.9.d.9@gmail.com";
+        testarEmail(emailComecarPonto,true,"O email é invalido pois começa com um ponto");
+        testarEmail(emailAcabarPonto,true,"O email é invalido pois acaba com um ponto");
+        testarEmail(emailDoisPontosConsecutivos,true,"O email é invalido pois tem dois pontos consecutivos");
+        testarEmail(emailCarateresEspeciais,true,"O email é invalido pois tem carateres especiais");
+        testarEmail(emailMenorSeisCarateres,true,"O email é invalido pois tem menos de seis carateres");
+        testarEmail(emailMaiorTrintaCarateres,true,"O email é invalido pois tem mais de trinta carateres");
+        testarEmail(emailValido,false,"O email é valido pois não infringe nenhuma regra");
+    }
+    /**
+     * Testes unitários relativamente à criacao dos emails de dominio Hotmail/Outlook/Live
+     * <br>Ver constante da regex de um email do dominio de Hotmail/Outlook/Live para informações 
+     * mais detalhadas
+     */
+    @Test
+    public void testEmailHotmail(){
+        String emailComecarPonto=".aaaaaa@hotmail.com";
+        String emailAcabarPonto="aaaaa.@hotmail.com";
+        String emailDoisPontosConsecutivos="aa...aa@hotmail.com";
+        String emailCarateresEspeciais="aaaaa*a@hotmail.com";
+        String emailSemCarateres="@hotmail.com";
+        String emailMaiorSessentaCarateres="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@hotmail.com";
+        String emailComecarSemAlfabeto="9asd@hotmail.com";
+        String emailValido="A_adddd.adsdsads-dd9a-@Hotmail.com";
+        testarEmail(emailComecarPonto,true,"O email é invalido pois começa com um ponto");
+        testarEmail(emailAcabarPonto,true,"O email é invalido pois acaba com um ponto");
+        testarEmail(emailDoisPontosConsecutivos,true,"O email é invalido pois tem dois pontos consecutivos");
+        testarEmail(emailCarateresEspeciais,true,"O email é invalido pois tem carateres especiais");
+        testarEmail(emailSemCarateres,true,"O email é invalido pois não tem carateres");
+        testarEmail(emailMaiorSessentaCarateres,true,"O email é invalido pois tem mais de sessenta carateres");
+        testarEmail(emailComecarSemAlfabeto,true,"O email é invalido pois não começa com uma letra do alfabeto");
+        testarEmail(emailValido,false,"O email é valido pois não infringe nenhuma regra");
+    }
+    /**
+     * Testes unitários relativamente à criacao dos emails de dominio Yahoo/Rocketmail/Ymail
+     * <br>Ver constante da regex de um email do dominio de Yahoo para informações 
+     * mais detalhadas
+     */
+    @Test
+    public void testEmailYahoo(){
+        String emailComecarPonto=".aaaaaa@yahoo.com";
+        String emailAcabarPonto="aaaaa.@yahoo.com";
+        String emailDoisPontosConsecutivos="aa...aa@yahoo.com";
+        String emailCarateresEspeciais="aaaaa*a@yahoo.com";
+        String emailMenosQuatroCarateres="aaa@yahoo.com";
+        String emailMaiorTrintaCarateres="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@yahoo.com";
+        String emailComecarSemAlfabeto="9asd@yahoo.com";
+        String emailValido="Aadddd.adsdsads333dd9a@yahoo.com";
+        testarEmail(emailComecarPonto,true,"O email é invalido pois começa com um ponto");
+        testarEmail(emailAcabarPonto,true,"O email é invalido pois acaba com um ponto");
+        testarEmail(emailDoisPontosConsecutivos,true,"O email é invalido pois tem dois pontos consecutivos");
+        testarEmail(emailCarateresEspeciais,true,"O email é invalido pois tem carateres especiais");
+        testarEmail(emailMenosQuatroCarateres,true,"O email é invalido pois tem menos de quatro carateres");
+        testarEmail(emailMaiorTrintaCarateres,true,"O email é invalido pois tem mais de trinta carateres");
+        testarEmail(emailComecarSemAlfabeto,true,"O email é invalido pois não começa com uma letra do alfabeto");
+        testarEmail(emailValido,false,"O email é valido pois não infringe nenhuma regra");
+    }
+    /**
+     * Testes unitários relativamente à criacao dos emails de dominio geral
+     * <br>Ver constante da regex de um email do dominio de geral para informações 
+     * mais detalhadas
+     */
+    @Test
+    public void testEmailGeral(){
+        String emailComecarPonto=".aaaaaa@email.com";
+        String emailAcabarPonto="aaaaa.@emailY.com";
+        String emailDoisPontosConsecutivos="aa...aa@24d.asd2.com";
+        String emailCarateresEspeciais="aaaaa«a@isep.com";
+        String emailMenosSemCarateres="@email.com";
+        String emailMaiorSessentaQuatraCarateres="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@as12rd.com";
+        String emailDoisCarater="aa@l.com";
+        String emailSessentaQuatroCarateres="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@vodafone.com";
+        String emailValido="A_adddd.a#~~~~d!sd?sadsdd9a@email.com.pt.xk.abcdef";
+        testarEmail(emailComecarPonto,true,"O email é invalido pois começa com um ponto");
+        testarEmail(emailAcabarPonto,true,"O email é invalido pois acaba com um ponto");
+        testarEmail(emailDoisPontosConsecutivos,true,"O email é invalido pois tem dois pontos consecutivos");
+        testarEmail(emailCarateresEspeciais,true,"O email é invalido pois tem carateres especiais");
+        testarEmail(emailMenosSemCarateres,true,"O email é invalido pois tem menos de quatro carateres");
+        testarEmail(emailMaiorSessentaQuatraCarateres,true,"O email é invalido pois tem mais de trinta carateres");
+        testarEmail(emailDoisCarater,false,"O email é válido pois tem no minimo dois carater");
+        testarEmail(emailSessentaQuatroCarateres,false,"O email é válido pois tem no maximo sessenta e quatro carateres");
+        testarEmail(emailValido,false,"O email é valido pois não infringe nenhuma regra");
     }
     /**
      * Test of verificarEmail method, of class Email.
@@ -119,4 +219,23 @@ public class EmailTest {
      * @return Email com um determinado email ou null caso tenha ocurrido alguma excecão
      */
     private Email createEmail(String email){try{return new Email(email);}catch(IllegalArgumentException e){return null;}}    
+    /**
+     * Método que testa a construção de um email
+     * @param email String com o email a ser testado
+     * @param falhar boolean true se o email é invalido, false se válido
+     * @param mensagem String com a mensagem do teste
+     */
+    private void testarEmail(String email,boolean falhar,String mensagem){
+        System.out.println(mensagem);
+        System.out.print("Testando a criação do Email: "+email+"...\nÉ suposto falhar? ");
+        if(falhar){
+            System.out.println("Sim");
+            assertNull("A condição deve falhar porque o email é invalido",createEmail(email));
+            System.out.println("A validação do email falhou como esperado");
+        }else{
+            System.out.println("Não");
+            assertNotNull(createEmail(email));
+        }
+        System.out.println("Teste validado com successo!");
+    }
 }

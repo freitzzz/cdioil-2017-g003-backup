@@ -24,6 +24,8 @@ public class OperatorsEncryptionTest {
      */
     @Test
     public void testOperatorsEncryption(){
+        System.out.println("Teste Unitário relativamente à encriptação e decriptação "
+                + "usando a encriptação por operadores");
         List<String> listRandomStrings=createListRandomStrings(NUMERO_STRINGS_ALEARTORIAS);
         List<String> listRandomEncryptedStrings=new ArrayList<>(NUMERO_STRINGS_ALEARTORIAS);
         List<String> listRandomDecryptedStrings=new ArrayList<>(NUMERO_STRINGS_ALEARTORIAS);
@@ -50,4 +52,43 @@ public class OperatorsEncryptionTest {
         return listRandomStrings;
     }
     
+    /**
+     * Testa a encriptação e decriptação usando determinados valores de encriptação 
+     * e de operadores
+     */
+    @Test
+    public void testOperatorsValues(){
+        System.out.println("Teste Unitário relativamente à encriptação e decriptação "
+                + "usando a encriptação por operadores com determinados valores de "
+                + "encriptação e de operador");
+        String palavra="Hello it's Lil Pump on this bitch!";
+        int operador=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_BITWISE;
+        List<String> listaPalavrasEncriptadas=new ArrayList<>();
+        for(int i=0;i<operador;i++){
+            listaPalavrasEncriptadas.add(OperatorsEncryption.encrypt(palavra,operador,i));
+        }
+        operador=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_ADICAO;
+        for(int i=0;i<100;i++){
+            int valor=new Random().nextInt(operador);
+            listaPalavrasEncriptadas.add(OperatorsEncryption.encrypt(palavra,operador,valor));
+        }
+        operador=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_MULTIPLICACAO;
+        for(int i=0;i<100;i++){
+            int valor=new Random().nextInt(operador);
+            listaPalavrasEncriptadas.add(OperatorsEncryption.encrypt(palavra,operador,valor));
+        }
+        listaPalavrasEncriptadas.forEach((t)->{areWordsEqual(palavra,OperatorsEncryption.decrypt(t));});
+        assertEquals(OperatorsEncryption.encrypt(null),null);
+        assertEquals(OperatorsEncryption.decrypt(null),null);
+        assertEquals(OperatorsEncryption.encrypt(""),"");
+        assertEquals(OperatorsEncryption.decrypt(""),"");
+    }
+    /**
+     * Método que verifica se duas Strings iguais (Case-Sensitive)
+     * @param wordX String com a palavra X
+     * @param wordY String com a palavra Y
+     */
+    private void areWordsEqual(String wordX,String wordY){
+        if(!wordX.equals(wordY))throw new AssertionError("Strings não são iguais!");
+    }
 }
