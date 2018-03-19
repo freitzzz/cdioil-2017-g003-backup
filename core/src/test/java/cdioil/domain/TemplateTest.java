@@ -5,7 +5,12 @@
  */
 package cdioil.domain;
 
+import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Gestor;
 import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.Nome;
+import cdioil.domain.authz.Password;
+import cdioil.domain.authz.SystemUser;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +36,7 @@ public class TemplateTest {
      * Instância de Template para testes.
      */
     Template template = new Template(cat);
+
     /**
      * Teste do método adicionarQuestao, da classe Template.
      */
@@ -43,13 +49,16 @@ public class TemplateTest {
         assertFalse("Questão null", template.adicionarQuestao(null));
         assertFalse("Questão já existente", template.adicionarQuestao(q));
     }
-     /**
+
+    /**
      * Teste do método adicionarInquerito, da classe Template.
      */
     @Test
     public void testAdicionarInquerito() {
         System.out.println("adicionarInquerito");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
+        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data,
+                new GrupoUtilizadores((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"),
+                        new Nome("Quim", "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))))));
         assertTrue("Deveria ser possível adicionar", template.adicionarInquerito(i));
         template.adicionarInquerito(i);
         assertFalse("Inquerito null", template.adicionarInquerito(null));
@@ -69,13 +78,16 @@ public class TemplateTest {
         assertFalse("Questão null", template.removerQuestao(null));
         assertFalse("Questão não existente", template.removerQuestao(q));
     }
+
     /**
      * Teste do método removerInquerito, da classe Template.
      */
     @Test
     public void testarRemoverInquerito() {
         System.out.println("removerInquerito");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
+        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data,
+                new GrupoUtilizadores((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"),
+                        new Nome("Quim", "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))))));
         template.adicionarInquerito(i);
         assertTrue("Deveria ser possível remover", template.removerInquerito(i));
         template.removerInquerito(i);
@@ -96,13 +108,16 @@ public class TemplateTest {
         assertFalse("Questão null", template.isQuestaoValida(null));
         assertFalse("Questão não existente", template.isQuestaoValida(q));
     }
+
     /**
      * Teste do método isInqueritoValido, da classe Template.
      */
     @Test
     public void testarIsInqueritoValido() {
         System.out.println("isInqueritoValido");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
+        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data,
+                new GrupoUtilizadores((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"),
+                        new Nome("Quim", "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))))));
         template.adicionarInquerito(i);
         assertTrue("Deveria ser válida", template.isInqueritoValido(i));
         template.removerInquerito(i);

@@ -15,7 +15,8 @@ import javax.persistence.Version;
  * É o responsável por avaliar produtos e fornecer feedback
  */
 @Entity
-public class UserRegistado implements Serializable,Identifiable<Long> {
+public class UserRegistado implements Serializable, Identifiable<Long> {
+
     @Id
     @GeneratedValue
     private long id;
@@ -29,6 +30,7 @@ public class UserRegistado implements Serializable,Identifiable<Long> {
 
     /**
      * Cria uma nova instância de UserRegistado
+     *
      * @param su conta de SystemUser a associar
      */
     public UserRegistado(SystemUser su) {
@@ -40,13 +42,18 @@ public class UserRegistado implements Serializable,Identifiable<Long> {
 
     /**
      * Compara esta instância de UserRegistado a outro Objeto arbitrário
+     *
      * @param o outro objeto a comparar
      * @return true se os dois elementos da comparação forem iguais
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         UserRegistado that = (UserRegistado) o;
 
@@ -54,14 +61,27 @@ public class UserRegistado implements Serializable,Identifiable<Long> {
     }
 
     /**
+     * Descreve textualmente o UserRegistado.
+     *
+     * @return a informação relativa ao seu SystemUser
+     */
+    @Override
+    public String toString() {
+        return su.toString();
+    }
+
+    /**
      * Calcula o hashcode desta instancia de UserRegistado
+     *
      * @return hashcode
      */
     @Override
     public int hashCode() {
         return su.hashCode();
     }
-    protected UserRegistado(){}
+
+    protected UserRegistado() {
+    }
 
     @Override
     public Long getID() {

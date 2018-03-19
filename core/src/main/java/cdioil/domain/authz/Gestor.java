@@ -12,11 +12,11 @@ import javax.persistence.Version;
 /**
  * Gestor de Inquéritos
  *
- * Responsável pela criação e configuração de inquéritos
- * de uma dada estrutura mercadológica
+ * Responsável pela criação e configuração de inquéritos de uma dada estrutura mercadológica
  */
 @Entity
-public class Gestor implements Serializable,Identifiable<Long>{
+public class Gestor implements Serializable, Identifiable<Long> {
+
     @Id
     @GeneratedValue
     private long id;
@@ -30,6 +30,7 @@ public class Gestor implements Serializable,Identifiable<Long>{
 
     /**
      * Cria uma nova instância de Gestor
+     *
      * @param su conta de SystemUser a associar
      */
     public Gestor(SystemUser su) {
@@ -41,14 +42,29 @@ public class Gestor implements Serializable,Identifiable<Long>{
     }
 
     /**
+     * Descreve textualmente o Gestor.
+     *
+     * @return a informação relativa ao seu SystemUser
+     */
+    @Override
+    public String toString() {
+        return su.toString();
+    }
+
+    /**
      * Compara esta instância de Gestor a outro Objeto arbitrário
+     *
      * @param o outro objeto a comparar
      * @return true se os dois elementos da comparação forem iguais
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Gestor gestor = (Gestor) o;
 
@@ -57,16 +73,19 @@ public class Gestor implements Serializable,Identifiable<Long>{
 
     /**
      * Calcula o hashcode desta instância de Gestor
+     *
      * @return o valor inteiro do hashcode do SystemUser associado
      */
     @Override
     public int hashCode() {
         return su.hashCode();
     }
-    protected Gestor(){}
+
+    protected Gestor() {
+    }
 
     @Override
     public Long getID() {
-       return id;
+        return id;
     }
 }
