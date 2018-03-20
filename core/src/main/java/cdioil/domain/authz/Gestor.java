@@ -1,7 +1,9 @@
 package cdioil.domain.authz;
 
+import cdioil.domain.Categoria;
 import cdioil.persistence.Identifiable;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +14,8 @@ import javax.persistence.Version;
 /**
  * Gestor de Inquéritos
  *
- * Responsável pela criação e configuração de inquéritos de uma dada estrutura mercadológica
+ * Responsável pela criação e configuração de inquéritos de uma dada estrutura
+ * mercadológica
  */
 @Entity
 public class Gestor implements Serializable, Identifiable<Long> {
@@ -27,6 +30,21 @@ public class Gestor implements Serializable, Identifiable<Long> {
      */
     @OneToOne(cascade = CascadeType.PERSIST)
     private SystemUser su;
+    /**
+     * Lista de categorias pelas quais o gestor é responsável
+     */
+    private List<Categoria> categorias;
+
+    /**
+     * Cria uma instância de Gestor
+     *
+     * @param su conta de SystemUser a associar
+     * @param categorias lista de categorias pelas quais o gestor é responsável
+     */
+    public Gestor(SystemUser su, List<Categoria> categorias) {
+        this.su = su;
+        this.categorias = categorias;
+    }
 
     /**
      * Cria uma nova instância de Gestor
