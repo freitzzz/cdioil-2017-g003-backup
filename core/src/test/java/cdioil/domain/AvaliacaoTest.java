@@ -5,9 +5,50 @@
  */
 package cdioil.domain;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  *
  * @author João
  */
 public class AvaliacaoTest {
+
+    Avaliacao instance;
+
+    @Before
+    public void setUp() {
+        instance = new Avaliacao("ding dong your opinion is wrong", new Inquerito());
+    }
+
+    /**
+     * Teste do método equals, da classe Avaliacao
+     */
+    /*@Test
+    public void testeEquals() {
+        System.out.println("equals");
+        //teste com objetos que não são instâncias deAvaliacao
+        assertFalse(instance.equals(new Inquerito()));
+        //teste com null
+        assertFalse(instance.equals(null));
+        //teste com a mesma instância
+        assertTrue(instance.equals(instance));
+        //teste com instâncias diferentes com a mesma informação mas ID diferente
+        Avaliacao av = new Avaliacao("ding dong your opinion is wrong", new Inquerito());
+        assertFalse(instance.equals(av));
+
+    }*/
+
+    /**
+     * Teste do método toString, da classe Avaliacao
+     */
+    @Test
+    public void testeToString() {
+        System.out.println("toString");
+        String expected = "Avaliação:\nOpinião: ding dong your opinion is wrong";
+        assertEquals(expected, instance.toString());
+    }
 }
