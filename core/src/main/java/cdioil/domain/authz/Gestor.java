@@ -106,4 +106,33 @@ public class Gestor implements Serializable, Identifiable<Long> {
     public Long getID() {
         return id;
     }
+
+    /**
+     * Adiciona várias categorias à lista de categorias
+     *
+     * @param lc lsita de categorias a adicionar
+     * @return true se foram adicionadas com sucesso, false se não forem
+     * adicionadas
+     */
+    public boolean adicionarCategorias(List<Categoria> lc) {
+        try {
+            return categorias.addAll(lc);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Remove várias categorias à lista de categorias
+     *
+     * @param lc lista de categorias a remover
+     * @return true se forem removidas com sucesso, false se não forem removidas
+     */
+    public boolean removerCategorias(List<Categoria> lc) {
+        try {
+            return categorias.removeAll(lc);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
