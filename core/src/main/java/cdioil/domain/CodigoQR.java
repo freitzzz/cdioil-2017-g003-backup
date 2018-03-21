@@ -9,7 +9,6 @@ import javax.persistence.Entity;
  * @author Rita Gonçalves (1160912)
  */
 @Entity(name = "CODIGOQR")
-@DiscriminatorValue(value = "CODIGOQR")
 public class CodigoQR extends Codigo<String> {
 
     /**

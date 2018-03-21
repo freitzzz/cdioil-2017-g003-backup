@@ -9,7 +9,6 @@ import javax.persistence.Entity;
  * @author Ana Guerra (1161191)
  */
 @Entity(name = "EAN")
-@DiscriminatorValue(value = "EAN")
 public class EAN extends Codigo<String> {
 
     /**
