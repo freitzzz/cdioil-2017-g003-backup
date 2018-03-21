@@ -3,13 +3,10 @@ package cdioil.domain;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
  * Classe que representa a Estrutura Mercadologica que agrega as categorias de
@@ -20,131 +17,19 @@ import javax.persistence.OneToMany;
 @Entity
 public class EstruturaMercadologica implements Serializable{
 
-    /**
-     * Clase interna que representa um nó na estrutura mercadologica.
-     * <p>
-     * Um nó contém uma categoria, assim como referencias para outros nós.
-     */
-    @Entity
-    protected static class Node implements Serializable {
-
-        /**
-         * Código de serialização.
-         */
-        private static final long serialVersionUID = 1L;
-
-        /**
-         * Node que se situa acima do node atual na estrutura.
-         */
-        @ManyToOne(fetch = FetchType.LAZY)
-        @Id
-        private Node pai;
-
-        /**
-         * Todos os nodes que se encontrem abaixo do atual.
-         */
-        @OneToMany(fetch = FetchType.LAZY)
-        @Id
-        private List<Node> filhos = new LinkedList<>();
-
-        /**
-         * Categoria de produtos contida no node.
-         */
-        @Column(unique = true)
-        private Categoria elemento;
-
-        /**
-         * Construtor apenas para uso do JPA.
-         */
-        protected Node() {
-        }
-
-        protected Node(Node pai, Categoria elemento) {
-            this.pai = pai;
-            this.elemento = elemento;
-        }
-
-        /**
-         * Retorna a Categoria presente neste node.
-         *
-         * @return a categoria contida no node
-         */
-        public Categoria getElemento() {
-            return elemento;
-        }
-
-        /**
-         * Retorna o conjunto de nodes filhos deste node.
-         *
-         * @return conjunto de nodes filhos
-         */
-        public List<Node> getFilhos() {
-            return filhos;
-        }
-
-        /**
-         * Adiciona um node ao conjunto de filhos deste node.
-         *
-         * @param filho node que se pretende adicionar aos filhos
-         * @return true - caso tenha sido possível adicionar ao conjunto de
-         * filhos<p>
-         * false - caso contrario
-         */
-        public boolean addFilho(Node filho) {
-            if (getFilhos().contains(filho)) {
-                return false;
-            }
-            return filhos.add(filho);
-        }
-
-        /**
-         * Gera um índice a partir da Categoria do Node.
-         *
-         * @return o valor de hash gerado
-         */
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 79 * hash + Objects.hashCode(this.elemento);
-            return hash;
-        }
-
-        /**
-         * Compara o Node com outro objeto.
-         *
-         * @param obj Objeto a comparar
-         * @return true, se os dois objetos tiverem a mesma Categoria. Caso
-         * contrário, retorna false
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-
-            Node other = (Node) obj;
-            if (!Objects.equals(this.elemento, other.elemento)) {
-                return false;
-            }
-            return true;
-        }
-
-    }
-    /*----------------------------------------------------------
-    -------------------FIM DA CLASSE NODE-----------------------*/
 
     /**
      * Código de serialização.
      */
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    
     /**
      * Primeiro node da estrutura mercadologica.
      */
-    @Id
     private Node raiz;
     /**
      * Tamanho da estrutura mercadologica (numero de nodes).
@@ -254,7 +139,7 @@ public class EstruturaMercadologica implements Serializable{
      * @return true se o node não tiver nodes filhos, false caso tenha
      */
     private boolean isLeaf(Node node) {
-        return node.filhos.isEmpty();
+        return node.getFilhos().isEmpty();
     }
 
     /**
@@ -352,14 +237,14 @@ public class EstruturaMercadologica implements Serializable{
 
         boolean eFilho = false;
 
-        for (Node n : nodePai.filhos) {
+        for (Node n : nodePai.getFilhos()) {
             if (n == nodeFilho) {
                 eFilho = true;
                 break;
             }
         }
 
-        return nodeFilho.pai == nodePai && eFilho;
+        return nodeFilho.getPai() == nodePai && eFilho;
     }
 
 }
