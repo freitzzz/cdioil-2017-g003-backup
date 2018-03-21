@@ -83,6 +83,14 @@ public class Email implements Serializable {
      */
     private static final String REGEX_DOMONIO_YAHOO="(yahoo|ymail|rocketmail)[.](com|in|co[.]uk)$";
     /**
+     * Constante que representa o valor a ser usado na encriptação por operadores usadada para encriptar os emails
+     */
+    private static final int OPERATORS_ENCRYPTION_EMAIL_VALUE=0xC666;
+    /**
+     * Constante que representa o operador a ser usado na encriptação por operadores usadada para encriptar os emails
+     */
+    private static final int OPERATORS_ENCRYPTION_EMAIL_OPERATOR=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_ADICAO;
+    /**
      * String que representa a indentificação do email
      */
     private String email;
@@ -170,7 +178,8 @@ public class Email implements Serializable {
      * @param email String com o email a ser encriptado
      * @return String com o email encriptado
      */
-    private String encryptEmail(String email){return OperatorsEncryption.encrypt(email);}
+    private String encryptEmail(String email){return OperatorsEncryption.encrypt(email
+            ,OPERATORS_ENCRYPTION_EMAIL_OPERATOR,OPERATORS_ENCRYPTION_EMAIL_VALUE);}
     /**
      * Método que decripta o email atual
      * @return String com o email decriptado

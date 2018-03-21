@@ -84,6 +84,7 @@ public final class CSVUtilizadoresReader implements UtilizadoresReader{
                             ,new Nome(nextCampos[identificadorNome],nextCampos[identificadorApelido])
                             ,new Password(Password.DEFAULT_PASSWORD)));
                 }catch(IllegalArgumentException e){
+                    System.out.println(e);
                 }
             }
         }
