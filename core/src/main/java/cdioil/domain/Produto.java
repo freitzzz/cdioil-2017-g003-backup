@@ -1,6 +1,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Representa um Produto presente numa Categoria da Estrutura Mercadologica.
@@ -17,10 +19,14 @@ import javax.persistence.Id;
 @Entity
 public class Produto implements Serializable {
 
+    /**
+     * Código de serialização.
+     */
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "IDPRODUTO")
+    @Column(name = "ID_PRODUTO")
     private Long id;
 
     /**
@@ -30,20 +36,10 @@ public class Produto implements Serializable {
     private String nome;
 
     /**
-     * Código de barras do produto.
+     * Lista de códigos do produto.
      */
-    private EAN codigoBarras;
-
-    /**
-     * Código QR do produto.
-     */
-    private CodigoQR codigoQR;
-
-    /**
-     * Preço unitário do produto.
-     */
-    @Column(name = "PRECOUNITARIO")
-    private Preco precoUnitario;
+    @OneToMany
+    List<Codigo> codigos = new ArrayList<>();
 
     /**
      * Construtor protegido apenas para uso de JPA.
@@ -52,32 +48,20 @@ public class Produto implements Serializable {
     }
 
     /**
-     * Constrói uma nova instância com um dado nome, preço unitário e código de barras.
+     * Constrói uma nova instância com um dado nome e 1 ou mais códigos.
      *
      * @param nome nome do produto
-     * @param preco preço unitário do produto
-     * @param codBarras código de barras
+     * @param codigo codigo
+     * @param codigos 0 ou mais codigos
      */
-    public Produto(String nome, Preco preco, EAN codBarras) {
+    public Produto(String nome, Codigo codigo, Codigo... codigos) {
         this.nome = nome;
-        this.precoUnitario = preco;
-        this.codigoBarras = codBarras;
-        this.codigoQR = null;
-    }
 
-    /**
-     * Constrói uma nova instância com um dado nome, preço unitário, código de barras e código QR.
-     *
-     * @param nome nome do produto
-     * @param preco preço unitário do produto
-     * @param codBarras código de barras
-     * @param codQR código QR
-     */
-    public Produto(String nome, Preco preco, EAN codBarras, CodigoQR codQR) {
-        this.nome = nome;
-        this.precoUnitario = preco;
-        this.codigoBarras = codBarras;
-        this.codigoQR = codQR;
+        this.codigos.add(codigo);
+
+        for (Codigo cod : codigos) {
+            this.codigos.add(cod);
+        }
     }
 
     /**
@@ -87,9 +71,17 @@ public class Produto implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("Nome: %s\nPreço: %s\nCódigo de Barras: \n%sCódigo QR: \n%s",
-                nome, precoUnitario, codigoBarras.toString(), codigoQR != null ? codigoQR.toString()
-                : "Sem código QR\n");
+
+        String result = String.format("Nome: %s\n", nome);
+
+        result += "Códigos:\n";
+
+        for (Codigo c : codigos) {
+
+            result += c.getClass().getSimpleName() + " " + c.toString();
+        }
+
+        return result;
     }
 
     /**
@@ -100,7 +92,7 @@ public class Produto implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.codigoBarras);
+        hash = 67 * hash + Objects.hashCode(this.codigos);
         return hash;
     }
 
@@ -108,10 +100,12 @@ public class Produto implements Serializable {
      * Compara o Produto com outro objeto.
      *
      * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem o mesmo código de barras. Caso contrário, retorna false
+     * @return true, se os dois objetos tiverem o mesmo código de barras. Caso
+     * contrário, retorna false
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj
+    ) {
         if (this == obj) {
             return true;
         }
@@ -119,7 +113,7 @@ public class Produto implements Serializable {
             return false;
         }
         final Produto other = (Produto) obj;
-        if (!Objects.equals(this.codigoBarras, other.codigoBarras)) {
+        if (!Objects.equals(this.codigos, other.codigos)) {
             return false;
         }
         return true;
