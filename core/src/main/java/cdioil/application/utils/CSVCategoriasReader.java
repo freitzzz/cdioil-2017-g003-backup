@@ -30,31 +30,6 @@ public class CSVCategoriasReader implements CategoriasReader {
     private static final String SPLITTER = ";";
 
     /**
-     * Descritor DC de uma Categoria.
-     */
-    private static final String DC = "DC";
-
-    /**
-     * Descritor UN de uma Categoria.
-     */
-    private static final String UN = "UN";
-
-    /**
-     * Descritor CAT de uma Categoria.
-     */
-    private static final String CAT = "CAT";
-
-    /**
-     * Descritor SCAT de uma Categoria.
-     */
-    private static final String SCAT = "SCAT";
-
-    /**
-     * Descritor UB de uma Categoria.
-     */
-    private static final String UB = "UB";
-
-    /**
      * Número da linha onde são identificados os campos a ler (colunas) no ficheiro CSV.
      */
     private static final int LINHA_IDENTIFICADOR = 0;
@@ -93,39 +68,51 @@ public class CSVCategoriasReader implements CategoriasReader {
         for (int i = LINHA_IDENTIFICADOR + 1; i < conteudoFicheiro.size(); i++) {
             String[] line = conteudoFicheiro.get(i).split(SPLITTER);
             if (line.length != 0) { //Termina a leitura quando não existirem mais linhas com informação
-                
-                /*Os identificadores das categorias têm de ser compostos pelo 
+                try {
+                    /*Os identificadores das categorias têm de ser compostos pelo 
                 identificador da categoria pai de modo a evitar colisões quando 
                 se adiciona novas categorias.*/
+                    Categoria pai = new Categoria(line[1], line[0] + Categoria.Sufixos.SUFIXO_DC);
+                    boolean added = em.adicionarCategoriaRaiz(pai);
+                    if (added) {
+                        categorias.add(pai);
+                    }
 
-                Categoria pai = new Categoria(line[1], line[0] + "DC");
-                boolean added = em.adicionarCategoriaRaiz(pai);
-                if (added) {
-                    categorias.add(pai);
-                }
-                
-                Categoria filha1 = new Categoria(line[3], line[0] + "DC" + line[2] + "UN");
-                added = em.adicionarCategoria(pai, filha1);
-                if (added) {
-                    categorias.add(filha1);
-                }
+                    Categoria filha1 = new Categoria(line[3], line[0]
+                            + Categoria.Sufixos.SUFIXO_DC + line[2]
+                            + Categoria.Sufixos.SUFIXO_UN);
+                    added = em.adicionarCategoria(pai, filha1);
+                    if (added) {
+                        categorias.add(filha1);
+                    }
 
-                Categoria filha2 = new Categoria(line[5], line[0] + "DC" + line[2] + "UN" + line[4] + "CAT");
-                added = em.adicionarCategoria(filha1, filha2);
-                if (added) {
-                    categorias.add(filha2);
-                }
-                
-                Categoria filha3 = new Categoria(line[7], line[0] + "DC" + line[2] + "UN" + line[4] + "CAT" + line[6] + "SCAT");
-                added = em.adicionarCategoria(filha2, filha3);
-                if (added) {
-                    categorias.add(filha3);
-                }
+                    Categoria filha2 = new Categoria(line[5], line[0]
+                            + Categoria.Sufixos.SUFIXO_DC + line[2]
+                            + Categoria.Sufixos.SUFIXO_UN + line[4]
+                            + Categoria.Sufixos.SUFIXO_CAT);
+                    added = em.adicionarCategoria(filha1, filha2);
+                    if (added) {
+                        categorias.add(filha2);
+                    }
 
-                Categoria filha4 = new Categoria(line[9], line[8] + UB);
-                added = em.adicionarCategoria(filha3, filha4);
-                if (added) {
-                    categorias.add(filha4);
+                    Categoria filha3 = new Categoria(line[7], line[0]
+                            + Categoria.Sufixos.SUFIXO_DC + line[2]
+                            + Categoria.Sufixos.SUFIXO_UN
+                            + line[4] + Categoria.Sufixos.SUFIXO_CAT + line[6]
+                            + Categoria.Sufixos.SUFIXO_SCAT);
+                    added = em.adicionarCategoria(filha2, filha3);
+                    if (added) {
+                        categorias.add(filha3);
+                    }
+
+                    Categoria filha4 = new Categoria(line[9], line[8]
+                            + Categoria.Sufixos.SUFIXO_UB);
+                    added = em.adicionarCategoria(filha3, filha4);
+                    if (added) {
+                        categorias.add(filha4);
+                    }
+                } catch(IllegalArgumentException ex){
+                    System.out.println("O formato das Categorias inválido na linha" + i + ".");
                 }
             }
         }
@@ -134,12 +121,14 @@ public class CSVCategoriasReader implements CategoriasReader {
 
     /**
      * Verifica se o conteúdo do ficheiro é válido (se não é null e se o número de colunas é o esperado).
-     * 
+     *
      * @param conteudoFicheiro Todas as linhas do ficheiro
      * @return true, caso o conteúdo seja válido. Caso contrário, retorna false
      */
     private boolean isFicheiroValido(List<String> conteudoFicheiro) {
-        if (conteudoFicheiro == null) return false;
+        if (conteudoFicheiro == null) {
+            return false;
+        }
         return conteudoFicheiro.get(LINHA_IDENTIFICADOR).split(SPLITTER).length == NUMERO_IDENTIFICADORES;
     }
 }

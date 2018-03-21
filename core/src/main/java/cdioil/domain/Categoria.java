@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,6 +43,12 @@ public class Categoria implements Serializable {
      */
     @OneToMany
     private Set<Produto> produtos = new HashSet<>();
+
+    /**
+     * Constante que representa a expressão regular para a validação dos descritivos.
+     */
+    private final static String REGEX_DESCRITIVO = "-?[0-9]+(" + Sufixos.SUFIXO_CAT + "|" + Sufixos.SUFIXO_SCAT
+            + "|" + Sufixos.SUFIXO_UB + "|" + Sufixos.SUFIXO_UN + "|" + Sufixos.SUFIXO_DC + ")";
 
     /**
      * Sufixos possíveis para o descritivo (DC, UN, CAT, SCAT ou UB).
@@ -86,35 +93,40 @@ public class Categoria implements Serializable {
     }
 
     /**
-     * Cria uma instância de Categoria, recebendo a sua designação e o
-     * descritivo.
+     * Cria uma instância de Categoria, recebendo a sua designação e o descritivo.
      *
      * @param designacao Desginação da Categoria
      * @param descritivo Descritivo da Categoria
      */
     public Categoria(String designacao, String descritivo) {
-        if (isDescritivoValido(descritivo)) {
+        if (isDesignacaoValida(designacao) && isDescritivoValido(descritivo)) {
             this.designacao = designacao;
             this.descritivo = descritivo;
             produtos = new HashSet<>();
         } else {
-            throw new IllegalArgumentException("Descritivo inválido.");
+            throw new IllegalArgumentException("Dados de entrada inválidos.");
         }
+    }
+
+    /**
+     * Verifica se a designação da Categoria é válido.
+     *
+     * @param designacao String a confirmar
+     * @return true, caso a designação seja válido. Caso contrário, retorna false
+     */
+    private boolean isDesignacaoValida(String designacao) {
+        return designacao != null
+                && !designacao.trim().isEmpty();
     }
 
     /**
      * Verifica se o descritivo da Categoria é válido.
      *
      * @param descritivo String a confirmar
-     * @return true, caso o descritivo seja válido. Caso contrário, retorna
-     * false
+     * @return true, caso o descritivo seja válido. Caso contrário, retorna false
      */
     private boolean isDescritivoValido(String descritivo) {
-        return descritivo.endsWith(Sufixos.SUFIXO_CAT.toString())
-                || descritivo.endsWith(Sufixos.SUFIXO_SCAT.toString())
-                || descritivo.endsWith(Sufixos.SUFIXO_UB.toString())
-                || descritivo.endsWith(Sufixos.SUFIXO_UN.toString())
-                || descritivo.endsWith(Sufixos.SUFIXO_DC.toString());
+        return descritivo != null && descritivo.matches(REGEX_DESCRITIVO);
     }
 
     /**
@@ -157,8 +169,7 @@ public class Categoria implements Serializable {
      * Compara a Categoria com outro objeto.
      *
      * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem os mesmos atributos. Caso
-     * contrário, retorna false
+     * @return true, se os dois objetos tiverem os mesmos atributos. Caso contrário, retorna false
      */
     @Override
     public boolean equals(Object obj) {
