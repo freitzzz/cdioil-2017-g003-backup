@@ -10,26 +10,84 @@ import java.util.Set;
 public class Categoria {
 
     /**
-     * Nome da categoria.
+     * Designação da Categoria.
      */
-    String nome;
+    String designacao;
 
     /**
-     * String que identifica a categoria (descritor + DC/UN/CAT/SCAT).
+     * Identificador da Categoria (descritivo + sufixo).
      */
-    String descritor;
+    String descritivo;
 
     /**
      * Conjunto de produtos contidos nesta categoria.
      */
     Set<Produto> produtos;
 
-    public Categoria(String nome, String descritor) {
-        this.nome = nome;
+    /**
+     * Sufixos possíveis para o descritivo (DC, UN, CAT, SCAT ou UB).
+     */
+    public enum Sufixos {
+        SUFIXO_DC() {
+            @Override
+            public String toString() {
+                return "DC";
+            }
+        },
+        SUFIXO_UN() {
+            @Override
+            public String toString() {
+                return "UN";
+            }
+        },
+        SUFIXO_CAT() {
+            @Override
+            public String toString() {
+                return "CAT";
+            }
+        },
+        SUFIXO_SCAT() {
+            @Override
+            public String toString() {
+                return "SCAT";
+            }
+        },
+        SUFIXO_UB() {
+            @Override
+            public String toString() {
+                return "UB";
+            }
+        };
+    }
 
-        this.descritor = descritor;
+    /**
+     * Cria uma instância de Categoria, recebendo a sua designação e o descritivo.
+     *
+     * @param designacao Desginação da Categoria
+     * @param descritivo Descritivo da Categoria
+     */
+    public Categoria(String designacao, String descritivo) {
+        if (isDescritivoValido(descritivo)) {
+            this.designacao = designacao;
+            this.descritivo = descritivo;
+            produtos = new HashSet<>();
+        } else {
+            throw new IllegalArgumentException("Descritivo inválido.");
+        }
+    }
 
-        produtos = new HashSet<>();
+    /**
+     * Verifica se o descritivo da Categoria é válido.
+     *
+     * @param descritivo String a confirmar
+     * @return true, caso o descritivo seja válido. Caso contrário, retorna false
+     */
+    private boolean isDescritivoValido(String descritivo) {
+        return descritivo.endsWith(Sufixos.SUFIXO_CAT.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_SCAT.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_UB.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_UN.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_DC.toString());
     }
 
     /**
@@ -40,17 +98,18 @@ public class Categoria {
      * false - caso contrário
      */
     public boolean adicionarProduto(Produto p) {
+        if(p == null) return false;
         return produtos.add(p);
     }
 
     /**
-     * Descreve a Categoria através do seu nome e descritor.
+     * Descreve a Categoria através do seu designacao e descritivo.
      *
      * @return a descrição textual da Categoria.
      */
     @Override
     public String toString() {
-        return String.format("Nome: %s\nDescritor: %s\n", nome, descritor);
+        return String.format("Nome: %s\nDescritivo: %s\n", designacao, descritivo);
     }
 
     /**
@@ -61,7 +120,7 @@ public class Categoria {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.descritor);
+        hash = 67 * hash + Objects.hashCode(this.descritivo);
         return hash;
     }
 
@@ -81,7 +140,7 @@ public class Categoria {
         }
 
         Categoria other = (Categoria) obj;
-        if (!Objects.equals(this.descritor, other.descritor)) {
+        if (!Objects.equals(this.descritivo, other.descritivo)) {
             return false;
         }
         return true;

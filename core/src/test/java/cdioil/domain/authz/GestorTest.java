@@ -39,8 +39,8 @@ public class GestorTest {
         lc = new LinkedList<>();
         assertFalse(instance.adicionarCategorias(lc));
         //teste adiconar lista com elementos
-        lc.add(new Categoria("Fruit", "Contains fruits"));
-        lc.add(new Categoria("Beverage", "Contains beverages"));
+        lc.add(new Categoria("Fruit", "124CAT"));
+        lc.add(new Categoria("Beverage", "6040SCAT"));
         assertTrue(instance.adicionarCategorias(lc));
         //teste adicionar lista com elementos repetidos
         assertTrue(instance.adicionarCategorias(lc));
@@ -60,8 +60,8 @@ public class GestorTest {
         lc = new LinkedList<>();
         assertFalse(instance.removerCategorias(lc));
         //teste remover lista com elementos inexistentes
-        lc.add(new Categoria("Fruit", "Contains fruits"));
-        lc.add(new Categoria("Beverage", "Contains beverages"));
+        lc.add(new Categoria("Fruit", "124CAT"));
+        lc.add(new Categoria("Beverage", "6040SCAT"));
         assertFalse(instance.removerCategorias(lc));
         //teste adicionar lista com elementos existentes
         instance.adicionarCategorias(lc);

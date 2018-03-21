@@ -69,7 +69,7 @@ public class ProdutoTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, p);
-        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100FC"), p);
+        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100DC"), p);
         assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new Preco("7€"), new EAN(33312118), new CodigoQR(552671)), p);
         assertEquals("Instância de CodigoQR igual", new Produto("ProdutoTeste", new EAN(33312113)), p);
     }

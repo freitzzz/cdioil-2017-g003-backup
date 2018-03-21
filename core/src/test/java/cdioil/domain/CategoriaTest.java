@@ -62,7 +62,7 @@ public class CategoriaTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("As descrições são iguais", "Nome: CategoriaTeste\nDescritor: 100CAT\n", c.toString());
+        assertEquals("As descrições são iguais", "Nome: CategoriaTeste\nDescritivo: 100CAT\n", c.toString());
     }
 
     /**

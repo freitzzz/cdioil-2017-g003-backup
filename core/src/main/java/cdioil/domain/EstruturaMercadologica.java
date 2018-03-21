@@ -35,7 +35,6 @@ public class EstruturaMercadologica {
         private Categoria elemento;
 
         protected Node(Node pai, Categoria elemento) {
-
             this.pai = pai;
             this.elemento = elemento;
             this.filhos = new LinkedList<>();
@@ -127,7 +126,7 @@ public class EstruturaMercadologica {
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Categoria("Todos os Produtos", "-1"));
+        raiz = new Node(null, new Categoria("Todos os Produtos", "-1UB"));
         tamanho = 1;
     }
 
@@ -263,7 +262,6 @@ public class EstruturaMercadologica {
 
             procuraFolhas(folhas, filho);
         }
-
     }
 
     /**
