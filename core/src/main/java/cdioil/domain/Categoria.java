@@ -27,15 +27,15 @@ public class Categoria implements Serializable {
     @Column(name = "ID_CATEGORIA", nullable = false, updatable = false)
     private Long id;
     /**
-     * Nome da categoria.
+     * Designação da Categoria.
      */
-    private String nome;
+    String designacao;
 
     /**
-     * String que identifica a categoria (descritor + DC/UN/CAT/SCAT).
+     * Identificador da Categoria (descritivo + sufixo).
      */
     @Column(unique = true)
-    private String descritor;
+    String descritivo;
 
     /**
      * Conjunto de produtos contidos nesta categoria.
@@ -44,20 +44,77 @@ public class Categoria implements Serializable {
     private Set<Produto> produtos = new HashSet<>();
 
     /**
+     * Sufixos possíveis para o descritivo (DC, UN, CAT, SCAT ou UB).
+     */
+    public enum Sufixos {
+        SUFIXO_DC() {
+            @Override
+            public String toString() {
+                return "DC";
+            }
+        },
+        SUFIXO_UN() {
+            @Override
+            public String toString() {
+                return "UN";
+            }
+        },
+        SUFIXO_CAT() {
+            @Override
+            public String toString() {
+                return "CAT";
+            }
+        },
+        SUFIXO_SCAT() {
+            @Override
+            public String toString() {
+                return "SCAT";
+            }
+        },
+        SUFIXO_UB() {
+            @Override
+            public String toString() {
+                return "UB";
+            }
+        };
+    }
+
+    /**
      * Construtor protegido apenas para uso do JPA.
      */
     protected Categoria() {
     }
 
     /**
-     * Constrói uma instância com um dado nome e descritor.
+     * Cria uma instância de Categoria, recebendo a sua designação e o
+     * descritivo.
      *
-     * @param nome
-     * @param descritor
+     * @param designacao Desginação da Categoria
+     * @param descritivo Descritivo da Categoria
      */
-    public Categoria(String nome, String descritor) {
-        this.nome = nome;
-        this.descritor = descritor;
+    public Categoria(String designacao, String descritivo) {
+        if (isDescritivoValido(descritivo)) {
+            this.designacao = designacao;
+            this.descritivo = descritivo;
+            produtos = new HashSet<>();
+        } else {
+            throw new IllegalArgumentException("Descritivo inválido.");
+        }
+    }
+
+    /**
+     * Verifica se o descritivo da Categoria é válido.
+     *
+     * @param descritivo String a confirmar
+     * @return true, caso o descritivo seja válido. Caso contrário, retorna
+     * false
+     */
+    private boolean isDescritivoValido(String descritivo) {
+        return descritivo.endsWith(Sufixos.SUFIXO_CAT.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_SCAT.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_UB.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_UN.toString())
+                || descritivo.endsWith(Sufixos.SUFIXO_DC.toString());
     }
 
     /**
@@ -68,17 +125,20 @@ public class Categoria implements Serializable {
      * false - caso contrário
      */
     public boolean adicionarProduto(Produto p) {
+        if (p == null) {
+            return false;
+        }
         return produtos.add(p);
     }
 
     /**
-     * Descreve a Categoria através do seu nome e descritor.
+     * Descreve a Categoria através do seu designacao e descritivo.
      *
      * @return a descrição textual da Categoria.
      */
     @Override
     public String toString() {
-        return String.format("Nome: %s\nDescritor: %s\n", nome, descritor);
+        return String.format("Nome: %s\nDescritivo: %s\n", designacao, descritivo);
     }
 
     /**
@@ -89,7 +149,7 @@ public class Categoria implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.descritor);
+        hash = 67 * hash + Objects.hashCode(this.descritivo);
         return hash;
     }
 
@@ -110,7 +170,7 @@ public class Categoria implements Serializable {
         }
 
         Categoria other = (Categoria) obj;
-        if (!Objects.equals(this.descritor, other.descritor)) {
+        if (!Objects.equals(this.descritivo, other.descritivo)) {
             return false;
         }
         return true;

@@ -27,7 +27,7 @@ import org.junit.Test;
  */
 public class TemplateTest {
 
-    Categoria cat = new Categoria("Pai", "10");
+    Categoria cat = new Categoria("Pai", "10DC");
     Calendar data = Calendar.getInstance();
     List<Questao> listaQuestoes = new LinkedList<>();
     List<Inquerito> listaInqueritos = new LinkedList<>();
@@ -82,7 +82,7 @@ public class TemplateTest {
     public void testToString() {
         System.out.println("toString");
         assertEquals("Os identificadores são iguais",
-                "\nCategoria: Nome: Pai\nDescritor: 10\n\nLista de Questoes: []", template.toString());
+                "\nCategoria: Nome: Pai\nDescritivo: 10DC\n\nLista de Questoes: []", template.toString());
     }
 
     /**

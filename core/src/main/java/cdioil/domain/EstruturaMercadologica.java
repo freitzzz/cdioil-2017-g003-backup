@@ -60,7 +60,6 @@ public class EstruturaMercadologica implements Serializable{
         }
 
         protected Node(Node pai, Categoria elemento) {
-
             this.pai = pai;
             this.elemento = elemento;
         }
@@ -157,7 +156,7 @@ public class EstruturaMercadologica implements Serializable{
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Categoria("Todos os Produtos", "-1"));
+        raiz = new Node(null, new Categoria("Todos os Produtos", "-1UB"));
         tamanho = 1;
     }
 
@@ -293,7 +292,6 @@ public class EstruturaMercadologica implements Serializable{
 
             procuraFolhas(folhas, filho);
         }
-
     }
 
     /**

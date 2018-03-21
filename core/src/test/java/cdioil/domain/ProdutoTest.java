@@ -61,8 +61,8 @@ public class ProdutoTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotNull("O produto não é null", p);
-        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100FC"), p);
+        assertNotEquals("Objeto null não é igual", null, p);
+        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100DC"), p);
         assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new EAN("33312118"), new CodigoQR("552671")), p);
         assertEquals("Instância com códigos iguais igual", new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235")), p);
     }
