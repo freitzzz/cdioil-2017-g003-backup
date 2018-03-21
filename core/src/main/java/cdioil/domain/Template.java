@@ -6,8 +6,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import javax.persistence.*;
 
 /**
@@ -33,11 +32,6 @@ public class Template implements Serializable {
     @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL)
     private List<Questao> listaQuestoes;
     /**
-     * Lista de inqueritos do Template.
-     */
-    @OneToMany(mappedBy = "inquerito", cascade = CascadeType.ALL)
-    private List<Inquerito> listaInqueritos;
-    /**
      * Categoria do Template.
      */
     private Categoria categoria;
@@ -45,19 +39,51 @@ public class Template implements Serializable {
     /**
      * Constrói uma instância de Template, recebendo por parâmetro os seus atributos.
      *
-     * @param questoes Lista de questoes do Template.
-     * @param inqueritos  Lista de inqueritos do Template.
      * @param categ Categoria do Template.
      */
-    public Template(List<Questao> questoes, List<Inquerito> inqueritos, Categoria categ) {
-        this.listaQuestoes = questoes;
-        this.listaInqueritos = inqueritos;
+    public Template(Categoria categ) {
+        this.listaQuestoes = new LinkedList<>();
         this.categoria = categ;
     }
     /**
      * Constrói uma instância vazia de Template (JPA).
      */
     protected Template() {
+    }
+     /**
+     * Adiciona uma questão à lista de questões.
+     *
+     * @param questao Questão a adicionar
+     * @return true, se for adicionada com sucesso. Caso contrário, retorna false
+     */
+    public boolean adicionarQuestao(Questao questao) {
+        if (questao == null || isQuestaoValida(questao)) {
+            return false;
+        }
+        return listaQuestoes.add(questao);
+    }
+
+    /**
+     * Remove uma questão da lista de questões.
+     *
+     * @param questao Questão a remover
+     * @return true, se for removida com sucesso. Caso contrário, retorna false
+     */
+    public boolean removerQuestao(Questao questao) {
+        if (questao == null || !isQuestaoValida(questao)) {
+            return false;
+        }
+        return listaQuestoes.remove(questao);
+    }
+    
+    /**
+     * Verifica se uma questão já existe na lista de questões.
+     *
+     * @param questao Questão a verificar
+     * @return true, se já existir na lista. Caso contrário, retorna false
+     */
+    public boolean isQuestaoValida(Questao questao) {
+        return listaQuestoes.contains(questao);
     }
 
     /**

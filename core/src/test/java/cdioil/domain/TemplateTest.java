@@ -5,10 +5,19 @@
  */
 package cdioil.domain;
 
-import java.util.ArrayList;
+import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.Nome;
+import cdioil.domain.authz.Password;
+import cdioil.domain.authz.SystemUser;
+import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -19,14 +28,53 @@ import org.junit.Test;
 public class TemplateTest {
 
     Categoria cat = new Categoria("Pai", "10");
-    List<Questao> listaQuestoes = new ArrayList<>();
-    List<Inquerito> listaInqueritos = new ArrayList<>();
+    Calendar data = Calendar.getInstance();
+    List<Questao> listaQuestoes = new LinkedList<>();
+    List<Inquerito> listaInqueritos = new LinkedList<>();
 
     /**
-     * Instância de EAN para testes.
+     * Instância de Template para testes.
      */
-    Template template = new Template(listaQuestoes, listaInqueritos, cat);
+    Template template = new Template(cat);
 
+    /**
+     * Teste do método adicionarQuestao, da classe Template.
+     */
+    @Test
+    public void testAdicionarQuestao() {
+        System.out.println("adicionarQuestao");
+        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        assertTrue("Deveria ser possível adicionar", template.adicionarQuestao(q));
+        template.adicionarQuestao(q);
+        assertFalse("Questão null", template.adicionarQuestao(null));
+        assertFalse("Questão já existente", template.adicionarQuestao(q));
+    }
+    /**
+     * Teste do método removerQuestao, da classe Template.
+     */
+    @Test
+    public void testarRemoverQuestao() {
+        System.out.println("removerQuestao");
+        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        template.adicionarQuestao(q);
+        assertTrue("Deveria ser possível remover", template.removerQuestao(q));
+        template.removerQuestao(q);
+        assertFalse("Questão null", template.removerQuestao(null));
+        assertFalse("Questão não existente", template.removerQuestao(q));
+    }
+    /**
+     * Teste do método isQuestaoValida, da classe Template.
+     */
+    @Test
+    public void testarIsQuestaoValida() {
+        System.out.println("isQuestaoValida");
+        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        template.adicionarQuestao(q);
+        assertTrue("Deveria ser válida", template.isQuestaoValida(q));
+        template.removerQuestao(q);
+        assertFalse("Questão null", template.isQuestaoValida(null));
+        assertFalse("Questão não existente", template.isQuestaoValida(q));
+    }
     /**
      * Teste do método toString, da classe Template.
      */
@@ -44,7 +92,7 @@ public class TemplateTest {
     public void testHashCode() {
         System.out.println("hashCode");
 
-        Template template2 = new Template(listaQuestoes, listaInqueritos, cat);
+        Template template2 = new Template(cat);
 
         assertEquals("Hash codes iguais", template2.hashCode(), template.hashCode());
     }
@@ -57,7 +105,8 @@ public class TemplateTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, template);
         assertNotEquals("Instância de outra classe não é igual", new CodigoQR("1"), template);
-        assertNotEquals("Instância de Template diferente", new Template(null, null, null), template);
-        assertEquals("Instância de Template igual", new Template(listaQuestoes, listaInqueritos, cat), template);
+        assertNotEquals("Instância de outra classe não é igual", new CodigoQR("1"), template);
+        assertNotEquals("Instância de Template diferente", new Template(null), template);
+        assertEquals("Instância de Template igual", new Template(cat), template);
     }
 }

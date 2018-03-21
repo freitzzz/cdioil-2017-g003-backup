@@ -141,7 +141,7 @@ public class EstruturaMercadologicaTest {
         Categoria c2 = new Categoria("Categoria filho", "2");
 
         struct.adicionarCategoria(c1, c2);
-
+        
         Produto p = new Produto("Produto", new EAN("1"));
 
         assertFalse("A categoria nao e uma folha", struct.adicionarProduto(p, c1));
@@ -175,7 +175,7 @@ public class EstruturaMercadologicaTest {
             Categoria filho3 = new Categoria("Sub-Categoria " + i, "SCAT0" + i);
 
             struct.adicionarCategoria(filho2, filho3);
-
+            
             Produto p = new Produto("Produto " + i, new EAN("i"), new CodigoQR(Integer.toString(2*i)));
 
             struct.adicionarProduto(p, filho3);

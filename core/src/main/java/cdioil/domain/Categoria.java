@@ -1,35 +1,63 @@
 package cdioil.domain;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Representa uma categoria de produtos existente na Estrutura Mercadologica.
  */
-public class Categoria {
+@Entity
+public class Categoria implements Serializable {
 
+    /**
+     * Código de serialização.
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID_CATEGORIA", nullable = false, updatable = false)
+    private Long id;
     /**
      * Nome da categoria.
      */
-    String nome;
+    private String nome;
 
     /**
      * String que identifica a categoria (descritor + DC/UN/CAT/SCAT).
      */
-    String descritor;
+    @Column(unique = true)
+    private String descritor;
 
     /**
      * Conjunto de produtos contidos nesta categoria.
      */
-    Set<Produto> produtos;
+    @OneToMany
+    private Set<Produto> produtos = new HashSet<>();
 
+    /**
+     * Construtor protegido apenas para uso do JPA.
+     */
+    protected Categoria() {
+    }
+
+    /**
+     * Constrói uma instância com um dado nome e descritor.
+     *
+     * @param nome
+     * @param descritor
+     */
     public Categoria(String nome, String descritor) {
         this.nome = nome;
-
         this.descritor = descritor;
-
-        produtos = new HashSet<>();
     }
 
     /**
@@ -69,7 +97,8 @@ public class Categoria {
      * Compara a Categoria com outro objeto.
      *
      * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem os mesmos atributos. Caso contrário, retorna false
+     * @return true, se os dois objetos tiverem os mesmos atributos. Caso
+     * contrário, retorna false
      */
     @Override
     public boolean equals(Object obj) {

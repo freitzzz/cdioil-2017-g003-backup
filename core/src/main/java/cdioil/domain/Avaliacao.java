@@ -44,6 +44,17 @@ public class Avaliacao implements Serializable {
     }
 
     /**
+     * construtor da classe Avaliacao
+     *
+     * @param opiniao opiniao do utilizador
+     * @param inquerito inquerito correspondente à avaliação
+     */
+    public Avaliacao(String opiniao, Inquerito inquerito) {
+        this.opiniao = opiniao;
+        this.inquerito = inquerito;
+    }
+
+    /**
      * Hash Code de uma avaliação
      *
      * @return hash code da avaliação
@@ -81,7 +92,7 @@ public class Avaliacao implements Serializable {
      */
     @Override
     public String toString() {
-        return "org.grupo3.cdioil.isep.feedback_monkey.domain.Avaliacao[ id=" + id + " ]";
+        return "Avaliação:\nOpinião: " + opiniao;
     }
 
 }

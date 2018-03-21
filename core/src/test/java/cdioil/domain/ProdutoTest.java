@@ -66,4 +66,17 @@ public class ProdutoTest {
         assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new EAN("33312118"), new CodigoQR("552671")), p);
         assertEquals("Instância com códigos iguais igual", new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235")), p);
     }
+
+    /**
+     * Test of alterarImagemProduto method, of class Produto.
+     */
+    @Test
+    public void testAlterarImagemProduto() {
+        System.out.println("alterarImagemProduto");
+        byte[] imagem = "Nova Imagem".getBytes();
+        p.alterarImagemProduto(imagem);
+        boolean expResult = true;
+        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo",p.alterarImagemProduto(imagem));
+        assertFalse("A condição acertar pois a Imagem do produto é invalida",p.alterarImagemProduto(null));
+    }
 }

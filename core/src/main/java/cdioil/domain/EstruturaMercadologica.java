@@ -1,8 +1,15 @@
 package cdioil.domain;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Classe que representa a Estrutura Mercadologica que agrega as categorias de
@@ -10,35 +17,52 @@ import java.util.Objects;
  *
  * @author António Sousa [1161371]
  */
-public class EstruturaMercadologica {
+@Entity
+public class EstruturaMercadologica implements Serializable{
 
     /**
      * Clase interna que representa um nó na estrutura mercadologica.
      * <p>
      * Um nó contém uma categoria, assim como referencias para outros nós.
      */
-    protected static class Node {
+    @Entity
+    protected static class Node implements Serializable {
+
+        /**
+         * Código de serialização.
+         */
+        private static final long serialVersionUID = 1L;
 
         /**
          * Node que se situa acima do node atual na estrutura.
          */
+        @ManyToOne(fetch = FetchType.LAZY)
+        @Id
         private Node pai;
 
         /**
          * Todos os nodes que se encontrem abaixo do atual.
          */
-        private List<Node> filhos;
+        @OneToMany(fetch = FetchType.LAZY)
+        @Id
+        private List<Node> filhos = new LinkedList<>();
 
         /**
          * Categoria de produtos contida no node.
          */
+        @Column(unique = true)
         private Categoria elemento;
+
+        /**
+         * Construtor apenas para uso do JPA.
+         */
+        protected Node() {
+        }
 
         protected Node(Node pai, Categoria elemento) {
 
             this.pai = pai;
             this.elemento = elemento;
-            this.filhos = new LinkedList<>();
         }
 
         /**
@@ -114,8 +138,14 @@ public class EstruturaMercadologica {
     -------------------FIM DA CLASSE NODE-----------------------*/
 
     /**
+     * Código de serialização.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Primeiro node da estrutura mercadologica.
      */
+    @Id
     private Node raiz;
     /**
      * Tamanho da estrutura mercadologica (numero de nodes).

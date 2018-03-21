@@ -24,6 +24,11 @@ public class Produto implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constante que representa o conteudo da imagem do produto por default
+     */
+    private static final String IMAGEM_PRODUTO_DEFAULT = "Produto sem Imagem";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_PRODUTO")
@@ -40,6 +45,11 @@ public class Produto implements Serializable {
      */
     @OneToMany
     List<Codigo> codigos = new ArrayList<>();
+
+    /**
+     * Imagem com a imagem do produto
+     */
+    private Imagem imagemProduto;
 
     /**
      * Construtor protegido apenas para uso de JPA.
@@ -61,6 +71,24 @@ public class Produto implements Serializable {
 
         for (Codigo cod : codigos) {
             this.codigos.add(cod);
+        }
+
+        this.imagemProduto = new Imagem(IMAGEM_PRODUTO_DEFAULT.getBytes());
+    }
+
+    /**
+     * Método que alterar a imagem atual do produto
+     *
+     * @param imagem Byte Array com o conteudo da imagem
+     * @return boolean true se a Imagem foi alterada com succeso, ou false caso
+     * tenha ocorrido um erro
+     */
+    public boolean alterarImagemProduto(byte[] imagem) {
+        try {
+            imagemProduto = new Imagem(imagem);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
     }
 
@@ -113,6 +141,7 @@ public class Produto implements Serializable {
             return false;
         }
         final Produto other = (Produto) obj;
+
         if (!Objects.equals(this.codigos, other.codigos)) {
             return false;
         }
