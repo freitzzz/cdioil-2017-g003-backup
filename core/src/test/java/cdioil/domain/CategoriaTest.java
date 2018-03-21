@@ -57,6 +57,46 @@ public class CategoriaTest {
     }
 
     /**
+     * Teste a comprovar que a criação de uma Categoria com descritor sem número falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDescritivoSemNumerosFalha() {
+        c = new Categoria("CategoriaInvalida", "DC");
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com descritor sem sufixo falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDescritivoSemSufixoFalha() {
+        c = new Categoria("CategoriaInvalida", "10");
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com descritor nulo falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDescritivoNullFalha() {
+        c = new Categoria("CategoriaInvalida", null);
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com designação vazia falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDesignacaoVaziaFalha() {
+        c = new Categoria("    ", "10DC");
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com designação nulo falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDesignacaoNullFalha() {
+        c = new Categoria(null, "10DC");
+    }
+
+    /**
      * Teste do método toString, da classe Categoria.
      */
     @Test
