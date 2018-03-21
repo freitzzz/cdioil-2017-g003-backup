@@ -50,7 +50,7 @@ public class CategoriaTest {
     @Test
     public void testAdicionarProduto() {
         System.out.println("adicionarProduto");
-        Produto p = new Produto("ProdutoTeste", new Preco("90€"), new EAN());
+        Produto p = new Produto("ProdutoTeste", new EAN("5434"));
         assertTrue("Produto pode ser adicionado", c.adicionarProduto(p));
         c.adicionarProduto(p);
         assertFalse("Produto já existente no Set", c.adicionarProduto(p));
@@ -81,7 +81,7 @@ public class CategoriaTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, c);
-        assertNotEquals("Instância de outra classe não é igual", new CodigoQR(12), c);
+        assertNotEquals("Instância de outra classe não é igual", new CodigoQR("12"), c);
         assertNotEquals("Instância de Categoria diferente", new Categoria("OutraCategoria", "102SCAT"), c);
         assertEquals("Instância de Categoria igual", new Categoria("NomeDiferenteMesmoDescritor", "100CAT"), c);
     }

@@ -37,7 +37,7 @@ public class InqueritoTest {
 
     @Before
     public void setUp() {
-        this.i = new Inquerito(new Produto("UmProduto", new Preco("3€"), new EAN(73292)));
+        this.i = new Inquerito(new Produto("UmProduto", new EAN("73292")));
     }
 
     @After
@@ -50,7 +50,9 @@ public class InqueritoTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        assertEquals("Deveriam ser iguais", 74343, i.hashCode());
+        Inquerito outro = new Inquerito(new Produto("UmProduto", new EAN("73292")));
+        
+        assertEquals(i.hashCode(), outro.hashCode());
     }
 
     /**
@@ -61,8 +63,8 @@ public class InqueritoTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
         assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100FC"), i);
-        assertNotEquals("Instância de Inquerito diferente", new Inquerito(new Produto("OutroProduto", new Preco("8€"), new EAN(123))), i);
-        assertEquals("Instância de Inquerito igual", new Inquerito(new Produto("UmProduto", new Preco("3€"), new EAN(73292))), i);
+        assertNotEquals("Instância de Inquerito diferente", new Inquerito(new Produto("OutroProduto", new EAN("123"))), i);
+        assertEquals("Instância de Inquerito igual", new Inquerito(new Produto("UmProduto", new EAN("73292"))), i);
     }
 
     /**

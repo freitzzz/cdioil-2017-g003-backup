@@ -56,7 +56,7 @@ public class TemplateTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, template);
-        assertNotEquals("Instância de outra classe não é igual", new CodigoQR(1), template);
+        assertNotEquals("Instância de outra classe não é igual", new CodigoQR("1"), template);
         assertNotEquals("Instância de Template diferente", new Template(null, null, null), template);
         assertEquals("Instância de Template igual", new Template(listaQuestoes, listaInqueritos, cat), template);
     }
