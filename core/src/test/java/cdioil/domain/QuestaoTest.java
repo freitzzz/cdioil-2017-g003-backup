@@ -5,8 +5,6 @@
  */
 package cdioil.domain;
 
-import cdioil.domain.EAN;
-import cdioil.domain.Questao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
@@ -47,7 +45,7 @@ public class QuestaoTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, questao);
-        assertNotEquals("Instância de outra classe não é igual", new EAN(1), questao);
+        assertNotEquals("Instância de outra classe não é igual", new EAN("1"), questao);
         assertNotEquals("Instância de Questao diferente", new Questao("Teste1",0,4,0.5), questao);
         assertEquals("Instância de Questao igual", new Questao("Teste da Questao",0,4,0.5), questao);
     }

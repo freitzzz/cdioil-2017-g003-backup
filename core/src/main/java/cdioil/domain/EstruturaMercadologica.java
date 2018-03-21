@@ -1,8 +1,12 @@
 package cdioil.domain;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Classe que representa a Estrutura Mercadologica que agrega as categorias de
@@ -10,109 +14,19 @@ import java.util.Objects;
  *
  * @author António Sousa [1161371]
  */
-public class EstruturaMercadologica {
+@Entity
+public class EstruturaMercadologica implements Serializable{
+
 
     /**
-     * Clase interna que representa um nó na estrutura mercadologica.
-     * <p>
-     * Um nó contém uma categoria, assim como referencias para outros nós.
+     * Código de serialização.
      */
-    protected static class Node {
+    private static final long serialVersionUID = 1L;
 
-        /**
-         * Node que se situa acima do node atual na estrutura.
-         */
-        private Node pai;
-
-        /**
-         * Todos os nodes que se encontrem abaixo do atual.
-         */
-        private List<Node> filhos;
-
-        /**
-         * Categoria de produtos contida no node.
-         */
-        private Categoria elemento;
-
-        protected Node(Node pai, Categoria elemento) {
-
-            this.pai = pai;
-            this.elemento = elemento;
-            this.filhos = new LinkedList<>();
-        }
-
-        /**
-         * Retorna a Categoria presente neste node.
-         *
-         * @return a categoria contida no node
-         */
-        public Categoria getElemento() {
-            return elemento;
-        }
-
-        /**
-         * Retorna o conjunto de nodes filhos deste node.
-         *
-         * @return conjunto de nodes filhos
-         */
-        public List<Node> getFilhos() {
-            return filhos;
-        }
-
-        /**
-         * Adiciona um node ao conjunto de filhos deste node.
-         *
-         * @param filho node que se pretende adicionar aos filhos
-         * @return true - caso tenha sido possível adicionar ao conjunto de
-         * filhos<p>
-         * false - caso contrario
-         */
-        public boolean addFilho(Node filho) {
-            if (getFilhos().contains(filho)) {
-                return false;
-            }
-            return filhos.add(filho);
-        }
-
-        /**
-         * Gera um índice a partir da Categoria do Node.
-         *
-         * @return o valor de hash gerado
-         */
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 79 * hash + Objects.hashCode(this.elemento);
-            return hash;
-        }
-
-        /**
-         * Compara o Node com outro objeto.
-         *
-         * @param obj Objeto a comparar
-         * @return true, se os dois objetos tiverem a mesma Categoria. Caso
-         * contrário, retorna false
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-
-            Node other = (Node) obj;
-            if (!Objects.equals(this.elemento, other.elemento)) {
-                return false;
-            }
-            return true;
-        }
-
-    }
-    /*----------------------------------------------------------
-    -------------------FIM DA CLASSE NODE-----------------------*/
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    
     /**
      * Primeiro node da estrutura mercadologica.
      */
@@ -127,7 +41,7 @@ public class EstruturaMercadologica {
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Categoria("Todos os Produtos", "-1"));
+        raiz = new Node(null, new Categoria("Todos os Produtos", "-1UB"));
         tamanho = 1;
     }
 
@@ -225,7 +139,7 @@ public class EstruturaMercadologica {
      * @return true se o node não tiver nodes filhos, false caso tenha
      */
     private boolean isLeaf(Node node) {
-        return node.filhos.isEmpty();
+        return node.getFilhos().isEmpty();
     }
 
     /**
@@ -263,7 +177,6 @@ public class EstruturaMercadologica {
 
             procuraFolhas(folhas, filho);
         }
-
     }
 
     /**
@@ -324,14 +237,14 @@ public class EstruturaMercadologica {
 
         boolean eFilho = false;
 
-        for (Node n : nodePai.filhos) {
+        for (Node n : nodePai.getFilhos()) {
             if (n == nodeFilho) {
                 eFilho = true;
                 break;
             }
         }
 
-        return nodeFilho.pai == nodePai && eFilho;
+        return nodeFilho.getPai() == nodePai && eFilho;
     }
 
 }

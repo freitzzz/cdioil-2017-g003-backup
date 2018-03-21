@@ -32,7 +32,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c = new Categoria("Bricolage", "1");
+        Categoria c = new Categoria("Bricolage", "109CAT");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -46,7 +46,7 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Categoria c = new Categoria("Bens Alimentares", "1");
+        Categoria c = new Categoria("Bens Alimentares", "109UB");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
@@ -63,13 +63,13 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Categoria c = new Categoria("Bens Alimentares", "1");
+        Categoria c = new Categoria("Bens Alimentares", "109UB");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
         assertEquals("A estrutura deverá conter dois nodes", 2, struct.tamanho());
 
-        Categoria c2 = new Categoria("Bebidas", "2");
+        Categoria c2 = new Categoria("Bebidas", "20UN");
 
         assertTrue(struct.adicionarCategoria(c, c2));
 
@@ -84,9 +84,9 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c1 = new Categoria("Casa e Decoracao", "1");
+        Categoria c1 = new Categoria("Casa e Decoracao", "1009SCAT");
 
-        Categoria c2 = new Categoria("Roupa", "2");
+        Categoria c2 = new Categoria("Roupa", "20CAT");
 
         struct.adicionarCategoriaRaiz(c1);
         struct.adicionarCategoriaRaiz(c2);
@@ -114,7 +114,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c = new Categoria("Higiene", "1");
+        Categoria c = new Categoria("Higiene", "10CAT");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -134,15 +134,15 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria c1 = new Categoria("Categoria pai", "1");
+        Categoria c1 = new Categoria("Categoria pai", "100CAT");
 
         struct.adicionarCategoriaRaiz(c1);
 
-        Categoria c2 = new Categoria("Categoria filho", "2");
+        Categoria c2 = new Categoria("Categoria filho", "20SCAT");
 
         struct.adicionarCategoria(c1, c2);
-
-        Produto p = new Produto("Produto", new EAN(1));
+        
+        Produto p = new Produto("Produto", new EAN("1"));
 
         assertFalse("A categoria nao e uma folha", struct.adicionarProduto(p, c1));
 
@@ -154,36 +154,33 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Categoria mae = new Categoria("Roupa", "DC20");
+        Categoria mae = new Categoria("Roupa", "20UB");
 
         struct.adicionarCategoriaRaiz(mae);
 
         for (int i = 0; i < 30; i++) {
 
-            Categoria pai = new Categoria("Alimentar", "DC10");
+            Categoria pai = new Categoria("Alimentar", "10UB");
 
             struct.adicionarCategoriaRaiz(pai);
 
-            Categoria filho = new Categoria("Bens Essenciais", "UN10");
+            Categoria filho = new Categoria("Bens Essenciais", "10DC");
 
             struct.adicionarCategoria(pai, filho);
 
-            Categoria filho2 = new Categoria("Gorduras Liquidas", "CAT1000");
+            Categoria filho2 = new Categoria("Gorduras Liquidas", "1000CAT");
 
             struct.adicionarCategoria(filho, filho2);
 
-            Categoria filho3 = new Categoria("Sub-Categoria " + i, "SCAT0" + i);
+            Categoria filho3 = new Categoria("Sub-Categoria " + i, "10" + i + "SCAT");
 
             struct.adicionarCategoria(filho2, filho3);
-
-            Produto p = new Produto("Produto " + i, new EAN(i));
+            
+            Produto p = new Produto("Produto " + i, new EAN("i"), new CodigoQR(Integer.toString(2*i)));
 
             struct.adicionarProduto(p, filho3);
 
         }
-
         assertEquals(35, struct.tamanho());
-
     }
-
 }

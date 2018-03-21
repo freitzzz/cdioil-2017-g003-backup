@@ -1,7 +1,9 @@
 package cdioil.domain.authz;
 
+import cdioil.domain.Categoria;
 import cdioil.persistence.Identifiable;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +14,8 @@ import javax.persistence.Version;
 /**
  * Gestor de Inquéritos
  *
- * Responsável pela criação e configuração de inquéritos de uma dada estrutura mercadológica
+ * Responsável pela criação e configuração de inquéritos de uma dada estrutura
+ * mercadológica
  */
 @Entity
 public class Gestor implements Serializable, Identifiable<Long> {
@@ -27,6 +30,21 @@ public class Gestor implements Serializable, Identifiable<Long> {
      */
     @OneToOne(cascade = CascadeType.PERSIST)
     private SystemUser su;
+    /**
+     * Lista de categorias pelas quais o gestor é responsável
+     */
+    private List<Categoria> categorias;
+
+    /**
+     * Cria uma instância de Gestor
+     *
+     * @param su conta de SystemUser a associar
+     * @param categorias lista de categorias pelas quais o gestor é responsável
+     */
+    public Gestor(SystemUser su, List<Categoria> categorias) {
+        this.su = su;
+        this.categorias = categorias;
+    }
 
     /**
      * Cria uma nova instância de Gestor
@@ -87,5 +105,34 @@ public class Gestor implements Serializable, Identifiable<Long> {
     @Override
     public Long getID() {
         return id;
+    }
+
+    /**
+     * Adiciona várias categorias à lista de categorias
+     *
+     * @param lc lsita de categorias a adicionar
+     * @return true se foram adicionadas com sucesso, false se não forem
+     * adicionadas
+     */
+    public boolean adicionarCategorias(List<Categoria> lc) {
+        try {
+            return categorias.addAll(lc);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Remove várias categorias à lista de categorias
+     *
+     * @param lc lista de categorias a remover
+     * @return true se forem removidas com sucesso, false se não forem removidas
+     */
+    public boolean removerCategorias(List<Categoria> lc) {
+        try {
+            return categorias.removeAll(lc);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

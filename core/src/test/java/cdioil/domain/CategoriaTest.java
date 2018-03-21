@@ -50,10 +50,50 @@ public class CategoriaTest {
     @Test
     public void testAdicionarProduto() {
         System.out.println("adicionarProduto");
-        Produto p = new Produto("ProdutoTeste", new EAN());
+        Produto p = new Produto("ProdutoTeste", new EAN("5434"));
         assertTrue("Produto pode ser adicionado", c.adicionarProduto(p));
         c.adicionarProduto(p);
         assertFalse("Produto já existente no Set", c.adicionarProduto(p));
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com descritor sem número falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDescritivoSemNumerosFalha() {
+        c = new Categoria("CategoriaInvalida", "DC");
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com descritor sem sufixo falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDescritivoSemSufixoFalha() {
+        c = new Categoria("CategoriaInvalida", "10");
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com descritor nulo falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDescritivoNullFalha() {
+        c = new Categoria("CategoriaInvalida", null);
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com designação vazia falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDesignacaoVaziaFalha() {
+        c = new Categoria("    ", "10DC");
+    }
+
+    /**
+     * Teste a comprovar que a criação de uma Categoria com designação nulo falha.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testDesignacaoNullFalha() {
+        c = new Categoria(null, "10DC");
     }
 
     /**
@@ -62,7 +102,7 @@ public class CategoriaTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("As descrições são iguais", "Nome: CategoriaTeste\nDescritor: 100CAT\n", c.toString());
+        assertEquals("As descrições são iguais", "Nome: CategoriaTeste\nDescritivo: 100CAT\n", c.toString());
     }
 
     /**
@@ -81,7 +121,7 @@ public class CategoriaTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, c);
-        assertNotEquals("Instância de outra classe não é igual", new CodigoQR(12), c);
+        assertNotEquals("Instância de outra classe não é igual", new CodigoQR("12"), c);
         assertNotEquals("Instância de Categoria diferente", new Categoria("OutraCategoria", "102SCAT"), c);
         assertEquals("Instância de Categoria igual", new Categoria("NomeDiferenteMesmoDescritor", "100CAT"), c);
     }

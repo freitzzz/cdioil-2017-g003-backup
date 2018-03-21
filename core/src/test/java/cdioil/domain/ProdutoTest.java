@@ -5,10 +5,7 @@
  */
 package cdioil.domain;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,21 +24,9 @@ public class ProdutoTest {
     public ProdutoTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
-        this.p = new Produto("ProdutoTeste", new EAN(33312113));
-    }
-
-    @After
-    public void tearDown() {
+        this.p = new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235"));
     }
 
     /**
@@ -50,7 +35,11 @@ public class ProdutoTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("Deveriam ser iguais", "Nome: ProdutoTeste\nImagem: Produto sem Imagem\nCódigo de Barras: \nID: 33312113\nCódigo QR: \nSem código QR\n", p.toString());
+        System.out.println(p.toString());
+
+        Produto copia = new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235"));
+
+        assertEquals(p.toString(), copia.toString());
     }
 
     /**
@@ -59,7 +48,11 @@ public class ProdutoTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        assertEquals("Deveriam ser iguais", 33313163, p.hashCode());
+
+        Produto copia = new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235"));
+
+        assertEquals(p.hashCode(), copia.hashCode());
+
     }
 
     /**
@@ -69,9 +62,9 @@ public class ProdutoTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, p);
-        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100FC"), p);
-        assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new Preco("7€"), new EAN(33312118), new CodigoQR(552671)), p);
-        assertEquals("Instância de CodigoQR igual", new Produto("ProdutoTeste", new EAN(33312113)), p);
+        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100DC"), p);
+        assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new EAN("33312118"), new CodigoQR("552671")), p);
+        assertEquals("Instância com códigos iguais igual", new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235")), p);
     }
 
     /**

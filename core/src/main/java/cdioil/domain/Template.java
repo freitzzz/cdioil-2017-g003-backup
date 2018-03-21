@@ -32,11 +32,6 @@ public class Template implements Serializable {
     @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL)
     private List<Questao> listaQuestoes;
     /**
-     * Lista de inqueritos do Template.
-     */
-    @OneToMany(mappedBy = "inquerito", cascade = CascadeType.ALL)
-    private List<Inquerito> listaInqueritos;
-    /**
      * Categoria do Template.
      */
     private Categoria categoria;
@@ -48,7 +43,6 @@ public class Template implements Serializable {
      */
     public Template(Categoria categ) {
         this.listaQuestoes = new LinkedList<>();
-        this.listaInqueritos = new LinkedList<>();
         this.categoria = categ;
     }
     /**
@@ -68,18 +62,6 @@ public class Template implements Serializable {
         }
         return listaQuestoes.add(questao);
     }
-    /**
-     * Adiciona um inquerito à lista de inqueritos.
-     *
-     * @param inquerito INquerito a adicionar
-     * @return true, se for adicionado com sucesso. Caso contrário, retorna false
-     */
-    public boolean adicionarInquerito(Inquerito inquerito) {
-        if (inquerito == null || isInqueritoValido(inquerito)) {
-            return false;
-        }
-        return listaInqueritos.add(inquerito);
-    }
 
     /**
      * Remove uma questão da lista de questões.
@@ -93,19 +75,7 @@ public class Template implements Serializable {
         }
         return listaQuestoes.remove(questao);
     }
-    /**
-     * Remove um Inquerito da lista de inqueritos.
-     *
-     * @param inquerito Questão a remover
-     * @return true, se for removido com sucesso. Caso contrário, retorna false
-     */
-    public boolean removerInquerito(Inquerito inquerito) {
-        if (inquerito == null || !isInqueritoValido(inquerito)) {
-            return false;
-        }
-        return listaInqueritos.remove(inquerito);
-    }
-
+    
     /**
      * Verifica se uma questão já existe na lista de questões.
      *
@@ -114,15 +84,6 @@ public class Template implements Serializable {
      */
     public boolean isQuestaoValida(Questao questao) {
         return listaQuestoes.contains(questao);
-    }
-    /**
-     * Verifica se um Inquerito já existe na lista de inqueritos.
-     *
-     * @param inquerito Inquerito a verificar
-     * @return true, se já existir na lista. Caso contrário, retorna false
-     */
-    public boolean isInqueritoValido(Inquerito inquerito) {
-        return listaInqueritos.contains(inquerito);
     }
 
     /**
