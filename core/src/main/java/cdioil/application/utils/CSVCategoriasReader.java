@@ -22,7 +22,7 @@ public class CSVCategoriasReader implements CategoriasReader {
     /**
      * File com o ficheiro a ler.
      */
-    private File file;
+    private final File file;
 
     /**
      * Divisória entre as colunas do ficheiro.
@@ -67,8 +67,9 @@ public class CSVCategoriasReader implements CategoriasReader {
 
         for (int i = LINHA_IDENTIFICADOR + 1; i < conteudoFicheiro.size(); i++) {
             String[] line = conteudoFicheiro.get(i).split(SPLITTER);
-            if (line.length != 0) { //Termina a leitura quando não existirem mais linhas com informação
+            if (line.length != 0) { //Não lê linhas sem informação
                 try {
+
                     /*Os identificadores das categorias têm de ser compostos pelo 
                 identificador da categoria pai de modo a evitar colisões quando 
                 se adiciona novas categorias.*/
@@ -111,7 +112,7 @@ public class CSVCategoriasReader implements CategoriasReader {
                     if (added) {
                         categorias.add(filha4);
                     }
-                } catch(IllegalArgumentException ex){
+                } catch (IllegalArgumentException ex) {
                     System.out.println("O formato das Categorias inválido na linha" + i + ".");
                 }
             }
@@ -125,7 +126,7 @@ public class CSVCategoriasReader implements CategoriasReader {
      * @param conteudoFicheiro Todas as linhas do ficheiro
      * @return true, caso o conteúdo seja válido. Caso contrário, retorna false
      */
-    private boolean isFicheiroValido(List<String> conteudoFicheiro) {
+    protected boolean isFicheiroValido(List<String> conteudoFicheiro) {
         if (conteudoFicheiro == null) {
             return false;
         }
