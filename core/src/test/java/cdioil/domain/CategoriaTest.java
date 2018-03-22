@@ -102,7 +102,10 @@ public class CategoriaTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("As descrições são iguais", "Nome: CategoriaTeste\nDescritivo: 100CAT\n", c.toString());
+        
+        Categoria outra = new Categoria("CategoriaTeste", "100CAT");
+        
+        assertEquals("As descrições são iguais", outra.toString(), c.toString());
     }
 
     /**
@@ -111,7 +114,10 @@ public class CategoriaTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        assertEquals("Hash codes iguais", 1448654062, c.hashCode());
+        
+        Categoria outra = new Categoria("CategoriaTeste", "100CAT");
+        
+        assertEquals("Hash codes iguais", outra.hashCode(), c.hashCode());
     }
 
     /**
@@ -123,7 +129,9 @@ public class CategoriaTest {
         assertNotEquals("Objeto null não é igual", null, c);
         assertNotEquals("Instância de outra classe não é igual", new CodigoQR("12"), c);
         assertNotEquals("Instância de Categoria diferente", new Categoria("OutraCategoria", "102SCAT"), c);
-        assertEquals("Instância de Categoria igual", new Categoria("NomeDiferenteMesmoDescritor", "100CAT"), c);
+        assertNotEquals("Instância de Categoria igual", new Categoria("NomeDiferenteMesmoDescritor", "100CAT"), c);
+        assertNotEquals("Instância de Categoria igual", new Categoria("CategoriaTeste", "101CAT"), c);
+        assertEquals("Instância de Categoria igual", new Categoria("CategoriaTeste", "100CAT"), c);
     }
 
 }
