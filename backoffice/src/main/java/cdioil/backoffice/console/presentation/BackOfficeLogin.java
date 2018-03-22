@@ -4,7 +4,6 @@ import cdioil.backoffice.console.utils.Console;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Gestor;
-import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.GestorRepositoryImpl;
