@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -160,8 +159,9 @@ public class Categoria implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.descritivo);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.designacao);
+        hash = 29 * hash + Objects.hashCode(this.descritivo);
         return hash;
     }
 
@@ -176,11 +176,16 @@ public class Categoria implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (obj == null) {
             return false;
         }
-
-        Categoria other = (Categoria) obj;
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Categoria other = (Categoria) obj;
+        if (!Objects.equals(this.designacao, other.designacao)) {
+            return false;
+        }
         if (!Objects.equals(this.descritivo, other.descritivo)) {
             return false;
         }
