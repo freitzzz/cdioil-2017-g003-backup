@@ -24,4 +24,12 @@ public interface UserRepository {
      * retorna null
      */
     SystemUser findByEmail(Email email);
+    
+     /**
+     * Procura uma lista de SystemUser através de um dado email
+     * @param email email dado
+     * @return lista de system user encontrados. No caso de não encontrar nenhum system user,
+     * retorna null
+     */
+    List<SystemUser> utilizadoresPorEmail(String email);
 }
