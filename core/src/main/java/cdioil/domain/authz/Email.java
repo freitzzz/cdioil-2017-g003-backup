@@ -100,7 +100,7 @@ public class Email implements Serializable {
      */
     public Email(String email){
         validaEmail(email);
-        this.email=encryptEmail(email);
+        this.email=email;
     }
     /**
      * Método que verifica se um certo email é igual ao Email atual
@@ -136,7 +136,7 @@ public class Email implements Serializable {
      * @return String com a informação textual do Email atual
      */
     @Override
-    public String toString(){return "Email: "+decryptEmail();}
+    public String toString(){return decryptEmail();}
     /**
      * Método que valida se um email é válido ou não
      * @param email String com o email a ser validado
@@ -184,7 +184,7 @@ public class Email implements Serializable {
      * Método que decripta o email atual
      * @return String com o email decriptado
      */
-    private String decryptEmail(){return OperatorsEncryption.decrypt(email);}
+    private String decryptEmail(){return email;}
     /**
      * Construtor protegido de modo a permitir a persistencia com o JPA
      */

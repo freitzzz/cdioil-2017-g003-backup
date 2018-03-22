@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
@@ -20,30 +19,20 @@ public class Whitelist implements Serializable {
      * Código de serialização
      */
     private static final long serialVersionUID = 5L;
-    /**
-     * Long com o identificador da identidade na base de dados
-     */
-    @Id
-    @GeneratedValue
-    private long id;
+    
     /**
      * String que representa o dominio princial de um endereço de email
      */
+    @Id
     private String dominio;
-    /**
-     * String que representa o subdominio de um endereço de email
-     */
-    private String subDominio;
 
     /**
      * Constrói uma nova instância de Dominio de um determinado email
      *
      * @param dominio String com o dominio que contém um certo dominio
-     * @param subDominio 
      */
-    public Whitelist(String dominio,String subDominio){
+    public Whitelist(String dominio){
         this.dominio=dominio;
-        this.subDominio=subDominio;
     }
     /**
      * Método que verifica se dois Dominios são iguais
@@ -60,8 +49,7 @@ public class Whitelist implements Serializable {
         if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
-        return dominio.equalsIgnoreCase(((Whitelist) obj).dominio)
-                && subDominio.equalsIgnoreCase(((Whitelist) obj).subDominio);
+        return dominio.equalsIgnoreCase(((Whitelist) obj).dominio);
     }
 
     /**
@@ -73,7 +61,6 @@ public class Whitelist implements Serializable {
     public int hashCode() {
         int hash = 7;
         hash = 29 * hash + Objects.hashCode(this.dominio);
-        hash = 29 * hash + Objects.hashCode(this.subDominio);
         return hash;
     }
 
@@ -84,7 +71,7 @@ public class Whitelist implements Serializable {
      */
     @Override
     public String toString() {
-        return "Dominio: " + dominio + "\nSubdominio: " + subDominio;
+        return "Dominio: " + dominio;
     }
 
     /**

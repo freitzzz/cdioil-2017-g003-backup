@@ -32,7 +32,7 @@ public class AdicionarWhitelistController {
     public void adicionarDominioAutorizado(String dominio) {
 
         //TODO atualizar caso de uso
-        Whitelist whitelist = new Whitelist(dominio, "");
+        Whitelist whitelist = new Whitelist(dominio);
 
         repo.add(whitelist);
     }
