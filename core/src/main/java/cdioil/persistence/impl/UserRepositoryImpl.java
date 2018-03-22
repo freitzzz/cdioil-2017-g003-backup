@@ -58,11 +58,9 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser,Email> imp
     @Override
     public SystemUser findByEmail(Email email) {
         EntityManager em = entityManager();
-
-        Query q =
-                em.createQuery("SELECT u from SystemUser u where u.email = :email");
-        q.setParameter("email", email);
-
+        Query q =//A -> 950 b 951C [A-B] [951-952]
+                em.createQuery("SELECT u from SystemUser u where lower(u.email.email) = :email");
+        q.setParameter("email", email.toString().toLowerCase());
         return (SystemUser) q.getSingleResult();
     }
     public boolean exists(SystemUser user){return find(user.getID())!=null;}

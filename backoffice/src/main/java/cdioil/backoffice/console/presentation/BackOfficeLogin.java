@@ -40,7 +40,7 @@ public class BackOfficeLogin {
             String passwordS = Console.readLine(PASSWORD);
             try {
                 Email email = new Email(emailS);
-                SystemUser sysUser = userRepo.find(email);
+                SystemUser sysUser = userRepo.findByEmail(email);
                 if (sysUser == null || !sysUser.passwordIgual(passwordS)) {
                     System.out.println(USER_NAO_ENCONTRADO);
                 } else {
