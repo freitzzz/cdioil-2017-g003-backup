@@ -95,14 +95,14 @@ public class MainMenu {
                     new ListarUsersUI().listarUtilizadores();
                     break;
                 case 5:
-
                     break;
                 case 6:
-
                     break;
                 case 7:
                     new ImportarCategoriasUI();
-
+                    break;
+                case 8:
+                    new PesquisarUtilizadoresUI();
                     break;
                 default:
                     System.out.println("OpÃ§Ã£o nÃ£o reconhecida");
@@ -154,6 +154,7 @@ public class MainMenu {
         System.out.println("5. Registar no Sistema");
         System.out.println("6. Atualizar dados");
         System.out.println("7. Importar Categorias");
+        System.out.println("8. Pesquisar Utilizador por Email");
         System.out.println("=============================");
         System.out.println("0. Sair\n");
         option = Console.readInteger("Por favor escolha uma opÃ§Ã£o:");
