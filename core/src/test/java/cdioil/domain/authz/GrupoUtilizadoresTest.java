@@ -96,8 +96,9 @@ public class GrupoUtilizadoresTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("Deveriam ser iguais", "GESTOR RESPONSÁVEL:\nNome: Quim  Barreiros\n"
-                + "Email: quimBarreiros@gmail.com\n\nUSERS:\n", gu.toString());
+        GrupoUtilizadores guOutro=new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Nome("Quim",
+                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
+        assertEquals("Deveriam ser iguais",guOutro.toString(), gu.toString());
     }
 
     /**

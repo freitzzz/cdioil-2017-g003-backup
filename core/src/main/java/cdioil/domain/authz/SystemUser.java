@@ -100,7 +100,7 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      */
     @Override
     public String toString() {
-        return "Nome: " + nome + "\n" + email + "\n";
+        return "Nome: " + nome + "\nEmail: " + email + "\n";
     }
 
     /**
