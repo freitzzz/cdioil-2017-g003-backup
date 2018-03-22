@@ -25,7 +25,7 @@ public class PesquisarUtilizadoresController {
      * retorna null
      */
     public List<SystemUser> utilizadoresPorEmail(String email){
-        return userRepos.utilizadoresPorEmail(email);
+        return userRepos.utilizadoresPorFiltracao(email);
     }
     
 }

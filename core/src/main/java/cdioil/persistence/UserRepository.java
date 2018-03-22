@@ -31,5 +31,5 @@ public interface UserRepository {
      * @return lista de system user encontrados. No caso de não encontrar nenhum system user,
      * retorna null
      */
-    List<SystemUser> utilizadoresPorEmail(String email);
+    List<SystemUser> utilizadoresPorFiltracao(String email);
 }

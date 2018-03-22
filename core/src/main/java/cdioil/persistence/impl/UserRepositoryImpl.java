@@ -70,18 +70,17 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
     }
 
     /**
-     * Procura uma lista de SystemUser através de um email
+     * Filtra os utilizadores por um determinado dominio ou expressao regular
      *
-     * @param email email dado
+     * @param filtro String com o filtro a ser aplicado
      * @return lista de system user encontrados. No caso de não encontrar nenhum system user, retorna null
      */
     @Override
-    public List<SystemUser> utilizadoresPorEmail(String email) {
+    public List<SystemUser> utilizadoresPorFiltracao(String filtro) {
         EntityManager em = entityManager();
-        Query q
-                = em.createQuery("SELECT u from SystemUser u where lower(u.email.email) like '%:email%'");
-        q.setParameter("email", email);
-        return (List<SystemUser>) q.getResultList();
+      
+        Query queryRegexed=em.createNativeQuery("select * from SYSTEMUSER u where lower(u.email) regexp '"+filtro+"'",SystemUser.class);
+        return (List<SystemUser>) queryRegexed.getResultList();
     }
 
     public boolean exists(SystemUser user) {

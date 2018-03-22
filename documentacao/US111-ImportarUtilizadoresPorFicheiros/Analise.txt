@@ -1,0 +1,28 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #1
+	
+	* Como Administrador, pretendo importar listas de utilizadores para o sistema para que possa ter utilizadores a atribuir a gestores e outros administradores.             A importação deve ser através de ficheiros. Os domínios/subdomínios têm de ser validados.
+	* Os dominios/subdominios devem também ser autorizados (Dito pelo cliente na reunião 16/03/2018)
+	* Os ficheiros podem ser do formato CSV
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	* Os dominios e subdominios devem ser validados e autorizados
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	* Todos os testes da classe Email
