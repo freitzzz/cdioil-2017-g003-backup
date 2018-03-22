@@ -12,16 +12,13 @@ import cdioil.application.utils.CategoriasReaderFactory;
 import java.util.List;
 
 /**
- * Controlador relativo ao caso de uso Importar Categorias através de ficheiros (US-201).
+ * Controlador relativo ao caso de uso Importar Categorias através de ficheiros
+ * (US-201).
  *
  * @author Rita Gonçalves (1160912)
  */
 public class ImportarCategoriasController {
 
-    /**
-     * Lista com todas as Categorias lidas.
-     */
-    private List<Categoria> categoriasLidas;
 
     /**
      * Importa uma lista de Categorias de um ficheiro
@@ -31,7 +28,7 @@ public class ImportarCategoriasController {
      */
     public List<Categoria> lerFicheiro(String filename) {
         CategoriasReader categoriasReader = CategoriasReaderFactory.create(filename);
-
-        return categoriasReader != null ? categoriasLidas = categoriasReader.lerFicheiro() : null;
+        
+        return categoriasReader != null ? categoriasReader.lerFicheiro() : null;
     }
 }

@@ -22,7 +22,7 @@ public class CSVCategoriasReader implements CategoriasReader {
     /**
      * File com o ficheiro a ler.
      */
-    private File file;
+    private final File file;
 
     /**
      * Divisória entre as colunas do ficheiro.
@@ -30,7 +30,8 @@ public class CSVCategoriasReader implements CategoriasReader {
     private static final String SPLITTER = ";";
 
     /**
-     * Número da linha onde são identificados os campos a ler (colunas) no ficheiro CSV.
+     * Número da linha onde são identificados os campos a ler (colunas) no
+     * ficheiro CSV.
      */
     private static final int LINHA_IDENTIFICADOR = 0;
 
@@ -40,7 +41,8 @@ public class CSVCategoriasReader implements CategoriasReader {
     private static final int NUMERO_IDENTIFICADORES = 10;
 
     /**
-     * Constrói uma instância de CSVCategoriasReader com o nome do ficheiro a ler.
+     * Constrói uma instância de CSVCategoriasReader com o nome do ficheiro a
+     * ler.
      *
      * @param filename Nome do ficheiro a ler
      */
@@ -57,18 +59,19 @@ public class CSVCategoriasReader implements CategoriasReader {
     public List<Categoria> lerFicheiro() {
         List<String> conteudoFicheiro = readFile(file);
 
-        if (isFicheiroValido(conteudoFicheiro)) {
+        if (!isFicheiroValido(conteudoFicheiro)) {
             return null;
         }
 
         List<Categoria> categorias = new LinkedList<>();
 
         EstruturaMercadologica em = new EstruturaMercadologica();
-
+        
         for (int i = LINHA_IDENTIFICADOR + 1; i < conteudoFicheiro.size(); i++) {
             String[] line = conteudoFicheiro.get(i).split(SPLITTER);
-            if (line.length != 0) { //Termina a leitura quando não existirem mais linhas com informação
+            if (line.length != 0) { //Não lê linhas sem informação
                 try {
+
                     /*Os identificadores das categorias têm de ser compostos pelo 
                 identificador da categoria pai de modo a evitar colisões quando 
                 se adiciona novas categorias.*/
@@ -78,27 +81,21 @@ public class CSVCategoriasReader implements CategoriasReader {
                         categorias.add(pai);
                     }
 
-                    Categoria filha1 = new Categoria(line[3], line[0]
-                            + Categoria.Sufixos.SUFIXO_DC + line[2]
+                    Categoria filha1 = new Categoria(line[3], line[2]
                             + Categoria.Sufixos.SUFIXO_UN);
                     added = em.adicionarCategoria(pai, filha1);
                     if (added) {
                         categorias.add(filha1);
                     }
 
-                    Categoria filha2 = new Categoria(line[5], line[0]
-                            + Categoria.Sufixos.SUFIXO_DC + line[2]
-                            + Categoria.Sufixos.SUFIXO_UN + line[4]
+                    Categoria filha2 = new Categoria(line[5], line[4]
                             + Categoria.Sufixos.SUFIXO_CAT);
                     added = em.adicionarCategoria(filha1, filha2);
                     if (added) {
                         categorias.add(filha2);
                     }
 
-                    Categoria filha3 = new Categoria(line[7], line[0]
-                            + Categoria.Sufixos.SUFIXO_DC + line[2]
-                            + Categoria.Sufixos.SUFIXO_UN
-                            + line[4] + Categoria.Sufixos.SUFIXO_CAT + line[6]
+                    Categoria filha3 = new Categoria(line[7], line[6]
                             + Categoria.Sufixos.SUFIXO_SCAT);
                     added = em.adicionarCategoria(filha2, filha3);
                     if (added) {
@@ -111,7 +108,7 @@ public class CSVCategoriasReader implements CategoriasReader {
                     if (added) {
                         categorias.add(filha4);
                     }
-                } catch(IllegalArgumentException ex){
+                } catch (IllegalArgumentException ex) {
                     System.out.println("O formato das Categorias inválido na linha" + i + ".");
                 }
             }
@@ -120,12 +117,13 @@ public class CSVCategoriasReader implements CategoriasReader {
     }
 
     /**
-     * Verifica se o conteúdo do ficheiro é válido (se não é null e se o número de colunas é o esperado).
+     * Verifica se o conteúdo do ficheiro é válido (se não é null e se o número
+     * de colunas é o esperado).
      *
      * @param conteudoFicheiro Todas as linhas do ficheiro
      * @return true, caso o conteúdo seja válido. Caso contrário, retorna false
      */
-    private boolean isFicheiroValido(List<String> conteudoFicheiro) {
+    protected boolean isFicheiroValido(List<String> conteudoFicheiro) {
         if (conteudoFicheiro == null) {
             return false;
         }

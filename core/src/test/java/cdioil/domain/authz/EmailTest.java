@@ -184,7 +184,7 @@ public class EmailTest {
         System.out.println("toString");
         String email="1111@isep.ipp.pt";
         Email emailX = new Email(email);
-        String expResult = "Email: "+email;
+        String expResult = email;
         assertEquals("A condição deve acertar porque o contéudo das Strings é o mesmo"
                 ,emailX.toString(),expResult);
     }

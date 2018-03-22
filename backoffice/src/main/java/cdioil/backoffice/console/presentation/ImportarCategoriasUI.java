@@ -86,8 +86,9 @@ public class ImportarCategoriasUI {
                 } else {
                     System.out.println(MENSAGEM_CATEGORIAS_IMPORTADAS[0]);
                     categorias.forEach((c) -> {
-                     //   System.out.println(c.toString());
+                        System.out.println(c.toString());
                     });
+                    System.out.println(categorias.size());
                     System.out.println(MENSAGEM_CATEGORIAS_IMPORTADAS[1]);
                     catched = true;
                 }
