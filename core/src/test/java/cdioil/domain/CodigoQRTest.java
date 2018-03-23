@@ -34,16 +34,16 @@ public class CodigoQRTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-
-        Codigo copia = new QRCode("73534325");
+        
+        Code copia = new QRCode("73534325");
 
         assertEquals("Objetos com atributos iguais deverão ter descrições iguais", copia.toString(), c.toString());
 
-        Codigo outro = new QRCode("4237484234");
+        Code outro = new QRCode("4237484234");
 
         assertNotEquals("Objetos com atributos diferentes deverão ter descrições diferentes", outro.toString(), c.toString());
 
-        Codigo codBarras = new EAN("73534325");
+        Code codBarras = new EAN("73534325");
 
         assertNotEquals("Apesar de ambos serem códigos com o mesmo valor as descrições deverão ser diferentes", codBarras.toString(), c.toString());
 
@@ -56,15 +56,15 @@ public class CodigoQRTest {
     public void testHashCode() {
         System.out.println("hashCode");
 
-        Codigo copia = new QRCode("73534325");
+        Code copia = new QRCode("73534325");
 
         assertEquals("Objetos com atributos iguais deverão ter hashcodes iguais", copia.toString(), c.toString());
 
-        Codigo outro = new QRCode("4237484234");
+        Code outro = new QRCode("4237484234");
 
         assertNotEquals("Objetos com atributos diferentes deverão ter hashcodes diferentes", outro.toString(), c.toString());
 
-        Codigo codBarras = new EAN("73534325");
+        Code codBarras = new EAN("73534325");
 
         assertNotEquals("Apesar de ambos serem códigos com o mesmo valor os hashcodes deverão ser diferentes", codBarras.hashCode(), c.hashCode());
 

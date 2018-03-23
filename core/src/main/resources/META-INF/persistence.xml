@@ -3,8 +3,6 @@
   <persistence-unit name="cdioil-2017-g003_Core_PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>cdioil.domain.Inquerito</class>
-    <class>cdioil.domain.Produto</class>
-    <class>cdioil.domain.Codigo</class>
     <class>cdioil.domain.EAN</class>
     <class>cdioil.domain.authz.Admin</class>
     <class>cdioil.domain.authz.SystemUser</class>
@@ -12,8 +10,11 @@
     <class>cdioil.domain.authz.UserRegistado</class>
     <class>cdioil.domain.authz.Whitelist</class>
     <class>cdioil.domain.Concurso</class>
-    <class>cdioil.domain.EstruturaMercadologica</class>
     <class>cdioil.domain.Node</class>
+    <class>cdioil.domain.Code</class>
+    <class>cdioil.domain.EstruturaMercadologica</class>
+    <class>cdioil.domain.Product</class>
+    <class>cdioil.domain.BinaryQuestion</class>
     <class>cdioil.domain.Category</class>
     <class>cdioil.domain.Review</class>
     <class>cdioil.domain.authz.Profile</class>

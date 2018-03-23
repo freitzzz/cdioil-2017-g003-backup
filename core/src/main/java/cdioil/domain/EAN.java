@@ -8,7 +8,7 @@ import javax.persistence.Entity;
  * @author Ana Guerra (1161191)
  */
 @Entity(name = "EAN")
-public class EAN extends Codigo<String> {
+public class EAN extends Code<String> {
 
     /**
      * Protected constructor for JPA.
@@ -22,7 +22,7 @@ public class EAN extends Codigo<String> {
      * @param code code to be a attribute
      */
     public EAN(String code) {
-        this.codigo = code;
+        this.code = code;
     }
 
 }

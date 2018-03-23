@@ -10,25 +10,27 @@ import javax.persistence.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
 public class SystemUser implements Serializable, Identifiable<Email> {
 
     /**
      * Serialization number.
      */
     private static final long serialVersionUID = 1L;
-
+    @Id
     @Version
     private Long version;
 
     /**
      * User's email.
      */
-    @EmbeddedId
+    @Embedded
     private Email email;
     /**
      * User's name.
      */
-    private Nome nome;
+    @Embedded
+    private Name nome;
     /**
      * User's password.
      */
@@ -42,7 +44,7 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * @param nome user's name
      * @param password user's password
      */
-    public SystemUser(Email email, Nome nome, Password password) {
+    public SystemUser(Email email, Name nome, Password password) {
         this.email = email;
         this.nome = nome;
         this.password = password;
@@ -117,7 +119,7 @@ public class SystemUser implements Serializable, Identifiable<Email> {
                     if (nome.length != 2) {
                         throw new IllegalArgumentException();
                     }
-                    this.nome = new Nome(nome[0], nome[1]);
+                    this.nome = new Name(nome[0], nome[1]);
                     break;
                 case 2://changes the user's email
                     Email email = new Email(newField);

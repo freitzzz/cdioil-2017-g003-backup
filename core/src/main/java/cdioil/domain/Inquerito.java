@@ -28,9 +28,9 @@ public class Inquerito implements Serializable, Evento {
     private int id;
 
     /**
-     * Produto associado ao inquerito
+     * Product associado ao inquerito
      */
-    private Produto produto;
+    private Product produto;
     /**
      * Utilizadores aos quais o Inquerito se destina.
      */
@@ -53,7 +53,7 @@ public class Inquerito implements Serializable, Evento {
      * @param data  Data de realização do inqueito
      * @param publicoAlvo Utilizadores aos quais o Inquerito se destina
      */
-    public Inquerito(Produto produto, Calendar data, GrupoUtilizadores publicoAlvo) {
+    public Inquerito(Product produto, Calendar data, GrupoUtilizadores publicoAlvo) {
         if (produto == null) {
             throw new IllegalArgumentException("O inquérito tem que ter um produto");
         }
@@ -107,7 +107,7 @@ public class Inquerito implements Serializable, Evento {
     }
 
     /**
-     * Devolve uma descricao do inquerito (Produto e lista de questoes)
+     * Devolve uma descricao do inquerito (Product e lista de questoes)
      *
      * @return descricao do inquerito
      */

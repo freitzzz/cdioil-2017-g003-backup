@@ -142,7 +142,7 @@ public class EstruturaMercadologicaTest {
 
         struct.adicionarCategoria(c1, c2);
         
-        Produto p = new Produto("Produto", new EAN("1"));
+        Product p = new Product("Produto", new EAN("1"));
 
         assertFalse("A categoria nao e uma folha", struct.adicionarProduto(p, c1));
 
@@ -176,7 +176,7 @@ public class EstruturaMercadologicaTest {
 
             struct.adicionarCategoria(filho2, filho3);
             
-            Produto p = new Produto("Produto " + i, new EAN("i"), new QRCode(Integer.toString(2*i)));
+            Product p = new Product("Produto " + i, new EAN("i"), new QRCode(Integer.toString(2*i)));
 
             struct.adicionarProduto(p, filho3);
 

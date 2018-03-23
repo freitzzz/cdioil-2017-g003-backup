@@ -50,7 +50,7 @@ public class CategoryTest {
     @Test
     public void testAdicionarProduto() {
         System.out.println("addProduct");
-        Produto p = new Produto("ProdutoTeste", new EAN("5434"));
+        Product p = new Product("ProdutoTeste", new EAN("5434"));
         assertTrue("Produto pode ser adicionado", c.addProduct(p));
         c.addProduct(p);
         assertFalse("Produto já existente no Set", c.addProduct(p));
