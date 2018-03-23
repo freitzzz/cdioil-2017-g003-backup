@@ -99,7 +99,7 @@ public class InqueritoTest {
     @Test
     public void testAdicionarQuestao() {
         System.out.println("adicionarQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         assertTrue("Deveria ser possível adicionar", i.adicionarQuestao(q));
         i.adicionarQuestao(q);
         assertFalse("Questão null", i.adicionarQuestao(null));
@@ -112,7 +112,7 @@ public class InqueritoTest {
     @Test
     public void testarRemoverQuestao() {
         System.out.println("removerQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         i.adicionarQuestao(q);
         assertTrue("Deveria ser possível remover", i.removerQuestao(q));
         i.removerQuestao(q);
@@ -126,7 +126,7 @@ public class InqueritoTest {
     @Test
     public void testarIsQuestaoValida() {
         System.out.println("isQuestaoValida");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         i.adicionarQuestao(q);
         assertTrue("Deveria ser válida", i.isQuestaoValida(q));
         i.removerQuestao(q);

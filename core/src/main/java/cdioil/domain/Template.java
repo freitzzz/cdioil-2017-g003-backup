@@ -30,7 +30,7 @@ public class Template implements Serializable {
      * Lista de questoes do Template.
      */
     @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL)
-    private List<Questao> listaQuestoes;
+    private List<Question> listaQuestoes;
     /**
      * Categoria do Template.
      */
@@ -56,7 +56,7 @@ public class Template implements Serializable {
      * @param questao Questão a adicionar
      * @return true, se for adicionada com sucesso. Caso contrário, retorna false
      */
-    public boolean adicionarQuestao(Questao questao) {
+    public boolean adicionarQuestao(Question questao) {
         if (questao == null || isQuestaoValida(questao)) {
             return false;
         }
@@ -69,7 +69,7 @@ public class Template implements Serializable {
      * @param questao Questão a remover
      * @return true, se for removida com sucesso. Caso contrário, retorna false
      */
-    public boolean removerQuestao(Questao questao) {
+    public boolean removerQuestao(Question questao) {
         if (questao == null || !isQuestaoValida(questao)) {
             return false;
         }
@@ -82,7 +82,7 @@ public class Template implements Serializable {
      * @param questao Questão a verificar
      * @return true, se já existir na lista. Caso contrário, retorna false
      */
-    public boolean isQuestaoValida(Questao questao) {
+    public boolean isQuestaoValida(Question questao) {
         return listaQuestoes.contains(questao);
     }
 
@@ -99,7 +99,7 @@ public class Template implements Serializable {
      *
      * @return a lista de questões do Template
      */
-    private List<Questao> getListaQuestoes() {
+    private List<Question> getListaQuestoes() {
         return listaQuestoes;
     }
     /**

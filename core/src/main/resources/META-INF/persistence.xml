@@ -18,6 +18,7 @@
     <class>cdioil.domain.Concurso</class>
     <class>cdioil.domain.EstruturaMercadologica</class>
     <class>cdioil.domain.Node</class>
+    <class>cdioil.domain.BinaryQuestion</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

@@ -29,7 +29,7 @@ public class TemplateTest {
 
     Categoria cat = new Categoria("Pai", "10DC");
     Calendar data = Calendar.getInstance();
-    List<Questao> listaQuestoes = new LinkedList<>();
+    List<Question> listaQuestoes = new LinkedList<>();
     List<Inquerito> listaInqueritos = new LinkedList<>();
 
     /**
@@ -43,7 +43,7 @@ public class TemplateTest {
     @Test
     public void testAdicionarQuestao() {
         System.out.println("adicionarQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         assertTrue("Deveria ser possível adicionar", template.adicionarQuestao(q));
         template.adicionarQuestao(q);
         assertFalse("Questão null", template.adicionarQuestao(null));
@@ -55,7 +55,7 @@ public class TemplateTest {
     @Test
     public void testarRemoverQuestao() {
         System.out.println("removerQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         template.adicionarQuestao(q);
         assertTrue("Deveria ser possível remover", template.removerQuestao(q));
         template.removerQuestao(q);
@@ -68,7 +68,7 @@ public class TemplateTest {
     @Test
     public void testarIsQuestaoValida() {
         System.out.println("isQuestaoValida");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         template.adicionarQuestao(q);
         assertTrue("Deveria ser válida", template.isQuestaoValida(q));
         template.removerQuestao(q);
