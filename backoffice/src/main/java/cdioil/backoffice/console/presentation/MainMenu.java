@@ -102,7 +102,7 @@ public class MainMenu {
                     new ImportCategoriesUI();
                     break;
                 case 8:
-                    new PesquisarUtilizadoresUI();
+                    new SearchUserUI();
                     break;
                 default:
                     System.out.println("OpÃ§Ã£o nÃ£o reconhecida");
