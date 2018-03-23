@@ -31,7 +31,8 @@ public class GestorTest {
     @Test
     public void testeAdicionarCategorias() {
         System.out.println("adicionarCategorias");
-        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
+        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"),
+                new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste adiconar lista a null
         List<Category> lc = null;
         assertFalse(instance.adicionarCategorias(lc));
@@ -39,8 +40,8 @@ public class GestorTest {
         lc = new LinkedList<>();
         assertFalse(instance.adicionarCategorias(lc));
         //teste adiconar lista com elementos
-        lc.add(new Category("Fruit", "124CAT"));
-        lc.add(new Category("Beverage", "6040SCAT"));
+        lc.add(new Category("Fruit", "124CAT", "10DC-10UN-124CAT"));
+        lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
         assertTrue(instance.adicionarCategorias(lc));
         //teste adicionar lista com elementos repetidos
         assertTrue(instance.adicionarCategorias(lc));
@@ -52,7 +53,8 @@ public class GestorTest {
     @Test
     public void testeRemoverCategorias() {
         System.out.println("removerCategorias");
-        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
+        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"),
+                new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste remover lista a null
         List<Category> lc = null;
         assertFalse(instance.removerCategorias(lc));
@@ -60,8 +62,9 @@ public class GestorTest {
         lc = new LinkedList<>();
         assertFalse(instance.removerCategorias(lc));
         //teste remover lista com elementos inexistentes
-        lc.add(new Category("Fruit", "124CAT"));
-        lc.add(new Category("Beverage", "6040SCAT"));
+        //teste adiconar lista com elementos
+        lc.add(new Category("Fruit", "124CAT", "10DC-10UN-124CAT"));
+        lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
         assertFalse(instance.removerCategorias(lc));
         //teste adicionar lista com elementos existentes
         instance.adicionarCategorias(lc);

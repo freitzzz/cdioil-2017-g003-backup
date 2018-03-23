@@ -63,7 +63,7 @@ public class TemplateTest {
 
     @Before
     public void setUp() {
-        c = new Category("Pai", "10DC");
+        c = new Category("Pai", "10DC","10DC");
         date = Calendar.getInstance();
         questions = new LinkedList<>();
         surveys = new LinkedList<>();

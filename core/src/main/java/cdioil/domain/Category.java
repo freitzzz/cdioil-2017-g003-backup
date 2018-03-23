@@ -28,7 +28,7 @@ public class Category implements Serializable {
      */
     @Version
     private Long version;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_CATEGORY", nullable = false, updatable = false)
@@ -48,6 +48,11 @@ public class Category implements Serializable {
     String identifier;
 
     /**
+     * Path of the Category in the Market Structure.
+     */
+    String path;
+
+    /**
      * List of products of the Category.
      */
     @OneToMany
@@ -56,8 +61,14 @@ public class Category implements Serializable {
     /**
      * Regular expression to validate the identifiers of the Category.
      */
-    private final static String IDENTIFIER_REGEX = "-?[0-9]+(" + Sufixes.SUFIX_CAT + "|" + Sufixes.SUFIX_SCAT
+    private final static String IDENTIFIER_REGEX = "[0-9]+(" + Sufixes.SUFIX_CAT + "|" + Sufixes.SUFIX_SCAT
             + "|" + Sufixes.SUFIX_UB + "|" + Sufixes.SUFIX_UN + "|" + Sufixes.SUFIX_DC + ")";
+
+    /**
+     * Regular expression to validate the path of the Category in the Market Structure.
+     */
+    private final static String PATH_REGEX = "[0-9]+" + Sufixes.SUFIX_DC + "((-[0-9]+" + Sufixes.SUFIX_UN + "(-[0-9]+"
+            + Sufixes.SUFIX_CAT + "(-[0-9]+" + Sufixes.SUFIX_SCAT + "(-[0-9]+" + Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**
      * Sufixes for the identifier of the Category (DC, UN, CAT, SCAT or UB).
@@ -102,14 +113,17 @@ public class Category implements Serializable {
     }
 
     /**
-     * Creates an instance of Category, receiving its name and identifier.
+     * Creates an instance of Category, receiving its name, path and identifier.
      *
      * @param name Name of the Category
      * @param identifier Idenfier of the Category
+     * @param path Path of the Category
      */
-    public Category(String name, String identifier) {
-        if (isNameValid(name) && isIdentifierValid(identifier)) {
+    public Category(String name, String identifier, String path) {
+        if (isNameValid(name) && isIdentifierValid(identifier)
+                && isPathValid(path) && path.endsWith(identifier)) {
             this.name = name;
+            this.path = path;
             this.identifier = identifier;
             products = new HashSet<>();
         } else {
@@ -135,7 +149,19 @@ public class Category implements Serializable {
      * @return true, if the identifier is valid. Otherwise, returns false
      */
     private boolean isIdentifierValid(String identifier) {
-        return identifier != null && identifier.matches(IDENTIFIER_REGEX);
+        return identifier != null
+                && (identifier.matches(IDENTIFIER_REGEX) || identifier.equals("RAIZ"));
+    }
+
+    /**
+     * Checks if the path of the Category is valid.
+     *
+     * @param name String to check
+     * @return true, if the path is valid. Otherwise, returns false
+     */
+    private boolean isPathValid(String path) {
+        return path != null
+                && (path.matches(PATH_REGEX) || path.equals("RAIZ"));
     }
 
     /**
@@ -168,9 +194,8 @@ public class Category implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.name);
-        hash = 29 * hash + Objects.hashCode(this.identifier);
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.path);
         return hash;
     }
 
@@ -178,26 +203,17 @@ public class Category implements Serializable {
      * Compares a Category with another Object.
      *
      * @param obj Object to compare
-     * @return true, if the two Objects are equal. Otherwise, returns false
+     * @return true, if the two Categories have the same path. Otherwise, returns false
      */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Category other = (Category) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.identifier, other.identifier)) {
-            return false;
-        }
-        return true;
+        Category other = (Category) obj;
+        return this.path.equals(other.path);
     }
 }

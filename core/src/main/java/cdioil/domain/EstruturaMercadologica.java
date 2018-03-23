@@ -12,8 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- * Classe que representa a Estrutura Mercadologica que agrega as categorias de
- * produtos.
+ * Classe que representa a Estrutura Mercadologica que agrega as categorias de produtos.
  *
  * @author António Sousa [1161371]
  */
@@ -45,7 +44,7 @@ public class EstruturaMercadologica implements Serializable {
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Category("Todos os Produtos", "-1UB"));
+        raiz = new Node(null, new Category("Todos os Produtos", "RAIZ", "RAIZ"));
         tamanho = 1;
     }
 
@@ -106,13 +105,11 @@ public class EstruturaMercadologica implements Serializable {
     }
 
     /**
-     * Método recursivo usado para para procurar uma dada Category na Estrutura
-     * Mercadologica.
+     * Método recursivo usado para para procurar uma dada Category na Estrutura Mercadologica.
      *
      * @param node node a partir do qual se pretende iniciar a procura
      * @param c Category a procurar
-     * @return o node em que a categoria se encontra, null caso não seja
-     * encontrada
+     * @return o node em que a categoria se encontra, null caso não seja encontrada
      */
     private Node procuraNode(Node node, Category c) {
         if (node == null) {
@@ -138,10 +135,8 @@ public class EstruturaMercadologica implements Serializable {
     }
 
     /**
-     * Método para verificar se um Node é uma folha da Estrutura
-     * Mercadologica.<p>
-     * Uma Category folha é uma categoria que não alberga sub-categorias,
-     * podendo conter produtos.
+     * Método para verificar se um Node é uma folha da Estrutura Mercadologica.<p>
+     * Uma Category folha é uma categoria que não alberga sub-categorias, podendo conter produtos.
      *
      * @param node node a verificar se é folha
      * @return true se o node não tiver nodes filhos, false caso tenha
@@ -151,8 +146,7 @@ public class EstruturaMercadologica implements Serializable {
     }
 
     /**
-     * Devolve uma coleção de todos os nodes da Estrutura Mercadologica que
-     * sejam folhas.
+     * Devolve uma coleção de todos os nodes da Estrutura Mercadologica que sejam folhas.
      *
      * @return
      */
@@ -166,8 +160,7 @@ public class EstruturaMercadologica implements Serializable {
     }
 
     /**
-     * Pesquisa recursivamente por todos os nodes que nao tenham filhos e
-     * adiciona-os a lista.
+     * Pesquisa recursivamente por todos os nodes que nao tenham filhos e adiciona-os a lista.
      *
      * @param folhas lista de nodes que não tenham nodes filhos
      * @param node node atual
@@ -188,8 +181,7 @@ public class EstruturaMercadologica implements Serializable {
     }
 
     /**
-     * Adiciona um Product a Category pretendida, podendo apenas adicionar-se a
-     * categorias que sejam folhas.
+     * Adiciona um Product a Category pretendida, podendo apenas adicionar-se a categorias que sejam folhas.
      *
      * @param p produto que se pretende adicionar
      * @param c categoria a qual se pretende adicionar o produto
@@ -226,8 +218,7 @@ public class EstruturaMercadologica implements Serializable {
      * @param pai categoria pai
      * @param filho categoria filho
      * @return true - se o pai estiver ligado e o filho ligado ao pai<p>
-     * false - caso uma das ligacoes nao se verifique ou se uma das categorias
-     * nao se encontrar na estrutura mercadologica
+     * false - caso uma das ligacoes nao se verifique ou se uma das categorias nao se encontrar na estrutura mercadologica
      */
     public boolean verificaLigados(Category pai, Category filho) {
 

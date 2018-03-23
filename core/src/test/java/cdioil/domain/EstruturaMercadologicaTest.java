@@ -32,7 +32,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c = new Category("Bricolage", "109CAT");
+        Category c = new Category("Bricolage", "100CAT", "10DC-10UN-100CAT");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -46,7 +46,7 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Category c = new Category("Bens Alimentares", "109UB");
+        Category c = new Category("Bens Alimentares", "109UB", "10DC-10UN-100CAT-102SCAT-109UB");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
@@ -63,13 +63,13 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Category c = new Category("Bens Alimentares", "109UB");
+        Category c = new Category("Bens Alimentares", "109UB", "10DC-10UN-100CAT-102SCAT-109UB");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
         assertEquals("A estrutura deverá conter dois nodes", 2, struct.tamanho());
 
-        Category c2 = new Category("Bebidas", "20UN");
+        Category c2 = new Category("Bebidas", "20UN", "10DC-20UN");
 
         assertTrue(struct.adicionarCategoria(c, c2));
 
@@ -84,9 +84,9 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c1 = new Category("Casa e Decoracao", "1009SCAT");
+        Category c1 = new Category("Casa e Decoracao", "1009SCAT", "10DC-10UN-100CAT-1009SCAT");
 
-        Category c2 = new Category("Roupa", "20CAT");
+        Category c2 = new Category("Roupa", "20CAT", "10DC-10UN-20CAT");
 
         struct.adicionarCategoriaRaiz(c1);
         struct.adicionarCategoriaRaiz(c2);
@@ -114,7 +114,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c = new Category("Higiene", "10CAT");
+        Category c = new Category("Higiene", "10CAT", "10DC-10UN-10CAT");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -134,14 +134,14 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c1 = new Category("Categoria pai", "100CAT");
+        Category c1 = new Category("Categoria pai", "100CAT", "10DC-10UN-100CAT");
 
         struct.adicionarCategoriaRaiz(c1);
 
-        Category c2 = new Category("Categoria filho", "20SCAT");
+        Category c2 = new Category("Categoria filho", "20SCAT", "10DC-10UN-100CAT-20SCAT");
 
         struct.adicionarCategoria(c1, c2);
-        
+
         Product p = new Product("Produto", new EAN("1"));
 
         assertFalse("A categoria nao e uma folha", struct.adicionarProduto(p, c1));
@@ -154,29 +154,29 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category mae = new Category("Roupa", "20UB");
+        Category mae = new Category("Roupa", "20UB", "10DC-10UN-100CAT-102SCAT-20UB");
 
         struct.adicionarCategoriaRaiz(mae);
 
         for (int i = 0; i < 30; i++) {
 
-            Category pai = new Category("Alimentar", "10UB");
+            Category pai = new Category("Alimentar", "10UB", "10DC-10UN-100CAT-102SCAT-10UB");
 
             struct.adicionarCategoriaRaiz(pai);
 
-            Category filho = new Category("Bens Essenciais", "10DC");
+            Category filho = new Category("Bens Essenciais", "20DC", "20DC");
 
             struct.adicionarCategoria(pai, filho);
 
-            Category filho2 = new Category("Gorduras Liquidas", "1000CAT");
+            Category filho2 = new Category("Gorduras Liquidas", "1000CAT", "10DC-10UN-1000CAT");
 
             struct.adicionarCategoria(filho, filho2);
 
-            Category filho3 = new Category("Sub-Categoria " + i, "10" + i + "SCAT");
+            Category filho3 = new Category("Sub-Categoria " + i, "10" + i + "SCAT", "10DC-10UN-100CAT-10" + i + "SCAT");
 
             struct.adicionarCategoria(filho2, filho3);
-            
-            Product p = new Product("Produto " + i, new EAN("i"), new QRCode(Integer.toString(2*i)));
+
+            Product p = new Product("Produto " + i, new EAN("i"), new QRCode(Integer.toString(2 * i)));
 
             struct.adicionarProduto(p, filho3);
 
