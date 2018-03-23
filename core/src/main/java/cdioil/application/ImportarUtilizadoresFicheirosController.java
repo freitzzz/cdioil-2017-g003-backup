@@ -1,10 +1,10 @@
 package cdioil.application;
 
 import cdioil.domain.authz.SystemUser;
-import cdioil.application.utils.UtilizadoresReader;
-import cdioil.application.utils.UtilizadoresReaderFactory;
+import cdioil.application.utils.UsersReaderFactory;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import java.util.List;
+import cdioil.application.utils.UsersReader;
 
 /**
  * Controlador relativo ao caso de uso Importar Listas de Utilizadores através 
@@ -25,8 +25,9 @@ public class ImportarUtilizadoresFicheirosController {
      * caso o ficheiro não seja válido
      */
     public List<SystemUser> readUtilizadores(String ficheiro){
-        UtilizadoresReader usersReader=UtilizadoresReaderFactory.create(ficheiro);
-        return usersReader!=null?usersLidos=UtilizadoresReaderFactory.create(ficheiro).read() : null;
+        //NAO ESQUECER IR BUSCAR A WHITE LIST AGORA
+        UsersReader usersReader=UsersReaderFactory.create(ficheiro);
+        return usersReader!=null?usersLidos=UsersReaderFactory.create(ficheiro).read() : null;
     }
 
     /**

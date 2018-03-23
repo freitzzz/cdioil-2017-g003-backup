@@ -33,7 +33,7 @@ public class ChangeUserDataController {
      * @return true if the data was changed successfully, false if not
      */
     public boolean changeDataField(String newData, int option) {
-        boolean b = su.alterarCampoInformacao(newData, option);
+        boolean b = su.changeUserDatafield(newData, option);
         if (b) {
             RepositorioBaseJPA repo = new UserRepositoryImpl();
             repo.merge(su);
