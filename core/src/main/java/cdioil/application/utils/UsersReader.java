@@ -10,7 +10,7 @@ import java.util.List;
 public interface UsersReader {
     /**
      * Method that reads and parses the users contained in a certain file
-     * @return List with all SystemUser read from the file, or null if an error occured 
+     * @return List with all users read from the file, or null if an error occured 
      */
     public abstract List<SystemUser> read();
 }
