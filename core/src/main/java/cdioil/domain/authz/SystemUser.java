@@ -17,14 +17,20 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * Serialization number.
      */
     private static final long serialVersionUID = 1L;
-    @Id
     @Version
     private Long version;
+    /**
+     * ID of the SystemUser for JPA.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     /**
      * User's email.
      */
     @Embedded
+    @Column(unique = true)
     private Email email;
     /**
      * User's name.
@@ -45,6 +51,9 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * @param password user's password
      */
     public SystemUser(Email email, Name nome, Password password) {
+         if (email == null) {
+            throw new IllegalArgumentException("O email não pode ser vazio.");
+        }
         this.email = email;
         this.nome = nome;
         this.password = password;
@@ -106,12 +115,12 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * Changes a property of a SystemUser (email, name or password)
      *
      * @param newField info given by the user
-     * @param option integer that indicates which property is going to be 
+     * @param option integer that indicates which property is going to be
      * updated
-     * @return true if the update was successful, false if the new info
-     * was not valid
+     * @return true if the update was successful, false if the new info was not
+     * valid
      */
-    public boolean alterarCampoInformacao(String newField, int option) {
+    public boolean changeUserDatafield(String newField, int option) {
         try {
             switch (option) {
                 case 1://changes the user's name
@@ -140,6 +149,7 @@ public class SystemUser implements Serializable, Identifiable<Email> {
 
     /**
      * Returns the user's ID (email)
+     *
      * @return email
      */
     @Override

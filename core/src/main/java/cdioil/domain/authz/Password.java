@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.domain.ValueObject;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -17,7 +18,7 @@ import javax.persistence.Embeddable;
  * @author Joana Pinheiro
  */
 @Embeddable
-public class Password implements Serializable {
+public class Password implements Serializable, ValueObject {
     private static final long serialVersionUID=10l;
     private static final String WEAK_PASSWORD = "Fraca!!!";
     private static final String AVERAGE_PASSWORD = "Média";

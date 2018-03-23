@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.domain.ValueObject;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -10,7 +11,7 @@ import javax.persistence.Embeddable;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Embeddable
-public class Email implements Serializable {
+public class Email implements Serializable, ValueObject {
     /**
      * Serializable ID
      */

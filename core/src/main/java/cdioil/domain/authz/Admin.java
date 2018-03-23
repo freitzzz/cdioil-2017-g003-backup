@@ -5,12 +5,12 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * Representa um administrador da app.
+ * Represents an administrator of the application.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-@Table(name="ADMINISTRADOR")
+@Table(name="ADMINISTRATOR")
 public class Admin implements Serializable,Identifiable<Long> {
     @Id
     @GeneratedValue
@@ -21,16 +21,16 @@ public class Admin implements Serializable,Identifiable<Long> {
     private Long version;
 
     /**
-     * Conta de utilizador associada ao Admin
+     * SystemUser associated with the admin.
      */
     
     @OneToOne(cascade = CascadeType.PERSIST)
     private SystemUser sysUser;
 
     /**
-     * Constroi uma instancia de Admin recebendo um SystemUser
+     * Builds an Admin with a SystemUser.
      *
-     * @param sysUser conta de utilizador associada ao admin
+     * @param sysUser SystemUser to be associated with the admin
      */
     public Admin(SystemUser sysUser) {
         if (sysUser == null) {
@@ -45,7 +45,7 @@ public class Admin implements Serializable,Identifiable<Long> {
     }
 
     /**
-     * Hash code do admin
+     * Admin's hash code.
      *
      * @return hash code
      */
@@ -55,11 +55,11 @@ public class Admin implements Serializable,Identifiable<Long> {
     }
 
     /**
-     * Verifica se duas instancias de Admin sao iguais tendo em conta as suas
-     * contas de utilizador
+     * Checks if two instances of Admin are the same by comparing
+     * their SystemUsers.
      *
-     * @param obj objeto a comparar
-     * @return true se se tratar do mesmo admin, false se não
+     * @param obj object to be compared
+     * @return true if it's the same admin, false if not
      */
     @Override
     public boolean equals(Object obj) {
@@ -74,9 +74,9 @@ public class Admin implements Serializable,Identifiable<Long> {
     }
 
     /**
-     * Devolve uma descricao de um admin
+     * Returns a description of an admin
      *
-     * @return descricao de um admin
+     * @return description of an admin
      */
     @Override
     public String toString() {

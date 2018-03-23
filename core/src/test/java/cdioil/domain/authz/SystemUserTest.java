@@ -23,24 +23,24 @@ public class SystemUserTest {
     }
 
     /**
-     * Teste do método alterarCampoInformacao, da classe SystemUser
+     * Teste do método changeUserDatafield, da classe SystemUser
      */
     @Test
     public void testeAlterarCampoInformacao() {
         System.out.println("alterarCampoInformacao");
         //teste alterar nome com nome sem espaços
-        assertFalse(instance.alterarCampoInformacao("Belmiro", 1));
+        assertFalse(instance.changeUserDatafield("Belmiro", 1));
         //teste alterar nome com nome válido
-        assertTrue(instance.alterarCampoInformacao("James Bond", 1));
+        assertTrue(instance.changeUserDatafield("James Bond", 1));
         //teste alterar Email com email inválido
-        assertFalse(instance.alterarCampoInformacao("madameTusseau", 2));
+        assertFalse(instance.changeUserDatafield("madameTusseau", 2));
         //teste alterar Email com email válido
         new Email("tragedyOfDarthPlagueisTheWise@gmail.com");
-        assertTrue(instance.alterarCampoInformacao("tragedyOfDarthPlagueisTheWise@gmail.com", 2));
+        assertTrue(instance.changeUserDatafield("tragedyOfDarthPlagueisTheWise@gmail.com", 2));
         //teste alterar Password com password fraca
-        assertFalse(instance.alterarCampoInformacao("deathsticks", 3));
+        assertFalse(instance.changeUserDatafield("deathsticks", 3));
         //teste alterar Password com password válida
-        assertTrue(instance.alterarCampoInformacao("WannaBuysomedeathsticks123", 3));
+        assertTrue(instance.changeUserDatafield("WannaBuysomedeathsticks123", 3));
     }
 
     /**

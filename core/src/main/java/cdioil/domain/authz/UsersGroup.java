@@ -33,7 +33,7 @@ public class UsersGroup implements Serializable {
     /**
      * Manager that created the UsersGroup.
      */
-    private Gestor manager;
+    private Manager manager;
 
     /**
      * List with all the RegisteredUsers of the UsersGroup.
@@ -46,7 +46,7 @@ public class UsersGroup implements Serializable {
      *
      * @param manager Manager that created the UsersGroup
      */
-    public UsersGroup(Gestor manager) {
+    public UsersGroup(Manager manager) {
         if (!isManagerValid(manager)) {
             this.manager = manager;
             this.users = new LinkedList<>();
@@ -67,7 +67,7 @@ public class UsersGroup implements Serializable {
      * @param manager Manager to check
      * @return true, if the manager is valid. Otherwise, returns false
      */
-    public boolean isManagerValid(Gestor manager) {
+    public boolean isManagerValid(Manager manager) {
         return manager == null;
     }
 

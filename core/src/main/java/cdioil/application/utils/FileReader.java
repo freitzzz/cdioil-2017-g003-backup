@@ -6,14 +6,14 @@ import java.nio.file.Files;
 import java.util.List;
 
 /**
- * Classe FileReader lê conteúdos de ficheiros
+ * FileReader class that reads the content of a file
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public final class FileReader {
     /**
-     * Método que lê o conteúdo de um ficheiro e retorna uma lista com o seu conteudo
-     * @param file String com o path do ficheiro
-     * @return List com o conteudo do ficheiro ou null caso o ficheiro não exista
+     * Method that reads the content of a file
+     * @param file String with the file path
+     * @return List with the content of the file, or null if an error occured
      */
     public static List<String> readFile(File file){
         try{
@@ -23,7 +23,7 @@ public final class FileReader {
         }
     }
     /**
-     * Esconde o construtor privado
+     * Hides default constructor
      */
     private FileReader(){}
 }

@@ -10,18 +10,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe Product.
+ * Tests of Product class
  *
  * @author Rita Gonçalves (1160912)
  */
-public class ProdutoTest {
+public class ProductTest {
 
     /**
-     * Instância de produto para testes.
+     * Instance of Product for testing purposes.
      */
     private Product p;
 
-    public ProdutoTest() {
+    public ProductTest() {
     }
 
     @Before
@@ -30,7 +30,7 @@ public class ProdutoTest {
     }
 
     /**
-     * Testa o método toString, da classe Product.
+     * Test of toString method, of class Product.
      */
     @Test
     public void testToString() {
@@ -43,7 +43,7 @@ public class ProdutoTest {
     }
 
     /**
-     * Testa o método hashCode, da classe Product.
+     * Test of hashCode method, of class Product.
      */
     @Test
     public void testHashCode() {
@@ -56,7 +56,7 @@ public class ProdutoTest {
     }
 
     /**
-     * Testa o método equals, da classe Product.
+     * Test of equals method, of class Product.
      */
     @Test
     public void testEquals() {

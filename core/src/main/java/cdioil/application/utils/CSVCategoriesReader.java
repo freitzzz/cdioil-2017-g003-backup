@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,7 +6,7 @@
 package cdioil.application.utils;
 
 import cdioil.domain.Category;
-import cdioil.domain.EstruturaMercadologica;
+import cdioil.domain.MarketStructure;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,7 +63,7 @@ public class CSVCategoriesReader implements CategoriesReader {
 
         List<Category> categories = new LinkedList<>();
 
-        EstruturaMercadologica em = new EstruturaMercadologica();
+        MarketStructure em = new MarketStructure();
 
         for (int i = IDENTIFIERS_LINE + 1; i < fileContent.size(); i++) {
             String[] line = fileContent.get(i).split(SPLITTER);
@@ -73,41 +73,44 @@ public class CSVCategoriesReader implements CategoriesReader {
                     String aux = line[0] + Category.Sufixes.SUFIX_DC;
                     Category c = new Category(line[1], aux, aux);
                     boolean added = em.adicionarCategoriaRaiz(c);
+
                     if (added) {
                         categories.add(c);
                     }
+
 
                     String id = line[2] + Category.Sufixes.SUFIX_UN;
                     aux += "-" + id;
                     Category c1 = new Category(line[3], line[2] + Category.Sufixes.SUFIX_UN, aux);
                     added = em.adicionarCategoria(c, c1);
+
                     if (added) {
                         categories.add(c1);
                     }
 
                     id = line[4] + Category.Sufixes.SUFIX_CAT;
                     aux += "-" + id;
-                    Category c2 = new Category(line[5], line[4]
-                            + Category.Sufixes.SUFIX_CAT, aux);
+                    Category c2 = new Category(line[5], line[4] + Category.Sufixes.SUFIX_CAT, aux);
                     added = em.adicionarCategoria(c1, c2);
+
                     if (added) {
                         categories.add(c2);
                     }
 
                     id = line[4] + Category.Sufixes.SUFIX_SCAT;
                     aux += "-" + id;
-                    Category c3 = new Category(line[7], line[6]
-                            + Category.Sufixes.SUFIX_SCAT, aux);
+                    Category c3 = new Category(line[7], line[6] + Category.Sufixes.SUFIX_SCAT, aux);
                     added = em.adicionarCategoria(c2, c3);
+
                     if (added) {
                         categories.add(c3);
                     }
                     
                     id = line[4] + Category.Sufixes.SUFIX_UB;
                     aux += "-" + id;
-                    Category c4 = new Category(line[9], line[8]
-                            + Category.Sufixes.SUFIX_UB, aux);
+                    Category c4 = new Category(line[9], line[8] + Category.Sufixes.SUFIX_UB, aux);
                     added = em.adicionarCategoria(c3, c4);
+
                     if (added) {
                         categories.add(c4);
                     }

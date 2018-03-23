@@ -17,7 +17,7 @@ import javax.persistence.InheritanceType;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Code<T> implements Serializable {
+public abstract class Code<T> implements Serializable, ValueObject {
 
     /**
      * Serialization identifier.

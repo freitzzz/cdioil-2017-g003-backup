@@ -2,7 +2,7 @@ package cdioil.application.bootstrap.authz;
 
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
@@ -64,19 +64,19 @@ public final class UsersBootstrap {
             ("tiago.ferreira@bit.sonae.pt",Password.DEFAULT_PASSWORD,"Tiago","Fereira")));
     }
     /**
-     * Inicializa diversos Gestores (Gestor)
+     * Inicializa diversos Gestores (Manager)
      */
     private void inicializarGestores(){
         GestorRepositoryImpl gestorRepo=new GestorRepositoryImpl();
-        gestorRepo.add(new Gestor(createSystemUser
+        gestorRepo.add(new Manager(createSystemUser
             ("bom.gestor@sonae.pt",Password.DEFAULT_PASSWORD,"Mario","Lirio")));
-        gestorRepo.add(new Gestor(createSystemUser
+        gestorRepo.add(new Manager(createSystemUser
             ("gestor.do.mes@gestores.sonae.pt",Password.DEFAULT_PASSWORD,"Antonio","Penacova")));
-        gestorRepo.add(new Gestor(createSystemUser
+        gestorRepo.add(new Manager(createSystemUser
             ("tiago.almeida@sonae.pt",Password.DEFAULT_PASSWORD,"Tiago","Almeida")));
     }
     /**
-     * Método que cria um SystemUser a ser atribuido a um UserRegistado/Admin/Gestor
+     * Método que cria um SystemUser a ser atribuido a um UserRegistado/Admin/Manager
      * @param email String com o email do utilizador
      * @param password String com a password do utilizador
      * @param nome String com o nome do utilizador

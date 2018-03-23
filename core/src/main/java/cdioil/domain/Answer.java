@@ -1,24 +1,107 @@
 package cdioil.domain;
 
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 /**
- * Interface that contains methods that are common
- * to all types of Answers.
- *
+ * Generic abstract class to be used for concrete types of Answer. 
+*
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+ * @param <T> type of data stored in the Answer
  */
-public interface Answer {
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Answer<T> implements Serializable, ValueObject {
 
     /**
-     * Returns the content of the answer.
-     *
-     * @return string with the contents of the answer
+     * Serialization code.
      */
-    abstract String content();
+    private static final long serialVersionUID = 1L;
 
     /**
-     * Returns the type of the answer.
-     *
-     * @return string with type of the answer.
+     * Database identifier.
      */
-    abstract String type();
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
+
+    /**
+     * The content of the answer.
+     */
+    protected T content;
+
+    /**
+     * The type of answer.
+     */
+    protected QuestionAnswerTypes type;
+
+    /**
+     * Empty constructor JPA.
+     */
+    protected Answer() {
+
+    }
+
+    /**
+     * Return the question's type.
+     *
+     * @return question's type enum value
+     */
+    public String type() {
+        return type.toString();
+    }
+
+    /**
+     * Returns the text of the question
+     *
+     * @return string with the question itself
+     */
+    public T content() {
+        return content;
+    }
+
+    /**
+     * Returns an hash value based on the attributes and class type.
+     * @return hash value
+     */
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.getClass());
+        hash = 29 * hash + Objects.hashCode(this.type);
+        hash = 29 * hash + Objects.hashCode(this.content);
+        return hash;
+    }
+
+    /**
+     * Verifies object equality based on the Answer's attributes and class type.
+     * @param obj object to be compared to
+     * @return true if the objects are truly equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Question<?> other = (Question<?>) obj;
+        if (this.type != other.type) {
+            return false;
+        }
+        if (!Objects.equals(this.content, other.content)) {
+            return false;
+        }
+        return true;
+    }
 }

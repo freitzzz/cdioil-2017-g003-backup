@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 
 /**
- * Testes unitarios da classe Admin.
+ * Unit testing for class Admin.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
@@ -22,19 +22,19 @@ public class AdminTest {
     }
 
     /**
-     * Teste para o construtor da classe Admin.
+     * Tests for the constructor.
      */
     @Test
-    public void testeConstrutor() {
-        System.out.println("Testes Construtor");
-        assertNull("A condição deve acertar pois os argumentos são inválidos",
+    public void testConstructor() {
+        System.out.println("Test Constructor");
+        assertNull("The condition should succeed because the argument is invalid",
                 createAdmin(null));
-        assertNotNull("A condição deve acertar pois os argumentos são válidos",
+        assertNotNull("The condition should succeed because the argument is valid",
                 createAdmin(sysUser));
     }
 
     /**
-     * Teste para o metodo hashCode da classe Admin.
+     * Test of method hashCode, of class Admin.
      */
     @Test
     public void testeHashCode() {
@@ -42,13 +42,14 @@ public class AdminTest {
         Admin a = createAdmin(sysUser);
         int expResult = sysUser.hashCode();
         int result = a.hashCode();
+        assertEquals(expResult,result);
     }
 
     /**
-     * Teste para o metodo equals da classe Admin.
+     * Test of equals method, of class Admin.
      */
     @Test
-    public void testeEquals() {
+    public void testEquals() {
         System.out.println("equals");
         Email email = new Email("bananas@bananeira.com");
         Password pwd = new Password("Bananas19");
@@ -71,10 +72,10 @@ public class AdminTest {
     }
 
     /**
-     * Teste do metodo toString da classe Admin.
+     * Test of method toString of class Admin.
      */
     @Test
-    public void testeToString() {
+    public void testToString() {
         System.out.println("toString");
         Admin a = createAdmin(sysUser);
         String expResult = sysUser.toString();
@@ -84,10 +85,10 @@ public class AdminTest {
     }
 
     /**
-     * Cria um novo objecto Admin com um SystemUser
+     * Builds an Admin instance of a SystemUser
      *
-     * @param sysUser utilizador do sistema
-     * @return instancia de Admin
+     * @param sysUser system user to be associated with the admin
+     * @return Admin instance
      */
     private Admin createAdmin(SystemUser sysUser) {
         try {

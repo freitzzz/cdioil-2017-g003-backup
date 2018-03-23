@@ -8,7 +8,7 @@ import javax.persistence.Entity;
  * @author Rita Gonçalves (1160912)
  */
 @Entity(name = "QR_CODE")
-public class QRCode extends Code<String> {
+public class QRCode extends Code<String> implements ValueObject{
 
     /**
      * Empty protected constructor for JPA.

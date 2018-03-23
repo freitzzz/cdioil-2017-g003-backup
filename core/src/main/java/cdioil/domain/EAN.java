@@ -8,7 +8,7 @@ import javax.persistence.Entity;
  * @author Ana Guerra (1161191)
  */
 @Entity(name = "EAN")
-public class EAN extends Code<String> {
+public class EAN extends Code<String> implements ValueObject {
 
     /**
      * Protected constructor for JPA.

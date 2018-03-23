@@ -1,7 +1,7 @@
 package cdioil.domain;
 
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
@@ -12,63 +12,63 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes unitarios da classe Concurso.
+ * Unit test of the class Constest.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-public class ConcursoTest {
+public class ContestTest {
 
-    private String descricao;
+    private String description;
     private UsersGroup gu;
-    private Calendar dataInicio;
-    private Calendar dataFim;
+    private Calendar beginDate;
+    private Calendar endDate;
 
     @Before
     public void setUp() {
-        descricao = "Concurso Teste";
-        gu = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        description = "Concurso Teste";
+        gu = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
-        dataInicio = Calendar.getInstance();
-        dataFim = Calendar.getInstance();
+        beginDate = Calendar.getInstance();
+        endDate = Calendar.getInstance();
     }
 
     /**
-     * Testes relacionados com o construtor da classe Concurso.
+     * Test of the constructor of the class Constest.
      */
     @Test
-    public void testeConstrutor() {
+    public void constructorTest() {
         System.out.println("Testes Construtor");
         assertNull("A condição deve acertar pois os argumentos são inválidos",
-                createConcurso(null, gu, dataInicio, dataFim));
+                createContest(null, gu, beginDate, endDate));
         assertNull("A condição deve acertar pois os argumentos são inválidos",
-                createConcurso(descricao, gu, null, dataFim));
+                createContest(description, gu, null, endDate));
         assertNull("A condição deve acertar pois os argumentos são inválidos",
-                createConcurso(descricao, gu, dataInicio, null));
+                createContest(description, gu, beginDate, null));
         assertNotNull("A condição deve acertar pois os argumentos são válidos",
-                createConcurso(descricao, gu, dataInicio, dataFim));
+                createContest(description, gu, beginDate, endDate));
     }
 
     /**
-     * Teste do metodo hashCode, da classe Concurso.
+     * Test of the hashCode method, of the class Constest.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
-        int expResult = descricao.hashCode();
+        Contest instance = createContest(description, gu, beginDate, endDate);
+        int expResult = description.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
     }
 
     /**
-     * Teste do metodo equals method, da classe Concurso.
+     * Test of the equals method, of the class Constest.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
-        Concurso instance2 = createConcurso(descricao, gu, dataInicio, dataFim);
-        Concurso instance3 = createConcurso("Concurso 3", gu, dataInicio, dataFim);
+        Contest instance = createContest(description, gu, beginDate, endDate);
+        Contest instance2 = createContest(description, gu, beginDate, endDate);
+        Contest instance3 = createContest("Concurso 3", gu, beginDate, endDate);
         assertEquals("A condição deve acertar pois estamos a comparar"
                 + "as mesmas instancias", instance, instance);
         assertNotEquals("A condição deve acertar pois estamos a comparar"
@@ -82,54 +82,54 @@ public class ConcursoTest {
     }
 
     /**
-     * Test do metodo toString, da classe Concurso.
+     * Test of the toString method, of the class Constest.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
+        Contest instance = createContest(description, gu, beginDate, endDate);
         String expResult = "Concurso Teste";
         String result = instance.toString();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test do metodo info, da classe Concurso.
+     * Test of the info method, of the class Constest.
      */
     @Test
     public void testInfo() {
         System.out.println("info");
-        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
+        Contest instance = createContest(description, gu, beginDate, endDate);
         String expResult = "Concurso Teste";
         String result = instance.info();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of publicoAlvo method, of class Concurso.
+     * Test of targetAudience method, of class Concurso.
      */
     @Test
-    public void testPublicoAlvo() {
-        System.out.println("publicoAlvo");
-        Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
+    public void testTargetAudience() {
+        System.out.println("targetAudience");
+        Contest instance = createContest(description, gu, beginDate, endDate);
         UsersGroup expResult = gu;
-        UsersGroup result = instance.publicoAlvo();
+        UsersGroup result = instance.targetAudience();
         assertEquals(expResult, result);
     }
 
     /**
-     * Cria um novo objeto Concurso com uma descricao, grupo de utilizadores, data de inicio e data de fim.
+     * Create a new object Constest with a description, group users, begin date and end date.
      *
-     * @param descricao
+     * @param description
      * @param gu
-     * @param dataInicio
-     * @param dataFim
-     * @return instancia de Concurso
+     * @param beginDate
+     * @param endDate
+     * @return instance of the Contest
      */
-    private Concurso createConcurso(String descricao, UsersGroup gu,
-            Calendar dataInicio, Calendar dataFim) {
+    private Contest createContest(String description, UsersGroup gu,
+            Calendar beginDate, Calendar endDate) {
         try {
-            return new Concurso(descricao, gu, dataInicio, dataFim);
+            return new Contest(description, gu, beginDate, endDate);
         } catch (IllegalArgumentException e) {
             return null;
         }

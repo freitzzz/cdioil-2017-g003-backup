@@ -38,7 +38,7 @@ public class Template implements Serializable {
     /**
      * List of Questions of the Template.
      */
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Question> questions;
 
     /**

@@ -3,7 +3,7 @@ package cdioil.backoffice.console.presentation;
 import cdioil.backoffice.console.utils.Console;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.GestorRepositoryImpl;
@@ -44,7 +44,7 @@ public class BackOfficeLogin {
                     System.out.println(USER_NAO_ENCONTRADO);
                 } else {
                     Admin admin = adminRepo.getEntity(new Admin(sysUser));
-                    Gestor gestor = gestorRepo.getEntity(new Gestor(sysUser));
+                    Manager gestor = gestorRepo.getEntity(new Manager(sysUser));
                     if (admin == null && gestor == null) {
                         System.out.println(USER_NAO_AUTORIZADO);
                         System.exit(0);

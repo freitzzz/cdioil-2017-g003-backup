@@ -1,7 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.domain.authz.Admin;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 
 /**
  * Classe que representa a consola de açoes do backoffice
@@ -16,10 +16,10 @@ public class BackOfficeConsole {
         MainMenu.mainLoopAdmin(admin);
     }
     /**
-     * Constrói uma nova consola para as funcionalidades do backoffice do Gestor
-     * @param gestor Gestor com o gestor que esta aceder ao backoffice
+     * Constrói uma nova consola para as funcionalidades do backoffice do Manager
+     * @param gestor Manager com o gestor que esta aceder ao backoffice
      */
-    public BackOfficeConsole(Gestor gestor){
+    public BackOfficeConsole(Manager gestor){
         MainMenu.mainLoopGestor(gestor);
     }
 }
