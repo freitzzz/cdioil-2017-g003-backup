@@ -44,19 +44,19 @@ public class Node implements Serializable {
      * Reference to a preceding Node in the structure.
      */
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Node pai;
+    private Node parent;
 
     /**
      * A list of references to following Nodes in the structure.
      */
-    @OneToMany(mappedBy = "pai", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<Node> filhos = new LinkedList<>();
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<Node> children = new LinkedList<>();
 
     /**
      * The element contained in this instance.
      */
     @OneToOne(cascade = {CascadeType.PERSIST})
-    private Category elemento;
+    private Category element;
 
     /**
      * Empty Constructor for JPA.
@@ -71,50 +71,50 @@ public class Node implements Serializable {
      * @param elemento
      */
     protected Node(Node pai, Category elemento) {
-        this.pai = pai;
-        this.elemento = elemento;
+        this.parent = pai;
+        this.element = elemento;
     }
 
     /**
-     * Retorna o Node pai.
+     * Returns the parent Node.
      *
-     * @return Node pai
+     * @return parent
      */
-    public Node getPai() {
-        return pai;
+    public Node getParent() {
+        return parent;
     }
 
     /**
-     * Retorna a Category presente neste node.
+     * Returns the Category contained in this Node.
      *
-     * @return a categoria contida no node
+     * @return element
      */
-    public Category getElemento() {
-        return elemento;
+    public Category getElement() {
+        return element;
     }
 
     /**
-     * Retorna o conjunto de nodes filhos deste node.
+     * Returns a list with all the Node's child Nodes.
      *
-     * @return conjunto de nodes filhos
+     * @return child Nodes list
      */
-    public List<Node> getFilhos() {
-        return filhos;
+    public List<Node> getChildren() {
+        return children;
     }
 
     /**
-     * Adiciona um node ao conjunto de filhos deste node.
+     * Adiciona um node ao conjunto de children deste node.
      *
-     * @param filho node que se pretende adicionar aos filhos
+     * @param filho node que se pretende adicionar aos children
      * @return true - caso tenha sido possível adicionar ao conjunto de
-     * filhos<p>
+     * children<p>
      * false - caso contrario
      */
-    public boolean addFilho(Node filho) {
-        if (getFilhos().contains(filho)) {
+    public boolean addChild(Node filho) {
+        if (getChildren().contains(filho)) {
             return false;
         }
-        return filhos.add(filho);
+        return children.add(filho);
     }
 
     /**
@@ -125,8 +125,8 @@ public class Node implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.pai);
-        hash = 97 * hash + Objects.hashCode(this.elemento);
+        hash = 97 * hash + Objects.hashCode(this.parent);
+        hash = 97 * hash + Objects.hashCode(this.element);
         return hash;
     }
 
@@ -149,10 +149,10 @@ public class Node implements Serializable {
             return false;
         }
         final Node other = (Node) obj;
-        if (!Objects.equals(this.pai, other.pai)) {
+        if (!Objects.equals(this.parent, other.parent)) {
             return false;
         }
-        if (!Objects.equals(this.elemento, other.elemento)) {
+        if (!Objects.equals(this.element, other.element)) {
             return false;
         }
         return true;
@@ -160,7 +160,7 @@ public class Node implements Serializable {
 
     @Override
     public String toString() {
-        return "Node{" + "elemento=" + elemento + '}';
+        return "Node{" + "elemento=" + element + '}';
     }
 
 }
