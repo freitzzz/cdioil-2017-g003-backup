@@ -6,33 +6,33 @@
 package cdioil.application.utils;
 
 /**
- * Factory de CategoriesReader.
+ * Factory of CategoriesReader.
  *
  * @author Rita Gonçalves (1160912)
  */
-public final class CategoriasReaderFactory {
+public final class CategoriesReaderFactory {
 
     /**
-     * Identificador do formato .csv.
+     * Identifier of the .csv file format.
      */
-    public static final String EXTENSAO_CSV = ".csv";
+    public static final String CSV_FORMAT = ".csv";
 
     /**
-     * Cria uma instância de CategoriesReader de acordo com o formato do ficheiro a ler.
+     * Creates an instance of CategoriesReader.
      *
-     * @param filename Nome do ficheiro a ler
-     * @return uma instância de CategoriesReader
+     * @param filename Name of the file to read
+     * @return an instance of CategoriesReader
      */
     public static CategoriesReader create(String filename) {
-        if (filename.endsWith(EXTENSAO_CSV)) {
+        if (filename.endsWith(CSV_FORMAT)) {
             return new CSVCategoriesReader(filename);
         }
         return null;
     }
 
     /**
-     * Esconde o construtor privado
+     * Hides the private constructor.
      */
-    private CategoriasReaderFactory() {
+    private CategoriesReaderFactory() {
     }
 }
