@@ -24,18 +24,18 @@ public abstract class Codigo<T> implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_CODIGO", updatable = false, nullable = false)
     /**
      * Chave primária gerada automaticamente.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID_CODIGO", updatable = false, nullable = false)
     protected int id;
 
-    @Column(unique = true)
     /**
      * Valor do código.
      */
+    @Column(unique = true)
     protected T codigo;
 
     /**
