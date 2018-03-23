@@ -1,7 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 /**
- * Classe Main do BackOffice da aplicação.
+ * Main class for the application's backoffice.
  * 
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */

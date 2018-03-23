@@ -10,56 +10,90 @@ import cdioil.persistence.impl.GestorRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 
 /**
- * Classe responsável pelo login no BackOffice da aplicação.
+ * Class responsible for the Application's Backoffice login.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class BackOfficeLogin {
 
-    private static final int ID_ADMIN = 1;
-    private static final int ID_GESTOR = 2;
-    private static final String HEADLINE = "===========================\n";
+    /**
+     * Integer used to identify an administrator login.
+     */
+    private static final int ADMIN_ID = 1;
+    /**
+     * Integer used to identify a manager login.
+     */
+    private static final int MANAGER_ID = 2;
+    /**
+     * Separator used for clarity.
+     */
+    private static final String SEPARATOR = "===========================\n";
+    /**
+     * Backoffice Login message.
+     */
     private static final String LOGIN_MESSAGE = "BackOffice Login\nInsira o seu email e password\n";
+    /**
+     * String to let the user know he needs to write his email.
+     */
     private static final String EMAIL = "Email: ";
+    /**
+     * String to let the user know she needs to write her password.
+     */
     private static final String PASSWORD = "Password: ";
-    private static final String USER_NAO_ENCONTRADO = "Credenciais erradas."
+    /**
+     * Error message to let the user know he wrote his credentials wrong.
+     */
+    private static final String WRONG_CREDENTIALS = "Credenciais erradas."
             + "Volte a tentar.\n";
-    private static final String USER_NAO_AUTORIZADO = "Não tem autorização "
+    /**
+     * Error message to let the user know she can't use the application's
+     * backoffice.
+     */
+    private static final String NON_AUTHORIZED_USER = "Não tem autorização "
             + "para utilizar o backoffice da aplicação. O programa irá terminar.\n";
-    private UserRepositoryImpl userRepo = new UserRepositoryImpl();
+    /**
+     * SystemUser Repository.
+     */
+    private UserRepositoryImpl sysUserRepo = new UserRepositoryImpl();
+    /**
+     * Admin Repository.
+     */
     private AdminRepositoryImpl adminRepo = new AdminRepositoryImpl();
+    /**
+     * Manager Repository.
+     */
     private GestorRepositoryImpl gestorRepo = new GestorRepositoryImpl();
 
     public void backofficeLogin() {
         int id = -1;
-        System.out.println(HEADLINE);
+        System.out.println(SEPARATOR);
         System.out.println(LOGIN_MESSAGE);
         while (id == -1) {
             String emailS = Console.readLine(EMAIL);
             String passwordS = Console.readLine(PASSWORD);
             try {
                 Email email = new Email(emailS);
-                SystemUser sysUser = userRepo.findByEmail(email);
+                SystemUser sysUser = sysUserRepo.findByEmail(email);
                 if (sysUser == null || !sysUser.samePassword(passwordS)) {
-                    System.out.println(USER_NAO_ENCONTRADO);
+                    System.out.println(WRONG_CREDENTIALS);
                 } else {
                     Admin admin = adminRepo.getEntity(new Admin(sysUser));
                     Manager gestor = gestorRepo.getEntity(new Manager(sysUser));
                     if (admin == null && gestor == null) {
-                        System.out.println(USER_NAO_AUTORIZADO);
+                        System.out.println(NON_AUTHORIZED_USER);
                         System.exit(0);
                     }
                     if (admin == null && gestor != null) {
-                        id = ID_GESTOR;
+                        id = MANAGER_ID;
                         new BackOfficeConsole(gestor);
                     }
                     if (gestor == null && admin != null) {
-                        id = ID_ADMIN;
+                        id = ADMIN_ID;
                         new BackOfficeConsole(admin);
                     }
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println(USER_NAO_ENCONTRADO);
+                System.out.println(WRONG_CREDENTIALS);
             }
         }
     }
