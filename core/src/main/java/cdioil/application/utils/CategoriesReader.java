@@ -6,19 +6,19 @@
 package cdioil.application.utils;
         
 import java.util.List;
-import cdioil.domain.Categoria;
+import cdioil.domain.Category;
 
 /**
  * Interface que permite a leitura de Categorias.
  *
  * @author Rita Gonçalves (1160912)
  */
-public interface CategoriasReader {
+public interface CategoriesReader {
 
     /**
      * Importa Categorias de um ficheiro de um determinado formato.
      *
      * @return Lista com as Categorias lidas
      */
-    public abstract List<Categoria> lerFicheiro();
+    public abstract List<Category> lerFicheiro();
 }

@@ -27,7 +27,7 @@ import org.junit.Test;
  */
 public class TemplateTest {
 
-    Categoria cat = new Categoria("Pai", "10DC");
+    Category cat = new Category("Pai", "10DC");
     Calendar data = Calendar.getInstance();
     List<Questao> listaQuestoes = new LinkedList<>();
     List<Inquerito> listaInqueritos = new LinkedList<>();

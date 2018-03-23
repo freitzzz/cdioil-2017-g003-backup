@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.domain.Categoria;
+import cdioil.domain.Category;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Assert;
@@ -33,14 +33,14 @@ public class GestorTest {
         System.out.println("adicionarCategorias");
         Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Nome("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste adiconar lista a null
-        List<Categoria> lc = null;
+        List<Category> lc = null;
         assertFalse(instance.adicionarCategorias(lc));
         //teste adicionar lista vazia
         lc = new LinkedList<>();
         assertFalse(instance.adicionarCategorias(lc));
         //teste adiconar lista com elementos
-        lc.add(new Categoria("Fruit", "124CAT"));
-        lc.add(new Categoria("Beverage", "6040SCAT"));
+        lc.add(new Category("Fruit", "124CAT"));
+        lc.add(new Category("Beverage", "6040SCAT"));
         assertTrue(instance.adicionarCategorias(lc));
         //teste adicionar lista com elementos repetidos
         assertTrue(instance.adicionarCategorias(lc));
@@ -54,14 +54,14 @@ public class GestorTest {
         System.out.println("removerCategorias");
         Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Nome("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste remover lista a null
-        List<Categoria> lc = null;
+        List<Category> lc = null;
         assertFalse(instance.removerCategorias(lc));
         //teste remover lista vazia
         lc = new LinkedList<>();
         assertFalse(instance.removerCategorias(lc));
         //teste remover lista com elementos inexistentes
-        lc.add(new Categoria("Fruit", "124CAT"));
-        lc.add(new Categoria("Beverage", "6040SCAT"));
+        lc.add(new Category("Fruit", "124CAT"));
+        lc.add(new Category("Beverage", "6040SCAT"));
         assertFalse(instance.removerCategorias(lc));
         //teste adicionar lista com elementos existentes
         instance.adicionarCategorias(lc);
