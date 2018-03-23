@@ -20,7 +20,7 @@ import org.junit.Test;
  */
 public class TemplateTest {
 
-    Category cat = new Category("Pai", "10DC");
+    Category cat = new Category("Pai", "10DC", "10DC");
     Calendar data = Calendar.getInstance();
     List<Question> listaQuestoes = new LinkedList<>();
     List<Survey> listaInqueritos = new LinkedList<>();

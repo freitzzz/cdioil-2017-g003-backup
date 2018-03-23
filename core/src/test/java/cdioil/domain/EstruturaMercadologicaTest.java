@@ -5,6 +5,10 @@
  */
 package cdioil.domain;
 
+import cdioil.domain.Category;
+import cdioil.domain.EAN;
+import cdioil.domain.Product;
+import cdioil.domain.QRCode;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;
