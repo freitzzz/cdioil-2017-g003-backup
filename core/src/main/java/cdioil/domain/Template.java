@@ -10,125 +10,140 @@ import java.util.*;
 import javax.persistence.*;
 
 /**
- * Descreve um Template.
+ * Represents a Template.
+ *
  * @author Ana Guerra (1161191)
  */
 @Entity
 public class Template implements Serializable {
-    
+
     /**
-     * Código de Serialização.
+     * Version for JPA.
+     */
+    @Version
+    private Long version;
+
+    /**
+     * Serialization code.
      */
     private static final long serialVersionUID = 1L;
+
     /**
-     * Identificador do Template.
+     * ID of the Template for JPA.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     /**
-     * Lista de questoes do Template.
+     * List of Questions of the Template.
      */
-    @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL)
-    private List<Question> listaQuestoes;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<Question> questions;
+
     /**
-     * Category do Template.
+     * Category of the Template.
      */
-    private Category categoria;
-    
+    private Category category;
+
     /**
-     * Constrói uma instância de Template, recebendo por parâmetro os seus atributos.
+     * Creates an instance of Template, receiving a Category.
      *
-     * @param categ Category do Template.
+     * @param category Category of the Template.
      */
-    public Template(Category categ) {
-        this.listaQuestoes = new LinkedList<>();
-        this.categoria = categ;
+    public Template(Category category) {
+        this.questions = new LinkedList<>();
+        this.category = category;
     }
+
     /**
-     * Constrói uma instância vazia de Template (JPA).
+     * Creates an empty protected instance for JPA.
      */
     protected Template() {
     }
-     /**
-     * Adiciona uma questão à lista de questões.
+
+    /**
+     * Adds a Question to the list of questions of the Template.
      *
-     * @param questao Questão a adicionar
-     * @return true, se for adicionada com sucesso. Caso contrário, retorna false
+     * @param question Question to add
+     * @return true, if the question is successfully added. Otherwise, returns false
      */
-    public boolean adicionarQuestao(Question questao) {
-        if (questao == null || isQuestaoValida(questao)) {
+    public boolean addQuestion(Question question) {
+        if (question == null || isQuestionValid(question)) {
             return false;
         }
-        return listaQuestoes.add(questao);
+        return questions.add(question);
     }
 
     /**
-     * Remove uma questão da lista de questões.
+     * Removes a Question from the list of questions of the Template.
      *
-     * @param questao Questão a remover
-     * @return true, se for removida com sucesso. Caso contrário, retorna false
+     * @param question Question to remove
+     * @return true, if the question is successfully removed. Otherwise, returns false
      */
-    public boolean removerQuestao(Question questao) {
-        if (questao == null || !isQuestaoValida(questao)) {
+    public boolean removeQuestion(Question question) {
+        if (question == null || !isQuestionValid(question)) {
             return false;
         }
-        return listaQuestoes.remove(questao);
-    }
-    
-    /**
-     * Verifica se uma questão já existe na lista de questões.
-     *
-     * @param questao Questão a verificar
-     * @return true, se já existir na lista. Caso contrário, retorna false
-     */
-    public boolean isQuestaoValida(Question questao) {
-        return listaQuestoes.contains(questao);
+        return questions.remove(question);
     }
 
     /**
-     * Método de acesso à categoria do Template em questão.
+     * Checks if a Question already exists in the list of questions.
      *
-     * @return a categoria do Template
+     * @param question Question to check
+     * @return true, if the question already exists. Otherwise, returns false
      */
-    private Category getCategoria() {
-        return categoria;
+    public boolean isQuestionValid(Question question) {
+        return questions.contains(question);
     }
+
     /**
-     * Método de acesso à lista de questões do Template em questão.
+     * Access method to the Category of the Template.
      *
-     * @return a lista de questões do Template
+     * @return the Category of the Template
      */
-    private List<Question> getListaQuestoes() {
-        return listaQuestoes;
+    private Category getCategory() {
+        return category;
     }
+
     /**
-     * Descreve o Template através da sua Category e lista de questoes.
+     * Access method to the list of questions of the Template.
      *
-     * @return a descrição textual do Template.
+     * @return the list with all questions of the Template
+     */
+    private List<Question> getQuestionsList() {
+        return questions;
+    }
+
+    /**
+     * Describes the Template.
+     *
+     * @return a description of the Template
      */
     @Override
     public String toString() {
-        return "\nCategoria: " + getCategoria() + "\nLista de Questoes: " + getListaQuestoes();
+        return "\nCategoria: " + getCategory() + "\nLista de Questões: " + getQuestionsList();
     }
-    
+
     /**
-     * Gera um índice a partir das questões e categorias do Template.
+     * Generates an unique index for the Template.
      *
-     * @return o valor de hash gerado
+     * @return the generated hash value
      */
-    @Override   
+    @Override
     public int hashCode() {
         int hash = 7;
-        hash = 43 * hash + Objects.hashCode(this.listaQuestoes);
-        hash = 43 * hash + Objects.hashCode(this.categoria);
+        hash = 43 * hash + Objects.hashCode(this.questions);
+        hash = 43 * hash + Objects.hashCode(this.category);
         return hash;
     }
+
     /**
-     * Compara o Template com outro objeto.
+     * Compares the Template with another Object.
      *
-     * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem as mesmas categorias e questões. Caso contrário, retorna false
+     * @param obj Object to compare
+     * @return true, if the two Objects have the same attributes. Otherwise, returns false
      */
     @Override
     public boolean equals(Object obj) {
@@ -142,13 +157,12 @@ public class Template implements Serializable {
             return false;
         }
         final Template other = (Template) obj;
-        if (!Objects.equals(this.listaQuestoes, other.listaQuestoes)) {
+        if (!Objects.equals(this.questions, other.questions)) {
             return false;
         }
-        if (!Objects.equals(this.categoria, other.categoria)) {
+        if (!Objects.equals(this.category, other.category)) {
             return false;
         }
         return true;
     }
-    
 }
