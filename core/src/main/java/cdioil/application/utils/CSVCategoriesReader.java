@@ -6,7 +6,7 @@
 package cdioil.application.utils;
 
 import cdioil.domain.Category;
-import cdioil.domain.EstruturaMercadologica;
+import cdioil.domain.MarketStructure;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,7 +63,7 @@ public class CSVCategoriesReader implements CategoriesReader {
 
         List<Category> categories = new LinkedList<>();
 
-        EstruturaMercadologica em = new EstruturaMercadologica();
+        MarketStructure em = new MarketStructure();
 
         for (int i = IDENTIFIERS_LINE + 1; i < fileContent.size(); i++) {
             String[] line = fileContent.get(i).split(SPLITTER);
@@ -72,35 +72,35 @@ public class CSVCategoriesReader implements CategoriesReader {
 
                     Category c = new Category(line[1], line[0]
                             + Category.Sufixes.SUFIX_DC);
-                    boolean added = em.adicionarCategoriaRaiz(c);
+                    boolean added = em.addRootCategory(c);
                     if (added) {
                         categories.add(c);
                     }
 
                     Category c1 = new Category(line[3], line[2]
                             + Category.Sufixes.SUFIX_UN);
-                    added = em.adicionarCategoria(c, c1);
+                    added = em.addCategory(c, c1);
                     if (added) {
                         categories.add(c1);
                     }
 
                     Category c2 = new Category(line[5], line[4]
                             + Category.Sufixes.SUFIX_CAT);
-                    added = em.adicionarCategoria(c1, c2);
+                    added = em.addCategory(c1, c2);
                     if (added) {
                         categories.add(c2);
                     }
 
                     Category c3 = new Category(line[7], line[6]
                             + Category.Sufixes.SUFIX_SCAT);
-                    added = em.adicionarCategoria(c2, c3);
+                    added = em.addCategory(c2, c3);
                     if (added) {
                         categories.add(c3);
                     }
 
                     Category c4 = new Category(line[9], line[8]
                             + Category.Sufixes.SUFIX_UB);
-                    added = em.adicionarCategoria(c3, c4);
+                    added = em.addCategory(c3, c4);
                     if (added) {
                         categories.add(c4);
                     }

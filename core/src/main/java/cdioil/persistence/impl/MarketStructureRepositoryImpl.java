@@ -5,7 +5,7 @@
  */
 package cdioil.persistence.impl;
 
-import cdioil.domain.EstruturaMercadologica;
+import cdioil.domain.MarketStructure;
 import cdioil.persistence.MarketStructureRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.RepositorioBaseJPA;
@@ -14,7 +14,7 @@ import cdioil.persistence.RepositorioBaseJPA;
  *
  * @author António Sousa [1161371]
  */
-public class MarketStructureRepositoryImpl extends RepositorioBaseJPA<EstruturaMercadologica, Long> implements MarketStructureRepository{
+public class MarketStructureRepositoryImpl extends RepositorioBaseJPA<MarketStructure, Long> implements MarketStructureRepository{
 
     @Override
     protected String nomeUnidadePersistencia() {
