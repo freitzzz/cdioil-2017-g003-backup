@@ -6,7 +6,7 @@
 package cdioil.application;
 
 import cdioil.domain.Category;
-import cdioil.application.utils.CategoriasReaderFactory;
+import cdioil.application.utils.CategoriesReaderFactory;
 
 import java.util.List;
 import cdioil.application.utils.CategoriesReader;
@@ -25,7 +25,7 @@ public class ImportCategoriesController {
      * @return a list with the readCategories Categories. Null if the file is not valid
      */
     public List<Category> readCategories(String file) {
-        CategoriesReader categoriesReader = CategoriasReaderFactory.create(file);
+        CategoriesReader categoriesReader = CategoriesReaderFactory.create(file);
 
         return categoriesReader != null ? categoriesReader.readCategories() : null;
     }

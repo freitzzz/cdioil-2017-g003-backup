@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 
 /**
  * Interface criada para representar carateristicas que todos os eventos
@@ -21,7 +21,7 @@ public interface Evento {
      * se destina.
      * @return utilizadores aos quais o evento se destina
      */
-    public abstract GrupoUtilizadores publicoAlvo();
+    public abstract UsersGroup publicoAlvo();
     
     
 }

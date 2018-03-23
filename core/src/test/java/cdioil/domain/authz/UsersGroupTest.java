@@ -14,18 +14,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe GrupoUtilizadores.
+ * Tests of the class UsersGroup.
  *
  * @author Rita Gonçalves (1160912)
  */
-public class GrupoUtilizadoresTest {
+public class UsersGroupTest {
 
     /**
-     * Instância de GrupoUtilizadores para testes.
+     * Instance of UsersGroup for test purposes.
      */
-    private GrupoUtilizadores gu;
+    private UsersGroup gu;
 
-    public GrupoUtilizadoresTest() {
+    public UsersGroupTest() {
     }
 
     @BeforeClass
@@ -38,7 +38,7 @@ public class GrupoUtilizadoresTest {
 
     @Before
     public void setUp() {
-        this.gu = new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        this.gu = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
     }
 
@@ -47,71 +47,73 @@ public class GrupoUtilizadoresTest {
     }
 
     /**
-     * Teste do método isUserValido, da classe GrupoUtilizadores.
+     * Test of the method isUserValid, of the class UsersGroup.
      */
     @Test
     public void testIsUserValido() {
-        System.out.println("isUserValido");
+        System.out.println("isUserValid");
         UserRegistado u = null;
-        assertFalse("Objeto null não é válido", gu.isUserValido(u));
+        assertFalse("Objeto null não é válido", gu.isUserValid(u));
         u = new UserRegistado(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
-        assertFalse("Objeto não pertence à lista", gu.isUserValido(u));
-        gu.adicionarUser(u);
-        assertTrue("Objeto existente na lista é válido", gu.isUserValido(u));
+        assertFalse("Objeto não pertence à lista", gu.isUserValid(u));
+        gu.addUser(u);
+        assertTrue("Objeto existente na lista é válido", gu.isUserValid(u));
     }
 
     /**
-     * Teste do método adicionarUser, da classe GrupoUtilizadores.
+     * Test of the method addUser, of the class UsersGroup.
      */
     @Test
     public void testAdicionarUser() {
-        System.out.println("adicionarUser");
-        assertFalse("Objeto null não é válido", gu.adicionarUser(null));
+        System.out.println("addUser");
+        assertFalse("Objeto null não é válido", gu.addUser(null));
         UserRegistado u = new UserRegistado(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
-        assertTrue("Objeto não pertence à lista, logo pode ser adicionado", gu.adicionarUser(u));
-        gu.adicionarUser(u);
-        assertFalse("Objeto existente na lista, logo não pode ser adicionado", gu.adicionarUser(u));
+        assertTrue("Objeto não pertence à lista, logo pode ser adicionado", gu.addUser(u));
+        gu.addUser(u);
+        assertFalse("Objeto existente na lista, logo não pode ser adicionado", gu.addUser(u));
     }
 
     /**
-     * Teste do método removerUser, da classe GrupoUtilizadores.
+     * Test of the method removeUser, of the class UsersGroup.
      */
     @Test
     public void testRemoverUser() {
-        System.out.println("removerUser");
+        System.out.println("removeUser");
         UserRegistado u = null;
-        assertFalse("Objeto null não é válido", gu.removerUser(u));
+        assertFalse("Objeto null não é válido", gu.removeUser(u));
         u = new UserRegistado(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
-        assertFalse("Objeto não pertence à lista, logo não pode ser removido", gu.removerUser(u));
-        gu.adicionarUser(u);
-        assertTrue("Objeto existente na lista, logo pode ser removido", gu.removerUser(u));
+        assertFalse("Objeto não pertence à lista, logo não pode ser removido", gu.removeUser(u));
+        gu.addUser(u);
+        assertTrue("Objeto existente na lista, logo pode ser removido", gu.removeUser(u));
     }
 
     /**
-     * Teste do método toString, da classe GrupoUtilizadores.
+     * Test of the method toString, of the class UsersGroup.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        GrupoUtilizadores guOutro=new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        UsersGroup oth = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
-        assertEquals("Deveriam ser iguais",guOutro.toString(), gu.toString());
+        assertEquals("Deveriam ser iguais", oth.toString(), gu.toString());
     }
 
     /**
-     * Teste do método hashCode, da classe GrupoUtilizadores.
+     * Test of the method hashCode, of the class UsersGroup.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        assertEquals("Deveriam ser iguais", 329, gu.hashCode());
+        UsersGroup oth = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
+        assertEquals("Deveriam ser iguais", oth.hashCode(), gu.hashCode());
     }
 
     /**
-     * Teste do método equals, da classe GrupoUtilizadores.
+     * Test of the method equals, of the class UsersGroup.
      */
     @Test
     public void testEquals() {

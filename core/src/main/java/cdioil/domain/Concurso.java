@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
 import java.util.Calendar;
 import javax.persistence.*;
@@ -30,7 +30,7 @@ public class Concurso implements Serializable, Evento {
     /**
      * Utilizadores aos quais o concurso se destina.
      */
-    private GrupoUtilizadores publicoAlvo;
+    private UsersGroup publicoAlvo;
     /**
      * Data de abertura do concurso.
      */
@@ -48,12 +48,12 @@ public class Concurso implements Serializable, Evento {
      *
      * @param descricao descricao do concurso
      * @param publicoAlvo grupo de utilizadores ao qual o concurso se destina
-     * TODO discutir como identificar quando uma instancia de GrupoUtilizadores
-     * se refere a TODOS os utilizadores da aplicação
+ TODO discutir como identificar quando uma instancia de UsersGroup
+ se refere a TODOS os utilizadores da aplicação
      * @param dataInicio data de inicio do concurso
      * @param dataFim data de fim do concurso
      */
-    public Concurso(String descricao, GrupoUtilizadores publicoAlvo,
+    public Concurso(String descricao, UsersGroup publicoAlvo,
             Calendar dataInicio, Calendar dataFim) {
         if (descricao == null) {
             throw new IllegalArgumentException("O concurso tem que ter uma "
@@ -135,7 +135,7 @@ public class Concurso implements Serializable, Evento {
      * @return grupo de utilizadores
      */
     @Override
-    public GrupoUtilizadores publicoAlvo() {
+    public UsersGroup publicoAlvo() {
         return publicoAlvo;
     }
 

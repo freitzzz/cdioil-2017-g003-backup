@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- * Classe que representa o conceito de password
+ * Classe that represents the password of a user
  *
  * @author Joana Pinheiro
  */
@@ -24,26 +23,26 @@ public class Password implements Serializable {
     private static final String AVERAGE_PASSWORD = "Média";
     private static final String STRONG_PASSWORD = "Forte";
     /**
-     * Password default atribuida aos utilizadores importados pelo administrador
+     * Password default given to SystemUsers imported by Admin
      */
     public static final String DEFAULT_PASSWORD="Password123";
 
     /**
-     * Constante que representa un conjunto aleatório de bytes com o objetivo de defender contra ataques à password
+     * Variable that represents a random number of bytes with the purpose of protecting the password against attacks
      */
     private static byte[] salt;
-    @Column(name="Gominhos")
+    @Column(name = "Gominhos")
     private String saltInString;
 
     /**
-     * Constante que representa uma password encriptada
+     * Variable that represents an encrypted password
      */
     private String password;
     
     /**
-     * Construtor de password
+     * Constructor of password of a SystemUser
      *
-     * @param password
+     * @param password password
      */
     public Password(String password) {
         if (strength(password).equalsIgnoreCase(WEAK_PASSWORD)) {
@@ -52,7 +51,7 @@ public class Password implements Serializable {
 
         try {
             salt = generateSalt();
-            this.saltInString=unirBytes(salt);
+            this.saltInString= byteToString(salt);
             this.password = generateHash(password + this.saltInString);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -61,9 +60,9 @@ public class Password implements Serializable {
     }
 
     /**
-     * Cria uma hash com a função de encriptação SHA-256
+     * Creastes an hash function SHA-256 (Secure Hash Algorithm 256)
      *
-     * @param password password de utilizador
+     * @param password password of a SystemUser
      * @return password hashed
      * @throws NoSuchAlgorithmException
      */
@@ -86,7 +85,7 @@ public class Password implements Serializable {
     }
 
     /**
-     * Gerar um número random
+     * Generates a random number
      *
      * @return salt
      */
@@ -98,10 +97,10 @@ public class Password implements Serializable {
     }
 
     /**
-     * Devolve a força da password. Fraca, Media ou Forte
+     * Returns the Strength of a password. Fraca, Media ou Forte
      *
-     * @param password password do utilizador
-     * @return força da password
+     * @param password password of a SystemUser
+     * @return strength of a password
      */
     private static String strength(String password) {
         Pattern patternAverage = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])[a-zA-Z\\d]{9,}$");
@@ -118,15 +117,23 @@ public class Password implements Serializable {
 
         return WEAK_PASSWORD;
     }
-    private String unirBytes(byte[] bytes){
-        String bytesUnidos="";
-        for(int i=0;i<bytes.length;i++)bytesUnidos+=bytes[i];
-        return bytesUnidos;
-    }
+
     /**
-     * Verifica de a password inserida é a correcta
-     * @param password password do utilizador
-     * @return retorna true se a password está correcta e false se está incorreta
+     * Tranforms a number of bytes into a String
+     * @param bytes number of bytes
+     * @return return a String
+     */
+    private String byteToString(byte[] bytes){
+        String stringBytes = "";
+        for (int i = 0; i < bytes.length; i++) stringBytes += bytes[i];
+
+        return stringBytes ;
+    }
+
+    /**
+     * Verifies if the inserted password is the correct one
+     * @param password password of a SystemUser
+     * @return returns true id a password is correct and false it's incorrect
      */
     public boolean verifyPassword(String password) {
         String hash = " ";
@@ -137,6 +144,7 @@ public class Password implements Serializable {
         }
         return hash.equals(this.password);
     }
+
     protected Password(){}
 }
 
