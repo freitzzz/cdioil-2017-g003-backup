@@ -52,7 +52,7 @@ public class MainMenu {
 //                    new ImportUsersFromFilesUI();
 //                    break;
 //                case 4:
-//                    new ListarUsersUI().listarUtilizadores();
+//                    new ListUsersUI().listAllUsers();
 //                    break;
 //                case 5:
 //                    
@@ -92,7 +92,7 @@ public class MainMenu {
                     new ImportUsersFromFilesUI();
                     break;
                 case 4:
-                    new ListarUsersUI().listarUtilizadores();
+                    new ListUsersUI().listAllUsers();
                     break;
                 case 5:
                     break;
