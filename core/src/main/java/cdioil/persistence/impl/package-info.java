@@ -1,5 +1,4 @@
 /**
- * Package relativa a todas as implementações de persistencia sobre o núcleo 
- * da aplicação
+ * Package that holds all repositories implementations from the business domain
  */
 package cdioil.persistence.impl;

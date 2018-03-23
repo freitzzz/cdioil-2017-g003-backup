@@ -1,5 +1,4 @@
 /**
- * Package onde se encontram todos packages e classes relativos a persistencia e 
- * repositórios da base de dados
+ * Package that holds all repositories from the business domain
  */
 package cdioil.persistence;

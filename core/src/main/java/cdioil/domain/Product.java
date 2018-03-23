@@ -52,7 +52,7 @@ public class Product implements Serializable {
     /**
      * The Product's image.
      */
-    private Imagem productImage;
+    private Image productImage;
 
     /**
      * Empty Constructor for JPA.
@@ -77,7 +77,7 @@ public class Product implements Serializable {
             this.codes.add(cod);
         }
 
-        this.productImage = new Imagem(IMAGEM_PRODUTO_DEFAULT.getBytes());
+        this.productImage = new Image(IMAGEM_PRODUTO_DEFAULT.getBytes());
     }
 
     /**
@@ -91,7 +91,7 @@ public class Product implements Serializable {
      */
     public boolean changeProductImage(byte[] imagem) {
         try {
-            productImage = new Imagem(imagem);
+            productImage = new Image(imagem);
             return true;
         } catch (IllegalArgumentException e) {
             return false;

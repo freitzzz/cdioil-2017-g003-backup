@@ -1,4 +1,4 @@
 /**
- * Package relativa ao negócio da aplicação.
+ * Package that holds the application business domain
  */
 package cdioil.domain;

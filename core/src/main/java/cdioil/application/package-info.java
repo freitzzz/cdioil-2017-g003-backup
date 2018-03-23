@@ -1,5 +1,4 @@
 /**
- * Package onde se encontram as diversas packages com os controladores relativos 
- * ao <b>núcleo</b> da aplicação
+ * Package that holds all controllers relatively to the application business domain
  */
 package cdioil.application;

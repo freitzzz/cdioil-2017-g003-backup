@@ -1,4 +1,4 @@
 /**
- * Package relativa às utilizadas da framework.
+ * Package that holds all the utilities used by the application
  */
-package cdioil.framework.util;
+package cdioil.application.utils;
