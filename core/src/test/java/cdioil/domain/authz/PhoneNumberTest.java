@@ -14,4 +14,9 @@ public class PhoneNumberTest {
         assertTrue(phoneNumber.validatesNumber(originalNumber));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void ensurePhoneNumberCantHaveLesThan9CharacteresTest() {
+        System.out.println("ensurePhoneNumberCantHaveLesThan9Characteres");
+        new PhoneNumber("911111");
+    }
 }
