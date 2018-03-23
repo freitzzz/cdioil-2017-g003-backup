@@ -57,7 +57,7 @@ public class CSVCategoriasReader implements CategoriesReader {
      * @return Lista com as Categorias lidas. Null caso o ficheiro seja inválido
      */
     @Override
-    public List<Category> lerFicheiro() {
+    public List<Category> readCategories() {
         List<String> conteudoFicheiro = readFile(file);
 
         if (!isFicheiroValido(conteudoFicheiro)) {

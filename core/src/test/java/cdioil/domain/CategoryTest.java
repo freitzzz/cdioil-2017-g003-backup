@@ -127,7 +127,7 @@ public class CategoryTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, c);
-        assertNotEquals("Instância de outra classe não é igual", new CodigoQR("12"), c);
+        assertNotEquals("Instância de outra classe não é igual", new QRCode("12"), c);
         assertNotEquals("Instância de Categoria diferente", new Category("OutraCategoria", "102SCAT"), c);
         assertNotEquals("Instância de Categoria igual", new Category("NomeDiferenteMesmoDescritor", "100CAT"), c);
         assertNotEquals("Instância de Categoria igual", new Category("CategoriaTeste", "101CAT"), c);

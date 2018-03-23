@@ -25,7 +25,7 @@ public final class CategoriasReaderFactory {
      */
     public static CategoriesReader create(String filename) {
         if (filename.endsWith(EXTENSAO_CSV)) {
-            return new CSVCategoriasReader(filename);
+            return new CSVCategoriesReader(filename);
         }
         return null;
     }

@@ -22,11 +22,11 @@ public class ImportCategoriesController {
      * Imports a list of Categories from a file.
      *
      * @param file Path of the file
-     * @return a list with the read Categories. Null if the file is not valid
+     * @return a list with the readCategories Categories. Null if the file is not valid
      */
     public List<Category> readCategories(String file) {
         CategoriesReader categoriesReader = CategoriasReaderFactory.create(file);
 
-        return categoriesReader != null ? categoriesReader.lerFicheiro() : null;
+        return categoriesReader != null ? categoriesReader.readCategories() : null;
     }
 }
