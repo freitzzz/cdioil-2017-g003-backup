@@ -11,6 +11,9 @@ import cdioil.persistence.UserRegistadoRepository;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.GestorRepositoryImpl;
 import cdioil.persistence.impl.RepositorioUtilizadoresImpl;
+import cdioil.persistence.impl.UserRepositoryImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bootstrap que persiste utilizadores na base de dados
@@ -24,6 +27,7 @@ public final class UsersBootstrap {
         inicializarUtilizadoresRegitados();
         inicializarAdministradores();
         inicializarGestores();
+        //inicializarXSystemUsers(5000);
     }
     /**
      * Inicializa diversos utilizadores registados (UserRegistado)
@@ -81,5 +85,13 @@ public final class UsersBootstrap {
      */
     private SystemUser createSystemUser(String email,String password,String nome,String apelido){
         return new SystemUser(new Email(email),new Nome(nome,apelido),new Password(password));
+    }
+    private void inicializarXSystemUsers(int x){
+        UserRepositoryImpl repo=new UserRepositoryImpl();
+        List<SystemUser> users=new ArrayList<>();
+        for(int i=0;i<x;i++){
+            users.add(createSystemUser("okaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+i+"@email.com",Password.DEFAULT_PASSWORD,"bro","bro"));
+        }
+        repo.saveAll(users);
     }
 }
