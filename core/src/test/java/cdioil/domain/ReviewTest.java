@@ -21,7 +21,7 @@ public class ReviewTest {
 
     @Before
     public void setUp() {
-        instance = new Review("ding dong your opinion is wrong", new Inquerito());
+        instance = new Review("ding dong your opinion is wrong", new Product());
     }
 
     /**
