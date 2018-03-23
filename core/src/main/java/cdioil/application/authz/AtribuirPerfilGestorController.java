@@ -5,7 +5,7 @@ import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
-import cdioil.persistence.impl.GestorRepositoryImpl;
+import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class AtribuirPerfilGestorController {
     /**
      * Implementação do Repositorio de Gestores
      */
-    private GestorRepositoryImpl gestorRepository;
+    private ManagerRepositoryImpl gestorRepository;
 
     /**
      * Implementação do Repositório de Admins
@@ -33,7 +33,7 @@ public class AtribuirPerfilGestorController {
      */
     public AtribuirPerfilGestorController() {
         this.systemUserRepository = new UserRepositoryImpl();
-        this.gestorRepository = new GestorRepositoryImpl();
+        this.gestorRepository = new ManagerRepositoryImpl();
         this.adminRepository = new AdminRepositoryImpl();
     }
 
