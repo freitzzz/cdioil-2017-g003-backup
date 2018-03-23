@@ -86,7 +86,7 @@ public class MainMenu {
                     new AtribuirPerfilGestorUI();
                     break;
                 case 2:
-                    new AdicionarWhitelistUI();
+                    new AddWhitelistUI();
                     break;
                 case 3:
                     new ImportarUtilizadoresFicheirosUI();
