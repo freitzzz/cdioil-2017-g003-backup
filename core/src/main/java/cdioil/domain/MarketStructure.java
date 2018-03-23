@@ -48,7 +48,7 @@ public class MarketStructure implements Serializable {
      */
     public MarketStructure() {
 
-        root = new Node(null, new Category("Todos os Produtos", "-1UB"));
+        root = new Node(null, new Category("Todos os Produtos", "RAIZ","RAIZ"));
         size = 1;
     }
 

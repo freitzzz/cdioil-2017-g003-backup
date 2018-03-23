@@ -6,7 +6,6 @@ import cdioil.domain.authz.UsersGroup;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
-import java.util.ArrayList;
 import java.util.Calendar;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -70,7 +69,7 @@ public class SurveyTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
-        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), i);
+        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC", "100DC"), i);
         assertNotEquals("Instância de Inquerito diferente", new Survey(new Product("OutroProduto", new EAN("123")), data, gu), i);
         assertEquals("Instância de Inquerito igual", new Survey(new Product("UmProduto", new EAN("73292")), data, gu), i);
     }

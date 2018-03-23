@@ -1,8 +1,3 @@
-﻿/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
 import cdioil.domain.Category;
@@ -72,7 +67,7 @@ public class CSVCategoriesReader implements CategoriesReader {
 
                     String aux = line[0] + Category.Sufixes.SUFIX_DC;
                     Category c = new Category(line[1], aux, aux);
-                    boolean added = em.adicionarCategoriaRaiz(c);
+                    boolean added = em.addRootCategory(c);
 
                     if (added) {
                         categories.add(c);
@@ -82,7 +77,7 @@ public class CSVCategoriesReader implements CategoriesReader {
                     String id = line[2] + Category.Sufixes.SUFIX_UN;
                     aux += "-" + id;
                     Category c1 = new Category(line[3], line[2] + Category.Sufixes.SUFIX_UN, aux);
-                    added = em.adicionarCategoria(c, c1);
+                    added = em.addCategory(c, c1);
 
                     if (added) {
                         categories.add(c1);
@@ -91,7 +86,7 @@ public class CSVCategoriesReader implements CategoriesReader {
                     id = line[4] + Category.Sufixes.SUFIX_CAT;
                     aux += "-" + id;
                     Category c2 = new Category(line[5], line[4] + Category.Sufixes.SUFIX_CAT, aux);
-                    added = em.adicionarCategoria(c1, c2);
+                    added = em.addCategory(c1, c2);
 
                     if (added) {
                         categories.add(c2);
@@ -100,7 +95,7 @@ public class CSVCategoriesReader implements CategoriesReader {
                     id = line[4] + Category.Sufixes.SUFIX_SCAT;
                     aux += "-" + id;
                     Category c3 = new Category(line[7], line[6] + Category.Sufixes.SUFIX_SCAT, aux);
-                    added = em.adicionarCategoria(c2, c3);
+                    added = em.addCategory(c2, c3);
 
                     if (added) {
                         categories.add(c3);
@@ -109,7 +104,7 @@ public class CSVCategoriesReader implements CategoriesReader {
                     id = line[4] + Category.Sufixes.SUFIX_UB;
                     aux += "-" + id;
                     Category c4 = new Category(line[9], line[8] + Category.Sufixes.SUFIX_UB, aux);
-                    added = em.adicionarCategoria(c3, c4);
+                    added = em.addCategory(c3, c4);
 
                     if (added) {
                         categories.add(c4);

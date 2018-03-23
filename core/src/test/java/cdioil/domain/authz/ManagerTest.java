@@ -42,7 +42,7 @@ public class ManagerTest {
     public void testeAdicionarCategorias() {
         System.out.println("adicionarCategorias");
 
-        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"),
+        Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
 	//teste adiconar lista a null
         List<Category> lc = null;
@@ -53,7 +53,7 @@ public class ManagerTest {
         //teste adiconar lista com elementos
         lc.add(new Category("Fruit", "124CAT", "10DC-10UN-124CAT"));
         lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
-        assertTrue(instance.adicionarCategorias(lc));
+        assertTrue(instance.addCategories(lc));
         //teste adicionar lista com elementos repetidos
         assertTrue(instance.addCategories(lc));
     }
@@ -65,7 +65,7 @@ public class ManagerTest {
     public void testRemoveCategories() {
         System.out.println("removerCategorias");
 
-        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"),
+        Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste remover lista a null
         List<Category> lc = null;
@@ -77,7 +77,7 @@ public class ManagerTest {
         //teste adiconar lista com elementos
         lc.add(new Category("Fruit", "124CAT", "10DC-10UN-124CAT"));
         lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
-        assertFalse(instance.removerCategorias(lc));
+        assertFalse(instance.removeCategories(lc));
         //teste adicionar lista com elementos existentes
         instance.addCategories(lc);
         assertTrue(instance.removeCategories(lc));
