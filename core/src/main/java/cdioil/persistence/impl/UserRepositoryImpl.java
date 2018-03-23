@@ -10,16 +10,15 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
- * Classe que implementa e permite a persistencia do repositório de utilizadores na base de dados
- *
+ * Class that represents the implementation of the SystemUser repository
+ * @see cdioil.persistence.UserRepository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> implements UserRepository {
 
     /**
-     * Método que devolve o nome da unidade de persistência usada no modulo em que está a ser feita a implementação
-     *
-     * @return String com o nome da unidade de persistencia
+     * Method that returns the persistence unit name that the repository uses
+     * @return String with the persistence unit name that the repository uses
      */
     @Override
     protected String nomeUnidadePersistencia() {
@@ -27,10 +26,9 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
     }
 
     /**
-     * Método que diante uma determinada lista de utilizadores, persiste-os na base de dados
-     *
-     * @param users List com todos os SystemUsers a serem persistidos na base de dados
-     * @return boolean true se operação ocorreu com successo, false caso contrário
+     * Method that persists a certain list of valid users in the database
+     * @param users List with all valid users to be saved on the database
+     * @return boolean true if the operation was successful, false if not
      */
     @Override
     public boolean saveAll(List<SystemUser> users) {
@@ -45,7 +43,11 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
         }
         return usersAdded != 0;
     }
-
+    /**
+     * Method that adds an user to the database
+     * @param user SystemUser with the user being added to the database
+     * @return SystemUser if the user was added with success, null if an error occured
+     */
     @Override
     public SystemUser add(SystemUser user) {
         if (exists(user)) {
@@ -55,10 +57,9 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
     }
 
     /**
-     * Procura um SystemUser através de um dado email
-     *
-     * @param email email dado
-     * @return system user encontrado. No caso de não encontrar nenhum system user, retorna null
+     * Method that finds a certain SystemUser by his email
+     * @param email Email with the email being searched
+     * @return SystemUser with the user that has the email that was being searched
      */
     @Override
     public SystemUser findByEmail(Email email) {
@@ -70,19 +71,23 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
     }
 
     /**
-     * Filtra os utilizadores por um determinado dominio ou expressao regular
-     *
-     * @param filtro String com o filtro a ser aplicado
-     * @return lista de system user encontrados. No caso de não encontrar nenhum system user, retorna null
+     * Method that finds all users with a certain email pattern 
+     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
+     * @param emailPattern String with the email pattern that is being searched
+     * @return List with all users found with a certain email pattern, or null if an 
+     * error occured
      */
     @Override
-    public List<SystemUser> utilizadoresPorFiltracao(String filtro) {
+    public List<SystemUser> usersByPattern(String emailPattern) {
         EntityManager em = entityManager();
-      
-        Query queryRegexed=em.createNativeQuery("select * from SYSTEMUSER u where lower(u.email) regexp '"+filtro+"'",SystemUser.class);
+        Query queryRegexed=em.createNativeQuery("select * from SYSTEMUSER u where lower(u.email) regexp '"+emailPattern+"'",SystemUser.class);
         return (List<SystemUser>) queryRegexed.getResultList();
     }
-
+    /**
+     * Method that checks if a certain user exists on the database
+     * @param user SystemUser with user being checked
+     * @return boolean true if the user exists on the database, false if not
+     */
     public boolean exists(SystemUser user) {
         return find(user.getID()) != null;
     }

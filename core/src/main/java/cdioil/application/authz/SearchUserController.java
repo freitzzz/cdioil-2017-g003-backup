@@ -24,7 +24,7 @@ public class SearchUserController {
      */
     public List<SystemUser> usersByEmail(String email){
         userRepos = new UserRepositoryImpl();
-        return userRepos.utilizadoresPorFiltracao(email);
+        return userRepos.usersByPattern(email);
     }
     
 }

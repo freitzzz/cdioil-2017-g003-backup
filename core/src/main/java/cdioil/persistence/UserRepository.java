@@ -5,31 +5,29 @@ import cdioil.domain.authz.SystemUser;
 import java.util.List;
 
 /**
- * Interface respetiva ao repositorio de utilizadores
+ * Interface for the SystemUser repository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public interface UserRepository {
     /**
-     * Método que diante uma determinada lista de utilizadores, persiste-os na 
-     * base de dados
-     * @param users List com todos os SystemUsers a serem persistidos na base de dados
-     * @return boolean true se operação ocorreu com successo, false caso contrário
+     * Method that persists a certain list of valid users in the database
+     * @param users List with all valid users to be saved on the database
+     * @return boolean true if the operation was successful, false if not
      */
     public abstract boolean saveAll(List<SystemUser> users);
 
     /**
-     * Procura um SystemUser através de um dado email
-     * @param email email dado
-     * @return system user encontrado. No caso de não encontrar nenhum system user,
-     * retorna null
+     * Method that finds a certain SystemUser by his email
+     * @param email Email with the email being searched
+     * @return SystemUser with the user that has the email that was being searched
      */
-    SystemUser findByEmail(Email email);
+    public abstract SystemUser findByEmail(Email email);
     
      /**
-     * Procura uma lista de SystemUser através de um dado email
-     * @param email email dado
-     * @return lista de system user encontrados. No caso de não encontrar nenhum system user,
-     * retorna null
+      * Method that finds all users with a certain email pattern 
+     * @param emailPattern String with the email pattern that is being searched
+     * @return List with all users found with a certain email pattern, or null if an 
+     * error occured
      */
-    List<SystemUser> utilizadoresPorFiltracao(String email);
+    public abstract List<SystemUser> usersByPattern(String emailPattern);
 }
