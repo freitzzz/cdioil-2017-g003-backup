@@ -1,7 +1,7 @@
 package cdioil.application.utils;
 
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Nome;
+import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import java.io.File;
@@ -81,7 +81,7 @@ public final class CSVUtilizadoresReader implements UtilizadoresReader{
             if(nextCampos.length==NUMERO_IDENTIFICADORES){
                 try{
                     usersLidos.add(new SystemUser(new Email(nextCampos[identificadorEmail])
-                            ,new Nome(nextCampos[identificadorNome],nextCampos[identificadorApelido])
+                            ,new Name(nextCampos[identificadorNome],nextCampos[identificadorApelido])
                             ,new Password(Password.DEFAULT_PASSWORD)));
                 }catch(IllegalArgumentException e){
                     System.out.println(e);

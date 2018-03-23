@@ -17,7 +17,7 @@ public class AdminTest {
     public void setUp() {
         Email email = new Email("lilpump@guccigang.com");
         Password pwd = new Password("Bananas19");
-        Nome nome = new Nome("Lil", "Pump");
+        Name nome = new Name("Lil", "Pump");
         sysUser = new SystemUser(email, nome, pwd);
     }
 
@@ -52,7 +52,7 @@ public class AdminTest {
         System.out.println("equals");
         Email email = new Email("bananas@bananeira.com");
         Password pwd = new Password("Bananas19");
-        Nome nome = new Nome("Lil", "Pump");
+        Name nome = new Name("Lil", "Pump");
         SystemUser sysUser2 = new SystemUser(email, nome, pwd);
         Admin a = createAdmin(sysUser);
         Admin a2 = createAdmin(sysUser2);

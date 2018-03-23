@@ -32,10 +32,9 @@ public class Review implements Serializable {
     private String opinion;
 
     /**
-     * Inquérito correspondente à avaliação
+     * product subject to review
      */
-    @OneToOne
-    private Inquerito inquiry;
+    private Product product;
 
     /**
      * Empty constructor of class Review
@@ -47,11 +46,11 @@ public class Review implements Serializable {
      * Review constructor
      *
      * @param opinion user's opinion
-     * @param inquiry review's corresponding inquiry
+     * @param product product subject to review
      */
-    public Review(String opinion, Inquerito inquiry) {
+    public Review(String opinion, Product product) {
         this.opinion = opinion;
-        this.inquiry = inquiry;
+        this.product = product;
     }
 
     /**

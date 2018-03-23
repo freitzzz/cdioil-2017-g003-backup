@@ -31,7 +31,7 @@ public class GestorTest {
     @Test
     public void testeAdicionarCategorias() {
         System.out.println("adicionarCategorias");
-        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Nome("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
+        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste adiconar lista a null
         List<Category> lc = null;
         assertFalse(instance.adicionarCategorias(lc));
@@ -52,7 +52,7 @@ public class GestorTest {
     @Test
     public void testeRemoverCategorias() {
         System.out.println("removerCategorias");
-        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Nome("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
+        Gestor instance = new Gestor(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste remover lista a null
         List<Category> lc = null;
         assertFalse(instance.removerCategorias(lc));

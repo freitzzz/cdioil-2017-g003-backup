@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
 import java.util.Calendar;
 import javax.persistence.*;
@@ -29,7 +29,7 @@ public class Contest implements Serializable, Evento {
     /**
      * Users to whom the contest is intended.
      */
-    private GrupoUtilizadores users;
+    private UsersGroup users;
     /**
      * Begind date of the contest.
      */
@@ -50,7 +50,7 @@ public class Contest implements Serializable, Evento {
      * @param beginDate begin date of the contest
      * @param endDate end date of the contest
      */
-    public Contest(String description, GrupoUtilizadores users,
+    public Contest(String description, UsersGroup users,
             Calendar beginDate, Calendar endDate) {
         if (description == null) {
             throw new IllegalArgumentException("O concurso tem que ter uma "
@@ -131,7 +131,7 @@ public class Contest implements Serializable, Evento {
      * @return group of users
      */
     @Override
-    public GrupoUtilizadores publicoAlvo() {
+    public UsersGroup publicoAlvo() {
         return users;
     }
 

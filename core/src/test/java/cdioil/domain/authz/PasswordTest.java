@@ -19,8 +19,8 @@ public class PasswordTest {
     }
 
     @Test
-    public void passwordCriadaSemProblemas() {
-        System.out.println("passwordCriadaSemProblemas");
+    public void passwordCreatedWithNoProblems() {
+        System.out.println("passwordCreatedWithNoProblems");
 
         Password password = new Password("Password123");
         assertTrue(password.verifyPassword("Password123"));
