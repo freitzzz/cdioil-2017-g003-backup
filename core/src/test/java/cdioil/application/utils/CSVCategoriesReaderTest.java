@@ -15,18 +15,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe CSVCategoriesReader.
+ * Tests of the class CSVCategoriesReader.
  *
  * @author Rita Gonçalves (1160912)
  */
-public class CSVCategoriasReaderTest {
+public class CSVCategoriesReaderTest {
 
     /**
-     * Instância de CSVCategoriesReader para testes.
+     * Instance of CSVCategoriesReader for test purposes.
      */
     CSVCategoriesReader c;
 
-    public CSVCategoriasReaderTest() {
+    public CSVCategoriesReaderTest() {
     }
 
     @BeforeClass
@@ -47,15 +47,15 @@ public class CSVCategoriasReaderTest {
     }
 
     /**
-     * Teste do método testIsFicheiroValido, da classe CSVCategoriesReader.
+     * Test of the method testIsFileValid, of the class CSVCategoriesReader.
      */
     @Test
-    public void testIsFicheiroValido() {
-        System.out.println("lerFicheiro");
-        List<String> conteudoFicheiro = null;
-        assertFalse("Ficheiros null não podem ser lidos", c.isFileValid(conteudoFicheiro));
-        conteudoFicheiro = new LinkedList<>();
-        conteudoFicheiro.add("Campo1;Campo2;Campo3;Campo4;Campo5;Campo6;Campo7;Campo8;Campo9;Campo10");
-        assertTrue("Campos corretos", c.isFileValid(conteudoFicheiro));
+    public void testIsFileValid() {
+        System.out.println("isFileValid");
+        List<String> fileContent = null;
+        assertFalse("Ficheiros null não podem ser lidos", c.isFileValid(fileContent));
+        fileContent = new LinkedList<>();
+        fileContent.add("Campo1;Campo2;Campo3;Campo4;Campo5;Campo6;Campo7;Campo8;Campo9;Campo10");
+        assertTrue("Campos corretos", c.isFileValid(fileContent));
     }
 }

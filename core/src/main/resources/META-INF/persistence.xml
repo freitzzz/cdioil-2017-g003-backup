@@ -5,7 +5,6 @@
     <class>cdioil.domain.Inquerito</class>
     <class>cdioil.domain.Produto</class>
     <class>cdioil.domain.Codigo</class>
-    <class>cdioil.domain.CodigoQR</class>
     <class>cdioil.domain.EAN</class>
     <class>cdioil.domain.authz.Admin</class>
     <class>cdioil.domain.authz.SystemUser</class>
@@ -15,10 +14,10 @@
     <class>cdioil.domain.Concurso</class>
     <class>cdioil.domain.EstruturaMercadologica</class>
     <class>cdioil.domain.Node</class>
-    <class>cdioil.domain.BinaryQuestion</class>
     <class>cdioil.domain.Category</class>
     <class>cdioil.domain.Review</class>
     <class>cdioil.domain.authz.Profile</class>
+    <class>cdioil.domain.QRCode</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

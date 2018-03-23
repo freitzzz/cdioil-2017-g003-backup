@@ -26,7 +26,7 @@ public class ProdutoTest {
 
     @Before
     public void setUp() {
-        this.p = new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235"));
+        this.p = new Produto("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
     }
 
     /**
@@ -37,7 +37,7 @@ public class ProdutoTest {
         System.out.println("toString");
         System.out.println(p.toString());
 
-        Produto copia = new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235"));
+        Produto copia = new Produto("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
 
         assertEquals(p.toString(), copia.toString());
     }
@@ -49,7 +49,7 @@ public class ProdutoTest {
     public void testHashCode() {
         System.out.println("hashCode");
 
-        Produto copia = new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235"));
+        Produto copia = new Produto("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
 
         assertEquals(p.hashCode(), copia.hashCode());
 
@@ -63,8 +63,8 @@ public class ProdutoTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, p);
         assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), p);
-        assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new EAN("33312118"), new CodigoQR("552671")), p);
-        assertEquals("Instância com códigos iguais igual", new Produto("ProdutoTeste", new EAN("544231234"), new CodigoQR("4324235")), p);
+        assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new EAN("33312118"), new QRCode("552671")), p);
+        assertEquals("Instância com códigos iguais igual", new Produto("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")), p);
     }
 
     /**

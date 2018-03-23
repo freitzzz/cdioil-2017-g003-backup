@@ -176,7 +176,7 @@ public class EstruturaMercadologicaTest {
 
             struct.adicionarCategoria(filho2, filho3);
             
-            Produto p = new Produto("Produto " + i, new EAN("i"), new CodigoQR(Integer.toString(2*i)));
+            Produto p = new Produto("Produto " + i, new EAN("i"), new QRCode(Integer.toString(2*i)));
 
             struct.adicionarProduto(p, filho3);
 
