@@ -49,7 +49,7 @@ public class MainMenu {
 //
 //                    break;
 //                case 3:
-//                    new ImportarUtilizadoresFicheirosUI();
+//                    new ImportUsersFromFilesUI();
 //                    break;
 //                case 4:
 //                    new ListarUsersUI().listarUtilizadores();
@@ -89,7 +89,7 @@ public class MainMenu {
                     new AddWhitelistUI();
                     break;
                 case 3:
-                    new ImportarUtilizadoresFicheirosUI();
+                    new ImportUsersFromFilesUI();
                     break;
                 case 4:
                     new ListarUsersUI().listarUtilizadores();
