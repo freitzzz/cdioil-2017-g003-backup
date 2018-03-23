@@ -32,9 +32,9 @@ public class ChangeUserDataUI {
         int option = Console.readInteger("Que campo de informação deseja alterar?\n1.Nome\n2.Email\n3.Password\n");
         String newData = Console.readLine("Introduza a nova informação:\n");
         boolean b = ctrl.changeDataField(newData, option);
-        if(b){
+        if (b) {
             System.out.println("Informação alterada com sucesso.\n");
-        }else{
+        } else {
             System.out.println("Dados inválidos!");
         }
     }
