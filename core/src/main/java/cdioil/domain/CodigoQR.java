@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * @author Rita Gonçalves (1160912)
  */
 @Entity(name = "CODIGOQR")
-public class CodigoQR extends Codigo<String> {
+public class CodigoQR extends Code<String> {
 
     /**
      * Construtor protegido para JPA.
@@ -24,6 +24,6 @@ public class CodigoQR extends Codigo<String> {
      * @param codigo o código a atribuir
      */
     public CodigoQR(String codigo) {
-        this.codigo = codigo;
+        this.code = codigo;
     }
 }
