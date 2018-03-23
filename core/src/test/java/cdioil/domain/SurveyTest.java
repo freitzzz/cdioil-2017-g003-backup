@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain;
 
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
@@ -25,16 +20,16 @@ import static org.junit.Assert.*;
  *
  * @author Rita Gonçalves (1160912)
  */
-public class InqueritoTest {
+public class SurveyTest {
 
     /**
      * Data for testing
      */
     Survey i;
-    GrupoUtilizadores gu;
+    UsersGroup gu;
     Calendar data;
 
-    public InqueritoTest() {
+    public SurveyTest() {
     }
 
     @BeforeClass
@@ -47,11 +42,10 @@ public class InqueritoTest {
 
     @Before
     public void setUp() {
-        
-        gu = new GrupoUtilizadores((new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        gu = new UsersGroup((new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
         data = Calendar.getInstance();
-        this.i = new Survey(new Produto("UmProduto", new EAN("73292")), data, gu);
+        this.i = new Survey(new Product("UmProduto", new EAN("73292")), data, gu);
     }
 
     @After
@@ -64,8 +58,8 @@ public class InqueritoTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Survey outro = new Survey(new Produto("UmProduto", new EAN("73292")), data, gu);
-        
+        Survey outro = new Survey(new Product("UmProduto", new EAN("73292")), data, gu);
+
         assertEquals(i.hashCode(), outro.hashCode());
     }
 
@@ -77,8 +71,8 @@ public class InqueritoTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
         assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), i);
-        assertNotEquals("Instância de Inquerito diferente", new Survey(new Produto("OutroProduto", new EAN("123")), data, gu), i);
-        assertEquals("Instância de Inquerito igual", new Survey(new Produto("UmProduto", new EAN("73292")), data, gu), i);
+        assertNotEquals("Instância de Inquerito diferente", new Survey(new Product("OutroProduto", new EAN("123")), data, gu), i);
+        assertEquals("Instância de Inquerito igual", new Survey(new Product("UmProduto", new EAN("73292")), data, gu), i);
     }
 
     /**
@@ -89,7 +83,7 @@ public class InqueritoTest {
         System.out.println("toString");
         System.out.println(i.toString());
         assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", i.toString(),
-                 "Inquerito sobre o produto:\n" + new Produto("UmProduto", new EAN("73292"))
+                "Inquerito sobre o produto:\n" + new Product("UmProduto", new EAN("73292"))
                 + "\nData:\n" + data);
     }
 
@@ -140,8 +134,8 @@ public class InqueritoTest {
     @Test
     public void testInfo() {
         System.out.println("info");
-        Survey inquerito = new Survey(new Produto("Teste", new EAN("123456789")), data, gu);
-        String expResult = "Inquerito sobre o produto:\n" + (new Produto("Teste", new EAN("123456789"))).toString()
+        Survey inquerito = new Survey(new Product("Teste", new EAN("123456789")), data, gu);
+        String expResult = "Inquerito sobre o produto:\n" + (new Product("Teste", new EAN("123456789"))).toString()
                 + "\nData:\n" + data;
         String result = inquerito.info();
         assertEquals(expResult, result);
@@ -153,10 +147,9 @@ public class InqueritoTest {
     @Test
     public void testTargetAudience() {
         System.out.println("targetAudience");
-        Survey inquerito = new Survey(new Produto("Teste", new EAN("123456789")), data, gu);
-        GrupoUtilizadores expResult = gu;
-        GrupoUtilizadores result = inquerito.targetAudience();
-        assertEquals(expResult, result);
+        Survey inquerito = new Survey(new Product("Teste", new EAN("123456789")), data, gu);
+        UsersGroup expResult = gu;
+        UsersGroup result = inquerito.targetAudience();
     }
 
 }

@@ -136,16 +136,6 @@ public class EmailTest {
         testarEmail(emailValido,false,"O email é valido pois não infringe nenhuma regra");
     }
     /**
-     * Test of verificarEmail method, of class Email.
-     */
-    @Test
-    public void testVerificarEmail() {
-        System.out.println("verificarEmail");
-        String email = "i.really.want.my.email.to.be.safe@securitas.pt";
-        Email instance = new Email(email);
-        assertTrue("A condição deve acertar pois os emails são iguais",instance.verificarEmail(email));
-    }
-    /**
      * Test of equals method, of class Email.
      */
     @Test

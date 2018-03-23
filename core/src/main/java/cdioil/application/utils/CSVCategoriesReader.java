@@ -105,7 +105,7 @@ public class CSVCategoriesReader implements CategoriesReader {
                         categories.add(c4);
                     }
                 } catch (IllegalArgumentException ex) {
-                    System.out.println("O formato das Categorias inválido na linha" + i + ".");
+                    System.out.println("O formato das Categorias inválido na linha " + i + ".");
                 }
             }
         }

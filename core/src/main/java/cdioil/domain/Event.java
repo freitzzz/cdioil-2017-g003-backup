@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 
 /**
  * Abstract class that represents Events.
@@ -17,9 +17,9 @@ public abstract class Event {
     /**
      * Survey's target audience.
      */
-    private GrupoUtilizadores targetAudience;
+    private UsersGroup targetAudience;
 
-    public Event(GrupoUtilizadores targetAudience) {
+    public Event(UsersGroup targetAudience) {
         if (targetAudience == null) {
             throw new IllegalArgumentException("O público alvo não"
                     + " pode ser null");
@@ -43,7 +43,7 @@ public abstract class Event {
      *
      * @return event's target audience
      */
-    public GrupoUtilizadores targetAudience(){
+    public UsersGroup targetAudience(){
         return targetAudience;
     }
 

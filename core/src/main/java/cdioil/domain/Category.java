@@ -31,7 +31,7 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_CATEGORIA", nullable = false, updatable = false)
+    @Column(name = "ID_CATEGORY", nullable = false, updatable = false)
     /**
      * ID of the Category for JPA.
      */
@@ -51,7 +51,7 @@ public class Category implements Serializable {
      * List of products of the Category.
      */
     @OneToMany
-    private Set<Produto> products = new HashSet<>();
+    private Set<Product> products = new HashSet<>();
 
     /**
      * Regular expression to validate the identifiers of the Category.
@@ -144,7 +144,7 @@ public class Category implements Serializable {
      * @param p product to add
      * @return true if the product is successfully added. Otherwise, returns false
      */
-    public boolean addProduct(Produto p) {
+    public boolean addProduct(Product p) {
         if (p == null) {
             return false;
         }

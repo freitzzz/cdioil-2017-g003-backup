@@ -8,7 +8,7 @@ import javax.persistence.Entity;
  * @author Rita Gonçalves (1160912)
  */
 @Entity(name = "QR_CODE")
-public class QRCode extends Codigo<String> {
+public class QRCode extends Code<String> {
 
     /**
      * Empty protected constructor for JPA.
@@ -23,6 +23,6 @@ public class QRCode extends Codigo<String> {
      * @param code Identifer of the QRCode
      */
     public QRCode(String code) {
-        this.codigo = code;
+        this.code = code;
     }
 }

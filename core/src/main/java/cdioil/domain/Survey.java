@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -30,7 +30,7 @@ public class Survey extends Event implements Serializable{
     /**
      * Product associated to the survey.
      */
-    private Produto product;
+    private Product product;
     
     /**
      * Data de realização do Survey.
@@ -50,7 +50,7 @@ public class Survey extends Event implements Serializable{
      * @param date  date when the survey was done
      * @param targetAudience survey's target audience
      */
-    public Survey(Produto product, Calendar date, GrupoUtilizadores targetAudience) {
+    public Survey(Product product, Calendar date, UsersGroup targetAudience) {
         super(targetAudience);
         if (product == null) {
             throw new IllegalArgumentException("O inquérito tem que ter um produto");

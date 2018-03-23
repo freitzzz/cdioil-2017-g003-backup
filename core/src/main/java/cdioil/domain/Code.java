@@ -11,47 +11,56 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 /**
- * Classe abstrata para códigos de um produto.
+ * Abstract class for a Product's code.
  *
  * @author António Sousa [1161371]
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Codigo<T> implements Serializable {
+public abstract class Code<T> implements Serializable {
 
     /**
-     * Código de serialização.
+     * Serialization identifier.
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * Chave primária gerada automaticamente.
+     * Auto-generated primary key.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_CODIGO", updatable = false, nullable = false)
+    @Column(name = "ID_CODE", updatable = false, nullable = false)
     protected int id;
 
     /**
-     * Valor do código.
+     * The code's value.
      */
     @Column(unique = true)
-    protected T codigo;
+    protected T code;
 
     /**
-     * Construtor para JPA.
+     * Empty constructor for JPA.
      */
-    protected Codigo() {
+    protected Code() {
     }
 
+    /**
+     * Returns the instance's hash.
+     * @return the hash value
+     */
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.codigo) + Objects.hashCode(this.getClass());
+        hash = 67 * hash + Objects.hashCode(this.code) + Objects.hashCode(this.getClass());
         /*Uma vez que isto será usado por todas as subclasses, o tipo de classe deverá contribuir para um hash diferente*/
         return hash;
     }
 
+    /**
+     * Checks for true equality with another object based on the code's value.
+     * @param obj object to compare to
+     * @return true if the objects are truly equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -63,21 +72,21 @@ public abstract class Codigo<T> implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Codigo other = (Codigo) obj;
-        if (!Objects.equals(this.codigo, other.codigo)) {
+        final Code other = (Code) obj;
+        if (!Objects.equals(this.code, other.code)) {
             return false;
         }
         return true;
     }
 
     /**
-     * Descreve a Instância através do seu código.
+     * Describes the instance based on its code.
      *
-     * @return a descrição textual do código.
+     * @return a textual representation of this instance.
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ": " + codigo.toString() + "\n";
+        return getClass().getSimpleName() + ": " + code.toString() + "\n";
     }
 
 }
