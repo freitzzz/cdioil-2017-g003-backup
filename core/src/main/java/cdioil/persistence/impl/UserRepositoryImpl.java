@@ -46,7 +46,7 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
     /**
      * Method that adds an user to the database
      * @param user SystemUser with the user being added to the database
-     * @return SystemUser if the user was added with success, null if an error occured
+     * @return SystemUser if the user was added with success, or null if an error occured
      */
     @Override
     public SystemUser add(SystemUser user) {
@@ -85,7 +85,7 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
     }
     /**
      * Method that checks if a certain user exists on the database
-     * @param user SystemUser with user being checked
+     * @param user SystemUser with the user being checked
      * @return boolean true if the user exists on the database, false if not
      */
     public boolean exists(SystemUser user) {

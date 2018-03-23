@@ -9,7 +9,7 @@ import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UserRegistado;
 import cdioil.persistence.UserRegistadoRepository;
 import cdioil.persistence.impl.AdminRepositoryImpl;
-import cdioil.persistence.impl.GestorRepositoryImpl;
+import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RepositorioUtilizadoresImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public final class UsersBootstrap {
      * Inicializa diversos Gestores (Manager)
      */
     private void inicializarGestores(){
-        GestorRepositoryImpl gestorRepo=new GestorRepositoryImpl();
+        ManagerRepositoryImpl gestorRepo=new ManagerRepositoryImpl();
         gestorRepo.add(new Manager(createSystemUser
             ("bom.gestor@sonae.pt",Password.DEFAULT_PASSWORD,"Mario","Lirio")));
         gestorRepo.add(new Manager(createSystemUser

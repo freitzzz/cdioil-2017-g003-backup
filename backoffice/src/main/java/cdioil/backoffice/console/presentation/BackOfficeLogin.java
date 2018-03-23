@@ -6,7 +6,7 @@ import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
-import cdioil.persistence.impl.GestorRepositoryImpl;
+import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 
 /**
@@ -62,7 +62,7 @@ public class BackOfficeLogin {
     /**
      * Manager Repository.
      */
-    private GestorRepositoryImpl gestorRepo = new GestorRepositoryImpl();
+    private ManagerRepositoryImpl gestorRepo = new ManagerRepositoryImpl();
 
     public void backofficeLogin() {
         int id = -1;

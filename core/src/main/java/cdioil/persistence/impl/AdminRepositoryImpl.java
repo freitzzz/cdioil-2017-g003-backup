@@ -1,30 +1,39 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.authz.Admin;
-import cdioil.domain.authz.SystemUser;
+import cdioil.persistence.AdminRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.RepositorioBaseJPA;
 
 /**
- * Classe que implementa e permite a persistencia do repositório de administradores 
- * na base de dados
+ * Class that represents the implementation of the Admin repository
+ * @see cdioil.persistence.AdminRepository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class AdminRepositoryImpl extends RepositorioBaseJPA<Admin,Long>{
+public class AdminRepositoryImpl extends RepositorioBaseJPA<Admin,Long> implements AdminRepository{
     /**
-     * Método que devolve o nome da unidade de persistência usada no modulo em 
-     * que está a ser feita a implementação
-     * @return String com o nome da unidade de persistencia
+     * Method that returns the persistence unit name that the repository uses
+     * @return String with the persistence unit name that the repository uses
      */
     @Override
     protected String nomeUnidadePersistencia() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
+    /**
+     * Method that adds an Admin to the database
+     * @param admin Admin with the administrator being added to the database
+     * @return Admin if the administrator was added with success, or null if an error occured
+     */
     @Override
     public Admin add(Admin admin){
         if(exists(admin))return admin;
         return super.add(admin);
     }
+    /**
+     * Method that checks if a certain admin exists on the database
+     * @param admin Admin with administrator being checked
+     * @return boolean true if the administrator exists on the database, false if not
+     */
     public boolean exists(Admin admin){return find(admin.getID())!=null;}
     
 }

@@ -1,9 +1,7 @@
 package cdioil.persistence;
 
 /**
- * Interface respetiva ao repositorio de administradores
+ * Interface for the Admin repository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public interface AdminRepository {
-    
-}
+public interface AdminRepository {}
