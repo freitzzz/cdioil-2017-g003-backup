@@ -8,7 +8,7 @@ package cdioil.domain;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Gestor;
 import cdioil.domain.authz.GrupoUtilizadores;
-import cdioil.domain.authz.Nome;
+import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class InqueritoTest {
     @Before
     public void setUp() {
         
-        gu = new GrupoUtilizadores((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Nome("Quim",
+        gu = new GrupoUtilizadores((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
         data = Calendar.getInstance();
         this.i = new Inquerito(new Product("UmProduto", new EAN("73292")), data, gu);
