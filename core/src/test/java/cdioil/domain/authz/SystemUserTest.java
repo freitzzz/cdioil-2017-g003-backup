@@ -19,7 +19,7 @@ public class SystemUserTest {
 
     @Before
     public void setUp() {
-        instance = new SystemUser(new Email("myPrecious@gmail.com"), new Nome("Gollum", "Smeagol"), new Password("Precious3"));
+        instance = new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"));
     }
 
     /**
@@ -50,11 +50,11 @@ public class SystemUserTest {
     public void testeEquals() {
         System.out.println("equals");
         //teste com instâncias iguais
-        assertTrue(instance.equals(new SystemUser(new Email("myPrecious@gmail.com"), new Nome("Gollum", "Smeagol"), new Password("Precious3"))));
+        assertTrue(instance.equals(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"))));
         //teste com instâncias diferentes com email igual
-        assertTrue(instance.equals(new SystemUser(new Email("myPrecious@gmail.com"), new Nome("Smeagol", "Gollum"), new Password("1RingIsMine"))));
+        assertTrue(instance.equals(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Smeagol", "Gollum"), new Password("1RingIsMine"))));
         //teste com instâncias com emails diferentes
-        assertFalse(instance.equals(new SystemUser(new Email("precious@gmail.com"), new Nome("Smeagol", "Gollum"), new Password("1RingIsMine"))));
+        assertFalse(instance.equals(new SystemUser(new Email("precious@gmail.com"), new Name("Smeagol", "Gollum"), new Password("1RingIsMine"))));
         //teste com objetos que não são instâncias de SystemUser
         assertFalse(instance.equals(new Email("americaWantsYou@gmail.com")));
         //teste com mesma instância

@@ -29,7 +29,7 @@ public class RegistarUtilizadorController {
             System.out.println(realSubdominio);
             Whitelist whitelist = new Whitelist(domainPart);
             if (new WhitelistRepositoryImpl().getEntity(whitelist) != null) {
-                SystemUser systemUser = new SystemUser(new Email(email), new Nome(primeiroNome, apelido), new Password(password));
+                SystemUser systemUser = new SystemUser(new Email(email), new Name(primeiroNome, apelido), new Password(password));
                 UserRegistado userRegistado = new UserRegistado(systemUser);
                 repositorioUtilizadoresJPA.addUserRegistado(userRegistado);
             }else{
