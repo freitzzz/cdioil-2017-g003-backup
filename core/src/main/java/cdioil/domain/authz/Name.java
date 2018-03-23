@@ -15,9 +15,6 @@ public class Name implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Version
-    private Long version;
-
     /**
      * Regex for a valid name.
      */
