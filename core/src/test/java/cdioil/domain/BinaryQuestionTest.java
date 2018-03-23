@@ -32,9 +32,10 @@ public class BinaryQuestionTest {
         System.out.println("hashCode");
         String q = "IT'S REALLY FUN c:";
         BinaryQuestion instance = new BinaryQuestion(q);
-        int expResult = q.hashCode();
-        int result = instance.hashCode();
-        assertEquals(expResult, result);
+        
+        BinaryQuestion other = new  BinaryQuestion(q);
+        
+        assertEquals(instance.hashCode(), other.hashCode());
     }
 
     /**

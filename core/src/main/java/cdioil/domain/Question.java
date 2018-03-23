@@ -1,24 +1,100 @@
 package cdioil.domain;
 
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 /**
- * Interface that contains methods that are common to all types of
- * Questions.
+ * Interface that contains methods that are common to all types of Questions.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-public interface Question {
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Question<T> implements Serializable, ValueObject{
+
+    /**
+     * Serialization code.
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    /**
+     * Database id.
+     */
+    protected Long id;
+
+    /**
+     * The type of question.
+     */
+    protected QuestionAnswerTypes type;
+
+    /**
+     * The question's content.
+     */
+    protected T content;
+
+    /**
+     * Empty Constructor for JPA.
+     */
+    protected Question() {
+
+    }
+
+    /**
+     * Return the question's type.
+     * @return question's type enum value
+     */
+    public String type() {
+        return type.toString();
+    }
 
     /**
      * Returns the text of the question
      *
      * @return string with the question itself
      */
-    abstract String content();
+    public T content() {
+        return content;
+    }
 
-    /**
-     * Returns the type of the question
-     *
-     * @return string with the question type
-     */
-    abstract String type();
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.getClass());
+        hash = 29 * hash + Objects.hashCode(this.type);
+        hash = 29 * hash + Objects.hashCode(this.content);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Question<?> other = (Question<?>) obj;
+        if (this.type != other.type) {
+            return false;
+        }
+        if (!Objects.equals(this.content, other.content)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+
 }
