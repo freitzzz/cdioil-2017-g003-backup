@@ -1,14 +1,5 @@
-﻿/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain;
 
-import cdioil.domain.Category;
-import cdioil.domain.EAN;
-import cdioil.domain.Product;
-import cdioil.domain.QRCode;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;
@@ -18,9 +9,9 @@ import static org.junit.Assert.*;
  *
  * @author António Sousa [1161371]
  */
-public class EstruturaMercadologicaTest {
+public class MarketStructureTest {
 
-    public EstruturaMercadologicaTest() {
+    public MarketStructureTest() {
     }
 
     @Test(expected = IllegalArgumentException.class)
