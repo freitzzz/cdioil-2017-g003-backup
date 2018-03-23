@@ -41,7 +41,7 @@ public class EstruturaMercadologica implements Serializable{
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Categoria("Todos os Produtos", "-1UB"));
+        raiz = new Node(null, new Category("Todos os Produtos", "-1UB"));
         tamanho = 1;
     }
 
@@ -56,7 +56,7 @@ public class EstruturaMercadologica implements Serializable{
      * @return true - se for possivel adicionar a categoria<p>
      * false - caso contrário
      */
-    public boolean adicionarCategoriaRaiz(Categoria c) {
+    public boolean adicionarCategoriaRaiz(Category c) {
         if (c == null) {
             throw new IllegalArgumentException("O argumento não pode ser null");
         }
@@ -65,14 +65,14 @@ public class EstruturaMercadologica implements Serializable{
     }
 
     /**
-     * Adiciona uma nova Categoria à Estrutura Mercadologica.
+     * Adiciona uma nova Category à Estrutura Mercadologica.
      *
      * @param pai a categoria acima da nova categoria
      * @param c a nova categoria
      * @return true - se for possivel adicionar a categoria<p>
      * false - caso contrário
      */
-    public boolean adicionarCategoria(Categoria pai, Categoria c) {
+    public boolean adicionarCategoria(Category pai, Category c) {
         if (pai == null || c == null) {
             throw new IllegalArgumentException("O argumentos não podem ser null");
         }
@@ -89,24 +89,24 @@ public class EstruturaMercadologica implements Serializable{
     }
 
     /**
-     * Remove a Categoria da Estrutura Mercadologica.
+     * Remove a Category da Estrutura Mercadologica.
      *
      * @param c categoria a remover
      */
-    public void removerCategoria(Categoria c) {
+    public void removerCategoria(Category c) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Método recursivo usado para para procurar uma dada Categoria na Estrutura
-     * Mercadologica.
+     * Método recursivo usado para para procurar uma dada Category na Estrutura
+ Mercadologica.
      *
      * @param node node a partir do qual se pretende iniciar a procura
-     * @param c Categoria a procurar
+     * @param c Category a procurar
      * @return o node em que a categoria se encontra, null caso não seja
      * encontrada
      */
-    private Node procuraNode(Node node, Categoria c) {
+    private Node procuraNode(Node node, Category c) {
         if (node == null) {
             return null;
         }
@@ -132,8 +132,8 @@ public class EstruturaMercadologica implements Serializable{
     /**
      * Método para verificar se um Node é uma folha da Estrutura
      * Mercadologica.<p>
-     * Uma Categoria folha é uma categoria que não alberga sub-categorias,
-     * podendo conter produtos.
+ Uma Category folha é uma categoria que não alberga sub-categorias,
+ podendo conter produtos.
      *
      * @param node node a verificar se é folha
      * @return true se o node não tiver nodes filhos, false caso tenha
@@ -148,9 +148,9 @@ public class EstruturaMercadologica implements Serializable{
      *
      * @return
      */
-    public Iterable<Categoria> getFolhas() {
+    public Iterable<Category> getFolhas() {
 
-        List<Categoria> folhas = new LinkedList<>();
+        List<Category> folhas = new LinkedList<>();
 
         procuraFolhas(folhas, raiz);
 
@@ -164,7 +164,7 @@ public class EstruturaMercadologica implements Serializable{
      * @param folhas lista de nodes que não tenham nodes filhos
      * @param node node atual
      */
-    private void procuraFolhas(List<Categoria> folhas, Node node) {
+    private void procuraFolhas(List<Category> folhas, Node node) {
 
         List<Node> filhos = node.getFilhos();
 
@@ -180,14 +180,14 @@ public class EstruturaMercadologica implements Serializable{
     }
 
     /**
-     * Adiciona um Produto a Categoria pretendida, podendo apenas adicionar-se a
-     * categorias que sejam folhas.
+     * Adiciona um Produto a Category pretendida, podendo apenas adicionar-se a
+ categorias que sejam folhas.
      *
      * @param p produto que se pretende adicionar
      * @param c categoria a qual se pretende adicionar o produto
      * @return true - se a categoria for uma folha<p>
      */
-    public boolean adicionarProduto(Produto p, Categoria c) {
+    public boolean adicionarProduto(Produto p, Category c) {
 
         if (p == null || c == null) {
             throw new IllegalArgumentException("Os argumentos não podem ser null");
@@ -197,7 +197,7 @@ public class EstruturaMercadologica implements Serializable{
 
         if (isLeaf(node)) {
             //adicionar à categoria dentro da estrutura e não à parametrizada
-            return node.getElemento().adicionarProduto(p);
+            return node.getElemento().addProduct(p);
         }
 
         return false;
@@ -221,7 +221,7 @@ public class EstruturaMercadologica implements Serializable{
      * false - caso uma das ligacoes nao se verifique ou se uma das categorias
      * nao se encontrar na estrutura mercadologica
      */
-    public boolean verificaLigados(Categoria pai, Categoria filho) {
+    public boolean verificaLigados(Category pai, Category filho) {
 
         if (pai == null || filho == null) {
             throw new IllegalArgumentException("Os argumentos não podem ser null");

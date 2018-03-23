@@ -32,16 +32,16 @@ public class Template implements Serializable {
     @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL)
     private List<Question> listaQuestoes;
     /**
-     * Categoria do Template.
+     * Category do Template.
      */
-    private Categoria categoria;
+    private Category categoria;
     
     /**
      * Constrói uma instância de Template, recebendo por parâmetro os seus atributos.
      *
-     * @param categ Categoria do Template.
+     * @param categ Category do Template.
      */
-    public Template(Categoria categ) {
+    public Template(Category categ) {
         this.listaQuestoes = new LinkedList<>();
         this.categoria = categ;
     }
@@ -91,7 +91,7 @@ public class Template implements Serializable {
      *
      * @return a categoria do Template
      */
-    private Categoria getCategoria() {
+    private Category getCategoria() {
         return categoria;
     }
     /**
@@ -103,7 +103,7 @@ public class Template implements Serializable {
         return listaQuestoes;
     }
     /**
-     * Descreve o Template através da sua Categoria e lista de questoes.
+     * Descreve o Template através da sua Category e lista de questoes.
      *
      * @return a descrição textual do Template.
      */
