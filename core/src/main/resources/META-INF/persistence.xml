@@ -2,7 +2,6 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="cdioil-2017-g003_Core_PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>cdioil.domain.Avaliacao</class>
     <class>cdioil.domain.Inquerito</class>
     <class>cdioil.domain.Categoria</class>
     <class>cdioil.domain.Produto</class>
@@ -10,7 +9,6 @@
     <class>cdioil.domain.CodigoQR</class>
     <class>cdioil.domain.EAN</class>
     <class>cdioil.domain.authz.Admin</class>
-    <class>cdioil.domain.authz.Perfil</class>
     <class>cdioil.domain.authz.SystemUser</class>
     <class>cdioil.domain.authz.Gestor</class>
     <class>cdioil.domain.authz.UserRegistado</class>
@@ -18,6 +16,8 @@
     <class>cdioil.domain.Concurso</class>
     <class>cdioil.domain.EstruturaMercadologica</class>
     <class>cdioil.domain.Node</class>
+    <class>cdioil.domain.Review</class>
+    <class>cdioil.domain.authz.Profile</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
