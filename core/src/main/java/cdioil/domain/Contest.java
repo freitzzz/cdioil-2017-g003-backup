@@ -11,7 +11,7 @@ import javax.persistence.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class Contest implements Serializable, Evento {
+public class Contest extends Event implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -52,6 +52,7 @@ public class Contest implements Serializable, Evento {
      */
     public Contest(String description, UsersGroup users,
             Calendar beginDate, Calendar endDate) {
+        super(users);
         if (description == null) {
             throw new IllegalArgumentException("O concurso tem que ter uma "
                     + "descrição.");
@@ -82,7 +83,6 @@ public class Contest implements Serializable, Evento {
      *
      * @return the hash value
      */
-    @Override
     public int hashCode() {
         return description.hashCode();
     }
@@ -93,7 +93,6 @@ public class Contest implements Serializable, Evento {
      * @param object Object to compare
      * @return true, if the two Objects are equal. Otherwise, returns false
      */
-    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -110,7 +109,6 @@ public class Contest implements Serializable, Evento {
      *
      * @return description of the Constest
      */
-    @Override
     public String toString() {
         return description;
     }
@@ -120,19 +118,7 @@ public class Contest implements Serializable, Evento {
      *
      * @return the information of the constest with a String
      */
-    @Override
     public String info() {
         return toString();
     }
-
-    /**
-     * Returns the group of users for whom the Constest is.
-     *
-     * @return group of users
-     */
-    @Override
-    public UsersGroup publicoAlvo() {
-        return users;
-    }
-
 }

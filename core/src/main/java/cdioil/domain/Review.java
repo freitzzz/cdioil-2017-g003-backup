@@ -34,6 +34,9 @@ public class Review implements Serializable {
     /**
      * product subject to review
      */
+    @OneToOne
+
+    private Survey inquiry;
     private Product product;
 
     /**

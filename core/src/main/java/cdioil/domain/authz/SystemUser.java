@@ -17,14 +17,20 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * Serialization number.
      */
     private static final long serialVersionUID = 1L;
-    @Id
     @Version
     private Long version;
+    /**
+     * ID of the SystemUser for JPA.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     /**
      * User's email.
      */
     @Embedded
+    @Column(unique = true)
     private Email email;
     /**
      * User's name.
@@ -45,6 +51,9 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * @param password user's password
      */
     public SystemUser(Email email, Name nome, Password password) {
+         if (email == null) {
+            throw new IllegalArgumentException("O email não pode ser vazio.");
+        }
         this.email = email;
         this.nome = nome;
         this.password = password;

@@ -16,7 +16,7 @@ import javax.persistence.InheritanceType;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question<T> implements Serializable, ValueObject{
+public abstract class Question<T> implements Serializable, ValueObject {
 
     /**
      * Serialization code.
@@ -49,6 +49,7 @@ public abstract class Question<T> implements Serializable, ValueObject{
 
     /**
      * Return the question's type.
+     *
      * @return question's type enum value
      */
     public String type() {
@@ -64,6 +65,11 @@ public abstract class Question<T> implements Serializable, ValueObject{
         return content;
     }
 
+    /**
+     * Returns an hash value based on the attributes and class type.
+     *
+     * @return hash value
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -73,6 +79,12 @@ public abstract class Question<T> implements Serializable, ValueObject{
         return hash;
     }
 
+    /**
+     * Verifies object equality based on the Question's attributes and class type.
+     *
+     * @param obj object to be compared to
+     * @return true if the objects are truly equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -93,8 +105,5 @@ public abstract class Question<T> implements Serializable, ValueObject{
         }
         return true;
     }
-    
-    
-    
 
 }

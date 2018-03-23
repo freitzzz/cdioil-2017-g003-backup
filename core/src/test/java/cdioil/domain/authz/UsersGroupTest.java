@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain.authz;
 
 import cdioil.domain.QRCode;
@@ -38,7 +33,7 @@ public class UsersGroupTest {
 
     @Before
     public void setUp() {
-        this.gu = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        this.gu = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
     }
 
@@ -96,8 +91,8 @@ public class UsersGroupTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        UsersGroup oth = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
-                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
+        UsersGroup oth = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), 
+                new Name("Quim","Barreiros"),new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         assertEquals("Deveriam ser iguais", oth.toString(), gu.toString());
     }
 
@@ -107,7 +102,7 @@ public class UsersGroupTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        UsersGroup oth = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        UsersGroup oth = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         assertEquals("Deveriam ser iguais", oth.hashCode(), gu.hashCode());
     }

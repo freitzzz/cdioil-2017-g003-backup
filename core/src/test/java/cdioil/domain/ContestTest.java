@@ -1,7 +1,7 @@
 package cdioil.domain;
 
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
@@ -26,7 +26,7 @@ public class ContestTest {
     @Before
     public void setUp() {
         description = "Concurso Teste";
-        gu = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        gu = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         beginDate = Calendar.getInstance();
         endDate = Calendar.getInstance();
@@ -106,14 +106,14 @@ public class ContestTest {
     }
 
     /**
-     * Test of publicoAlvo method, of class Constest.
+     * Test of targetAudience method, of class Concurso.
      */
     @Test
-    public void testPublicoAlvo() {
-        System.out.println("publicoAlvo");
+    public void testTargetAudience() {
+        System.out.println("targetAudience");
         Contest instance = createContest(description, gu, beginDate, endDate);
         UsersGroup expResult = gu;
-        UsersGroup result = instance.publicoAlvo();
+        UsersGroup result = instance.targetAudience();
         assertEquals(expResult, result);
     }
 

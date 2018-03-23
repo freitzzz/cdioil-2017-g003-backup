@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.domain.ValueObject;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,12 +12,9 @@ import javax.persistence.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Embeddable
-public class Name implements Serializable {
+public class Name implements Serializable, ValueObject {
 
     private static final long serialVersionUID = 1L;
-
-    @Version
-    private Long version;
 
     /**
      * Regex for a valid name.

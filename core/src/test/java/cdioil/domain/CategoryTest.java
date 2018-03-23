@@ -37,7 +37,7 @@ public class CategoryTest {
 
     @Before
     public void setUp() {
-        c = new Category("CategoriaTeste", "100CAT");
+        c = new Category("CategoriaTeste", "100CAT", "10DC-10UN-100CAT");
     }
 
     @After
@@ -61,7 +61,7 @@ public class CategoryTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDescritivoSemNumerosFalha() {
-        c = new Category("CategoriaInvalida", "DC");
+        c = new Category("CategoriaInvalida", "DC", "10DC");
     }
 
     /**
@@ -69,7 +69,7 @@ public class CategoryTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDescritivoSemSufixoFalha() {
-        c = new Category("CategoriaInvalida", "10");
+        c = new Category("CategoriaInvalida", "10", "10DC");
     }
 
     /**
@@ -77,7 +77,7 @@ public class CategoryTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDescritivoNullFalha() {
-        c = new Category("CategoriaInvalida", null);
+        c = new Category("CategoriaInvalida", null, "10DC");
     }
 
     /**
@@ -85,7 +85,7 @@ public class CategoryTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDesignacaoVaziaFalha() {
-        c = new Category("    ", "10DC");
+        c = new Category("    ", "10DC", "10DC");
     }
 
     /**
@@ -93,7 +93,7 @@ public class CategoryTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDesignacaoNullFalha() {
-        c = new Category(null, "10DC");
+        c = new Category(null, "10DC", "10DC");
     }
 
     /**
@@ -103,7 +103,7 @@ public class CategoryTest {
     public void testToString() {
         System.out.println("toString");
 
-        Category oth = new Category("CategoriaTeste", "100CAT");
+        Category oth = new Category("CategoriaTeste", "100CAT", "10DC-10UN-100CAT");
 
         assertEquals("As descrições são iguais", oth.toString(), c.toString());
     }
@@ -115,7 +115,7 @@ public class CategoryTest {
     public void testHashCode() {
         System.out.println("hashCode");
 
-        Category oth = new Category("CategoriaTeste", "100CAT");
+        Category oth = new Category("CategoriaTeste", "100CAT", "10DC-10UN-100CAT");
 
         assertEquals("Hash codes iguais", oth.hashCode(), c.hashCode());
     }
@@ -128,9 +128,7 @@ public class CategoryTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, c);
         assertNotEquals("Instância de outra classe não é igual", new QRCode("12"), c);
-        assertNotEquals("Instância de Categoria diferente", new Category("OutraCategoria", "102SCAT"), c);
-        assertNotEquals("Instância de Categoria igual", new Category("NomeDiferenteMesmoDescritor", "100CAT"), c);
-        assertNotEquals("Instância de Categoria igual", new Category("CategoriaTeste", "101CAT"), c);
-        assertEquals("Instância de Categoria igual", new Category("CategoriaTeste", "100CAT"), c);
+        assertNotEquals("Instância de Categoria diferente", new Category("OutraCategoria", "102SCAT", "10DC-10UN-100CAT-102SCAT"), c);
+        assertEquals("Instância de Categoria igual", new Category("CategoriaTeste", "100CAT", "10DC-10UN-100CAT"), c);
     }
 }

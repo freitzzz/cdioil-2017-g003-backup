@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this t file, choose Tools | Templates
- * and open the t in the editor.
- */
 package cdioil.domain;
 
 import java.util.Calendar;
@@ -25,6 +20,10 @@ import org.junit.Test;
  */
 public class TemplateTest {
 
+    Category cat = new Category("Pai", "10DC", "10DC");
+    Calendar data = Calendar.getInstance();
+    List<Question> listaQuestoes = new LinkedList<>();
+    List<Survey> listaInqueritos = new LinkedList<>();
     /**
      * Instance of Category for test purposes.
      */
@@ -46,9 +45,9 @@ public class TemplateTest {
     List<Question> questions;
 
     /**
-     * List of Questions for test purposes.
+     * List of Surveys for test purposes.
      */
-    List<Inquerito> surveys;
+    List<Survey> surveys;
 
     public TemplateTest() {
     }
@@ -63,7 +62,7 @@ public class TemplateTest {
 
     @Before
     public void setUp() {
-        c = new Category("Pai", "10DC");
+        c = new Category("Pai", "10DC","10DC");
         date = Calendar.getInstance();
         questions = new LinkedList<>();
         surveys = new LinkedList<>();
