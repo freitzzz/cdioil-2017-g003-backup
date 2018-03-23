@@ -12,9 +12,8 @@ import javax.persistence.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class Concurso implements Serializable, Evento {
+public class Concurso extends Event implements Serializable{
 
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -135,7 +134,7 @@ public class Concurso implements Serializable, Evento {
      * @return grupo de utilizadores
      */
     @Override
-    public GrupoUtilizadores publicoAlvo() {
+    public GrupoUtilizadores targetAudience() {
         return publicoAlvo;
     }
 

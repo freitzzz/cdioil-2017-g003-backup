@@ -21,7 +21,7 @@ public class ReviewTest {
 
     @Before
     public void setUp() {
-        instance = new Review("ding dong your opinion is wrong", new Inquerito());
+        instance = new Review("ding dong your opinion is wrong", new Survey());
     }
 
     /**
@@ -31,13 +31,13 @@ public class ReviewTest {
     public void testeEquals() {
         System.out.println("equals");
         //teste com objetos que não são instâncias deAvaliacao
-        assertFalse(instance.equals(new Inquerito()));
+        assertFalse(instance.equals(new Survey()));
         //teste com null
         assertFalse(instance.equals(null));
         //teste com a mesma instância
         assertTrue(instance.equals(instance));
         //teste com instâncias diferentes com a mesma informação mas ID diferente
-        Review av = new Review("ding dong your opinion is wrong", new Inquerito());
+        Review av = new Review("ding dong your opinion is wrong", new Survey());
         assertFalse(instance.equals(av));
 
     }*/

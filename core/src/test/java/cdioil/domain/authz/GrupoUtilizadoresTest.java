@@ -38,7 +38,7 @@ public class GrupoUtilizadoresTest {
 
     @Before
     public void setUp() {
-        this.gu = new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        this.gu = new GrupoUtilizadores(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
     }
 
@@ -96,7 +96,7 @@ public class GrupoUtilizadoresTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        GrupoUtilizadores guOutro=new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        GrupoUtilizadores guOutro=new GrupoUtilizadores(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         assertEquals("Deveriam ser iguais",guOutro.toString(), gu.toString());
     }

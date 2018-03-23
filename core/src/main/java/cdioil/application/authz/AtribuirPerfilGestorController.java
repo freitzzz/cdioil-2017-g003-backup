@@ -2,7 +2,7 @@ package cdioil.application.authz;
 
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.GestorRepositoryImpl;
@@ -48,8 +48,8 @@ public class AtribuirPerfilGestorController {
                 (List<SystemUser>) systemUserRepository.findAll();
 
         // Lista de gestores
-        List<Gestor> gestores =
-                (List<Gestor>) gestorRepository.findAll();
+        List<Manager> gestores =
+                (List<Manager>) gestorRepository.findAll();
 
         // Lista de admins
         List<Admin> admins =
@@ -70,7 +70,7 @@ public class AtribuirPerfilGestorController {
     }
 
     /**
-     * Através de um dado email, cria um Gestor com o SystemUser associado
+     * Através de um dado email, cria um Manager com o SystemUser associado
      * @param email email do SystemUser pretendido
      */
     public void atribuirGestor(String email) {
@@ -78,8 +78,8 @@ public class AtribuirPerfilGestorController {
         Email e = new Email(email);
         SystemUser su = systemUserRepository.findByEmail(e);
 
-        // Adicionar Gestor
-        Gestor g = new Gestor(su);
+        // Adicionar Manager
+        Manager g = new Manager(su);
 
         // Persiste
         gestorRepository.add(g);

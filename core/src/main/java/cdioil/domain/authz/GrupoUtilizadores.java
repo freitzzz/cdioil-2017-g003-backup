@@ -24,9 +24,9 @@ public class GrupoUtilizadores implements Serializable {
     private int id;
 
     /**
-     * Gestor que criou o grupo.
+     * Manager que criou o grupo.
      */
-    private Gestor g;
+    private Manager g;
 
     /**
      * Lista com os utilizadores do grupo.
@@ -35,11 +35,11 @@ public class GrupoUtilizadores implements Serializable {
     private List<UserRegistado> users;
 
     /**
-     * Constrói uma instância de GrupoUtilizadores, recebendo o Gestor que o criou.
+     * Constrói uma instância de GrupoUtilizadores, recebendo o Manager que o criou.
      *
-     * @param g Gestor que criou o GrupoUtilizadores
+     * @param g Manager que criou o GrupoUtilizadores
      */
-    public GrupoUtilizadores(Gestor g) {
+    public GrupoUtilizadores(Manager g) {
         if (!isGestorValido(g)) {
             this.g = g;
             this.users = new LinkedList<>();
@@ -55,12 +55,12 @@ public class GrupoUtilizadores implements Serializable {
     }
 
     /**
-     * Verifica se um Gestor é válido.
+     * Verifica se um Manager é válido.
      *
-     * @param g Gestor a verificar
+     * @param g Manager a verificar
      * @return true, caso o gestor seja válido. Caso contrário, retorna false
      */
-    public boolean isGestorValido(Gestor g) {
+    public boolean isGestorValido(Manager g) {
         return g == null;
     }
 

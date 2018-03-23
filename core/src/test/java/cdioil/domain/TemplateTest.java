@@ -6,7 +6,7 @@
 package cdioil.domain;
 
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.GrupoUtilizadores;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
@@ -30,7 +30,7 @@ public class TemplateTest {
     Category cat = new Category("Pai", "10DC");
     Calendar data = Calendar.getInstance();
     List<Question> listaQuestoes = new LinkedList<>();
-    List<Inquerito> listaInqueritos = new LinkedList<>();
+    List<Survey> listaInqueritos = new LinkedList<>();
 
     /**
      * Instância de Template para testes.

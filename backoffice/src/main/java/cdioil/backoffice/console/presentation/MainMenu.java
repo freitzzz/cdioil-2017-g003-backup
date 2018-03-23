@@ -2,7 +2,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.console.utils.Console;
 import cdioil.domain.authz.Admin;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 
 /**
  * Interface GrÃ¡fica do Back Office
@@ -19,7 +19,7 @@ public class MainMenu {
 //        System.out.println("=============================");
 //        System.out.println("        Back Office");
 //        System.out.println("=============================");
-//        System.out.println("1. Atribuir Perfil de Gestor");
+//        System.out.println("1. Atribuir Perfil de Manager");
 //        System.out.println("2. Adicionar Dominios/SubdomÃ­nios Autorizados");
 //        System.out.println("3. Importar Lista de Utilizadores");
 //        System.out.println("4. Listar Todos os Utilizadores");
@@ -111,7 +111,7 @@ public class MainMenu {
         } while (opcao != 0);
     }
 
-    public static void mainLoopGestor(Gestor gestor) {
+    public static void mainLoopGestor(Manager gestor) {
         int opcao = 0;
         do {
             opcao = menuGestor();

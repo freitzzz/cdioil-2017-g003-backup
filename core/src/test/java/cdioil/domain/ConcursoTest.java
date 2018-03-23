@@ -1,7 +1,7 @@
 package cdioil.domain;
 
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.GrupoUtilizadores;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
@@ -26,7 +26,7 @@ public class ConcursoTest {
     @Before
     public void setUp() {
         descricao = "Concurso Teste";
-        gu = new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        gu = new GrupoUtilizadores(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         dataInicio = Calendar.getInstance();
         dataFim = Calendar.getInstance();
@@ -106,14 +106,14 @@ public class ConcursoTest {
     }
 
     /**
-     * Test of publicoAlvo method, of class Concurso.
+     * Test of targetAudience method, of class Concurso.
      */
     @Test
     public void testPublicoAlvo() {
         System.out.println("publicoAlvo");
         Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
         GrupoUtilizadores expResult = gu;
-        GrupoUtilizadores result = instance.publicoAlvo();
+        GrupoUtilizadores result = instance.targetAudience();
         assertEquals(expResult, result);
     }
 

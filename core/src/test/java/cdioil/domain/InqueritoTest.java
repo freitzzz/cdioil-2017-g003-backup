@@ -6,7 +6,7 @@
 package cdioil.domain;
 
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Gestor;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.GrupoUtilizadores;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
@@ -21,16 +21,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe Inquerito.
+ * Unit testing for class Survey.
  *
  * @author Rita Gonçalves (1160912)
  */
 public class InqueritoTest {
 
     /**
-     * Instância de Inquérito para testes.
+     * Data for testing
      */
-    Inquerito i;
+    Survey i;
     GrupoUtilizadores gu;
     Calendar data;
 
@@ -48,10 +48,10 @@ public class InqueritoTest {
     @Before
     public void setUp() {
         
-        gu = new GrupoUtilizadores((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        gu = new GrupoUtilizadores((new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
         data = Calendar.getInstance();
-        this.i = new Inquerito(new Produto("UmProduto", new EAN("73292")), data, gu);
+        this.i = new Survey(new Produto("UmProduto", new EAN("73292")), data, gu);
     }
 
     @After
@@ -59,30 +59,30 @@ public class InqueritoTest {
     }
 
     /**
-     * Teste do método hashCode, da classe Inquerito.
+     * Test of method hashCode, of class Survey.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Inquerito outro = new Inquerito(new Produto("UmProduto", new EAN("73292")), data, gu);
+        Survey outro = new Survey(new Produto("UmProduto", new EAN("73292")), data, gu);
         
         assertEquals(i.hashCode(), outro.hashCode());
     }
 
     /**
-     * Teste do método equals, da classe Inquerito.
+     * Test of method equals, of class Survey.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
         assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), i);
-        assertNotEquals("Instância de Inquerito diferente", new Inquerito(new Produto("OutroProduto", new EAN("123")), data, gu), i);
-        assertEquals("Instância de Inquerito igual", new Inquerito(new Produto("UmProduto", new EAN("73292")), data, gu), i);
+        assertNotEquals("Instância de Inquerito diferente", new Survey(new Produto("OutroProduto", new EAN("123")), data, gu), i);
+        assertEquals("Instância de Inquerito igual", new Survey(new Produto("UmProduto", new EAN("73292")), data, gu), i);
     }
 
     /**
-     * Teste do método toString, da classe Inquerito.
+     * Test of method toString, of class Survey.
      */
     @Test
     public void testToString() {
@@ -94,44 +94,44 @@ public class InqueritoTest {
     }
 
     /**
-     * Teste do método adicionarQuestao, da classe Inquerito.
+     * Test of method addQuestion, of class Survey.
      */
     @Test
-    public void testAdicionarQuestao() {
-        System.out.println("adicionarQuestao");
+    public void testAddQuestion() {
+        System.out.println("addQuestion");
         Question q = new BinaryQuestion("QuestaoTeste");
-        assertTrue("Deveria ser possível adicionar", i.adicionarQuestao(q));
-        i.adicionarQuestao(q);
-        assertFalse("Questão null", i.adicionarQuestao(null));
-        assertFalse("Questão já existente", i.adicionarQuestao(q));
+        assertTrue("Deveria ser possível adicionar", i.addQuestion(q));
+        i.addQuestion(q);
+        assertFalse("Questão null", i.addQuestion(null));
+        assertFalse("Questão já existente", i.addQuestion(q));
     }
 
     /**
-     * Teste do método removerQuestao, da classe Inquerito.
+     * Test of method removeQuestion, of class Survey.
      */
     @Test
-    public void testarRemoverQuestao() {
-        System.out.println("removerQuestao");
+    public void testRemoveQuestion() {
+        System.out.println("removeQuestion");
         Question q = new BinaryQuestion("QuestaoTeste");
-        i.adicionarQuestao(q);
-        assertTrue("Deveria ser possível remover", i.removerQuestao(q));
-        i.removerQuestao(q);
-        assertFalse("Questão null", i.removerQuestao(null));
-        assertFalse("Questão não existente", i.removerQuestao(q));
+        i.addQuestion(q);
+        assertTrue("Deveria ser possível remover", i.removeQuestion(q));
+        i.removeQuestion(q);
+        assertFalse("Questão null", i.removeQuestion(null));
+        assertFalse("Questão não existente", i.removeQuestion(q));
     }
 
     /**
-     * Teste do método isQuestaoValida, da classe Inquerito.
+     * Test of method isValidQuestion, of class Survey.
      */
     @Test
-    public void testarIsQuestaoValida() {
-        System.out.println("isQuestaoValida");
+    public void testIsValidQuestion() {
+        System.out.println("isValidQuestion");
         Question q = new BinaryQuestion("QuestaoTeste");
-        i.adicionarQuestao(q);
-        assertTrue("Deveria ser válida", i.isQuestaoValida(q));
-        i.removerQuestao(q);
-        assertFalse("Questão null", i.isQuestaoValida(null));
-        assertFalse("Questão não existente", i.isQuestaoValida(q));
+        i.addQuestion(q);
+        assertTrue("Deveria ser válida", i.isValidQuestion(q));
+        i.removeQuestion(q);
+        assertFalse("Questão null", i.isValidQuestion(null));
+        assertFalse("Questão não existente", i.isValidQuestion(q));
     }
 
     /**
@@ -140,7 +140,7 @@ public class InqueritoTest {
     @Test
     public void testInfo() {
         System.out.println("info");
-        Inquerito inquerito = new Inquerito(new Produto("Teste", new EAN("123456789")), data, gu);
+        Survey inquerito = new Survey(new Produto("Teste", new EAN("123456789")), data, gu);
         String expResult = "Inquerito sobre o produto:\n" + (new Produto("Teste", new EAN("123456789"))).toString()
                 + "\nData:\n" + data;
         String result = inquerito.info();
@@ -148,14 +148,14 @@ public class InqueritoTest {
     }
 
     /**
-     * Test of publicoAlvo method, of class Inquerito.
+     * Test of targetAudience method, of class Survey.
      */
     @Test
-    public void testPublicoAlvo() {
-        System.out.println("publicoAlvo");
-        Inquerito inquerito = new Inquerito(new Produto("Teste", new EAN("123456789")), data, gu);
+    public void testTargetAudience() {
+        System.out.println("targetAudience");
+        Survey inquerito = new Survey(new Produto("Teste", new EAN("123456789")), data, gu);
         GrupoUtilizadores expResult = gu;
-        GrupoUtilizadores result = inquerito.publicoAlvo();
+        GrupoUtilizadores result = inquerito.targetAudience();
         assertEquals(expResult, result);
     }
 

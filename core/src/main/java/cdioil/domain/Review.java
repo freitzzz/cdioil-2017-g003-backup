@@ -35,7 +35,7 @@ public class Review implements Serializable {
      * Inquérito correspondente à avaliação
      */
     @OneToOne
-    private Inquerito inquiry;
+    private Survey inquiry;
 
     /**
      * Empty constructor of class Review
@@ -49,7 +49,7 @@ public class Review implements Serializable {
      * @param opinion user's opinion
      * @param inquiry review's corresponding inquiry
      */
-    public Review(String opinion, Inquerito inquiry) {
+    public Review(String opinion, Survey inquiry) {
         this.opinion = opinion;
         this.inquiry = inquiry;
     }
