@@ -15,32 +15,11 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "QUESTION"))
-public class BinaryQuestion implements Serializable, Question {
-
-    /**
-     * Serialization code.
-     */
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    /**
-     * Database id.
-     */
-    private Long id;
-
-    /**
-     * Question text.
-     */
-    private String question;
-
-    /**
-     * Question type.
-     */
-    private final QuestionAnswerTypes type = QuestionAnswerTypes.BINARY;
-
+public class BinaryQuestion extends Question<String> {
+    
     /**
      * Builds an instance of BinaryQuestion receiving a question.
+     *
      * @param question text of the question
      */
     public BinaryQuestion(String question) {
@@ -48,60 +27,8 @@ public class BinaryQuestion implements Serializable, Question {
             throw new IllegalArgumentException("O conteúdo da questão não "
                     + "pode ser vazio.");
         }
-        this.question = question;
 
+        this.content = question;
+        this.type = QuestionAnswerTypes.BINARY;
     }
-
-    protected BinaryQuestion() {
-        //For ORM
-    }
-
-    /**
-     * Hash code of BinaryQuestion.
-     *
-     * @return hash code
-     */
-    @Override
-    public int hashCode() {
-        return question.hashCode();
-    }
-
-    /**
-     * Verifies if two instances of BinaryQuestion are the same.
-     *
-     * @param obj instance to be compared
-     * @return true if they have the same question, false if they don't.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof BinaryQuestion)) {
-            return false;
-        }
-        final BinaryQuestion other = (BinaryQuestion) obj;
-        return this.question.equals(other.question);
-    }
-
-    /**
-     * Returns the content of the question
-     *
-     * @return string with the text of the question
-     */
-    @Override
-    public String content() {
-        return question;
-    }
-
-    /**
-     * Returns the type of the question
-     *
-     * @return string with the question type
-     */
-    @Override
-    public String type() {
-        return type.toString();
-    }
-
 }
