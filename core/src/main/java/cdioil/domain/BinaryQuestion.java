@@ -10,7 +10,6 @@ import javax.persistence.UniqueConstraint;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "QUESTION"))
 public class BinaryQuestion extends Question<String> {
 
     /**
