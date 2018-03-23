@@ -106,12 +106,12 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * Changes a property of a SystemUser (email, name or password)
      *
      * @param newField info given by the user
-     * @param option integer that indicates which property is going to be 
+     * @param option integer that indicates which property is going to be
      * updated
-     * @return true if the update was successful, false if the new info
-     * was not valid
+     * @return true if the update was successful, false if the new info was not
+     * valid
      */
-    public boolean alterarCampoInformacao(String newField, int option) {
+    public boolean changeUserDatafield(String newField, int option) {
         try {
             switch (option) {
                 case 1://changes the user's name
@@ -140,6 +140,7 @@ public class SystemUser implements Serializable, Identifiable<Email> {
 
     /**
      * Returns the user's ID (email)
+     *
      * @return email
      */
     @Override
