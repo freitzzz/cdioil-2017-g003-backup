@@ -31,7 +31,7 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_CATEGORIA", nullable = false, updatable = false)
+    @Column(name = "ID_CATEGORY", nullable = false, updatable = false)
     /**
      * ID of the Category for JPA.
      */

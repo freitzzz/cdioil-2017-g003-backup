@@ -9,18 +9,18 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe QRCode.
+ * Tests of class QRCode.
  *
  * @author Rita Gonçalves (1160912)
  */
-public class CodigoQRTest {
+public class QRCodeTest {
 
     /**
-     * Instância de QRCode para testes.
+     * Instance of QRCode for testing purposes.
      */
     QRCode c;
 
-    public CodigoQRTest() {
+    public QRCodeTest() {
     }
 
     @Before
@@ -29,7 +29,7 @@ public class CodigoQRTest {
     }
 
     /**
-     * Teste do método toString, da classe QRCode.
+     * Test of toString method, of class QRCode.
      */
     @Test
     public void testToString() {
@@ -50,7 +50,7 @@ public class CodigoQRTest {
     }
 
     /**
-     * Teste do método hashCode, da classe QRCode.
+     * Test of hashCode method, of class QRCode
      */
     @Test
     public void testHashCode() {
@@ -71,7 +71,7 @@ public class CodigoQRTest {
     }
 
     /**
-     * Teste do método equals, da classe QRCode.
+     * Test of equals method, of class QRCode
      */
     @Test
     public void testEquals() {
