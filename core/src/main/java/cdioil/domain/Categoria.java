@@ -34,7 +34,6 @@ public class Categoria implements Serializable {
     /**
      * Identificador da Categoria (descritivo + sufixo).
      */
-    @Column(unique = true)
     String descritivo;
 
     /**
