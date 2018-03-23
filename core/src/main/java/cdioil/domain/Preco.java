@@ -13,7 +13,7 @@ import javax.persistence.Embeddable;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Embeddable
-public class Preco implements Serializable {
+public class Preco implements Serializable,ValueObject {
 
     /**
      * Constante que representa a mensagem que caracteriza um preço inválido

@@ -12,7 +12,7 @@ import javax.persistence.Lob;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Embeddable
-public class Imagem implements Serializable {
+public class Imagem implements Serializable,ValueObject {
     /**
      * Constante que representa a mensagem de erro a quando a criação de uma imagem 
      * inválida
