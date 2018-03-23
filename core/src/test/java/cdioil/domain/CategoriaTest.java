@@ -22,7 +22,7 @@ public class CategoriaTest {
     /**
      * Instância de Categoria para testes.
      */
-    Categoria c;
+    Category c;
 
     public CategoriaTest() {
     }
@@ -37,7 +37,7 @@ public class CategoriaTest {
 
     @Before
     public void setUp() {
-        c = new Categoria("CategoriaTeste", "100CAT");
+        c = new Category("CategoriaTeste", "100CAT");
     }
 
     @After
@@ -50,7 +50,7 @@ public class CategoriaTest {
     @Test
     public void testAdicionarProduto() {
         System.out.println("adicionarProduto");
-        Produto p = new Produto("ProdutoTeste", new EAN("5434"));
+        Product p = new Product("ProdutoTeste", new EAN("5434"));
         assertTrue("Produto pode ser adicionado", c.adicionarProduto(p));
         c.adicionarProduto(p);
         assertFalse("Produto já existente no Set", c.adicionarProduto(p));
@@ -61,7 +61,7 @@ public class CategoriaTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDescritivoSemNumerosFalha() {
-        c = new Categoria("CategoriaInvalida", "DC");
+        c = new Category("CategoriaInvalida", "DC");
     }
 
     /**
@@ -69,7 +69,7 @@ public class CategoriaTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDescritivoSemSufixoFalha() {
-        c = new Categoria("CategoriaInvalida", "10");
+        c = new Category("CategoriaInvalida", "10");
     }
 
     /**
@@ -77,7 +77,7 @@ public class CategoriaTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDescritivoNullFalha() {
-        c = new Categoria("CategoriaInvalida", null);
+        c = new Category("CategoriaInvalida", null);
     }
 
     /**
@@ -85,7 +85,7 @@ public class CategoriaTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDesignacaoVaziaFalha() {
-        c = new Categoria("    ", "10DC");
+        c = new Category("    ", "10DC");
     }
 
     /**
@@ -93,7 +93,7 @@ public class CategoriaTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testDesignacaoNullFalha() {
-        c = new Categoria(null, "10DC");
+        c = new Category(null, "10DC");
     }
 
     /**
@@ -103,7 +103,7 @@ public class CategoriaTest {
     public void testToString() {
         System.out.println("toString");
         
-        Categoria outra = new Categoria("CategoriaTeste", "100CAT");
+        Category outra = new Category("CategoriaTeste", "100CAT");
         
         assertEquals("As descrições são iguais", outra.toString(), c.toString());
     }
@@ -115,7 +115,7 @@ public class CategoriaTest {
     public void testHashCode() {
         System.out.println("hashCode");
         
-        Categoria outra = new Categoria("CategoriaTeste", "100CAT");
+        Category outra = new Category("CategoriaTeste", "100CAT");
         
         assertEquals("Hash codes iguais", outra.hashCode(), c.hashCode());
     }
@@ -128,10 +128,10 @@ public class CategoriaTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, c);
         assertNotEquals("Instância de outra classe não é igual", new CodigoQR("12"), c);
-        assertNotEquals("Instância de Categoria diferente", new Categoria("OutraCategoria", "102SCAT"), c);
-        assertNotEquals("Instância de Categoria igual", new Categoria("NomeDiferenteMesmoDescritor", "100CAT"), c);
-        assertNotEquals("Instância de Categoria igual", new Categoria("CategoriaTeste", "101CAT"), c);
-        assertEquals("Instância de Categoria igual", new Categoria("CategoriaTeste", "100CAT"), c);
+        assertNotEquals("Instância de Categoria diferente", new Category("OutraCategoria", "102SCAT"), c);
+        assertNotEquals("Instância de Categoria igual", new Category("NomeDiferenteMesmoDescritor", "100CAT"), c);
+        assertNotEquals("Instância de Categoria igual", new Category("CategoriaTeste", "101CAT"), c);
+        assertEquals("Instância de Categoria igual", new Category("CategoriaTeste", "100CAT"), c);
     }
 
 }

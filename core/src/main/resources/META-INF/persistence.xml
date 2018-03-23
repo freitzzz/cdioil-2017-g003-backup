@@ -4,10 +4,6 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>cdioil.domain.Avaliacao</class>
     <class>cdioil.domain.Inquerito</class>
-    <class>cdioil.domain.Categoria</class>
-    <class>cdioil.domain.Produto</class>
-    <class>cdioil.domain.Codigo</class>
-    <class>cdioil.domain.CodigoQR</class>
     <class>cdioil.domain.EAN</class>
     <class>cdioil.domain.authz.Admin</class>
     <class>cdioil.domain.authz.Perfil</class>
@@ -16,8 +12,12 @@
     <class>cdioil.domain.authz.UserRegistado</class>
     <class>cdioil.domain.authz.Whitelist</class>
     <class>cdioil.domain.Concurso</class>
-    <class>cdioil.domain.EstruturaMercadologica</class>
     <class>cdioil.domain.Node</class>
+    <class>cdioil.domain.Code</class>
+    <class>cdioil.domain.CodigoQR</class>
+    <class>cdioil.domain.EstruturaMercadologica</class>
+    <class>cdioil.domain.Category</class>
+    <class>cdioil.domain.Product</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
