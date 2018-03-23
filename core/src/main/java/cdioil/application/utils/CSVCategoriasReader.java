@@ -5,7 +5,7 @@
  */
 package cdioil.application.utils;
 
-import cdioil.domain.Categoria;
+import cdioil.domain.Category;
 import cdioil.domain.EstruturaMercadologica;
 import java.io.File;
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ import cdioil.persistence.impl.MarketStructureRepositoryImpl;
  *
  * @author Rita Gonçalves (1160912)
  */
-public class CSVCategoriasReader implements CategoriasReader {
+public class CSVCategoriasReader implements CategoriesReader {
 
     /**
      * File com o ficheiro a ler.
@@ -57,7 +57,7 @@ public class CSVCategoriasReader implements CategoriasReader {
      * @return Lista com as Categorias lidas. Null caso o ficheiro seja inválido
      */
     @Override
-    public List<Categoria> lerFicheiro() {
+    public List<Category> lerFicheiro() {
         List<String> conteudoFicheiro = readFile(file);
 
         if (!isFicheiroValido(conteudoFicheiro)) {
@@ -66,7 +66,7 @@ public class CSVCategoriasReader implements CategoriasReader {
 
         MarketStructureRepositoryImpl repo = new MarketStructureRepositoryImpl();
         
-        List<Categoria> categorias = new LinkedList<>();
+        List<Category> categorias = new LinkedList<>();
 
         EstruturaMercadologica em = new EstruturaMercadologica();
         
@@ -78,35 +78,35 @@ public class CSVCategoriasReader implements CategoriasReader {
                 /*Os identificadores das categorias têm de ser compostos pelo 
                 identificador da categoria pai de modo a evitar colisões quando 
                 se adiciona novas categorias.*/
-                    Categoria pai = new Categoria(line[1].toLowerCase(), line[0] + Categoria.Sufixos.SUFIXO_DC);
+                    Category pai = new Category(line[1].toLowerCase(), line[0] + Category.Sufixes.SUFIX_DC);
                     boolean added = em.adicionarCategoriaRaiz(pai);
                     if (added) {
                         categorias.add(pai);
                     }
 
-                    Categoria filha1 = new Categoria(line[3].toLowerCase(), line[2]
-                            + Categoria.Sufixos.SUFIXO_UN);
+                    Category filha1 = new Category(line[3].toLowerCase(), line[2]
+                            + Category.Sufixes.SUFIX_UN);
                     added = em.adicionarCategoria(pai, filha1);
                     if (added) {
                         categorias.add(filha1);
                     }
-
-                    Categoria filha2 = new Categoria(line[5].toLowerCase(), line[4]
-                            + Categoria.Sufixos.SUFIXO_CAT);
+                    
+                    Category filha2 = new Category(line[5].toLowerCase(), line[4]
+                            + Category.Sufixes.SUFIX_CAT);
                     added = em.adicionarCategoria(filha1, filha2);
                     if (added) {
                         categorias.add(filha2);
                     }
-
-                    Categoria filha3 = new Categoria(line[7].toLowerCase(), line[6]
-                            + Categoria.Sufixos.SUFIXO_SCAT);
+                    
+                    Category filha3 = new Category(line[7].toLowerCase(), line[6]
+                            + Category.Sufixes.SUFIX_SCAT);
                     added = em.adicionarCategoria(filha2, filha3);
                     if (added) {
                         categorias.add(filha3);
                     }
 
-                    Categoria filha4 = new Categoria(line[9].toLowerCase(), line[8]
-                            + Categoria.Sufixos.SUFIXO_UB);
+                    Category filha4 = new Category(line[9].toLowerCase(), line[8]
+                            + Category.Sufixes.SUFIX_UB);
                     added = em.adicionarCategoria(filha3, filha4);
                     if (added) {
                         categorias.add(filha4);

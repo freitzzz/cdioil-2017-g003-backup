@@ -15,13 +15,13 @@ import org.junit.Test;
  *
  * @author João
  */
-public class AvaliacaoTest {
+public class ReviewTest {
 
-    Avaliacao instance;
+    Review instance;
 
     @Before
     public void setUp() {
-        instance = new Avaliacao("ding dong your opinion is wrong", new Inquerito());
+        instance = new Review("ding dong your opinion is wrong", new Inquerito());
     }
 
     /**
@@ -37,16 +37,16 @@ public class AvaliacaoTest {
         //teste com a mesma instância
         assertTrue(instance.equals(instance));
         //teste com instâncias diferentes com a mesma informação mas ID diferente
-        Avaliacao av = new Avaliacao("ding dong your opinion is wrong", new Inquerito());
+        Review av = new Review("ding dong your opinion is wrong", new Inquerito());
         assertFalse(instance.equals(av));
 
     }*/
 
     /**
-     * Teste do método toString, da classe Avaliacao
+     * Test of toString method, of class Review
      */
     @Test
-    public void testeToString() {
+    public void testToString() {
         System.out.println("toString");
         String expected = "Avaliação:\nOpinião: ding dong your opinion is wrong";
         assertEquals(expected, instance.toString());

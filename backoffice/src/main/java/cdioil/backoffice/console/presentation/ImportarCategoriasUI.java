@@ -5,9 +5,9 @@
  */
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.ImportarCategoriasController;
+import cdioil.application.ImportCategoriesController;
 import cdioil.backoffice.console.utils.Console;
-import cdioil.domain.Categoria;
+import cdioil.domain.Category;
 import java.util.List;
 
 /**
@@ -54,13 +54,13 @@ public class ImportarCategoriasUI {
     /**
      * Controlador que controla a importação das categorias através de ficheiros.
      */
-    private final ImportarCategoriasController ctrl;
+    private final ImportCategoriesController ctrl;
 
     /**
      * Constrói uma nova User Interface que permite a interação entre o administrador e a importação de categorias através de ficheiros.
      */
     public ImportarCategoriasUI() {
-        ctrl = new ImportarCategoriasController();
+        ctrl = new ImportCategoriesController();
         importarCategorias();
     }
 
@@ -74,7 +74,7 @@ public class ImportarCategoriasUI {
             String filePath = Console.readLine(MENSAGEM_CAMINHO_FICHEIRO);
             if (filePath.equalsIgnoreCase(EXIT_CODE))return;
             
-            List<Categoria> categorias = ctrl.lerFicheiro(filePath);
+            List<Category> categorias = ctrl.readCategories(filePath);
             if (categorias == null) {
                 String opcao = Console.readLine(MENSAGEM_CAMINHO_FICHEIRO_NAO_ENCONTRADO);
                 if (opcao.equalsIgnoreCase(EXIT_CODE)) {

@@ -56,7 +56,7 @@ public class Node implements Serializable {
      * The element contained in this instance.
      */
     @OneToOne(cascade = {CascadeType.PERSIST})
-    private Categoria elemento;
+    private Category elemento;
 
     /**
      * Empty Constructor for JPA.
@@ -66,10 +66,11 @@ public class Node implements Serializable {
 
     /**
      * Instantiates a Node with a given parent Node and element.
+     *
      * @param pai
-     * @param elemento 
+     * @param elemento
      */
-    protected Node(Node pai, Categoria elemento) {
+    protected Node(Node pai, Category elemento) {
         this.pai = pai;
         this.elemento = elemento;
     }
@@ -84,11 +85,11 @@ public class Node implements Serializable {
     }
 
     /**
-     * Retorna a Categoria presente neste node.
+     * Retorna a Category presente neste node.
      *
      * @return a categoria contida no node
      */
-    public Categoria getElemento() {
+    public Category getElemento() {
         return elemento;
     }
 
@@ -117,11 +118,11 @@ public class Node implements Serializable {
     }
 
     /**
-     * Gera um índice a partir da Categoria do Node.
+     * Gera um índice a partir da Category do Node.
      *
      * @return o valor de hash gerado
      */
-    @Override    
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 97 * hash + Objects.hashCode(this.pai);
@@ -133,7 +134,7 @@ public class Node implements Serializable {
      * Compara o Node com outro objeto.
      *
      * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem a mesma Categoria. Caso
+     * @return true, se os dois objetos tiverem a mesma Category. Caso
      * contrário, retorna false
      */
     @Override
@@ -161,9 +162,5 @@ public class Node implements Serializable {
     public String toString() {
         return "Node{" + "elemento=" + elemento + '}';
     }
-
-
-
-    
 
 }

@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.domain.Categoria;
+import cdioil.domain.Category;
 import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import java.util.List;
@@ -33,7 +33,7 @@ public class Gestor implements Serializable, Identifiable<Long> {
     /**
      * Lista de categorias pelas quais o gestor é responsável
      */
-    private List<Categoria> categorias;
+    private List<Category> categorias;
 
     /**
      * Cria uma instância de Gestor
@@ -41,7 +41,7 @@ public class Gestor implements Serializable, Identifiable<Long> {
      * @param su conta de SystemUser a associar
      * @param categorias lista de categorias pelas quais o gestor é responsável
      */
-    public Gestor(SystemUser su, List<Categoria> categorias) {
+    public Gestor(SystemUser su, List<Category> categorias) {
         this.su = su;
         this.categorias = categorias;
     }
@@ -114,7 +114,7 @@ public class Gestor implements Serializable, Identifiable<Long> {
      * @return true se foram adicionadas com sucesso, false se não forem
      * adicionadas
      */
-    public boolean adicionarCategorias(List<Categoria> lc) {
+    public boolean adicionarCategorias(List<Category> lc) {
         try {
             return categorias.addAll(lc);
         } catch (Exception e) {
@@ -128,7 +128,7 @@ public class Gestor implements Serializable, Identifiable<Long> {
      * @param lc lista de categorias a remover
      * @return true se forem removidas com sucesso, false se não forem removidas
      */
-    public boolean removerCategorias(List<Categoria> lc) {
+    public boolean removerCategorias(List<Category> lc) {
         try {
             return categorias.removeAll(lc);
         } catch (Exception e) {
