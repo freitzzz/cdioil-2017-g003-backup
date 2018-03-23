@@ -16,8 +16,8 @@
     <class>cdioil.domain.Code</class>
     <class>cdioil.domain.CodigoQR</class>
     <class>cdioil.domain.EstruturaMercadologica</class>
-    <class>cdioil.domain.Category</class>
     <class>cdioil.domain.Product</class>
+    <class>cdioil.domain.Categoria</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

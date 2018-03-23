@@ -3,10 +3,13 @@ package cdioil.domain;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * Classe que representa a Estrutura Mercadologica que agrega as categorias de
@@ -15,8 +18,7 @@ import javax.persistence.Id;
  * @author António Sousa [1161371]
  */
 @Entity
-public class EstruturaMercadologica implements Serializable{
-
+public class EstruturaMercadologica implements Serializable {
 
     /**
      * Código de serialização.
@@ -24,12 +26,14 @@ public class EstruturaMercadologica implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "ID_ESTRUTURA", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
+
     /**
      * Primeiro node da estrutura mercadologica.
      */
+    @OneToOne(cascade = {CascadeType.PERSIST})
     private Node raiz;
     /**
      * Tamanho da estrutura mercadologica (numero de nodes).
@@ -77,13 +81,17 @@ public class EstruturaMercadologica implements Serializable{
             throw new IllegalArgumentException("O argumentos não podem ser null");
         }
 
-        Node nodePai = procuraNode(raiz, pai);
-        Node nodeFilho = procuraNode(raiz, c);
-
         //Ler: "Se o pai estiver na estrutura, mas o filho nao"
-        if (nodePai != null && nodeFilho == null) {
-            tamanho++;
-            return nodePai.addFilho(new Node(nodePai, c));
+        Node nodePai = procuraNode(raiz, pai);
+
+        if (nodePai != null) {
+
+            Node nodeFilho = procuraNode(nodePai, c);
+
+            if (nodeFilho == null) {
+                tamanho++;
+                return nodePai.addFilho(new Node(nodePai, c));
+            }
         }
         return false;
     }
@@ -180,14 +188,14 @@ public class EstruturaMercadologica implements Serializable{
     }
 
     /**
-     * Adiciona um Produto a Categoria pretendida, podendo apenas adicionar-se a
-     * categorias que sejam folhas.
+     * Adiciona um Product a Categoria pretendida, podendo apenas adicionar-se a
+ categorias que sejam folhas.
      *
      * @param p produto que se pretende adicionar
      * @param c categoria a qual se pretende adicionar o produto
      * @return true - se a categoria for uma folha<p>
      */
-    public boolean adicionarProduto(Produto p, Categoria c) {
+    public boolean adicionarProduto(Product p, Categoria c) {
 
         if (p == null || c == null) {
             throw new IllegalArgumentException("Os argumentos não podem ser null");

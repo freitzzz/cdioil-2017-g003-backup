@@ -32,7 +32,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c = new Category("Bricolage", "109CAT");
+        Categoria c = new Categoria("Bricolage", "109CAT");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -46,7 +46,7 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Category c = new Category("Bens Alimentares", "109UB");
+        Categoria c = new Categoria("Bens Alimentares", "109UB");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
@@ -63,13 +63,13 @@ public class EstruturaMercadologicaTest {
 
         assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.tamanho());
 
-        Category c = new Category("Bens Alimentares", "109UB");
+        Categoria c = new Categoria("Bens Alimentares", "109UB");
 
         assertTrue(struct.adicionarCategoriaRaiz(c));
 
         assertEquals("A estrutura deverá conter dois nodes", 2, struct.tamanho());
 
-        Category c2 = new Category("Bebidas", "20UN");
+        Categoria c2 = new Categoria("Bebidas", "20UN");
 
         assertTrue(struct.adicionarCategoria(c, c2));
 
@@ -84,14 +84,14 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c1 = new Category("Casa e Decoracao", "1009SCAT");
+        Categoria c1 = new Categoria("Casa e Decoracao", "1009SCAT");
 
-        Category c2 = new Category("Roupa", "20CAT");
+        Categoria c2 = new Categoria("Roupa", "20CAT");
 
         struct.adicionarCategoriaRaiz(c1);
         struct.adicionarCategoriaRaiz(c2);
 
-        List<Category> expected = new LinkedList<>();
+        List<Categoria> expected = new LinkedList<>();
 
         expected.add(c1);
         expected.add(c2);
@@ -114,7 +114,7 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c = new Category("Higiene", "10CAT");
+        Categoria c = new Categoria("Higiene", "10CAT");
 
         struct.adicionarCategoriaRaiz(c);
 
@@ -134,11 +134,11 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category c1 = new Category("Categoria pai", "100CAT");
+        Categoria c1 = new Categoria("Categoria pai", "100CAT");
 
         struct.adicionarCategoriaRaiz(c1);
 
-        Category c2 = new Category("Categoria filho", "20SCAT");
+        Categoria c2 = new Categoria("Categoria filho", "20SCAT");
 
         struct.adicionarCategoria(c1, c2);
         
@@ -154,25 +154,25 @@ public class EstruturaMercadologicaTest {
 
         EstruturaMercadologica struct = new EstruturaMercadologica();
 
-        Category mae = new Category("Roupa", "20UB");
+        Categoria mae = new Categoria("Roupa", "20UB");
 
         struct.adicionarCategoriaRaiz(mae);
 
         for (int i = 0; i < 30; i++) {
 
-            Category pai = new Category("Alimentar", "10UB");
+            Categoria pai = new Categoria("Alimentar", "10UB");
 
             struct.adicionarCategoriaRaiz(pai);
 
-            Category filho = new Category("Bens Essenciais", "10DC");
+            Categoria filho = new Categoria("Bens Essenciais", "10DC");
 
             struct.adicionarCategoria(pai, filho);
 
-            Category filho2 = new Category("Gorduras Liquidas", "1000CAT");
+            Categoria filho2 = new Categoria("Gorduras Liquidas", "1000CAT");
 
             struct.adicionarCategoria(filho, filho2);
 
-            Category filho3 = new Category("Sub-Categoria " + i, "10" + i + "SCAT");
+            Categoria filho3 = new Categoria("Sub-Categoria " + i, "10" + i + "SCAT");
 
             struct.adicionarCategoria(filho2, filho3);
             

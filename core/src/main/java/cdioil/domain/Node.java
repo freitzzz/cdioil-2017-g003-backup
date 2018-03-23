@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain;
 
 import java.io.Serializable;
@@ -10,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -31,37 +28,47 @@ import javax.persistence.OneToMany;
 public class Node implements Serializable {
 
     /**
-     * Código de serialização.
+     * Serialization identifier.
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Database identifier.
+     */
     @Id
+    @Column(name = "ID_NODE", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     /**
-     * Node que se situa acima do node atual na estrutura.
+     * Reference to a preceding Node in the structure.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Node pai;
 
     /**
-     * Todos os nodes que se encontrem abaixo do atual.
+     * A list of references to following Nodes in the structure.
      */
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pai", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Node> filhos = new LinkedList<>();
 
     /**
-     * Categoria de produtos contida no node.
+     * The element contained in this instance.
      */
+    @OneToOne(cascade = {CascadeType.PERSIST})
     private Categoria elemento;
 
     /**
-     * Construtor apenas para uso do JPA.
+     * Empty Constructor for JPA.
      */
     protected Node() {
     }
 
+    /**
+     * Instantiates a Node with a given parent Node and element.
+     * @param pai
+     * @param elemento 
+     */
     protected Node(Node pai, Categoria elemento) {
         this.pai = pai;
         this.elemento = elemento;
@@ -114,10 +121,11 @@ public class Node implements Serializable {
      *
      * @return o valor de hash gerado
      */
-    @Override
+    @Override    
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.elemento);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.pai);
+        hash = 97 * hash + Objects.hashCode(this.elemento);
         return hash;
     }
 
@@ -133,15 +141,29 @@ public class Node implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (obj == null) {
             return false;
         }
-
-        Node other = (Node) obj;
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Node other = (Node) obj;
+        if (!Objects.equals(this.pai, other.pai)) {
+            return false;
+        }
         if (!Objects.equals(this.elemento, other.elemento)) {
             return false;
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" + "elemento=" + elemento + '}';
+    }
+
+
+
+    
 
 }

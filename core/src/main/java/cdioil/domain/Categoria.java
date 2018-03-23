@@ -40,7 +40,7 @@ public class Categoria implements Serializable {
      * Conjunto de produtos contidos nesta categoria.
      */
     @OneToMany
-    private Set<Produto> produtos = new HashSet<>();
+    private Set<Product> produtos = new HashSet<>();
 
     /**
      * Constante que representa a expressão regular para a validação dos descritivos.
@@ -134,7 +134,7 @@ public class Categoria implements Serializable {
      * @return true - se o produto tiver sido adicionado com sucesso<p>
      * false - caso contrário
      */
-    public boolean adicionarProduto(Produto p) {
+    public boolean adicionarProduto(Product p) {
         if (p == null) {
             return false;
         }

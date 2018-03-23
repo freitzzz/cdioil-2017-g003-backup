@@ -76,7 +76,7 @@ public class InqueritoTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
-        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), i);
+        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100DC"), i);
         assertNotEquals("Instância de Inquerito diferente", new Inquerito(new Product("OutroProduto", new EAN("123")), data, gu), i);
         assertEquals("Instância de Inquerito igual", new Inquerito(new Product("UmProduto", new EAN("73292")), data, gu), i);
     }
