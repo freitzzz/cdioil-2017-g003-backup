@@ -4,53 +4,37 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Classe Whitelist que representa o dominio e subdominio de um endereço de
- * email
- *
+ * Whitelist class that represents an authorized domain/subdomain
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Entity
 public class Whitelist implements Serializable {
-
     /**
-     * Código de serialização
+     * Serializable ID
      */
     private static final long serialVersionUID = 5L;
+    
     /**
-     * Long com o identificador da identidade na base de dados
+     * String that repesents the authorized
      */
     @Id
-    @GeneratedValue
-    private long id;
-    /**
-     * String que representa o dominio princial de um endereço de email
-     */
-    private String dominio;
-    /**
-     * String que representa o subdominio de um endereço de email
-     */
-    private String subDominio;
+    @Column(name="DOMINIO")
+    private String domain;
 
     /**
-     * Constrói uma nova instância de Dominio de um determinado email
-     *
-     * @param dominio String com o dominio que contém um certo dominio
-     * @param subDominio 
+     * Builds a new instance of Whitelist with an authorized domain
+     * @param domain String with the authorized domain
      */
-    public Whitelist(String dominio,String subDominio){
-        this.dominio=dominio;
-        this.subDominio=subDominio;
+    public Whitelist(String domain){
+        this.domain=domain;
     }
     /**
-     * Método que verifica se dois Dominios são iguais
-     *
-     * @param obj Whitelist com o dominio de um email a ser comparado com o
-     * Whitelist atual
-     * @return boolean true se os dominios são iguais, false caso contrário
+     * Method that verifies if two authorized domains/subdomains are equal
+     * @param obj Whitelist with the authorized domain to be compared with the actual one
+     * @return boolean true if domains are equal, false if not
      */
     @Override
     public boolean equals(Object obj) {
@@ -60,36 +44,32 @@ public class Whitelist implements Serializable {
         if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
-        return dominio.equalsIgnoreCase(((Whitelist) obj).dominio)
-                && subDominio.equalsIgnoreCase(((Whitelist) obj).subDominio);
+        return domain.equalsIgnoreCase(((Whitelist) obj).domain);
     }
 
     /**
-     * Hashcode do Whitelist
-     *
-     * @return Integer com o hashcode do dominio atual
+     * Whitelist hashcode
+     * @return Integer with the current Whitelist hashcode
      */
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.dominio);
-        hash = 29 * hash + Objects.hashCode(this.subDominio);
+        hash = 29 * hash + Objects.hashCode(this.domain);
         return hash;
     }
 
     /**
-     * Método que representa a informação textual de um Whitelist
+     *Method that represents the textual representation of a Whitelist
      *
-     * @return String coma informação textual do Whitelist atual
+     * @return String with the textual information of the current whitelist
      */
     @Override
     public String toString() {
-        return "Dominio: " + dominio + "\nSubdominio: " + subDominio;
+        return "Domain: " + domain;
     }
 
     /**
-     * Construtor protegido de modo a permitir a persitencia com o JPA
+     * Proctected constructor in order to persist with JPA
      */
-    protected Whitelist() {
-    }
+    protected Whitelist() {}
 }

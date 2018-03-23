@@ -5,15 +5,12 @@
  */
 package cdioil.domain;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe Produto.
+ * Testes da classe Product.
  *
  * @author Rita Gonçalves (1160912)
  */
@@ -22,68 +19,65 @@ public class ProdutoTest {
     /**
      * Instância de produto para testes.
      */
-    private Produto p;
+    private Product p;
 
     public ProdutoTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
-        this.p = new Produto("ProdutoTeste", new EAN(33312113));
-    }
-
-    @After
-    public void tearDown() {
+        this.p = new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
     }
 
     /**
-     * Testa o método toString, da classe Produto.
+     * Testa o método toString, da classe Product.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("Deveriam ser iguais", "Nome: ProdutoTeste\nImagem: Produto sem Imagem\nCódigo de Barras: \nID: 33312113\nCódigo QR: \nSem código QR\n", p.toString());
+        System.out.println(p.toString());
+
+        Product copia = new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
+
+        assertEquals(p.toString(), copia.toString());
     }
 
     /**
-     * Testa o método hashCode, da classe Produto.
+     * Testa o método hashCode, da classe Product.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        assertEquals("Deveriam ser iguais", 33313163, p.hashCode());
+        
+        Product copia = new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
+
+        assertEquals(p.hashCode(), copia.hashCode());
+
     }
 
     /**
-     * Testa o método equals, da classe Produto.
+     * Testa o método equals, da classe Product.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, p);
-        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100FC"), p);
-        assertNotEquals("Instância de Produto diferente", new Produto("ProdutoTeste", new Preco("7€"), new EAN(33312118), new CodigoQR(552671)), p);
-        assertEquals("Instância de CodigoQR igual", new Produto("ProdutoTeste", new EAN(33312113)), p);
+        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), p);
+        
+        assertNotEquals("Instância de Produto diferente", new Product("ProdutoTeste", new EAN("33312118"), new QRCode("552671")), p);
+        assertEquals("Instância com códigos iguais igual", new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")), p);
     }
 
     /**
-     * Test of alterarImagemProduto method, of class Produto.
+     * Test of changeProductImage method, of class Product.
      */
     @Test
     public void testAlterarImagemProduto() {
         System.out.println("alterarImagemProduto");
         byte[] imagem = "Nova Imagem".getBytes();
-        p.alterarImagemProduto(imagem);
+        p.changeProductImage(imagem);
         boolean expResult = true;
-        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo",p.alterarImagemProduto(imagem));
-        assertFalse("A condição acertar pois a Imagem do produto é invalida",p.alterarImagemProduto(null));
+        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo",p.changeProductImage(imagem));
+        assertFalse("A condição acertar pois a Imagem do produto é invalida",p.changeProductImage(null));
     }
 }

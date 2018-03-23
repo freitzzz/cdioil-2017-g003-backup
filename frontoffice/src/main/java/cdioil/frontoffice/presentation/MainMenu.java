@@ -1,7 +1,7 @@
 package cdioil.frontoffice.presentation;
 
 import cdioil.domain.authz.SystemUser;
-import cdioil.frontoffice.presentation.authz.MudarInfoUtilizadorUI;
+import cdioil.frontoffice.presentation.authz.ChangeUserDataUI;
 import cdioil.frontoffice.presentation.authz.RegistarUtilizadorUI;
 
 public class MainMenu {
@@ -12,8 +12,8 @@ public class MainMenu {
      * @param loggedUser user com sessao iniciada
      */
     public void mainAlterarDados(SystemUser loggedUser) {
-        MudarInfoUtilizadorUI mui = new MudarInfoUtilizadorUI(loggedUser);
-        mui.mudarInformacao();
+        ChangeUserDataUI mui = new ChangeUserDataUI(loggedUser);
+        mui.changeData();
     }
     
     

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain.authz;
 
 import cdioil.persistence.Identifiable;
@@ -10,62 +5,67 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * Representa os utilizadores da app.
+ * Represents the users of the app.
  *
- * @author Gil Durão
+ * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
 public class SystemUser implements Serializable, Identifiable<Email> {
 
+    /**
+     * Serialization number.
+     */
     private static final long serialVersionUID = 1L;
-
-    //@Version
-    //private Long version;
+    @Id
+    @Version
+    private Long version;
 
     /**
-     * Email do utilizador (username)
+     * User's email.
      */
-    @EmbeddedId
+    @Embedded
     private Email email;
     /**
-     * Nome do utilizador
+     * User's name.
      */
-    private Nome nome;
+    @Embedded
+    private Name nome;
     /**
-     * Password do utilizador
+     * User's password.
      */
     @Embedded
     private Password password;
 
     /**
-     * Constroi uma instancia de SystemUser com um email, nome e uma password
+     * Builds a SystemUser instance with an email, name and password
      *
-     * @param email
-     * @param nome
-     * @param password
+     * @param email user's email
+     * @param nome user's name
+     * @param password user's password
      */
-    public SystemUser(Email email, Nome nome, Password password) {
+    public SystemUser(Email email, Name nome, Password password) {
         this.email = email;
         this.nome = nome;
-        this.password = password; //Falta a encriptacao
+        this.password = password;
     }
 
     protected SystemUser() {
-        //Para ORM
+        //For ORM
     }
 
     /**
-     * Verifica se uma password recebida é igual à de um utilizador
+     * Checks if a given password matches the user's password
      *
-     * @param password pwd recebida
-     * @return true se forem iguals, false se forem diferentes
+     * @param password given pwd
+     * @return true if they match, false if they don't match
      */
-    public boolean passwordIgual(String password) {
+    public boolean samePassword(String password) {
         return this.password.verifyPassword(password);
     }
 
     /**
-     * Hash code do utilizador
+     * SystemUser's hash code.
      *
      * @return hash code
      */
@@ -75,11 +75,10 @@ public class SystemUser implements Serializable, Identifiable<Email> {
     }
 
     /**
-     * Verifica se duas instancias de SystemUser sao iguais tendo em conta o seu
-     * id (email)
+     * Checks if two SystemUser instances are the same comparing their emails.
      *
-     * @param obj objeto a comparar
-     * @return true se se tratar do mesmo utilizador, false se não
+     * @param obj object to be compared
+     * @return true if it's the same user, false if not
      */
     @Override
     public boolean equals(Object obj) {
@@ -94,39 +93,40 @@ public class SystemUser implements Serializable, Identifiable<Email> {
     }
 
     /**
-     * Devolve uma descricao de um utilizador (email)
+     * Returns a description of a user (name + email)
      *
-     * @return descricao de um utilizador
+     * @return user's description
      */
     @Override
     public String toString() {
-        return "Nome: " + nome + "\n" + email + "\n";
+        return "Nome: " + nome + "\nEmail: " + email + "\n";
     }
 
     /**
-     * Altera um campo de informação do utilizador
+     * Changes a property of a SystemUser (email, name or password)
      *
-     * @param novoCampo informação introduzida pelo utilizador
-     * @param opcao inteiro que indica qual campo de informação vai ser alterado
-     * @return true se campo for alterado com sucesso, false se nova informação
-     * for inválida
+     * @param newField info given by the user
+     * @param option integer that indicates which property is going to be 
+     * updated
+     * @return true if the update was successful, false if the new info
+     * was not valid
      */
-    public boolean alterarCampoInformacao(String novoCampo, int opcao) {
+    public boolean alterarCampoInformacao(String newField, int option) {
         try {
-            switch (opcao) {
-                case 1://muda o nome do utilizador
-                    String[] nome = novoCampo.split(" ");
+            switch (option) {
+                case 1://changes the user's name
+                    String[] nome = newField.split(" ");
                     if (nome.length != 2) {
                         throw new IllegalArgumentException();
                     }
-                    this.nome = new Nome(nome[0], nome[1]);
+                    this.nome = new Name(nome[0], nome[1]);
                     break;
-                case 2://muda o email do utilizador
-                    Email email = new Email(novoCampo);
+                case 2://changes the user's email
+                    Email email = new Email(newField);
                     this.email = email;
                     break;
-                case 3://muda a password do utilizador
-                    Password password = new Password(novoCampo);
+                case 3://changes the user's password
+                    Password password = new Password(newField);
                     this.password = password;
                     break;
                 default:
@@ -138,6 +138,10 @@ public class SystemUser implements Serializable, Identifiable<Email> {
         }
     }
 
+    /**
+     * Returns the user's ID (email)
+     * @return email
+     */
     @Override
     public Email getID() {
         return email;

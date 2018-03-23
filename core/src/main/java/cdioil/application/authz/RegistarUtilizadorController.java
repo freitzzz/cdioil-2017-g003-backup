@@ -10,6 +10,7 @@ public class RegistarUtilizadorController {
     private static final String REGEX_DOMINIO = "[A-Za-z0-9]{1,63}[.][A-Za-z]{2,6}$";
     //private static final String REGEX_SUB_DOMINIO = "[A-Za-z0-9](([A-Za-z0-9]|[.](?![.]))){0,63}";
 
+    //TO-DO DAR FIX AO CODIGO QUE TA EM BAIXO, HA COISAS QUE JA NAO SAO PRECISOS
     public void criarUtilizadorRegistado(String primeiroNome, String apelido, String email, String password) {
         String[] domainSplitted = email.split("@");
         if (domainSplitted.length == 2) {
@@ -26,9 +27,9 @@ public class RegistarUtilizadorController {
             }
             System.out.println(realDominio);
             System.out.println(realSubdominio);
-            Whitelist whitelist = new Whitelist(realDominio, realSubdominio);
+            Whitelist whitelist = new Whitelist(domainPart);
             if (new WhitelistRepositoryImpl().getEntity(whitelist) != null) {
-                SystemUser systemUser = new SystemUser(new Email(email), new Nome(primeiroNome, apelido), new Password(password));
+                SystemUser systemUser = new SystemUser(new Email(email), new Name(primeiroNome, apelido), new Password(password));
                 UserRegistado userRegistado = new UserRegistado(systemUser);
                 repositorioUtilizadoresJPA.addUserRegistado(userRegistado);
             }else{

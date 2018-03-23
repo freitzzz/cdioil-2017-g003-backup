@@ -1,146 +1,152 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this t file, choose Tools | Templates
+ * and open the t in the editor.
  */
 package cdioil.domain;
 
-import cdioil.domain.authz.GrupoUtilizadores;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Teste da classe Template.
+ * Tests of the class Template.
  *
  * @author Ana Guerra (1161191)
  */
 public class TemplateTest {
 
-    Categoria cat = new Categoria("Pai", "10");
-    Calendar data = Calendar.getInstance();
-    List<Questao> listaQuestoes = new LinkedList<>();
-    List<Inquerito> listaInqueritos = new LinkedList<>();
+    /**
+     * Instance of Category for test purposes.
+     */
+    Category c;
 
     /**
-     * Instância de Template para testes.
+     * Instance of Template for test purposes.
      */
-    Template template = new Template(cat);
-    /**
-     * Teste do método adicionarQuestao, da classe Template.
-     */
-    @Test
-    public void testAdicionarQuestao() {
-        System.out.println("adicionarQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
-        assertTrue("Deveria ser possível adicionar", template.adicionarQuestao(q));
-        template.adicionarQuestao(q);
-        assertFalse("Questão null", template.adicionarQuestao(null));
-        assertFalse("Questão já existente", template.adicionarQuestao(q));
-    }
-     /**
-     * Teste do método adicionarInquerito, da classe Template.
-     */
-    @Test
-    public void testAdicionarInquerito() {
-        System.out.println("adicionarInquerito");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
-        assertTrue("Deveria ser possível adicionar", template.adicionarInquerito(i));
-        template.adicionarInquerito(i);
-        assertFalse("Inquerito null", template.adicionarInquerito(null));
-        assertFalse("Inquerito já existente", template.adicionarInquerito(i));
-    }
+    Template t;
 
     /**
-     * Teste do método removerQuestao, da classe Template.
+     * Instance of Calendar for test purposes.
      */
-    @Test
-    public void testarRemoverQuestao() {
-        System.out.println("removerQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
-        template.adicionarQuestao(q);
-        assertTrue("Deveria ser possível remover", template.removerQuestao(q));
-        template.removerQuestao(q);
-        assertFalse("Questão null", template.removerQuestao(null));
-        assertFalse("Questão não existente", template.removerQuestao(q));
-    }
+    Calendar date;
+
     /**
-     * Teste do método removerInquerito, da classe Template.
+     * List of Questions for test purposes.
      */
-    @Test
-    public void testarRemoverInquerito() {
-        System.out.println("removerInquerito");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
-        template.adicionarInquerito(i);
-        assertTrue("Deveria ser possível remover", template.removerInquerito(i));
-        template.removerInquerito(i);
-        assertFalse("Inquerito null", template.removerInquerito(null));
-        assertFalse("Inquerito não existente", template.removerInquerito(i));
+    List<Question> questions;
+
+    /**
+     * List of Questions for test purposes.
+     */
+    List<Inquerito> surveys;
+
+    public TemplateTest() {
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+    }
+
+    @Before
+    public void setUp() {
+        c = new Category("Pai", "10DC");
+        date = Calendar.getInstance();
+        questions = new LinkedList<>();
+        surveys = new LinkedList<>();
+        t = new Template(c);
+    }
+
+    @After
+    public void tearDown() {
     }
 
     /**
-     * Teste do método isQuestaoValida, da classe Template.
+     * Test of the method addQuestion, of the class Template.
      */
     @Test
-    public void testarIsQuestaoValida() {
+    public void testAddQuestion() {
+        System.out.println("addQuestion");
+        Question q = new BinaryQuestion("QuestaoTeste");
+        assertTrue("Deveria ser possível adicionar", t.addQuestion(q));
+        assertFalse("Questão null", t.addQuestion(null));
+        t.addQuestion(q);
+        assertFalse("Questão já existente", t.addQuestion(q));
+    }
+
+    /**
+     * Test of the method removeQuestion, of the class Template.
+     */
+    @Test
+    public void testRemoveQuestion() {
+        System.out.println("removeQuestion");
+        Question q = new BinaryQuestion("QuestaoTeste");
+        t.addQuestion(q);
+        assertTrue("Deveria ser possível remover", t.removeQuestion(q));
+        assertFalse("Questão null", t.removeQuestion(null));
+        t.removeQuestion(q);
+        assertFalse("Questão não existente", t.removeQuestion(q));
+    }
+
+    /**
+     * Test of the method isQuestionValid, of the class Template.
+     */
+    @Test
+    public void testIsQuestionValid() {
         System.out.println("isQuestaoValida");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
-        template.adicionarQuestao(q);
-        assertTrue("Deveria ser válida", template.isQuestaoValida(q));
-        template.removerQuestao(q);
-        assertFalse("Questão null", template.isQuestaoValida(null));
-        assertFalse("Questão não existente", template.isQuestaoValida(q));
-    }
-    /**
-     * Teste do método isInqueritoValido, da classe Template.
-     */
-    @Test
-    public void testarIsInqueritoValido() {
-        System.out.println("isInqueritoValido");
-        Inquerito i = new Inquerito(new Produto("Produto", new EAN(123456789)), data, new GrupoUtilizadores());
-        template.adicionarInquerito(i);
-        assertTrue("Deveria ser válida", template.isInqueritoValido(i));
-        template.removerInquerito(i);
-        assertFalse("Inquerito null", template.isInqueritoValido(null));
-        assertFalse("Inquerito não existente", template.isInqueritoValido(i));
+        Question q = new BinaryQuestion("QuestaoTeste");
+        t.addQuestion(q);
+        assertTrue("Deveria ser válida", t.isQuestionValid(q));
+        assertFalse("Questão null", t.isQuestionValid(null));
+        t.removeQuestion(q);
+        assertFalse("Questão não existente", t.isQuestionValid(q));
     }
 
     /**
-     * Teste do método toString, da classe Template.
+     * Test of the method toString, of the class Template.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("Os identificadores são iguais",
-                "\nCategoria: Nome: Pai\nDescritor: 10\n\nLista de Questoes: []", template.toString());
+        Template t2 = new Template(c);
+
+        assertEquals("Descrições iguais", t2.toString(), t.toString());
     }
 
     /**
-     * Teste do método hashCode, da classe Template.
+     * Test of the method hashCode, of the class Template.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
+        Template t2 = new Template(c);
 
-        Template template2 = new Template(cat);
-
-        assertEquals("Hash codes iguais", template2.hashCode(), template.hashCode());
+        assertEquals("Hash codes iguais", t2.hashCode(), t.hashCode());
     }
 
     /**
-     * Teste do método equals, da classe Template.
+     * Test of the method equals, of the class Template.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, template);
-        assertNotEquals("Instância de outra classe não é igual", new CodigoQR(1), template);
-        assertNotEquals("Instância de Template diferente", new Template(null), template);
-        assertEquals("Instância de Template igual", new Template(cat), template);
+        assertNotEquals("Objeto null não é igual", null, t);
+        assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), t);
+        assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), t);
+        assertNotEquals("Instância de Template diferente", new Template(null), t);
+        assertEquals("Instância de Template igual", new Template(c), t);
     }
 }

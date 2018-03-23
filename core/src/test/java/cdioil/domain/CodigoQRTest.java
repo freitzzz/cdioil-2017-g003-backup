@@ -9,64 +9,76 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe CodigoQR.
+ * Testes da classe QRCode.
  *
  * @author Rita Gonçalves (1160912)
  */
 public class CodigoQRTest {
 
     /**
-     * Instância de CodigoQR para testes.
+     * Instância de QRCode para testes.
      */
-    CodigoQR c;
+    QRCode c;
 
     public CodigoQRTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
-        c = new CodigoQR(52);
-    }
-
-    @After
-    public void tearDown() {
+        c = new QRCode("73534325");
     }
 
     /**
-     * Teste do método toString, da classe CodigoQR.
+     * Teste do método toString, da classe QRCode.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        assertEquals("As descrições são iguais", "ID: 52\n", c.toString());
+        
+        Code copia = new QRCode("73534325");
+
+        assertEquals("Objetos com atributos iguais deverão ter descrições iguais", copia.toString(), c.toString());
+
+        Code outro = new QRCode("4237484234");
+
+        assertNotEquals("Objetos com atributos diferentes deverão ter descrições diferentes", outro.toString(), c.toString());
+
+        Code codBarras = new EAN("73534325");
+
+        assertNotEquals("Apesar de ambos serem códigos com o mesmo valor as descrições deverão ser diferentes", codBarras.toString(), c.toString());
+
     }
 
     /**
-     * Teste do método hashCode, da classe CodigoQR.
+     * Teste do método hashCode, da classe QRCode.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        assertEquals("Hash codes iguais", 255, c.hashCode());
+
+        Code copia = new QRCode("73534325");
+
+        assertEquals("Objetos com atributos iguais deverão ter hashcodes iguais", copia.toString(), c.toString());
+
+        Code outro = new QRCode("4237484234");
+
+        assertNotEquals("Objetos com atributos diferentes deverão ter hashcodes diferentes", outro.toString(), c.toString());
+
+        Code codBarras = new EAN("73534325");
+
+        assertNotEquals("Apesar de ambos serem códigos com o mesmo valor os hashcodes deverão ser diferentes", codBarras.hashCode(), c.hashCode());
+
     }
 
     /**
-     * Teste do método equals, da classe CodigoQR.
+     * Teste do método equals, da classe QRCode.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, c);
-        assertNotEquals("Instância de outra classe não é igual", "Hello", c);
-        assertNotEquals("Instância de CodigoQR diferente", new CodigoQR(60), c);
-        assertEquals("Instância de CodigoQR igual", new CodigoQR(52), c);
+        assertNotEquals("Instância de outra classe não é igual", new EAN("4324"), c);
+        assertNotEquals("Instância de CodigoQR diferente", new QRCode("6032"), c);
+        assertEquals("Instância de CodigoQR igual", new QRCode("73534325"), c);
     }
 }

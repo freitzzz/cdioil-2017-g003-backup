@@ -1,8 +1,15 @@
 package cdioil.domain;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * Classe que representa a Estrutura Mercadologica que agrega as categorias de
@@ -10,112 +17,23 @@ import java.util.Objects;
  *
  * @author António Sousa [1161371]
  */
-public class EstruturaMercadologica {
+@Entity
+public class EstruturaMercadologica implements Serializable {
 
     /**
-     * Clase interna que representa um nó na estrutura mercadologica.
-     * <p>
-     * Um nó contém uma categoria, assim como referencias para outros nós.
+     * Código de serialização.
      */
-    protected static class Node {
+    private static final long serialVersionUID = 1L;
 
-        /**
-         * Node que se situa acima do node atual na estrutura.
-         */
-        private Node pai;
-
-        /**
-         * Todos os nodes que se encontrem abaixo do atual.
-         */
-        private List<Node> filhos;
-
-        /**
-         * Categoria de produtos contida no node.
-         */
-        private Categoria elemento;
-
-        protected Node(Node pai, Categoria elemento) {
-
-            this.pai = pai;
-            this.elemento = elemento;
-            this.filhos = new LinkedList<>();
-        }
-
-        /**
-         * Retorna a Categoria presente neste node.
-         *
-         * @return a categoria contida no node
-         */
-        public Categoria getElemento() {
-            return elemento;
-        }
-
-        /**
-         * Retorna o conjunto de nodes filhos deste node.
-         *
-         * @return conjunto de nodes filhos
-         */
-        public List<Node> getFilhos() {
-            return filhos;
-        }
-
-        /**
-         * Adiciona um node ao conjunto de filhos deste node.
-         *
-         * @param filho node que se pretende adicionar aos filhos
-         * @return true - caso tenha sido possível adicionar ao conjunto de
-         * filhos<p>
-         * false - caso contrario
-         */
-        public boolean addFilho(Node filho) {
-            if (getFilhos().contains(filho)) {
-                return false;
-            }
-            return filhos.add(filho);
-        }
-
-        /**
-         * Gera um índice a partir da Categoria do Node.
-         *
-         * @return o valor de hash gerado
-         */
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 79 * hash + Objects.hashCode(this.elemento);
-            return hash;
-        }
-
-        /**
-         * Compara o Node com outro objeto.
-         *
-         * @param obj Objeto a comparar
-         * @return true, se os dois objetos tiverem a mesma Categoria. Caso
-         * contrário, retorna false
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-
-            Node other = (Node) obj;
-            if (!Objects.equals(this.elemento, other.elemento)) {
-                return false;
-            }
-            return true;
-        }
-
-    }
-    /*----------------------------------------------------------
-    -------------------FIM DA CLASSE NODE-----------------------*/
+    @Id
+    @Column(name = "ID_ESTRUTURA", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     /**
      * Primeiro node da estrutura mercadologica.
      */
+    @OneToOne(cascade = {CascadeType.PERSIST})
     private Node raiz;
     /**
      * Tamanho da estrutura mercadologica (numero de nodes).
@@ -127,7 +45,7 @@ public class EstruturaMercadologica {
      */
     public EstruturaMercadologica() {
 
-        raiz = new Node(null, new Categoria("Todos os Produtos", "-1"));
+        raiz = new Node(null, new Category("Todos os Produtos", "-1UB"));
         tamanho = 1;
     }
 
@@ -142,7 +60,7 @@ public class EstruturaMercadologica {
      * @return true - se for possivel adicionar a categoria<p>
      * false - caso contrário
      */
-    public boolean adicionarCategoriaRaiz(Categoria c) {
+    public boolean adicionarCategoriaRaiz(Category c) {
         if (c == null) {
             throw new IllegalArgumentException("O argumento não pode ser null");
         }
@@ -151,48 +69,52 @@ public class EstruturaMercadologica {
     }
 
     /**
-     * Adiciona uma nova Categoria à Estrutura Mercadologica.
+     * Adiciona uma nova Category à Estrutura Mercadologica.
      *
      * @param pai a categoria acima da nova categoria
      * @param c a nova categoria
      * @return true - se for possivel adicionar a categoria<p>
      * false - caso contrário
      */
-    public boolean adicionarCategoria(Categoria pai, Categoria c) {
+    public boolean adicionarCategoria(Category pai, Category c) {
         if (pai == null || c == null) {
             throw new IllegalArgumentException("O argumentos não podem ser null");
         }
 
-        Node nodePai = procuraNode(raiz, pai);
-        Node nodeFilho = procuraNode(raiz, c);
-
         //Ler: "Se o pai estiver na estrutura, mas o filho nao"
-        if (nodePai != null && nodeFilho == null) {
-            tamanho++;
-            return nodePai.addFilho(new Node(nodePai, c));
+        Node nodePai = procuraNode(raiz, pai);
+
+        if (nodePai != null) {
+
+            Node nodeFilho = procuraNode(nodePai, c);
+
+            if (nodeFilho == null) {
+                tamanho++;
+                return nodePai.addFilho(new Node(nodePai, c));
+            }
         }
         return false;
     }
 
     /**
-     * Remove a Categoria da Estrutura Mercadologica.
+     * Remove a Category da Estrutura Mercadologica.
      *
      * @param c categoria a remover
      */
-    public void removerCategoria(Categoria c) {
+    public void removerCategoria(Category c) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Método recursivo usado para para procurar uma dada Categoria na Estrutura
+     * Método recursivo usado para para procurar uma dada Category na Estrutura
      * Mercadologica.
      *
      * @param node node a partir do qual se pretende iniciar a procura
-     * @param c Categoria a procurar
+     * @param c Category a procurar
      * @return o node em que a categoria se encontra, null caso não seja
      * encontrada
      */
-    private Node procuraNode(Node node, Categoria c) {
+    private Node procuraNode(Node node, Category c) {
         if (node == null) {
             return null;
         }
@@ -218,14 +140,14 @@ public class EstruturaMercadologica {
     /**
      * Método para verificar se um Node é uma folha da Estrutura
      * Mercadologica.<p>
-     * Uma Categoria folha é uma categoria que não alberga sub-categorias,
+     * Uma Category folha é uma categoria que não alberga sub-categorias,
      * podendo conter produtos.
      *
      * @param node node a verificar se é folha
      * @return true se o node não tiver nodes filhos, false caso tenha
      */
     private boolean isLeaf(Node node) {
-        return node.filhos.isEmpty();
+        return node.getFilhos().isEmpty();
     }
 
     /**
@@ -234,9 +156,9 @@ public class EstruturaMercadologica {
      *
      * @return
      */
-    public Iterable<Categoria> getFolhas() {
+    public Iterable<Category> getFolhas() {
 
-        List<Categoria> folhas = new LinkedList<>();
+        List<Category> folhas = new LinkedList<>();
 
         procuraFolhas(folhas, raiz);
 
@@ -250,7 +172,7 @@ public class EstruturaMercadologica {
      * @param folhas lista de nodes que não tenham nodes filhos
      * @param node node atual
      */
-    private void procuraFolhas(List<Categoria> folhas, Node node) {
+    private void procuraFolhas(List<Category> folhas, Node node) {
 
         List<Node> filhos = node.getFilhos();
 
@@ -263,18 +185,17 @@ public class EstruturaMercadologica {
 
             procuraFolhas(folhas, filho);
         }
-
     }
 
     /**
-     * Adiciona um Produto a Categoria pretendida, podendo apenas adicionar-se a
+     * Adiciona um Product a Category pretendida, podendo apenas adicionar-se a
      * categorias que sejam folhas.
      *
      * @param p produto que se pretende adicionar
      * @param c categoria a qual se pretende adicionar o produto
      * @return true - se a categoria for uma folha<p>
      */
-    public boolean adicionarProduto(Produto p, Categoria c) {
+    public boolean adicionarProduto(Product p, Category c) {
 
         if (p == null || c == null) {
             throw new IllegalArgumentException("Os argumentos não podem ser null");
@@ -284,7 +205,7 @@ public class EstruturaMercadologica {
 
         if (isLeaf(node)) {
             //adicionar à categoria dentro da estrutura e não à parametrizada
-            return node.getElemento().adicionarProduto(p);
+            return node.getElemento().addProduct(p);
         }
 
         return false;
@@ -308,7 +229,7 @@ public class EstruturaMercadologica {
      * false - caso uma das ligacoes nao se verifique ou se uma das categorias
      * nao se encontrar na estrutura mercadologica
      */
-    public boolean verificaLigados(Categoria pai, Categoria filho) {
+    public boolean verificaLigados(Category pai, Category filho) {
 
         if (pai == null || filho == null) {
             throw new IllegalArgumentException("Os argumentos não podem ser null");
@@ -324,14 +245,14 @@ public class EstruturaMercadologica {
 
         boolean eFilho = false;
 
-        for (Node n : nodePai.filhos) {
+        for (Node n : nodePai.getFilhos()) {
             if (n == nodeFilho) {
                 eFilho = true;
                 break;
             }
         }
 
-        return nodeFilho.pai == nodePai && eFilho;
+        return nodeFilho.getPai() == nodePai && eFilho;
     }
 
 }

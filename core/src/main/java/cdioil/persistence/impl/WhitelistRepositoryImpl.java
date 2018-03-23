@@ -9,7 +9,7 @@ import cdioil.persistence.WhitelistRepository;
  *
  * @author António Sousa [1161371]
  */
-public class WhitelistRepositoryImpl extends RepositorioBaseJPA<Whitelist, Long> implements WhitelistRepository {
+public class WhitelistRepositoryImpl extends RepositorioBaseJPA<Whitelist, String> implements WhitelistRepository {
 
     @Override
     protected String nomeUnidadePersistencia() {

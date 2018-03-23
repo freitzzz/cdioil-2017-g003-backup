@@ -1,27 +1,30 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.authz.AdicionarWhitelistController;
+import cdioil.application.authz.AddWhitelistController;
 import cdioil.backoffice.console.utils.Console;
 
 /**
- * User Interface responsável pela interação do utilizador para a US103
+ * User story 103's user interface.
  *
  * @author António Sousa [1161371]
  */
-public class AdicionarWhitelistUI {
-
-    AdicionarWhitelistController controller;
+public class AddWhitelistUI {
 
     /**
-     * Instancia a user interface.
+     * The use case's controller.
      */
-    public AdicionarWhitelistUI() {
+    AddWhitelistController controller;
 
-        controller = new AdicionarWhitelistController();
-        apresentarUI();
+    /**
+     * Instantiates the user interface.
+     */
+    public AddWhitelistUI() {
+
+        controller = new AddWhitelistController();
+        showUI();
     }
 
-    private void apresentarUI() {
+    private void showUI() {
 
         int opcao = -1;
 
@@ -40,7 +43,7 @@ public class AdicionarWhitelistUI {
 
                 case 1:
                     String dominio = Console.readLine("Escreva o dominio de email que pretende autorizar.\n");
-                    controller.adicionarDominioAutorizado(dominio);
+                    controller.addAuthorizedDomain(dominio);
                     break;
 
                 default:

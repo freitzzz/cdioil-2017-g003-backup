@@ -10,164 +10,140 @@ import java.util.*;
 import javax.persistence.*;
 
 /**
- * Descreve um Template.
+ * Represents a Template.
+ *
  * @author Ana Guerra (1161191)
  */
 @Entity
 public class Template implements Serializable {
-    
+
     /**
-     * Código de Serialização.
+     * Version for JPA.
+     */
+    @Version
+    private Long version;
+
+    /**
+     * Serialization code.
      */
     private static final long serialVersionUID = 1L;
+
     /**
-     * Identificador do Template.
+     * ID of the Template for JPA.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     /**
-     * Lista de questoes do Template.
+     * List of Questions of the Template.
      */
-    @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL)
-    private List<Questao> listaQuestoes;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<Question> questions;
+
     /**
-     * Lista de inqueritos do Template.
+     * Category of the Template.
      */
-    @OneToMany(mappedBy = "inquerito", cascade = CascadeType.ALL)
-    private List<Inquerito> listaInqueritos;
+    private Category category;
+
     /**
-     * Categoria do Template.
-     */
-    private Categoria categoria;
-    
-    /**
-     * Constrói uma instância de Template, recebendo por parâmetro os seus atributos.
+     * Creates an instance of Template, receiving a Category.
      *
-     * @param categ Categoria do Template.
+     * @param category Category of the Template.
      */
-    public Template(Categoria categ) {
-        this.listaQuestoes = new LinkedList<>();
-        this.listaInqueritos = new LinkedList<>();
-        this.categoria = categ;
+    public Template(Category category) {
+        this.questions = new LinkedList<>();
+        this.category = category;
     }
+
     /**
-     * Constrói uma instância vazia de Template (JPA).
+     * Creates an empty protected instance for JPA.
      */
     protected Template() {
     }
-     /**
-     * Adiciona uma questão à lista de questões.
-     *
-     * @param questao Questão a adicionar
-     * @return true, se for adicionada com sucesso. Caso contrário, retorna false
-     */
-    public boolean adicionarQuestao(Questao questao) {
-        if (questao == null || isQuestaoValida(questao)) {
-            return false;
-        }
-        return listaQuestoes.add(questao);
-    }
+
     /**
-     * Adiciona um inquerito à lista de inqueritos.
+     * Adds a Question to the list of questions of the Template.
      *
-     * @param inquerito INquerito a adicionar
-     * @return true, se for adicionado com sucesso. Caso contrário, retorna false
+     * @param question Question to add
+     * @return true, if the question is successfully added. Otherwise, returns false
      */
-    public boolean adicionarInquerito(Inquerito inquerito) {
-        if (inquerito == null || isInqueritoValido(inquerito)) {
+    public boolean addQuestion(Question question) {
+        if (question == null || isQuestionValid(question)) {
             return false;
         }
-        return listaInqueritos.add(inquerito);
+        return questions.add(question);
     }
 
     /**
-     * Remove uma questão da lista de questões.
+     * Removes a Question from the list of questions of the Template.
      *
-     * @param questao Questão a remover
-     * @return true, se for removida com sucesso. Caso contrário, retorna false
+     * @param question Question to remove
+     * @return true, if the question is successfully removed. Otherwise, returns false
      */
-    public boolean removerQuestao(Questao questao) {
-        if (questao == null || !isQuestaoValida(questao)) {
+    public boolean removeQuestion(Question question) {
+        if (question == null || !isQuestionValid(question)) {
             return false;
         }
-        return listaQuestoes.remove(questao);
-    }
-    /**
-     * Remove um Inquerito da lista de inqueritos.
-     *
-     * @param inquerito Questão a remover
-     * @return true, se for removido com sucesso. Caso contrário, retorna false
-     */
-    public boolean removerInquerito(Inquerito inquerito) {
-        if (inquerito == null || !isInqueritoValido(inquerito)) {
-            return false;
-        }
-        return listaInqueritos.remove(inquerito);
+        return questions.remove(question);
     }
 
     /**
-     * Verifica se uma questão já existe na lista de questões.
+     * Checks if a Question already exists in the list of questions.
      *
-     * @param questao Questão a verificar
-     * @return true, se já existir na lista. Caso contrário, retorna false
+     * @param question Question to check
+     * @return true, if the question already exists. Otherwise, returns false
      */
-    public boolean isQuestaoValida(Questao questao) {
-        return listaQuestoes.contains(questao);
-    }
-    /**
-     * Verifica se um Inquerito já existe na lista de inqueritos.
-     *
-     * @param inquerito Inquerito a verificar
-     * @return true, se já existir na lista. Caso contrário, retorna false
-     */
-    public boolean isInqueritoValido(Inquerito inquerito) {
-        return listaInqueritos.contains(inquerito);
+    public boolean isQuestionValid(Question question) {
+        return questions.contains(question);
     }
 
     /**
-     * Método de acesso à categoria do Template em questão.
+     * Access method to the Category of the Template.
      *
-     * @return a categoria do Template
+     * @return the Category of the Template
      */
-    private Categoria getCategoria() {
-        return categoria;
+    private Category getCategory() {
+        return category;
     }
+
     /**
-     * Método de acesso à lista de questões do Template em questão.
+     * Access method to the list of questions of the Template.
      *
-     * @return a lista de questões do Template
+     * @return the list with all questions of the Template
      */
-    private List<Questao> getListaQuestoes() {
-        return listaQuestoes;
+    private List<Question> getQuestionsList() {
+        return questions;
     }
+
     /**
-     * Descreve o Template através da sua Categoria e lista de questoes.
+     * Describes the Template.
      *
-     * @return a descrição textual do Template.
+     * @return a description of the Template
      */
     @Override
     public String toString() {
-        return "\nCategoria: " + getCategoria() + "\nLista de Questoes: " + getListaQuestoes();
+        return "\nCategoria: " + getCategory() + "\nLista de Questões: " + getQuestionsList();
     }
-    
+
     /**
-     * Gera um índice a partir das questões e categorias do Template.
+     * Generates an unique index for the Template.
      *
-     * @return o valor de hash gerado
+     * @return the generated hash value
      */
-    @Override   
+    @Override
     public int hashCode() {
         int hash = 7;
-        hash = 43 * hash + Objects.hashCode(this.listaQuestoes);
-        hash = 43 * hash + Objects.hashCode(this.categoria);
+        hash = 43 * hash + Objects.hashCode(this.questions);
+        hash = 43 * hash + Objects.hashCode(this.category);
         return hash;
     }
+
     /**
-     * Compara o Template com outro objeto.
+     * Compares the Template with another Object.
      *
-     * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem as mesmas categorias e questões. Caso contrário, retorna false
+     * @param obj Object to compare
+     * @return true, if the two Objects have the same attributes. Otherwise, returns false
      */
     @Override
     public boolean equals(Object obj) {
@@ -181,13 +157,12 @@ public class Template implements Serializable {
             return false;
         }
         final Template other = (Template) obj;
-        if (!Objects.equals(this.listaQuestoes, other.listaQuestoes)) {
+        if (!Objects.equals(this.questions, other.questions)) {
             return false;
         }
-        if (!Objects.equals(this.categoria, other.categoria)) {
+        if (!Objects.equals(this.category, other.category)) {
             return false;
         }
         return true;
     }
-    
 }

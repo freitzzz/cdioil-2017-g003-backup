@@ -17,16 +17,10 @@ public class WhitelistBootstrap {
      */
     private void inicializarDominios(){
         WhitelistRepositoryImpl whiteRepo=new WhitelistRepositoryImpl();
-        whiteRepo.add(new Whitelist("gmail.com",""));
-        whiteRepo.add(new Whitelist("outlook.com",""));
-        whiteRepo.add(new Whitelist("outlook.pt",""));
-        whiteRepo.add(new Whitelist("live.com",""));
-        whiteRepo.add(new Whitelist("hotmail.com",""));
-        whiteRepo.add(new Whitelist("live.com","bit"));
-        whiteRepo.add(new Whitelist("sonae.pt","gestor"));
-        whiteRepo.add(new Whitelist("sonae.pt","admin"));
-        whiteRepo.add(new Whitelist("sonae.pt","continente"));
-        whiteRepo.add(new Whitelist("sonae.pt","worten"));
-        whiteRepo.add(new Whitelist("sonae.pt",""));
+        whiteRepo.add(new Whitelist("gmail.com"));
+        whiteRepo.add(new Whitelist("outlook.com"));
+        whiteRepo.add(new Whitelist("outlook.pt"));
+        whiteRepo.add(new Whitelist("live.com"));
+        whiteRepo.add(new Whitelist("hotmail.com"));
     }
 }
