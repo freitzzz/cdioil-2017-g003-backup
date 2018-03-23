@@ -76,7 +76,7 @@ public class InqueritoTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
-        assertNotEquals("Instância de outra classe não é igual", new Categoria("CategoriaTeste", "100DC"), i);
+        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), i);
         assertNotEquals("Instância de Inquerito diferente", new Inquerito(new Produto("OutroProduto", new EAN("123")), data, gu), i);
         assertEquals("Instância de Inquerito igual", new Inquerito(new Produto("UmProduto", new EAN("73292")), data, gu), i);
     }
@@ -99,7 +99,7 @@ public class InqueritoTest {
     @Test
     public void testAdicionarQuestao() {
         System.out.println("adicionarQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         assertTrue("Deveria ser possível adicionar", i.adicionarQuestao(q));
         i.adicionarQuestao(q);
         assertFalse("Questão null", i.adicionarQuestao(null));
@@ -112,7 +112,7 @@ public class InqueritoTest {
     @Test
     public void testarRemoverQuestao() {
         System.out.println("removerQuestao");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         i.adicionarQuestao(q);
         assertTrue("Deveria ser possível remover", i.removerQuestao(q));
         i.removerQuestao(q);
@@ -126,7 +126,7 @@ public class InqueritoTest {
     @Test
     public void testarIsQuestaoValida() {
         System.out.println("isQuestaoValida");
-        Questao q = new Questao("QuestaoTeste", 0, 4, 0.5);
+        Question q = new BinaryQuestion("QuestaoTeste");
         i.adicionarQuestao(q);
         assertTrue("Deveria ser válida", i.isQuestaoValida(q));
         i.removerQuestao(q);

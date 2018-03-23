@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  *
  * @author João
  */
-public class PerfilTest {
+public class ProfileTest {
 
     /**
      * Test of adicionarAvaliacao method, of class Perfil.

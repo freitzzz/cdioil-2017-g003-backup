@@ -13,12 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- * Classe Avaliacao. Representa uma avaliacao feita por um utilizador registado.
+ * Review class.
  *
  * @author João
  */
 @Entity
-public class Avaliacao implements Serializable {
+public class Review implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,37 +27,37 @@ public class Avaliacao implements Serializable {
     private Long id;
 
     /**
-     * opinião do utilizador relativamente ao produto avaliado
+     * user's opinion on the reviewed product
      */
-    private String opiniao;
+    private String opinion;
 
     /**
      * Inquérito correspondente à avaliação
      */
     @OneToOne
-    private Inquerito inquerito;
+    private Inquerito inquiry;
 
     /**
-     * construtor vazio da classe Avaliacao
+     * Empty constructor of class Review
      */
-    protected Avaliacao() {
+    protected Review() {
     }
 
     /**
-     * construtor da classe Avaliacao
+     * Review constructor
      *
-     * @param opiniao opiniao do utilizador
-     * @param inquerito inquerito correspondente à avaliação
+     * @param opinion user's opinion
+     * @param inquiry review's corresponding inquiry
      */
-    public Avaliacao(String opiniao, Inquerito inquerito) {
-        this.opiniao = opiniao;
-        this.inquerito = inquerito;
+    public Review(String opinion, Inquerito inquiry) {
+        this.opinion = opinion;
+        this.inquiry = inquiry;
     }
 
     /**
-     * Hash Code de uma avaliação
+     * Review's hash code.
      *
-     * @return hash code da avaliação
+     * @return review's hash code
      */
     @Override
     public int hashCode() {
@@ -67,18 +67,18 @@ public class Avaliacao implements Serializable {
     }
 
     /**
-     * verifica se duas avaliações são iguais baseado nos respetivos id
+     * Checks if two instances of Review are equal
      *
-     * @param object obejto a ser comparado
-     * @return true se ambos forem iguais, false se forem diferentes
+     * @param object object to be compared
+     * @return true if instances are equal, false if not
      */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Avaliacao)) {
+        if (!(object instanceof Review)) {
             return false;
         }
-        Avaliacao other = (Avaliacao) object;
+        Review other = (Review) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -86,13 +86,13 @@ public class Avaliacao implements Serializable {
     }
 
     /**
-     * devolve uma string que contém informação sobre a avaliação
+     * Returns a string containing the review's data
      *
-     * @return string que contém informação sobre a avaliação
+     * @return string containing the review's data
      */
     @Override
     public String toString() {
-        return "Avaliação:\nOpinião: " + opiniao;
+        return "Avaliação:\nOpinião: " + opinion;
     }
 
 }

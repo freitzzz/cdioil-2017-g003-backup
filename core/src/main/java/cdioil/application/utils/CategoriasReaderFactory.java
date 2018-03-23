@@ -6,7 +6,7 @@
 package cdioil.application.utils;
 
 /**
- * Factory de CategoriasReader.
+ * Factory de CategoriesReader.
  *
  * @author Rita Gonçalves (1160912)
  */
@@ -18,14 +18,14 @@ public final class CategoriasReaderFactory {
     public static final String EXTENSAO_CSV = ".csv";
 
     /**
-     * Cria uma instância de CategoriasReader de acordo com o formato do ficheiro a ler.
+     * Cria uma instância de CategoriesReader de acordo com o formato do ficheiro a ler.
      *
      * @param filename Nome do ficheiro a ler
-     * @return uma instância de CategoriasReader
+     * @return uma instância de CategoriesReader
      */
-    public static CategoriasReader create(String filename) {
+    public static CategoriesReader create(String filename) {
         if (filename.endsWith(EXTENSAO_CSV)) {
-            return new CSVCategoriasReader(filename);
+            return new CSVCategoriesReader(filename);
         }
         return null;
     }

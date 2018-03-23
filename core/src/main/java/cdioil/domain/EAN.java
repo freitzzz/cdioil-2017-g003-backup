@@ -1,10 +1,9 @@
 package cdioil.domain;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
- * Representa um código EAN (European Article Number)
+ * Rpresnets the code EAN (European Article Number)
  *
  * @author Ana Guerra (1161191)
  */
@@ -12,19 +11,18 @@ import javax.persistence.Entity;
 public class EAN extends Codigo<String> {
 
     /**
-     * Construtor protegido para JPA.
+     * Protected constructor for JPA.
      */
     protected EAN() {
 
     }
-
     /**
-     * Constrói uma nova instância com um dado código.
+     * Constructs a new instance with a given code.
      *
-     * @param codigo código a atribuir
+     * @param code code to be a attribute
      */
-    public EAN(String codigo) {
-        this.codigo = codigo;
+    public EAN(String code) {
+        this.codigo = code;
     }
 
 }

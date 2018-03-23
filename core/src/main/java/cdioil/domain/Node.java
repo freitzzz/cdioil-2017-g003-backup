@@ -52,9 +52,9 @@ public class Node implements Serializable {
     private List<Node> filhos = new LinkedList<>();
 
     /**
-     * Categoria de produtos contida no node.
+     * Category de produtos contida no node.
      */
-    private Categoria elemento;
+    private Category elemento;
 
     /**
      * Construtor apenas para uso do JPA.
@@ -62,7 +62,7 @@ public class Node implements Serializable {
     protected Node() {
     }
 
-    protected Node(Node pai, Categoria elemento) {
+    protected Node(Node pai, Category elemento) {
         this.pai = pai;
         this.elemento = elemento;
     }
@@ -77,11 +77,11 @@ public class Node implements Serializable {
     }
 
     /**
-     * Retorna a Categoria presente neste node.
+     * Retorna a Category presente neste node.
      *
      * @return a categoria contida no node
      */
-    public Categoria getElemento() {
+    public Category getElemento() {
         return elemento;
     }
 
@@ -110,7 +110,7 @@ public class Node implements Serializable {
     }
 
     /**
-     * Gera um índice a partir da Categoria do Node.
+     * Gera um índice a partir da Category do Node.
      *
      * @return o valor de hash gerado
      */
@@ -125,8 +125,8 @@ public class Node implements Serializable {
      * Compara o Node com outro objeto.
      *
      * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem a mesma Categoria. Caso
-     * contrário, retorna false
+     * @return true, se os dois objetos tiverem a mesma Category. Caso
+ contrário, retorna false
      */
     @Override
     public boolean equals(Object obj) {

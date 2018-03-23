@@ -73,17 +73,17 @@ public class SystemUserTest {
     }
 
     /**
-     * Teste do método passwordIgual, da classe SystemUser
+     * Teste do método samePassword, da classe SystemUser
      */
     @Test
     public void testePasswordIgual() {
         System.out.println("passwordIgual");
         //teste com passwords iguais
-        assertTrue(instance.passwordIgual("Precious3"));
+        assertTrue(instance.samePassword("Precious3"));
         //teste com passwords diferentes
-        assertFalse(instance.passwordIgual("Precious4"));
+        assertFalse(instance.samePassword("Precious4"));
         //teste com password inválida
-        assertFalse(instance.passwordIgual(""));
+        assertFalse(instance.samePassword(""));
     }
 
     /**

@@ -40,7 +40,7 @@ public class BackOfficeLogin {
             try {
                 Email email = new Email(emailS);
                 SystemUser sysUser = userRepo.findByEmail(email);
-                if (sysUser == null || !sysUser.passwordIgual(passwordS)) {
+                if (sysUser == null || !sysUser.samePassword(passwordS)) {
                     System.out.println(USER_NAO_ENCONTRADO);
                 } else {
                     Admin admin = adminRepo.getEntity(new Admin(sysUser));
