@@ -8,7 +8,7 @@ package cdioil.domain;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Gestor;
 import cdioil.domain.authz.GrupoUtilizadores;
-import cdioil.domain.authz.Nome;
+import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import java.util.Calendar;

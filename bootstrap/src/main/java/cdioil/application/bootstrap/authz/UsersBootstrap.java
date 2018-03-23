@@ -3,7 +3,7 @@ package cdioil.application.bootstrap.authz;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Gestor;
-import cdioil.domain.authz.Nome;
+import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UserRegistado;
@@ -84,7 +84,7 @@ public final class UsersBootstrap {
      * @return SystemUser com o utilizador do sistema
      */
     private SystemUser createSystemUser(String email,String password,String nome,String apelido){
-        return new SystemUser(new Email(email),new Nome(nome,apelido),new Password(password));
+        return new SystemUser(new Email(email),new Name(nome,apelido),new Password(password));
     }
     private void inicializarXSystemUsers(int x){
         UserRepositoryImpl repo=new UserRepositoryImpl();
