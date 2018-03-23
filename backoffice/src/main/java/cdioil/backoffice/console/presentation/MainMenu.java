@@ -61,7 +61,7 @@ public class MainMenu {
 //                    
 //                    break;
 //                case 7:
-//                    new ImportarCategoriasUI();
+//                    new ImportCategoriesUI();
 //                    
 //                    break;
 //                case 8:
@@ -99,7 +99,7 @@ public class MainMenu {
                 case 6:
                     break;
                 case 7:
-                    new ImportarCategoriasUI();
+                    new ImportCategoriesUI();
                     break;
                 case 8:
                     new PesquisarUtilizadoresUI();

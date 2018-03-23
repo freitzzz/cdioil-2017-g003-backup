@@ -15,16 +15,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes da classe CSVCategoriasReader.
+ * Testes da classe CSVCategoriesReader.
  *
  * @author Rita Gonçalves (1160912)
  */
 public class CSVCategoriasReaderTest {
 
     /**
-     * Instância de CSVCategoriasReader para testes.
+     * Instância de CSVCategoriesReader para testes.
      */
-    CSVCategoriasReader c;
+    CSVCategoriesReader c;
 
     public CSVCategoriasReaderTest() {
     }
@@ -39,7 +39,7 @@ public class CSVCategoriasReaderTest {
 
     @Before
     public void setUp() {
-        c = new CSVCategoriasReader("Test.csv");
+        c = new CSVCategoriesReader("Test.csv");
     }
 
     @After
@@ -47,15 +47,15 @@ public class CSVCategoriasReaderTest {
     }
 
     /**
-     * Teste do método testIsFicheiroValido, da classe CSVCategoriasReader.
+     * Teste do método testIsFicheiroValido, da classe CSVCategoriesReader.
      */
     @Test
     public void testIsFicheiroValido() {
         System.out.println("lerFicheiro");
         List<String> conteudoFicheiro = null;
-        assertFalse("Ficheiros null não podem ser lidos", c.isFicheiroValido(conteudoFicheiro));
+        assertFalse("Ficheiros null não podem ser lidos", c.isFileValid(conteudoFicheiro));
         conteudoFicheiro = new LinkedList<>();
         conteudoFicheiro.add("Campo1;Campo2;Campo3;Campo4;Campo5;Campo6;Campo7;Campo8;Campo9;Campo10");
-        assertTrue("Campos corretos", c.isFicheiroValido(conteudoFicheiro));
+        assertTrue("Campos corretos", c.isFileValid(conteudoFicheiro));
     }
 }
