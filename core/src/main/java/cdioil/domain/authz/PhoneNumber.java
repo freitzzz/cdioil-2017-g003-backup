@@ -3,6 +3,7 @@ package cdioil.domain.authz;
 import org.h2.util.StringUtils;
 
 import cdioil.application.utils.OperatorsEncryption;
+import cdioil.domain.ValueObject;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.regex.Matcher;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
  * @author Joana Pinheiro
  */
 @Embeddable
-public class PhoneNumber implements Serializable {
+public class PhoneNumber implements Serializable, ValueObject {
 
     /**
      * Serial Number
