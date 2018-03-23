@@ -2,7 +2,7 @@ package cdioil.domain;
 
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Gestor;
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
@@ -19,14 +19,14 @@ import static org.junit.Assert.*;
 public class ConcursoTest {
 
     private String descricao;
-    private GrupoUtilizadores gu;
+    private UsersGroup gu;
     private Calendar dataInicio;
     private Calendar dataFim;
 
     @Before
     public void setUp() {
         descricao = "Concurso Teste";
-        gu = new GrupoUtilizadores(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        gu = new UsersGroup(new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         dataInicio = Calendar.getInstance();
         dataFim = Calendar.getInstance();
@@ -112,8 +112,8 @@ public class ConcursoTest {
     public void testPublicoAlvo() {
         System.out.println("publicoAlvo");
         Concurso instance = createConcurso(descricao, gu, dataInicio, dataFim);
-        GrupoUtilizadores expResult = gu;
-        GrupoUtilizadores result = instance.publicoAlvo();
+        UsersGroup expResult = gu;
+        UsersGroup result = instance.publicoAlvo();
         assertEquals(expResult, result);
     }
 
@@ -126,7 +126,7 @@ public class ConcursoTest {
      * @param dataFim
      * @return instancia de Concurso
      */
-    private Concurso createConcurso(String descricao, GrupoUtilizadores gu,
+    private Concurso createConcurso(String descricao, UsersGroup gu,
             Calendar dataInicio, Calendar dataFim) {
         try {
             return new Concurso(descricao, gu, dataInicio, dataFim);
