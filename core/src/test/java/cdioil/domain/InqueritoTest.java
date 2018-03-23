@@ -7,7 +7,7 @@ package cdioil.domain;
 
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Gestor;
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
@@ -31,7 +31,7 @@ public class InqueritoTest {
      * Instância de Inquérito para testes.
      */
     Inquerito i;
-    GrupoUtilizadores gu;
+    UsersGroup gu;
     Calendar data;
 
     public InqueritoTest() {
@@ -48,7 +48,7 @@ public class InqueritoTest {
     @Before
     public void setUp() {
         
-        gu = new GrupoUtilizadores((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        gu = new UsersGroup((new Gestor(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
         data = Calendar.getInstance();
         this.i = new Inquerito(new Product("UmProduto", new EAN("73292")), data, gu);
@@ -154,8 +154,8 @@ public class InqueritoTest {
     public void testPublicoAlvo() {
         System.out.println("publicoAlvo");
         Inquerito inquerito = new Inquerito(new Product("Teste", new EAN("123456789")), data, gu);
-        GrupoUtilizadores expResult = gu;
-        GrupoUtilizadores result = inquerito.publicoAlvo();
+        UsersGroup expResult = gu;
+        UsersGroup result = inquerito.publicoAlvo();
         assertEquals(expResult, result);
     }
 

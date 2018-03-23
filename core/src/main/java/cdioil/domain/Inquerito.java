@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.GrupoUtilizadores;
+import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -34,7 +34,7 @@ public class Inquerito implements Serializable, Evento {
     /**
      * Utilizadores aos quais o Inquerito se destina.
      */
-    private GrupoUtilizadores publicoAlvo;
+    private UsersGroup publicoAlvo;
     /**
      * Data de realização do Inquerito.
      */
@@ -53,7 +53,7 @@ public class Inquerito implements Serializable, Evento {
      * @param data  Data de realização do inqueito
      * @param publicoAlvo Utilizadores aos quais o Inquerito se destina
      */
-    public Inquerito(Product produto, Calendar data, GrupoUtilizadores publicoAlvo) {
+    public Inquerito(Product produto, Calendar data, UsersGroup publicoAlvo) {
         if (produto == null) {
             throw new IllegalArgumentException("O inquérito tem que ter um produto");
         }
@@ -164,7 +164,7 @@ public class Inquerito implements Serializable, Evento {
      * @return grupo de utilizadores
      */
     @Override
-    public GrupoUtilizadores publicoAlvo() {
+    public UsersGroup publicoAlvo() {
         return publicoAlvo;
     }
 }
