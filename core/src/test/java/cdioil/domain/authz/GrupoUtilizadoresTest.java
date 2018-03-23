@@ -5,7 +5,7 @@
  */
 package cdioil.domain.authz;
 
-import cdioil.domain.CodigoQR;
+import cdioil.domain.QRCode;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -117,7 +117,7 @@ public class GrupoUtilizadoresTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, gu);
-        assertNotEquals("Instância de outra classe não é igual", new CodigoQR("40"), gu);
+        assertNotEquals("Instância de outra classe não é igual", new QRCode("40"), gu);
         assertEquals("Instância de GrupoUtilizadores igual", gu, gu);
     }
 }
