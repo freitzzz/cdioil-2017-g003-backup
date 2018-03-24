@@ -59,7 +59,7 @@ public abstract class Question<T> implements Serializable, ValueObject {
     /**
      * Returns the text of the question
      *
-     * @return string with the question itself
+     * @return the question itself
      */
     public T content() {
         return content;
@@ -90,20 +90,14 @@ public abstract class Question<T> implements Serializable, ValueObject {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if(!(obj instanceof Question<?>)){
             return false;
         }
         final Question<?> other = (Question<?>) obj;
         if (this.type != other.type) {
             return false;
         }
-        if (!Objects.equals(this.content, other.content)) {
-            return false;
-        }
-        return true;
+        return this.content.equals(other.content);
     }
 
 }
