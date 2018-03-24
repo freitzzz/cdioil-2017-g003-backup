@@ -79,7 +79,7 @@ public final class CSVUsersReader implements UsersReader{
                             ,new Name(nextCampos[nameIdentifier],nextCampos[subnameIdentifier])
                             ,new Password(Password.DEFAULT_PASSWORD)));
                 }catch(IllegalArgumentException e){
-                    System.out.println(e);
+                    //TO-DO IMPLEMENT LOGGER
                 }
             }
         }

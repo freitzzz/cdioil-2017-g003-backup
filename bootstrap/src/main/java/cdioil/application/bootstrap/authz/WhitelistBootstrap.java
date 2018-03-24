@@ -22,5 +22,13 @@ public class WhitelistBootstrap {
         whiteRepo.add(new Whitelist("outlook.pt"));
         whiteRepo.add(new Whitelist("live.com"));
         whiteRepo.add(new Whitelist("hotmail.com"));
+        whiteRepo.add(new Whitelist("sonae.pt"));
+        whiteRepo.add(new Whitelist("worten.pt"));
+        whiteRepo.add(new Whitelist("bit.sonae.pt"));
+        whiteRepo.add(new Whitelist("continente.sonae.pt"));
+        whiteRepo.add(new Whitelist("mng.continente.sonae.pt"));
+        whiteRepo.add(new Whitelist("dsi.continente.sonae.pt"));
+        whiteRepo.add(new Whitelist("loja.continente.sonae.pt"));
+        whiteRepo.add(new Whitelist("compras.continente.sonae.pt"));
     }
 }

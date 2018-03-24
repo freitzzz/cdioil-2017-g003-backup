@@ -8,13 +8,14 @@ import cdioil.persistence.UserRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import javax.persistence.NoResultException;
 
 /**
  * Class that represents the implementation of the SystemUser repository
  * @see cdioil.persistence.UserRepository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> implements UserRepository {
+public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Integer> implements UserRepository {
 
     /**
      * Method that returns the persistence unit name that the repository uses
@@ -67,7 +68,11 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
         Query q =
                 em.createQuery("SELECT u from SystemUser u where lower(u.email.email) = :email");
         q.setParameter("email", email.toString().toLowerCase());
-        return (SystemUser) q.getSingleResult();
+        try{
+            return (SystemUser) q.getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
     }
 
     /**
@@ -89,6 +94,6 @@ public class UserRepositoryImpl extends RepositorioBaseJPA<SystemUser, Email> im
      * @return boolean true if the user exists on the database, false if not
      */
     public boolean exists(SystemUser user) {
-        return find(user.getID()) != null;
+        return findByEmail(user.getID()) != null;
     }
 }
