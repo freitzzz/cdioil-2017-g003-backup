@@ -85,10 +85,10 @@ public class BinaryQuestionTest {
     }
 
     /**
-     * Cria uma instancia de BinaryQuestion recebendo uma questao
+     * Builds a BinaryQuestion with a question
      *
-     * @param question content da questao
-     * @return instancia de BinaryQuestion
+     * @param question the question itself
+     * @return BinaryQuestion instance
      */
     private BinaryQuestion createBinaryQuestion(String question) {
         try {
