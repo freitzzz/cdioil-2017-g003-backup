@@ -64,7 +64,7 @@ public class FrontOfficeLogin {
             String emailS = Console.readLine(EMAIL);
             String passwordS = Console.readLine(PASSWORD);
             Email email = new Email(emailS);
-            SystemUser sysUser = userRepo.find(email);
+            SystemUser sysUser = userRepo.findByEmail(email);
             if (sysUser == null || !sysUser.samePassword(passwordS)) {
                 System.out.println(USER_NAO_ENCONTRADO);
             } else {
