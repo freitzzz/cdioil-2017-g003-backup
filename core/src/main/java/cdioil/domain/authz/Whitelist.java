@@ -21,7 +21,7 @@ public class Whitelist implements Serializable {
      * String that repesents the authorized
      */
     @Id
-    @Column(name="DOMINIO")
+    @Column(name="WHITELISTED_DOMAIN")
     private String domain;
 
     /**
@@ -54,7 +54,7 @@ public class Whitelist implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.domain);
+        hash = 29 * hash + Objects.hashCode(this.domain.toLowerCase()) + Objects.hashCode(this.domain.toUpperCase());
         return hash;
     }
 
