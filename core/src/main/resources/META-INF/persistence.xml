@@ -19,10 +19,11 @@
     <class>cdioil.domain.authz.Manager</class>
     <class>cdioil.domain.authz.Profile</class>
     <class>cdioil.domain.authz.SystemUser</class>
-    <class>cdioil.domain.authz.UserRegistado</class>
     <class>cdioil.domain.authz.UsersGroup</class>
     <class>cdioil.domain.authz.Whitelist</class>
     <class>cdioil.domain.MarketStructure</class>
+    <class>cdioil.domain.authz.RegisteredUser</class>
+    <class>cdioil.domain.BinaryAnswer</class>
     <class>cdioil.domain.IndependentQuestionsLibrary</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>

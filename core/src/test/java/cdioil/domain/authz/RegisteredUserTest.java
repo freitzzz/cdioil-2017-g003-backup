@@ -3,16 +3,16 @@ package cdioil.domain.authz;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UserRegistadoTest {
+public class RegisteredUserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void criaInstanciaInvalidaDeUserRegistadoTest() {
-        new UserRegistado(null);
+        new RegisteredUser(null);
     }
 
     @Test
     public void equalsHashCodeTest() {
-        UserRegistado ur = new UserRegistado(new SystemUser());
+        RegisteredUser ur = new RegisteredUser(new SystemUser());
 
         Assert.assertNotEquals(ur, "Dummy");
         Assert.assertNotEquals(ur, null);

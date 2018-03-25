@@ -6,11 +6,10 @@ import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
-import cdioil.domain.authz.UserRegistado;
-import cdioil.persistence.UserRegistadoRepository;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
-import cdioil.persistence.impl.RepositorioUtilizadoresImpl;
+import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,25 +29,25 @@ public final class UsersBootstrap {
         //inicializarXSystemUsers(5000);
     }
     /**
-     * Inicializa diversos utilizadores registados (UserRegistado)
+     * Inicializa diversos utilizadores registados (RegisteredUser)
      */
     private void inicializarUtilizadoresRegitados(){
-        UserRegistadoRepository userRepo=new RepositorioUtilizadoresImpl();
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        RegisteredUserRepositoryImpl userRepo=new RegisteredUserRepositoryImpl();
+        userRepo.add(new RegisteredUser(createSystemUser
             ("joao@email.com",Password.DEFAULT_PASSWORD,"Joao","Padaria")));
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        userRepo.add(new RegisteredUser(createSystemUser
             ("maria@email.com",Password.DEFAULT_PASSWORD,"Maria","Albertina")));
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        userRepo.add(new RegisteredUser(createSystemUser
             ("antonio@email.com",Password.DEFAULT_PASSWORD,"Antonio","Variações")));
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        userRepo.add(new RegisteredUser(createSystemUser
             ("gisele@email.com",Password.DEFAULT_PASSWORD,"Gisele","Gisele")));
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        userRepo.add(new RegisteredUser(createSystemUser
             ("quetirofoiesse@email.com",Password.DEFAULT_PASSWORD,"Maya","das Cartas")));
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        userRepo.add(new RegisteredUser(createSystemUser
             ("bombado70@email.com",Password.DEFAULT_PASSWORD,"Agua","Fresca")));
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        userRepo.add(new RegisteredUser(createSystemUser
             ("lil.pump.x3@email.com",Password.DEFAULT_PASSWORD,"Pump","Eskeiit")));
-        userRepo.addUserRegistado(new UserRegistado(createSystemUser
+        userRepo.add(new RegisteredUser(createSystemUser
             ("dinamagalhaes@email.com",Password.DEFAULT_PASSWORD,"Dina","Magalhaes")));
     }
     /**
@@ -76,7 +75,7 @@ public final class UsersBootstrap {
             ("tiago.almeida@sonae.pt",Password.DEFAULT_PASSWORD,"Tiago","Almeida")));
     }
     /**
-     * Método que cria um SystemUser a ser atribuido a um UserRegistado/Admin/Manager
+     * Método que cria um SystemUser a ser atribuido a um RegisteredUser/Admin/Manager
      * @param email String com o email do utilizador
      * @param password String com a password do utilizador
      * @param nome String com o nome do utilizador

@@ -39,7 +39,7 @@ public class UsersGroup implements Serializable {
      * List with all the RegisteredUsers of the UsersGroup.
      */
     @ElementCollection
-    private List<UserRegistado> users;
+    private List<RegisteredUser> users;
 
     /**
      * Creates an instance of UsersGroup, receiving the Manager that created it.
@@ -77,7 +77,7 @@ public class UsersGroup implements Serializable {
      * @param u RegisteredUser to check
      * @return true, if the users list contains the user to add. Otherwise, returns false
      */
-    public boolean isUserValid(UserRegistado u) {
+    public boolean isUserValid(RegisteredUser u) {
         return users.contains(u);
     }
 
@@ -87,7 +87,7 @@ public class UsersGroup implements Serializable {
      * @param u RegisteredUser to add
      * @return true, if the RegisteredUser is successfully added. Otherwise, returns false
      */
-    public boolean addUser(UserRegistado u) {
+    public boolean addUser(RegisteredUser u) {
         if (u == null || isUserValid(u)) {
             return false;
         }
@@ -100,7 +100,7 @@ public class UsersGroup implements Serializable {
      * @param u RegisteredUser to remove
      * @return true, if the RegisteredUser is successfully removed. Otherwise, returns false
      */
-    public boolean removeUser(UserRegistado u) {
+    public boolean removeUser(RegisteredUser u) {
         if (u == null || !isUserValid(u)) {
             return false;
         }
