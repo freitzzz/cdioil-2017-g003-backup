@@ -1,7 +1,6 @@
 package cdioil.backoffice.webapp;
 
 import cdioil.backoffice.webapp.authz.LoginView;
-import cdioil.backoffice.webapp.authz.TestView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
