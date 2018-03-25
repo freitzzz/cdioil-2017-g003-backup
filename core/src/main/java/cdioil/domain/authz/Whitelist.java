@@ -65,7 +65,7 @@ public class Whitelist implements Serializable {
      */
     @Override
     public String toString() {
-        return "Domain: " + domain;
+        return "Domain: " + domain.toLowerCase();
     }
 
     /**
