@@ -3,20 +3,20 @@ package cdioil.persistence.impl;
 import cdioil.domain.authz.Manager;
 import cdioil.persistence.ManagerRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
-import cdioil.persistence.RepositorioBaseJPA;
+import cdioil.persistence.BaseJPARepository;
 
 /**
  * Class that represents the implementation of the Manager repository
  * @see cdioil.persistence.ManagerRepository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class ManagerRepositoryImpl extends RepositorioBaseJPA<Manager,Long> implements ManagerRepository{
+public class ManagerRepositoryImpl extends BaseJPARepository<Manager,Long> implements ManagerRepository{
     /**
      * Method that returns the persistence unit name that the repository uses
      * @return String with the persistence unit name that the repository uses
      */
     @Override
-    protected String nomeUnidadePersistencia() {
+    protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
     /**

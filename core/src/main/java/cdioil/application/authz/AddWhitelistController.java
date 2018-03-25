@@ -29,7 +29,6 @@ public class AddWhitelistController {
      */
     public void addAuthorizedDomain(String domain) {
 
-        //TODO atualizar caso de uso
         Whitelist whitelist = new Whitelist(domain);
 
         repo.add(whitelist);

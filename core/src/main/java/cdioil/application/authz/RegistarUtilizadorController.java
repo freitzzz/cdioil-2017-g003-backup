@@ -1,12 +1,12 @@
 package cdioil.application.authz;
 
-import cdioil.persistence.impl.RepositorioUtilizadoresImpl;
+import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.domain.authz.*;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
 
 public class RegistarUtilizadorController {
 
-    private RepositorioUtilizadoresImpl repositorioUtilizadoresJPA = new RepositorioUtilizadoresImpl();
+    private RegisteredUserRepositoryImpl repositorioUtilizadoresJPA = new RegisteredUserRepositoryImpl();
     private static final String REGEX_DOMINIO = "[A-Za-z0-9]{1,63}[.][A-Za-z]{2,6}$";
     //private static final String REGEX_SUB_DOMINIO = "[A-Za-z0-9](([A-Za-z0-9]|[.](?![.]))){0,63}";
 
@@ -30,8 +30,8 @@ public class RegistarUtilizadorController {
             Whitelist whitelist = new Whitelist(domainPart);
             if (new WhitelistRepositoryImpl().getEntity(whitelist) != null) {
                 SystemUser systemUser = new SystemUser(new Email(email), new Name(primeiroNome, apelido), new Password(password));
-                UserRegistado userRegistado = new UserRegistado(systemUser);
-                repositorioUtilizadoresJPA.addUserRegistado(userRegistado);
+                RegisteredUser userRegistado = new RegisteredUser(systemUser);
+                repositorioUtilizadoresJPA.add(userRegistado);
             }else{
                 throw new IllegalArgumentException("Dominio/Subdominio de email nao autorizado");
             }

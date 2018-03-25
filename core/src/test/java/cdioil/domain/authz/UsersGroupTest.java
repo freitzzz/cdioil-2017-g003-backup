@@ -47,9 +47,9 @@ public class UsersGroupTest {
     @Test
     public void testIsUserValido() {
         System.out.println("isUserValid");
-        UserRegistado u = null;
+        RegisteredUser u = null;
         assertFalse("Objeto null não é válido", gu.isUserValid(u));
-        u = new UserRegistado(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
+        u = new RegisteredUser(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
         assertFalse("Objeto não pertence à lista", gu.isUserValid(u));
         gu.addUser(u);
@@ -63,7 +63,7 @@ public class UsersGroupTest {
     public void testAdicionarUser() {
         System.out.println("addUser");
         assertFalse("Objeto null não é válido", gu.addUser(null));
-        UserRegistado u = new UserRegistado(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
+        RegisteredUser u = new RegisteredUser(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
         assertTrue("Objeto não pertence à lista, logo pode ser adicionado", gu.addUser(u));
         gu.addUser(u);
@@ -76,9 +76,9 @@ public class UsersGroupTest {
     @Test
     public void testRemoverUser() {
         System.out.println("removeUser");
-        UserRegistado u = null;
+        RegisteredUser u = null;
         assertFalse("Objeto null não é válido", gu.removeUser(u));
-        u = new UserRegistado(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
+        u = new RegisteredUser(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
         assertFalse("Objeto não pertence à lista, logo não pode ser removido", gu.removeUser(u));
         gu.addUser(u);

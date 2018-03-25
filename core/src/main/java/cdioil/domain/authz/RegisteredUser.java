@@ -15,7 +15,7 @@ import javax.persistence.Version;
  * É o responsável por avaliar produtos e fornecer feedback
  */
 @Entity
-public class UserRegistado implements Serializable, Identifiable<Long> {
+public class RegisteredUser implements Serializable, Identifiable<Long> {
 
     @Id
     @GeneratedValue
@@ -23,7 +23,7 @@ public class UserRegistado implements Serializable, Identifiable<Long> {
     @Version
     private Long version;
     /**
-     * Conta de SystemUser associada a esta instância de UserRegistado
+     * Conta de SystemUser associada a esta instância de RegisteredUser
      */
     @OneToOne(cascade = CascadeType.PERSIST)
     private SystemUser su;
@@ -33,7 +33,7 @@ public class UserRegistado implements Serializable, Identifiable<Long> {
      *
      * @param su conta de SystemUser a associar
      */
-    public UserRegistado(SystemUser su) {
+    public RegisteredUser(SystemUser su) {
         if (su == null) {
             throw new IllegalArgumentException("Instância de SystemUser atribuida é null");
         }
@@ -41,7 +41,7 @@ public class UserRegistado implements Serializable, Identifiable<Long> {
     }
 
     /**
-     * Compara esta instância de UserRegistado a outro Objeto arbitrário
+     * Compara esta instância de RegisteredUser a outro Objeto arbitrário
      *
      * @param o outro objeto a comparar
      * @return true se os dois elementos da comparação forem iguais
@@ -55,13 +55,13 @@ public class UserRegistado implements Serializable, Identifiable<Long> {
             return false;
         }
 
-        UserRegistado that = (UserRegistado) o;
+        RegisteredUser that = (RegisteredUser) o;
 
         return su.equals(that.su);
     }
 
     /**
-     * Descreve textualmente o UserRegistado.
+     * Descreve textualmente o RegisteredUser.
      *
      * @return a informação relativa ao seu SystemUser
      */
@@ -71,7 +71,7 @@ public class UserRegistado implements Serializable, Identifiable<Long> {
     }
 
     /**
-     * Calcula o hashcode desta instancia de UserRegistado
+     * Calcula o hashcode desta instancia de RegisteredUser
      *
      * @return hashcode
      */
@@ -80,7 +80,7 @@ public class UserRegistado implements Serializable, Identifiable<Long> {
         return su.hashCode();
     }
 
-    protected UserRegistado() {
+    protected RegisteredUser() {
     }
 
     @Override

@@ -2,7 +2,7 @@ package cdioil.application.authz;
 
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.UserRepositoryImpl;
-import cdioil.persistence.RepositorioBaseJPA;
+import cdioil.persistence.BaseJPARepository;
 
 /**
  * Controller of US Change User's Data
@@ -35,7 +35,7 @@ public class ChangeUserDataController {
     public boolean changeDataField(String newData, int option) {
         boolean b = su.changeUserDatafield(newData, option);
         if (b) {
-            RepositorioBaseJPA repo = new UserRepositoryImpl();
+            BaseJPARepository repo = new UserRepositoryImpl();
             repo.merge(su);
         }
         return b;

@@ -2,6 +2,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.application.authz.AddWhitelistController;
 import cdioil.backoffice.console.utils.Console;
+import javax.persistence.RollbackException;
 
 /**
  * User story 103's user interface.
@@ -43,7 +44,11 @@ public class AddWhitelistUI {
 
                 case 1:
                     String dominio = Console.readLine("Escreva o dominio de email que pretende autorizar.\n");
-                    controller.addAuthorizedDomain(dominio);
+                    try{
+                     controller.addAuthorizedDomain(dominio);   
+                    }catch(RollbackException e){
+                        System.out.println("Impossível adicionar registo duplicado.");
+                    }
                     break;
 
                 default:

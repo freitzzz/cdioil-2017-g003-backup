@@ -112,7 +112,7 @@ public class Product implements Serializable {
 
         for (Code c : codes) {
 
-            result += c.getClass().getSimpleName() + " " + c.toString();
+            result += c.toString();
         }
 
         return result;
