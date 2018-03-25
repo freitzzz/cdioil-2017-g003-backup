@@ -1,6 +1,7 @@
 package cdioil.backoffice.webapp;
 
 import cdioil.backoffice.webapp.authz.LoginView;
+import cdioil.backoffice.webapp.authz.TestView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
@@ -40,5 +41,8 @@ public class MyUI extends UI {
         navigator.addView(LoginView.VIEW_NAME,LoginView.class);
         navigator.navigateTo(LoginView.VIEW_NAME);
     }
-
+    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+    @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
+    public static class MyUIServlet extends VaadinServlet {
+    }
 }
