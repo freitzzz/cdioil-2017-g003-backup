@@ -1,14 +1,14 @@
 package cdioil.persistence.impl;
 
-import cdioil.persistence.RepositorioBaseJPA;
+import cdioil.persistence.BaseJPARepository;
 import cdioil.domain.authz.UserRegistado;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserRegistadoRepository;
 
-public class RepositorioUtilizadoresImpl extends RepositorioBaseJPA<UserRegistado,Long> implements UserRegistadoRepository {
+public class RepositorioUtilizadoresImpl extends BaseJPARepository<UserRegistado,Long> implements UserRegistadoRepository {
 
     @Override
-    protected String nomeUnidadePersistencia() {
+    protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
 
