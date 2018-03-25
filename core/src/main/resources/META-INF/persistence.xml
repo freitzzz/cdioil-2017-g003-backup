@@ -23,6 +23,7 @@
     <class>cdioil.domain.authz.UsersGroup</class>
     <class>cdioil.domain.authz.Whitelist</class>
     <class>cdioil.domain.MarketStructure</class>
+    <class>cdioil.domain.IndependentQuestionsLibrary</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
