@@ -16,13 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
+ * Class representing a Node in the Market Structure. A Node is composed of a
+ * Category as well as references to its parent and its children.
  *
  * @author António Sousa [1161371]
- */
-/**
- * Clase interna que representa um nó na estrutura mercadologica.
- * <p>
- * Um nó contém uma categoria, assim como referencias para outros nós.
  */
 @Entity
 public class Node implements Serializable {
@@ -67,12 +64,12 @@ public class Node implements Serializable {
     /**
      * Instantiates a Node with a given parent Node and element.
      *
-     * @param pai
-     * @param elemento
+     * @param parent
+     * @param element
      */
-    protected Node(Node pai, Category elemento) {
-        this.parent = pai;
-        this.element = elemento;
+    protected Node(Node parent, Category element) {
+        this.parent = parent;
+        this.element = element;
     }
 
     /**
@@ -103,39 +100,44 @@ public class Node implements Serializable {
     }
 
     /**
-     * Adiciona um node ao conjunto de children deste node.
+     * Adds a Node to the collection of children.
      *
-     * @param filho node que se pretende adicionar aos children
-     * @return true - caso tenha sido possível adicionar ao conjunto de
-     * children<p>
-     * false - caso contrario
+     * @param child Node to be added to this instance's collection of child
+     * Nodes
+     * @return true - if child is not null nor is it contained in the collection
+     * of child Nodes
+     * <p>
+     * false - otherwise
      */
-    public boolean addChild(Node filho) {
-        if (getChildren().contains(filho)) {
+    public boolean addChild(Node child) {
+
+        if (child != null && !getChildren().contains(child)) {
+            return children.add(child);
+        } else {
             return false;
         }
-        return children.add(filho);
     }
 
     /**
-     * Gera um índice a partir da Category do Node.
+     * Generates an hash value based on the Node's Category.
      *
-     * @return o valor de hash gerado
+     * @return the generated hash value
      */
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.parent);
         hash = 97 * hash + Objects.hashCode(this.element);
         return hash;
     }
 
     /**
-     * Compara o Node com outro objeto.
+     * Compares this instance to another Object.
      *
-     * @param obj Objeto a comparar
-     * @return true, se os dois objetos tiverem a mesma Category. Caso
-     * contrário, retorna false
+     * @param obj
+     * @return true - if both are instances of Node and they hold an equal
+     * Category<p>
+     * false - if obj is not an instance of Node, nor does it hold an equal
+     * Category
      */
     @Override
     public boolean equals(Object obj) {
@@ -149,9 +151,6 @@ public class Node implements Serializable {
             return false;
         }
         final Node other = (Node) obj;
-        if (!Objects.equals(this.parent, other.parent)) {
-            return false;
-        }
         if (!Objects.equals(this.element, other.element)) {
             return false;
         }
@@ -160,7 +159,7 @@ public class Node implements Serializable {
 
     @Override
     public String toString() {
-        return "Node{" + "elemento=" + element + '}';
+        return "Node{" + "element=" + element + '}';
     }
 
 }
