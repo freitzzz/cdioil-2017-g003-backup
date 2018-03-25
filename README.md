@@ -1,24 +1,24 @@
-Polythecnic of Porto, School of Engineering
-
-EAPLI 
-
-=======================
-
-This application is part of the lab project for the course EAPLI.
-
-Please check notes.txt for a discussion on design decissions.
-
-BUILD
-------
-
-make sure Maven is installed and on the PATH
-
-run script build-all.bat
+# Feedback Monkey
 
 
-RUN
-------
+## Build
 
-make sure a JRE is installed and on the PATH
+Before executing any of the modules of the application make sure to execute ``build-all``
 
-run script run-backoffice or run-user.bat
+## Bootstrap
+
+To run the bootstrap of the application execute ``bootstrap``
+
+## Backoffice
+
+To run the backoffice of the application you can either:
+
+- Run it on **console** by executing ``run-backoffice-console``
+
+- Run it on the **web** as an WebApp by executing ``run-backoffice-webapp``
+
+
+### Built with and Dependencies
+
+- The application is built in **Java** and uses **Maven** as way to manage modules and dependencies
+- The WebApp uses [**Vaadin**](https://vaadin.com/) a free Web Framework for Java
