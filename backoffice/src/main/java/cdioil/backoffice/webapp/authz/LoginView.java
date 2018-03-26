@@ -1,8 +1,10 @@
 package cdioil.backoffice.webapp.authz;
 
+import cdioil.backoffice.webapp.utils.PopupNotification;
 import cdioil.domain.authz.Email;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
@@ -26,6 +28,16 @@ public class LoginView extends LoginDesign implements View{
      */
     private static final String INVALID_USERNAME_DESCRIPTION="Por favor insira um email válido";
     /**
+     * Constant that represents the name of the error dialog that pops up if the 
+     * user tries to login with an invalid username
+     */
+    private static final String INVALID_LOGIN_CREDENTIALS_NAME="Credenciais Erradas!";
+    /**
+     * Constant that represents the message that pops up if the user 
+     * tries to login with an invalid username
+     */
+    private static final String INVALID_LOGIN_CREDENTIALS_DESCRIPTION="As credenciais do login estão erradas";
+    /**
      * Current Navigator
      */
     private final Navigator navigator;
@@ -48,8 +60,12 @@ public class LoginView extends LoginDesign implements View{
         btnLogin.addClickListener((event)->{
             if(checkForUsername()){
                 if(checkForLoginCredentials()){
-                    //TO-DO: ADD NOTIFICATION POP-UP FOR VALID LOGIN
+                    //TO-DO: ADD NAVIGATOR FOR EACH TYPE OF BACKOFFICE USER (MANAGER + ADMIN)
+                }else{
+                    showInvalidLoginCredentialsNotification();
                 }
+            }else{
+                showInvalidUsernameNotification();
             }
         });
     }
@@ -62,7 +78,6 @@ public class LoginView extends LoginDesign implements View{
             new Email(txtUsername.getValue());
             return true;
         }catch(IllegalArgumentException e){
-            Notification.show(INVALID_USERNAME_NAME,INVALID_USERNAME_DESCRIPTION,Notification.Type.ERROR_MESSAGE);
             return false;
         }
     }
@@ -73,5 +88,19 @@ public class LoginView extends LoginDesign implements View{
     private boolean checkForLoginCredentials(){
         //TO-DO: ADD SERVICE FOR LOGIN
         return false;
+    }
+    /**
+     * Pops up a notification informing the user that the username is invalid
+     */
+    private void showInvalidUsernameNotification(){
+        PopupNotification.show(INVALID_USERNAME_NAME,INVALID_USERNAME_DESCRIPTION
+                    ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
+    }
+    /**
+     * Pops up a notification informing the user that login credentials are invalid
+     */
+    private void showInvalidLoginCredentialsNotification(){
+        PopupNotification.show(INVALID_LOGIN_CREDENTIALS_NAME,INVALID_LOGIN_CREDENTIALS_DESCRIPTION
+                    ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
     }
 }
