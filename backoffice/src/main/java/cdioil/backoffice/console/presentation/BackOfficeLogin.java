@@ -73,8 +73,8 @@ public class BackOfficeLogin {
             String passwordS = Console.readLine(PASSWORD);
             try {
                 Email email = new Email(emailS);
-                SystemUser sysUser = sysUserRepo.findByEmail(email);
-                if (sysUser == null || !sysUser.samePassword(passwordS)) {
+                SystemUser sysUser = sysUserRepo.login(email, passwordS);
+                if (sysUser == null) {
                     System.out.println(WRONG_CREDENTIALS);
                 } else {
                     Admin admin = adminRepo.getEntity(new Admin(sysUser));
