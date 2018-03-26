@@ -115,25 +115,5 @@ public abstract class BaseJPARepository<T, K extends Serializable> implements Da
         em.close();
         return entity;
     }
-
-    /**
-     * <b>SOLUCAO TEMPORARIA</b>
-     * <br>Não me julguem
-     *
-     * @param entity
-     * @return
-     */
-    public T getEntity(T entity) {
-        if (entity == null) {
-            return null;
-        }
-        Iterator<T> iteratorEntities = findAll().iterator();
-        while (iteratorEntities.hasNext()) {
-            if (iteratorEntities.next().equals(entity)) {
-                return entity;
-            }
-        }
-        return null;
-    }
-
+    
 }
