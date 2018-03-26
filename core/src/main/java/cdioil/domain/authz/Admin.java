@@ -25,6 +25,7 @@ public class Admin implements Serializable,Identifiable<Long> {
      */
     
     @OneToOne(cascade = CascadeType.PERSIST)
+    @Column(unique = true)
     private SystemUser sysUser;
 
     /**

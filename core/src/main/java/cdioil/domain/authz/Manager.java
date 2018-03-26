@@ -5,6 +5,7 @@ import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ public class Manager implements Serializable, Identifiable<Long> {
      * SystemUser associated with a Manager.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
+    @Column(unique = true)
     private SystemUser su;
     /**
      * Category List associated with a Manager.
