@@ -29,7 +29,7 @@ public class Whitelist implements Serializable {
      * @param domain String with the authorized domain
      */
     public Whitelist(String domain){
-        this.domain=domain;
+        this.domain=domain.toLowerCase();
     }
     /**
      * Method that verifies if two authorized domains/subdomains are equal
@@ -44,7 +44,7 @@ public class Whitelist implements Serializable {
         if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
-        return domain.equalsIgnoreCase(((Whitelist) obj).domain);
+        return domain.equals(((Whitelist) obj).domain);
     }
 
     /**
@@ -54,7 +54,7 @@ public class Whitelist implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.domain.toLowerCase()) + Objects.hashCode(this.domain.toUpperCase());
+        hash = 29 * hash + Objects.hashCode(this.domain);
         return hash;
     }
 
@@ -65,7 +65,7 @@ public class Whitelist implements Serializable {
      */
     @Override
     public String toString() {
-        return "Domain: " + domain.toLowerCase();
+        return "Domain: " + domain;
     }
 
     /**

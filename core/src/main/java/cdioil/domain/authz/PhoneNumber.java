@@ -35,6 +35,12 @@ public class PhoneNumber implements Serializable, ValueObject {
     private String number;
 
     /**
+     * Empty constructor used for JPA.
+     */
+    protected PhoneNumber() {
+    }
+
+    /**
      * PhoneNumber construtor
      * @param number phone number
      */
