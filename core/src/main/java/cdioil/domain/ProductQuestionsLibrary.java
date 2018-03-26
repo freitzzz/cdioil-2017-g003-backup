@@ -111,6 +111,11 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesProductExist(product)) {
             return false;
         }
+        for(Product key : library.keySet()){
+            if(!(key.equals(product)) && library.get(key).contains(question)){
+                return false;
+            }
+        }
         if (!doesQuestionExist(question, product)) {
             return library.get(product).add(question);
         }

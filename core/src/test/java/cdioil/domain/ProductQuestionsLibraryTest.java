@@ -93,7 +93,7 @@ public class ProductQuestionsLibraryTest {
         Product product2 = new Product("ProdutoTest2e", new EAN("644231234"),
                 new QRCode("5324235"));
         instance.addProduct(product2);
-        assertTrue("The condition should succeed because the same question is "
+        assertFalse("The condition should succeed because the same question is "
                 + "being added to a different product.", instance.addQuestion(question, product2));
     }
 
@@ -145,7 +145,7 @@ public class ProductQuestionsLibraryTest {
                 new QRCode("5324235"));
         instance.addProduct(product2);
         instance.addQuestion(question, product2);
-        assertTrue("The condition shuold succeed because the same question exists"
+        assertFalse("The condition shuold succeed because the same question exists"
                 + "in another product.", instance.doesQuestionExist(question, product2));
     }
 
