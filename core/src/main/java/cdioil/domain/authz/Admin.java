@@ -10,9 +10,10 @@ import javax.persistence.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-@Table(name="ADMINISTRATOR")
+@Table(name="ADMINISTRATOR", uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER_ID"}))
 public class Admin implements Serializable,Identifiable<Long> {
     @Id
+    @Column(name = "ADMINISTRATOR_ID")
     @GeneratedValue
     private long id;
     private static final long serialVersionUID = 1L;
@@ -25,7 +26,7 @@ public class Admin implements Serializable,Identifiable<Long> {
      */
     
     @OneToOne(cascade = CascadeType.PERSIST)
-    @Column(unique = true)
+    @JoinColumn(name = "SYSTEMUSER_ID")
     private SystemUser sysUser;
 
     /**
