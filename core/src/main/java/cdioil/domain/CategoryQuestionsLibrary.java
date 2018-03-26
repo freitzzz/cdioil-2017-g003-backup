@@ -35,13 +35,13 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     private Long id;
 
     /**
-     * Map that contains questions (values) related to categories (keys).
-     * TODO check JPA annotations
+     * Map that contains questions (values) related to categories (keys). TODO
+     * check JPA annotations
      */
     @ElementCollection
     @MapKeyColumn(name = "Category")
     @Column(name = "Questions")
-    @CollectionTable(name = "CategoryQuestionsLibrary",joinColumns = @JoinColumn(name = "library id"))
+    @CollectionTable(name = "CategoryQuestionsLibrary", joinColumns = @JoinColumn(name = "library id"))
     private Map<Category, HashSet<Question>> library;
 
     /**
@@ -50,6 +50,17 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
      */
     public CategoryQuestionsLibrary() {
         this.library = new HashMap<>();
+    }
+
+    /**
+     * Returns all the questions related to a category
+     *
+     * @param category category to which the questions are related
+     * @return set of questions related to a category if the category exists, or
+     * null if the category doesn't exist in the library.
+     */
+    public HashSet<Question> categoryQuestionSet(Category category) {
+        return doesCategoryExist(category) ? library.get(category) : null;
     }
 
     /**
@@ -140,6 +151,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
 
     /**
      * CategoryQuestionsLibrary's hash code.
+     *
      * @return hash code.
      */
     @Override
@@ -148,8 +160,9 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Checks if two CategoryQuestionsLibrary are the same through their hash 
+     * Checks if two CategoryQuestionsLibrary are the same through their hash
      * map.
+     *
      * @param obj object to be compared.
      * @return true if they're equal, false if otherwise
      */

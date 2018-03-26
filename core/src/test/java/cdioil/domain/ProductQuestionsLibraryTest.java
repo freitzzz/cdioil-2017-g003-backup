@@ -1,9 +1,5 @@
 package cdioil.domain;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -13,6 +9,22 @@ import static org.junit.Assert.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class ProductQuestionsLibraryTest {
+
+    /**
+     * Test of productQuestionSet method, of class ProductQuestionsLibrary.
+     */
+    @Test
+    public void testProductQuestionSet() {
+        System.out.println("productQuestionSet");
+        Product product = new Product("ProdutoTeste", new EAN("544231234"),
+                new QRCode("4324235"));
+        ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
+        assertNull("The condition should succeed because there aren't any"
+                + "products in the library.", instance.productQuestionSet(product));
+        instance.addProduct(product);
+        assertNotNull("The condition should succeed because there is a product"
+                + "in the library.", instance.productQuestionSet(product));
+    }
 
     /**
      * Test of addProduct method, of class ProductQuestionsLibrary.

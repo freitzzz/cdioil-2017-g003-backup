@@ -11,6 +11,22 @@ import static org.junit.Assert.*;
 public class CategoryQuestionsLibraryTest {
 
     /**
+     * Test of categoryQuestionSet method, of class CAtegoryQuestionsLibrary.
+     */
+    @Test
+    public void testCategoryQuestionSet() {
+        System.out.println("categoryQuestionSet");
+        Category category = new Category("CategoryTest", "100CAT",
+                "10DC-10UN-100CAT");
+        CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
+        assertNull("The condition should succeed because there are no categories "
+                + "in the library.", instance.categoryQuestionSet(category));
+        instance.addCategory(category);
+        assertNotNull("The condition should succeed because a category exists "
+                + "in the library.", instance.categoryQuestionSet(category));
+    }
+
+    /**
      * Test of addCategory method, of class CategoryQuestionsLibrary.
      */
     @Test

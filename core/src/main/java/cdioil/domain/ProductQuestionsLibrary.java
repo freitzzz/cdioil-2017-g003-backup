@@ -52,6 +52,17 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
+     * Returns a set of questions related to a product.
+     *
+     * @param product product to which the questions are related to
+     * @return null if the product doesn't exist, the set of questions related
+     * to the product if it does exist.
+     */
+    public HashSet<Question> productQuestionSet(Product product) {
+        return doesProductExist(product) ? library.get(product) : null;
+    }
+
+    /**
      * Adds a product to the library.
      *
      * @param product product to be added
