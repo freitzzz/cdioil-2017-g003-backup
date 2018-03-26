@@ -76,7 +76,7 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Integer> i
         }
     }
     
-    public SystemUser login(Email email, String passwordString) {
+    public long login(Email email, String passwordString) {
 
         EntityManager em = entityManager();
 
@@ -88,13 +88,13 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Integer> i
 
         if (password.verifyPassword(passwordString)) {
 
-            q = em.createQuery("SELECT u FROM SystemUser u WHERE LOWER(u.email.email) = :email");
+            q = em.createQuery("SELECT u.id FROM SystemUser u WHERE LOWER(u.email.email) = :email");
             
             q.setParameter("email", email.toString().toLowerCase());
             
-            return (SystemUser) q.getSingleResult();
+            return (long) q.getSingleResult();
         } else {
-            return null;
+            return -1;
         }
     }
 
