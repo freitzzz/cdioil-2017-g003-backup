@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
  *
  * TODO After all types of questions are implemented, update tests to consider
  * all types of questions in the library
- * 
+ *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class IndependentQuestionsLibraryTest {
@@ -94,23 +94,10 @@ public class IndependentQuestionsLibraryTest {
         Question question = new BinaryQuestion("QuestaoTeste");
         IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
         assertFalse("The condition should be false because the question doesn't"
-                + "exist in the library",instance.doesQuestionExist(question));
+                + "exist in the library", instance.doesQuestionExist(question));
         instance.addQuestion(question);
         assertTrue("The condition should be true because the question was added"
-                + "to the library",instance.doesQuestionExist(question));
-    }
-
-    /**
-     * Test of size method, of class IndependentQuestionsLibrary.
-     */
-    @Test
-    public void testSize() {
-        System.out.println("size");
-        IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
-        instance.addQuestion(new BinaryQuestion("QuestaoTeste"));
-        int expResult = 1;
-        int result = instance.size();
-        assertEquals(expResult, result);
+                + "to the library", instance.doesQuestionExist(question));
     }
 
 }

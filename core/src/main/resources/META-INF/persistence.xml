@@ -25,6 +25,8 @@
     <class>cdioil.domain.authz.RegisteredUser</class>
     <class>cdioil.domain.BinaryAnswer</class>
     <class>cdioil.domain.IndependentQuestionsLibrary</class>
+    <class>cdioil.domain.CategoryQuestionsLibrary</class>
+    <class>cdioil.domain.ProductQuestionsLibrary</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
