@@ -17,14 +17,6 @@ import cdioil.persistence.impl.UserRepositoryImpl;
 public class BackOfficeLogin {
 
     /**
-     * Integer used to identify an administrator login.
-     */
-    private static final int ADMIN_ID = 1;
-    /**
-     * Integer used to identify a manager login.
-     */
-    private static final int MANAGER_ID = 2;
-    /**
      * Separator used for clarity.
      */
     private static final String SEPARATOR = "===========================\n";
@@ -65,7 +57,7 @@ public class BackOfficeLogin {
     private ManagerRepositoryImpl gestorRepo = new ManagerRepositoryImpl();
 
     public void backofficeLogin() {
-        int id = -1;
+        long id = -1;
         System.out.println(SEPARATOR);
         System.out.println(LOGIN_MESSAGE);
         while (id == -1) {
@@ -73,22 +65,20 @@ public class BackOfficeLogin {
             String passwordS = Console.readLine(PASSWORD);
             try {
                 Email email = new Email(emailS);
-                SystemUser sysUser = sysUserRepo.login(email, passwordS);
-                if (sysUser == null) {
+                id = sysUserRepo.login(email, passwordS);
+                if (id == -1) {
                     System.out.println(WRONG_CREDENTIALS);
                 } else {
-                    Admin admin = adminRepo.getEntity(new Admin(sysUser));
-                    Manager gestor = gestorRepo.getEntity(new Manager(sysUser));
+                    Admin admin = adminRepo.findByUserID(id);
+                    Manager gestor = gestorRepo.findByUserID(id);
                     if (admin == null && gestor == null) {
                         System.out.println(NON_AUTHORIZED_USER);
                         System.exit(0);
                     }
                     if (admin == null && gestor != null) {
-                        id = MANAGER_ID;
                         new BackOfficeConsole(gestor);
                     }
                     if (gestor == null && admin != null) {
-                        id = ADMIN_ID;
                         new BackOfficeConsole(admin);
                     }
                 }
