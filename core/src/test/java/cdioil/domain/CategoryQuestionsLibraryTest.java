@@ -92,7 +92,7 @@ public class CategoryQuestionsLibraryTest {
                 + "exists for this category.", instance.addQuestion(question, category));
         Category category2 = new Category();
         instance.addCategory(category2);
-        assertTrue("The condition should succeed because the same question is "
+        assertFalse("The condition should succeed because the same question is "
                 + "being added to a different category.", instance.addQuestion(question, category2));
     }
 
@@ -142,7 +142,7 @@ public class CategoryQuestionsLibraryTest {
         Category category2 = new Category();
         instance.addCategory(category2);
         instance.addQuestion(question, category2);
-        assertTrue("The condition shuold succeed because the same question exists"
+        assertFalse("The condition should succeed because the same question exists"
                 + "in another category.", instance.doesQuestionExist(question, category2));
     }
 

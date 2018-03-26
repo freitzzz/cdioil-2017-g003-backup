@@ -112,6 +112,11 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesCategoryExist(category)) {
             return false;
         }
+        for(Category key : library.keySet()){
+            if(!(key.equals(category)) && library.get(key).contains(question)){
+                return false;
+            }
+        }
         if (!doesQuestionExist(question, category)) {
             return library.get(category).add(question);
         }
