@@ -1,6 +1,7 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Password;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.PersistenceUnitNameCore;
@@ -72,6 +73,28 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Integer> i
             return (SystemUser) q.getSingleResult();
         }catch(NoResultException e){
             return null;
+        }
+    }
+    
+    public long login(Email email, String passwordString) {
+
+        EntityManager em = entityManager();
+
+        Query q = em.createQuery("SELECT u.password FROM SystemUser u WHERE LOWER(u.email.email) = :email");
+
+        q.setParameter("email", email.toString().toLowerCase());
+
+        Password password = (Password) q.getSingleResult();
+
+        if (password.verifyPassword(passwordString)) {
+
+            q = em.createQuery("SELECT u.id FROM SystemUser u WHERE LOWER(u.email.email) = :email");
+            
+            q.setParameter("email", email.toString().toLowerCase());
+            
+            return (long) q.getSingleResult();
+        } else {
+            return -1;
         }
     }
 

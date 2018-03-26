@@ -37,6 +37,7 @@ public class IndependentQuestionsLibrary implements Serializable, QuestionLibrar
 
     /**
      * IndependentQuestionsLibrary's hash code
+     *
      * @return hash code
      */
     @Override
@@ -46,6 +47,7 @@ public class IndependentQuestionsLibrary implements Serializable, QuestionLibrar
 
     /**
      * Verifies if two IndependentQuestionsLibrary objects are the same.
+     *
      * @param obj object to be compared
      * @return true if they are equal, false if otherwise
      */
@@ -54,22 +56,19 @@ public class IndependentQuestionsLibrary implements Serializable, QuestionLibrar
         if (this == obj) {
             return true;
         }
-        if(!(obj instanceof IndependentQuestionsLibrary)){
+        if (!(obj instanceof IndependentQuestionsLibrary)) {
             return false;
         }
         final IndependentQuestionsLibrary other = (IndependentQuestionsLibrary) obj;
         return this.library.equals(other.library);
     }
 
-    
-    
     /**
      * Adds a question to the set.
      *
      * @param question question to be added
      * @return true if the question is added, false if not.
      */
-    @Override
     public boolean addQuestion(Question question) {
         if (!doesQuestionExist(question)) {
             return library.add(question);
@@ -83,7 +82,6 @@ public class IndependentQuestionsLibrary implements Serializable, QuestionLibrar
      * @param question question to be removed.
      * @return true if the question is removed, false if not
      */
-    @Override
     public boolean removeQuestion(Question question) {
         if (doesQuestionExist(question)) {
             return library.remove(question);
@@ -97,19 +95,8 @@ public class IndependentQuestionsLibrary implements Serializable, QuestionLibrar
      * @param question question to be checked
      * @return true if it already exists, false if not
      */
-    @Override
     public boolean doesQuestionExist(Question question) {
         return library.contains(question);
-    }
-
-    /**
-     * Returns the total number of questions that exist in the library
-     *
-     * @return number of questions in the hash set
-     */
-    @Override
-    public int size() {
-        return library.size();
     }
 
 }

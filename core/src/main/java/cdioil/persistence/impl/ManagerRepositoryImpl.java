@@ -4,6 +4,7 @@ import cdioil.domain.authz.Manager;
 import cdioil.persistence.ManagerRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.BaseJPARepository;
+import javax.persistence.Query;
 
 /**
  * Class that represents the implementation of the Manager repository
@@ -35,5 +36,21 @@ public class ManagerRepositoryImpl extends BaseJPARepository<Manager,Long> imple
      * @return boolean true if the manager exists on the database, false if not
      */
     public boolean exists(Manager manager){return find(manager.getID())!=null;}
+
+    @Override
+    public Manager findByUserID(long dataBaseId) {
+
+        Query q = entityManager().createQuery("SELECT m FROM Manager m WHERE m.su.id = :databaseId");
+
+        q.setParameter("databaseId", dataBaseId);
+
+        if (q.getResultList().isEmpty()) {
+            return null;
+        }
+        return (Manager) q.getSingleResult();
+
+    }
+    
+
     
 }

@@ -5,10 +5,14 @@ import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 /**
@@ -19,10 +23,12 @@ import javax.persistence.Version;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER"}))
 public class Manager implements Serializable, Identifiable<Long> {
 
     @Id
     @GeneratedValue
+    @Column(name = "MANAGER_ID")
     private long id;
     @Version
     private Long version;
@@ -30,6 +36,7 @@ public class Manager implements Serializable, Identifiable<Long> {
      * SystemUser associated with a Manager.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "SYSTEMUSER")
     private SystemUser su;
     /**
      * Category List associated with a Manager.

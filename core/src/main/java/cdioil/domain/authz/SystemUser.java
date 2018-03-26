@@ -24,7 +24,8 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "SYSTEMUSER_ID")
+    private Long id;
 
     /**
      * User's email.
@@ -156,5 +157,5 @@ public class SystemUser implements Serializable, Identifiable<Email> {
     public Email getID() {
         return email;
     }
-
+    
 }
