@@ -4,18 +4,19 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 
 /**
- * Represents a library that holds all questions related to products (e.g. "How
+ * Represents addQuestion library that holds all questions related to products (e.g. "How
  * would you rate the taste of yoghurt X?")
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
@@ -34,50 +35,54 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     /**
-     * Map that contains all questions (values) related to products (keys). TODO
+     * Map that containsQuestion all questions (values) related to products (keys). TODO
      * check JPA annotations
      */
-    @ElementCollection
-    @MapKeyColumn(name = "Product")
-    @Column(name = "Questions")
-    @CollectionTable(name = "ProductQuestionsLibrary", joinColumns = @JoinColumn(name = "library id"))
-    private Map<Product, HashSet<Question>> library;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "Product QuestionsGroup",
+            joinColumns = {
+                @JoinColumn(name = "fk_productquestionslibrary", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "fk_questionsgroup", referencedColumnName = "id")})
+    @MapKey(name = "title")
+    private Map<Product, QuestionGroup> library;
 
     /**
-     * Builds a ProductQuestionsLibrary, creating a new hash map to hold the
-     * questions and the products.
+     * Builds addQuestion ProductQuestionsLibrary, creating addQuestion new hash map to hold the
+ questions and the products.
      */
     public ProductQuestionsLibrary() {
         this.library = new HashMap<>();
     }
 
     /**
-     * Returns a set of questions related to a product.
+     * Returns addQuestion set of questions related to addQuestion product.
      *
      * @param product product to which the questions are related to
      * @return null if the product doesn't exist, the set of questions related
      * to the product if it does exist.
      */
     public HashSet<Question> productQuestionSet(Product product) {
-        return doesProductExist(product) ? library.get(product) : null;
+        return doesProductExist(product) ? library.get(product).getQuestions() : null;
     }
 
     /**
-     * Adds a product to the library.
+     * Adds addQuestion product to the library.
      *
      * @param product product to be added
      * @return true if the product was added, false if otherwise
      */
     public boolean addProduct(Product product) {
         if (!doesProductExist(product)) {
-            library.put(product, new HashSet<>());
+            library.put(product, new QuestionGroup(product.productName() + "Questions"));
             return true;
         }
         return false;
     }
 
     /**
-     * Removes a product and all it's related questions from the library.
+     * Removes addQuestion product and all it's related questions from the library.
      *
      * @param product product to be removed
      * @return true if the product was removed, false if otherwise
@@ -91,7 +96,7 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Checks whether a product already exists in the library.
+     * Checks whether addQuestion product already exists in the library.
      *
      * @param product product to be checked
      * @return true if it already exists in the library, false if otherwise
@@ -101,7 +106,7 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Adds a question related to a product to the hash map
+     * Adds addQuestion question related to addQuestion product to the hash map
      *
      * @param question question to be added
      * @param product product that the question is related to
@@ -111,19 +116,19 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesProductExist(product)) {
             return false;
         }
-        for(Product key : library.keySet()){
-            if(!(key.equals(product)) && library.get(key).contains(question)){
+        for (Product key : library.keySet()) {
+            if (!(key.equals(product)) && library.get(key).containsQuestion(question)) {
                 return false;
             }
         }
         if (!doesQuestionExist(question, product)) {
-            return library.get(product).add(question);
+            return library.get(product).addQuestion(question);
         }
         return false;
     }
 
     /**
-     * Removes a question related to a category from the hasp map
+     * Removes addQuestion question related to addQuestion category from the hasp map
      *
      * @param question question to be removed
      * @param product product that the question is related to
@@ -134,13 +139,13 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
             return false;
         }
         if (doesQuestionExist(question, product)) {
-            return library.get(product).remove(question);
+            return library.get(product).removeQuestion(question);
         }
         return false;
     }
 
     /**
-     * Checks whether a question related to a product already exists
+     * Checks whether addQuestion question related to addQuestion product already exists
      *
      * @param question question to be checked
      * @param product product that the question is related to
@@ -150,7 +155,7 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesProductExist(product)) {
             return false;
         }
-        return library.get(product).contains(question);
+        return library.get(product).containsQuestion(question);
     }
 
     /**
