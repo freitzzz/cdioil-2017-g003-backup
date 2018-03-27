@@ -7,11 +7,11 @@ Before executing any of the modules of the application make sure to execute ``bu
 
 ## Bootstrap
 
-To run the bootstrap of the application execute ``bootstrap``
+To run the application bootstrap execute ``bootstrap``
 
 ## Backoffice
 
-To run the backoffice of the application you can either:
+To run the application backoffice you can either:
 
 - Run it on **console** by executing ``run-backoffice-console``
 

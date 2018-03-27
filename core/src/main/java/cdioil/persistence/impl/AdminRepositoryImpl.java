@@ -40,7 +40,7 @@ public class AdminRepositoryImpl extends BaseJPARepository<Admin,Long> implement
     
     @Override
     public Admin findByUserID(long databaseId) {
-
+        
         Query q = entityManager().createQuery("SELECT a FROM Admin a WHERE a.sysUser.id = :databaseId");
 
         q.setParameter("databaseId", databaseId);

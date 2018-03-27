@@ -1,0 +1,11 @@
+	
+
+	TEST PLAN
+
+	_______________________________
+	CASO #1: Change Dish
+	_______________________________
+
+	1. Introduzir nome do ficheiro com os utilizadores
+	2. Mostrar os utilizadores importados
+	3. Escolhar a opção guardar os utilizadores na base de dados

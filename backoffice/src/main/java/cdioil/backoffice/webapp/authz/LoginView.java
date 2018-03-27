@@ -1,7 +1,14 @@
 package cdioil.backoffice.webapp.authz;
 
+import cdioil.backoffice.webapp.admin.AdminPanelView;
+import cdioil.backoffice.webapp.manager.ManagerPanelView;
 import cdioil.backoffice.webapp.utils.PopupNotification;
+import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Manager;
+import cdioil.persistence.impl.AdminRepositoryImpl;
+import cdioil.persistence.impl.ManagerRepositoryImpl;
+import cdioil.persistence.impl.UserRepositoryImpl;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.shared.Position;
@@ -29,19 +36,36 @@ public class LoginView extends LoginDesign implements View{
     private static final String INVALID_USERNAME_DESCRIPTION="Por favor insira um email válido";
     /**
      * Constant that represents the name of the error dialog that pops up if the 
-     * user tries to login with an invalid username
+     * user tries to login with invalid credentials
      */
     private static final String INVALID_LOGIN_CREDENTIALS_NAME="Credenciais Erradas!";
     /**
      * Constant that represents the message that pops up if the user 
-     * tries to login with an invalid username
+     * tries to login with invalid credentials
      */
     private static final String INVALID_LOGIN_CREDENTIALS_DESCRIPTION="As credenciais do login estão erradas";
+    /**
+     * Constant that represents the name of the error dialog that pops up if the 
+     * user tries to login with an invalid user for backoffice
+     */
+    private static final String INVALID_USER_LOGIN_NAME="Acesso Invalido!";
+    /**
+     * Constant that represents the message that pops up if the user 
+     * tries to login with an invalid user for backoffice
+     */
+    private static final String INVALID_USER_LOGIN_DESCRIPTION="Não tem permissões para aceder à plataforma";
     /**
      * Current Navigator
      */
     private final Navigator navigator;
-
+    /**
+     * Admin that just logged in
+     */
+    private Admin admin;
+    /**
+     * Manager that just logged in
+     */
+    private Manager manager;
     /**
      * Creates a new LoginView
      */
@@ -60,7 +84,14 @@ public class LoginView extends LoginDesign implements View{
         btnLogin.addClickListener((event)->{
             if(checkForUsername()){
                 if(checkForLoginCredentials()){
-                    //TO-DO: ADD NAVIGATOR FOR EACH TYPE OF BACKOFFICE USER (MANAGER + ADMIN)
+                    if(admin!=null){
+                        navigator.navigateTo(AdminPanelView.VIEW_NAME);
+                    }else if(manager!=null){
+                        navigator.navigateTo(ManagerPanelView.VIEW_NAME);
+                    }else{
+                        showInvalidUserNotification();
+                    }
+                    
                 }else{
                     showInvalidLoginCredentialsNotification();
                 }
@@ -83,11 +114,15 @@ public class LoginView extends LoginDesign implements View{
     }
     /**
      * Checks if the user credentials are valid and if it can login in the backoffice
-     * @return boolean true if the user credentials are valid, false if not
+     * @return Admin if the 
      */
     private boolean checkForLoginCredentials(){
-        //TO-DO: ADD SERVICE FOR LOGIN
-        return false;
+        long userID=new UserRepositoryImpl().login(new Email(txtUsername.getValue())
+                ,txtPassword.getValue());
+        if(userID==-1)return false;
+        admin=new AdminRepositoryImpl().findByUserID(userID);
+        if(admin==null)manager=new ManagerRepositoryImpl().findByUserID(userID);
+        return true;
     }
     /**
      * Pops up a notification informing the user that the username is invalid
@@ -101,6 +136,13 @@ public class LoginView extends LoginDesign implements View{
      */
     private void showInvalidLoginCredentialsNotification(){
         PopupNotification.show(INVALID_LOGIN_CREDENTIALS_NAME,INVALID_LOGIN_CREDENTIALS_DESCRIPTION
+                    ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
+    }
+    /**
+     * Pops up a notification informing the user that he is not valid to access backoffice
+     */
+    private void showInvalidUserNotification(){
+        PopupNotification.show(INVALID_USER_LOGIN_NAME,INVALID_USER_LOGIN_DESCRIPTION
                     ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
     }
 }

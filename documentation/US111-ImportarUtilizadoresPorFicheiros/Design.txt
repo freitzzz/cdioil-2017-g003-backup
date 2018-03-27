@@ -1,0 +1,11 @@
+	_________
+
+	DESIGN
+	_________
+
+
+
+
+   	Classes do domínio:  SystemUser
+   	Controlador: ImportUsersFromFilesController
+   	Repository: UserRepository & WhitelistRepository
