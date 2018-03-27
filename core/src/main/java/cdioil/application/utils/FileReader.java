@@ -16,6 +16,7 @@ public final class FileReader {
      * @return List with the content of the file, or null if an error occured
      */
     public static List<String> readFile(File file){
+        if(file==null)return null;
         try{
             return Files.readAllLines(file.toPath());
         }catch(IOException e){
