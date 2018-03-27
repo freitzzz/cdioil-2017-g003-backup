@@ -16,7 +16,7 @@ import javax.persistence.*;
  */
 @Entity
 public class Template implements Serializable {
-
+    
     /**
      * Version for JPA.
      */
@@ -52,6 +52,11 @@ public class Template implements Serializable {
      * @param category Category of the Template.
      */
     public Template(Category category) {
+        
+        if(category == null){
+            throw new IllegalArgumentException("Argumento não pode ser null");
+        }
+        
         this.questions = new LinkedList<>();
         this.category = category;
     }
@@ -150,19 +155,13 @@ public class Template implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof Template)){
             return false;
         }
         final Template other = (Template) obj;
-        if (!Objects.equals(this.questions, other.questions)) {
+        if (!this.questions.equals(other.questions)) {
             return false;
         }
-        if (!Objects.equals(this.category, other.category)) {
-            return false;
-        }
-        return true;
+        return this.category.equals(other.category);
     }
 }
