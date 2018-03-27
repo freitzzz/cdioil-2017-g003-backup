@@ -67,8 +67,7 @@ public class Node implements Serializable {
      * @param parent
      * @param element
      */
-    protected Node(Node parent, Category element) {
-        this.parent = parent;
+    protected Node(Category element) {
         this.element = element;
     }
 
@@ -112,6 +111,7 @@ public class Node implements Serializable {
     public boolean addChild(Node child) {
 
         if (child != null && !getChildren().contains(child)) {
+            child.parent = this;
             return children.add(child);
         } else {
             return false;

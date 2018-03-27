@@ -48,7 +48,7 @@ public class MarketStructure implements Serializable {
      */
     public MarketStructure() {
 
-        root = new Node(null, new Category("Todos os Produtos", "RAIZ","RAIZ"));
+        root = new Node(new Category("Todos os Produtos", "RAIZ"));
         size = 1;
     }
 
@@ -100,7 +100,7 @@ public class MarketStructure implements Serializable {
 
             if (childNode == null) {
                 size++;
-                return parentNode.addChild(new Node(parentNode, c));
+                return parentNode.addChild(new Node(c));
             }
         }
         return false;
@@ -220,7 +220,7 @@ public class MarketStructure implements Serializable {
 
         if (node != null) {
             if (isLeaf(node)) {
-                //adicionar à categoria dentro da estrutura e não à parametrizada
+                //Add to the category inside the structure
                 return node.getElement().addProduct(p);
             }
         }
