@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -11,9 +10,10 @@ import javax.persistence.*;
  * Represents a product survey
  *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+ * @param <K> represents Product or Category
  */
 @Entity
-public class Survey extends Event implements Serializable{
+public class Survey<K> implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class Survey extends Event implements Serializable{
     /**
      * Product associated to the survey.
      */
-    private Product product;
+    private List<K> list;
     
     /**
      * Data de realização do Survey.
@@ -39,24 +39,26 @@ public class Survey extends Event implements Serializable{
     private Calendar date;
 
     /**
-     * Survey's questions.
+     * ======================================
+     * TODO Replace questionList with graph.
+     * ======================================
      */
     private List<Question> questionList;
 
     /**
-     * Builds an instance of survey with a product, date and targetAudience
+     * Builds an instance of survey with a product and a date
      *
-     * @param product product associated with the survey
+     * @param list list of products or categories the survey is associated to
      * @param date  date when the survey was done
-     * @param targetAudience survey's target audience
      */
-    public Survey(Product product, Calendar date, UsersGroup targetAudience) {
-        super(targetAudience);
-        if (product == null) {
-            throw new IllegalArgumentException("O inquérito tem que ter um produto");
+    public Survey(List<K> list, Calendar date) {
+        if (list == null) {
+            throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
+                    + " um produto ou uma categoria");
         }
-        this.product = product;
-        this.questionList = new LinkedList<>();
+        this.list = list;
+        this.questionList = new LinkedList<>(); // TODO Remove after
+                                                // implementing graph
         if (date == null) {
             throw new IllegalArgumentException("O inquérito tem que ter uma data");
         }
@@ -70,6 +72,11 @@ public class Survey extends Event implements Serializable{
     /**
      * Adds a question to the list of questions.
      *
+     * ==============================================
+     * TODO Delete method after graph has been added.
+     * ==============================================
+     * 
+     * 
      * @param question question to be added
      * @return true, if the question is added, false if the question is invalid
      */
@@ -83,6 +90,10 @@ public class Survey extends Event implements Serializable{
     /**
      * Remove a question from the question list.
      *
+     * ==============================================
+     * TODO Delete method after graph has been added.
+     * ==============================================
+     * 
      * @param question question to be removed
      * @return true if the question was removed, false if otherwise
      */
@@ -96,6 +107,10 @@ public class Survey extends Event implements Serializable{
     /**
      * Checks if a question already exists in the question list
      *
+     * ==============================================
+     * TODO Delete method after graph has been added.
+     * ==============================================
+     * 
      * @param question question to be verified
      * @return true, if it already exists in the list, false if otherwise
      */
@@ -104,13 +119,14 @@ public class Survey extends Event implements Serializable{
     }
 
     /**
-     * Returns a description of the survey (product description and date)
+     * Returns a description of the survey (product or category
+     * description and date)
      *
      * @return survey's description
      */
     @Override
     public String toString() {
-        return "Inquerito sobre o produto:\n" + product.toString()
+        return "Inquerito sobre:\n" + list.toString()
                 + "\nData:\n" + date;
     }
 
@@ -121,7 +137,7 @@ public class Survey extends Event implements Serializable{
      */
     @Override
     public int hashCode() {
-        return product.hashCode() + questionList.hashCode();
+        return list.hashCode() + questionList.hashCode();
     }
 
     /**
@@ -140,19 +156,10 @@ public class Survey extends Event implements Serializable{
             return false;
         }
         final Survey other = (Survey) obj;
-        if (!this.product.equals(other.product)) {
+        if (!this.list.equals(other.list)) {
             return false;
         }
-        return this.questionList.equals(other.questionList);
-    }
-
-     /**
-     * Returns the info of a Survey
-     *
-     * @return survey info
-     */
-    @Override
-    public String info() {
-        return toString();
+        return this.questionList.equals(other.questionList); //TODO Remove
+                                                             // after implementing graph
     }
 }

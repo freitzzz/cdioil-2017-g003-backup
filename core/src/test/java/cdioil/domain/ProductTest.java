@@ -30,6 +30,16 @@ public class ProductTest {
     }
 
     /**
+     * Test of productName method, of class Product.
+     */
+    @Test
+    public void testProductName() {
+        System.out.println("productName");
+        assertEquals("The condition should succeed because the names"
+                + "are equal.", p.productName(), "ProdutoTeste");
+    }
+
+    /**
      * Test of toString method, of class Product.
      */
     @Test
@@ -48,7 +58,7 @@ public class ProductTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        
+
         Product copia = new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
 
         assertEquals(p.hashCode(), copia.hashCode());
@@ -62,8 +72,8 @@ public class ProductTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, p);
-        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC","100DC"), p);
-        
+        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC", "100DC"), p);
+
         assertNotEquals("Instância de Produto diferente", new Product("ProdutoTeste", new EAN("33312118"), new QRCode("552671")), p);
         assertEquals("Instância com códigos iguais igual", new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")), p);
     }
@@ -77,7 +87,7 @@ public class ProductTest {
         byte[] imagem = "Nova Imagem".getBytes();
         p.changeProductImage(imagem);
         boolean expResult = true;
-        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo",p.changeProductImage(imagem));
-        assertFalse("A condição acertar pois a Imagem do produto é invalida",p.changeProductImage(null));
+        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo", p.changeProductImage(imagem));
+        assertFalse("A condição acertar pois a Imagem do produto é invalida", p.changeProductImage(null));
     }
 }

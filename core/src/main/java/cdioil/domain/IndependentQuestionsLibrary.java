@@ -3,6 +3,7 @@ package cdioil.domain;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +25,7 @@ public class IndependentQuestionsLibrary implements Serializable, QuestionLibrar
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Question> library;
 
     /**
