@@ -28,7 +28,7 @@ public class Category implements Serializable {
      */
     @Version
     private Long version;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_CATEGORY", nullable = false, updatable = false)
@@ -40,17 +40,17 @@ public class Category implements Serializable {
     /**
      * Name of the Category.
      */
-    String name;
+    private String name;
 
     /**
      * Identifier of the Category (number + sufix).
      */
-    String identifier;
+    private String identifier;
 
     /**
      * Path of the Category in the Market Structure.
      */
-    String path;
+    private String path;
 
     /**
      * List of products of the Category.
@@ -65,7 +65,8 @@ public class Category implements Serializable {
             + "|" + Sufixes.SUFIX_UB + "|" + Sufixes.SUFIX_UN + "|" + Sufixes.SUFIX_DC + ")";
 
     /**
-     * Regular expression to validate the path of the Category in the Market Structure.
+     * Regular expression to validate the path of the Category in the Market
+     * Structure.
      */
     private final static String PATH_REGEX = "[0-9]+" + Sufixes.SUFIX_DC + "((-[0-9]+" + Sufixes.SUFIX_UN + "(-[0-9]+"
             + Sufixes.SUFIX_CAT + "(-[0-9]+" + Sufixes.SUFIX_SCAT + "(-[0-9]+" + Sufixes.SUFIX_UB + ")?)?)?)?)";
@@ -168,13 +169,23 @@ public class Category implements Serializable {
      * Adds a product to the list of products of the Category.
      *
      * @param p product to add
-     * @return true if the product is successfully added. Otherwise, returns false
+     * @return true if the product is successfully added. Otherwise, returns
+     * false
      */
     public boolean addProduct(Product p) {
         if (p == null) {
             return false;
         }
         return products.add(p);
+    }
+
+    /**
+     * Returns the name of the Category.
+     *
+     * @return string with the name of the category
+     */
+    public String categoryName() {
+        return name;
     }
 
     /**
@@ -203,7 +214,8 @@ public class Category implements Serializable {
      * Compares a Category with another Object.
      *
      * @param obj Object to compare
-     * @return true, if the two Categories have the same path. Otherwise, returns false
+     * @return true, if the two Categories have the same path. Otherwise,
+     * returns false
      */
     @Override
     public boolean equals(Object obj) {

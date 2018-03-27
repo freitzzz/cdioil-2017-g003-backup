@@ -47,7 +47,7 @@ public class Product implements Serializable {
      * List of the Product's Codes.
      */
     @OneToMany
-    List<Code> codes = new ArrayList<>();
+    private List<Code> codes = new ArrayList<>();
 
     /**
      * The Product's image.
@@ -96,6 +96,15 @@ public class Product implements Serializable {
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    /**
+     * Returns the product's name.
+     *
+     * @return string with the product's name
+     */
+    public String productName() {
+        return name;
     }
 
     /**
