@@ -1,5 +1,7 @@
 package cdioil.domain;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import org.junit.After;
@@ -20,7 +22,7 @@ public class SurveyTest {
      * Data for testing
      */
     Survey i;
-    Calendar data;
+    LocalDateTime data;
 
     public SurveyTest() {
     }
@@ -35,7 +37,7 @@ public class SurveyTest {
 
     @Before
     public void setUp() {
-        data = Calendar.getInstance();
+        data = LocalDateTime.of(0, Month.MARCH, 2, 0, 0, 0);
         this.i = new Survey(new ArrayList<>(), data);
     }
 

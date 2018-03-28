@@ -1,7 +1,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.*;
@@ -33,10 +33,9 @@ public class Survey<K> implements Serializable{
     private List<K> list;
     
     /**
-     * Data de realização do Survey.
+     * Date of when the survey was done.
      */
-    @Temporal(TemporalType.DATE)
-    private Calendar date;
+    private LocalDateTime date;
 
     /**
      * ======================================
@@ -51,7 +50,7 @@ public class Survey<K> implements Serializable{
      * @param list list of products or categories the survey is associated to
      * @param date  date when the survey was done
      */
-    public Survey(List<K> list, Calendar date) {
+    public Survey(List<K> list, LocalDateTime date) {
         if (list == null) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");

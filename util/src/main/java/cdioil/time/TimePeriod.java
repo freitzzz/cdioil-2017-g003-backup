@@ -1,28 +1,18 @@
-package cdioil.domain;
+package cdioil.time;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 
 /**
  * Represents a time period with a starting date and an ending date.
  *
- * =============================================================================
- * TODO Check if this class belongs in the utils package or domain package.
- * =============================================================================
- *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity
-public class TimePeriod implements Serializable, ValueObject {
+@Embeddable
+public class TimePeriod implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     /**
      * Starting date.

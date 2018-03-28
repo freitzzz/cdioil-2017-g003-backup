@@ -1,4 +1,4 @@
-package cdioil.domain;
+package cdioil.time;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
