@@ -9,7 +9,7 @@ import cdioil.persistence.impl.WhitelistRepositoryImpl;
 import java.util.ArrayList;
 
 /**
- * Controller for the <i>Importar Listas de Utilizadores através de ficheiros use case </i><b>(US-111)</b>
+ * Controller for the <i>Importar Listas de Utilizadores através de ficheiros</i> use case <b>(US-111)</b>
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public class ImportUsersFromFilesController {
