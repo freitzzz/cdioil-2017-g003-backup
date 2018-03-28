@@ -1,8 +1,6 @@
 package cdioil.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  * Represents a binary question.
