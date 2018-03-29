@@ -1,11 +1,8 @@
 package cdioil.domain;
 
-import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Manager;
-import cdioil.domain.authz.UsersGroup;
-import cdioil.domain.authz.Name;
-import cdioil.domain.authz.Password;
-import cdioil.domain.authz.SystemUser;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Calendar;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,8 +22,7 @@ public class SurveyTest {
      * Data for testing
      */
     Survey i;
-    UsersGroup gu;
-    Calendar data;
+    LocalDateTime data;
 
     public SurveyTest() {
     }
@@ -41,10 +37,8 @@ public class SurveyTest {
 
     @Before
     public void setUp() {
-        gu = new UsersGroup((new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
-                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
-        data = Calendar.getInstance();
-        this.i = new Survey(new Product("UmProduto", new EAN("73292")), data, gu);
+        data = LocalDateTime.of(0, Month.MARCH, 2, 0, 0, 0);
+        this.i = new Survey(new ArrayList<>(), data);
     }
 
     @After
@@ -57,7 +51,7 @@ public class SurveyTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Survey outro = new Survey(new Product("UmProduto", new EAN("73292")), data, gu);
+        Survey outro = new Survey(new ArrayList<>(), data);
 
         assertEquals(i.hashCode(), outro.hashCode());
     }
@@ -70,8 +64,10 @@ public class SurveyTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
         assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC", "100DC"), i);
-        assertNotEquals("Instância de Inquerito diferente", new Survey(new Product("OutroProduto", new EAN("123")), data, gu), i);
-        assertEquals("Instância de Inquerito igual", new Survey(new Product("UmProduto", new EAN("73292")), data, gu), i);
+        ArrayList<Product> al = new ArrayList<>();
+        al.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        assertNotEquals("Instância de Inquerito diferente", new Survey(al, data), i);
+        assertEquals("Instância de Inquerito igual", new Survey(new ArrayList<>(), data), i);
     }
 
     /**
@@ -80,10 +76,10 @@ public class SurveyTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        System.out.println(i.toString());
+        Survey s = new Survey(new ArrayList<>(), data);
         assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", i.toString(),
-                "Inquerito sobre o produto:\n" + new Product("UmProduto", new EAN("73292"))
-                + "\nData:\n" + data);
+                s.toString());
+
     }
 
     /**
@@ -126,29 +122,4 @@ public class SurveyTest {
         assertFalse("Questão null", i.isValidQuestion(null));
         assertFalse("Questão não existente", i.isValidQuestion(q));
     }
-
-    /**
-     * Test do metodo info, da classe Concurso.
-     */
-    @Test
-    public void testInfo() {
-        System.out.println("info");
-        Survey inquerito = new Survey(new Product("Teste", new EAN("123456789")), data, gu);
-        String expResult = "Inquerito sobre o produto:\n" + (new Product("Teste", new EAN("123456789"))).toString()
-                + "\nData:\n" + data;
-        String result = inquerito.info();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of targetAudience method, of class Survey.
-     */
-    @Test
-    public void testTargetAudience() {
-        System.out.println("targetAudience");
-        Survey inquerito = new Survey(new Product("Teste", new EAN("123456789")), data, gu);
-        UsersGroup expResult = gu;
-        UsersGroup result = inquerito.targetAudience();
-    }
-
 }

@@ -13,18 +13,13 @@ package cdioil.application.utils;
 public final class CategoriesReaderFactory {
 
     /**
-     * Identifier of the .csv file format.
-     */
-    public static final String CSV_FORMAT = ".csv";
-
-    /**
      * Creates an instance of CategoriesReader.
      *
      * @param filename Name of the file to read
      * @return an instance of CategoriesReader
      */
     public static CategoriesReader create(String filename) {
-        if (filename.endsWith(CSV_FORMAT)) {
+        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) {
             return new CSVCategoriesReader(filename);
         }
         return null;

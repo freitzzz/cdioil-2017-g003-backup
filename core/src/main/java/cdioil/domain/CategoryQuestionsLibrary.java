@@ -4,18 +4,18 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 
 /**
- * Represents a library that holds all questions related to categories (e.g. "Do
+ * Represents addQuestion library that holds all questions related to categories (e.g. "Do
  * you think red wines are better than port wines?")
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
@@ -35,50 +35,54 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     private Long id;
 
     /**
-     * Map that contains questions (values) related to categories (keys). TODO
+     * Map that containsQuestion questions (values) related to categories (keys). TODO
      * check JPA annotations
      */
-    @ElementCollection
-    @MapKeyColumn(name = "Category")
-    @Column(name = "Questions")
-    @CollectionTable(name = "CategoryQuestionsLibrary", joinColumns = @JoinColumn(name = "library id"))
-    private Map<Category, HashSet<Question>> library;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "Category QuestionsGroup",
+            joinColumns = {
+                @JoinColumn(name = "fk_categoryquestionslibrary", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "fk_questionsgroup", referencedColumnName = "id")})
+    @MapKey(name = "title")
+    private Map<Category, QuestionGroup> library;
 
     /**
-     * Builds a CategoryQuestionsLibrary, creating a new hash map to hold the
-     * questions and the categories.
+     * Builds addQuestion CategoryQuestionsLibrary, creating addQuestion new hash map to hold the
+ questions and the categories.
      */
     public CategoryQuestionsLibrary() {
         this.library = new HashMap<>();
     }
 
     /**
-     * Returns all the questions related to a category
+     * Returns all the questions related to addQuestion category
      *
      * @param category category to which the questions are related
-     * @return set of questions related to a category if the category exists, or
-     * null if the category doesn't exist in the library.
+     * @return set of questions related to addQuestion category if the category exists, or
+ null if the category doesn't exist in the library.
      */
     public HashSet<Question> categoryQuestionSet(Category category) {
-        return doesCategoryExist(category) ? library.get(category) : null;
+        return doesCategoryExist(category) ? library.get(category).getQuestions() : null;
     }
 
     /**
-     * Adds a category to the library.
+     * Adds addQuestion category to the library.
      *
      * @param category category to be added
      * @return true if the category was added, false if otherwise
      */
     public boolean addCategory(Category category) {
         if (!doesCategoryExist(category)) {
-            library.put(category, new HashSet<>());
+            library.put(category, new QuestionGroup(category.categoryName() + " Questions"));
             return true;
         }
         return false;
     }
 
     /**
-     * Removes a category and all it's related questions from the library.
+     * Removes addQuestion category and all it's related questions from the library.
      *
      * @param category category to be removed
      * @return true if the category was removed, false if otherwise
@@ -92,7 +96,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Checks whether a category already exists in the library.
+     * Checks whether addQuestion category already exists in the library.
      *
      * @param category category to be checked
      * @return true if it already exists in the library, false if otherwise
@@ -102,7 +106,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Adds a question related to a category to the hash map
+     * Adds addQuestion question related to addQuestion category to the hash map
      *
      * @param question question to be added
      * @param category category that the question is related to
@@ -112,19 +116,19 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesCategoryExist(category)) {
             return false;
         }
-        for(Category key : library.keySet()){
-            if(!(key.equals(category)) && library.get(key).contains(question)){
+        for (Category key : library.keySet()) {
+            if (!(key.equals(category)) && library.get(key).containsQuestion(question)) {
                 return false;
             }
         }
         if (!doesQuestionExist(question, category)) {
-            return library.get(category).add(question);
+            return library.get(category).addQuestion(question);
         }
         return false;
     }
 
     /**
-     * Removes a question related to a category from the hasp map
+     * Removes addQuestion question related to addQuestion category from the hasp map
      *
      * @param question question to be removed
      * @param category category that the question is related to
@@ -135,13 +139,13 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
             return false;
         }
         if (doesQuestionExist(question, category)) {
-            return library.get(category).remove(question);
+            return library.get(category).removeQuestion(question);
         }
         return false;
     }
 
     /**
-     * Checks whether a question related to a category already exists
+     * Checks whether addQuestion question related to addQuestion category already exists
      *
      * @param question question to be checked
      * @param category category that the question is related to
@@ -151,7 +155,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesCategoryExist(category)) {
             return false;
         }
-        return library.get(category).contains(question);
+        return library.get(category).containsQuestion(question);
     }
 
     /**

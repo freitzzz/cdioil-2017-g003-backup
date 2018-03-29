@@ -28,6 +28,9 @@
     <class>cdioil.domain.CategoryQuestionsLibrary</class>
     <class>cdioil.domain.ProductQuestionsLibrary</class>
     <class>cdioil.domain.GlobalLibrary</class>
+    <class>cdioil.domain.QuestionGroup</class>
+    <class>cdioil.domain.Questionnaire</class>
+    <class>cdioil.time.TimePeriod</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

@@ -45,6 +45,16 @@ public class CategoryTest {
     }
 
     /**
+     * Test of categoryName method, of class Category.
+     */
+    @Test
+    public void testCategoryName() {
+        System.out.println("categoryName");
+        assertEquals("The condition should succeed because the names are"
+                + "the same", c.categoryName(), "CategoriaTeste");
+    }
+
+    /**
      * Test of the method addProduct, of the class Category.
      */
     @Test
@@ -57,7 +67,8 @@ public class CategoryTest {
     }
 
     /**
-     * Test of the regular expression to validate the identifier (no numbers), of the class Category.
+     * Test of the regular expression to validate the identifier (no numbers),
+     * of the class Category.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testIdentifierWithoutNumbersFails() {
@@ -66,7 +77,8 @@ public class CategoryTest {
     }
 
     /**
-     * Test of the regular expression to validate the identifier (no sufix), of the class Category.
+     * Test of the regular expression to validate the identifier (no sufix), of
+     * the class Category.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testIdentifierWithoutSufixFails() {
@@ -119,7 +131,8 @@ public class CategoryTest {
     }
 
     /**
-     * Test to validate that the path has to end with the identifier, of the class Category.
+     * Test to validate that the path has to end with the identifier, of the
+     * class Category.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testValidIdentifierInvalidPathFails() {
@@ -128,15 +141,15 @@ public class CategoryTest {
     }
 
     /**
-     * Test of the regular expression of the path to validate that the path has to end with the identifier, of the class Category.
+     * Test of the regular expression of the path to validate that the path has
+     * to end with the identifier, of the class Category.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidPathFails() {
         System.out.println("validate path has to end with the identifier");
         c = new Category("CategoriaInvalida", "10SCAT", "10DC-SCAT");
     }
-    
-    
+
     /**
      * Test to validate that a null path fails, of the class Category.
      */
@@ -146,7 +159,7 @@ public class CategoryTest {
         c = new Category("CategoriaInvalida", "10SCAT", null);
     }
 
-       /**
+    /**
      * Test to validate that an empty path fails, of the class Category.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -154,7 +167,7 @@ public class CategoryTest {
         System.out.println("validate empty path fails");
         c = new Category("CategoriaInvalida", "10SCAT", "  ");
     }
-    
+
     /**
      * Test of the method toString, of the class Category.
      */

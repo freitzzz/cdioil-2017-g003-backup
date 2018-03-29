@@ -10,7 +10,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 /**
- * Interface that contains methods that are common to all types of Questions.
+ * Abstract class that represents a Question.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
