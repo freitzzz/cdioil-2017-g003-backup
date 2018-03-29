@@ -6,18 +6,14 @@
     <class>cdioil.domain.BinaryQuestion</class>
     <class>cdioil.domain.Category</class>
     <class>cdioil.domain.Code</class>
-    <class>cdioil.domain.Contest</class>
     <class>cdioil.domain.EAN</class>
     <class>cdioil.domain.Node</class>
     <class>cdioil.domain.Product</class>
     <class>cdioil.domain.QRCode</class>
     <class>cdioil.domain.Question</class>
-    <class>cdioil.domain.Review</class>
-    <class>cdioil.domain.Survey</class>
     <class>cdioil.domain.Template</class>
     <class>cdioil.domain.authz.Admin</class>
     <class>cdioil.domain.authz.Manager</class>
-    <class>cdioil.domain.authz.Profile</class>
     <class>cdioil.domain.authz.SystemUser</class>
     <class>cdioil.domain.authz.UsersGroup</class>
     <class>cdioil.domain.authz.Whitelist</class>
@@ -29,8 +25,11 @@
     <class>cdioil.domain.ProductQuestionsLibrary</class>
     <class>cdioil.domain.GlobalLibrary</class>
     <class>cdioil.domain.QuestionGroup</class>
-    <class>cdioil.domain.Questionnaire</class>
-    <class>cdioil.time.TimePeriod</class>
+    <class>cdioil.domain.authz.Profile</class>
+    <class>cdioil.domain.Review</class>
+    <class>cdioil.domain.Survey</class>
+    <class>cdioil.domain.Contest</class>
+    <class>cdioil.domain.Event</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

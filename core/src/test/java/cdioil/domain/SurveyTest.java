@@ -3,7 +3,6 @@ package cdioil.domain;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Calendar;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -64,7 +63,7 @@ public class SurveyTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
         assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC", "100DC"), i);
-        ArrayList<Product> al = new ArrayList<>();
+        ArrayList<SurveyItem> al = new ArrayList<>();
         al.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
         assertNotEquals("Instância de Inquerito diferente", new Survey(al, data), i);
         assertEquals("Instância de Inquerito igual", new Survey(new ArrayList<>(), data), i);

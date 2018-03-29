@@ -16,7 +16,7 @@ import javax.persistence.Version;
  * Represents a category from the market structure.
  */
 @Entity
-public class Category implements Serializable {
+public class Category implements Serializable,SurveyItem {
 
     /**
      * Serialization code.

@@ -3,10 +3,12 @@ package cdioil.domain;
 import cdioil.time.TimePeriod;
 import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 
 /**
  * Abstract class that represents Events.
@@ -41,11 +43,13 @@ public abstract class Event implements Serializable {
     /**
      * Event's target audience.
      */
+    @OneToOne
     private UsersGroup targetAudience;
 
     /**
      * Time period for which the event is active.
      */
+    @Embedded
     private TimePeriod timePeriod;
 
     /**

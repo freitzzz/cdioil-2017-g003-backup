@@ -25,6 +25,7 @@
         <module>bootstrap</module>
         <module>frontoffice</module>
         <module>backoffice</module>
+        <module>util</module>
     </modules>
 
     <dependencies>

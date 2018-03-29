@@ -39,7 +39,7 @@ public class MarketStructure implements Serializable {
     /**
      * The number of nodes/categories in the market structure.
      */
-    private int size;
+    private int marketSize;
 
     /**
      * Public Constructor for instantiating a Market Structure.<p>
@@ -49,7 +49,7 @@ public class MarketStructure implements Serializable {
     public MarketStructure() {
 
         root = new Node(null, new Category("Todos os Produtos", "RAIZ","RAIZ"));
-        size = 1;
+        marketSize = 1;
     }
 
     /**
@@ -99,7 +99,7 @@ public class MarketStructure implements Serializable {
             Node childNode = searchNode(parentNode, c);
 
             if (childNode == null) {
-                size++;
+                marketSize++;
                 return parentNode.addChild(new Node(parentNode, c));
             }
         }
@@ -233,7 +233,7 @@ public class MarketStructure implements Serializable {
      * @return the Market Structure's size
      */
     public int size() {
-        return size;
+        return marketSize;
     }
 
     /**
