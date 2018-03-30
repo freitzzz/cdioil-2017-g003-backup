@@ -35,8 +35,8 @@ public class ChangeUserDataController {
     public boolean changeDataField(String newData, int option) {
         boolean b = su.changeUserDatafield(newData, option);
         if (b) {
-            BaseJPARepository repo = new UserRepositoryImpl();
-            repo.merge(su);
+            UserRepositoryImpl repo = new UserRepositoryImpl();
+            su=repo.merge(su);
         }
         return b;
     }

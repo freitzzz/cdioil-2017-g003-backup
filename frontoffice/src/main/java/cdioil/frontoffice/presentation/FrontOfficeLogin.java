@@ -20,7 +20,7 @@ public class FrontOfficeLogin {
             + "Volte a tentar.\n";
     private static final int CRIAR_CONTA_ID = 1;
     private static final int LOGIN_ID = 2;
-    private UserRepositoryImpl userRepo = new UserRepositoryImpl();
+    //private UserRepositoryImpl userRepo = new UserRepositoryImpl();
 
     /**
      * Metodo principal do frontOffice da app.
@@ -64,7 +64,7 @@ public class FrontOfficeLogin {
             String emailS = Console.readLine(EMAIL);
             String passwordS = Console.readLine(PASSWORD);
             Email email = new Email(emailS);
-            SystemUser sysUser = userRepo.findByEmail(email);
+            SystemUser sysUser = new UserRepositoryImpl().findByEmail(email);
             if (sysUser == null || !sysUser.samePassword(passwordS)) {
                 System.out.println(USER_NAO_ENCONTRADO);
             } else {
