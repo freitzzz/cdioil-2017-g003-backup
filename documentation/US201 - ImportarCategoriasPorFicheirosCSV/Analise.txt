@@ -1,0 +1,35 @@
+	___________
+
+	  ANÁLISE 
+	___________
+
+	USER STORY DO SPRINT #1
+	
+	* Como Administrador, pretendo importar categorias para o sistema através de ficheiros.
+
+	* Existem 5 tipos de categorias - DC, UN CAT, SCAT, UB (Reunião com o cliente).
+	* O descritivo de uma categoria tem um número, seguido de um dos sufixos enumerados acima.
+	* Os formato dos ficheiros é CSV.
+
+	_____________________
+		
+	  TESTES UNITÁRIOS
+	_____________________
+
+
+	* Classe Categoria:
+		* testIdentifierWithoutNumbersFails
+		* testIdentifierWithoutSufixFails
+		* testNullIdentifierFails
+		* testEmptyIdentifierFails
+		* testRootIdentifierAndNameWork
+		* testEmptyNameFails
+		* testNullNameFails
+		* testValidIdentifierInvalidPathFails
+		* testInvalidPathFails
+		* testNullPathFails
+		* testEmptyPathFails
+
+	* Classe MarketStructure - todos os testes
+
+	* Classe CSVCategoriesReader - todos os testes
