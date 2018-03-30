@@ -1,0 +1,11 @@
+
+	TEST PLAN
+
+	_______________________________
+	
+          CASO #1: Importar Categorias
+	_______________________________
+
+	1. Introduzir nome do ficheiro com as categorias.
+	2. Mostrar todas as categorias importadas.
+	3. Guardar na base de dados.
