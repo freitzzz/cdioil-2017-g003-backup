@@ -23,11 +23,11 @@ public class NodeTest {
     @Test
     public void testGetParent() {
         System.out.println("getParent");
-        Category element = new Category("Name", "10DC");
+        Category element = new Category("Name", "10DC", "10DC");
         Node node = new Node(element);
         assertNull(node.getParent());
 
-        Category element1 = new Category("Anotha one", "11DC");
+        Category element1 = new Category("Anotha one", "11DC", "11DC");
         Node child = new Node(element1);
         assertNull(child.getParent());
         node.addChild(child);
@@ -45,10 +45,10 @@ public class NodeTest {
     @Test
     public void testGetElement() {
         System.out.println("getElement");
-        Category c = new Category("Bajoras", "15DC");
+        Category c = new Category("Bajoras", "15DC", "15DC");
         Node node = new Node(c);
 
-        Category expected = new Category("Bajoras", "15DC");
+        Category expected = new Category("Bajoras", "15DC", "15DC");
         assertEquals(expected, node.getElement());
     }
 
@@ -59,12 +59,12 @@ public class NodeTest {
     public void testGetChildren() {
         System.out.println("getChildren");
 
-        Category c = new Category("Bajoras", "15DC");
+        Category c = new Category("Bajoras", "15DC", "15DC");
         Node node = new Node(c);
         assertNotNull(node.getChildren());
         assertTrue(node.getChildren().isEmpty());
 
-        node.addChild(new Node(new Category("Bajoras", "15DC")));
+        node.addChild(new Node(new Category("Bajoras", "15DC", "15DC")));
 
         assertEquals(1, node.getChildren().size());
     }
@@ -76,15 +76,18 @@ public class NodeTest {
     public void testAddChild() {
         System.out.println("addChild");
 
-        Category c = new Category("Bajoras", "15DC");
+        Category c = new Category("Bajoras", "15DC", "15DC");
         Node node = new Node(c);
 
         assertFalse(node.addChild(null));
 
-        Category c2 = new Category("Oh he need some milk", "15DC-12UN");
+        Category c2 = new Category("Oh he need some milk", "12UN" ,"15DC-12UN");
 
         Node child = new Node(c2);
         assertTrue(node.addChild(child));
+        
+        assertEquals(node, child.getParent());
+        assertTrue(node == child.getParent());
 
         assertFalse(node.addChild(new Node(c2)));
     }
@@ -96,7 +99,7 @@ public class NodeTest {
     public void testHashCode() {
         System.out.println("hashCode");
 
-        Category c = new Category("Bajoras", "15DC");
+        Category c = new Category("Bajoras", "15DC", "15DC");
         Node node = new Node(c);
 
         Node node2 = new Node(c);
@@ -112,7 +115,7 @@ public class NodeTest {
     public void testEquals() {
         System.out.println("equals");
 
-        Category c = new Category("Bajoras", "15DC");
+        Category c = new Category("Bajoras", "15DC", "15DC");
         Node node = new Node(c);
 
         Node node2 = new Node(c);
@@ -132,7 +135,7 @@ public class NodeTest {
     public void testToString() {
         System.out.println("toString");
 
-        Category c = new Category("Bajoras", "15DC");
+        Category c = new Category("Bajoras", "15DC", "15DC");
         Node node = new Node(c);
 
         Node node2 = new Node(c);
