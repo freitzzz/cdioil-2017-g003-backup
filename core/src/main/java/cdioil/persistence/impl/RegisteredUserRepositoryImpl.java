@@ -5,7 +5,7 @@ import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.RegisteredUserRepository;
 
-public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUser,Long> implements RegisteredUserRepository {
+public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUser, Long> implements RegisteredUserRepository {
 
     @Override
     protected String persistenceUnitName() {
@@ -13,9 +13,14 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
     }
 
     @Override
-    public RegisteredUser add(RegisteredUser user){
-        if(exists(user))return user;
+    public RegisteredUser add(RegisteredUser user) {
+        if (exists(user)) {
+            return user;
+        }
         return super.add(user);
     }
-    public boolean exists(RegisteredUser user){return find(user.getID())!=null;}
+
+    public boolean exists(RegisteredUser user) {
+        return new UserRepositoryImpl().findByEmail(user.getID()) != null;
+    }
 }

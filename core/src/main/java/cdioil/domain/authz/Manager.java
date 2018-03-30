@@ -16,15 +16,16 @@ import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 /**
- *  Survey Manager
+ * Survey Manager
  *
  * Person responsible for the creation and configuration of surveys of a given
  * market structure.
+ *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER"}))
-public class Manager implements Serializable, Identifiable<Long> {
+public class Manager implements Serializable, Identifiable<Email> {
 
     @Id
     @GeneratedValue
@@ -46,7 +47,7 @@ public class Manager implements Serializable, Identifiable<Long> {
     /**
      * Builds a Manager with a SystemUser and a Category List
      *
-     * @param su SystemUser account 
+     * @param su SystemUser account
      * @param categories Category List
      */
     public Manager(SystemUser su, List<Category> categories) {
@@ -113,8 +114,8 @@ public class Manager implements Serializable, Identifiable<Long> {
     }
 
     @Override
-    public Long getID() {
-        return id;
+    public Email getID() {
+        return su.getID();
     }
 
     /**

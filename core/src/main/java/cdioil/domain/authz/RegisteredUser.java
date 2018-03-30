@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
@@ -16,7 +17,7 @@ import javax.persistence.Version;
  * É o responsável por avaliar produtos e fornecer feedback
  */
 @Entity
-public class RegisteredUser implements Serializable, Identifiable<Long> {
+public class RegisteredUser implements Serializable, Identifiable<Email> {
 
     @Id
     @GeneratedValue
@@ -28,6 +29,7 @@ public class RegisteredUser implements Serializable, Identifiable<Long> {
      * Conta de SystemUser associada a esta instância de RegisteredUser
      */
     @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "SYSTEMUSER")
     private SystemUser su;
 
     /**
@@ -86,7 +88,7 @@ public class RegisteredUser implements Serializable, Identifiable<Long> {
     }
 
     @Override
-    public Long getID() {
-        return id;
+    public Email getID() {
+        return su.getID();
     }
 }

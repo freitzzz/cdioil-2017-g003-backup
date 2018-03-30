@@ -16,12 +16,14 @@ public class WhitelistRepositoryImpl extends BaseJPARepository<Whitelist, String
     protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
-    public List<String> allWhitelistInString(){
-        return (List<String>)entityManager().createNativeQuery("SELECT * FROM WHITELIST").getResultList();
+
+    public List<String> allWhitelistInString() {
+        return (List<String>) entityManager().createNativeQuery("SELECT * FROM WHITELIST").getResultList();
     }
-    
+
     /**
      * Retrives the whitelist with the given domain (case insensitive).
+     *
      * @param domain email domain
      * @return the whitelist with the given domain
      */
@@ -31,8 +33,23 @@ public class WhitelistRepositoryImpl extends BaseJPARepository<Whitelist, String
         if (domain == null || domain.trim().isEmpty()) {
             return null;
         }
-        String newDomain=domain.toLowerCase();
-        return (Whitelist) entityManager().createQuery("SELECT w FROM WHITELIST w WHERE w.domain = '" + newDomain + "'").getSingleResult();
+        String newDomain = domain.toLowerCase();
+        return (Whitelist) entityManager().createQuery("SELECT w FROM Whitelist "
+                + "w WHERE w.domain = '" + newDomain + "'").getSingleResult();
     }
 
+    /**
+     * Adds a new whitelist to the repository.
+     *
+     * @param whiteList whitelist to be added
+     * @return the whitelist passed as parameter
+     */
+    @Override
+    public Whitelist add(Whitelist whiteList) {
+        if (find(whiteList.getID()) != null) {
+            return whiteList;
+        } else {
+            return super.add(whiteList);
+        }
+    }
 }
