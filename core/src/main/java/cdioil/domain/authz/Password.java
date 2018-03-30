@@ -104,10 +104,10 @@ public class Password implements Serializable, ValueObject {
      * @return strength of a password
      */
     private static String strength(String password) {
-        Pattern patternAverage = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])[a-zA-Z\\d]{9,}$");
+        Pattern patternAverage = Pattern.compile("^(?=[a-z0-9]?[A-Z])(?=[A-Z0-9]*?[a-z])(?=[A-Za-z]*?[0-9]).{9,}$");
         Matcher matcherAverage = patternAverage.matcher(password);
 
-        Pattern patternStrong = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z\\d])([a-zA-Z\\d]|[^a-zA-Z\\d]){9,}$");
+        Pattern patternStrong = Pattern.compile("^(?=(([a-z0-9])|([^A-Za-z0-9\\s]))?[A-Z])(?=(([A-Z0-9])|([^A-Za-z0-9\\s]))*?[a-z])(?=(([A-Za-z])|([^A-Za-z0-9\\s]))*?[0-9])(?=[A-Za-z0-9]*?[^A-Za-z0-9\\s]).{9,}$");
         Matcher matcherStrong = patternStrong.matcher(password);
 
         if (matcherAverage.matches()) {
