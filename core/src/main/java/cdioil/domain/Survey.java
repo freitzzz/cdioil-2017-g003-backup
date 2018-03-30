@@ -10,10 +10,9 @@ import javax.persistence.*;
  * Represents a product survey
  *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- * @param <K> represents Product or Category
  */
 @Entity
-public class Survey<K> implements Serializable{
+public class Survey implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -30,18 +29,19 @@ public class Survey<K> implements Serializable{
     /**
      * Product associated to the survey.
      */
-    private List<K> list;
+    private List<SurveyItem> list;
     
     /**
      * Date of when the survey was done.
      */
-    private LocalDateTime date;
+    private LocalDateTime surveyDate;
 
     /**
      * ======================================
      * TODO Replace questionList with graph.
      * ======================================
      */
+    @OneToMany
     private List<Question> questionList;
 
     /**
@@ -50,7 +50,7 @@ public class Survey<K> implements Serializable{
      * @param list list of products or categories the survey is associated to
      * @param date  date when the survey was done
      */
-    public Survey(List<K> list, LocalDateTime date) {
+    public Survey(List<SurveyItem> list, LocalDateTime date) {
         if (list == null) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
@@ -61,7 +61,7 @@ public class Survey<K> implements Serializable{
         if (date == null) {
             throw new IllegalArgumentException("O inquérito tem que ter uma data");
         }
-        this.date = date;
+        this.surveyDate = date;
     }
     
     protected Survey(){
@@ -126,7 +126,7 @@ public class Survey<K> implements Serializable{
     @Override
     public String toString() {
         return "Inquerito sobre:\n" + list.toString()
-                + "\nData:\n" + date;
+                + "\nData:\n" + surveyDate;
     }
 
     /**

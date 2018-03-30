@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
  * @author António Sousa [1161371]
  */
 @Entity
-public class Product implements Serializable {
+public class Product implements Serializable,SurveyItem {
 
     /**
      * Serialization identifier.

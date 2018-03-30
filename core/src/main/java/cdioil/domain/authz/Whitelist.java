@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.persistence.Identifiable;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -11,7 +12,7 @@ import javax.persistence.Id;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Entity
-public class Whitelist implements Serializable {
+public class Whitelist implements Serializable, Identifiable<String> {
     /**
      * Serializable ID
      */
@@ -72,4 +73,13 @@ public class Whitelist implements Serializable {
      * Proctected constructor in order to persist with JPA
      */
     protected Whitelist() {}
+
+    /**
+     * Returns the entity's identity.
+     * @return whitelisted domain
+     */
+    @Override
+    public String getID() {
+       return this.domain;
+    }
 }

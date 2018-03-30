@@ -11,7 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="ADMINISTRATOR", uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER_ID"}))
-public class Admin implements Serializable,Identifiable<Long> {
+public class Admin implements Serializable,Identifiable<Email> {
     @Id
     @Column(name = "ADMINISTRATOR_ID")
     @GeneratedValue
@@ -86,8 +86,8 @@ public class Admin implements Serializable,Identifiable<Long> {
     }
 
     @Override
-    public Long getID(){
-        return id;
+    public Email getID(){
+        return sysUser.getID();
     }
 
 }
