@@ -6,6 +6,6 @@
 
 
 
-   	Classes do domínio:  SystemUser
+   	Classes do domínio:  SystemUser,Whitelist
    	Controlador: ImportUsersFromFilesController
    	Repository: UserRepository & WhitelistRepository

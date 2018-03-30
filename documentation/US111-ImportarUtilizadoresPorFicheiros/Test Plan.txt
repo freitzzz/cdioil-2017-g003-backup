@@ -3,7 +3,7 @@
 	TEST PLAN
 
 	_______________________________
-	CASO #1: Change Dish
+	CASO #1: Importar Utilizadores
 	_______________________________
 
 	1. Introduzir nome do ficheiro com os utilizadores
