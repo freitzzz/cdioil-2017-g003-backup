@@ -14,6 +14,7 @@ import javax.persistence.InheritanceType;
  * Abstract class for a Product's code.
  *
  * @author António Sousa [1161371]
+ * @param <T> type of code
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

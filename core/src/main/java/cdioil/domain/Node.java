@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 /**
  * Class representing a Node in the Market Structure. A Node is composed of a
@@ -36,6 +37,12 @@ public class Node implements Serializable {
     @Column(name = "ID_NODE", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    /**
+     * Database Version number.
+     */
+    @Version
+    private Long version;
 
     /**
      * Reference to a preceding Node in the structure.
@@ -64,11 +71,9 @@ public class Node implements Serializable {
     /**
      * Instantiates a Node with a given parent Node and element.
      *
-     * @param parent
      * @param element
      */
-    protected Node(Node parent, Category element) {
-        this.parent = parent;
+    protected Node(Category element) {
         this.element = element;
     }
 
@@ -112,6 +117,7 @@ public class Node implements Serializable {
     public boolean addChild(Node child) {
 
         if (child != null && !getChildren().contains(child)) {
+            child.parent = this;
             return children.add(child);
         } else {
             return false;

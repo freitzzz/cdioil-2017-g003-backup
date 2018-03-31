@@ -16,7 +16,7 @@ public class FrontOfficeLogin {
     private static final String MAIN_MESSAGE = "FrontOffice\n";
     private static final String EMAIL = "Email: ";
     private static final String PASSWORD = "Password: ";
-    private static final String USER_NAO_ENCONTRADO = "Credenciais erradas."
+    private static final String WRONG_CREDENTIALS = "Credenciais erradas."
             + "Volte a tentar.\n";
     private static final int CRIAR_CONTA_ID = 1;
     private static final int LOGIN_ID = 2;
@@ -60,17 +60,21 @@ public class FrontOfficeLogin {
         int id = -1;
         System.out.println(HEADLINE);
         System.out.println(MAIN_MESSAGE);
-        while (id == -1) {
-            String emailS = Console.readLine(EMAIL);
-            String passwordS = Console.readLine(PASSWORD);
-            Email email = new Email(emailS);
-            SystemUser sysUser = new UserRepositoryImpl().findByEmail(email);
-            if (sysUser == null || !sysUser.samePassword(passwordS)) {
-                System.out.println(USER_NAO_ENCONTRADO);
-            } else {
-                id = LOGIN_ID;
-                new FrontOfficeConsole(sysUser);
+        try {
+            while (id == -1) {
+                String emailS = Console.readLine(EMAIL);
+                String passwordS = Console.readLine(PASSWORD);
+                Email email = new Email(emailS);
+                SystemUser sysUser = new UserRepositoryImpl().findByEmail(email);
+                if (sysUser == null || !sysUser.samePassword(passwordS)) {
+                    System.out.println(WRONG_CREDENTIALS);
+                } else {
+                    id = LOGIN_ID;
+                    new FrontOfficeConsole(sysUser);
+                }
             }
+        } catch (IllegalArgumentException e) {
+            System.out.println(WRONG_CREDENTIALS);
         }
     }
 }

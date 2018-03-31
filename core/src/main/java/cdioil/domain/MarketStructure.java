@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 /**
  * Class representing a Market Structure which is composed of various product
@@ -29,6 +30,12 @@ public class MarketStructure implements Serializable {
     @Column(name = "MKTSTRUCT_ID", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    
+    /**
+     * Database Version number.
+     */
+    @Version 
+    private Long version;
 
     /**
      * The Market Structure's first Node.
@@ -48,7 +55,7 @@ public class MarketStructure implements Serializable {
      */
     public MarketStructure() {
 
-        root = new Node(null, new Category("Todos os Produtos", "RAIZ","RAIZ"));
+        root = new Node(new Category("Todos os Produtos", "RAIZ","RAIZ"));
         marketSize = 1;
     }
 
@@ -100,7 +107,7 @@ public class MarketStructure implements Serializable {
 
             if (childNode == null) {
                 marketSize++;
-                return parentNode.addChild(new Node(parentNode, c));
+                return parentNode.addChild(new Node(c));
             }
         }
         return false;
@@ -220,7 +227,7 @@ public class MarketStructure implements Serializable {
 
         if (node != null) {
             if (isLeaf(node)) {
-                //adicionar à categoria dentro da estrutura e não à parametrizada
+                //Add to the category inside the structure
                 return node.getElement().addProduct(p);
             }
         }

@@ -145,7 +145,7 @@ public class TemplateTest {
         assertNotEquals("Objeto null não é igual", null, t);
         assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), t);
         assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), t);
-        assertNotEquals("Instância de Template diferente", new Template(null), t);
+        assertNotEquals("Instância de Template diferente", new Template(new Category("Outro", "11DC", "11DC")), t);
         assertEquals("Instância de Template igual", new Template(c), t);
     }
 }

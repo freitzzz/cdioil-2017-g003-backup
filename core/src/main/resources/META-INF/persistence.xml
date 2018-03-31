@@ -30,6 +30,7 @@
     <class>cdioil.domain.Survey</class>
     <class>cdioil.domain.Contest</class>
     <class>cdioil.domain.Event</class>
+    <class>cdioil.domain.Questionnaire</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
