@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 /**
  * Represents a Product in a Market Structure's Category.
@@ -36,6 +38,9 @@ public class Product implements Serializable,SurveyItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "PRODUCT_ID")
     private Long id;
+    
+    @Version
+    private Long version;
 
     /**
      * Product's name.
@@ -47,6 +52,7 @@ public class Product implements Serializable,SurveyItem {
      * List of the Product's Codes.
      */
     @OneToMany
+    @JoinColumn(name = "FK_PRODUCT")
     private List<Code> codes = new ArrayList<>();
 
     /**

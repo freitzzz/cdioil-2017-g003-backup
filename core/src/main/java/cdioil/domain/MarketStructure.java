@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 /**
  * Class representing a Market Structure which is composed of various product
@@ -29,6 +30,12 @@ public class MarketStructure implements Serializable {
     @Column(name = "MKTSTRUCT_ID", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    
+    /**
+     * Database Version number.
+     */
+    @Version 
+    private Long version;
 
     /**
      * The Market Structure's first Node.
