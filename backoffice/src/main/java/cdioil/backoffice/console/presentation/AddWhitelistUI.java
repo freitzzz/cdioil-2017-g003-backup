@@ -2,7 +2,6 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.application.authz.AddWhitelistController;
 import cdioil.backoffice.console.utils.Console;
-import javax.persistence.RollbackException;
 
 /**
  * User story 103's user interface.
@@ -11,10 +10,23 @@ import javax.persistence.RollbackException;
  */
 public class AddWhitelistUI {
 
+    private static final String HEAD_LINE = "======================";
+
+    private static final String ADD_WHITELISTED_DOMAIN = "Adicionar dominios de email autorizados.";
+
+    private static final String EXIT = "Sair.";
+
+    private static final String OPTION_SELECTION = "Selecione uma opcao: \n";
+
+    private static final String EXITING = "A sair...";
+
+    private static final String NEW_WHITELISTED_DOMAIN = "Escreva o dominio de email que pretende autorizar.\nEscreva 'sair' se pretender cancelar.";
+
+    private static final String ERROR_INVALID_OPTION = "Por favor selecione uma opcao valida.\n";
     /**
      * The use case's controller.
      */
-    AddWhitelistController controller;
+    private AddWhitelistController controller;
 
     /**
      * Instantiates the user interface.
@@ -31,28 +43,34 @@ public class AddWhitelistUI {
 
         while (opcao != 0) {
 
-            System.out.println("======================");
-            System.out.println("1. Adicionar dominios de email autorizados.");
-            System.out.println("0. Sair.");
-            opcao = Console.readInteger("Selecione uma opcao: \n");
+            System.out.println(HEAD_LINE);
+            System.out.println("1. " + ADD_WHITELISTED_DOMAIN);
+            System.out.println("0. " + EXIT);
+            opcao = Console.readInteger(OPTION_SELECTION);
 
             switch (opcao) {
 
                 case 0:
-                    System.out.println("A sair...");
+                    System.out.println(EXITING);
                     break;
 
                 case 1:
-                    String dominio = Console.readLine("Escreva o dominio de email que pretende autorizar.\n");
-                    try{
-                     controller.addAuthorizedDomain(dominio);   
-                    }catch(RollbackException e){
-                        System.out.println("Impossível adicionar registo duplicado.");
+
+                    Iterable<String> whitelistedDomains = controller.getExistingEntries();
+
+                    for (String domain : whitelistedDomains) {
+                        System.out.println(domain);
                     }
+
+                    String dominio = Console.readLine(NEW_WHITELISTED_DOMAIN);
+                    if (dominio.equalsIgnoreCase("SAIR")) {
+                        break;
+                    }
+                    controller.addAuthorizedDomain(dominio);
                     break;
 
                 default:
-                    System.out.println("Por favor insira uma opcao valida.\n");
+                    System.out.println(ERROR_INVALID_OPTION);
                     break;
 
             }
