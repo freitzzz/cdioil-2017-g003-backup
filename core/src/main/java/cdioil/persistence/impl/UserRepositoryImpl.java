@@ -16,7 +16,7 @@ import javax.persistence.NoResultException;
  * @see cdioil.persistence.UserRepository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Integer> implements UserRepository {
+public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> implements UserRepository {
 
     /**
      * Method that returns the persistence unit name that the repository uses
@@ -76,10 +76,17 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Integer> i
         }
     }
     
+    /**
+     * Retrieves a SystemUser's database ID if one is found with matching password and email address
+     * @param email email address
+     * @param passwordString non-hashed password
+     * @return SystemUser's database ID
+     */
     public long login(Email email, String passwordString) {
 
         EntityManager em = entityManager();
 
+        //Fetch user's password before fetching the id
         Query q = em.createQuery("SELECT u.password FROM SystemUser u WHERE LOWER(u.email.email) = :email");
         
         q.setParameter("email", email.toString().toLowerCase());
