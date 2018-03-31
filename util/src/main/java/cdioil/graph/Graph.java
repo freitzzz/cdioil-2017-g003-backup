@@ -1,10 +1,21 @@
 package cdioil.graph;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
+import javax.persistence.Version;
 
 /**
  * Adjacency map Graph implementation of GraphInterface.
@@ -13,8 +24,24 @@ import java.util.Objects;
  * @param <V> data type for elements stored in the Graph's vertices
  * @param <E> data type for elements stored in the Graph's edges
  */
-public class Graph<V, E> implements GraphInterface<V, E> {
+@Entity
+public class Graph<V extends Serializable, E extends Serializable> implements GraphInterface<V, E>, Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
+    /**
+     * Database ID.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
+    /**
+     * Database Version value.
+     */
+    @Version
+    private Long version;
+    
     /**
      * Number of vertices in this instance.
      */
@@ -30,7 +57,18 @@ public class Graph<V, E> implements GraphInterface<V, E> {
     /**
      * Map containing all of the vertices and their connections
      */
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "ADJANCECY_MAP",
+            joinColumns = {@JoinColumn(name = "FK_VERTEX_ELEMENT", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "FK_VERTEX", referencedColumnName = "id")})
+    @MapKey(name = "vertexKey")
     private Map<V, Vertex<V, E>> vertices;
+
+    /**
+     * JPA Constructor.
+     */
+    protected Graph() {
+    }
 
     /**
      * Instantiates an empty Graph.
@@ -80,7 +118,7 @@ public class Graph<V, E> implements GraphInterface<V, E> {
             return -1;
         }
 
-        return vertices.get(vert).getKey();
+        return vertices.get(vert).getVertexKey();
     }
 
     @SuppressWarnings("unchecked")
@@ -93,7 +131,7 @@ public class Graph<V, E> implements GraphInterface<V, E> {
         V[] keyverts = (V[]) Array.newInstance(vertElem.getClass(), numVert);
 
         for (Vertex<V, E> vert : vertices.values()) {
-            keyverts[vert.getKey()] = vert.getElement();
+            keyverts[vert.getVertexKey()] = vert.getElement();
         }
 
         return keyverts;
@@ -304,10 +342,10 @@ public class Graph<V, E> implements GraphInterface<V, E> {
 
         //update the keys of subsequent vertices in the map
         for (Vertex<V, E> v : vertices.values()) {
-            int keyVert = v.getKey();
-            if (keyVert > vertex.getKey()) {
+            int keyVert = v.getVertexKey();
+            if (keyVert > vertex.getVertexKey()) {
                 keyVert = keyVert - 1;
-                v.setKey(keyVert);
+                v.setVertexKey(keyVert);
             }
         }
         //The edges that live from vert are removed with the vertex    

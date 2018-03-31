@@ -23,11 +23,11 @@ public class VertexTest {
         System.out.println("getKey");
 
         int expResult = -1;
-        assertEquals(expResult, instance.getKey());
+        assertEquals(expResult, instance.getVertexKey());
 
         Vertex<String, Integer> instance1 = new Vertex<>(1, "Vertex1");
         expResult = 1;
-        assertEquals(expResult, instance1.getKey());
+        assertEquals(expResult, instance1.getVertexKey());
     }
 
     /**
@@ -37,9 +37,9 @@ public class VertexTest {
     public void testSetKey() {
         System.out.println("setKey");
         int k = 2;
-        instance.setKey(k);
+        instance.setVertexKey(k);
         int expResult = 2;
-        assertEquals(expResult, instance.getKey());
+        assertEquals(expResult, instance.getVertexKey());
     }
 
     /**
@@ -253,7 +253,7 @@ public class VertexTest {
     public void testEquals() {
         System.out.println("equals");
 
-        instance.setKey(1);
+        instance.setVertexKey(1);
         instance.setElement("Vertex1");
 
         Vertex<String, Integer> instance2 = new Vertex<>(2, "Vertex2");
@@ -327,7 +327,7 @@ public class VertexTest {
     public void testToString() {
         System.out.println("toString");
 
-        instance.setKey(1);
+        instance.setVertexKey(1);
         instance.setElement("Vertex1");
 
         Vertex<String, Integer> instance2 = new Vertex<>(2, "Vertex2");

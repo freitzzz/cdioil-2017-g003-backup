@@ -1,7 +1,14 @@
 package cdioil.graph;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 /**
  * Wrapper class for the Graph's edges.
@@ -10,7 +17,23 @@ import java.util.Objects;
  * @param <V> data type for elements stored in the Graph's vertices
  * @param <E> data type for elements stored in the Graph's edges
  */
-public class Edge<V, E> implements Comparable<Object> {
+@Entity
+public class Edge<V extends Serializable, E extends Serializable> implements Comparable<Object>, Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
+    /**
+     * Database ID.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    /**
+     * Database Version value.
+     */
+    @Version
+    private Long version;
 
     /**
      * Element stored in the Edge.
@@ -23,10 +46,12 @@ public class Edge<V, E> implements Comparable<Object> {
     /**
      * Origin Vertex.
      */
+    @OneToOne
     private Vertex<V, E> vOrig;
     /**
      * Destination Vertex.
      */
+    @OneToOne
     private Vertex<V, E> vDest;
 
     /**
@@ -42,6 +67,7 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Instantiates an Edge with a given element, weight and pair of vertices.
+     *
      * @param eInf element
      * @param ew weight value
      * @param vo origin vertex
@@ -56,6 +82,7 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Retrieves the element stored in the Edge.
+     *
      * @return element
      */
     public E getElement() {
@@ -64,6 +91,7 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Sets a new element for the Edge.
+     *
      * @param eInf new element
      */
     public void setElement(E eInf) {
@@ -72,6 +100,7 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Retrieves the Edge's weight value.
+     *
      * @return weight
      */
     public double getWeight() {
@@ -80,6 +109,7 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Sets a new weight value.
+     *
      * @param ew new weight value
      */
     public void setWeight(double ew) {
@@ -88,7 +118,8 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Retrieves the origin Vertex's element.
-     * @return 
+     *
+     * @return
      */
     public V getVOrig() {
         if (this.vOrig != null) {
@@ -99,6 +130,7 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Sets a new origin Vertex.
+     *
      * @param vo new origin Vertex
      */
     public void setVOrig(Vertex<V, E> vo) {
@@ -107,7 +139,8 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Retrieves the destination Vertex's element.
-     * @return 
+     *
+     * @return
      */
     public V getVDest() {
         if (this.vDest != null) {
@@ -118,7 +151,8 @@ public class Edge<V, E> implements Comparable<Object> {
 
     /**
      * Sets a new destination Vertex.
-     * @param vd 
+     *
+     * @param vd
      */
     public void setVDest(Vertex<V, E> vd) {
         vDest = vd;

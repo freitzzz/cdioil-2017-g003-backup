@@ -1,5 +1,7 @@
 package cdioil.graph;
 
+import java.io.Serializable;
+
 /**
  * Interface that defines the general behaviour for a Graph.
  *
@@ -7,7 +9,7 @@ package cdioil.graph;
  * @param <V> data type for elements stored in the Graph's vertices
  * @param <E> data type for elements stored in the Graph's edges
  */
-public interface GraphInterface<V, E> {
+public interface GraphInterface<V extends Serializable, E extends Serializable> {
 
     /**
      * Computes the number of vertices stored in the Graph.

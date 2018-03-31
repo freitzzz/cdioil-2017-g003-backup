@@ -31,6 +31,9 @@
     <class>cdioil.domain.Contest</class>
     <class>cdioil.domain.Event</class>
     <class>cdioil.domain.Questionnaire</class>
+    <!--<class>cdioil.graph.Edge</class>
+    <class>cdioil.graph.Graph</class>
+    <class>cdioil.graph.Vertex</class>-->
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
