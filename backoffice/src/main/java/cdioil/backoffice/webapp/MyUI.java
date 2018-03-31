@@ -2,6 +2,7 @@ package cdioil.backoffice.webapp;
 
 import cdioil.backoffice.webapp.admin.AdminPanelView;
 import cdioil.backoffice.webapp.authz.LoginView;
+import cdioil.backoffice.webapp.manager.ManagerImportView;
 import cdioil.backoffice.webapp.manager.ManagerPanelView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -42,10 +43,11 @@ public class MyUI extends UI {
         navigator.addView(LoginView.VIEW_NAME,LoginView.class);
         navigator.addView(AdminPanelView.VIEW_NAME,AdminPanelView.class);
         navigator.addView(ManagerPanelView.VIEW_NAME,ManagerPanelView.class);
+        navigator.addView(ManagerImportView.VIEW_NAME,ManagerImportView.class);
         navigator.navigateTo(LoginView.VIEW_NAME);
     }
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
-    @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
+    @VaadinServletConfiguration(ui = MyUI.class, productionMode = true)
     public static class MyUIServlet extends VaadinServlet {
     }
 }
