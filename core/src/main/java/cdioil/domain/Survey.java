@@ -1,8 +1,8 @@
 package cdioil.domain;
 
+import cdioil.graph.Graph;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -29,38 +29,36 @@ public class Survey implements Serializable{
     /**
      * Product associated to the survey.
      */
-    private List<SurveyItem> list;
+    private List<SurveyItem> itemList;
     
     /**
      * Date of when the survey was done.
      */
     private LocalDateTime surveyDate;
 
-    /**
-     * ======================================
-     * TODO Replace questionList with graph.
-     * ======================================
-     */
-    @OneToMany
-    private List<Question> questionList;
 
     /**
-     * Builds an instance of survey with a product and a date
+     * Question and Answer graph.
+     */
+    //@OneToOne
+    private Graph<Question,Answer> graph;
+
+    /**
+     * Builds an instance of survey with a product and a date.
      *
-     * @param list list of products or categories the survey is associated to
+     * @param itemList list of products or categories the survey is associated to
      * @param date  date when the survey was done
      */
-    public Survey(List<SurveyItem> list, LocalDateTime date) {
-        if (list == null) {
+    public Survey(List<SurveyItem> itemList, LocalDateTime date) {
+        if (itemList == null) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
         }
-        this.list = list;
-        this.questionList = new LinkedList<>(); // TODO Remove after
-                                                // implementing graph
         if (date == null) {
             throw new IllegalArgumentException("O inquérito tem que ter uma data");
         }
+        this.itemList = itemList;
+        this.graph = new Graph<>(true);     //Directed Graph
         this.surveyDate = date;
     }
     
@@ -70,11 +68,6 @@ public class Survey implements Serializable{
 
     /**
      * Adds a question to the list of questions.
-     *
-     * ==============================================
-     * TODO Delete method after graph has been added.
-     * ==============================================
-     * 
      * 
      * @param question question to be added
      * @return true, if the question is added, false if the question is invalid
@@ -83,16 +76,12 @@ public class Survey implements Serializable{
         if (question == null || isValidQuestion(question)) {
             return false;
         }
-        return questionList.add(question);
+        return graph.insertVertex(question);
     }
 
     /**
-     * Remove a question from the question list.
+     * Remove a question from the graph.
      *
-     * ==============================================
-     * TODO Delete method after graph has been added.
-     * ==============================================
-     * 
      * @param question question to be removed
      * @return true if the question was removed, false if otherwise
      */
@@ -100,21 +89,17 @@ public class Survey implements Serializable{
         if (question == null || !isValidQuestion(question)) {
             return false;
         }
-        return questionList.remove(question);
+        return graph.removeVertex(question);
     }
 
     /**
-     * Checks if a question already exists in the question list
+     * Checks if a question already exists in the graph.
      *
-     * ==============================================
-     * TODO Delete method after graph has been added.
-     * ==============================================
-     * 
      * @param question question to be verified
      * @return true, if it already exists in the list, false if otherwise
      */
     public boolean isValidQuestion(Question question) {
-        return questionList.contains(question);
+        return graph.validVertex(question);
     }
 
     /**
@@ -125,7 +110,7 @@ public class Survey implements Serializable{
      */
     @Override
     public String toString() {
-        return "Inquerito sobre:\n" + list.toString()
+        return "Inquerito sobre:\n" + itemList.toString()
                 + "\nData:\n" + surveyDate;
     }
 
@@ -136,7 +121,7 @@ public class Survey implements Serializable{
      */
     @Override
     public int hashCode() {
-        return list.hashCode() + questionList.hashCode();
+        return itemList.hashCode() + graph.hashCode();
     }
 
     /**
@@ -155,10 +140,9 @@ public class Survey implements Serializable{
             return false;
         }
         final Survey other = (Survey) obj;
-        if (!this.list.equals(other.list)) {
+        if (!this.itemList.equals(other.itemList)) {
             return false;
         }
-        return this.questionList.equals(other.questionList); //TODO Remove
-                                                             // after implementing graph
+        return this.graph.equals(other.graph);
     }
 }

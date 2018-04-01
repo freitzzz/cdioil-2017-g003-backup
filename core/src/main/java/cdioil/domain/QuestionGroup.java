@@ -2,6 +2,7 @@ package cdioil.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class QuestionGroup implements Serializable {
      * Set of questions related to addQuestion category or addQuestion product.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
-    private HashSet<Question> questions;
+    private Set<Question> questions;
 
     /**
      * String that will serve as addQuestion map key for

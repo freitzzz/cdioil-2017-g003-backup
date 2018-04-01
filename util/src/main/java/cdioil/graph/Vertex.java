@@ -1,9 +1,20 @@
 package cdioil.graph;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
+import javax.persistence.Version;
 
 /**
  * Wrapper class for the Graph's vertices.
@@ -12,47 +23,73 @@ import java.util.Objects;
  * @param <V> data type for elements stored in the Graph's vertices
  * @param <E> data type for elements stored in the Graph's edges
  */
-public class Vertex<V, E> {
+@Entity
+public class Vertex<V extends Serializable, E extends Serializable> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
-     * Vertex key value
+     * Database ID.
      */
-    private int key;                     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    /**
+     * Database Version value.
+     */
+    @Version
+    private Long version;
+
+    /**
+     * Vertex key value.
+     */
+    private int vertexKey;
     /**
      * Element stored in the Vertex.
      */
-    private V element;                 
+    private V element;
     /**
      * Map of directly adjacent outgoing vertices and edges connecting them.
      */
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "OUTGOING_VERTICES",
+            joinColumns = {
+                @JoinColumn(name = "FK_VERTEX_ELEMENT", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "FK_VERTEX", referencedColumnName = "id")})
+    @MapKey(name = "vertexKey")
     private Map<V, Edge<V, E>> outVerts;
 
     /**
      * Default constructor of Vertex.<p>
-     * Sets the value of key to -1 and its element is null.
+ Sets the value of vertexKey to -1 and its element is null.
      */
     public Vertex() {
-        key = -1;
+        vertexKey = -1;
         element = null;
         outVerts = new LinkedHashMap<>();
     }
 
     /**
-     * Instantiates a Vertex with a given key and element.
-     * @param k key
+     * Instantiates a Vertex with a given vertexKey and element.
+     *
+     * @param k vertexKey
      * @param vInf element
      */
     public Vertex(int k, V vInf) {
-        key = k;
+        vertexKey = k;
         element = vInf;
         outVerts = new LinkedHashMap<>();
     }
 
     /**
      * Instantiates a copy of a given Vertex.
-     * @param v 
+     *
+     * @param v
      */
     public Vertex(Vertex<V, E> v) {
-        key = v.getKey();
+        vertexKey = v.getVertexKey();
         element = v.getElement();
         outVerts = new LinkedHashMap<>();
         for (V vert : v.outVerts.keySet()) {
@@ -62,23 +99,26 @@ public class Vertex<V, E> {
     }
 
     /**
-     * Retrieves the key value.
-     * @return key
+     * Retrieves the vertexKey value.
+     *
+     * @return vertexKey
      */
-    public int getKey() {
-        return key;
+    public int getVertexKey() {
+        return vertexKey;
     }
 
     /**
-     * Sets the key value.
-     * @param k new key value
+     * Sets the vertexKey value.
+     *
+     * @param k new vertexKey value
      */
-    public void setKey(int k) {
-        key = k;
+    public void setVertexKey(int k) {
+        vertexKey = k;
     }
 
     /**
      * Retrieves the element.
+     *
      * @return element
      */
     public V getElement() {
@@ -87,6 +127,7 @@ public class Vertex<V, E> {
 
     /**
      * Sets the element.
+     *
      * @param vInf new element
      */
     public void setElement(V vInf) {
@@ -95,6 +136,7 @@ public class Vertex<V, E> {
 
     /**
      * Adds a new adjacent vertex.
+     *
      * @param vAdj adjacent vertex
      * @param edge edge connecting the two vertices
      */
@@ -104,6 +146,7 @@ public class Vertex<V, E> {
 
     /**
      * Retrieves the adjacent vertex from a given Edge.
+     *
      * @param edge
      * @return adjacent vertex
      */
@@ -120,7 +163,8 @@ public class Vertex<V, E> {
 
     /**
      * Removes an adjacent vertex.
-     * @param vAdj 
+     *
+     * @param vAdj
      */
     public void remAdjVert(V vAdj) {
         outVerts.remove(vAdj);
@@ -128,6 +172,7 @@ public class Vertex<V, E> {
 
     /**
      * Retrieves the Edge connecting this vertex to the adjacent vertex.
+     *
      * @param vAdj
      * @return edge connecting the two vertices
      */
@@ -137,7 +182,8 @@ public class Vertex<V, E> {
 
     /**
      * Computes the number of adjacent vertices.
-     * @return 
+     *
+     * @return
      */
     public int numAdjVerts() {
         return outVerts.size();
@@ -145,7 +191,8 @@ public class Vertex<V, E> {
 
     /**
      * Retrieves an Iterable Collection with all of the adjacent vertices.
-     * @return 
+     *
+     * @return
      */
     public Iterable<V> getAllAdjVerts() {
         return outVerts.keySet();
@@ -153,7 +200,8 @@ public class Vertex<V, E> {
 
     /**
      * Retrieves an Iterable Collection with all of the outgoing edges.
-     * @return 
+     *
+     * @return
      */
     public Iterable<Edge<V, E>> getAllOutEdges() {
         return outVerts.values();
@@ -162,7 +210,7 @@ public class Vertex<V, E> {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 31 * hash + this.key;
+        hash = 31 * hash + this.vertexKey;
         hash = 31 * hash + Objects.hashCode(this.element);
         return hash;
     }
@@ -181,7 +229,7 @@ public class Vertex<V, E> {
 
         Vertex<V, E> otherVertex = (Vertex<V, E>) otherObj;
 
-        if (this.key != otherVertex.key) {
+        if (this.vertexKey != otherVertex.vertexKey) {
             return false;
         }
 
@@ -217,7 +265,7 @@ public class Vertex<V, E> {
 
         Vertex<V, E> newVertex = new Vertex<>();
 
-        newVertex.setKey(key);
+        newVertex.setVertexKey(vertexKey);
         newVertex.setElement(element);
 
         for (V vert : outVerts.keySet()) {
@@ -231,7 +279,7 @@ public class Vertex<V, E> {
     public String toString() {
         String st = "";
         if (element != null) {
-            st = element + " (" + key + "): \n";
+            st = element + " (" + vertexKey + "): \n";
         }
         if (!outVerts.isEmpty()) {
             for (Map.Entry<V, Edge<V, E>> e : outVerts.entrySet()) {
