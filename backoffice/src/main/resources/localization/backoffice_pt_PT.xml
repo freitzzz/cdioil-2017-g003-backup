@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--Newline character: &#10; -->
+<!--Tab character: &#x9; -->
+<Messages>
+
+	<InfoMessages>
+		<Message messageId = "info_welcome" value = "Bem-vindo ao BackOffice&#10;"/>
+		<Message messageId = "info_shutdown" value = "O programa irá encerrar"/>
+		<Message messageId = "info_exiting" value = "A Sair..."/>
+		<Message messageId = "info_manager_header" value = "&#x9;Back Office Gestor"/>
+		<Message messageId = "info_admin_header" value = "&#x9;Back Office Admin"/>
+	</InfoMessages>
+
+	
+	<RequestMessages>
+		<Message messageId = "request_login" value = "Login: "/>
+		<Message messageId = "request_email" value = "Email: "/>
+		<Message messageId = "request_password" value = "Password: "/>
+		<Message messageId = "request_select_option" value = "Por favor, selecione uma opção:&#10;"/>
+		<Message messageId = "request_new_domain" value = "Escreva o dominio de email que pretende autorizar.&#10;Escreva 'sair' se pretender cancelar."/>
+		<Message messageId = "request_select_language" value = "Selecione o seu idioma:"/>
+	</RequestMessages>
+	
+	
+	<ErrorMessages>
+		<Message messageId = "error_unauthorized_user" value = "Não está autorizado a utilizar o Backoffice."/>
+		<Message messageId = "error_invalid_credentials" value = "Credenciais inválidas.&#10;Por favor tente novamente."/>
+		<Message messageId = "error_invalid_option" value = "Por favor, selecione uma opção válida.&#10;"/>
+		<Message messageId = "error_not_implemented" value = "Funcionalidade não implementada"/>
+		<Message messageId = "error_invalid_file_format" value = "Formato de ficheiro inválido!"/>
+	</ErrorMessages>
+	
+	
+	<MenuOptions>
+		<Message messageId = "option_exit" value = "Sair"/>
+		<Message messageId = "option_change_language" value = "Alterar Idioma"/>
+		
+		<AdminMenuOptions>
+			<Message messageId = "option_assign_manager" value = "Atribuir Perfil de Gestor"/>
+			<Message messageId = "option_whitelist_domain" value = "Adicionar Domínios de Email Autorizados"/>
+			<Message messageId = "option_import_users" value = "Importar Lista de Utilizadores"/>
+			<Message messageId = "option_display_users" value = "Listar Todos os Utilizadores"/>
+			<Message messageId = "option_register_user" value = "Registar no Sistema"/>
+			<Message messageId = "option_update_data" value = "Atualizar Dados"/>
+			<Message messageId = "option_import_categories" value = "Importar Categorias"/>
+			<Message messageId = "option_search_user_by_email" value = "Pesquisar Utilizador por Email"/>
+		</AdminMenuOptions>
+		
+		<ManagerMenuOptions>
+			<Message messageId = "option_import_questions" value = "Importar Questões para Novo Template"/>
+		</ManagerMenuOptions>
+	</MenuOptions>
+	
+</Messages>

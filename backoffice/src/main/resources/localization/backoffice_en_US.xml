@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--Newline character: &#10; -->
+<!--Tab character: &#x9; -->
+<Messages>
+
+	<InfoMessages>
+		<Message messageId = "info_welcome" value = "Welcome to the BackOffice&#10;"/>
+		<Message messageId = "info_shutdown" value = "The program will shutdown"/>
+		<Message messageId = "info_exiting" value = "Exiting..."/>
+		<Message messageId = "info_manager_header" value = "&#x9;Manager's Back Office"/>
+		<Message messageId = "info_admin_header" value = "&#x9;Admin's Back Office"/>
+	</InfoMessages>
+
+	
+	<RequestMessages>
+		<Message messageId = "request_login" value = "Login: "/>
+		<Message messageId = "request_email" value = "Email: "/>
+		<Message messageId = "request_password" value = "Password: "/>
+		<Message messageId = "request_select_option" value = "Please, choose an option:&#10;"/>
+		<Message messageId = "request_new_domain" value = "Type in the email domain you wish to authorize.&#10;Type in 'exit' if you wish to cancel."/>
+		<Message messageId = "request_select_language" value = "Select your language:"/>
+	</RequestMessages>
+	
+	
+	<ErrorMessages>
+		<Message messageId = "error_unauthorized_user" value = "You're not authorized to use the BackOffice."/>
+		<Message messageId = "error_invalid_credentials" value = "Invalid credentials.&#10;Please, try again."/>
+		<Message messageId = "error_invalid_option" value = "Please, select a valid option.&#10;"/>
+		<Message messageId = "error_not_implemented" value = "Feature not yet implemented"/>
+		<Message messageId = "error_invalid_file_format" value = "Invalid file format!"/>
+	</ErrorMessages>
+	
+	
+	<MenuOptions>
+		<Message messageId = "option_exit" value = "Exit"/>
+		<Message messageId = "option_change_language" value = "Change Language"/>
+		
+		<AdminMenuOptions>
+			<Message messageId = "option_assign_manager" value = "Assign Manager Role"/>
+			<Message messageId = "option_whitelist_domain" value = "Whitelist Domains"/>
+			<Message messageId = "option_import_users" value = "Import Users"/>
+			<Message messageId = "option_display_users" value = "List All Users"/>
+			<Message messageId = "option_register_user" value = "Register"/>
+			<Message messageId = "option_update_data" value = "Update Data"/>
+			<Message messageId = "option_import_categories" value = "Import Categories"/>
+			<Message messageId = "option_search_user_by_email" value = "Search Users by Email"/>
+		</AdminMenuOptions>
+		
+		<ManagerMenuOptions>
+			<Message messageId = "option_import_questions" value = "Import Questions for New Template"/>
+		</ManagerMenuOptions>
+	</MenuOptions>
+	
+</Messages>
