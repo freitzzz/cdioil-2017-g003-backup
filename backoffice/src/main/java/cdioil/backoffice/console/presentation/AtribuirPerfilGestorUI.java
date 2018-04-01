@@ -1,7 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.application.authz.AtribuirPerfilGestorController;
-import cdioil.backoffice.console.utils.Console;
+import cdioil.backoffice.utils.Console;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
