@@ -6,6 +6,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -87,7 +88,13 @@ public class Review implements Serializable {
         }
         return true;
     }
-
+    /**
+     * Method that returns all questions and respective answers of the current Review
+     * @return Map with all questions and respective answers of the current Review
+     */
+    public Map<Question,Answer> getReviewQuestionAnswers(){
+        return null;
+    }
     /**
      * Returns a string containing the review's data
      *
