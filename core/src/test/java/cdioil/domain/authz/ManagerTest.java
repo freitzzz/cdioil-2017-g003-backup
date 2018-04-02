@@ -3,16 +3,26 @@ package cdioil.domain.authz;
 import cdioil.domain.Category;
 import java.util.LinkedList;
 import java.util.List;
-import org.junit.Assert;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Unit testing for class Manager.
- * @author 
+ *
+ * @author
  */
 public class ManagerTest {
+
+    private SystemUser sysUser;
+
+    @Before
+    public void setUp() {
+        Email email = new Email("lilpump@guccigang.com");
+        Password pwd = new Password("Bananas19");
+        Name nome = new Name("Lil", "Pump");
+        sysUser = new SystemUser(email, nome, pwd);
+    }
 
     /**
      * Builds invalid manager instance.
@@ -23,16 +33,44 @@ public class ManagerTest {
     }
 
     /**
-     * Tests hashCode and equals method of class Manager.
+     * Test of hashCode method of class Manager.
      */
     @Test
-    public void equalsHashCodeTest() {
-        Manager g = new Manager(new SystemUser());
+    public void hashCodeTest() {
+        System.out.println("hashCode");
+        Manager g = new Manager(sysUser);
+        int expResult = sysUser.hashCode();
+        int result = g.hashCode();
+        assertEquals(expResult, result);
+    }
 
-        Assert.assertNotEquals(g, "Dummy");
-        Assert.assertNotEquals(g, null);
-        Assert.assertNotEquals(g, 14);
-        Assert.assertEquals(g, g);
+    /**
+     * Test of equals method of class Manager.
+     */
+    @Test
+    public void equalsTest() {
+        System.out.println("equals");
+
+        Manager instance = new Manager(sysUser);
+        assertNotEquals("The condition should succeed because we are comparing"
+                + "a manager instance to a null value", instance, null);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "instances of different classes", instance, "bananas");
+        assertEquals("The condition should succeed because we are comparing "
+                + "the same instance", instance, instance);
+
+        Email email = new Email("lilxan@guccigang.com");
+        Password pwd = new Password("Bananas19");
+        Name nome = new Name("Lil", "Xan");
+        SystemUser sysUser2 = new SystemUser(email, nome, pwd);
+
+        Manager other = new Manager(sysUser2);
+        Manager that = new Manager(sysUser);
+
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "managers that have different system users", instance, other);
+        assertEquals("The condition should succeed because we are comparing "
+                + "managers that have the same system user", instance, that);
     }
 
     /**
@@ -44,7 +82,7 @@ public class ManagerTest {
 
         Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
-	//teste adiconar lista a null
+        //teste adiconar lista a null
         List<Category> lc = null;
         assertFalse(instance.addCategories(lc));
         //teste adicionar lista vazia
@@ -81,5 +119,17 @@ public class ManagerTest {
         //teste adicionar lista com elementos existentes
         instance.addCategories(lc);
         assertTrue(instance.removeCategories(lc));
+    }
+
+    /**
+     * Test of getID method, of class Manager.
+     */
+    @Test
+    public void testGetID() {
+        System.out.println("getID");
+        Manager instance = new Manager(sysUser);
+        Email expResult = new Email("lilpump@guccigang.com");
+        Email result = instance.getID();
+        assertEquals(expResult, result);
     }
 }

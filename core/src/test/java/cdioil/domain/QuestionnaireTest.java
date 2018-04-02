@@ -6,6 +6,7 @@ import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
+import cdioil.graph.Graph;
 import cdioil.time.TimePeriod;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class QuestionnaireTest {
     private String description;
     private UsersGroup gu;
     private TimePeriod timePeriod;
+    private Graph<Question, Answer> graph;
 
     @Before
     public void setUp() {
@@ -43,6 +45,7 @@ public class QuestionnaireTest {
         LocalTime t2 = LocalTime.of(10, 10, 10);
         LocalDateTime dt2 = LocalDateTime.of(d2, t2);
         timePeriod = new TimePeriod(dt, dt2);
+        graph = new Graph(true);
     }
 
     /**
@@ -51,16 +54,18 @@ public class QuestionnaireTest {
     @Test
     public void constructorTest() {
         System.out.println("Testes Construtor");
-        assertNull("The condition should succeed because the arguments are "
-                + "invalid", createQuestionnaire(null, description, gu, timePeriod));
-        assertNull("The condition should succeed because the arguments are "
-                + "invalid", createQuestionnaire(title, null, gu, timePeriod));
-        assertNull("The condition should succeed because the arguments are "
-                + "invalid", createQuestionnaire(title, description, null, timePeriod));
-        assertNull("The condition should succeed because the arguments are "
-                + "invalid", createQuestionnaire(title, description, gu, null));
+        assertNull("The condition should succeed because the title is "
+                + "null", createQuestionnaire(null, description, gu, timePeriod, graph));
+        assertNull("The condition should succeed because the description is "
+                + "null", createQuestionnaire(title, null, gu, timePeriod, graph));
+        assertNull("The condition should succeed because the target audience is "
+                + "null", createQuestionnaire(title, description, null, timePeriod, graph));
+        assertNull("The condition should succeed because the time period is "
+                + "null", createQuestionnaire(title, description, gu, null, graph));
         assertNotNull("The condition should succeed because the arguments are "
-                + "valid", createQuestionnaire(title, description, gu, timePeriod));
+                + "valid", createQuestionnaire(title, description, gu, timePeriod, graph));
+        assertNull("The condition should succeed because the graph is null",
+                createQuestionnaire(title, description, gu, timePeriod, null));
     }
 
     /**
@@ -69,8 +74,8 @@ public class QuestionnaireTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Questionnaire instance = createQuestionnaire(title, description, gu, timePeriod);
-        Questionnaire other = createQuestionnaire(title, description, gu, timePeriod);
+        Questionnaire instance = createQuestionnaire(title, description, gu, timePeriod, graph);
+        Questionnaire other = createQuestionnaire(title, description, gu, timePeriod, graph);
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
@@ -82,9 +87,9 @@ public class QuestionnaireTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Questionnaire instance = createQuestionnaire(title, description, gu, timePeriod);
-        Questionnaire instance2 = createQuestionnaire(title, description, gu, timePeriod);
-        Questionnaire instance3 = createQuestionnaire("Titulo 3", "Questionario 3", gu, timePeriod);
+        Questionnaire instance = createQuestionnaire(title, description, gu, timePeriod, graph);
+        Questionnaire instance2 = createQuestionnaire(title, description, gu, timePeriod, graph);
+        Questionnaire instance3 = createQuestionnaire("Titulo 3", "Questionario 3", gu, timePeriod, graph);
         assertEquals("A condição deve acertar pois estamos a comparar"
                 + "as mesmas instancias", instance, instance);
         assertNotEquals("A condição deve acertar pois estamos a comparar"
@@ -103,7 +108,7 @@ public class QuestionnaireTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Questionnaire instance = createQuestionnaire(title, description, gu, timePeriod);
+        Questionnaire instance = createQuestionnaire(title, description, gu, timePeriod, graph);
         String expResult = "Evento: Titulo Teste\n"
                 + "Descricao: Questionario Teste\n"
                 + "Data de Inicio: 2010-03-02 10:10:10\n"
@@ -129,9 +134,9 @@ public class QuestionnaireTest {
      * @return instance of the Contest
      */
     private Questionnaire createQuestionnaire(String title, String description, UsersGroup gu,
-            TimePeriod timePeriod) {
+            TimePeriod timePeriod, Graph<Question, Answer> graph) {
         try {
-            return new Questionnaire(title, description, gu, timePeriod);
+            return new Questionnaire(title, description, gu, timePeriod, graph);
         } catch (IllegalArgumentException e) {
             return null;
         }

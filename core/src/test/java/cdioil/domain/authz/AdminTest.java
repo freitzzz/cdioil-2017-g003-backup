@@ -83,6 +83,18 @@ public class AdminTest {
         assertEquals("A condição deve acertar pois as strings são iguais",
                  expResult, result);
     }
+    
+    /**
+     * Test of method getID, of class Admin.
+     */
+    @Test
+    public void testGetID(){
+        System.out.println("getID");
+        Admin a = createAdmin(sysUser);
+        Email expResult = new Email("lilpump@guccigang.com");
+        Email result = a.getID();
+        assertEquals(expResult,result);
+    }
 
     /**
      * Builds an Admin instance of a SystemUser

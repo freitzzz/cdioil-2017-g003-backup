@@ -17,17 +17,29 @@ public class NameTest {
     public void testConstructor() {
         System.out.println("Constructor Tests");
         assertNull("The condition should succeed because the arguments"
-                + "are invalid",createName(null, null));
+                + "are invalid", createName(null, null));
+        assertNull("The condition should succeed because the first name can't"
+                + " be null", createName(null, "Apelido"));
+        assertNull("The condition should succeed because the last name can't "
+                + "be null", createName("First Name", null));
+        assertNull("The condition should succeed because the first name can't "
+                + "be empty", createName("", "Apelido"));
+        assertNull("The condition should succeed because the last name can't be"
+                + " empty", createName("First Name", ""));
         assertNull("The condition should succeed because the arguments"
-                + "are invalid",createName("", ""));
-        assertNull("The condition should succeed because the arguments"
-                + "are invalid", createName("aa214124", "gds12345"));
-        assertNull("The condition should succeed because the arguments"
-                + "are invalid",createName("!#vv", "??=ad"));
+                + "are invalid", createName("", ""));
+        assertNull("The condition should succeed because the first"
+                + " name is invalid", createName("aa214124", "Last Name"));
+        assertNull("The condition should succeed because the first name is "
+                + "invalid", createName("!#vv", "Last Name"));
+        assertNull("The condition should succeed because the last name is "
+                + "invalid",createName("First","$$%%aperi??"));
+        assertNull("The condition should succeed because the last name"
+                + " is invalid", createName("First Name", "123last name"));
         assertNotNull("The condition should succeed because the arguments"
-                + "are valid",createName("Lil", "Pump"));
+                + "are valid", createName("Lil", "Pump"));
         assertNotNull("The condition should succeed because the arguments"
-                + "are valid",createName("nao sei", "USAR CAPS LOCK"));
+                + "are valid", createName("nao sei", "USAR CAPS LOCK"));
     }
 
     /**

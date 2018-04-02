@@ -95,4 +95,15 @@ public class SystemUserTest {
         String expected = "Nome: Gollum  Smeagol\nEmail: myPrecious@gmail.com\n";
         assertEquals(expected, instance.toString());
     }
+    
+    /**
+     * Test of getID method, of class SystemUser.
+     */
+    @Test
+    public void testGetID(){
+        System.out.println("getID");
+        Email expResult = new Email("myPrecious@gmail.com");
+        Email result = instance.getID();
+        assertEquals(expResult,result);
+    }
 }

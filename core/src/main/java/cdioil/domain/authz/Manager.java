@@ -3,6 +3,7 @@ package cdioil.domain.authz;
 import cdioil.domain.Category;
 import cdioil.persistence.Identifiable;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -65,7 +66,7 @@ public class Manager implements Serializable, Identifiable<Email> {
             throw new IllegalArgumentException("A instância de SystemUser "
                     + "não pode ser null.");
         }
-
+        this.categories = new LinkedList<>();
         this.su = su;
     }
 
@@ -90,7 +91,7 @@ public class Manager implements Serializable, Identifiable<Email> {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Manager)) {
             return false;
         }
 

@@ -43,6 +43,22 @@ public class SurveyTest {
     @After
     public void tearDown() {
     }
+    
+    /**
+     * Ensure that an exception is thrown when the item list is null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureNullItemListThrowsException(){
+        new Survey(null,data);
+    }
+    
+    /**
+     * Ensure that an exception is thrown when the data is null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureNullDateThrowsException(){
+        new Survey(new ArrayList<>(),null);
+    }
 
     /**
      * Test of method hashCode, of class Survey.
@@ -62,11 +78,12 @@ public class SurveyTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
-        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC", "100DC"), i);
         ArrayList<SurveyItem> al = new ArrayList<>();
         al.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
         assertNotEquals("Instância de Inquerito diferente", new Survey(al, data), i);
         assertEquals("Instância de Inquerito igual", new Survey(new ArrayList<>(), data), i);
+        assertEquals("Compare same instance",i,i);
+        assertNotEquals("Instances of different classes",i,"bananas");
     }
 
     /**
