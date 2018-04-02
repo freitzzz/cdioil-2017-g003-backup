@@ -1,6 +1,8 @@
 package cdioil.application.utils;
 
+import cdioil.domain.Review;
 import java.io.File;
+import java.util.List;
 
 /**
  * Utilitary class that writes survey answers into a CSV file
@@ -12,11 +14,19 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
      */
     private final File file;
     /**
+     * List with all survey reviews being exported
+     */
+    private final List<Review> surveyReviews;
+    /**
      * Builds a new CSVSurveyAnswersWriter with the file that is going to be 
      * written all survey answers
      * @param filename String with the filename that is going to be written all survey answers
+     * @param surveyReviews List with all survey reviews being exported
      */
-    public CSVSurveyAnswersWriter(String filename){this.file=new File(filename);}
+    public CSVSurveyAnswersWriter(String filename,List<Review> surveyReviews){
+        this.file=new File(filename);
+        this.surveyReviews=surveyReviews;
+    }
     /**
      * Method that writes all answers from a certain survey into a CSV file
      * @return boolean true if all answers were writed with success, false if not

@@ -6,6 +6,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,8 +36,8 @@ public class Review implements Serializable {
      * product subject to review
      */
     @OneToOne
-
-    private Survey inquiry;
+    @Column(name="SURVEY")
+    private Survey survey;
     private Product product;
 
     /**
