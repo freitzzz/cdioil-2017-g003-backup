@@ -52,9 +52,6 @@ public class SystemUser implements Serializable, Identifiable<Email> {
      * @param password user's password
      */
     public SystemUser(Email email, Name nome, Password password) {
-         if (email == null) {
-            throw new IllegalArgumentException("O email não pode ser vazio.");
-        }
         this.email = email;
         this.nome = nome;
         this.password = password;

@@ -10,4 +10,4 @@
 	   password Password123
 	2. Escolher a opção 4 "Listar Todos Os Utilizadores Do Sistema"
 	3. Verificar que os utilizadores apresentados são os mesmos
-	   inicializados pelo boostrap.
+	   inicializados pelo bootstrap.

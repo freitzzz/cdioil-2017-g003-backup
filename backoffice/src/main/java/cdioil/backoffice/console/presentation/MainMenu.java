@@ -50,7 +50,7 @@ public class MainMenu {
     private final String OPTION_UPDATE_DATA = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_update_data");
     private final String OPTION_IMPORT_CATEGORIES = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_categories");
     private final String OPTION_USER_BY_EMAIL = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_search_user_by_email");
-    
+    private final String OPTION_REMOVE_CATEGORIES_FROM_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_remove_categories_from_manager");
     
     public void mainLoopAdmin(Admin admin) {
         int opcao = 0;
@@ -84,6 +84,12 @@ public class MainMenu {
                     new SearchUserUI();
                     break;
                 case 9:
+                    //new AddCategoriesUI();
+                    break;
+                case 10:
+                    new RemoveCategoriesUI().doShow();
+                    break;
+                case 11:
                     new ChangeLanguageUI();
                     break;
                 default:
@@ -141,7 +147,9 @@ public class MainMenu {
         System.out.println("6. " + OPTION_UPDATE_DATA);
         System.out.println("7. " + OPTION_IMPORT_CATEGORIES);
         System.out.println("8. " + OPTION_USER_BY_EMAIL);
-        System.out.println("9. " + OPTION_CHANGE_LANGUAGE);
+        //System.out.println("9. " + OPTION_ADD_CATEGORIES_TO_MANAGER);
+        System.out.println("10. "+OPTION_REMOVE_CATEGORIES_FROM_MANAGER);
+        System.out.println("11. " + OPTION_CHANGE_LANGUAGE);
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);
