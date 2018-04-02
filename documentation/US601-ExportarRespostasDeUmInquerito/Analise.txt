@@ -1,0 +1,26 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #2
+	
+	* Como Gestor pretendo exportar todas as respostas de um determinado inquérito para um ficheiro
+	* Os ficheiros a serem exportados deverão ser do formato CSV
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	
