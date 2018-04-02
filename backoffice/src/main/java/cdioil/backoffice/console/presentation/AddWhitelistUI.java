@@ -1,7 +1,8 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.application.authz.AddWhitelistController;
-import cdioil.backoffice.console.utils.Console;
+import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
+import cdioil.backoffice.utils.Console;
 
 /**
  * User story 103's user interface.
@@ -10,19 +11,17 @@ import cdioil.backoffice.console.utils.Console;
  */
 public class AddWhitelistUI {
 
-    private static final String HEAD_LINE = "======================";
+    private final String SEPARATOR = "===========================\n";
+    
+    private final String INFO_EXITING = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_exiting");
 
-    private static final String ADD_WHITELISTED_DOMAIN = "Adicionar dominios de email autorizados.";
+    private final String OPTION_WHITELIST_DOMAIN = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_whitelist_domain");
+    private final String OPTION_EXIT = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_exit");
 
-    private static final String EXIT = "Sair.";
+    private final String REQUEST_SELECT_OPTION = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_select_option");
+    private final String REQUEST_NEW_DOMAIN = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_new_domain");
 
-    private static final String OPTION_SELECTION = "Selecione uma opcao: \n";
-
-    private static final String EXITING = "A sair...";
-
-    private static final String NEW_WHITELISTED_DOMAIN = "Escreva o dominio de email que pretende autorizar.\nEscreva 'sair' se pretender cancelar.";
-
-    private static final String ERROR_INVALID_OPTION = "Por favor selecione uma opcao valida.\n";
+    private final String ERROR_INVALID_OPTION = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_invalid_option");
     /**
      * The use case's controller.
      */
@@ -39,34 +38,36 @@ public class AddWhitelistUI {
 
     private void showUI() {
 
-        int opcao = -1;
+        int option = -1;
 
-        while (opcao != 0) {
+        while (option != 0) {
 
-            System.out.println(HEAD_LINE);
-            System.out.println("1. " + ADD_WHITELISTED_DOMAIN);
-            System.out.println("0. " + EXIT);
-            opcao = Console.readInteger(OPTION_SELECTION);
+            System.out.println(SEPARATOR);
+            System.out.println("1. " + OPTION_WHITELIST_DOMAIN);
+            System.out.println("0. " + OPTION_EXIT);
+            option = Console.readInteger(REQUEST_SELECT_OPTION);
 
-            switch (opcao) {
+            switch (option) {
 
                 case 0:
-                    System.out.println(EXITING);
+                    System.out.println(INFO_EXITING);
                     break;
 
                 case 1:
-
+                    
                     Iterable<String> whitelistedDomains = controller.getExistingEntries();
 
                     for (String domain : whitelistedDomains) {
                         System.out.println(domain);
                     }
 
-                    String dominio = Console.readLine(NEW_WHITELISTED_DOMAIN);
-                    if (dominio.equalsIgnoreCase("SAIR")) {
+                    System.out.println(SEPARATOR);
+                    
+                    String newDomain = Console.readLine(REQUEST_NEW_DOMAIN);
+                    if (newDomain.equalsIgnoreCase(OPTION_EXIT)) {
                         break;
                     }
-                    controller.addAuthorizedDomain(dominio);
+                    controller.addAuthorizedDomain(newDomain);
                     break;
 
                 default:

@@ -1,10 +1,10 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.backoffice.console.utils.Console;
+import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
+import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
-import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
@@ -19,30 +19,34 @@ public class BackOfficeLogin {
     /**
      * Separator used for clarity.
      */
-    private static final String SEPARATOR = "===========================\n";
+    private final String SEPARATOR = "===========================\n";
     /**
-     * Backoffice Login message.
+     * Backoffice Welcome message.
      */
-    private static final String LOGIN_MESSAGE = "BackOffice Login\nInsira o seu email e password\n";
+    private final String INFO_WELCOME = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_welcome");
+    
     /**
-     * String to let the user know he needs to write his email.
+     * Message that informing the user the program is about to shutdown.
      */
-    private static final String EMAIL = "Email: ";
+    private final String INFO_SHUTDOWN = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_shutdown");
+    
     /**
-     * String to let the user know she needs to write her password.
+     * Message requesting the user for their email address.
      */
-    private static final String PASSWORD = "Password: ";
+    private final String REQUEST_EMAIL = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_email");
     /**
-     * Error message to let the user know he wrote his credentials wrong.
+     * Message requesting the user for their password.
      */
-    private static final String WRONG_CREDENTIALS = "Credenciais erradas."
-            + "Volte a tentar.\n";
+    private final String REQUEST_PASSWORD = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_password");
     /**
-     * Error message to let the user know she can't use the application's
-     * backoffice.
+     * Error message informing the user of invalid credentials.
      */
-    private static final String NON_AUTHORIZED_USER = "Não tem autorização "
-            + "para utilizar o backoffice da aplicação. O programa irá terminar.\n";
+    private final String ERROR_INVALID_CREDENTIALS = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_invalid_credentials");
+    /**
+     * Error message informing the user they're not authorized to use the Backoffice.
+     */
+    private final String ERROR_UNAUTHORIZED_USER = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_unauthorized_user");
+    
     /**
      * SystemUser Repository.
      */
@@ -54,36 +58,37 @@ public class BackOfficeLogin {
     /**
      * Manager Repository.
      */
-    private ManagerRepositoryImpl gestorRepo = new ManagerRepositoryImpl();
+    private ManagerRepositoryImpl managerRepo = new ManagerRepositoryImpl();
 
     public void backofficeLogin() {
         long id = -1;
         System.out.println(SEPARATOR);
-        System.out.println(LOGIN_MESSAGE);
+        System.out.println(INFO_WELCOME);
         while (id == -1) {
-            String emailS = Console.readLine(EMAIL);
-            String passwordS = Console.readLine(PASSWORD);
+            String emailS = Console.readLine(REQUEST_EMAIL);
+            String passwordS = Console.readLine(REQUEST_PASSWORD);
             try {
                 Email email = new Email(emailS);
                 id = sysUserRepo.login(email, passwordS);
                 if (id == -1) {
-                    System.out.println(WRONG_CREDENTIALS);
+                    System.out.println(ERROR_INVALID_CREDENTIALS);
                 } else {
                     Admin admin = adminRepo.findByUserID(id);
-                    Manager gestor = gestorRepo.findByUserID(id);
-                    if (admin == null && gestor == null) {
-                        System.out.println(NON_AUTHORIZED_USER);
+                    Manager manager = managerRepo.findByUserID(id);
+                    if (admin == null && manager == null) {
+                        System.out.println(ERROR_UNAUTHORIZED_USER);
+                        System.out.println(INFO_SHUTDOWN);
                         System.exit(0);
                     }
-                    if (admin == null && gestor != null) {
-                        new BackOfficeConsole(gestor);
+                    if (admin == null && manager != null) {
+                        new BackOfficeConsole(manager);
                     }
-                    if (gestor == null && admin != null) {
+                    if (manager == null && admin != null) {
                         new BackOfficeConsole(admin);
                     }
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println(WRONG_CREDENTIALS);
+                System.out.println(ERROR_INVALID_CREDENTIALS);
             }
         }
     }

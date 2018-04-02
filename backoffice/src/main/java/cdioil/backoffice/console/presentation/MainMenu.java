@@ -1,86 +1,65 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.backoffice.console.utils.Console;
+import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
+import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Manager;
 
 /**
- * Interface GrÃ¡fica do Back Office
+ * BackOffice's User Interface.
  */
 public class MainMenu {
 
-    //public static void main(String[] args){}
-//    /**
-//     * Menu Principal da aplicaÃ§Ã£o
-//     * @return opÃ§Ã£o escolhida pelo utilizador
-//     */
-//    private static int menu() {
-//        int option = -1;
-//        System.out.println("=============================");
-//        System.out.println("        Back Office");
-//        System.out.println("=============================");
-//        System.out.println("1. Atribuir Perfil de Manager");
-//        System.out.println("2. Adicionar Dominios/SubdomÃ­nios Autorizados");
-//        System.out.println("3. Importar Lista de Utilizadores");
-//        System.out.println("4. Listar Todos os Utilizadores");
-//        System.out.println("5. Registar no Sistema");
-//        System.out.println("6. Atualizar dados");
-//        System.out.println("7. Importar Categorias");
-//        System.out.println("8. Importar QuestÃµes para novo Template");
-//        System.out.println("=============================");
-//        System.out.println("0. Sair\n");
-//        option = Console.readInteger("Por favor escolha uma opÃ§Ã£o:");
-//        return option;
-//    }
-//
-//    public static void mainLoop() {
-//        int opcao = 0;
-//        do {
-//            opcao = menu();
-//
-//            switch (opcao) {
-//                case 0:
-//                    System.out.println("Fim");
-//                    break;
-//                case 1:
-//                    new AtribuirPerfilGestorUI();
-//                    break;
-//                case 2:
-//
-//                    break;
-//                case 3:
-//                    new ImportUsersFromFilesUI();
-//                    break;
-//                case 4:
-//                    new ListUsersUI().listAllUsers();
-//                    break;
-//                case 5:
-//                    
-//                    break;
-//                case 6:
-//                    
-//                    break;
-//                case 7:
-//                    new ImportCategoriesUI();
-//                    
-//                    break;
-//                case 8:
-//                    
-//                    break;
-//                default:
-//                    System.out.println("OpÃ§Ã£o nÃ£o reconhecida");
-//                    break;
-//            }
-//        } while (opcao != 0);
-//    }
-    public static void mainLoopAdmin(Admin admin) {
+    /* ==============
+        COMMON
+       ==============
+    */
+    private final String SEPARATOR = "=============================";
+    
+    private final String INFO_SHUTDOWN = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_shutdown");
+    
+    private final String ERROR_INVALID_OPTION = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_invalid_option");
+    private final String ERROR_NOT_IMPLEMENTED = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_not_implemented");
+    
+    private final String REQUEST_SELECT_OPTION = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_select_option");
+    
+    private final String OPTION_EXIT = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_exit");  
+    private final String OPTION_CHANGE_LANGUAGE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_change_language");
+    
+    
+    /* ==============
+        MANAGER
+       ==============
+    */
+    private final String INFO_MANAGER_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_manager_header");
+    
+    private final String OPTION_IMPORT_QUESTIONS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions");
+    
+    
+    /* ==============
+        ADMIN
+       ==============
+    */
+    private final String INFO_ADMIN_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_admin_header");
+    
+    private final String OPTION_ASSIGN_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_assign_manager");
+    private final String OPTION_WHITELIST_DOMAIN = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_whitelist_domain");
+    private final String OPTION_DISPLAY_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_display_users");
+    private final String OPTION_IMPORT_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_users");
+    private final String OPTION_REGISTER_USER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_register_user");
+    private final String OPTION_UPDATE_DATA = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_update_data");
+    private final String OPTION_IMPORT_CATEGORIES = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_categories");
+    private final String OPTION_USER_BY_EMAIL = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_search_user_by_email");
+    
+    
+    public void mainLoopAdmin(Admin admin) {
         int opcao = 0;
         do {
             opcao = menuAdmin();
 
             switch (opcao) {
                 case 0:
-                    System.out.println("Fim");
+                    System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
                     new AtribuirPerfilGestorUI();
@@ -104,60 +83,68 @@ public class MainMenu {
                 case 8:
                     new SearchUserUI();
                     break;
+                case 9:
+                    new ChangeLanguageUI();
+                    break;
                 default:
-                    System.out.println("OpÃ§Ã£o nÃ£o reconhecida");
+                    System.out.println(ERROR_INVALID_OPTION);
                     break;
             }
         } while (opcao != 0);
     }
 
-    public static void mainLoopGestor(Manager gestor) {
+    public void mainLoopGestor(Manager gestor) {
         int opcao = 0;
         do {
             opcao = menuGestor();
 
             switch (opcao) {
                 case 0:
-                    System.out.println("Fim");
+                    System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    System.out.println("Funcionalidade nÃ£o implementada");
+                    System.out.println(ERROR_NOT_IMPLEMENTED);
+                    break;
+                case 2:
+                    new ChangeLanguageUI();
                     break;
                 default:
-                    System.out.println("OpÃ§Ã£o nÃ£o reconhecida");
+                    System.out.println(ERROR_INVALID_OPTION);
                     break;
             }
         } while (opcao != 0);
     }
 
-    private static int menuGestor() {
+    private int menuGestor() {
         int option = -1;
-        System.out.println("=============================");
-        System.out.println("        Back Office Gestor");
-        System.out.println("=============================");
-        System.out.println("1. Importar QuestÃµes para novo Template");
-        System.out.println("=============================");
-        System.out.println("0. Sair\n");
-        option = Console.readInteger("Por favor escolha uma opÃ§Ã£o:");
+        System.out.println(SEPARATOR);
+        System.out.println(INFO_MANAGER_HEADER);
+        System.out.println(SEPARATOR);
+        System.out.println("1. " + OPTION_IMPORT_QUESTIONS);
+        System.out.println("2. " + OPTION_CHANGE_LANGUAGE);
+        System.out.println(SEPARATOR);
+        System.out.println("0. " + OPTION_EXIT);
+        option = Console.readInteger(REQUEST_SELECT_OPTION);
         return option;
     }
 
-    private static int menuAdmin() {
+    private int menuAdmin() {
         int option = -1;
-        System.out.println("=============================");
-        System.out.println("        Back Office Admin");
-        System.out.println("=============================");
-        System.out.println("1. Atribuir Perfil de Gestor");
-        System.out.println("2. Adicionar Dominios/SubdomÃ­nios Autorizados");
-        System.out.println("3. Importar Lista de Utilizadores");
-        System.out.println("4. Listar Todos os Utilizadores");
-        System.out.println("5. Registar no Sistema");
-        System.out.println("6. Atualizar dados");
-        System.out.println("7. Importar Categorias");
-        System.out.println("8. Pesquisar Utilizador por Email");
-        System.out.println("=============================");
-        System.out.println("0. Sair\n");
-        option = Console.readInteger("Por favor escolha uma opÃ§Ã£o:");
+        System.out.println(SEPARATOR);
+        System.out.println(INFO_ADMIN_HEADER);
+        System.out.println(SEPARATOR);
+        System.out.println("1. " + OPTION_ASSIGN_MANAGER);
+        System.out.println("2. " + OPTION_WHITELIST_DOMAIN);
+        System.out.println("3. " + OPTION_IMPORT_USERS);
+        System.out.println("4. " + OPTION_DISPLAY_USERS);
+        System.out.println("5. " + OPTION_REGISTER_USER);
+        System.out.println("6. " + OPTION_UPDATE_DATA);
+        System.out.println("7. " + OPTION_IMPORT_CATEGORIES);
+        System.out.println("8. " + OPTION_USER_BY_EMAIL);
+        System.out.println("9. " + OPTION_CHANGE_LANGUAGE);
+        System.out.println(SEPARATOR);
+        System.out.println("0. " + OPTION_EXIT);
+        option = Console.readInteger(REQUEST_SELECT_OPTION);
         return option;
     }
 }

@@ -13,13 +13,13 @@ public class BackOfficeConsole {
      * @param admin Admin com o administrador que esta aceder ao backoffice
      */
     public BackOfficeConsole(Admin admin){
-        MainMenu.mainLoopAdmin(admin);
+        new MainMenu().mainLoopAdmin(admin);
     }
     /**
      * Constrói uma nova consola para as funcionalidades do backoffice do Manager
      * @param gestor Manager com o gestor que esta aceder ao backoffice
      */
     public BackOfficeConsole(Manager gestor){
-        MainMenu.mainLoopGestor(gestor);
+        new MainMenu().mainLoopGestor(gestor);
     }
 }
