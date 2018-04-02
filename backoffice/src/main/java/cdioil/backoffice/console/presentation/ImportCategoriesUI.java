@@ -6,7 +6,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.application.ImportCategoriesController;
-import cdioil.backoffice.console.utils.Console;
+import cdioil.backoffice.utils.Console;
 import cdioil.domain.Category;
 import java.util.List;
 
