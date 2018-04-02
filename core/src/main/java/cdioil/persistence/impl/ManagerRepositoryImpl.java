@@ -1,6 +1,7 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.authz.Manager;
+import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.ManagerRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.BaseJPARepository;
@@ -39,18 +40,22 @@ public class ManagerRepositoryImpl extends BaseJPARepository<Manager,Long> imple
 
     @Override
     public Manager findByUserID(long dataBaseId) {
-
         Query q = entityManager().createQuery("SELECT m FROM Manager m WHERE m.su.id = :databaseId");
-
         q.setParameter("databaseId", dataBaseId);
-
-        if (q.getResultList().isEmpty()) {
-            return null;
-        }
+        if (q.getResultList().isEmpty())return null;
         return (Manager) q.getSingleResult();
-
     }
-    
 
-    
+    /**
+     * Finds a manager that is associated with a system user
+     * @param sysUser system user that the manager is associated with
+     * @return manager instance that's associated with the system user, null
+     * if the manager doesn't exist
+     */
+    public Manager findBySystemUser(SystemUser sysUser) {
+        Query q = entityManager().createQuery("SELECT m FROM Manager m WHERE m.su = :sysUser");
+        q.setParameter("sysUser", sysUser);
+        if(q.getResultList().isEmpty())return null;
+        return (Manager) q.getSingleResult();
+    } 
 }
