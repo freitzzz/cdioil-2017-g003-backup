@@ -34,6 +34,10 @@
     <!--<class>cdioil.graph.Edge</class>
     <class>cdioil.graph.Graph</class>
     <class>cdioil.graph.Vertex</class>-->
+    <class>cdioil.domain.MultipleChoiceQuestion</class>
+    <class>cdioil.domain.MultipleChoiceAnswer</class>
+    <class>cdioil.domain.QuantitativeQuestion</class>
+    <class>cdioil.domain.QuantitativeAnswer</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

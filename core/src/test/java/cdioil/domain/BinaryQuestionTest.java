@@ -32,9 +32,9 @@ public class BinaryQuestionTest {
         System.out.println("hashCode");
         String q = "IT'S REALLY FUN c:";
         BinaryQuestion instance = new BinaryQuestion(q);
-        
-        BinaryQuestion other = new  BinaryQuestion(q);
-        
+
+        BinaryQuestion other = new BinaryQuestion(q);
+
         assertEquals(instance.hashCode(), other.hashCode());
     }
 
@@ -47,6 +47,8 @@ public class BinaryQuestionTest {
         BinaryQuestion instance = new BinaryQuestion("QuestaoTeste");
         BinaryQuestion instance2 = new BinaryQuestion("QuestaoTeste");
         BinaryQuestion instance3 = new BinaryQuestion("TesteQuestao");
+        QuantitativeQuestion instance4 = new QuantitativeQuestion("QuestaoTeste",
+                0.0, 5.0, 0.5);
         assertEquals("The condition should succeed because we are "
                 + "comparing the same instances", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"
@@ -56,7 +58,9 @@ public class BinaryQuestionTest {
         assertEquals("The condition should succeed because we are comparing two"
                 + " instances with the same properties", instance, instance2);
         assertNotEquals("The condition should succeed because we are comparing"
-                + " instances with the same properties", instance, instance3);
+                + " instances with the different properties", instance, instance3);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "questions of different types", instance, instance4);
     }
 
     /**

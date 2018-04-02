@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -48,14 +49,20 @@ public class BinaryAnswerTest {
         BinaryAnswer instance2 = new BinaryAnswer(false);
         BinaryAnswer instance3 = new BinaryAnswer(true);
         BinaryAnswer instance4 = new BinaryAnswer(false);
+        LinkedList<Boolean> answer = new LinkedList<>();
+        answer.add(Boolean.TRUE);
+        MultipleChoiceAnswer outsider = new MultipleChoiceAnswer(answer);
         assertEquals("The condition should succeed because we are "
                 + "comparing the same instances", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"
                 + " instances of different classes", instance, "bananas");
         assertNotEquals("The condition should succeed because we are "
                 + "comparing an instance with a null value", instance, null);
+        assertNotEquals("The condition should succeed because we are "
+                + "comparing answers of different types", instance, outsider);
         assertNotEquals("The condition should succeed because we are comparing two"
                 + " instances with different properties", instance3, instance2);
+
         assertEquals("The condition should succeed because we are comparing "
                 + "instances with the same boolean value (true)",
                 instance, instance3);
