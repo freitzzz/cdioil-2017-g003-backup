@@ -22,8 +22,13 @@ public class BackOfficeLocalizationHandler {
 
     static {
         LANGUAGE_FILES_MAP = new HashMap<>();
-        LANGUAGE_FILES_MAP.put(Language.pt_PT, new File("src/main/resources/localization/backoffice_pt_PT.xml"));
-        LANGUAGE_FILES_MAP.put(Language.en_US, new File("src/main/resources/localization/backoffice_en_US.xml"));
+
+        LANGUAGE_FILES_MAP.put(Language.pt_PT,
+                new File(BackOfficeLocalizationHandler.class.getClassLoader()
+                        .getResource("localization/backoffice_pt_PT.xml").getFile()));
+        LANGUAGE_FILES_MAP.put(Language.en_US,
+                new File(BackOfficeLocalizationHandler.class.getClassLoader()
+                        .getResource("localization/backoffice_en_US.xml").getFile()));
     }
 
     /**
