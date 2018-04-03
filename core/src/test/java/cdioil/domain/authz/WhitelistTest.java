@@ -68,5 +68,12 @@ public class WhitelistTest {
         
         assertEquals(domain.toString(), sameDomain.toString());
     }
+    /**
+     * Miscellaneous tests
+     */
+    @Test
+    public void testMisc(){
+        assertNotNull("Creation of the object shouldn't be null",new Whitelist());
+    }
     
 }

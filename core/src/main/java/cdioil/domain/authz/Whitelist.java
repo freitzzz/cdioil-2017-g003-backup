@@ -33,6 +33,14 @@ public class Whitelist implements Serializable, Identifiable<String> {
         this.domain=domain.toLowerCase();
     }
     /**
+     * Returns the entity's identity.
+     * @return whitelisted domain
+     */
+    @Override
+    public String getID() {
+       return this.domain;
+    }
+    /**
      * Method that verifies if two authorized domains/subdomains are equal
      * @param obj Whitelist with the authorized domain to be compared with the actual one
      * @return boolean true if domains are equal, false if not
@@ -73,13 +81,4 @@ public class Whitelist implements Serializable, Identifiable<String> {
      * Proctected constructor in order to persist with JPA
      */
     protected Whitelist() {}
-
-    /**
-     * Returns the entity's identity.
-     * @return whitelisted domain
-     */
-    @Override
-    public String getID() {
-       return this.domain;
-    }
 }

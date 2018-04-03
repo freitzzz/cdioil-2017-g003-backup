@@ -179,6 +179,13 @@ public class EmailTest {
                 ,emailX.toString(),expResult);
     }
     /**
+     * Miscellaneous tests
+     */
+    @Test
+    public void testMisc(){
+        assertNotNull("Creation of the object shouldn't be null",new Email());
+    }
+    /**
      * Cria e devolve uma lista com endereços de email válidos do dominio Gmail
      * @return List com uma lista de endereços de email válidos do dominio Gmail
      */

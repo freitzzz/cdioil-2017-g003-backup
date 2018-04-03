@@ -80,6 +80,13 @@ public class PrecoTest {
                 ,instanceY.toString(),expResult);
     }
     /**
+     * Miscellaneous tests
+     */
+    @Test
+    public void testMisc(){
+        assertNotNull("Creation of the object shouldn't be null",new Preco());
+    }
+    /**
      * Cria um novo objecto Preco com um determinado preço
      * @param preco String com o preço
      * @return Preco com um determinado preço ou null caso tenha ocurrido alguma excecão

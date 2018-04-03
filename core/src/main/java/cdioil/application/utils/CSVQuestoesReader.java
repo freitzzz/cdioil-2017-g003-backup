@@ -70,12 +70,13 @@ public class CSVQuestoesReader implements QuestoesReader {
                     String CAT = line[2];
                     String SCAT = line[3];
                     String UB = line[4];
-                    String tipo = line[5];
+                    String ID = line[5];
+                    String tipo = line[6];
 
-                    String param = line[7];
+                    String param = line[8];
                     Question question;
                     if (tipo.equalsIgnoreCase("SN")) {
-                        question = new BinaryQuestion(line[6]);
+                        question = new BinaryQuestion(line[7],ID);
                     } else if (tipo.equalsIgnoreCase("EM")) {
                         String[] pEM = param.split("=");
                         int nrEM = Integer.parseInt(pEM[1]);
@@ -83,14 +84,14 @@ public class CSVQuestoesReader implements QuestoesReader {
                         for (int a = 0; a < nrEM; a++) {
                             options.add(a + 1 + "");
                         }
-                        question = new MultipleChoiceQuestion(line[6], options);
+                        question = new MultipleChoiceQuestion(line[7],ID, options);
                     } else if (tipo.equalsIgnoreCase("ESC")) {
                         String[] pESC = param.split(";");
                         String[] pMin = pESC[0].split("=");
                         String[] pMax = pESC[1].split("=");
                         double min = Double.parseDouble(pMin[1]);
                         double max = Double.parseDouble(pMax[1]);
-                        question = new QuantitativeQuestion(line[6], min, max, 0.5);
+                        question = new QuantitativeQuestion(line[7], ID,min, max, 0.5);
                     }//else{
 //                        ERRRORRRR
 //                    }
