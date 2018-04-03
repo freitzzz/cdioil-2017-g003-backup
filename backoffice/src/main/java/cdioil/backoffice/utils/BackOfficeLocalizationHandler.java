@@ -83,10 +83,9 @@ public class BackOfficeLocalizationHandler {
     public void loadStrings() throws ParserConfigurationException, SAXException, IOException {
 
         Properties properties = new Properties();
-        FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIES_FILE_PATH);
-        
-        properties.load(inputStream);
-        inputStream.close();
+        try (FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIES_FILE_PATH)) {
+            properties.load(inputStream);
+        }
 
         Language definedLanguage = Language.valueOf(properties.getProperty("language"));
 
