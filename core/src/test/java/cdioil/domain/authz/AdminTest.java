@@ -31,6 +31,7 @@ public class AdminTest {
                 createAdmin(null));
         assertNotNull("The condition should succeed because the argument is valid",
                 createAdmin(sysUser));
+        assertNotNull("Empty constructor test", new Admin());
     }
 
     /**

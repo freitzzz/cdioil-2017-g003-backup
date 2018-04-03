@@ -28,7 +28,7 @@ public abstract class Question<T> implements Serializable, ValueObject {
     /**
      * Database id.
      */
-    protected Long id;
+    protected Long databaseID;
 
     /**
      * The type of question.
@@ -39,6 +39,11 @@ public abstract class Question<T> implements Serializable, ValueObject {
      * The question's content.
      */
     protected T content;
+
+    /**
+     * The question's ID.
+     */
+    protected String questionID;
 
     /**
      * Empty Constructor for JPA.
@@ -76,11 +81,13 @@ public abstract class Question<T> implements Serializable, ValueObject {
         hash = 29 * hash + Objects.hashCode(this.getClass());
         hash = 29 * hash + Objects.hashCode(this.type);
         hash = 29 * hash + Objects.hashCode(this.content);
+        hash = 29 * hash + Objects.hash(this.questionID);
         return hash;
     }
 
     /**
-     * Verifies object equality based on the Question's attributes and class type.
+     * Verifies object equality based on the Question's attributes and class
+     * type.
      *
      * @param obj object to be compared to
      * @return true if the objects are truly equal, false otherwise
@@ -90,11 +97,14 @@ public abstract class Question<T> implements Serializable, ValueObject {
         if (this == obj) {
             return true;
         }
-        if(!(obj instanceof Question<?>)){
+        if (!(obj instanceof Question<?>)) {
             return false;
         }
         final Question<?> other = (Question<?>) obj;
         if (this.type != other.type) {
+            return false;
+        }
+        if (!this.questionID.equals(other.questionID)) {
             return false;
         }
         return this.content.equals(other.content);

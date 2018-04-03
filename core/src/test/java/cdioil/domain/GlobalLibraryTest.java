@@ -67,7 +67,8 @@ public class GlobalLibraryTest {
         System.out.println("equals");
         GlobalLibrary instance = new GlobalLibrary();
         GlobalLibrary instance2 = new GlobalLibrary();
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "D4";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         Category category = new Category("CategoryTest", "100CAT",

@@ -66,6 +66,7 @@ public class QuestionnaireTest {
                 + "valid", createQuestionnaire(title, description, gu, timePeriod, graph));
         assertNull("The condition should succeed because the graph is null",
                 createQuestionnaire(title, description, gu, timePeriod, null));
+        assertNotNull("Empty constructor test", new Questionnaire());
     }
 
     /**

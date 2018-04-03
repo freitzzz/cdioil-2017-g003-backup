@@ -43,21 +43,21 @@ public class SurveyTest {
     @After
     public void tearDown() {
     }
-    
+
     /**
      * Ensure that an exception is thrown when the item list is null.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void ensureNullItemListThrowsException(){
-        new Survey(null,data);
+    public void ensureNullItemListThrowsException() {
+        new Survey(null, data);
     }
-    
+
     /**
      * Ensure that an exception is thrown when the data is null.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void ensureNullDateThrowsException(){
-        new Survey(new ArrayList<>(),null);
+    public void ensureNullDateThrowsException() {
+        new Survey(new ArrayList<>(), null);
     }
 
     /**
@@ -82,8 +82,8 @@ public class SurveyTest {
         al.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
         assertNotEquals("Instância de Inquerito diferente", new Survey(al, data), i);
         assertEquals("Instância de Inquerito igual", new Survey(new ArrayList<>(), data), i);
-        assertEquals("Compare same instance",i,i);
-        assertNotEquals("Instances of different classes",i,"bananas");
+        assertEquals("Compare same instance", i, i);
+        assertNotEquals("Instances of different classes", i, "bananas");
     }
 
     /**
@@ -104,7 +104,8 @@ public class SurveyTest {
     @Test
     public void testAddQuestion() {
         System.out.println("addQuestion");
-        Question q = new BinaryQuestion("QuestaoTeste");
+        String id = "4P";
+        Question q = new BinaryQuestion("QuestaoTeste", id);
         assertTrue("Deveria ser possível adicionar", i.addQuestion(q));
         i.addQuestion(q);
         assertFalse("Questão null", i.addQuestion(null));
@@ -117,7 +118,8 @@ public class SurveyTest {
     @Test
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
-        Question q = new BinaryQuestion("QuestaoTeste");
+        String id = "5Q";
+        Question q = new BinaryQuestion("QuestaoTeste", id);
         i.addQuestion(q);
         assertTrue("Deveria ser possível remover", i.removeQuestion(q));
         i.removeQuestion(q);
@@ -131,7 +133,8 @@ public class SurveyTest {
     @Test
     public void testIsValidQuestion() {
         System.out.println("isValidQuestion");
-        Question q = new BinaryQuestion("QuestaoTeste");
+        String id = "E8";
+        Question q = new BinaryQuestion("QuestaoTeste", id);
         i.addQuestion(q);
         assertTrue("Deveria ser válida", i.isValidQuestion(q));
         i.removeQuestion(q);

@@ -51,6 +51,10 @@ public class QuestionGroup implements Serializable {
      * @param title Title of the question group;
      */
     public QuestionGroup(String title) {
+        if(title == null || title.isEmpty()){
+            throw new IllegalArgumentException("O titulo do grupo de questões "
+                    + "não pode ser null");
+        }
         this.title = title;
         questions = new HashSet<>();
     }

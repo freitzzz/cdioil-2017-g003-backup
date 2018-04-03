@@ -40,6 +40,7 @@ public class NameTest {
                 + "are valid", createName("Lil", "Pump"));
         assertNotNull("The condition should succeed because the arguments"
                 + "are valid", createName("nao sei", "USAR CAPS LOCK"));
+        assertNotNull("Empty constructor test",new Name());
     }
 
     /**

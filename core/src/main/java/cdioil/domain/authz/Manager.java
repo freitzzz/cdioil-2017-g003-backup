@@ -146,4 +146,14 @@ public class Manager implements Serializable, Identifiable<Email> {
             return false;
         }
     }
+
+    /**
+     * Checks if manager is associated with a Category
+     *
+     * @param c category to check
+     * @return true if manager is associated, false if not
+     */
+    public boolean isAssociatedWithCategory(Category c) {
+        return this.categories.contains(c);
+    }
 }

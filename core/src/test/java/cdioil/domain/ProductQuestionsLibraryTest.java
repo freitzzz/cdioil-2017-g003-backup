@@ -79,7 +79,8 @@ public class ProductQuestionsLibraryTest {
     @Test
     public void testAddQuestion() {
         System.out.println("addQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "5H";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
@@ -103,7 +104,8 @@ public class ProductQuestionsLibraryTest {
     @Test
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "4";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
@@ -129,7 +131,8 @@ public class ProductQuestionsLibraryTest {
     @Test
     public void testDoesQuestionExist() {
         System.out.println("doesQuestionExist");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "9A";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
@@ -181,7 +184,8 @@ public class ProductQuestionsLibraryTest {
                 + "instances of different classes.", instance.equals("banana"));
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
-        BinaryQuestion question = new BinaryQuestion("QuestaoTeste");
+        String id = "6Y";
+        BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id);
         instance.addProduct(product);
         assertFalse("The condition should succeed because the instances have"
                 + "different mappings (one has a product, the other"

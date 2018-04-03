@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
  *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity
+@Entity()
 public class IndependentQuestionsLibrary implements Serializable, QuestionLibrary {
 
     private static final long serialVersionUID = 1L;

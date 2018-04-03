@@ -59,6 +59,8 @@ public class TimePeriodTest {
 
         assertNull("The condition should succeed because the starting date "
                 + "and the ending date are the same", createTimePeriod(startDate, endDate));
+        
+        assertNotNull("Empty constructor test", new TimePeriod());
     }
 
     /**
