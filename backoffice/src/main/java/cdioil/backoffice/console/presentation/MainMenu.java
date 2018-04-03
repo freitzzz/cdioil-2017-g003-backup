@@ -33,7 +33,8 @@ public class MainMenu {
     private final String INFO_MANAGER_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_manager_header");
 
     private final String OPTION_IMPORT_QUESTIONS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions");
-
+    private static final String OPTION_EXPORT_SURVEY_ANSWERS=BackOfficeLocalizationHandler.getInstance().getMessageValue("option_export_survey_answers");
+    
     /* ==============
         ADMIN
        ==============
@@ -117,6 +118,9 @@ public class MainMenu {
                 case 2:
                     new ChangeLanguageUI();
                     break;
+                case 3:
+                    new ExportSurveyAnswersUI();
+                    break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);
                     break;
@@ -131,6 +135,7 @@ public class MainMenu {
         System.out.println(SEPARATOR);
         System.out.println("1. " + OPTION_IMPORT_QUESTIONS);
         System.out.println("2. " + OPTION_CHANGE_LANGUAGE);
+        System.out.println("3. " + OPTION_EXPORT_SURVEY_ANSWERS);
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);
