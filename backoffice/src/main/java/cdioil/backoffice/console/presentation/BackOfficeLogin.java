@@ -24,12 +24,12 @@ public class BackOfficeLogin {
      * Backoffice Welcome message.
      */
     private final String INFO_WELCOME = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_welcome");
-    
+
     /**
      * Message that informing the user the program is about to shutdown.
      */
     private final String INFO_SHUTDOWN = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_shutdown");
-    
+
     /**
      * Message requesting the user for their email address.
      */
@@ -46,19 +46,6 @@ public class BackOfficeLogin {
      * Error message informing the user they're not authorized to use the Backoffice.
      */
     private final String ERROR_UNAUTHORIZED_USER = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_unauthorized_user");
-    
-    /**
-     * SystemUser Repository.
-     */
-    private UserRepositoryImpl sysUserRepo = new UserRepositoryImpl();
-    /**
-     * Admin Repository.
-     */
-    private AdminRepositoryImpl adminRepo = new AdminRepositoryImpl();
-    /**
-     * Manager Repository.
-     */
-    private ManagerRepositoryImpl managerRepo = new ManagerRepositoryImpl();
 
     public void backofficeLogin() {
         long id = -1;
@@ -69,12 +56,12 @@ public class BackOfficeLogin {
             String passwordS = Console.readLine(REQUEST_PASSWORD);
             try {
                 Email email = new Email(emailS);
-                id = sysUserRepo.login(email, passwordS);
+                id = new UserRepositoryImpl().login(email, passwordS);
                 if (id == -1) {
                     System.out.println(ERROR_INVALID_CREDENTIALS);
                 } else {
-                    Admin admin = adminRepo.findByUserID(id);
-                    Manager manager = managerRepo.findByUserID(id);
+                    Admin admin = new AdminRepositoryImpl().findByUserID(id);
+                    Manager manager = new ManagerRepositoryImpl().findByUserID(id);
                     if (admin == null && manager == null) {
                         System.out.println(ERROR_UNAUTHORIZED_USER);
                         System.out.println(INFO_SHUTDOWN);

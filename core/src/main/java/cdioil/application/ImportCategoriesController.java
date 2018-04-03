@@ -5,11 +5,10 @@
  */
 package cdioil.application;
 
-import cdioil.domain.Category;
 import cdioil.application.utils.CategoriesReaderFactory;
-
-import java.util.List;
 import cdioil.application.utils.CategoriesReader;
+import cdioil.domain.MarketStructure;
+import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 
 /**
  * Controller class for the User Story 201 - Import Categories from a File.
@@ -24,9 +23,13 @@ public class ImportCategoriesController {
      * @param file Path of the file
      * @return a list with the readCategories Categories. Null if the file is not valid
      */
-    public List<Category> readCategories(String file) {
+    public MarketStructure readCategories(String file) {
         CategoriesReader categoriesReader = CategoriesReaderFactory.create(file);
 
-        return categoriesReader != null ? categoriesReader.readCategories() : null;
+        if (categoriesReader != null){
+            MarketStructure em = categoriesReader.readCategories();
+            if (new MarketStructureRepositoryImpl().merge(em) != null) return em;
+        }
+        return null;
     }
 }
