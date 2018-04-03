@@ -1,0 +1,23 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #2
+	
+	* Como Administrador, quero poder associar um Gestor a uma categoria, incluindo eventualmente alguns filhos.
+	  Quero poder indicar as categorias e respetivos filhos usando expressões regulares.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+	* Classe ManagerTest : testAddCategories

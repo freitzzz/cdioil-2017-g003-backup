@@ -1,0 +1,10 @@
+	_________
+
+	DESIGN
+	_________
+
+
+
+   	Classes do domínio: Manager
+   	Controller: CategoryManagementController
+   	Repository: MarketStructureRepository, ManagerRepository
