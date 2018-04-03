@@ -29,7 +29,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Category> findCategoriesByIdentifierPattern(String identifierPattern) {
         EntityManager em = entityManager();
-        Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where lower(c.path) regexp '" + identifierPattern + "'", Category.class);
+        Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + identifierPattern + "'", Category.class);
         return (List<Category>) queryRegexed.getResultList();
     }
 }
