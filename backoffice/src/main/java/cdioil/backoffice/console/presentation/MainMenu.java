@@ -84,7 +84,7 @@ public class MainMenu {
                     new SearchUserUI();
                     break;
                 case 9:
-                    //new AddCategoriesUI();
+                    new AssociateCategoriesUI();
                     break;
                 case 10:
                     new RemoveCategoriesUI().doShow();

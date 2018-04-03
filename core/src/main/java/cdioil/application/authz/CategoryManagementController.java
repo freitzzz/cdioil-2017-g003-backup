@@ -8,8 +8,7 @@ import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 
 /**
- * Controller class used for US150 - Associar Categorias a um Gestor and US152 -
- * Remover Categorias a um Gestor.
+ * Controller class used for US150 - Associar Categorias a um Gestor and US152 - Remover Categorias a um Gestor.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
@@ -25,7 +24,7 @@ public class CategoryManagementController {
      * Manager Repository.
      */
     private ManagerRepositoryImpl managerRepo = new ManagerRepositoryImpl();
-    
+
     /**
      * Market Structure Repository.
      */
@@ -33,6 +32,7 @@ public class CategoryManagementController {
 
     /**
      * Finds all managers saved in the database.
+     *
      * @return iterable of managers
      */
     public Iterable<Manager> listAllManagers() {
@@ -41,8 +41,8 @@ public class CategoryManagementController {
     }
 
     /**
-     * Sets a manager chosen by an admin based on the email he inserted in the
-     * UI
+     * Sets a manager chosen by an admin based on the email he inserted in the UI
+     *
      * @param email email written by the admin on the UI
      * @return true if the manager exists and was set, false if otherwise
      */
@@ -56,6 +56,7 @@ public class CategoryManagementController {
 
     /**
      * Removes categories from a manager.
+     *
      * @param identifier identifier of the categories
      * @return true if they were removed with success, false if otherwise
      */
@@ -67,4 +68,17 @@ public class CategoryManagementController {
         return true;
     }
 
+    /**
+     * Adds categories to a manager.
+     *
+     * @param identifier identifier of the categories
+     * @return true, if the categories are successfully added.
+     */
+    public boolean addCategories(String identifier) {
+        //=======================================
+        //TODO implement findByIdentifier method
+        //=======================================
+        //return manager.addCategories(marketStructRepo.findByIdentifier(identifier));
+        return true;
+    }
 }

@@ -77,8 +77,8 @@ public class ManagerTest {
      * Test addCategories method, of class Manager.
      */
     @Test
-    public void testeAdicionarCategorias() {
-        System.out.println("adicionarCategorias");
+    public void testeAddCategories() {
+        System.out.println("addCategories");
 
         Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
