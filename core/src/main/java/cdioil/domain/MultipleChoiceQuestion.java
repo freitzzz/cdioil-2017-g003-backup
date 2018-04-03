@@ -3,6 +3,7 @@ package cdioil.domain;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
 /**
@@ -21,6 +22,7 @@ public class MultipleChoiceQuestion extends Question<String> implements Serializ
     /**
      * List containing all the options for the question.
      */
+    @ElementCollection
     private List<String> options;
 
     /**
