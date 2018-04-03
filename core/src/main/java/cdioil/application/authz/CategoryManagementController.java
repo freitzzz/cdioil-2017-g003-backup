@@ -73,9 +73,9 @@ public class CategoryManagementController {
      * @param identifier identifier of the categories
      * @return true, if the categories are successfully added.
      */
-    public boolean addCategories(String identifier) {
+    public boolean addCategories(String identifier) {       
         if (manager.addCategories(new MarketStructureRepositoryImpl().
-                findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier + REGEX_SUFIX)) != false) {
+                findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier.toUpperCase() + REGEX_SUFIX)) != false) {
             Manager managerY = new ManagerRepositoryImpl().merge(manager);
             if (managerY != null) {
                 manager = managerY;
