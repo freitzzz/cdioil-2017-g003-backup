@@ -45,6 +45,7 @@
 			<Message messageId = "option_import_categories" value = "Import Categories"/>
 			<Message messageId = "option_search_user_by_email" value = "Search Users by Email"/>
 			<Message messageId = "option_remove_categories_from_manager" value = "Remove Categories from Manager"/>
+                        <Message messageId = "option_associate_categories_to_manager" value = "Associate Categories to a Manager"/>
 			<Message messageId = "option_list_categories_without_managers" value = "List Categories without Managers"/>
 		</AdminMenuOptions>
 		
