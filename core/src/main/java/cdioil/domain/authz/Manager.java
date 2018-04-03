@@ -19,8 +19,7 @@ import javax.persistence.Version;
 /**
  * Survey Manager
  *
- * Person responsible for the creation and configuration of surveys of a given
- * market structure.
+ * Person responsible for the creation and configuration of surveys of a given market structure.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
@@ -127,7 +126,8 @@ public class Manager implements Serializable, Identifiable<Email> {
      */
     public boolean addCategories(List<Category> lc) {
         try {
-            return categories.addAll(lc);
+            if (lc != null) return categories.addAll(lc);
+            else return false;
         } catch (Exception e) {
             return false;
         }

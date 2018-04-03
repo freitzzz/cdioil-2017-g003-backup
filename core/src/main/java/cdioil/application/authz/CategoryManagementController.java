@@ -31,6 +31,16 @@ public class CategoryManagementController {
     private MarketStructureRepositoryImpl marketStructRepo = new MarketStructureRepositoryImpl();
 
     /**
+     * Sufix of the regular expression used to search categories by its identifier.
+     */
+    private static final String REGEX_PREFIX = "*";
+
+    /**
+     * Prefix of the regular expression used to search categories by its identifier.
+     */
+    private static final String REGEX_SUFIX = "*";
+
+    /**
      * Finds all managers saved in the database.
      *
      * @return iterable of managers
@@ -75,10 +85,6 @@ public class CategoryManagementController {
      * @return true, if the categories are successfully added.
      */
     public boolean addCategories(String identifier) {
-        //=======================================
-        //TODO implement findByIdentifier method
-        //=======================================
-        //return manager.addCategories(marketStructRepo.findByIdentifier(identifier));
-        return true;
+        return manager.addCategories(marketStructRepo.findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier + REGEX_SUFIX));
     }
 }
