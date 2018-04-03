@@ -132,4 +132,25 @@ public class ManagerTest {
         Email result = instance.getID();
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of isAssociatedWithCategory method, of class Manager
+     */
+    @Test
+    public void testIsAssociatedWithCategory() {
+        System.out.println("isAssociatedWithCategory");
+        List<Category> lc = new LinkedList<>();
+        Manager instance = new Manager(sysUser, lc);
+        Category c1 = new Category("Fruit", "124CAT", "10DC-10UN-124CAT");
+        //test with empty list of categories
+        assertFalse(instance.isAssociatedWithCategory(c1));
+        //test when list does not contain category
+        lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
+        instance.addCategories(lc);
+        assertFalse(instance.isAssociatedWithCategory(c1));
+        //test when list does contain category
+        lc.add(c1);
+        instance.addCategories(lc);
+        assertTrue(instance.isAssociatedWithCategory(c1));
+    }
 }

@@ -30,11 +30,11 @@ public class MarketStructure implements Serializable {
     @Column(name = "MKTSTRUCT_ID", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
+
     /**
      * Database Version number.
      */
-    @Version 
+    @Version
     private Long version;
 
     /**
@@ -55,7 +55,7 @@ public class MarketStructure implements Serializable {
      */
     public MarketStructure() {
 
-        root = new Node(new Category("Todos os Produtos", "RAIZ","RAIZ"));
+        root = new Node(new Category("Todos os Produtos", "RAIZ", "RAIZ"));
         marketSize = 1;
     }
 
@@ -278,4 +278,18 @@ public class MarketStructure implements Serializable {
         return childNode.getParent() == parentNode && isChild;
     }
 
+    public List<Category> getAllCategories() {
+        List<Category> lc = new LinkedList<>();
+        getAllCategories(lc, root);
+        return lc;
+    }
+
+    private void getAllCategories(List<Category> lc, Node node) {
+        if (node != null && !isLeaf(node)) {
+            lc.add(node.getElement());
+            for (Node n : node.getChildren()) {
+                getAllCategories(lc, n);
+            }
+        }
+    }
 }
