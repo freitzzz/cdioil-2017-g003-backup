@@ -12,6 +12,21 @@ import static org.junit.Assert.*;
 public class QuestionGroupTest {
 
     /**
+     * Constructor tests.
+     */
+    @Test
+    public void testConstructor() {
+        System.out.println("constructor");
+        assertNotNull("Empty constructor test", new QuestionGroup());
+        assertNull("This condition should succeed because the title is null",
+                createQuestionGroup(null));
+        assertNull("This condition should succeed because the title is empty",
+                createQuestionGroup(""));
+        assertNotNull("This condition should succeed because the title is valid",
+                createQuestionGroup("Title"));
+    }
+
+    /**
      * Test of getQuestions method, of class QuestionGroup.
      */
     @Test
@@ -29,7 +44,8 @@ public class QuestionGroupTest {
     @Test
     public void testContainsQuestion() {
         System.out.println("containsQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "4";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
         instance.addQuestion(question);
         assertTrue("The condition should succeed because the question exists"
@@ -42,7 +58,8 @@ public class QuestionGroupTest {
     @Test
     public void testAddQuestion() {
         System.out.println("addQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "4";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
         assertTrue("The condition should succeed because the question"
                 + "can be added.", instance.addQuestion(question));
@@ -57,7 +74,8 @@ public class QuestionGroupTest {
     @Test
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "4T";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
         assertFalse("The condition should succeed because the question"
                 + "doesn't exist.", instance.removeQuestion(question));
@@ -87,7 +105,9 @@ public class QuestionGroupTest {
         System.out.println("equals");
         QuestionGroup other = new QuestionGroup("Group");
         QuestionGroup instance = new QuestionGroup("Group");
-        Question q = new BinaryQuestion("QuestaoTeste");
+        String id = "4";
+        String otherID = "5";
+        Question q = new BinaryQuestion("QuestaoTeste", id);
         assertEquals("The condition should succeed because we are comparing"
                 + "the same instances.", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing "
@@ -97,7 +117,7 @@ public class QuestionGroupTest {
         assertEquals("The condition should succeed because we are comparing"
                 + "instances with the same properties.", instance, other);
         instance.addQuestion(q);
-        other.addQuestion(new BinaryQuestion("QuestaoTeste2"));
+        other.addQuestion(new BinaryQuestion("QuestaoTeste2", otherID));
         assertNotEquals("The condition should succeed because we are comparing"
                 + "instances with different sets of questions.", instance, other);
         QuestionGroup instance2 = new QuestionGroup("Group2");
@@ -109,6 +129,20 @@ public class QuestionGroupTest {
         assertEquals("The condition should succeed because we are comparing"
                 + "instances with the same question set and title", instance2,
                 instance3);
+    }
+
+    /**
+     * Builds a QuestionGroup instance.
+     *
+     * @param title question group title
+     * @return QuestionGroup instance or null if an exception ocurred
+     */
+    private QuestionGroup createQuestionGroup(String title) {
+        try {
+            return new QuestionGroup(title);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
 }

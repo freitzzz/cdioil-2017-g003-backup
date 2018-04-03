@@ -1,0 +1,16 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Adicionar Categorias a um Gestor
+	________________________________________________
+
+	1. Fazer login com o admin sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção 10 "Adicionar Categorias a um Gestor"
+	3. Inserir um dos e-mails associados aos gestores
+	   apresentados na consola.
+	4. Inserir um descritivo de uma/várias categoria(s) que ainda
+	   não esteja(m) associada(s) ao gestor.
+	5. Obter mensagem de sucesso.

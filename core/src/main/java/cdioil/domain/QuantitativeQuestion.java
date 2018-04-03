@@ -13,20 +13,13 @@ import javax.persistence.Id;
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity
+@Entity(name = "QuantitativeQuestion")
 public class QuantitativeQuestion extends Question<String> implements Serializable {
 
     /**
      * Serialization number.
      */
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Database ID.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     /**
      * Minimum value for the question.
@@ -44,9 +37,23 @@ public class QuantitativeQuestion extends Question<String> implements Serializab
      */
     private Double increment;
 
-    public QuantitativeQuestion(String question, Double minValue, Double maxValue, Double increment) {
+    /**
+     * Builds a quantitative question with the question itself, it's id,
+     * the minimum value a user can answer the question, the maximum value a
+     * user can answer the question and the increment value.
+     * @param question the question itself
+     * @param questionID the question's ID
+     * @param minValue min value a user can answer the question
+     * @param maxValue max value a user can answer the question
+     * @param increment increment value
+     */
+    public QuantitativeQuestion(String question, String questionID, Double minValue, Double maxValue, Double increment) {
         if (question == null || question.isEmpty()) {
             throw new IllegalArgumentException("A pergunta não pode ser null");
+        }
+        if (questionID == null || questionID.isEmpty()) {
+            throw new IllegalArgumentException("O id da pergunta não pode ser "
+                    + "null");
         }
         if (minValue == null || Double.isNaN(minValue) || Double.isInfinite(minValue) || minValue < 0.0) {
             throw new IllegalArgumentException("O valor mínimo tem que ter um "
@@ -67,6 +74,7 @@ public class QuantitativeQuestion extends Question<String> implements Serializab
                     + " ser infinito nem null");
         }
         this.content = question;
+        this.questionID = questionID;
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.increment = increment;
@@ -89,7 +97,7 @@ public class QuantitativeQuestion extends Question<String> implements Serializab
     public List<Double> possibleValues() {
         LinkedList<Double> possibleValues = new LinkedList<>();
         Double i = minValue;
-        while(Double.compare(i, maxValue) != 1){
+        while (Double.compare(i, maxValue) != 1) {
             possibleValues.add(i);
             i += increment;
         }

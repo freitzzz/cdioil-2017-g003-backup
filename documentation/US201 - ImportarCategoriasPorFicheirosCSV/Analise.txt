@@ -10,6 +10,13 @@
 	* Existem 5 tipos de categorias - DC, UN CAT, SCAT, UB (Reunião com o cliente).
 	* O descritivo de uma categoria tem um número, seguido de um dos sufixos enumerados acima.
 	* Os formato dos ficheiros é CSV.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
 
 	_____________________
 		

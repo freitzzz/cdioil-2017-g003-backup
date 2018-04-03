@@ -26,6 +26,7 @@ public class MultipleChoiceAnswerTest {
         list.add(Boolean.TRUE);
         assertNotNull("The condition should succeed because the argument is valid",
                 createMCAnswer(list));
+        assertNotNull("Empty constructor test",new MultipleChoiceAnswer());
     }
 
     /**
