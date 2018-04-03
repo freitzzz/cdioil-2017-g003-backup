@@ -6,6 +6,7 @@ import cdioil.langs.Language;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -29,13 +30,13 @@ public class ChangeLanguageController {
         
         Properties properties = new Properties();
         
-        FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIESFILE);
+        FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIES_FILE_PATH);
         properties.load(inputStream);
         inputStream.close();
         
         properties.setProperty("language", l.name());
         
-        FileOutputStream outputStream = new FileOutputStream(BackOfficeProperties.PROPERTIESFILE);
+        FileOutputStream outputStream = new FileOutputStream(BackOfficeProperties.PROPERTIES_FILE_PATH);
         properties.store(outputStream, "Current Language");
         outputStream.close();
         

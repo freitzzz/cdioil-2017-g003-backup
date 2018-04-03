@@ -5,9 +5,13 @@ import cdioil.langs.LocalizationParserXML;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -21,14 +25,21 @@ public class BackOfficeLocalizationHandler {
     private static final Map<Language, File> LANGUAGE_FILES_MAP;
 
     static {
+        
         LANGUAGE_FILES_MAP = new HashMap<>();
-
-        LANGUAGE_FILES_MAP.put(Language.pt_PT,
-                new File(BackOfficeLocalizationHandler.class.getClassLoader()
-                        .getResource("localization/backoffice_pt_PT.xml").getFile()));
-        LANGUAGE_FILES_MAP.put(Language.en_US,
-                new File(BackOfficeLocalizationHandler.class.getClassLoader()
-                        .getResource("localization/backoffice_en_US.xml").getFile()));
+        
+        //Instantiate Map and convert URLs to UTF-8
+        try {
+            LANGUAGE_FILES_MAP.put(Language.pt_PT,
+                    new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
+                            .getResource("localization/backoffice_pt_PT.xml").getFile(), "UTF-8")));
+            
+            LANGUAGE_FILES_MAP.put(Language.en_US,
+                    new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
+                            .getResource("localization/backoffice_en_US.xml").getFile(), "UTF-8")));
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(BackOfficeLocalizationHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -72,7 +83,8 @@ public class BackOfficeLocalizationHandler {
     public void loadStrings() throws ParserConfigurationException, SAXException, IOException {
 
         Properties properties = new Properties();
-        FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIESFILE);
+        FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIES_FILE_PATH);
+        
         properties.load(inputStream);
         inputStream.close();
 
