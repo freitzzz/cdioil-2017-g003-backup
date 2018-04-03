@@ -26,6 +26,7 @@ public class QuantitativeAnswerTest {
                 + "negative value", createQAnswer(-1.0));
         assertNotNull("The condition should succeed because the argument is valid",
                 createQAnswer(2.0));
+        assertNotNull("Empty constructor test", new QuantitativeAnswer());
     }
 
     /**

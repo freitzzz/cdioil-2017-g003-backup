@@ -79,7 +79,8 @@ public class CategoryQuestionsLibraryTest {
     @Test
     public void testAddQuestion() {
         System.out.println("addQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "144";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Category category = new Category("CategoryTest", "100CAT",
                 "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
@@ -102,7 +103,8 @@ public class CategoryQuestionsLibraryTest {
     @Test
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "4";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Category category = new Category("CategoryTest", "100CAT",
                 "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
@@ -127,7 +129,8 @@ public class CategoryQuestionsLibraryTest {
     @Test
     public void testDoesQuestionExist() {
         System.out.println("doesQuestionExist");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "4L";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Category category = new Category("CategoryTest", "100CAT",
                 "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
@@ -178,7 +181,8 @@ public class CategoryQuestionsLibraryTest {
                 + "instances of different classes.", instance.equals("banana"));
         Category cat = new Category("CategoryTest", "100CAT",
                 "10DC-10UN-100CAT");
-        BinaryQuestion question = new BinaryQuestion("QuestaoTeste");
+        String id = "4B";
+        BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id);
         instance.addCategory(cat);
         assertFalse("The condition should succeed because the instances have"
                 + "different mappings (one has a category, the other"

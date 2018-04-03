@@ -31,10 +31,12 @@ public class QuestionLibrariesBootstrap {
     private void bootstrapCategoryQuestionsLibrary() {
         CategoryQuestionsLibrary library = new CategoryQuestionsLibrary();
         Category cat = new Category("Vinhos", "100CAT", "10DC-10UN-100CAT");
+        String id = "3";
+        String id2 = "2";
         BinaryQuestion q = new BinaryQuestion("Acha que a percentagem de alcool"
-                + "nos vinhos e satisfatoria?");
+                + "nos vinhos e satisfatoria?",id);
         BinaryQuestion q2 = new BinaryQuestion("Os nomes das marcas de vinhos"
-                + "sao apelativos?");
+                + "sao apelativos?",id2);
         library.addCategory(cat);
         library.addQuestion(q, cat);
         library.addQuestion(q2, cat);
@@ -49,8 +51,9 @@ public class QuestionLibrariesBootstrap {
         ProductQuestionsLibrary library = new ProductQuestionsLibrary();
         Product prod = new Product("Chocolate Nestle", new EAN("544231234"),
                 new QRCode("4324235"));
+        String id = "1";
         BinaryQuestion q = new BinaryQuestion("Gostaria de ver mais produtos"
-                + "Nestle nas lojas Continente?");
+                + "Nestle nas lojas Continente?",id);
         library.addProduct(prod);
         library.addQuestion(q, prod);
         ProductQuestionsLibraryRepositoryImpl repo = new ProductQuestionsLibraryRepositoryImpl();
@@ -62,8 +65,10 @@ public class QuestionLibrariesBootstrap {
      */
     private void bootstrapIndependentQuestionsLibrary() {
         IndependentQuestionsLibrary library = new IndependentQuestionsLibrary();
-        BinaryQuestion q = new BinaryQuestion("Acha a embalagem apelativa?");
-        BinaryQuestion q2 = new BinaryQuestion("Acha que este produto e caro?");
+        String id = "A4";
+        String id2 = "B6";
+        BinaryQuestion q = new BinaryQuestion("Acha a embalagem apelativa?",id);
+        BinaryQuestion q2 = new BinaryQuestion("Acha que este produto e caro?",id2);
         library.addQuestion(q2);
         library.addQuestion(q);
         IndependentQuestionsLibraryRepositoryImpl repo = new IndependentQuestionsLibraryRepositoryImpl();

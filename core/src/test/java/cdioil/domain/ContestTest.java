@@ -58,6 +58,7 @@ public class ContestTest {
                 + "invalid", createContest(title, description, gu, null));
         assertNotNull("The condition should succeed because the arguments are "
                 + "valid", createContest(title, description, gu, timePeriod));
+        assertNotNull("Empty constructor test", new Contest());
     }
 
     /**

@@ -23,6 +23,7 @@ public class BinaryAnswerTest {
                 createBinaryAnswer(true));
         assertNotNull("\"The condition should succeed because the argument is valid",
                 createBinaryAnswer(false));
+        assertNotNull("Empty constructor test",new BinaryAnswer());
     }
 
     /**

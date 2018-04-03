@@ -20,17 +20,21 @@ public class MultipleChoiceQuestionTest {
         LinkedList<String> list = new LinkedList<>();
         String s = "test";
         list.add(s);
+        String id = "5";
         assertNull("The condition should succeed because the question is null",
-                createMCQuestion(null, list));
+                createMCQuestion(null, id, list));
         assertNull("\"The condition should succeed because the question is empty",
-                createMCQuestion("", list));
+                createMCQuestion("", id, list));
+        assertNull("The condition should succeed because the question id is null",
+                createMCQuestion("Question", null, list));
         assertNotNull("\"The condition should succeed because the arguments are valid",
-                createMCQuestion("Question", list));
+                createMCQuestion("Question", id, list));
         assertNull("The condition should succeed because the set is null",
-                createMCQuestion("Question", null));
+                createMCQuestion("Question", id, null));
         list.remove(s);
         assertNull("The condition should succeed because the set is empty",
-                createMCQuestion("Question", list));
+                createMCQuestion("Question", id, list));
+        assertNotNull("Empty constructor test", new MultipleChoiceQuestion());
     }
 
     /**
@@ -43,9 +47,10 @@ public class MultipleChoiceQuestionTest {
         LinkedList<String> list = new LinkedList<>();
         String s = "test";
         list.add(s);
-        MultipleChoiceQuestion instance = createMCQuestion(q, list);
+        String id = "5";
+        MultipleChoiceQuestion instance = createMCQuestion(q, id, list);
 
-        MultipleChoiceQuestion other = createMCQuestion(q, list);
+        MultipleChoiceQuestion other = createMCQuestion(q, id, list);
 
         assertEquals(instance.hashCode(), other.hashCode());
     }
@@ -59,10 +64,14 @@ public class MultipleChoiceQuestionTest {
         LinkedList<String> list = new LinkedList<>();
         String s = "test";
         list.add(s);
-        MultipleChoiceQuestion instance = createMCQuestion("Question", list);
-        MultipleChoiceQuestion instance2 = createMCQuestion("Question", list);
-        MultipleChoiceQuestion instance3 = createMCQuestion("Question3", list);
-        BinaryQuestion instance4 = new BinaryQuestion("Question");
+        String mcID = "5";
+        String otherMCId = "6L";
+        MultipleChoiceQuestion instance = createMCQuestion("Question", mcID, list);
+        MultipleChoiceQuestion instance2 = createMCQuestion("Question", mcID, list);
+        MultipleChoiceQuestion instance3 = createMCQuestion("Question3", otherMCId, list);
+        MultipleChoiceQuestion instance5 = createMCQuestion("Question", otherMCId, list);
+        String id = "3";
+        BinaryQuestion instance4 = new BinaryQuestion("Question", id);
         assertEquals("The condition should succeed because we are "
                 + "comparing the same instances", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"
@@ -71,10 +80,12 @@ public class MultipleChoiceQuestionTest {
                 + "comparing the an instance with a null value", instance, null);
         assertEquals("The condition should succeed because we are comparing two"
                 + " instances with the same properties", instance, instance2);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "questions with different IDs", instance, instance5);
         assertNotEquals("The condition should succeed because we are comparing"
                 + " instances with different properties", instance, instance3);
         assertNotEquals("The condition should succeed because we are comparing "
-                + "questions of different types",instance,instance4);
+                + "questions of different types", instance, instance4);
     }
 
     /**
@@ -87,7 +98,8 @@ public class MultipleChoiceQuestionTest {
         LinkedList<String> list = new LinkedList<>();
         String s = "test";
         list.add(s);
-        MultipleChoiceQuestion instance = new MultipleChoiceQuestion(q, list);
+        String id = "4";
+        MultipleChoiceQuestion instance = new MultipleChoiceQuestion(q, id, list);
         String expResult = q;
         String result = instance.content();
         assertEquals(expResult, result);
@@ -103,7 +115,8 @@ public class MultipleChoiceQuestionTest {
         String s = "test";
         list.add(s);
         String q = "Question";
-        MultipleChoiceQuestion instance = new MultipleChoiceQuestion(q, list);
+        String id = "4T";
+        MultipleChoiceQuestion instance = new MultipleChoiceQuestion(q, id, list);
         String expResult = QuestionAnswerTypes.MULTIPLE_CHOICE.toString();
         String result = instance.type();
         assertEquals(expResult, result);
@@ -113,12 +126,13 @@ public class MultipleChoiceQuestionTest {
      * Builds a MultipleChoiceQuestion with a question and a set of options.
      *
      * @param question the question itself
+     * @param questionID the question's ID
      * @param options set with the options
      * @return MultipleChoiceQuestion instance
      */
-    private MultipleChoiceQuestion createMCQuestion(String question, LinkedList<String> options) {
+    private MultipleChoiceQuestion createMCQuestion(String question, String questionID, LinkedList<String> options) {
         try {
-            return new MultipleChoiceQuestion(question, options);
+            return new MultipleChoiceQuestion(question, questionID, options);
         } catch (IllegalArgumentException e) {
             return null;
         }

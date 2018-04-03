@@ -43,14 +43,16 @@ public class IndependentQuestionsLibraryTest {
                 + "the same instance", instance, instance);
         assertEquals("The condition should succeed because we are comparing"
                 + "instances with the same properties", instance, instance2);
-        instance.addQuestion(new BinaryQuestion("QuestaoTeste"));
+        String id = "5A";
+        String otherID = "6B";
+        instance.addQuestion(new BinaryQuestion("QuestaoTeste", id));
         assertNotEquals("The condition should succeed because we are comparing"
-                + "a library with one question to a library"
-                + "with no questions", instance, instance2);
-        instance2.addQuestion(new BinaryQuestion("QuestaoTeste"));
+                + " a library with one question to a library"
+                + " with no questions", instance, instance2);
+        instance2.addQuestion(new BinaryQuestion("QuestaoTeste", id));
         assertEquals("The condition should succeed because we are comparing"
-                + "instances with the same properties", instance, instance2);
-        instance3.addQuestion(new BinaryQuestion("TesteQuestao"));
+                + " instances with the same properties", instance, instance2);
+        instance3.addQuestion(new BinaryQuestion("TesteQuestao", otherID));
         assertNotEquals("The condition should succeed because we are comparing"
                 + "libraries that have different questions", instance, instance3);
     }
@@ -61,7 +63,8 @@ public class IndependentQuestionsLibraryTest {
     @Test
     public void testAddQuestion() {
         System.out.println("addQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "F4";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
         assertTrue("The condition should be true because this question hasn't"
                 + "been added to the library.", instance.addQuestion(question));
@@ -75,7 +78,8 @@ public class IndependentQuestionsLibraryTest {
     @Test
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "H4";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
         assertFalse("The condition should be false because the question doesn't"
                 + "exist in the library and therefore cannot be removed",
@@ -91,7 +95,8 @@ public class IndependentQuestionsLibraryTest {
     @Test
     public void testDoesQuestionExist() {
         System.out.println("doesQuestionExist");
-        Question question = new BinaryQuestion("QuestaoTeste");
+        String id = "R5";
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
         assertFalse("The condition should be false because the question doesn't"
                 + "exist in the library", instance.doesQuestionExist(question));
