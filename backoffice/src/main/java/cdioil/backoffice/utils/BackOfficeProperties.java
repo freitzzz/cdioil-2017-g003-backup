@@ -11,5 +11,5 @@ public interface BackOfficeProperties {
     /**
      * BackOffice's Properties File.
      */
-    public final static File PROPERTIESFILE = new File("src/main/resources/backoffice.properties");
+    public final static File PROPERTIESFILE = new File(BackOfficeProperties.class.getClassLoader().getResource("backoffice.properties").getFile());
 }
