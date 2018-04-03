@@ -10,7 +10,7 @@ import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.Manager;
 
 /**
- * User Interface for the User Story 150 - Add Categories to a Manager.
+ * User Interface for the User Story 150 - Associate Categories to a Manager.
  *
  * @author Rita Gonçalves (1160912)
  */
@@ -56,7 +56,7 @@ public class AssociateCategoriesUI {
      */
     private static final String SUCCESS_MESSAGE = "\nAs categorias foram adicionadas"
             + " com sucesso.\n";
-
+    
     /**
      * Instance of Controller that intermediates the interactions between the administrator and the domain classes.
      */
@@ -71,7 +71,7 @@ public class AssociateCategoriesUI {
     }
 
     /**
-     * Method that runs US150 - Add Categories to a Manager.
+     * Method that runs US150 - Associate Categories to a Manager.
      */
     public void doShow() {
   Iterable<Manager> managerList = ctrl.listAllManagers();

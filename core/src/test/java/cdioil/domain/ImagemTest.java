@@ -64,6 +64,13 @@ public class ImagemTest {
         assertEquals("A condição deve acertar pois o conteudo as Strings são iguais",expResult, result);
     }
     /**
+     * Miscellaneous tests
+     */
+    @Test
+    public void testMisc(){
+        assertNotNull("Creation of the object shouldn't be null",new Image());
+    }
+    /**
      * Métoodo que cria uma instância de Image
      * @param imagem Array de Bytes com o contéudo da imagem
      * @return Image com o a imagem criada, ou null caso os parametros sejam invalidos

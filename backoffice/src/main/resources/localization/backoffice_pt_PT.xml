@@ -44,7 +44,9 @@
 			<Message messageId = "option_update_data" value = "Atualizar Dados"/>
 			<Message messageId = "option_import_categories" value = "Importar Categorias"/>
 			<Message messageId = "option_search_user_by_email" value = "Pesquisar Utilizador por Email"/>
-			<Message messageId = "option_remove_categories_from_manager" value = "Remover Categorias a um Gestor"/>
+			<Message messageId = "option_remove_categories_from_manager" value = "Remover Categorias de um Gestor"/>
+                        <Message messageId = "option_associate_categories_to_manager" value = "Associar Categorias a um Gestor"/>
+			<Message messageId = "option_list_categories_without_managers" value = "Listar Categorias sem Gestores"/>
 		</AdminMenuOptions>
 		
 		<ManagerMenuOptions>
