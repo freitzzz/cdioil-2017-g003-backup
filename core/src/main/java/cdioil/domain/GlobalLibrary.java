@@ -1,10 +1,12 @@
 package cdioil.domain;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * Represents a library that contains all the other ones
@@ -31,17 +33,20 @@ public class GlobalLibrary implements Serializable {
     /**
      * Library that contains all questions related to categories.
      */
+    @OneToOne(cascade = CascadeType.PERSIST)
     private CategoryQuestionsLibrary catQuestionsLibrary;
 
     /**
      * Library that contains all questions related to products.
      */
+    @OneToOne(cascade = CascadeType.PERSIST)
     private ProductQuestionsLibrary prodQuestionsLibrary;
 
     /**
      * Library that contains all questions that aren't related to categories or
      * products.
      */
+    @OneToOne(cascade = CascadeType.PERSIST)
     private IndependentQuestionsLibrary indQuestionsLibrary;
 
     /**

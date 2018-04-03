@@ -44,6 +44,8 @@ public class QuantitativeQuestionTest {
 
         assertNull("The condition should succeed because the question id is "
                 + "null", createQQuestion(q, null, minValue, maxValue, increment));
+        assertNull("The condition should succeed because question id is "
+                + "empty", createQQuestion(q, "", minValue, maxValue, increment));
 
         assertNull("The condition should succeed because the min value "
                 + "is null", createQQuestion(q, id, null, maxValue, increment));

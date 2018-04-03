@@ -27,6 +27,8 @@ public class MultipleChoiceQuestionTest {
                 createMCQuestion("", id, list));
         assertNull("The condition should succeed because the question id is null",
                 createMCQuestion("Question", null, list));
+        assertNull("The condition should succeed because the question id is empty",
+                createMCQuestion("Question", "", list));
         assertNotNull("\"The condition should succeed because the arguments are valid",
                 createMCQuestion("Question", id, list));
         assertNull("The condition should succeed because the set is null",
