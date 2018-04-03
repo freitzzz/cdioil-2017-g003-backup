@@ -278,14 +278,26 @@ public class MarketStructure implements Serializable {
         return childNode.getParent() == parentNode && isChild;
     }
 
+    /**
+     * Lists all the categories in the structure, call recursive method of the
+     * same name
+     *
+     * @return list of the categories in the structure
+     */
     public List<Category> getAllCategories() {
         List<Category> lc = new LinkedList<>();
         getAllCategories(lc, root);
         return lc;
     }
 
+    /**
+     * Recursive getAllCategories, adds Category in node to the list
+     *
+     * @param lc list of categories to fill
+     * @param node current node
+     */
     private void getAllCategories(List<Category> lc, Node node) {
-        if (node != null && !isLeaf(node)) {
+        if (node != null) {
             lc.add(node.getElement());
             for (Node n : node.getChildren()) {
                 getAllCategories(lc, n);
