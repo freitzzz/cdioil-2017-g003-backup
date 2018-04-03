@@ -50,6 +50,7 @@ public class BackOfficeLocalizationHandler {
     public static BackOfficeLocalizationHandler getInstance() {
         if (instance == null) {
             instance = new BackOfficeLocalizationHandler();
+            instance.messagesMap = new HashMap<>();
         }
 
         return instance;
@@ -90,10 +91,6 @@ public class BackOfficeLocalizationHandler {
      * @return localized string
      */
     public String getMessageValue(String messageID) {
-
-        if (messagesMap == null) {
-            return null;
-        }
 
         return messagesMap.get(messageID);
     }
