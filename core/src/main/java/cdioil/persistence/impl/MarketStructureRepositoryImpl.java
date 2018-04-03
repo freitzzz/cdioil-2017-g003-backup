@@ -15,5 +15,4 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
     protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
-
 }
