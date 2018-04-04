@@ -29,15 +29,15 @@ public class ChangeLanguageController {
         
         Properties properties = new Properties();
         
-        FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIESFILE);
-        properties.load(inputStream);
-        inputStream.close();
+        try (FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIES_FILE_PATH)) {
+            properties.load(inputStream);
+        }
         
         properties.setProperty("language", l.name());
         
-        FileOutputStream outputStream = new FileOutputStream(BackOfficeProperties.PROPERTIESFILE);
-        properties.store(outputStream, "Current Language");
-        outputStream.close();
+        try (FileOutputStream outputStream = new FileOutputStream(BackOfficeProperties.PROPERTIES_FILE_PATH)) {
+            properties.store(outputStream, "Current Language");
+        }
         
         BackOfficeLocalizationHandler.getInstance().loadStrings();
     }

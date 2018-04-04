@@ -6,11 +6,14 @@ import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -114,6 +117,19 @@ public class ContestTest {
                 + "";
         String result = instance.toString();
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of addUsersToGroup method, of class Event
+     */
+    @Test
+    public void testAddUsersToGroup() {
+        System.out.println("addUsersToGroup");
+        Contest c = createContest(title, description, gu, timePeriod);
+        assertFalse(c.addUsersToGroup(null));
+        List<RegisteredUser> lru = new LinkedList<>();
+        lru.add(new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"))));
+        assertTrue(c.addUsersToGroup(lru));
     }
 
     /**

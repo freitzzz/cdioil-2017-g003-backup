@@ -22,7 +22,12 @@ public class ListCategoriesUI {
     private static final String INTRO_MESSAGE = "Categories without managers:";
 
     /**
-     * Contructor of ListCategoriesUI class
+     * Message displayed when MarketStructure is null
+     */
+    private static final String MARKET__STRUCTURE_NULL_MSG = "Market Structure does not exist!";
+
+    /**
+     * Constructor of ListCategoriesUI class
      */
     public ListCategoriesUI() {
         ctrl = new ListCategoriesController();
@@ -33,9 +38,13 @@ public class ListCategoriesUI {
      */
     public void listCategoriesWithoutManagers() {
         List<Category> lc = ctrl.listCategoriesWithoutManagers();
-        System.out.println(INTRO_MESSAGE);
-        for (Category c : lc) {
-            System.out.println(c);
+        if (lc == null) {
+            System.out.println(MARKET__STRUCTURE_NULL_MSG);
+        } else {
+            System.out.println(INTRO_MESSAGE);
+            for (Category c : lc) {
+                System.out.println(c);
+            }
         }
     }
 }

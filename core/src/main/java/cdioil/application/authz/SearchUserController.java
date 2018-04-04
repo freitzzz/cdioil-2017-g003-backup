@@ -15,7 +15,17 @@ import java.util.List;
  */
 public class SearchUserController {
 
-    UserRepositoryImpl userRepos;
+    private UserRepositoryImpl userRepos;
+    
+     /**
+     * Sufix of the regular expression used to search categories by its identifier.
+     */
+    private static final String REGEX_PREFIX = "^*";
+
+    /**
+     * Prefix of the regular expression used to search categories by its identifier.
+     */
+    private static final String REGEX_SUFIX = "*";
     
     /**
      * Search a SystemUser by email
@@ -24,7 +34,7 @@ public class SearchUserController {
      */
     public List<SystemUser> usersByEmail(String email){
         userRepos = new UserRepositoryImpl();
-        return userRepos.usersByPattern(email);
+        return userRepos.usersByPattern(REGEX_PREFIX + email.toLowerCase() + REGEX_SUFIX);
     }
     
 }

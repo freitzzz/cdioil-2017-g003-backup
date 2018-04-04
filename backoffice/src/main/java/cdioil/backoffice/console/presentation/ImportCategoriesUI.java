@@ -7,8 +7,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.application.ImportCategoriesController;
 import cdioil.backoffice.utils.Console;
-import cdioil.domain.Category;
-import java.util.List;
+import cdioil.domain.MarketStructure;
 
 /**
  * User Interface for the User Story 201 - Import Categories from a File.
@@ -42,8 +41,7 @@ public class ImportCategoriesUI {
     /**
      * Represents a message that informs the user that the format of the file is not valid.
      */
-    private static final String INVALID_FORMAT_MESSAGE = "Formato de ficheiro inválido!"
-            + "\nNenhuma categoria foi importada.";
+    private static final String INVALID_CATEGORIES_MESSAGE = "Nenhuma categoria foi importada.";
 
     /**
      * Represents a message that delimitates the imported categories.
@@ -76,21 +74,17 @@ public class ImportCategoriesUI {
                 return;
             }
 
-            List<Category> categories = ctrl.readCategories(filePath);
-            if (categories == null) {
+            MarketStructure em = ctrl.readCategories(filePath);
+            if (em == null) {
                 String option = Console.readLine(FILEPATH_NOT_FOUND_MESSAGE);
                 if (option.equalsIgnoreCase(EXIT_CODE)) {
                     return;
                 }
             } else {
-                if (categories.isEmpty()) {
-                    System.out.println(INVALID_FORMAT_MESSAGE);
+                if (ctrl.getNumberOfCategoriesRead() == 0) {
+                    System.out.println(INVALID_CATEGORIES_MESSAGE);
                 } else {
-                    System.out.println(IMPORTED_CATEGORIES_MESSAGE[0]);
-                    categories.forEach((c) -> {
-                        System.out.println(c.toString());
-                    });
-                    System.out.println(categories.size());
+                    System.out.println("Foram lidas " + ctrl.getNumberOfCategoriesRead() + " categorias.");
                     System.out.println(IMPORTED_CATEGORIES_MESSAGE[1]);
                     catched = true;
                 }

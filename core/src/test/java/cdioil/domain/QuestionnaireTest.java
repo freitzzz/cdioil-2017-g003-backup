@@ -4,6 +4,7 @@ import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.graph.Graph;
@@ -12,10 +13,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.LinkedList;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -125,8 +130,21 @@ public class QuestionnaireTest {
     }
 
     /**
-     * Create a new object Constest with a description, group users, begin date
-     * and end date.
+     * Test of addUsersToGroup method, of class Event
+     */
+    @Test
+    public void testAddUsersToGroup() {
+        System.out.println("addUsersToGroup");
+        Questionnaire q = createQuestionnaire(title, description, gu, timePeriod, graph);
+        assertFalse(q.addUsersToGroup(null));
+        List<RegisteredUser> lru = new LinkedList<>();
+        lru.add(new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"))));
+        assertTrue(q.addUsersToGroup(lru));
+    }
+
+    /**
+     * Create a new object Questionnaire with a description, group users, begin
+     * date and end date.
      *
      * @param description
      * @param gu

@@ -21,24 +21,14 @@ public class CategoryManagementController {
     private Manager manager;
 
     /**
-     * Manager Repository.
-     */
-    private ManagerRepositoryImpl managerRepo = new ManagerRepositoryImpl();
-
-    /**
-     * Market Structure Repository.
-     */
-    private MarketStructureRepositoryImpl marketStructRepo = new MarketStructureRepositoryImpl();
-
-    /**
      * Sufix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_PREFIX = "*";
+    private static final String REGEX_PREFIX = "^*";
 
     /**
      * Prefix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_SUFIX = "*";
+    private static final String REGEX_SUFIX = "*$";
 
     /**
      * Finds all managers saved in the database.
@@ -46,8 +36,7 @@ public class CategoryManagementController {
      * @return iterable of managers
      */
     public Iterable<Manager> listAllManagers() {
-        Iterable<Manager> managerList = managerRepo.findAll();
-        return managerList;
+        return new ManagerRepositoryImpl().findAll();
     }
 
     /**
@@ -60,7 +49,7 @@ public class CategoryManagementController {
         UserRepositoryImpl userRepo = new UserRepositoryImpl();
         Email managerEmail = new Email(email);
         SystemUser sysUser = userRepo.findByEmail(managerEmail);
-        manager = managerRepo.findBySystemUser(sysUser);
+        manager = new ManagerRepositoryImpl().findBySystemUser(sysUser);
         return manager != null;
     }
 
@@ -71,11 +60,15 @@ public class CategoryManagementController {
      * @return true if they were removed with success, false if otherwise
      */
     public boolean removeCategories(String identifier) {
-        //=======================================
-        //TODO implement findByIdentifier method
-        //=======================================
-        //return manager.removeCategories(marketStructRepo.findByIdentifier(identifier));
-        return true;
+        if (manager.removeCategories(new MarketStructureRepositoryImpl().
+                findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier.toUpperCase() + REGEX_SUFIX)) != false) {
+            Manager managerY = new ManagerRepositoryImpl().merge(manager);
+            if (managerY != null) {
+                manager = managerY;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -84,7 +77,15 @@ public class CategoryManagementController {
      * @param identifier identifier of the categories
      * @return true, if the categories are successfully added.
      */
-    public boolean addCategories(String identifier) {
-        return manager.addCategories(marketStructRepo.findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier + REGEX_SUFIX));
+    public boolean addCategories(String identifier) {       
+        if (manager.addCategories(new MarketStructureRepositoryImpl().
+                findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier.toUpperCase() + REGEX_SUFIX)) != false) {
+            Manager managerY = new ManagerRepositoryImpl().merge(manager);
+            if (managerY != null) {
+                manager = managerY;
+                return true;
+            }
+        }
+        return false;
     }
 }
