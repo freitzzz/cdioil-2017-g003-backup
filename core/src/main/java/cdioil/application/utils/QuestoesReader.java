@@ -5,8 +5,7 @@
  */
 package cdioil.application.utils;
 
-import cdioil.domain.Question;
-import java.util.List;
+import cdioil.domain.GlobalLibrary;
 
 /**
  * Interface que permite a leitura de questoes.
@@ -18,8 +17,9 @@ public interface QuestoesReader {
     /**
      * Importa questoes de um ficheiro de um determinado formato.
      *
-     * @return Lista com as questoes lidas
+     * @param globalLibrary
+     * @return A biblioteca de Questoesde uma dada categoria
      */
-    public abstract List<Question> readQuestoes();
+    public abstract int readQuestoes(GlobalLibrary globalLibrary);
     
 }

@@ -20,12 +20,12 @@ public class SearchUserController {
      /**
      * Sufix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_PREFIX = "^*";
+    private static final String REGEX_PREFIX = "^.*";
 
     /**
      * Prefix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_SUFIX = "*";
+    private static final String REGEX_SUFIX = ".*";
     
     /**
      * Search a SystemUser by email

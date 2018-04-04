@@ -3,6 +3,8 @@ package cdioil.domain;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -116,11 +118,11 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesCategoryExist(category)) {
             return false;
         }
-        for (Category key : library.keySet()) {
-            if (!(key.equals(category)) && library.get(key).containsQuestion(question)) {
-                return false;
-            }
-        }
+//        for(Category key : library.keySet()) {
+//            if (!(key.equals(category)) && library.get(key).containsQuestion(question)) {
+//                return false;
+//            }
+//        }
         if (!doesQuestionExist(question, category)) {
             return library.get(category).addQuestion(question);
         }
