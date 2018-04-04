@@ -7,7 +7,6 @@ import com.vaadin.ui.Grid;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public class RegisterManagerView extends RegisterManagerDesign implements View {
 
@@ -40,5 +39,7 @@ public class RegisterManagerView extends RegisterManagerDesign implements View {
         List<String> emails = controller.getListaUsersRegistados();
 
         userTable.setItems(emails);
+
+        userTable.getDataProvider().refreshAll();
     }
 }
