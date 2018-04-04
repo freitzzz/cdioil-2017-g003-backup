@@ -1,8 +1,10 @@
 package cdioil.domain;
 
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.time.TimePeriod;
 import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -124,5 +126,21 @@ public abstract class Event implements Serializable {
     public String toString() {
         return "Evento: " + title + "\nDescricao: " + description + "\n"
                 + timePeriod.toString() + "\nPublico Alvo: " + targetAudience.toString();
+    }
+
+    /**
+     * Adds a list of users to the target audience
+     *
+     * @param users users to add to target audience
+     * @return true if users were added successfully, false if not
+     */
+    public boolean addUsersToGroup(List<RegisteredUser> users) {
+        if(users == null){
+            return false;
+        }
+        for (RegisteredUser u : users) {
+            this.targetAudience.addUser(null);
+        }
+        return true;
     }
 }
