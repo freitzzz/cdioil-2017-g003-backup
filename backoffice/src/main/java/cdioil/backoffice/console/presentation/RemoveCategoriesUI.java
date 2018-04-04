@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.authz.CategoryManagementController;
+import cdioil.backoffice.application.authz.CategoryManagementController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.Manager;
 

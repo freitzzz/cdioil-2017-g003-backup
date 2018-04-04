@@ -1,21 +1,26 @@
 package cdioil.domain;
 
+import cdioil.application.utils.QuestionAnswerGraph;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
-import cdioil.graph.Graph;
 import cdioil.time.TimePeriod;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.LinkedList;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +35,7 @@ public class QuestionnaireTest {
     private String description;
     private UsersGroup gu;
     private TimePeriod timePeriod;
-    private Graph<Question, Answer> graph;
+    private QuestionAnswerGraph graph;
 
     @Before
     public void setUp() {
@@ -45,7 +50,7 @@ public class QuestionnaireTest {
         LocalTime t2 = LocalTime.of(10, 10, 10);
         LocalDateTime dt2 = LocalDateTime.of(d2, t2);
         timePeriod = new TimePeriod(dt, dt2);
-        graph = new Graph(true);
+        graph = new QuestionAnswerGraph(true);
     }
 
     /**
@@ -125,8 +130,21 @@ public class QuestionnaireTest {
     }
 
     /**
-     * Create a new object Constest with a description, group users, begin date
-     * and end date.
+     * Test of addUsersToGroup method, of class Event
+     */
+    @Test
+    public void testAddUsersToGroup() {
+        System.out.println("addUsersToGroup");
+        Questionnaire q = createQuestionnaire(title, description, gu, timePeriod, graph);
+        assertFalse(q.addUsersToGroup(null));
+        List<RegisteredUser> lru = new LinkedList<>();
+        lru.add(new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"))));
+        assertTrue(q.addUsersToGroup(lru));
+    }
+
+    /**
+     * Create a new object Questionnaire with a description, group users, begin
+     * date and end date.
      *
      * @param description
      * @param gu
@@ -135,7 +153,7 @@ public class QuestionnaireTest {
      * @return instance of the Contest
      */
     private Questionnaire createQuestionnaire(String title, String description, UsersGroup gu,
-            TimePeriod timePeriod, Graph<Question, Answer> graph) {
+            TimePeriod timePeriod, QuestionAnswerGraph graph) {
         try {
             return new Questionnaire(title, description, gu, timePeriod, graph);
         } catch (IllegalArgumentException e) {

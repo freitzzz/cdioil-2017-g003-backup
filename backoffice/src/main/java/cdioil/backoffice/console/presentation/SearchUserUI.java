@@ -5,7 +5,7 @@
  */
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.authz.SearchUserController;
+import cdioil.backoffice.application.authz.SearchUserController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.SystemUser;
 import java.util.List;

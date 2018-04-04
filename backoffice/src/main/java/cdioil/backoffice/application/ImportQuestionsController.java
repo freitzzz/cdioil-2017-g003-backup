@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.application;
+package cdioil.backoffice.application;
 
 import cdioil.application.utils.QuestoesReader;
 import cdioil.application.utils.QuestoesReaderFactory;

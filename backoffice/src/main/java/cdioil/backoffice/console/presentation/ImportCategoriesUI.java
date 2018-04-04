@@ -5,7 +5,7 @@
  */
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.ImportCategoriesController;
+import cdioil.backoffice.application.ImportCategoriesController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.MarketStructure;
 
@@ -41,8 +41,7 @@ public class ImportCategoriesUI {
     /**
      * Represents a message that informs the user that the format of the file is not valid.
      */
-    private static final String INVALID_FORMAT_MESSAGE = "Formato de ficheiro inválido!"
-            + "\nNenhuma categoria foi importada.";
+    private static final String INVALID_CATEGORIES_MESSAGE = "Nenhuma categoria foi importada.";
 
     /**
      * Represents a message that delimitates the imported categories.
@@ -82,10 +81,10 @@ public class ImportCategoriesUI {
                     return;
                 }
             } else {
-                if (em.getAllCategories().isEmpty()) {
-                    System.out.println(INVALID_FORMAT_MESSAGE);
+                if (ctrl.getNumberOfCategoriesRead() == 0) {
+                    System.out.println(INVALID_CATEGORIES_MESSAGE);
                 } else {
-                    System.out.println("Foram lidas " + em.getAllCategories().size() + " categorias.");
+                    System.out.println("Foram lidas " + ctrl.getNumberOfCategoriesRead() + " categorias.");
                     System.out.println(IMPORTED_CATEGORIES_MESSAGE[1]);
                     catched = true;
                 }

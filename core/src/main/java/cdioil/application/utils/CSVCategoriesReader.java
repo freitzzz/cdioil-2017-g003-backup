@@ -18,6 +18,11 @@ public class CSVCategoriesReader implements CategoriesReader {
      * File to read.
      */
     private final File file;
+    
+    /**
+     * List with the Categoires that were read.
+     */
+    private List<Category> lc;
 
     /**
      * Splitter of the columns of the file.
@@ -41,6 +46,7 @@ public class CSVCategoriesReader implements CategoriesReader {
      */
     public CSVCategoriesReader(String filename) {
         this.file = new File(filename);
+        lc = new LinkedList<>();
     }
 
     /**
@@ -62,26 +68,32 @@ public class CSVCategoriesReader implements CategoriesReader {
             String[] line = fileContent.get(i).split(SPLITTER);
             if (line.length != 0) { //Doesn't read empty lines
                 try {
-
                     String path = line[0] + Category.Sufixes.SUFIX_DC;
                     Category c = new Category(line[1], line[0] + Category.Sufixes.SUFIX_DC, path);
                     boolean added = em.addRootCategory(c);
+                    if(added) lc.add(c);
 
                     path = path + "-" + line[2] + Category.Sufixes.SUFIX_UN;
                     Category c1 = new Category(line[3], line[2] + Category.Sufixes.SUFIX_UN, path);
                     added = em.addCategory(c, c1);
+                    if(added) lc.add(c1);
 
+                    
                     path = path + "-" + line[4] + Category.Sufixes.SUFIX_CAT;
                     Category c2 = new Category(line[5], line[4] + Category.Sufixes.SUFIX_CAT, path);
                     added = em.addCategory(c1, c2);
-
+                    if(added) lc.add(c2);
+                    
                     path = path + "-" + line[6] + Category.Sufixes.SUFIX_SCAT;
                     Category c3 = new Category(line[7], line[6] + Category.Sufixes.SUFIX_SCAT, path);
                     added = em.addCategory(c2, c3);
+                    if(added) lc.add(c3);
                     
                     path = path + "-" + line[8] + Category.Sufixes.SUFIX_UB;
                     Category c4 = new Category(line[9], line[8] + Category.Sufixes.SUFIX_UB, path);
                     added = em.addCategory(c3, c4);
+                    if(added) lc.add(c4);
+                    
                 } catch (IllegalArgumentException ex) {
                     System.out.println("O formato das Categorias inválido na linha " + i + ".");
                 }
@@ -90,6 +102,15 @@ public class CSVCategoriesReader implements CategoriesReader {
         return em;
     }
 
+    /**
+     * Returns the number of Categories in the list of Categories.
+     * 
+     * @return the number of Categories that were read
+     */
+    public int getNumberOfCategoriesRead(){
+        return lc.size();
+    }
+    
     /**
      * Checks if the content of the file is valid - not null and has all the expected identifiers properly splitted.
      *
