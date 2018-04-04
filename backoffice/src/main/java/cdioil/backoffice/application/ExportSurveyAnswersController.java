@@ -1,4 +1,4 @@
-package cdioil.application;
+package cdioil.backoffice.application;
 
 import cdioil.application.utils.SurveyAnswersWriter;
 import cdioil.application.utils.SurveyAnswersWriterFactory;

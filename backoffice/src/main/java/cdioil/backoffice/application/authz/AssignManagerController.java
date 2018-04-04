@@ -1,4 +1,4 @@
-package cdioil.application.authz;
+package cdioil.backoffice.application.authz;
 
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;

@@ -1,6 +1,6 @@
 package cdioil.backoffice.webapp.admin;
 
-import cdioil.application.authz.AssignManagerController;
+import cdioil.backoffice.application.authz.AssignManagerController;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
