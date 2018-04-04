@@ -1,6 +1,10 @@
 package cdioil.domain;
 
+import cdioil.application.utils.AnswerEdge;
+import cdioil.application.utils.QuestionAnswerGraph;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +21,10 @@ import javax.persistence.OneToOne;
 public class Review implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * Constant that represents the index reference for the "real" question on the graph
+     */
+    private static final int QUESTION_INDEX_REFERENCE=0;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,7 +40,7 @@ public class Review implements Serializable {
     @OneToOne
     private Survey survey;
     private Product product;
-
+    private QuestionAnswerGraph answers;
     /**
      * Empty constructor of class Review
      */
@@ -86,7 +93,11 @@ public class Review implements Serializable {
      * @return Map with all questions and respective answers of the current Review
      */
     public Map<Question,Answer> getReviewQuestionAnswers(){
-        return null;
+        Map<Question,Answer> mapAnswers=new HashMap<>();
+        Iterator<AnswerEdge> iteratorAnswers=answers.edges().iterator();
+        iteratorAnswers.forEachRemaining((answer) -> {mapAnswers
+                .put(answers.endVertices(answer)[QUESTION_INDEX_REFERENCE],answer.getElement());});
+        return mapAnswers;
     }
     /**
      * Returns a string containing the review's data

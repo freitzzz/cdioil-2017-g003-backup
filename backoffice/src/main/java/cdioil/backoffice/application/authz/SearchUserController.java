@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.application.authz;
+package cdioil.backoffice.application.authz;
 
 import cdioil.domain.authz.*;
 import cdioil.persistence.impl.UserRepositoryImpl;

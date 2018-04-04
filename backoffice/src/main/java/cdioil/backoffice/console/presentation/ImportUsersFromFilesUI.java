@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.ImportUsersFromFilesController;
+import cdioil.backoffice.application.ImportUsersFromFilesController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.SystemUser;
 import java.util.List;

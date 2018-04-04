@@ -16,20 +16,8 @@
        <row expand="1">
         <column>
          <vaadin-vertical-layout width-auto height-full :center>
-          <vaadin-grid style-name="compact" _id="userTable" :center>
-           <table>
-            <colgroup>
-             <col column-id="email" sortable="false">
-            </colgroup>
-            <thead>
-             <tr default>
-              <th plain-text column-ids="email">Email</th>
-             </tr>
-            </thead>
-            <tbody></tbody>
-           </table>
-          </vaadin-grid>
-          <vaadin-button plain-text _id="confirmBtn" :center>
+          <vaadin-grid style-name="compact" data-item-type="java.lang.String" _id="userTable" :center></vaadin-grid>
+          <vaadin-button plain-text _id="confirmBtn">
             Add Manager 
           </vaadin-button>
          </vaadin-vertical-layout>

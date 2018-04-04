@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.authz.ListUsersController;
+import cdioil.backoffice.application.authz.ListUsersController;
 import cdioil.domain.authz.SystemUser;
 
 /**

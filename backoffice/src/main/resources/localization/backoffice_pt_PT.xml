@@ -45,14 +45,15 @@
 			<Message messageId = "option_import_categories" value = "Importar Categorias"/>
 			<Message messageId = "option_search_user_by_email" value = "Pesquisar Utilizador por Email"/>
 			<Message messageId = "option_remove_categories_from_manager" value = "Remover Categorias de um Gestor"/>
-                        <Message messageId = "option_associate_categories_to_manager" value = "Associar Categorias a um Gestor"/>
+            <Message messageId = "option_associate_categories_to_manager" value = "Associar Categorias a um Gestor"/>
 			<Message messageId = "option_list_categories_without_managers" value = "Listar Categorias sem Gestores"/>
 		</AdminMenuOptions>
 		
 		<ManagerMenuOptions>
 			<Message messageId = "option_import_questions" value = "Importar Questões para Novo Template"/>
-                        <Message messageId="option_export_survey_answers" value="Exportar Respostas de Um Inquérito"/>
-                </ManagerMenuOptions>
+            <Message messageId="option_export_survey_answers" value="Exportar Respostas de Um Inquérito"/>
+			<Message messageId="option_add_users_questionnaire" value="Adicionar Utilizadores a Inquérito"/>
+        </ManagerMenuOptions>
 	</MenuOptions>
 	
 </Messages>

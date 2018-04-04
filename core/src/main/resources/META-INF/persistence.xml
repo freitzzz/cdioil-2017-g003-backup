@@ -31,13 +31,13 @@
     <class>cdioil.domain.Contest</class>
     <class>cdioil.domain.Event</class>
     <class>cdioil.domain.Questionnaire</class>
-    <!--<class>cdioil.graph.Edge</class>
-    <class>cdioil.graph.Graph</class>
-    <class>cdioil.graph.Vertex</class>-->
     <class>cdioil.domain.MultipleChoiceQuestion</class>
     <class>cdioil.domain.MultipleChoiceAnswer</class>
     <class>cdioil.domain.QuantitativeQuestion</class>
     <class>cdioil.domain.QuantitativeAnswer</class>
+    <class>cdioil.application.utils.AnswerEdge</class>
+    <class>cdioil.application.utils.QuestionAnswerGraph</class>
+    <class>cdioil.application.utils.QuestionVertex</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
