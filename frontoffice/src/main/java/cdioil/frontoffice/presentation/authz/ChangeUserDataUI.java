@@ -1,6 +1,6 @@
 package cdioil.frontoffice.presentation.authz;
 
-import cdioul.frontoffice.application.authz.ChangeUserDataController;
+import cdioil.frontoffice.application.authz.ChangeUserDataController;
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.utils.Console;
 

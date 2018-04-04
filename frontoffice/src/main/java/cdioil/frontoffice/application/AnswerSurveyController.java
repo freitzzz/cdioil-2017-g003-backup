@@ -1,4 +1,4 @@
-package cdioil.application;
+package cdioil.frontoffice.application;
 
 public class AnswerSurveyController {
 }
