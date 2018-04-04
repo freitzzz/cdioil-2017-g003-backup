@@ -63,7 +63,7 @@ public class MainMenu {
                     System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    new AtribuirPerfilGestorUI();
+                    new AssignManagerUI();
                     break;
                 case 2:
                     new AddWhitelistUI();

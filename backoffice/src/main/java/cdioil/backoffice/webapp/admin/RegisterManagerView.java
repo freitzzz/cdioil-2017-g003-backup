@@ -1,6 +1,6 @@
 package cdioil.backoffice.webapp.admin;
 
-import cdioil.application.authz.AtribuirPerfilGestorController;
+import cdioil.application.authz.AssignManagerController;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -10,10 +10,10 @@ import java.util.List;
 
 public class RegisterManagerView extends RegisterManagerDesign implements View {
 
-    private AtribuirPerfilGestorController controller;
+    private AssignManagerController controller;
 
     public RegisterManagerView() {
-        controller = new AtribuirPerfilGestorController();
+        controller = new AssignManagerController();
         fillTables();
 
         confirmBtn.addClickListener(new Button.ClickListener() {
@@ -26,7 +26,7 @@ public class RegisterManagerView extends RegisterManagerDesign implements View {
                 if (email == null) {
                     //TODO display error
                 } else {
-                    controller.atribuirGestor(email);
+                    controller.assignManager(email);
                     //TODO Mensagem de sucesso
                 }
             }
@@ -36,7 +36,7 @@ public class RegisterManagerView extends RegisterManagerDesign implements View {
     private void fillTables() {
         userTable.setSelectionMode(Grid.SelectionMode.SINGLE);
 
-        List<String> emails = controller.getListaUsersRegistados();
+        List<String> emails = controller.registeredUsers();
 
         userTable.setItems(emails);
 

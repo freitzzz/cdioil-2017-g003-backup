@@ -11,69 +11,70 @@ import cdioil.persistence.impl.UserRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AtribuirPerfilGestorController {
+public class AssignManagerController {
 
     /**
-     * Implementação do Repositorio de SystemUsers
+     * UserRepository Implementation
      */
     private UserRepositoryImpl systemUserRepository;
 
     /**
-     * Implementação do Repositorio de Gestores
+     * Manager Repository Implementation
      */
-    private ManagerRepositoryImpl gestorRepository;
+    private ManagerRepositoryImpl managerRepository;
 
     /**
-     * Implementação do Repositório de Admins
+     * Admin Repository Implementatation
      */
     private AdminRepositoryImpl adminRepository;
 
     /**
-     * Construtor
+     * Constructor
      */
-    public AtribuirPerfilGestorController() {
+    public AssignManagerController() {
         this.systemUserRepository = new UserRepositoryImpl();
-        this.gestorRepository = new ManagerRepositoryImpl();
+        this.managerRepository = new ManagerRepositoryImpl();
         this.adminRepository = new AdminRepositoryImpl();
     }
 
     /**
-     * Procura todos os SystemUsers que nao sejam gestores ou admins
-     * @return lista de System Users
+     * Fetches a list of registered users
+     * @return arraylist with emails from registered users
      */
-    public ArrayList<String> getListaUsersRegistados() {
+    public ArrayList<String> registeredUsers() {
 
         // Lista de System user
         List<SystemUser> systemUsers =
                 (List<SystemUser>) systemUserRepository.findAll();
 
-        // Lista de gestores
-        List<Manager> gestores =
-                (List<Manager>) gestorRepository.findAll();
+        // Lista de managers
+        List<Manager> managers =
+                (List<Manager>) managerRepository.findAll();
 
         // Lista de admins
         List<Admin> admins =
                 (List<Admin>) adminRepository.findAll();
 
         /*
-        Contem todos os utilizadores que nao sao gestores nem admins
+        Contem todos os utilizadores que nao sao managers nem admins
          */
-        ArrayList<String> usersValidos = new ArrayList<>();
+        ArrayList<String> validUsers = new ArrayList<>();
 
         for (SystemUser su : systemUsers) {
-            if (!gestores.contains(su) && !admins.contains(su)) {
-                usersValidos.add(su.toString());
+            if (!managers.contains(su) && !admins.contains(su)) {
+                validUsers.add(su.toString());
             }
         }
 
-        return usersValidos;
+        return validUsers;
     }
 
+
     /**
-     * Através de um dado email, cria um Manager com o SystemUser associado
-     * @param email email do SystemUser pretendido
+     * From a given email, find a user and assigns it the role of manager
+     * @param email given email
      */
-    public void atribuirGestor(String email) {
+    public void assignManager(String email) {
         // Buscar SystemUser com email dado
         Email e = new Email(email);
         SystemUser su = systemUserRepository.findByEmail(e);
@@ -82,6 +83,6 @@ public class AtribuirPerfilGestorController {
         Manager g = new Manager(su);
 
         // Persiste
-        gestorRepository.add(g);
+        managerRepository.add(g);
     }
 }

@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.authz.AtribuirPerfilGestorController;
+import cdioil.application.authz.AssignManagerController;
 import cdioil.backoffice.utils.Console;
 
 import javax.persistence.NoResultException;
@@ -8,41 +8,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Atribui um perfil de Gestor a um utilizador registado
+ * Assigns a Manager role to a system user
  */
-public class AtribuirPerfilGestorUI {
+public class AssignManagerUI {
 
     /**
      * Controller
      */
-    private AtribuirPerfilGestorController controller;
+    private AssignManagerController controller;
 
     /**
-     * Separador
+     * Console line separator
      */
     private static final String LINE_SEPARATOR =
             "==========================================";
 
     /**
-     * Máximo de users mostrados por página
+     * Max users per page
      */
-    private static final int MAX_USERS_PAGINA = 10;
+    private static final int MAX_USERS_PAGE = 10;
 
     /**
-     * Construtor
+     * Constructor
      */
-    public AtribuirPerfilGestorUI() {
-        controller = new AtribuirPerfilGestorController();
+    public AssignManagerUI() {
+        controller = new AssignManagerController();
 
-        mostrarMenu();
+        showMenu();
     }
 
     /**
-     * Menu Principal da User Storie
+     * Shows the main menu
      */
-    private void mostrarMenu() {
+    private void showMenu() {
 
-        int opcao = -1;
+        int option = -1;
 
         while (true) {
             System.out.println(LINE_SEPARATOR);
@@ -54,15 +54,15 @@ public class AtribuirPerfilGestorUI {
             System.out.println("3 - Sair");
             System.out.println(LINE_SEPARATOR);
 
-            opcao = Console.readInteger("Opção");
+            option = Console.readInteger("Opção");
 
-            switch (opcao) {
+            switch (option) {
                 case 1:
-                    mostrarListaUtilizadoresRegistados();
+                    showListOfRegisteredUsers();
                     break;
                 case 2:
                     try {
-                        atribuirGestor();
+                        assignManager();
                     } catch (IllegalArgumentException e) {
                         System.out.println(LINE_SEPARATOR);
                         System.out.println("ERRO: Email inválido!");
@@ -72,6 +72,7 @@ public class AtribuirPerfilGestorUI {
                     }
                     break;
                 case 3:
+                    // Do nothing
                     return;
                 default:
                     System.out.println(LINE_SEPARATOR);
@@ -83,52 +84,52 @@ public class AtribuirPerfilGestorUI {
     }
 
     /**
-     * Mostra na consola uma lista de utilizadores registados
-     * A lista apresentada nao contem contas de System user associadas
-     * a gestores ou admins
+     * Prints a list of registered users
+     * Only SystemUsers are shown. If a user is an admin or a manager, it's email
+     * is not printed.
      */
-    private void mostrarListaUtilizadoresRegistados() {
+    private void showListOfRegisteredUsers() {
         // Get lista users
-        ArrayList<String> listaUsers = getListaUsersRegistados();
-        if (listaUsers.isEmpty()) {
+        ArrayList<String> userList = getRegisteredUsersLists();
+        if (userList.isEmpty()) {
             System.out.println("ERRO: Não há utilizadores registados!");
             return;
         }
 
-        final int numeroUsers = listaUsers.size();
-        final int numeroPaginas = numeroPaginas(numeroUsers);
+        final int nUsers = userList.size();
+        final int nPages = numberOfPages(nUsers);
 
         int currentPage = 1;
-        int opcao = -1;
-        List<String> usersPagina = null;
+        int option = -1;
+        List<String> usersPage = null;
 
         System.out.println(LINE_SEPARATOR);
         System.out.println("Lista Utilizadores");
         System.out.println(LINE_SEPARATOR);
 
         while (true) {
-            int idxInicial = MAX_USERS_PAGINA * (currentPage - 1);
-            int idxFinal = idxInicial + MAX_USERS_PAGINA;
+            int idxInicial = MAX_USERS_PAGE * (currentPage - 1);
+            int idxFinal = idxInicial + MAX_USERS_PAGE;
 
-            if (idxFinal > numeroUsers) {
-                idxFinal = numeroUsers - 1;
+            if (idxFinal > nUsers) {
+                idxFinal = nUsers - 1;
             }
 
-            usersPagina = listaUsers.subList(idxInicial, idxFinal + 1);
+            usersPage = userList.subList(idxInicial, idxFinal + 1);
 
-            for (String user : usersPagina) {
+            for (String user : usersPage) {
                 System.out.println(user);
             }
 
             System.out.println(LINE_SEPARATOR);
-            System.out.println(String.format("Página %d/%d", currentPage, numeroPaginas));
+            System.out.println(String.format("Página %d/%d", currentPage, nPages));
             System.out.println("Introduza '0' para sair da vista de utilizadores");
-            opcao = Console.readInteger("Ir para página: ");
+            option = Console.readInteger("Ir para página: ");
 
-            if (opcao == 0) {
+            if (option == 0) {
                 return;
-            } else if (opcao >= 1 && opcao <= numeroPaginas) {
-                currentPage = opcao;
+            } else if (option >= 1 && option <= nPages) {
+                currentPage = option;
                 continue;
             } else {
                 System.out.println("ERRO: Introduza uma página valida.");
@@ -139,29 +140,28 @@ public class AtribuirPerfilGestorUI {
     }
 
     /**
-     *
-     * @return Lista com os nomes de todos os utilizadores registados
-     * que nao sejam admins/gestores
+     * Gets a list of registered users
+     * @return ArrayList
      */
-    private ArrayList<String> getListaUsersRegistados() {
-        return controller.getListaUsersRegistados();
+    private ArrayList<String> getRegisteredUsersLists() {
+        return controller.registeredUsers();
     }
 
     /**
-     * Conta o numero de paginas necessario para mostrar todos os users
-     * @param numeroUsers numero users total
-     * @return numero de paginas necessario
+     * Number of pages needed to show all users
+     * @param nUsers total number of users
+     * @return number of pages needed
      */
-    private int numeroPaginas(int numeroUsers) {
-        return numeroUsers / MAX_USERS_PAGINA + 1;
+    private int numberOfPages(int nUsers) {
+        return nUsers / MAX_USERS_PAGE + 1;
     }
 
     /**
-     * Atribui um gestor a um utilizador registado
+     * Assigns a manager role to a SystemUser
      */
-    private void atribuirGestor() {
+    private void assignManager() {
         String email = Console.readLine("Introduza o email desejado");
 
-        controller.atribuirGestor(email);
+        controller.assignManager(email);
     }
 }
