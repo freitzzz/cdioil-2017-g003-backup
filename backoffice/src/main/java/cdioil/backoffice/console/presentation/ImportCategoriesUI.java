@@ -5,7 +5,7 @@
  */
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.ImportCategoriesController;
+import cdioil.backoffice.application.ImportCategoriesController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.MarketStructure;
 

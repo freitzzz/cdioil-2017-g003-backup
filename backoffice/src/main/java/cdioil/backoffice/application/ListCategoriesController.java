@@ -1,4 +1,4 @@
-package cdioil.application;
+package cdioil.backoffice.application;
 
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;

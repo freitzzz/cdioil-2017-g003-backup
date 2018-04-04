@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.application.utils.QuestionAnswerGraph;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
@@ -7,7 +8,6 @@ import cdioil.domain.authz.Password;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
-import cdioil.graph.Graph;
 import cdioil.time.TimePeriod;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ public class QuestionnaireTest {
     private String description;
     private UsersGroup gu;
     private TimePeriod timePeriod;
-    private Graph<Question, Answer> graph;
+    private QuestionAnswerGraph graph;
 
     @Before
     public void setUp() {
@@ -50,7 +50,7 @@ public class QuestionnaireTest {
         LocalTime t2 = LocalTime.of(10, 10, 10);
         LocalDateTime dt2 = LocalDateTime.of(d2, t2);
         timePeriod = new TimePeriod(dt, dt2);
-        graph = new Graph(true);
+        graph = new QuestionAnswerGraph(true);
     }
 
     /**
@@ -153,7 +153,7 @@ public class QuestionnaireTest {
      * @return instance of the Contest
      */
     private Questionnaire createQuestionnaire(String title, String description, UsersGroup gu,
-            TimePeriod timePeriod, Graph<Question, Answer> graph) {
+            TimePeriod timePeriod, QuestionAnswerGraph graph) {
         try {
             return new Questionnaire(title, description, gu, timePeriod, graph);
         } catch (IllegalArgumentException e) {

@@ -1,10 +1,8 @@
 package cdioil.backoffice.webapp.admin;
 
-import cdioil.application.authz.AssignManagerController;
-import com.vaadin.data.provider.ListDataProvider;
+import cdioil.backoffice.application.authz.AssignManagerController;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
 
 import java.util.Iterator;
 import java.util.List;

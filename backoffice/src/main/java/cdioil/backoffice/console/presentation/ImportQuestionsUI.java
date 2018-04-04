@@ -5,7 +5,7 @@
  */
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.ImportQuestionsController;
+import cdioil.backoffice.application.ImportQuestionsController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.Question;
 import java.util.List;

@@ -1,7 +1,7 @@
 package cdioil.frontoffice.presentation.authz;
 
 
-import cdioil.application.authz.RegistarUtilizadorController;
+import cdioul.frontoffice.application.authz.RegistarUtilizadorController;
 import cdioil.frontoffice.utils.Console;
 
 public class RegistarUtilizadorUI {
