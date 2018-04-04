@@ -60,11 +60,15 @@ public class CategoryManagementController {
      * @return true if they were removed with success, false if otherwise
      */
     public boolean removeCategories(String identifier) {
-        //=======================================
-        //TODO implement findByIdentifier method
-        //=======================================
-        //return manager.removeCategories(marketStructRepo.findByIdentifier(identifier));
-        return true;
+        if (manager.removeCategories(new MarketStructureRepositoryImpl().
+                findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier.toUpperCase() + REGEX_SUFIX)) != false) {
+            Manager managerY = new ManagerRepositoryImpl().merge(manager);
+            if (managerY != null) {
+                manager = managerY;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
