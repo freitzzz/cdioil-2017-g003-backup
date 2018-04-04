@@ -18,18 +18,34 @@ import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 public class ImportCategoriesController {
 
     /**
+     * Instance of CategoriesReader to read the file.
+     */
+    CategoriesReader categoriesReader;
+
+    /**
      * Imports a list of Categories from a file.
      *
      * @param file Path of the file
      * @return a list with the readCategories Categories. Null if the file is not valid
      */
     public MarketStructure readCategories(String file) {
-        CategoriesReader categoriesReader = CategoriesReaderFactory.create(file);
+        categoriesReader = CategoriesReaderFactory.create(file);
 
-        if (categoriesReader != null){
+        if (categoriesReader != null) {
             MarketStructure em = categoriesReader.readCategories();
-            if (new MarketStructureRepositoryImpl().merge(em) != null) return em;
+            if (new MarketStructureRepositoryImpl().merge(em) != null) {
+                return em;
+            }
         }
         return null;
+    }
+
+    /**
+     * Returns the number of Categories in the list of Categories.
+     *
+     * @return the number of Categories that were read
+     */
+    public int getNumberOfCategoriesRead() {
+        return categoriesReader.getNumberOfCategoriesRead();
     }
 }

@@ -20,4 +20,12 @@ public interface CategoriesReader {
      * @return Market Structure with the Categories that were read
      */
     public abstract MarketStructure readCategories();
+
+    /**
+     * Returns the number of Categories in the list of Categories.
+     *
+     * @return the number of Categories that were read
+     */
+    public abstract int getNumberOfCategoriesRead();
+
 }
