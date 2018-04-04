@@ -40,7 +40,7 @@ public class Survey implements Serializable{
     /**
      * Question and Answer graph.
      */
-    //@OneToOne
+    @OneToOne
     private Graph<Question,Answer> graph;
 
     /**
