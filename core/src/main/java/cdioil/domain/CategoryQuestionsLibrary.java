@@ -118,11 +118,6 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesCategoryExist(category)) {
             return false;
         }
-//        for(Category key : library.keySet()) {
-//            if (!(key.equals(category)) && library.get(key).containsQuestion(question)) {
-//                return false;
-//            }
-//        }
         if (!doesQuestionExist(question, category)) {
             return library.get(category).addQuestion(question);
         }
@@ -159,7 +154,6 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
         }
         return library.get(category).containsQuestion(question);
     }
-
     /**
      * CategoryQuestionsLibrary's hash code.
      *

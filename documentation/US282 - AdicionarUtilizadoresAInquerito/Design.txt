@@ -1,0 +1,11 @@
+	_________
+
+	DESIGN
+	_________
+
+
+
+
+   	Classes do domínio: Questionnaire, UserGroup
+   	Controller: AddUsersQuestionnaireController
+   	Repository: EventRepository, RegisteredUserRepository, WhitelistReposiotry

@@ -16,6 +16,8 @@ public class Survey implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
+    private LocalDateTime endingDate;
+
     @Version
     private Long version;
 
@@ -40,7 +42,7 @@ public class Survey implements Serializable{
     /**
      * Question and Answer graph.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private QuestionAnswerGraph graph;
 
     /**
@@ -49,7 +51,7 @@ public class Survey implements Serializable{
      * @param itemList list of products or categories the survey is associated to
      * @param date  date when the survey was done
      */
-    public Survey(List<SurveyItem> itemList, LocalDateTime date) {
+    public Survey(List<SurveyItem> itemList, LocalDateTime date, LocalDateTime endingDate) {
         if (itemList == null) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
@@ -60,6 +62,7 @@ public class Survey implements Serializable{
         this.itemList = itemList;
         this.graph = new QuestionAnswerGraph(true);     //Directed Graph
         this.surveyDate = date;
+        this.endingDate = endingDate;
     }
     
     protected Survey(){

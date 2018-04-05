@@ -21,7 +21,7 @@ public class AnswerSurveyMain {
         Product p = new Product("Red Wine", new EAN("123123332"));
 
         List<SurveyItem> itemList = Arrays.asList(p);
-        Survey s = new Survey(itemList, LocalDateTime.now());
+        Survey s = new Survey(itemList, LocalDateTime.now(), LocalDateTime.now());
 
         Question q1 =
                 new BinaryQuestion("Did you enjoy this product?", "Q1");

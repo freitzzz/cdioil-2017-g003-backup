@@ -37,7 +37,7 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
      */
     @Override
     public List<RegisteredUser> getUsersByDomain(String domain) {
-        Query q = entityManager().createQuery("SELECT u FROM RegisteredUser r WHERE r.su.email LIKE :pattern");
+        Query q = entityManager().createQuery("SELECT r FROM RegisteredUser r WHERE r.su.email.email LIKE :pattern");
         q.setParameter("pattern", "%@" + domain);
         if (q.getResultList().isEmpty()) {
             return null;

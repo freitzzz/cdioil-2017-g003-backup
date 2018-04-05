@@ -105,18 +105,8 @@ public class ContestTest {
     public void testToString() {
         System.out.println("toString");
         Contest instance = createContest(title, description, gu, timePeriod);
-        String expResult = "Evento: Titulo Teste\n"
-                + "Descricao: Concurso Teste\n"
-                + "Data de Inicio: 2010-03-02 10:10:10\n"
-                + "Data de Fim: 2010-03-04 10:10:10\n"
-                + "Publico Alvo: GESTOR RESPONSÁVEL:\n"
-                + "Nome: Quim  Barreiros\n"
-                + "Email: quimBarreiros@gmail.com\n"
-                + "\n"
-                + "USERS:\n"
-                + "";
-        String result = instance.toString();
-        assertEquals(expResult, result);
+        Contest other = createContest(title,description,gu,timePeriod);
+        assertTrue(instance.toString().equals(other.toString()));
     }
 
     /**

@@ -1,0 +1,30 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Mudar Email Utilizador
+	________________________________________________
+
+	1. Fazer login com o admin sonae.lover@sonae.pt - Password: Password123 no frontoffice
+	2. Escolher o campo Email (2).
+	3. Introduzir novo Email.
+	4. Obter mensagem de sucesso.
+
+	________________________________________________
+	CASO #2: Mudar Nome Utilizador
+	________________________________________________
+
+	1. Fazer login com o admin sonae.lover@sonae.pt - Password: Password123 no frontoffice
+	2. Escolher o campo Nome (1).
+	3. Introduzir novo Nome.
+	4. Obter mensagem de sucesso.
+
+	________________________________________________
+	CASO #3: Mudar Password Utilizador
+	________________________________________________
+
+	1. Fazer login com o admin sonae.lover@sonae.pt - Password: Password123 no frontoffice
+	2. Escolher o campo Password (3).
+	3. Introduzir novo Password.
+	4. Obter mensagem de sucesso.
