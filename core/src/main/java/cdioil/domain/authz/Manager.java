@@ -29,6 +29,8 @@ import javax.persistence.Version;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER"}))
 public class Manager implements Serializable, Identifiable<Email> {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue
     @Column(name = "MANAGER_ID")

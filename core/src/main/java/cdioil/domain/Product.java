@@ -2,6 +2,7 @@ package cdioil.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -75,13 +76,16 @@ public class Product implements Serializable,SurveyItem {
      * @param codes 0 or more codes
      */
     public Product(String name, Code code, Code... codes) {
+        
+        if(name == null || code == null || name.trim().isEmpty()){
+            throw new IllegalArgumentException("Invalid parameters.");
+        }
+        
         this.name = name;
 
         this.codes.add(code);
 
-        for (Code cod : codes) {
-            this.codes.add(cod);
-        }
+        this.codes.addAll(Arrays.asList(codes));
 
         this.productImage = new Image(IMAGEM_PRODUTO_DEFAULT.getBytes());
     }
@@ -163,10 +167,7 @@ public class Product implements Serializable,SurveyItem {
         }
         final Product other = (Product) obj;
 
-        if (!Objects.equals(this.codes, other.codes)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.codes, other.codes);
     }
 
 }

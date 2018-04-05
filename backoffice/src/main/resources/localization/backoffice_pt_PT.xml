@@ -48,12 +48,14 @@
             <Message messageId = "option_associate_categories_to_manager" value = "Associar Categorias a um Gestor"/>
 			<Message messageId = "option_list_categories_without_managers" value = "Listar Categorias sem Gestores"/>
 		</AdminMenuOptions>
-		
+
 		<ManagerMenuOptions>
 			<Message messageId = "option_import_questions" value = "Importar Questões sobre categorias"/>
             <Message messageId="option_export_survey_answers" value="Exportar Respostas de Um Inquérito"/>
 			<Message messageId="option_add_users_questionnaire" value="Adicionar Utilizadores a Inquérito"/>
+			<Message messageId="option_create_survey" value="Criar Inquérito"/>
         </ManagerMenuOptions>
+
 	</MenuOptions>
 	
 </Messages>

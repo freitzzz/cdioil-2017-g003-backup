@@ -8,4 +8,4 @@
 
    	Classes do domínio:  Survey, Review, Question, Answer
    	Controlador: ExportSurveyAnswersController
-   	Repository: ReviewRepository
+   	Repository: ReviewRepository,SurveyRepository

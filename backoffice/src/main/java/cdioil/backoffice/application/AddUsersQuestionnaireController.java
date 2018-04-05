@@ -1,11 +1,13 @@
-package cdioil.application;
+package cdioil.backoffice.application;
 
 import cdioil.domain.Questionnaire;
+import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Name;
+import cdioil.domain.authz.Password;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.Whitelist;
 import cdioil.persistence.BaseJPARepository;
-import cdioil.persistence.EventRepository;
-import cdioil.persistence.RegisteredUserRepository;
 import cdioil.persistence.impl.EventRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
@@ -37,7 +39,7 @@ public class AddUsersQuestionnaireController {
      * @return list of questionnaires
      */
     public List<Questionnaire> getQuestionnaires() {
-        EventRepository repo = new EventRepositoryImpl();
+        EventRepositoryImpl repo = new EventRepositoryImpl();
         List<Questionnaire> lq = repo.getQuestionnaires();
         return lq;
     }
@@ -60,16 +62,21 @@ public class AddUsersQuestionnaireController {
      * @return list of users
      */
     public List<RegisteredUser> getUsersByDomain(String domain) {
-        RegisteredUserRepository repo = new RegisteredUserRepositoryImpl();
-        return repo.getUsersByDomain(domain);
+        RegisteredUserRepositoryImpl repo = new RegisteredUserRepositoryImpl();
+        users = repo.getUsersByDomain(domain);
+        return users;
     }
 
     /**
      * Adds the users to the questionnaire
      *
      * @param questionnaire questionnaire to add users to
+     * @return true if users were added successfully, false if not
      */
     public boolean addUsersQuestionnaire(Questionnaire questionnaire) {
-        return questionnaire.addUsersToGroup(users);
+        boolean b = questionnaire.addUsersToGroup(users);
+        EventRepositoryImpl repo = new EventRepositoryImpl();
+        repo.merge(questionnaire);
+        return b;
     }
 }
