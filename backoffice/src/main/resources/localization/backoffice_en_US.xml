@@ -51,8 +51,9 @@
 		
 		<ManagerMenuOptions>
 			<Message messageId = "option_import_questions" value = "Import Questions for New Template"/>
-                        <Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
-                </ManagerMenuOptions>
+			<Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
+			<Message messageId="option_create_survey" value="Create Survey"/>
+		</ManagerMenuOptions>
 	</MenuOptions>
 	
 </Messages>
