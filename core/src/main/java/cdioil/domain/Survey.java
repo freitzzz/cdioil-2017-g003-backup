@@ -40,7 +40,7 @@ public class Survey implements Serializable{
     /**
      * Question and Answer graph.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private QuestionAnswerGraph graph;
 
     /**
