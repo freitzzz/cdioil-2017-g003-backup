@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author Ana Guerra (1161191)
  */
-public class CSVQuestoesReader implements QuestoesReader {
+public class CSVQuestionsReader implements QuestionsReader {
 
     /**
      * Nome do ficheiro a ler.
@@ -97,13 +97,13 @@ public class CSVQuestoesReader implements QuestoesReader {
      *
      * @param filename Nome do ficheiro a ler
      */
-    public CSVQuestoesReader(String filename) {
+    public CSVQuestionsReader(String filename) {
         this.file = new File(filename);
         lq = new LinkedList<>();
     }
 
     @Override
-    public int readQuestoes(GlobalLibrary globalLibrary) {
+    public int readQuestions(GlobalLibrary globalLibrary) {
         List<String> fileContent = readFile(file);
         if (!isFileValid(fileContent)) {
             return 2;

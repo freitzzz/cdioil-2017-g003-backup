@@ -5,10 +5,10 @@
  */
 package cdioil.backoffice.application;
 
-import cdioil.application.utils.QuestoesReader;
-import cdioil.application.utils.QuestoesReaderFactory;
+import cdioil.application.utils.QuestionsReaderFactory;
 import cdioil.domain.GlobalLibrary;
 import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
+import cdioil.application.utils.QuestionsReader;
 
 /**
  * Controlador relativo ao caso de uso Importar Questoes através de ficheiros (US-210).
@@ -26,9 +26,9 @@ public class ImportQuestionsController {
      * @return a lista de questoes lidas. Null se o ficheiro for inválido
      */
     public int lerFicheiro(String filename) {
-        QuestoesReader questionsReader = QuestoesReaderFactory.create(filename);
+        QuestionsReader questionsReader = QuestionsReaderFactory.create(filename);
         if (questionsReader != null){
-            int cql = questionsReader.readQuestoes(globalLibrary);
+            int cql = questionsReader.readQuestions(globalLibrary);
             if (new GlobalLibraryRepositoryImpl().merge(globalLibrary) != null) return cql ;
         }
         return 1;
