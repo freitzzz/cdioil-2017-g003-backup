@@ -1,8 +1,11 @@
 package cdioil.backoffice.webapp.admin;
 
+import cdioil.backoffice.webapp.authz.LoginView;
 import cdioil.backoffice.webapp.utils.ImageUtils;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -33,9 +36,21 @@ public class AdminPanelView extends AdminPanelDesign implements View {
 
         loadImages();
 
+        setButtonIcons();
+
         leftPanelActionListeners();
 
         wipComponent = wipView;
+    }
+
+    private void setButtonIcons() {
+        btnDashboard.setIcon(VaadinIcons.DASHBOARD);
+        btnAddManager.setIcon(VaadinIcons.CLIPBOARD_USER);
+        btn3.setIcon(VaadinIcons.USERS);
+        btn4.setIcon(VaadinIcons.BAR_CHART);
+        btn5.setIcon(VaadinIcons.COG);
+        btnConta.setIcon(VaadinIcons.USER_CARD);
+        btnLogout.setIcon(VaadinIcons.CLOSE_CIRCLE);
     }
 
     private void loadImages() {
@@ -44,7 +59,7 @@ public class AdminPanelView extends AdminPanelDesign implements View {
     }
 
     private void leftPanelActionListeners() {
-        btnHome.addClickListener(new Button.ClickListener() {
+        btnDashboard.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 rightPanel.setContent(wipComponent);
@@ -72,6 +87,12 @@ public class AdminPanelView extends AdminPanelDesign implements View {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 rightPanel.setContent(wipComponent);
+            }
+        });
+        btnLogout.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                navigator.navigateTo(LoginView.VIEW_NAME);
             }
         });
     }

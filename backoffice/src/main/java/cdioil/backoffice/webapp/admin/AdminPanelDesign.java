@@ -25,7 +25,7 @@ public class AdminPanelDesign extends CssLayout {
     protected Panel panelManager;
     protected Image imgManager;
     protected Label lblName;
-    protected Button btnHome;
+    protected Button btnDashboard;
     protected Button btnAddManager;
     protected Button btn3;
     protected Button btn4;
