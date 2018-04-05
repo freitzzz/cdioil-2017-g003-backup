@@ -5,8 +5,9 @@
 
 	USER STORY DE SPRINT #2
 	
-	* Como Administrador, quero poder associar um Gestor a uma categoria, incluindo eventualmente alguns filhos.
-	  Quero poder indicar as categorias e respetivos filhos usando expressões regulares.
+	* Como Administrador, quero listar as categorias sem gestores associados.12
+
+
 	______________________
 
 	REGRAS DE NEGÓCIO
@@ -15,9 +16,12 @@
 
 	--------------------------------------------------------------
 
+
+
 	______________________
 		
 	TESTES UNITÁRIOS
 	_____________________
 
-	* Todos os testes da classe ManagerTest.
+	* Classe ManagerTest : testIsAssociatedWithCategory()
+	* Classe MarketStructureTest : testGetAllCategories()

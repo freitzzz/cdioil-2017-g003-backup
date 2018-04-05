@@ -37,7 +37,7 @@ public class SurveyTest {
     @Before
     public void setUp() {
         data = LocalDateTime.of(0, Month.MARCH, 2, 0, 0, 0);
-        this.i = new Survey(new ArrayList<>(), data);
+        this.i = new Survey(new ArrayList<>(), data,LocalDateTime.now());
     }
 
     @After
@@ -49,7 +49,7 @@ public class SurveyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullItemListThrowsException() {
-        new Survey(null, data);
+        new Survey(null,data, LocalDateTime.now());
     }
 
     /**
@@ -57,7 +57,7 @@ public class SurveyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullDateThrowsException() {
-        new Survey(new ArrayList<>(), null);
+        new Survey(new ArrayList<>(), null, LocalDateTime.now());
     }
 
     /**
@@ -66,7 +66,7 @@ public class SurveyTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Survey outro = new Survey(new ArrayList<>(), data);
+        Survey outro = new Survey(new ArrayList<>(), data, LocalDateTime.now());
 
         assertEquals(i.hashCode(), outro.hashCode());
     }
@@ -80,8 +80,8 @@ public class SurveyTest {
         assertNotEquals("Objeto null não é igual", null, i);
         ArrayList<SurveyItem> al = new ArrayList<>();
         al.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
-        assertNotEquals("Instância de Inquerito diferente", new Survey(al, data), i);
-        assertEquals("Instância de Inquerito igual", new Survey(new ArrayList<>(), data), i);
+        assertNotEquals("Instância de Inquerito diferente", new Survey(al, data, LocalDateTime.now()), i);
+        assertEquals("Instância de Inquerito igual", new Survey(new ArrayList<>(), data, LocalDateTime.now()), i);
         assertEquals("Compare same instance", i, i);
         assertNotEquals("Instances of different classes", i, "bananas");
     }
@@ -92,7 +92,7 @@ public class SurveyTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Survey s = new Survey(new ArrayList<>(), data);
+        Survey s = new Survey(new ArrayList<>(), data, LocalDateTime.now());
         assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", i.toString(),
                 s.toString());
 

@@ -5,8 +5,8 @@
 
 	USER STORY DE SPRINT #2
 	
-	* Como Administrador, quero poder associar um Gestor a uma categoria, incluindo eventualmente alguns filhos.
-	  Quero poder indicar as categorias e respetivos filhos usando expressões regulares.
+	* Como Utilizador, pretendo rectificar os meus dados pessoais (e.g. nome, email) para os manter sempre atualizados
+
 	______________________
 
 	REGRAS DE NEGÓCIO
@@ -15,9 +15,11 @@
 
 	--------------------------------------------------------------
 
+
+
 	______________________
 		
 	TESTES UNITÁRIOS
 	_____________________
 
-	* Todos os testes da classe ManagerTest.
+	* Classe SystenUserTest : testChangeUserDataField()

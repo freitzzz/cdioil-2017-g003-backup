@@ -6,20 +6,22 @@
 package cdioil.application.utils;
 
 import cdioil.domain.GlobalLibrary;
+import cdioil.domain.authz.Manager;
 
 /**
- * Interface que permite a leitura de questoes.
+ * Interface for reading questions from files.
  * 
  * @author Ana Guerra (1161191)
  */
-public interface QuestoesReader {
+public interface QuestionsReader {
     
     /**
-     * Importa questoes de um ficheiro de um determinado formato.
+     * Imports questions from a file.
      *
      * @param globalLibrary
+     * @param manager
      * @return A biblioteca de Questoesde uma dada categoria
      */
-    public abstract int readQuestoes(GlobalLibrary globalLibrary);
+    int readQuestions(GlobalLibrary globalLibrary, Manager manager);
     
 }

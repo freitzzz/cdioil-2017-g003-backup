@@ -33,20 +33,20 @@ public class GlobalLibrary implements Serializable {
     /**
      * Library that contains all questions related to categories.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private CategoryQuestionsLibrary catQuestionsLibrary;
 
     /**
      * Library that contains all questions related to products.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private ProductQuestionsLibrary prodQuestionsLibrary;
 
     /**
      * Library that contains all questions that aren't related to categories or
      * products.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private IndependentQuestionsLibrary indQuestionsLibrary;
 
     /**

@@ -50,10 +50,17 @@
 		</AdminMenuOptions>
 		
 		<ManagerMenuOptions>
+<<<<<<< HEAD
 			<Message messageId = "option_import_questions" value = "Import Questions for New Template"/>
+			<Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
+			<Message messageId="option_create_survey" value="Create Survey"/>
+		</ManagerMenuOptions>
+=======
+			<Message messageId = "option_import_questions" value = "Import Questions about a Category"/>
             <Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
 			<Message messageId="option_add_users_questionnaire" value="Add Users to Questionnaire"/>
         </ManagerMenuOptions>
+>>>>>>> f815901a3bd5b4b6687fb22c375426582b2830e8
 	</MenuOptions>
 	
 </Messages>

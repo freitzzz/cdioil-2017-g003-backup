@@ -7,21 +7,21 @@ package cdioil.application.utils;
 
 
 /**
- * Factory de QuestoesReader.
+ * Factory de QuestionsReader.
  * 
  * @author Ana Guerra (1161191)
  */
-public final class QuestoesReaderFactory {
+public final class QuestionsReaderFactory {
 
     /**
-     * Cria uma instância de QuestoesReader de acordo com o formato do ficheiro a ler.
+     * Cria uma instância de QuestionsReader de acordo com o formato do ficheiro a ler.
      *
      * @param filename Nome do ficheiro a ler
-     * @return uma instância de QuestoesReader
+     * @return uma instância de QuestionsReader
      */
-    public static QuestoesReader create(String filename) {
+    public static QuestionsReader create(String filename) {
         if (filename.endsWith((CommonFileExtensions.CSV_EXTENSION))) {
-            return new CSVQuestoesReader(filename);
+            return new CSVQuestionsReader(filename);
         }
         return null;
     }
@@ -29,7 +29,7 @@ public final class QuestoesReaderFactory {
     /**
      * Esconde o construtor privado
      */
-    private QuestoesReaderFactory() {
+    private QuestionsReaderFactory() {
     }
     
 }

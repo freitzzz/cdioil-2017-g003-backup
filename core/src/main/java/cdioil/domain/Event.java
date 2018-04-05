@@ -5,12 +5,17 @@ import cdioil.time.TimePeriod;
 import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 /**
  * Abstract class that represents Events.
@@ -30,7 +35,12 @@ public abstract class Event implements Serializable {
      * Database ID.
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "EVENT_ID")
     private Long id;
+    
+    @Version
+    private Long version;
 
     /**
      * Event's title.
@@ -45,7 +55,7 @@ public abstract class Event implements Serializable {
     /**
      * Event's target audience.
      */
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private UsersGroup targetAudience;
 
     /**
@@ -125,7 +135,7 @@ public abstract class Event implements Serializable {
     @Override
     public String toString() {
         return "Evento: " + title + "\nDescricao: " + description + "\n"
-                + timePeriod.toString() + "\nPublico Alvo: " + targetAudience.toString();
+                + timePeriod.toString() + "\nPublico Alvo: " + targetAudience;
     }
 
     /**
@@ -139,7 +149,7 @@ public abstract class Event implements Serializable {
             return false;
         }
         for (RegisteredUser u : users) {
-            this.targetAudience.addUser(null);
+            this.targetAudience.addUser(u);
         }
         return true;
     }

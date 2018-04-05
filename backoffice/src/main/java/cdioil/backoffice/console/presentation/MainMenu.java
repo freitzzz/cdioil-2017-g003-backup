@@ -34,6 +34,7 @@ public class MainMenu {
 
     private final String OPTION_IMPORT_QUESTIONS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions");
     private static final String OPTION_EXPORT_SURVEY_ANSWERS=BackOfficeLocalizationHandler.getInstance().getMessageValue("option_export_survey_answers");
+    public static final String OPTION_CREATE_SURVEY = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_create_survey");
     
     /* ==============
         ADMIN
@@ -114,7 +115,7 @@ public class MainMenu {
                     System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    new ImportQuestionsUI();
+                    new ImportQuestionsUI(gestor);
                     break;
                 case 2:
                     new ChangeLanguageUI();
@@ -124,6 +125,9 @@ public class MainMenu {
                     break;
                 case 4:
                     new AddUsersQuestionnaireUI().addUsersQuestionnaire();
+                    break;
+                case 5:
+                    //new CreateSurveyUI();
                     break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);
@@ -141,6 +145,7 @@ public class MainMenu {
         System.out.println("2. " + OPTION_CHANGE_LANGUAGE);
         System.out.println("3. " + OPTION_EXPORT_SURVEY_ANSWERS);
         System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
+        System.out.println("5. " + OPTION_CREATE_SURVEY);
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);
