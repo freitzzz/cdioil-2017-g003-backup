@@ -32,4 +32,18 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + identifierPattern + "'", Category.class);
         return (List<Category>) queryRegexed.getResultList();
     }
+    
+    /**
+     * Method that finds all categories with a certain path pattern
+     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
+     *
+     * @param pathPattern String with the path pattern to search
+     * @return List with all categories found, or null if an error occured
+     */
+    public List<Category> findCategoriesByPathPattern(String pathPattern) {
+        EntityManager em = entityManager();
+        Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + pathPattern + "'", Category.class);
+        if((List<Category>) queryRegexed.getResultList()==null) return null;
+        return (List<Category>) queryRegexed.getResultList();
+    }
 }

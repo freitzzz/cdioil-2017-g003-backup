@@ -114,7 +114,7 @@ public class MainMenu {
                     System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    new ImportQuestionsUI();
+                    new ImportQuestionsUI(gestor);
                     break;
                 case 2:
                     new ChangeLanguageUI();

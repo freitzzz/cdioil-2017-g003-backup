@@ -20,7 +20,7 @@ public class ImportCategoriesController {
     /**
      * Instance of CategoriesReader to read the file.
      */
-    CategoriesReader categoriesReader;
+    private CategoriesReader categoriesReader;
 
     /**
      * Imports a list of Categories from a file.

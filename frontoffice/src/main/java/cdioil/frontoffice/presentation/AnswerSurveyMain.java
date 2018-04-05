@@ -1,12 +1,9 @@
 package cdioil.frontoffice.presentation;
 
-import cdioil.domain.BinaryAnswer;
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.EAN;
-import cdioil.domain.MultipleChoiceAnswer;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.Product;
-import cdioil.domain.QuantitativeAnswer;
 import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.Question;
 import cdioil.domain.Survey;

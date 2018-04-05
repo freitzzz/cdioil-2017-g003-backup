@@ -4,20 +4,27 @@ import cdioil.backoffice.webapp.utils.ImageUtils;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 
 /**
  * @author <a href="https://github.com/freitzzz">freitzzz</a>
  */
-public class AdminPanelView extends AdminPanelDesign implements View{
+public class AdminPanelView extends AdminPanelDesign implements View {
+
     /**
      * Constant that represents the current page view name
      */
     public static final String VIEW_NAME="Admin Panel";
+
     /**
      * Current Navigator
      */
     private final Navigator navigator;
+
+    private GridLayout wipComponent;
+
     /**
      * Builds a new AdminPanelView
      */
@@ -27,17 +34,44 @@ public class AdminPanelView extends AdminPanelDesign implements View{
         loadImages();
 
         leftPanelActionListeners();
+
+        wipComponent = wipView;
     }
 
     private void loadImages() {
-        logoHomeImg.setSource(ImageUtils.imagePathAsResource("/WEB-INF/logos/Feedback_Monkey_Full.png"));
+        wipImage.setSource(ImageUtils.imagePathAsResource("/WEB-INF/backgrounds/WIP.png"));
+        imgManager.setSource(ImageUtils.imagePathAsResource("/WEB-INF/users/DEFAULT_USER_IMAGE.png"));
     }
 
     private void leftPanelActionListeners() {
+        btnHome.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                rightPanel.setContent(wipComponent);
+            }
+        });
         btnAddManager.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 rightPanel.setContent(new RegisterManagerView());
+            }
+        });
+        btn3.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                rightPanel.setContent(wipComponent);
+            }
+        });
+        btn4.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                rightPanel.setContent(wipComponent);
+            }
+        });
+        btn5.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                rightPanel.setContent(wipComponent);
             }
         });
     }
