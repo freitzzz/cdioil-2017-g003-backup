@@ -7,38 +7,40 @@
  </head>
  <body>
   <vaadin-css-layout responsive size-full>
-   <vaadin-horizontal-layout responsive>
-    <vaadin-panel responsive width="237px" height="645px" _id="panelManager">
+   <vaadin-horizontal-layout responsive height-full>
+    <vaadin-panel responsive width-auto height-full _id="panelManager">
      <vaadin-grid-layout size-full>
       <row>
-       <column>
+       <column expand="1">
         <vaadin-vertical-layout width-auto height="142px" :center>
-         <vaadin-image width="110px" height="70px" _id="imgManager"></vaadin-image>
-         <vaadin-label height-full plain-text _id="lblName" :bottom :center :expand>
-           Name 
+         <vaadin-image width="90px" height="90px" _id="imgManager" :center></vaadin-image>
+         <vaadin-label height-full plain-text _id="lblName" :center :expand>
+           Pedro Santos 
          </vaadin-label>
         </vaadin-vertical-layout>
        </column>
       </row>
       <row>
        <column>
-        <vaadin-form-layout size-auto margin :middle :center>
-         <vaadin-button style-name="borderless" plain-text _id="btnHome">
-           Home 
-         </vaadin-button>
-         <vaadin-button style-name="borderless" plain-text _id="btnAddManager">
-           Add Manager 
-         </vaadin-button>
-         <vaadin-button style-name="borderless" plain-text _id="btn3">
-           Placeholder 
-         </vaadin-button>
-         <vaadin-button style-name="borderless" plain-text _id="btn4">
-           Placeholder 
-         </vaadin-button>
-         <vaadin-button style-name="borderless" plain-text _id="btn5">
-           Placeholder 
-         </vaadin-button>
-        </vaadin-form-layout>
+        <vaadin-panel :middle :center>
+         <vaadin-form-layout responsive size-full margin>
+          <vaadin-button width="150px" plain-text _id="btnHome">
+            Home 
+          </vaadin-button>
+          <vaadin-button plain-text _id="btnAddManager">
+            Registar Gestor 
+          </vaadin-button>
+          <vaadin-button width="150px" plain-text _id="btn3">
+            Ver Utilizadores 
+          </vaadin-button>
+          <vaadin-button width="150px" plain-text _id="btn4">
+            Estatisticas 
+          </vaadin-button>
+          <vaadin-button width="150px" plain-text _id="btn5">
+            Opções 
+          </vaadin-button>
+         </vaadin-form-layout>
+        </vaadin-panel>
        </column>
       </row>
       <row></row>
@@ -56,25 +58,14 @@
       </row>
      </vaadin-grid-layout>
     </vaadin-panel>
-    <vaadin-panel width="1241px" _id="rightPanel">
-     <vaadin-vertical-layout size-auto>
-      <vaadin-horizontal-layout :middle :right :expand>
-       <vaadin-label height-full plain-text _id="lblUserName" :bottom :center :expand>
-         Name 
-       </vaadin-label>
-       <vaadin-image :center></vaadin-image>
-      </vaadin-horizontal-layout>
-      <vaadin-panel responsive size-auto _id="dashboardPanel">
-       <vaadin-grid-layout spacing responsive margin>
-        <row>
-         <column>
-          <vaadin-image _id="logoHomeImg"></vaadin-image>
-         </column>
-        </row>
-        <row></row>
-       </vaadin-grid-layout>
-      </vaadin-panel>
-     </vaadin-vertical-layout>
+    <vaadin-panel width="1241px" height-full _id="rightPanel">
+     <vaadin-grid-layout size-full _id="wipView">
+      <row>
+       <column>
+        <vaadin-image _id="wipImage" :middle :center></vaadin-image>
+       </column>
+      </row>
+     </vaadin-grid-layout>
     </vaadin-panel>
    </vaadin-horizontal-layout>
   </vaadin-css-layout>

@@ -58,4 +58,13 @@ public class CSVCategoriesReaderTest {
         fileContent.add("Campo1;Campo2;Campo3;Campo4;Campo5;Campo6;Campo7;Campo8;Campo9;Campo10");
         assertTrue("Campos corretos", c.isFileValid(fileContent));
     }
+
+    /**
+     * Test of the method getNumberOfCategoriesRead, of the clss CSVCategoriesReader.
+     */
+    @Test
+    public void testGetNumberOfCategoriesRead() {
+        System.out.println("getNumberOfCategoriesRead");
+        assertTrue(c.getNumberOfCategoriesRead() == 0);
+    }
 }

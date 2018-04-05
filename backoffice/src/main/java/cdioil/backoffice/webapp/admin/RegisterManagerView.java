@@ -3,9 +3,11 @@ package cdioil.backoffice.webapp.admin;
 import cdioil.backoffice.application.authz.AssignManagerController;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class RegisterManagerView extends RegisterManagerDesign implements View {
 
@@ -20,14 +22,16 @@ public class RegisterManagerView extends RegisterManagerDesign implements View {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 Iterator<String> selection = userTable.getSelectedItems().iterator();
 
-                String email = selection.next();
-
-                if (email == null) {
-                    //TODO display error
-                } else {
-                    controller.assignManager(email);
-                    //TODO Mensagem de sucesso
+                String email = null;
+                try {
+                    email = selection.next();
+                } catch (NoSuchElementException e) {
+                    Notification.show("Selecione um utilizador!", Notification.Type.ERROR_MESSAGE);
+                    return;
                 }
+
+                Notification.show("Gestor registado!", Notification.Type.WARNING_MESSAGE);
+                //controller.assignManager(email);
             }
         });
     }
@@ -37,7 +41,7 @@ public class RegisterManagerView extends RegisterManagerDesign implements View {
         List<String> emails = controller.registeredUsers();
 
         userTable.setItems(emails);
-        userTable.addColumn(String::toString).setCaption("Email");
+        userTable.addColumn(String::toString).setCaption("Utilizador");
         userTable.getDataProvider().refreshAll();
     }
 }
