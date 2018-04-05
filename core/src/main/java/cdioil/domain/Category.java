@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,7 +56,7 @@ public class Category implements Serializable,SurveyItem {
     /**
      * List of products of the Category.
      */
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Product> products = new HashSet<>();
 
     /**
@@ -177,6 +178,14 @@ public class Category implements Serializable,SurveyItem {
             return false;
         }
         return products.add(p);
+    }
+    
+    /**
+     * Returns the set of products associated to the Category.
+     * @return set of products
+     */
+    public Set<Product> getProductSet(){
+        return products;
     }
 
     /**

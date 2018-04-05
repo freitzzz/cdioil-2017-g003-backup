@@ -2,13 +2,12 @@ package cdioil.application.bootstrap.domain;
 
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.Category;
-import cdioil.domain.EAN;
 import cdioil.domain.GlobalLibrary;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.Product;
-import cdioil.domain.QRCode;
 import cdioil.domain.QuantitativeQuestion;
 import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
+import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.LinkedList;
 
 /**
@@ -18,6 +17,10 @@ import java.util.LinkedList;
  */
 public class QuestionLibrariesBootstrap {
 
+    private static final String BOOTSTRAP_CAT_PATH = "10938DC";
+    private final MarketStructureRepositoryImpl marketRepo = new MarketStructureRepositoryImpl();
+    private final Category cat = marketRepo.findCategoriesByPathPattern(BOOTSTRAP_CAT_PATH);
+    
     /**
      * Creates a global library, sets up the libraries that it contains and
      * persists it in the database.
@@ -35,7 +38,6 @@ public class QuestionLibrariesBootstrap {
      * Sets up a CategoryQuestionsLibrary.
      */
     private void bootstrapCategoryQuestionsLibrary(GlobalLibrary globalLibrary) {
-        Category cat = new Category("Vinhos", "100CAT", "10DC-10UN-100CAT");
         String id = "3";
         String id2 = "2";
         BinaryQuestion q = new BinaryQuestion("Acha que a percentagem de alcool"
@@ -60,8 +62,7 @@ public class QuestionLibrariesBootstrap {
      * Sets up a ProductQuestionsLibrary.
      */
     private void bootstrapProductQuestionsLibrary(GlobalLibrary globalLibrary) {
-        Product prod = new Product("Chocolate Nestle", new EAN("544231234"),
-                new QRCode("4324235"));
+        Product prod = cat.getProductSet().iterator().next();
         String id = "1";
         BinaryQuestion q = new BinaryQuestion("Gostaria de ver mais produtos"
                 + "Nestle nas lojas Continente?", id);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,8 +52,7 @@ public class Product implements Serializable,SurveyItem {
     /**
      * List of the Product's Codes.
      */
-    @OneToMany
-    @JoinColumn(name = "FK_PRODUCT")
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Code> codes = new ArrayList<>();
 
     /**

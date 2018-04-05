@@ -30,15 +30,15 @@ public abstract class Code<T> implements Serializable, ValueObject {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_CODE", updatable = false, nullable = false)
-    protected int id;
+    @Column(name = "ID_CODE")
+    private int id;
 
     /**
      * The code's value.
      */
     @Column(unique = true)
     protected T code;
-
+    
     /**
      * Empty constructor for JPA.
      */
