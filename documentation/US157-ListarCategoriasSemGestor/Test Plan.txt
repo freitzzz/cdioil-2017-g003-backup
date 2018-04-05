@@ -1,0 +1,12 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Listar Categorias sem Gestores
+	________________________________________________
+
+	1. Fazer login com o admin sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção 11 "Listar Categorias sem Gestores"
+	3. Obter a lista de categorias sem gestores associados.
