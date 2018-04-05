@@ -180,12 +180,13 @@ public class CSVQuestionsReader implements QuestionsReader {
                                 String[] pEM = param.split("=");
                                 int nrEM = Integer.parseInt(pEM[1]);
                                 LinkedList<String> options = new LinkedList<>();
+                                String q  = line[7];
                                 for (int a = 0; a < nrEM; a++) {
                                     line = fileContent.get(i + 1).split(SPLITTER);
                                     i++;
                                     options.add(line[7]);
                                 }
-                                Question question = new MultipleChoiceQuestion(line[7], ID, options);
+                                Question question = new MultipleChoiceQuestion(q, ID, options);
                                 if(!addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat)) System.out.println("ERRO");
 
                             } else if (tipo.equalsIgnoreCase(ESC_QUESTION)) {
