@@ -4,6 +4,7 @@ import cdioil.application.utils.QuestionAnswerGraph;
 import cdioil.time.TimePeriod;
 import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
@@ -21,7 +22,7 @@ public class Questionnaire extends Event implements Serializable {
     /**
      * Question and Answer graph.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private QuestionAnswerGraph graph;
 
     /**

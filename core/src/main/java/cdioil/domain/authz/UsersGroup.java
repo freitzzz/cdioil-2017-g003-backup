@@ -1,12 +1,17 @@
 package cdioil.domain.authz;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 /**
@@ -17,11 +22,14 @@ import javax.persistence.Version;
 @Entity
 public class UsersGroup implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * ID of the UsersGroup for JPA.
      */
     @Column(name = "ID_USERSGROUP")
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     /**
@@ -33,12 +41,13 @@ public class UsersGroup implements Serializable {
     /**
      * Manager that created the UsersGroup.
      */
+    @OneToOne
     private Manager manager;
 
     /**
      * List with all the RegisteredUsers of the UsersGroup.
      */
-    @ElementCollection
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<RegisteredUser> users;
 
     /**
@@ -75,7 +84,8 @@ public class UsersGroup implements Serializable {
      * Checks if a user is valid - the users list contains the user.
      *
      * @param u RegisteredUser to check
-     * @return true, if the users list contains the user to add. Otherwise, returns false
+     * @return true, if the users list contains the user to add. Otherwise,
+     * returns false
      */
     public boolean isUserValid(RegisteredUser u) {
         return users.contains(u);
@@ -85,7 +95,8 @@ public class UsersGroup implements Serializable {
      * Adds a RegisteredUser to the list of users.
      *
      * @param u RegisteredUser to add
-     * @return true, if the RegisteredUser is successfully added. Otherwise, returns false
+     * @return true, if the RegisteredUser is successfully added. Otherwise,
+     * returns false
      */
     public boolean addUser(RegisteredUser u) {
         if (u == null || isUserValid(u)) {
@@ -98,7 +109,8 @@ public class UsersGroup implements Serializable {
      * Removes a RegisteredUser from the list of users.
      *
      * @param u RegisteredUser to remove
-     * @return true, if the RegisteredUser is successfully removed. Otherwise, returns false
+     * @return true, if the RegisteredUser is successfully removed. Otherwise,
+     * returns false
      */
     public boolean removeUser(RegisteredUser u) {
         if (u == null || !isUserValid(u)) {
@@ -114,7 +126,7 @@ public class UsersGroup implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("GESTOR RESPONSÁVEL:\n%s\nUSERS:\n", manager, users);
+        return String.format("GESTOR RESPONSÁVEL:\n%s\nUSERS:\n%s", manager, Arrays.toString(users.toArray()));
     }
 
     /**
@@ -133,7 +145,8 @@ public class UsersGroup implements Serializable {
      * Compares the UsersGroup with a received Object.
      *
      * @param obj Object to compare
-     * @return true, if the two Objects have the same ID. Otherwise, returns false
+     * @return true, if the two Objects have the same ID. Otherwise, returns
+     * false
      */
     @Override
     public boolean equals(Object obj) {
