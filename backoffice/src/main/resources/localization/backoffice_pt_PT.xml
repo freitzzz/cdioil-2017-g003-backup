@@ -50,7 +50,7 @@
 		</AdminMenuOptions>
 		
 		<ManagerMenuOptions>
-			<Message messageId = "option_import_questions" value = "Importar Questões para Novo Template"/>
+			<Message messageId = "option_import_questions" value = "Importar Questões sobre categorias"/>
             <Message messageId="option_export_survey_answers" value="Exportar Respostas de Um Inquérito"/>
 			<Message messageId="option_add_users_questionnaire" value="Adicionar Utilizadores a Inquérito"/>
         </ManagerMenuOptions>

@@ -40,10 +40,10 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      * @param pathPattern String with the path pattern to search
      * @return List with all categories found, or null if an error occured
      */
-    public Category findCategoriesByPathPattern(String pathPattern) {
+    public List<Category> findCategoriesByPathPattern(String pathPattern) {
         EntityManager em = entityManager();
         Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + pathPattern + "'", Category.class);
-        if((Category)queryRegexed.getSingleResult()== null) return null;
-        return (Category)queryRegexed.getSingleResult();
+        if((List<Category>) queryRegexed.getResultList()==null) return null;
+        return (List<Category>) queryRegexed.getResultList();
     }
 }
