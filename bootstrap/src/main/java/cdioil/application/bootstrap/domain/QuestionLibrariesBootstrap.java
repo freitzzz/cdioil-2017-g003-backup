@@ -19,7 +19,7 @@ public class QuestionLibrariesBootstrap {
 
     private static final String BOOTSTRAP_CAT_PATH = "10938DC";
     private final MarketStructureRepositoryImpl marketRepo = new MarketStructureRepositoryImpl();
-    private final Category cat = marketRepo.findCategoriesByPathPattern(BOOTSTRAP_CAT_PATH);
+    private final Category cat = marketRepo.findCategoriesByPathPattern(BOOTSTRAP_CAT_PATH).get(0);
     
     /**
      * Creates a global library, sets up the libraries that it contains and
