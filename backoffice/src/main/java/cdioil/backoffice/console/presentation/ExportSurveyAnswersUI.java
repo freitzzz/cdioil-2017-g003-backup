@@ -39,7 +39,7 @@ public final class ExportSurveyAnswersUI {
      * Constant that represents the message that asks the user to choose the file which 
      * is going to hold the exported survey answers
      */
-    private static final String CHOOSE_FILE_PATH_MESSAGE="Escolha um Inquérito do qual queira "
+    private static final String CHOOSE_FILE_PATH_MESSAGE="Escolha o caminho do ficheiro do qual queira  "
                 + "exportar as respostas "+ALTERNATIVE_EXIT_MESSAGE;
     /**
      * Constant that represents the message that is shown to the user when an invalid 
@@ -51,6 +51,11 @@ public final class ExportSurveyAnswersUI {
      * currently no available surveys
      */
     private static final String NO_AVAILABLE_SURVEYS_MESSAGE="Não existe nenhum inquérito disponivel!";
+    /**
+     * Constant that represents the message that informs the user that there are 
+     * currently no reviews on the current selected survey
+     */
+    private static final String NO_AVAILABLE_REVIEWS_MESSAGE="O Inquérito não tem avaliações!\nPor favor escolha outro inquérito "+ALTERNATIVE_EXIT_MESSAGE;
     /**
      * Constant that represents the message that informs the user that the selected survey 
      * answers were exported with success
@@ -77,6 +82,10 @@ public final class ExportSurveyAnswersUI {
      */
     private Survey currentChoosenSurvey;
     /**
+     * Controller for the Export Survey Answers use case
+     */
+    private ExportSurveyAnswersController exportSurveyAnswersController;
+    /**
      * Builds a new ExportSurveyAnswersUI
      */
     public ExportSurveyAnswersUI(){
@@ -87,6 +96,7 @@ public final class ExportSurveyAnswersUI {
      */
     private void showAllSurveys(){
         getAllSurveys();
+        System.out.println(EXIT_MESSAGE);
         if(allSurveys.isEmpty()){System.out.println(NO_AVAILABLE_SURVEYS_MESSAGE);return;}
         System.out.println(AVAILABLE_SURVEYS_MESSAGE[0]);
         for(int i=0;i<allSurveys.size();i++){
@@ -102,12 +112,17 @@ public final class ExportSurveyAnswersUI {
      */
     private void chooseSurvey(){
         String choosenSurveyInString=Console.readLine(CHOOSE_SURVEY_MESSAGE);
-        if(checkForExitCode(EXIT_CODE))return;
+        if(checkForExitCode(choosenSurveyInString))return;
         if((this.currentChoosenSurvey=getChoosenSurvey(choosenSurveyInString))==null){
             System.out.println(INVALID_SELECTED_SURVEY);
             chooseSurvey();
         }else{
-            chooseExportedFile();
+            if(!checkForSurveyReviews()){
+                System.out.println(NO_AVAILABLE_REVIEWS_MESSAGE);
+                chooseSurvey();
+            }else{
+                chooseExportedFile();
+            }
         }
     }
     /**
@@ -117,7 +132,7 @@ public final class ExportSurveyAnswersUI {
     private void chooseExportedFile(){
         String filePath=Console.readLine(CHOOSE_FILE_PATH_MESSAGE);
         if(checkForExitCode(filePath))return;
-        if(new ExportSurveyAnswersController(currentChoosenSurvey).exportAnswersFromSurvey(filePath)){
+        if(exportSurveyAnswersController.exportAnswersFromSurvey(filePath)){
             System.out.println(EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE);
         }else{
             System.out.println(EXPORTED_SURVEY_ANSWERS_FAILURE_MESSAGE);
@@ -149,6 +164,18 @@ public final class ExportSurveyAnswersUI {
             return allSurveys.get(Integer.parseInt(choosenSurvey)-1);
         }catch(NumberFormatException | ArrayIndexOutOfBoundsException e){
             return null;
+        }
+    }
+    /**
+     * Method that checks if the current selected survey has reviews
+     * @return boolean true if the survey has reviews, false if not
+     */
+    private boolean checkForSurveyReviews(){
+        try{
+            exportSurveyAnswersController=new ExportSurveyAnswersController(currentChoosenSurvey);
+            return true;
+        }catch(IllegalArgumentException e){
+            return false;
         }
     }
 }

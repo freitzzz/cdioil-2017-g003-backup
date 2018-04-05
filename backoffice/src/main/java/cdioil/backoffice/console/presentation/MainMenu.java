@@ -32,10 +32,11 @@ public class MainMenu {
      */
     private final String INFO_MANAGER_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_manager_header");
 
-    private final String OPTION_IMPORT_QUESTIONS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions");
-    private static final String OPTION_EXPORT_SURVEY_ANSWERS=BackOfficeLocalizationHandler.getInstance().getMessageValue("option_export_survey_answers");
+    private final String OPTION_IMPORT_QUESTIONS_TEMPLATE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions_template");
+    private static final String OPTION_IMPORT_QUESTIONS_CATEGORY = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions_category");
+    private static final String OPTION_EXPORT_SURVEY_ANSWERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_export_survey_answers");
     public static final String OPTION_CREATE_SURVEY = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_create_survey");
-    
+
     /* ==============
         ADMIN
        ==============
@@ -141,7 +142,7 @@ public class MainMenu {
         System.out.println(SEPARATOR);
         System.out.println(INFO_MANAGER_HEADER);
         System.out.println(SEPARATOR);
-        System.out.println("1. " + OPTION_IMPORT_QUESTIONS);
+        System.out.println("1. " + OPTION_IMPORT_QUESTIONS_TEMPLATE);
         System.out.println("2. " + OPTION_CHANGE_LANGUAGE);
         System.out.println("3. " + OPTION_EXPORT_SURVEY_ANSWERS);
         System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
