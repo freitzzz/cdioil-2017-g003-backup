@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.AddUsersQuestionnaireController;
+import cdioil.backoffice.application.AddUsersQuestionnaireController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.Questionnaire;
 import cdioil.domain.authz.RegisteredUser;
@@ -86,11 +86,15 @@ public class AddUsersQuestionnaireUI {
             System.out.println(NO_QUESTIONNAIRES_MSG);
         } else {
             //print questionnaires along with an int to later fetch the chosen one from the list
+            int chosen = 0;
             int i = 1;
             for (Questionnaire q : lq) {
                 System.out.println(i + ". " + q);
+                i++;
             }
-            int chosen = Console.readInteger(CHOOSE_QUESTIONNAIRE_MSG);
+            while (chosen < 1 || chosen > i-1) {
+                chosen = Console.readInteger(CHOOSE_QUESTIONNAIRE_MSG);
+            }
             Questionnaire q = lq.get(chosen - 1);
 
             List<Whitelist> whitelist = ctrl.getWhitelistedDomains();
@@ -102,8 +106,12 @@ public class AddUsersQuestionnaireUI {
                 i = 1;
                 for (Whitelist wl : whitelist) {
                     System.out.println(i + ". " + wl);
+                    i++;
                 }
-                chosen = Console.readInteger(CHOOSE_DOMAIN_MSG);
+                chosen = 0;
+                while (chosen < 1 || chosen > i-1) {
+                    chosen = Console.readInteger(CHOOSE_DOMAIN_MSG);
+                }
                 Whitelist w = whitelist.get(chosen - 1);
                 List<RegisteredUser> lru = ctrl.getUsersByDomain(w.getID());
                 //if list is null

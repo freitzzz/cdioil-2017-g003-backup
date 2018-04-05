@@ -27,7 +27,7 @@ public class EventRepositoryImpl extends BaseJPARepository<Event, Long> implemen
      */
     @Override
     public List<Questionnaire> getQuestionnaires() {
-        Query q = entityManager().createQuery("SELECT ques FROM Questionnaire");
+        Query q = entityManager().createQuery("SELECT ques FROM Questionnaire ques");
         if (q.getResultList().isEmpty()) {
             return null;
         }
