@@ -1,0 +1,27 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #2
+	
+	* Como Gestor, quero poder adicionar utilizadores a um inquérito através de domínios/subdomínios do email.
+
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+	* Classe QuestionnaireTest : testAddUsersToGroup()
+	* UserGroupTest : testAddUser()
