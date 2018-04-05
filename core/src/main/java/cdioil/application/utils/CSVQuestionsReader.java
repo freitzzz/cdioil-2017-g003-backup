@@ -15,6 +15,7 @@ import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.Question;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.io.File;
+import cdioil.domain.authz.Manager;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     private List<Question> lq;
 
     /**
-     * Divisória entre as colunas do ficheiro.
+     * DivisÃ³ria entre as colunas do ficheiro.
      */
     private static final String SPLITTER = ";";
     /**
@@ -55,6 +56,18 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Hashtag Identifier.
      */
     private static final String HASHTAG_IDENTIFIER = "#";
+    /**
+     * SN Question.
+     */
+    private static final String SN_QUESTION = "SN";
+    /**
+     * ESC Question.
+     */
+    private static final String ESC_QUESTION = "ESC";
+    /**
+     * EM Question.
+     */
+    private static final String EM_QUESTION = "EM";
     /**
      * DC Identifier.
      */
@@ -88,22 +101,32 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final String QUESTION_IDENTIFIER = "Texto";
     /**
+     * Path Identifier.
+     */
+    private static final String PATH_IDENTIFIER = "-";
+    /**
      * Scale of the evaluation
      */
     private static final double SCALE = 0.5;
 
-    /**
-     * Constrói uma instância de CSVCategoriasReader com o nome do ficheiro a ler.
+     /**
+     * Creates an instance of CSVQuestionsReader, receiving the name of the file to read.
      *
-     * @param filename Nome do ficheiro a ler
+     * @param filename Name of the file to read
      */
     public CSVQuestionsReader(String filename) {
         this.file = new File(filename);
         lq = new LinkedList<>();
     }
 
+    /**
+     * Imports Questions from a .csv file.
+     *
+     * @return integer with option
+     */
     @Override
-    public int readQuestions(GlobalLibrary globalLibrary) {
+    public int readQuestions(GlobalLibrary globalLibrary, Manager manager) {
+        int nrCatNI = 0;
         List<String> fileContent = readFile(file);
         if (!isFileValid(fileContent)) {
             return 2;
@@ -119,61 +142,73 @@ public class CSVQuestionsReader implements QuestionsReader {
                     String SCAT = line[3];
                     String UB = line[4];
                     String path;
-                    if (UB.equals("")) {
-                        path = DC + DC_IDENTIFIER + "-" + UN + UN_IDENTIFIER+ "-" + CAT + CAT_IDENTIFIER +
-                                "-" + SCAT + SCAT_IDENTIFIER;
-                    } else if (SCAT.equals("") && UB.equals("") ) {
-                        path = DC + DC_IDENTIFIER + "-" + UN + UN_IDENTIFIER+ "-" + CAT + CAT_IDENTIFIER;
-                    } else if (CAT.equals("") && SCAT.equals("") && UB.equals("")) {
-                        path = DC + DC_IDENTIFIER + "-" + UN + UN_IDENTIFIER;
-                    } else if (UN.equals("") && CAT.equals("") && SCAT.equals("") && UB.equals("")) {
+                    if (UB.trim().isEmpty() && !UN.trim().isEmpty() && !CAT.trim().isEmpty() && !SCAT.trim().isEmpty() && !DC.trim().isEmpty()) {
+                        path = DC + DC_IDENTIFIER + PATH_IDENTIFIER
+                                + UN + UN_IDENTIFIER + PATH_IDENTIFIER
+                                + CAT + CAT_IDENTIFIER + PATH_IDENTIFIER
+                                + SCAT + SCAT_IDENTIFIER;
+                    } else if (SCAT.trim().isEmpty() && UB.trim().isEmpty()) {
+                        path = DC + DC_IDENTIFIER +PATH_IDENTIFIER
+                                + UN + UN_IDENTIFIER + PATH_IDENTIFIER
+                                + CAT + CAT_IDENTIFIER;
+                    } else if (CAT.trim().isEmpty() && SCAT.trim().isEmpty() && UB.trim().isEmpty()) {
+                        path = DC + DC_IDENTIFIER + PATH_IDENTIFIER
+                                + UN + UN_IDENTIFIER;
+                    } else if (UN.trim().isEmpty() && CAT.trim().isEmpty() && SCAT.trim().isEmpty() && UB.trim().isEmpty()) {
                         path = DC + DC_IDENTIFIER;
                     } else {
-                        path = DC + DC_IDENTIFIER + "-" + UN + UN_IDENTIFIER+ "-" + CAT + CAT_IDENTIFIER +
-                                "-" + SCAT + SCAT_IDENTIFIER + "-" + UB + UB_IDENTIFIER;
+                        path = DC + DC_IDENTIFIER + PATH_IDENTIFIER + UN + UN_IDENTIFIER + PATH_IDENTIFIER + CAT + CAT_IDENTIFIER
+                                + PATH_IDENTIFIER+ SCAT + SCAT_IDENTIFIER + PATH_IDENTIFIER + UB + UB_IDENTIFIER;
                     }
-                    System.out.println("PATH:   " + path);
                     String ID = line[5];
                     String tipo = line[6];
 
-                    Category cat = new MarketStructureRepositoryImpl().
+                    List<Category> list = new MarketStructureRepositoryImpl().
                             findCategoriesByPathPattern(path.toUpperCase());
-                    if (cat == null) {
+                    if (list == null) {
                         return 2;
                     }
+                    for (Category cat : list) {
+                        if (manager.isAssociatedWithCategory(cat)) {
+                            globalLibrary.getCatQuestionsLibrary().addCategory(cat);
+                            if (tipo.equalsIgnoreCase(SN_QUESTION)) {
+                                Question question = new BinaryQuestion(line[7], ID);
+                                if(!addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat)) System.out.println("ERRO");
 
-                    globalLibrary.getCatQuestionsLibrary().addCategory(cat);
-                    if (tipo.equalsIgnoreCase("SN")) {
-                        Question question = new BinaryQuestion(line[7], ID);
-                        addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat);
+                            } else if (tipo.equalsIgnoreCase(EM_QUESTION)) {
+                                String param = line[8];
+                                String[] pEM = param.split("=");
+                                int nrEM = Integer.parseInt(pEM[1]);
+                                LinkedList<String> options = new LinkedList<>();
+                                for (int a = 0; a < nrEM; a++) {
+                                    line = fileContent.get(i + 1).split(SPLITTER);
+                                    i++;
+                                    options.add(line[7]);
+                                }
+                                Question question = new MultipleChoiceQuestion(line[7], ID, options);
+                                if(!addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat)) System.out.println("ERRO");
 
-                    } else if (tipo.equalsIgnoreCase("EM")) {
-                        String param = line[8];
-                        String[] pEM = param.split("=");
-                        int nrEM = Integer.parseInt(pEM[1]);
-                        LinkedList<String> options = new LinkedList<>();
-                        for (int a = 0; a < nrEM; a++) {
-                            line = fileContent.get(i + 1).split(SPLITTER);
-                            i++;
-                            options.add(line[7]);
+                            } else if (tipo.equalsIgnoreCase(ESC_QUESTION)) {
+                                String[] pMin = line[8].trim().split("=");
+                                String[] pMax = line[9].trim().split("=");
+                                pMax[1] = pMax[1].replace('"', ' ').trim();
+                                double min = Double.parseDouble(pMin[1]);
+                                double max = Double.parseDouble(pMax[1]);
+                                Question question = new QuantitativeQuestion(line[7], ID, min, max, SCALE);
+                                if(!addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat)) System.out.println("ERRO");
+                            }
+                        } else {
+                            nrCatNI++;
                         }
-                        Question question = new MultipleChoiceQuestion(line[7], ID, options);
-                        addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat);
-
-                    } else if (tipo.equalsIgnoreCase("ESC")) {
-                        String[] pMin = line[8].trim().split("=");
-                        String[] pMax = line[9].trim().split("=");
-                        pMax[1] = pMax[1].replace('"', ' ').trim();
-                        double min = Double.parseDouble(pMin[1]);
-                        double max = Double.parseDouble(pMax[1]);
-                        Question question = new QuantitativeQuestion(line[7], ID, min, max, SCALE);
-                        addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat);
-
                     }
                 } catch (IllegalArgumentException ex) {
-                    System.out.println("O formato das Questões é inválido na linha " + i + ".");
+                    System.out.println("O formato das QuestÃµes Ã© invÃ¡lido na linha " + i + ".");
                 }
             }
+        }
+        if (nrCatNI++ != 0) {
+            System.out.println("NÃ£o foram importadas " + nrCatNI + " questÃµes, porque as categorias nÃ£o lhe pertencem.");
+            return 4;
         }
         return 3;
     }
@@ -190,15 +225,17 @@ public class CSVQuestionsReader implements QuestionsReader {
         }
         String[] line = fileContent.get(IDENTIFIERS_LINE).split(SPLITTER);
 
-        return line.length == MIN_IDENTIFIERS || line.length == MAX_IDENTIFIERS;
-//                 && line[0].equalsIgnoreCase(HASHTAG_IDENTIFIER + DC_IDENTIFIER)
-//                && line[1].equalsIgnoreCase(HASHTAG_IDENTIFIER + UN_IDENTIFIER)
-//                && line[2].equalsIgnoreCase(HASHTAG_IDENTIFIER + CAT_IDENTIFIER)
-//                && line[3].equalsIgnoreCase(HASHTAG_IDENTIFIER + SCAT_IDENTIFIER)
-//                && line[4].equalsIgnoreCase(HASHTAG_IDENTIFIER + UB_IDENTIFIER)
-//                && line[5].equalsIgnoreCase(ID_IDENTIFIER)
-//                && line[6].equalsIgnoreCase(TYPE_IDENTIFIER)
-//                && line[7].equalsIgnoreCase(QUESTION_IDENTIFIER);
+        line[0] = line[0].replace('?', ' ').trim();
+
+        return (line.length == MIN_IDENTIFIERS || line.length == MAX_IDENTIFIERS)
+                && line[0].contains(HASHTAG_IDENTIFIER + DC_IDENTIFIER)
+                && line[1].equalsIgnoreCase(HASHTAG_IDENTIFIER + UN_IDENTIFIER)
+                && line[2].equalsIgnoreCase(HASHTAG_IDENTIFIER + CAT_IDENTIFIER)
+                && line[3].equalsIgnoreCase(HASHTAG_IDENTIFIER + SCAT_IDENTIFIER)
+                && line[4].equalsIgnoreCase(HASHTAG_IDENTIFIER + UB_IDENTIFIER)
+                && line[5].equalsIgnoreCase(ID_IDENTIFIER)
+                && line[6].equalsIgnoreCase(TYPE_IDENTIFIER)
+                && line[7].equalsIgnoreCase(QUESTION_IDENTIFIER);
     }
 
     /**

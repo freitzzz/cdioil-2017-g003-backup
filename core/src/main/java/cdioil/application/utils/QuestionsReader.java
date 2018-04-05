@@ -6,6 +6,7 @@
 package cdioil.application.utils;
 
 import cdioil.domain.GlobalLibrary;
+import cdioil.domain.authz.Manager;
 
 /**
  * Interface for reading questions from files.
@@ -18,8 +19,9 @@ public interface QuestionsReader {
      * Imports questions from a file.
      *
      * @param globalLibrary
+     * @param manager
      * @return A biblioteca de Questoesde uma dada categoria
      */
-    int readQuestions(GlobalLibrary globalLibrary);
+    int readQuestions(GlobalLibrary globalLibrary, Manager manager);
     
 }

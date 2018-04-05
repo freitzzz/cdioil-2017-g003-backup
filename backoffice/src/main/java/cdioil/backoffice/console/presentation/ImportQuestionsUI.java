@@ -7,6 +7,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.ImportQuestionsController;
 import cdioil.backoffice.utils.Console;
+import cdioil.domain.authz.Manager;
 
 /**
  * User Interface for the User Story 210 - Import Questions from a File.
@@ -37,7 +38,11 @@ public class ImportQuestionsUI {
     /**
      * Represents a message that delimitates the imported questions.
      */
-    private static final String IMPORTED_QUESTIONS_MESSAGE = "#####Questões Importadas#####";
+    private static final String IMPORTED_QUESTIONS_MESSAGE = "Questões Importadas Com Sucesso";
+     /**
+     * Represents a message that delimitates the imported somae questions.
+     */
+    private static final String IMPORTED_SOME_QUESTIONS_MESSAGE = "As Restantes Questões Foram Importadas Com Sucesso";
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
@@ -50,9 +55,10 @@ public class ImportQuestionsUI {
 
     /**
      * Creates a new User Interface.
+     * @param manager Manager
      */
-    public ImportQuestionsUI() {
-        iQueCtrl = new ImportQuestionsController();
+    public ImportQuestionsUI(Manager manager) {
+        iQueCtrl = new ImportQuestionsController(manager);
         importQuestions();
     }
 
@@ -79,6 +85,10 @@ public class ImportQuestionsUI {
             }
             if(cql == 3){
                 System.out.println(IMPORTED_QUESTIONS_MESSAGE);
+                catched = true;
+            }
+            if(cql == 4){
+                System.out.println(IMPORTED_SOME_QUESTIONS_MESSAGE);
                 catched = true;
             }
 

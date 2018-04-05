@@ -1,0 +1,25 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #2
+	
+	* Como Utilizador, pretendo rectificar os meus dados pessoais (e.g. nome, email) para os manter sempre atualizados
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+	* Classe SystenUserTest : testChangeUserDataField()
