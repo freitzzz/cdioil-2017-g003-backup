@@ -107,6 +107,7 @@ public class CSVCategoriesReader implements CategoriesReader {
      * 
      * @return the number of Categories that were read
      */
+    @Override
     public int getNumberOfCategoriesRead(){
         return lc.size();
     }

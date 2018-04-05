@@ -8,7 +8,7 @@ import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 
 /**
- * Controller class used for US150 - Associar Categorias a um Gestor and US152 - Remover Categorias a um Gestor.
+ * Controller class used for US150 - Associar Categorias a um Gestor and US152 - Remover Categorias de um Gestor.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
@@ -23,12 +23,12 @@ public class CategoryManagementController {
     /**
      * Sufix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_PREFIX = "^*";
+    private static final String REGEX_PREFIX = ".*";
 
     /**
      * Prefix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_SUFIX = "*$";
+    private static final String REGEX_SUFIX = ".*";
 
     /**
      * Finds all managers saved in the database.
@@ -77,7 +77,7 @@ public class CategoryManagementController {
      * @param identifier identifier of the categories
      * @return true, if the categories are successfully added.
      */
-    public boolean addCategories(String identifier) {       
+    public boolean addCategories(String identifier) {
         if (manager.addCategories(new MarketStructureRepositoryImpl().
                 findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier.toUpperCase() + REGEX_SUFIX)) != false) {
             Manager managerY = new ManagerRepositoryImpl().merge(manager);
