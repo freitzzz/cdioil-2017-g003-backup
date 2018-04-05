@@ -4,6 +4,7 @@ import cdioil.domain.GlobalLibrary;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.GlobalLibraryRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
+import javax.persistence.Query;
 
 /**
  * GlobalLibrary Repository implementation.
@@ -22,4 +23,8 @@ public class GlobalLibraryRepositoryImpl extends BaseJPARepository<GlobalLibrary
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
 
+    public GlobalLibrary findByQuery(){
+       Query query = entityManager().createQuery("SELECT e FROM " + GlobalLibrary.class.getSimpleName() + " e");
+       return (GlobalLibrary) query.getSingleResult();
+   }
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.application;
+package cdioil.backoffice.application;
 
 import cdioil.application.utils.CategoriesReaderFactory;
 import cdioil.application.utils.CategoriesReader;
@@ -20,7 +20,7 @@ public class ImportCategoriesController {
     /**
      * Instance of CategoriesReader to read the file.
      */
-    CategoriesReader categoriesReader;
+    private CategoriesReader categoriesReader;
 
     /**
      * Imports a list of Categories from a file.

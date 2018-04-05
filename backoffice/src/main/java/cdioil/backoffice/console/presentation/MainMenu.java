@@ -53,6 +53,7 @@ public class MainMenu {
     private final String OPTION_REMOVE_CATEGORIES_FROM_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_remove_categories_from_manager");
     private final String OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_associate_categories_to_manager");
     private final String OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_list_categories_without_managers");
+    private final String OPTION_ADD_USERS_QUESTIONNAIRE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_add_users_questionnaire");
 
     public void mainLoopAdmin(Admin admin) {
         int opcao = 0;
@@ -64,7 +65,7 @@ public class MainMenu {
                     System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    new AtribuirPerfilGestorUI();
+                    new AssignManagerUI();
                     break;
                 case 2:
                     new AddWhitelistUI();
@@ -114,7 +115,7 @@ public class MainMenu {
                     System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    new ImportQuestionsUI();
+                    new ImportQuestionsUI(gestor);
                     break;
                 case 2:
                     new ChangeLanguageUI();
@@ -123,6 +124,9 @@ public class MainMenu {
                     new ExportSurveyAnswersUI();
                     break;
                 case 4:
+                    new AddUsersQuestionnaireUI().addUsersQuestionnaire();
+                    break;
+                case 5:
                     new CreateSurveyUI();
                     break;
                 default:
@@ -140,7 +144,8 @@ public class MainMenu {
         System.out.println("1. " + OPTION_IMPORT_QUESTIONS);
         System.out.println("2. " + OPTION_CHANGE_LANGUAGE);
         System.out.println("3. " + OPTION_EXPORT_SURVEY_ANSWERS);
-        System.out.println("4. " + OPTION_CREATE_SURVEY);
+        System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
+        System.out.println("5. " + OPTION_CREATE_SURVEY);
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);

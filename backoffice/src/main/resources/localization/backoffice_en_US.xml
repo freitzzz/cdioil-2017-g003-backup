@@ -45,15 +45,22 @@
 			<Message messageId = "option_import_categories" value = "Import Categories"/>
 			<Message messageId = "option_search_user_by_email" value = "Search Users by Email"/>
 			<Message messageId = "option_remove_categories_from_manager" value = "Remove Categories from Manager"/>
-                        <Message messageId = "option_associate_categories_to_manager" value = "Associate Categories to a Manager"/>
+            <Message messageId = "option_associate_categories_to_manager" value = "Associate Categories to a Manager"/>
 			<Message messageId = "option_list_categories_without_managers" value = "List Categories without Managers"/>
 		</AdminMenuOptions>
 		
 		<ManagerMenuOptions>
+<<<<<<< HEAD
 			<Message messageId = "option_import_questions" value = "Import Questions for New Template"/>
 			<Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
 			<Message messageId="option_create_survey" value="Create Survey"/>
 		</ManagerMenuOptions>
+=======
+			<Message messageId = "option_import_questions" value = "Import Questions about a Category"/>
+            <Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
+			<Message messageId="option_add_users_questionnaire" value="Add Users to Questionnaire"/>
+        </ManagerMenuOptions>
+>>>>>>> f815901a3bd5b4b6687fb22c375426582b2830e8
 	</MenuOptions>
 	
 </Messages>

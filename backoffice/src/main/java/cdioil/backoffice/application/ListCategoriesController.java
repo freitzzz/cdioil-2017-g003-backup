@@ -1,4 +1,4 @@
-package cdioil.application;
+package cdioil.backoffice.application;
 
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
@@ -25,6 +25,9 @@ public class ListCategoriesController {
         BaseJPARepository repo = new ManagerRepositoryImpl();
         List<Manager> managers = (List<Manager>) repo.findAll();
         List<MarketStructure> lms = (List<MarketStructure>) new MarketStructureRepositoryImpl().findAll();
+        if(lms.size()<1){
+            return null;
+        }
         MarketStructure marketStruct = lms.get(0);
         List<Category> lc = marketStruct.getAllCategories();
         List<Category> catWithoutManagers = new LinkedList<>();
