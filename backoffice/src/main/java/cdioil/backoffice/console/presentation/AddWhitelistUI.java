@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.authz.AddWhitelistController;
+import cdioil.backoffice.application.authz.AddWhitelistController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.backoffice.utils.Console;
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.application.authz;
+package cdioil.backoffice.application.authz;
 
 import cdioil.domain.authz.*;
 import cdioil.persistence.impl.UserRepositoryImpl;
@@ -20,12 +20,12 @@ public class SearchUserController {
      /**
      * Sufix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_PREFIX = "^*";
+    private static final String REGEX_PREFIX = "^.*";
 
     /**
      * Prefix of the regular expression used to search categories by its identifier.
      */
-    private static final String REGEX_SUFIX = "*";
+    private static final String REGEX_SUFIX = ".*";
     
     /**
      * Search a SystemUser by email

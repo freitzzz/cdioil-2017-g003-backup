@@ -1,8 +1,8 @@
 package cdioil.domain;
 
+import cdioil.application.utils.QuestionAnswerGraph;
 import cdioil.time.TimePeriod;
 import cdioil.domain.authz.UsersGroup;
-import cdioil.graph.Graph;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -21,8 +21,8 @@ public class Questionnaire extends Event implements Serializable {
     /**
      * Question and Answer graph.
      */
-    //@OneToOne
-    private Graph<Question, Answer> graph;
+    @OneToOne
+    private QuestionAnswerGraph graph;
 
     /**
      * Builds a Questionnaire with a title, description, target audience and
@@ -35,7 +35,7 @@ public class Questionnaire extends Event implements Serializable {
      * @param graph questionnaire's question and answer graph
      */
     public Questionnaire(String title, String description, UsersGroup targetAudience,
-            TimePeriod timePeriod,Graph<Question,Answer> graph) {
+            TimePeriod timePeriod,QuestionAnswerGraph graph) {
         super(title, description, targetAudience, timePeriod);
         if(graph == null){
             throw new IllegalArgumentException("O questionário tem que ter "

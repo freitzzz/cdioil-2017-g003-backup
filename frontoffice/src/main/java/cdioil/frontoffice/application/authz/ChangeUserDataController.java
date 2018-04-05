@@ -1,4 +1,4 @@
-package cdioil.application.authz;
+package cdioil.frontoffice.application.authz;
 
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.UserRepositoryImpl;

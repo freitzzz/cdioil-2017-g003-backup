@@ -1,4 +1,4 @@
-package cdioil.application.authz;
+package cdioil.frontoffice.application.authz;
 
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.domain.authz.*;
