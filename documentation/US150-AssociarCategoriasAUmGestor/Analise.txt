@@ -20,4 +20,4 @@
 	TESTES UNITÁRIOS
 	_____________________
 
-	* Classe ManagerTest : testAddCategories
+	* Todos os testes da classe ManagerTest.
