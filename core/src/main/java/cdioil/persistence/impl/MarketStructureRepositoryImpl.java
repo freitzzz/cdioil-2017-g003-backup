@@ -1,12 +1,17 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.Category;
+import cdioil.domain.Code;
+import cdioil.domain.GlobalLibrary;
 import cdioil.domain.MarketStructure;
+import cdioil.domain.Product;
 import cdioil.persistence.MarketStructureRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.BaseJPARepository;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 /**
@@ -45,5 +50,15 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + pathPattern + "'", Category.class);
         if((List<Category>) queryRegexed.getResultList()==null) return null;
         return (List<Category>) queryRegexed.getResultList();
+    }
+    
+    /**
+     * Returns the market structure persisted in the database.
+     * @return market structure
+     */
+    public MarketStructure findMarketStructure(){
+        Query query = entityManager().createQuery("SELECT e FROM " + MarketStructure.class.getSimpleName() + " e");
+        List<MarketStructure> list = query.getResultList();
+        return !list.isEmpty() ? list.get(0) : null;
     }
 }

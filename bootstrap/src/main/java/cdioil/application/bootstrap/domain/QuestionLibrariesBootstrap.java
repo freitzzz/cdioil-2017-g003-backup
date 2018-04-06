@@ -8,6 +8,7 @@ import cdioil.domain.Product;
 import cdioil.domain.QuantitativeQuestion;
 import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -20,7 +21,7 @@ public class QuestionLibrariesBootstrap {
     private static final String BOOTSTRAP_CAT_PATH = "10938DC";
     private final MarketStructureRepositoryImpl marketRepo = new MarketStructureRepositoryImpl();
     private final Category cat = marketRepo.findCategoriesByPathPattern(BOOTSTRAP_CAT_PATH).get(0);
-    
+
     /**
      * Creates a global library, sets up the libraries that it contains and
      * persists it in the database.
@@ -52,6 +53,9 @@ public class QuestionLibrariesBootstrap {
         MultipleChoiceQuestion q3 = new MultipleChoiceQuestion("Bla bla", "5", q3List);
         QuantitativeQuestion q4 = new QuantitativeQuestion("Wow?", "98", 0.0, 5.0, 1.0);
         globalLibrary.getCatQuestionsLibrary().addCategory(cat);
+        marketRepo.findMarketStructure().getAllCategories().forEach((databaseCat) -> {
+            globalLibrary.getCatQuestionsLibrary().addCategory(databaseCat);
+        });
         globalLibrary.getCatQuestionsLibrary().addQuestion(q, cat);
         globalLibrary.getCatQuestionsLibrary().addQuestion(q2, cat);
         globalLibrary.getCatQuestionsLibrary().addQuestion(q3, cat);
