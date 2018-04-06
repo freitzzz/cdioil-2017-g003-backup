@@ -92,8 +92,9 @@ public class SystemUserTest {
     @Test
     public void testeToString() {
         System.out.println("toString");
-        String expected = "Nome: Gollum  Smeagol\nEmail: myPrecious@gmail.com\n";
-        assertEquals(expected, instance.toString());
+        SystemUser other = new SystemUser(new Email("myPrecious@gmail.com"), 
+                new Name("Gollum", "Smeagol"), new Password("Precious3"));
+        assertTrue(instance.toString().equals(other.toString()));
     }
     
     /**

@@ -3,6 +3,13 @@ package cdioil.application.utils;
 import java.util.Random;
 
 /**
+ * Utilitary class that permists encryption of Strings using operators
+ * <br>Highly <b><i>secrect</i></b> <b>encryption !!!</b>
+ * <br>But how does <i>operators</i> encryption work?
+ * <br>The encryption uses bitwise operations (&lt;&lt;) and "mathematicals" (+*) 
+ * fazendo a seguinte operação para cada byte/char da cadeia de caratéres a ser encriptada:
+ * <br>&#09;<b>CARATER_ENCRIPTADO=VALOR_BYTE_CARATER (&lt;&lt;*+) VALOR_ENCRIPTAÇÃO</b>
+ * <br>O resto dos operadores (-/&gt;&gt;) não são usados pois podem levar a carateres nulos (0)
  * Classe utilitária que permite a encriptação de Strings usando operadores
  * <br>Encriptação muito <b><i>secreta</i></b> <b>!!!</b>
  * <br>Como funciona a encriptação por <i>operadores</i>?
@@ -45,7 +52,7 @@ public final class OperatorsEncryption {
     /**
      * Constante que representa o alfabeto usado como demilitador na encriptação
      */
-    private static final String ALFABETO_ENCRIPTACAO="!#$%&/()?»«";
+    private static final String ALFABETO_ENCRIPTACAO="#";
     /**
      * Constante que representa a expressão regular usada para demilitar a 
      * String encriptada no processo de encriptação
@@ -93,6 +100,20 @@ public final class OperatorsEncryption {
      */
     public static String decrypt(String encryptedWord){
         return generateDecryptionOperation(encryptedWord);
+    }
+    /**
+     * Method that removes the encryption header from the encrypted word
+     * @param encryptedWord String with encrypted word
+     * @return String with the encrypted word with the header removed
+     */
+    public static String removeEncryptionHeader(String encryptedWord){
+        String[] encryptedWordSplitted=encryptedWord.split(ALFABETO_ENCRIPTACAO);
+        if(encryptedWord.length()<=2)return "";
+        StringBuilder builder=new StringBuilder();
+        for(int i=2;i<encryptedWordSplitted.length;i++){
+            builder.append(encryptedWordSplitted[i]).append(ALFABETO_ENCRIPTACAO);
+        }
+        return builder.toString();
     }
     /**
      * Encripta uma palavra usando a encriptação por operadores

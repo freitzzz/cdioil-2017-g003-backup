@@ -160,10 +160,11 @@ public class EmailTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Email instance = new Email("1111@isep.ipp.pt");
-        int expResult = 705951839;
-        int result = instance.hashCode();
-        assertEquals("A condição deve acertar pois os valores são iguais",expResult,result);
+        String email="1111@isep.ipp.pt";
+        Email instance = new Email(email);
+        Email other = new Email(email);
+        assertEquals("A condição deve acertar pois os valores são iguais",
+                instance.hashCode(),other.hashCode());
     }
 
     /**

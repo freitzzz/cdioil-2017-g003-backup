@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.application.utils.OperatorsEncryption;
 import cdioil.domain.ValueObject;
 import java.io.Serializable;
 import java.util.Objects;
@@ -86,12 +87,20 @@ public class Email implements Serializable,ValueObject {
      */
     private String email;
     /**
+     * Constant that represents the encryption value being used
+     */
+    public static final int ENCRYPTION_VALUE=0xAC67F;
+    /**
+     * Constant that represents the encryption value being used
+     */
+    public static final int ENCRYPTION_CODE=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_ADICAO;
+    /**
      * Builds a new instance of email
      * @param email String with the email address
      */
     public Email(String email){
         validateEmail(email);
-        this.email=email;
+        this.email=encryptEmail(email.toLowerCase());
     }
     /**
      * Method that verifies if two Emails are equal
@@ -119,7 +128,7 @@ public class Email implements Serializable,ValueObject {
      * @return String with the textual information of the current email
      */
     @Override
-    public String toString(){return email;}
+    public String toString(){return decryptEmail();}
     /**
      * Method that validates an email address
      * @param email String with the email address to validated
@@ -154,6 +163,21 @@ public class Email implements Serializable,ValueObject {
      */
     private boolean checkEmail(String email,String regexEmail){
         return Pattern.compile(regexEmail,Pattern.CASE_INSENSITIVE).matcher(email).matches();
+    }
+    /**
+     * Method that encrypts a certain email
+     * @param email String with the email being encrypted
+     * @return String with the email being encrypted
+     */
+    private String encryptEmail(String email){
+        return OperatorsEncryption.encrypt(email,ENCRYPTION_CODE,ENCRYPTION_VALUE);
+    }
+    /**
+     * Method that decrypts the current email
+     * @return String with the current email decrypted
+     */
+    private String decryptEmail(){
+        return OperatorsEncryption.decrypt(this.email);
     }
     /**
      * Protected constructor in order to persist with JPA

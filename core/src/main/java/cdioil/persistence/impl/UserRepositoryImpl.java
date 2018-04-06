@@ -1,5 +1,6 @@
 package cdioil.persistence.impl;
 
+import cdioil.application.utils.OperatorsEncryption;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Password;
 import cdioil.persistence.BaseJPARepository;
@@ -9,7 +10,6 @@ import cdioil.persistence.UserRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
-import javax.persistence.NoResultException;
 
 /**
  * Class that represents the implementation of the SystemUser repository
@@ -68,12 +68,9 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
         EntityManager em = entityManager();
         Query q =
                 em.createQuery("SELECT u from SystemUser u where lower(u.email.email) = :email");
-        q.setParameter("email", email.toString().toLowerCase());
-        try{
-            return (SystemUser) q.getSingleResult();
-        }catch(NoResultException e){
-            return null;
-        }
+        q.setParameter("email",OperatorsEncryption.encrypt(email.toString().toLowerCase()
+                ,Email.ENCRYPTION_CODE,Email.ENCRYPTION_VALUE));
+        return !q.getResultList().isEmpty() ? (SystemUser)q.getSingleResult() : null;
     }
     
     /**
@@ -85,11 +82,12 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
     public long login(Email email, String passwordString) {
 
         EntityManager em = entityManager();
-
+        String encryptedEmail=OperatorsEncryption.encrypt(email.toString().toLowerCase()
+                ,Email.ENCRYPTION_CODE,Email.ENCRYPTION_VALUE);
         //Fetch user's password before fetching the id
         Query q = em.createQuery("SELECT u.password FROM SystemUser u WHERE LOWER(u.email.email) = :email");
         
-        q.setParameter("email", email.toString().toLowerCase());
+        q.setParameter("email", encryptedEmail);
         if(q.getResultList().isEmpty())return -1;
         Password password = (Password) q.getSingleResult();
 
@@ -97,7 +95,7 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
 
             q = em.createQuery("SELECT u.id FROM SystemUser u WHERE LOWER(u.email.email) = :email");
             
-            q.setParameter("email", email.toString().toLowerCase());
+            q.setParameter("email", encryptedEmail);
             return (long) q.getSingleResult();
         } else {
             return -1;
@@ -114,7 +112,11 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
     @Override
     public List<SystemUser> usersByPattern(String emailPattern) {
         EntityManager em = entityManager();
-        Query queryRegexed=em.createNativeQuery("select * from SYSTEMUSER u where lower(u.email) regexp '"+emailPattern+"'",SystemUser.class);
+        String newEmail=OperatorsEncryption.removeEncryptionHeader(
+                OperatorsEncryption
+                .encrypt(emailPattern,Email.ENCRYPTION_CODE,Email.ENCRYPTION_VALUE));
+        System.out.println(newEmail);
+        Query queryRegexed=em.createNativeQuery("select * from SYSTEMUSER u where lower(u.email) regexp '.*"+newEmail+".*'",SystemUser.class);
         return (List<SystemUser>) queryRegexed.getResultList();
     }
     /**
