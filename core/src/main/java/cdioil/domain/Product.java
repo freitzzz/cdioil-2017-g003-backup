@@ -54,6 +54,7 @@ public class Product implements Serializable,SurveyItem {
      * List of the Product's Codes.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id")
     private List<Code> codes = new ArrayList<>();
 
     /**

@@ -33,7 +33,7 @@ public class ImportQuestionsController {
      */
     public ImportQuestionsController(Manager manager) {
         this.manager = manager;
-        globalLibrary = new GlobalLibraryRepositoryImpl().findByQuery();
+        globalLibrary = new GlobalLibraryRepositoryImpl().findGlobalLibrary();
     }
 
     /**

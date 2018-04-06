@@ -38,14 +38,7 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
      * Map that containsQuestion all questions (values) related to products (keys). TODO
      * check JPA annotations
      */
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "Product QuestionsGroup",
-            joinColumns = {
-                @JoinColumn(name = "fk_productquestionslibrary", referencedColumnName = "id")},
-            inverseJoinColumns = {
-                @JoinColumn(name = "fk_questionsgroup", referencedColumnName = "id")})
-    @MapKey(name = "title")
+    @ManyToMany(cascade = CascadeType.ALL)
     private Map<Product, QuestionGroup> library;
 
     /**

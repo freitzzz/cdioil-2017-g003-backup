@@ -17,7 +17,7 @@ import javax.persistence.Version;
  * Represents a category from the market structure.
  */
 @Entity
-public class Category implements Serializable,SurveyItem {
+public class Category implements Serializable, SurveyItem {
 
     /**
      * Serialization code.
@@ -179,12 +179,13 @@ public class Category implements Serializable,SurveyItem {
         }
         return products.add(p);
     }
-    
+
     /**
      * Returns the set of products associated to the Category.
+     *
      * @return set of products
      */
-    public Set<Product> getProductSet(){
+    public Set<Product> getProductSet() {
         return products;
     }
 
@@ -195,6 +196,15 @@ public class Category implements Serializable,SurveyItem {
      */
     public String categoryName() {
         return name;
+    }
+
+    /**
+     * Returns the path of the Category.
+     *
+     * @return string with the path of the category
+     */
+    public String categoryPath() {
+        return path;
     }
 
     /**
