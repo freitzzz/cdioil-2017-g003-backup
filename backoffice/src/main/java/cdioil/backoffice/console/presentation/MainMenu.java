@@ -10,51 +10,53 @@ import cdioil.domain.authz.Manager;
  */
 public class MainMenu {
 
+    private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
+    
     /* ==============
         COMMON
        ==============
      */
     private final String SEPARATOR = "=============================";
 
-    private final String INFO_SHUTDOWN = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_shutdown");
+    private String INFO_SHUTDOWN = localizationHandler.getMessageValue("info_shutdown");
 
-    private final String ERROR_INVALID_OPTION = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_invalid_option");
-    private final String ERROR_NOT_IMPLEMENTED = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_not_implemented");
+    private String ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
+    private String ERROR_NOT_IMPLEMENTED = localizationHandler.getMessageValue("error_not_implemented");
 
-    private final String REQUEST_SELECT_OPTION = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_select_option");
+    private String REQUEST_SELECT_OPTION = localizationHandler.getMessageValue("request_select_option");
 
-    private final String OPTION_EXIT = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_exit");
-    private final String OPTION_CHANGE_LANGUAGE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_change_language");
+    private String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
+    private String OPTION_CHANGE_LANGUAGE = localizationHandler.getMessageValue("option_change_language");
 
     /* ==============
         MANAGER
        ==============
      */
-    private final String INFO_MANAGER_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_manager_header");
+    private String INFO_MANAGER_HEADER = localizationHandler.getMessageValue("info_manager_header");
 
-    private final String OPTION_IMPORT_QUESTIONS_TEMPLATE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions_template");
-    private static final String OPTION_IMPORT_QUESTIONS_CATEGORY = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_questions_category");
-    private static final String OPTION_EXPORT_SURVEY_ANSWERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_export_survey_answers");
-    public static final String OPTION_CREATE_SURVEY = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_create_survey");
+    private String OPTION_IMPORT_QUESTIONS_TEMPLATE = localizationHandler.getMessageValue("option_import_questions_template");
+    private String OPTION_IMPORT_QUESTIONS_CATEGORY = localizationHandler.getMessageValue("option_import_questions_category");
+    private String OPTION_EXPORT_SURVEY_ANSWERS = localizationHandler.getMessageValue("option_export_survey_answers");
+    private String OPTION_CREATE_SURVEY = localizationHandler.getMessageValue("option_create_survey");
 
     /* ==============
         ADMIN
        ==============
      */
-    private final String INFO_ADMIN_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_admin_header");
+    private String INFO_ADMIN_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_admin_header");
 
-    private final String OPTION_ASSIGN_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_assign_manager");
-    private final String OPTION_WHITELIST_DOMAIN = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_whitelist_domain");
-    private final String OPTION_DISPLAY_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_display_users");
-    private final String OPTION_IMPORT_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_users");
-    private final String OPTION_REGISTER_USER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_register_user");
-    private final String OPTION_UPDATE_DATA = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_update_data");
-    private final String OPTION_IMPORT_CATEGORIES = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_categories");
-    private final String OPTION_USER_BY_EMAIL = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_search_user_by_email");
-    private final String OPTION_REMOVE_CATEGORIES_FROM_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_remove_categories_from_manager");
-    private final String OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_associate_categories_to_manager");
-    private final String OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_list_categories_without_managers");
-    private final String OPTION_ADD_USERS_QUESTIONNAIRE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_add_users_questionnaire");
+    private String OPTION_ASSIGN_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_assign_manager");
+    private String OPTION_WHITELIST_DOMAIN = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_whitelist_domain");
+    private String OPTION_DISPLAY_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_display_users");
+    private String OPTION_IMPORT_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_users");
+    private String OPTION_REGISTER_USER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_register_user");
+    private String OPTION_UPDATE_DATA = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_update_data");
+    private String OPTION_IMPORT_CATEGORIES = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_categories");
+    private String OPTION_USER_BY_EMAIL = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_search_user_by_email");
+    private String OPTION_REMOVE_CATEGORIES_FROM_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_remove_categories_from_manager");
+    private String OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_associate_categories_to_manager");
+    private String OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_list_categories_without_managers");
+    private String OPTION_ADD_USERS_QUESTIONNAIRE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_add_users_questionnaire");
 
     public void mainLoopAdmin(Admin admin) {
         int opcao = 0;
@@ -98,6 +100,7 @@ public class MainMenu {
                     break;
                 case 12:
                     new ChangeLanguageUI();
+                    refreshLocalizedMessages();
                     break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);
@@ -120,6 +123,7 @@ public class MainMenu {
                     break;
                 case 2:
                     new ChangeLanguageUI();
+                    refreshLocalizedMessages();
                     break;
                 case 3:
                     new ExportSurveyAnswersUI();
@@ -175,4 +179,43 @@ public class MainMenu {
         option = Console.readInteger(REQUEST_SELECT_OPTION);
         return option;
     }
+
+    /**
+     * Updates UI messages.
+     */
+    private void refreshLocalizedMessages() {
+
+        INFO_SHUTDOWN = localizationHandler.getMessageValue("info_shutdown");
+
+        ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
+        ERROR_NOT_IMPLEMENTED = localizationHandler.getMessageValue("error_not_implemented");
+
+        REQUEST_SELECT_OPTION = localizationHandler.getMessageValue("request_select_option");
+
+        OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
+        OPTION_CHANGE_LANGUAGE = localizationHandler.getMessageValue("option_change_language");
+
+        INFO_MANAGER_HEADER = localizationHandler.getMessageValue("info_manager_header");
+
+        OPTION_IMPORT_QUESTIONS_TEMPLATE = localizationHandler.getMessageValue("option_import_questions_template");
+        OPTION_IMPORT_QUESTIONS_CATEGORY = localizationHandler.getMessageValue("option_import_questions_category");
+        OPTION_EXPORT_SURVEY_ANSWERS = localizationHandler.getMessageValue("option_export_survey_answers");
+        OPTION_CREATE_SURVEY = localizationHandler.getMessageValue("option_create_survey");
+
+        INFO_ADMIN_HEADER = localizationHandler.getMessageValue("info_admin_header");
+
+        OPTION_ASSIGN_MANAGER = localizationHandler.getMessageValue("option_assign_manager");
+        OPTION_WHITELIST_DOMAIN = localizationHandler.getMessageValue("option_whitelist_domain");
+        OPTION_DISPLAY_USERS = localizationHandler.getMessageValue("option_display_users");
+        OPTION_IMPORT_USERS = localizationHandler.getMessageValue("option_import_users");
+        OPTION_REGISTER_USER = localizationHandler.getMessageValue("option_register_user");
+        OPTION_UPDATE_DATA = localizationHandler.getMessageValue("option_update_data");
+        OPTION_IMPORT_CATEGORIES = localizationHandler.getMessageValue("option_import_categories");
+        OPTION_USER_BY_EMAIL = localizationHandler.getMessageValue("option_search_user_by_email");
+        OPTION_REMOVE_CATEGORIES_FROM_MANAGER = localizationHandler.getMessageValue("option_remove_categories_from_manager");
+        OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = localizationHandler.getMessageValue("option_associate_categories_to_manager");
+        OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = localizationHandler.getMessageValue("option_list_categories_without_managers");
+        OPTION_ADD_USERS_QUESTIONNAIRE = localizationHandler.getMessageValue("option_add_users_questionnaire");
+    }
+
 }
