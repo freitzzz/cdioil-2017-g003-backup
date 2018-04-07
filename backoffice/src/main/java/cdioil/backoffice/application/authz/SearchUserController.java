@@ -34,7 +34,7 @@ public class SearchUserController {
      */
     public List<SystemUser> usersByEmail(String email){
         userRepos = new UserRepositoryImpl();
-        return userRepos.usersByPattern(REGEX_PREFIX + email.toLowerCase() + REGEX_SUFIX);
+        return userRepos.usersByPattern(email.toLowerCase());
     }
     
 }

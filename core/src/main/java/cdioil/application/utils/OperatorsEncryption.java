@@ -107,12 +107,14 @@ public final class OperatorsEncryption {
      * @return String with the encrypted word with the header removed
      */
     public static String removeEncryptionHeader(String encryptedWord){
+        if(encryptedWord==null)return encryptedWord;
         String[] encryptedWordSplitted=encryptedWord.split(ALFABETO_ENCRIPTACAO);
         if(encryptedWord.length()<=2)return "";
         StringBuilder builder=new StringBuilder();
-        for(int i=2;i<encryptedWordSplitted.length;i++){
+        for(int i=2;i<encryptedWordSplitted.length-1;i++){
             builder.append(encryptedWordSplitted[i]).append(ALFABETO_ENCRIPTACAO);
         }
+        builder.append(encryptedWordSplitted[encryptedWordSplitted.length-1]);
         return builder.toString();
     }
     /**
@@ -124,15 +126,16 @@ public final class OperatorsEncryption {
         if(word==null||word.isEmpty())return word;
         if(operation==0)operation=VALORES_OPERADORES[new Random().nextInt(VALORES_OPERADORES.length)];
         if(randomValue==0)randomValue=new Random().nextInt(operation)+1;
-        String encryptedString=""+operation;
-        encryptedString+=ALFABETO_ENCRIPTACAO.charAt(new Random().nextInt(ALFABETO_ENCRIPTACAO.length()));
-        encryptedString+=randomValue;
+        StringBuilder builder=new StringBuilder();
+        builder.append(operation);
+        builder.append(ALFABETO_ENCRIPTACAO.charAt(new Random().nextInt(ALFABETO_ENCRIPTACAO.length())));
+        builder.append(randomValue);
         for(int i=0;i<word.length();i++){
-            encryptedString+=ALFABETO_ENCRIPTACAO.charAt(new Random().nextInt(ALFABETO_ENCRIPTACAO.length()));
-            encryptedString+=encryptCharacter(operation,word.charAt(i),randomValue);
+            builder.append(ALFABETO_ENCRIPTACAO.charAt(new Random().nextInt(ALFABETO_ENCRIPTACAO.length())));
+            builder.append(encryptCharacter(operation,word.charAt(i),randomValue));
         }
         resetOperators();
-        return encryptedString;
+        return builder.toString();
     }
     /**
      * Decripta palavra que foi previamente encriptada com a encriptação por operadores
@@ -141,14 +144,14 @@ public final class OperatorsEncryption {
      */
     private static String generateDecryptionOperation(String encryptedWord){
         if(encryptedWord==null||encryptedWord.isEmpty())return encryptedWord;
-        String decryptedString="";
+        StringBuilder builder=new StringBuilder();
         String[] encryptedWordSplitted=encryptedWord.split(REGEX_ENCRIPTACAO);
         int operationX=Integer.parseInt(encryptedWordSplitted[0]);
         long value=Long.parseLong(encryptedWordSplitted[1]);
         for(int i=2;i<encryptedWordSplitted.length;i++){
-            decryptedString+=decryptCharacter(operationX,encryptedWordSplitted[i],value);
+            builder.append(decryptCharacter(operationX,encryptedWordSplitted[i],value));
         }
-        return decryptedString;
+        return builder.toString();
     }
     /**
      * Método que encripta um certo carater dianta uma certa operação, com um 

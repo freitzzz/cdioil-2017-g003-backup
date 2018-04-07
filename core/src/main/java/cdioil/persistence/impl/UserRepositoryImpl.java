@@ -68,8 +68,7 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
         EntityManager em = entityManager();
         Query q =
                 em.createQuery("SELECT u from SystemUser u where lower(u.email.email) = :email");
-        q.setParameter("email",OperatorsEncryption.encrypt(email.toString().toLowerCase()
-                ,Email.ENCRYPTION_CODE,Email.ENCRYPTION_VALUE));
+        q.setParameter("email",prepareEncryptedEmailForQuery(email.toString().toLowerCase()));
         return !q.getResultList().isEmpty() ? (SystemUser)q.getSingleResult() : null;
     }
     
@@ -82,8 +81,7 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
     public long login(Email email, String passwordString) {
 
         EntityManager em = entityManager();
-        String encryptedEmail=OperatorsEncryption.encrypt(email.toString().toLowerCase()
-                ,Email.ENCRYPTION_CODE,Email.ENCRYPTION_VALUE);
+        String encryptedEmail=prepareEncryptedEmailForQuery(email.toString().toLowerCase());
         //Fetch user's password before fetching the id
         Query q = em.createQuery("SELECT u.password FROM SystemUser u WHERE LOWER(u.email.email) = :email");
         
@@ -112,10 +110,7 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
     @Override
     public List<SystemUser> usersByPattern(String emailPattern) {
         EntityManager em = entityManager();
-        String newEmail=OperatorsEncryption.removeEncryptionHeader(
-                OperatorsEncryption
-                .encrypt(emailPattern,Email.ENCRYPTION_CODE,Email.ENCRYPTION_VALUE));
-        System.out.println(newEmail);
+        String newEmail=prepareEncryptedEmailPatternForQuery(emailPattern.toLowerCase());
         Query queryRegexed=em.createNativeQuery("select * from SYSTEMUSER u where lower(u.email) regexp '.*"+newEmail+".*'",SystemUser.class);
         return (List<SystemUser>) queryRegexed.getResultList();
     }
@@ -127,4 +122,22 @@ public class UserRepositoryImpl extends BaseJPARepository<SystemUser, Long> impl
     public boolean exists(SystemUser user) {
         return findByEmail(user.getID()) != null;
     }
+    /**
+     * Method that encrypts a certain email in order to be used on a certain query
+     * @param email String with the email being used on a certain query
+     * @return String with the encrypted email prepared to be used on the query
+     */
+    private String prepareEncryptedEmailForQuery(String email){
+        return OperatorsEncryption.encrypt(email,Email.ENCRYPTION_CODE,Email.ENCRYPTION_VALUE);
+    }
+    /**
+     * Method that encrypts a certain email pattern in order to be used on a certain query
+     * @param email String with the email pattern being used on a certain query
+     * @return String with the encrypted email pattern prepared to be used on the query
+     */
+    private String prepareEncryptedEmailPatternForQuery(String email){
+        return OperatorsEncryption
+                .removeEncryptionHeader(prepareEncryptedEmailForQuery(email));
+    }
+    
 }

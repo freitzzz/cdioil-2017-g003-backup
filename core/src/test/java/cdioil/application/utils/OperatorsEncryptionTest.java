@@ -37,22 +37,6 @@ public class OperatorsEncryptionTest {
     }
     
     /**
-     * Cria uma lista de Strings aleartorias com o comprimento inferior a 15
-     * @param numberOfStrings Integer com o numero de Strings aleartorias a serem criadas
-     * @return List com as Strings aleartorias criadas
-     */
-    private List<String> createListRandomStrings(int numberOfStrings){
-        List<String> listRandomStrings=new ArrayList<>(numberOfStrings);
-        for(int i=0;i<numberOfStrings;i++){
-            String randomString="";
-            int randomValue=new Random().nextInt(15);
-            for(int j=0;j<randomValue;j++)randomString+=(char)(new Random().nextInt('z'));
-            listRandomStrings.add(randomString);
-        }
-        return listRandomStrings;
-    }
-    
-    /**
      * Testa a encriptação e decriptação usando determinados valores de encriptação 
      * e de operadores
      */
@@ -83,6 +67,37 @@ public class OperatorsEncryptionTest {
         assertEquals(OperatorsEncryption.encrypt(""),"");
         assertEquals(OperatorsEncryption.decrypt(""),"");
     }
+    
+    @Test
+    public void testRemoveHeaderValue(){
+        String encryptedStringNoHeader="Lil Pump#Biggest Flexer#of the century";
+        String encryptedString="Hmmmm#maybe not#"+encryptedStringNoHeader;
+        System.out.println("Test of Remove Header Value of an encrypted String");
+        assertEquals("The condition must be successful since the content of the Strings "
+                + "is the same",OperatorsEncryption.removeEncryptionHeader(null),null);
+        assertEquals("The condition must be successful since the content of the Strings "
+                + "is the same",OperatorsEncryption.removeEncryptionHeader(""),"");
+        System.out.println(OperatorsEncryption.removeEncryptionHeader(encryptedString));
+        assertEquals("The condition must be successful since the content of the Strings "
+                + "is the same",OperatorsEncryption.removeEncryptionHeader(encryptedString),encryptedStringNoHeader);
+    }
+    
+    /**
+     * Cria uma lista de Strings aleartorias com o comprimento inferior a 15
+     * @param numberOfStrings Integer com o numero de Strings aleartorias a serem criadas
+     * @return List com as Strings aleartorias criadas
+     */
+    private List<String> createListRandomStrings(int numberOfStrings){
+        List<String> listRandomStrings=new ArrayList<>(numberOfStrings);
+        for(int i=0;i<numberOfStrings;i++){
+            StringBuilder builder=new StringBuilder();
+            int randomValue=new Random().nextInt(15);
+            for(int j=0;j<randomValue;j++)builder.append((char)(new Random().nextInt('z')));
+            listRandomStrings.add(builder.toString());
+        }
+        return listRandomStrings;
+    }
+    
     /**
      * Método que verifica se duas Strings iguais (Case-Sensitive)
      * @param wordX String com a palavra X
