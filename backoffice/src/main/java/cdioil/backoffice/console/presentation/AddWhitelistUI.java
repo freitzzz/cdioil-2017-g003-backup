@@ -14,6 +14,7 @@ public class AddWhitelistUI {
     private final String SEPARATOR = "===========================\n";
     
     private final String INFO_EXITING = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_exiting");
+    private final String INFO_EXIT_INPUT = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_exit_input");
 
     private final String OPTION_WHITELIST_DOMAIN = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_whitelist_domain");
     private final String OPTION_EXIT = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_exit");
@@ -63,7 +64,7 @@ public class AddWhitelistUI {
 
                     System.out.println(SEPARATOR);
                     
-                    String newDomain = Console.readLine(REQUEST_NEW_DOMAIN);
+                    String newDomain = Console.readLine(REQUEST_NEW_DOMAIN + "\n" + INFO_EXIT_INPUT);
                     if (newDomain.equalsIgnoreCase(OPTION_EXIT)) {
                         break;
                     }

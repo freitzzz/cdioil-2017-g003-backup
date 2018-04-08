@@ -11,7 +11,7 @@ import cdioil.domain.authz.Manager;
 public class MainMenu {
 
     private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
-    
+
     /* ==============
         COMMON
        ==============
@@ -109,7 +109,7 @@ public class MainMenu {
         } while (opcao != 0);
     }
 
-    public void mainLoopGestor(Manager gestor) {
+    public void mainLoopManager(Manager manager) {
         int opcao = 0;
         do {
             opcao = menuGestor();
@@ -119,7 +119,7 @@ public class MainMenu {
                     System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    new ImportQuestionsUI(gestor);
+                    new ImportQuestionsUI(manager);
                     break;
                 case 2:
                     new ChangeLanguageUI();
