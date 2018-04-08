@@ -1,95 +1,83 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
 import static cdioil.application.utils.FileReader.readFile;
 import cdioil.domain.BinaryQuestion;
-import cdioil.domain.Category;
-import cdioil.domain.CategoryQuestionsLibrary;
-import cdioil.domain.GlobalLibrary;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.Question;
-import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.io.File;
-import cdioil.domain.authz.Manager;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Permite a leitura de Questoes a partir de ficheiros .csv.
+ * Class used for importing Questions from a file with the .csv extension.
  *
  * @author Ana Guerra (1161191)
+ * @author António Sousa [1161371]
  */
 public class CSVQuestionsReader implements QuestionsReader {
 
     /**
-     * Nome do ficheiro a ler.
+     * File being read.
      */
-    private File file;
+    private final File file;
     /**
-     * List with the Questions that were read.
-     */
-    private List<Question> lq;
-
-    /**
-     * DivisÃ³ria entre as colunas do ficheiro.
+     * Character used for splitting data within the file.
      */
     private static final String SPLITTER = ";";
     /**
-     * Number of the line that contains the identifiers of the columns.
+     * Number of the line that contains the identifiers of the columns (the
+     * first one in this case).
      */
     private static final int IDENTIFIERS_LINE = 0;
-
     /**
      * Max number of identifiers (columns) in the CSV file.
      */
-    private static final int MAX_IDENTIFIERS = 9;
+    private static final int MAX_NUM_IDENTIFIERS = 9;
     /**
      * Min number of identifiers (columns) in the CSV file.
      */
-    private static final int MIN_IDENTIFIERS = 8;
+    private static final int MIN_NUM_IDENTIFIERS = 8;
     /**
      * Hashtag Identifier.
      */
     private static final String HASHTAG_IDENTIFIER = "#";
     /**
-     * SN Question.
+     * Yes/No Question.
      */
     private static final String SN_QUESTION = "SN";
     /**
-     * ESC Question.
+     * Quantitative Question.
      */
     private static final String ESC_QUESTION = "ESC";
     /**
-     * EM Question.
+     * Multiple Choice Question.
      */
     private static final String EM_QUESTION = "EM";
     /**
-     * DC Identifier.
+     * Categories' DC Identifier.
      */
     private static final String DC_IDENTIFIER = "DC";
     /**
-     * UN Identifier.
+     * Categories' UN Identifier.
      */
     private static final String UN_IDENTIFIER = "UN";
     /**
-     * CAT Identifier.
+     * Categories' CAT Identifier.
      */
     private static final String CAT_IDENTIFIER = "CAT";
     /**
-     * SCAT Identifier.
+     * Categories' SCAT Identifier.
      */
     private static final String SCAT_IDENTIFIER = "SCAT";
     /**
-     * UB Identifier.
+     * Categories' UB Identifier.
      */
     private static final String UB_IDENTIFIER = "UB";
     /**
-     * Question ID Identifier.
+     * Question ID.
      */
     private static final String ID_IDENTIFIER = "QuestaoID";
     /**
@@ -101,6 +89,10 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final String QUESTION_IDENTIFIER = "Texto";
     /**
+     * Question Parameters Identifier.
+     */
+    private static final String PARAMETER_IDENTIFIER = "Parametros";
+    /**
      * Path Identifier.
      */
     private static final String PATH_IDENTIFIER = "-";
@@ -108,98 +100,144 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Scale of the evaluation
      */
     private static final double SCALE = 0.5;
+    /**
+     * The number of cells skipped in order to reach the start of a new question
+     * in a file with questions relative to categories.
+     */
+    private static final int CATEGORIES_FILE_OFFSET = 5;
+    /**
+     * The number of cells skipped in order to reach the start of a new question
+     * in a file with independent questions.
+     */
+    private static final int INDEPENDENT_FILE_OFFSET = 0;
 
-     /**
-     * Creates an instance of CSVQuestionsReader, receiving the name of the file to read.
+    /**
+     * Creates an instance of CSVQuestionsReader, receiving the name of the file
+     * to read.
      *
      * @param filename Name of the file to read
      */
     public CSVQuestionsReader(String filename) {
         this.file = new File(filename);
-        lq = new LinkedList<>();
     }
 
-    /**
-     * Imports Questions from a .csv file.
-     *
-     * @return integer with option
-     */
+    //TODO: improve usage of integers for checking errors; Add list of non-imported categories to return value?
     @Override
-    public int readQuestions(GlobalLibrary globalLibrary, Manager manager) {
-        int nrCatNI = 0;
+    public Map<String, List<Question>> readCategoryQuestions() {
+
+        //int numberQuestionsNotImported = 0;
         List<String> fileContent = readFile(file);
-        if (!isFileValid(fileContent)) {
-            return 2;
+
+        if (!isCategoryQuestionsFileValid(fileContent)) {
+            throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
-        for (int i = IDENTIFIERS_LINE + 1; i < fileContent.size(); i++) {
-            String[] line = fileContent.get(i).split(SPLITTER);
-            if (line.length != 0) { //Doesn't read empty lines
+
+        Map<String, List<Question>> readQuestions = new HashMap<>();
+
+        //Put the list's size in a variable to avoid checking size every iteration
+        int numLines = fileContent.size();
+
+        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
+
+            String[] currentLine = fileContent.get(i).split(SPLITTER);
+            if (currentLine.length > 0) { //Doesn't read empty lines
+
+                //TODO: remove this try/catch block and move it to the UI
                 try {
+                    String DC = currentLine[0].trim();
 
-                    String DC = line[0];
-                    String UN = line[1];
-                    String CAT = line[2];
-                    String SCAT = line[3];
-                    String UB = line[4];
-                    String path;
-                    if (UB.trim().isEmpty() && !UN.trim().isEmpty() && !CAT.trim().isEmpty() && !SCAT.trim().isEmpty() && !DC.trim().isEmpty()) {
-                        path = DC + DC_IDENTIFIER + PATH_IDENTIFIER
-                                + UN + UN_IDENTIFIER + PATH_IDENTIFIER
-                                + CAT + CAT_IDENTIFIER + PATH_IDENTIFIER
-                                + SCAT + SCAT_IDENTIFIER;
-                    } else if (SCAT.trim().isEmpty() && UB.trim().isEmpty()) {
-                        path = DC + DC_IDENTIFIER +PATH_IDENTIFIER
-                                + UN + UN_IDENTIFIER + PATH_IDENTIFIER
-                                + CAT + CAT_IDENTIFIER;
-                    } else if (CAT.trim().isEmpty() && SCAT.trim().isEmpty() && UB.trim().isEmpty()) {
-                        path = DC + DC_IDENTIFIER + PATH_IDENTIFIER
-                                + UN + UN_IDENTIFIER;
-                    } else if (UN.trim().isEmpty() && CAT.trim().isEmpty() && SCAT.trim().isEmpty() && UB.trim().isEmpty()) {
-                        path = DC + DC_IDENTIFIER;
-                    } else {
-                        path = DC + DC_IDENTIFIER + PATH_IDENTIFIER + UN + UN_IDENTIFIER + PATH_IDENTIFIER + CAT + CAT_IDENTIFIER
-                                + PATH_IDENTIFIER+ SCAT + SCAT_IDENTIFIER + PATH_IDENTIFIER + UB + UB_IDENTIFIER;
-                    }
-                    String ID = line[5];
-                    String tipo = line[6];
+                    //Add category identifiers incrementally rather than checking all of the possibilities
+                    //If DC empty, then skip reading this line and avoid doing all the other operations
+                    if (!DC.isEmpty()) {
 
-                    List<Category> list = new MarketStructureRepositoryImpl().
-                            findCategoriesByPathPattern(path.toUpperCase());
-                    if (list == null) {
-                        return 2;
-                    }
-                    for (Category cat : list) {
-                        if (manager.isAssociatedWithCategory(cat)) {
-                            globalLibrary.getCatQuestionsLibrary().addCategory(cat);
-                            if (tipo.equalsIgnoreCase(SN_QUESTION)) {
-                                Question question = new BinaryQuestion(line[7], ID);
-                                if(!addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat)) System.out.println("ERRO");
+                        StringBuilder sb = new StringBuilder(DC);
+                        sb.append(DC_IDENTIFIER);
+                        String UN = currentLine[1].trim();
 
-                            } else if (tipo.equalsIgnoreCase(EM_QUESTION)) {
-                                String param = line[8];
-                                String[] pEM = param.split("=");
-                                int nrEM = Integer.parseInt(pEM[1]);
-                                LinkedList<String> options = new LinkedList<>();
-                                String q  = line[7];
-                                for (int a = 0; a < nrEM; a++) {
-                                    line = fileContent.get(i + 1).split(SPLITTER);
-                                    i++;
-                                    options.add(line[7]);
+                        if (!UN.isEmpty()) {
+
+                            sb.append(PATH_IDENTIFIER);
+                            sb.append(UN);
+                            sb.append(UN_IDENTIFIER);
+
+                            String CAT = currentLine[2].trim();
+
+                            if (!CAT.isEmpty()) {
+
+                                sb.append(PATH_IDENTIFIER);
+                                sb.append(CAT);
+                                sb.append(CAT_IDENTIFIER);
+
+                                String SCAT = currentLine[3].trim();
+
+                                if (!SCAT.isEmpty()) {
+
+                                    sb.append(PATH_IDENTIFIER);
+                                    sb.append(SCAT);
+                                    sb.append(SCAT_IDENTIFIER);
+
+                                    String UB = currentLine[4].trim();
+
+                                    if (!UB.trim().isEmpty()) {
+
+                                        sb.append(PATH_IDENTIFIER);
+                                        sb.append(UB);
+                                        sb.append(UB_IDENTIFIER);
+                                    }
                                 }
-                                Question question = new MultipleChoiceQuestion(q, ID, options);
-                                if(!addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat)) System.out.println("ERRO");
-
-                            } else if (tipo.equalsIgnoreCase(ESC_QUESTION)) {
-                                String[] pMin = line[8].trim().split("=");
-                                String[] pMax = line[9].trim().split("=");
-                                pMax[1] = pMax[1].replace('"', ' ').trim();
-                                double min = Double.parseDouble(pMin[1]);
-                                double max = Double.parseDouble(pMax[1]);
-                                Question question = new QuantitativeQuestion(line[7], ID, min, max, SCALE);
-                                if(!addQuestion(globalLibrary.getCatQuestionsLibrary(), question, cat)) System.out.println("ERRO");
                             }
-                        } else {
-                            nrCatNI++;
+                        }
+
+                        String path = sb.toString();
+
+                        String questionType = currentLine[6].trim();
+
+                        Question question = null;
+
+                        if (questionType.equalsIgnoreCase(SN_QUESTION)) {
+
+                            question = readBinaryQuestion(currentLine, CATEGORIES_FILE_OFFSET);
+
+                        } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
+
+                            Object[] objects = readMultipleChoiceQuestion(currentLine, CATEGORIES_FILE_OFFSET, fileContent, i);
+
+                            i = (Integer) objects[0];
+                            question = (Question) objects[1];
+
+                        } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
+
+                            question = readQuantitativeQuestion(currentLine, CATEGORIES_FILE_OFFSET);
+                        }
+
+                        //question is only null if an unknown type of question is read
+                        if (question != null) {
+
+                            //If the map doesn't contain the key, add it to the map and make its value a new empty list
+                            if (!readQuestions.containsKey(path)) {
+
+                                List<Question> value = new LinkedList<>();
+                                readQuestions.put(path, value);
+
+                                readQuestions.put(path, value);
+                            }
+
+                            readQuestions.get(path).add(question);
+
+//                            for (Category cat : list) {
+//                                if (manager.isAssociatedWithCategory(cat)) {
+//
+//                                    categoryQuestionsLibrary.addCategory(cat);
+//
+//                                    boolean added = categoryQuestionsLibrary.addQuestion(question, cat);
+//
+//                                    if (!added) {
+//                                        System.out.println("ERRO");
+//                                    }
+//                                } else {
+//                                    numberQuestionsNotImported++;
+//                                }
+//                            }
                         }
                     }
                 } catch (IllegalArgumentException ex) {
@@ -207,20 +245,99 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
         }
-        if (nrCatNI++ != 0) {
-            System.out.println("NÃ£o foram importadas " + nrCatNI + " questÃµes, porque as categorias nÃ£o lhe pertencem.");
-            return 4;
-        }
-        return 3;
+//        //Why was it incremented?
+//        if (numberQuestionsNotImported++ != 0) {
+//            System.out.println("NÃ£o foram importadas " + numberQuestionsNotImported + " questÃµes, porque as categorias nÃ£o lhe pertencem.");
+//            return 4;
+//        }
+//        return 3;
+
+        return readQuestions;
+
     }
 
     /**
-     * Checks if the content of the file is valid - not null and has all the expected identifiers properly splitted.
+     * Reads a binary question from a CSV file.
+     *
+     * @param currentLine the line currently being read in the file
+     * @param offset number of cells skipped to reach the start of a question
+     * @return binary question
+     */
+    private Question readBinaryQuestion(String[] currentLine, int offset) {
+
+        String questionID = currentLine[offset].trim();
+        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
+
+        return new BinaryQuestion(questionText, questionID);
+    }
+
+    /**
+     * Reads a quantitative question from a CSV file.
+     *
+     * @param currentLine the line currently being read in the file
+     * @param offset number of cells skipped to reach the start of a question
+     * @return quantitative question
+     */
+    private Question readQuantitativeQuestion(String[] currentLine, int offset) {
+
+        String questionID = currentLine[offset].trim();
+        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
+        String[] pMin = currentLine[offset + 3].trim().split("=");
+        String[] pMax = currentLine[offset + 4].trim().split("=");
+        pMax[1] = pMax[1].replace("\"", "").trim();
+        double min = Double.parseDouble(pMin[1]);
+        double max = Double.parseDouble(pMax[1]);
+        return new QuantitativeQuestion(questionText, questionID, min, max, SCALE);
+    }
+
+    /**
+     * Reads a multiplle choice question from a CSV file.</br>This one is a bit
+     * different from the other ones, since it returns an updated value of the
+     * current line's index as well as the question itself, this is due to the
+     * fact that instances of <code>MultipleChoiceQuestion</code> have options
+     * and so some lines need to be skipped.
+     *
+     * @param currentLine line currently being read
+     * @param offset number of cells skipped to reach the start of the question
+     * @param fileContent all of the file's lines
+     * @param currentIdx index of the line currently being read
+     * @return an array of <code>Object</code> with two positions, where the
+     * first contains an updated value of the current line index, and the second
+     * contains an instance of <code>MultipleChoiceQuestion</code>.
+     */
+    private Object[] readMultipleChoiceQuestion(String[] currentLine, int offset, List<String> fileContent, int currentIdx) {
+
+        Object[] result = new Object[2];
+
+        String questionID = currentLine[offset].trim();
+        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
+
+        //Fetch number of options
+        String param = currentLine[offset + 3];
+        String[] pEM = param.split("=");
+        int nrEM = Integer.parseInt(pEM[1]);
+
+        LinkedList<String> options = new LinkedList<>();
+
+        for (int a = 0; a < nrEM; a++) {
+            currentLine = fileContent.get(currentIdx++).split(SPLITTER);
+            options.add(currentLine[offset + 2]);
+        }
+
+        result[0] = currentIdx;
+        result[1] = new MultipleChoiceQuestion(questionText, questionID, options);
+
+        return result;
+    }
+
+    /**
+     * Checks if the content of the file is valid - not null and has all the
+     * expected identifiers properly splitted.
      *
      * @param fileContent All the lines of the file
      * @return true, if the content is valid. Otherwise, returns false
      */
-    protected boolean isFileValid(List<String> fileContent) {
+    private boolean isCategoryQuestionsFileValid(List<String> fileContent) {
         if (fileContent == null) {
             return false;
         }
@@ -228,7 +345,7 @@ public class CSVQuestionsReader implements QuestionsReader {
 
         line[0] = line[0].replace('?', ' ').trim();
 
-        return (line.length == MIN_IDENTIFIERS || line.length == MAX_IDENTIFIERS)
+        return ((line.length == MIN_NUM_IDENTIFIERS || line.length == MAX_NUM_IDENTIFIERS)
                 && line[0].contains(HASHTAG_IDENTIFIER + DC_IDENTIFIER)
                 && line[1].equalsIgnoreCase(HASHTAG_IDENTIFIER + UN_IDENTIFIER)
                 && line[2].equalsIgnoreCase(HASHTAG_IDENTIFIER + CAT_IDENTIFIER)
@@ -236,19 +353,83 @@ public class CSVQuestionsReader implements QuestionsReader {
                 && line[4].equalsIgnoreCase(HASHTAG_IDENTIFIER + UB_IDENTIFIER)
                 && line[5].equalsIgnoreCase(ID_IDENTIFIER)
                 && line[6].equalsIgnoreCase(TYPE_IDENTIFIER)
-                && line[7].equalsIgnoreCase(QUESTION_IDENTIFIER);
+                && line[7].equalsIgnoreCase(QUESTION_IDENTIFIER)
+                && line[8].equalsIgnoreCase(PARAMETER_IDENTIFIER));
+    }
+
+    @Override
+    public List<Question> readIndependentQuestions() {
+
+        List<String> fileContent = readFile(file);
+
+        if (fileContent == null) {
+            return null;
+        }
+
+        if (!isIndependentQuestionsFileValid(fileContent)) {
+            throw new InvalidFileFormattingException("Unrecognized file formatting");
+        }
+
+        List<Question> newlyImportedQuestions = new LinkedList<>();
+
+        int numLines = fileContent.size();
+
+        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
+
+            String[] currentLine = fileContent.get(i).split(SPLITTER);
+
+            if (currentLine.length > 0) {
+
+                String questionType = currentLine[1].trim();
+
+                Question question = null;
+
+                if (questionType.equalsIgnoreCase(SN_QUESTION)) {
+
+                    question = readBinaryQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
+
+                } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
+
+                    Object[] objects = readMultipleChoiceQuestion(currentLine, INDEPENDENT_FILE_OFFSET, fileContent, i);
+
+                    i = (Integer) objects[0];
+                    question = (Question) objects[1];
+
+                } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
+
+                    question = readQuantitativeQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
+                }
+
+                if (question != null) {
+                    newlyImportedQuestions.add(question);
+                }
+            }
+        }
+
+        return newlyImportedQuestions;
     }
 
     /**
-     * Adds a question to the Category Questions Library.
+     * Checks if the content of the file is valid - not null and has all the
+     * expected identifiers properly splitted.
      *
-     * @param cqb CategoryQuestionsLibrary
-     * @param que Question
-     * @param cat Category
-     * @return true if the question is successfully added or false if not.
+     * @param fileContent All the lines of the file
+     * @return true, if the content is valid. Otherwise, returns false
      */
-    public boolean addQuestion(CategoryQuestionsLibrary cqb, Question que, Category cat) {
-        return cqb.addQuestion(que, cat);
+    private boolean isIndependentQuestionsFileValid(List<String> fileContent) {
+
+        if (fileContent == null || fileContent.isEmpty()) {
+            return false;
+        }
+
+        String[] line = fileContent.get(IDENTIFIERS_LINE).split(SPLITTER);
+
+        line[0] = line[0].replace('?', ' ').trim();
+
+        return (line.length == 4 && line[0].equalsIgnoreCase(ID_IDENTIFIER)
+                && line[1].equalsIgnoreCase(TYPE_IDENTIFIER)
+                && line[2].equalsIgnoreCase(QUESTION_IDENTIFIER)
+                && line[3].equalsIgnoreCase(PARAMETER_IDENTIFIER));
     }
 
 }

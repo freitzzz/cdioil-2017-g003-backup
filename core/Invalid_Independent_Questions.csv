@@ -1,0 +1,9 @@
+QuestaoID;Tipo;Texto;Parametros;ParametroInvalido
+A34;SN;"Já adquiriu produtos de marca Continente?	";
+A23;ESC;Qual a sua opinião global sobre os produtos de marca Continente?;"MIN=0;MAX=5"
+B12;EM;Como classifica os seus hábitos de compra de produtos de marca Continente?;N=4
+B12;EM;"São a minha preferência	";
+B12;EM;"Compro quando são mais baratos	";
+B12;EM;"Gosto de alguns específicos	";
+B12;EM;"Não compro	";
+A15;SN;"Recomenda produtos de marca Continente a amigos?	";
