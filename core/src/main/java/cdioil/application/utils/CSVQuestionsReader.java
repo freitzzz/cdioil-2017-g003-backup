@@ -156,33 +156,25 @@ public class CSVQuestionsReader implements QuestionsReader {
 
                         if (!UN.isEmpty()) {
 
-                            sb.append(PATH_IDENTIFIER);
-                            sb.append(UN);
-                            sb.append(UN_IDENTIFIER);
+                            sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
 
                             String CAT = currentLine[2].trim();
 
                             if (!CAT.isEmpty()) {
 
-                                sb.append(PATH_IDENTIFIER);
-                                sb.append(CAT);
-                                sb.append(CAT_IDENTIFIER);
+                                sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
 
                                 String SCAT = currentLine[3].trim();
 
                                 if (!SCAT.isEmpty()) {
 
-                                    sb.append(PATH_IDENTIFIER);
-                                    sb.append(SCAT);
-                                    sb.append(SCAT_IDENTIFIER);
+                                    sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
 
                                     String UB = currentLine[4].trim();
 
                                     if (!UB.trim().isEmpty()) {
 
-                                        sb.append(PATH_IDENTIFIER);
-                                        sb.append(UB);
-                                        sb.append(UB_IDENTIFIER);
+                                        sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
                                     }
                                 }
                             }
@@ -223,21 +215,6 @@ public class CSVQuestionsReader implements QuestionsReader {
                             }
 
                             readQuestions.get(path).add(question);
-
-//                            for (Category cat : list) {
-//                                if (manager.isAssociatedWithCategory(cat)) {
-//
-//                                    categoryQuestionsLibrary.addCategory(cat);
-//
-//                                    boolean added = categoryQuestionsLibrary.addQuestion(question, cat);
-//
-//                                    if (!added) {
-//                                        System.out.println("ERRO");
-//                                    }
-//                                } else {
-//                                    numberQuestionsNotImported++;
-//                                }
-//                            }
                         }
                     }
                 } catch (IllegalArgumentException ex) {
