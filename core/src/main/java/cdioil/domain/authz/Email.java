@@ -93,7 +93,7 @@ public class Email implements Serializable,ValueObject {
     /**
      * Constant that represents the encryption codes being used
      */
-    public static final int ENCRYPTION_CODE=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_ADICAO;
+    public static final int ENCRYPTION_CODE=OperatorsEncryption.ADDITION_ENCRYPTION_CODE;
     /**
      * Builds a new instance of email
      * @param email String with the email address

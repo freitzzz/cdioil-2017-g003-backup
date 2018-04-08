@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;GENERATE_GETTERS&quot;:false,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;mytheme&quot;}">
+  <meta name="vaadin-version" content="8.0.5">
+ </head>
+ <body>
+  <vaadin-css-layout size-full>
+   <vaadin-panel size-full _id="panelExport">
+    <vaadin-grid-layout size-full _id="gridExport">
+     <row>
+      <column>
+       <vaadin-grid data-item-type="cdioil.domain.Survey" _id="gridSurveys" :middle :center></vaadin-grid>
+      </column>
+     </row>
+     <row>
+      <column>
+       <vaadin-button plain-text _id="btnExportSurveyAnswers" :center>
+         Exportar Repostas 
+       </vaadin-button>
+      </column>
+     </row>
+    </vaadin-grid-layout>
+   </vaadin-panel>
+  </vaadin-css-layout>
+ </body>
+</html>

@@ -46,17 +46,17 @@ public class OperatorsEncryptionTest {
                 + "usando a encriptação por operadores com determinados valores de "
                 + "encriptação e de operador");
         String palavra="Hello it's Lil Pump on this bitch!";
-        int operador=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_BITWISE;
+        int operador=OperatorsEncryption.BITWISE_ENCRYPTION_CODE;
         List<String> listaPalavrasEncriptadas=new ArrayList<>();
         for(int i=0;i<operador;i++){
             listaPalavrasEncriptadas.add(OperatorsEncryption.encrypt(palavra,operador,i));
         }
-        operador=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_ADICAO;
+        operador=OperatorsEncryption.ADDITION_ENCRYPTION_CODE;
         for(int i=0;i<100;i++){
             int valor=new Random().nextInt(operador);
             listaPalavrasEncriptadas.add(OperatorsEncryption.encrypt(palavra,operador,valor));
         }
-        operador=OperatorsEncryption.VALOR_ENCRIPTACAO_OPERADOR_MULTIPLICACAO;
+        operador=OperatorsEncryption.MULTIPLICATION_ENCRYPTION_CODE;
         for(int i=0;i<100;i++){
             int valor=new Random().nextInt(operador);
             listaPalavrasEncriptadas.add(OperatorsEncryption.encrypt(palavra,operador,valor));
