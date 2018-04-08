@@ -9,6 +9,8 @@
 		<Message messageId = "info_exiting" value = "A Sair..."/>
 		<Message messageId = "info_manager_header" value = "&#x9;Back Office Gestor"/>
 		<Message messageId = "info_admin_header" value = "&#x9;Back Office Admin"/>
+		<Message messageId = "info_exit_input" value = "Escreva 'sair' se pretender cancelar."/>
+		<Message messageId = "info_num_questions_imported" value = "Número de questões importadas com sucesso:"/>
 	</InfoMessages>
 
 	
@@ -17,8 +19,9 @@
 		<Message messageId = "request_email" value = "Email: "/>
 		<Message messageId = "request_password" value = "Password: "/>
 		<Message messageId = "request_select_option" value = "Por favor, selecione uma opção:&#10;"/>
-		<Message messageId = "request_new_domain" value = "Escreva o dominio de email que pretende autorizar.&#10;Escreva 'sair' se pretender cancelar."/>
+		<Message messageId = "request_new_domain" value = "Escreva o dominio de email que pretende autorizar."/>
 		<Message messageId = "request_select_language" value = "Selecione o seu idioma:"/>
+		<Message messageId = "request_file_path" value = "Por favor introduza o caminho do ficheiro:"/>
 	</RequestMessages>
 	
 	
@@ -28,6 +31,8 @@
 		<Message messageId = "error_invalid_option" value = "Por favor, selecione uma opção válida.&#10;"/>
 		<Message messageId = "error_not_implemented" value = "Funcionalidade não implementada"/>
 		<Message messageId = "error_invalid_file_format" value = "Formato de ficheiro inválido!"/>
+		<Message messageId = "error_file_not_found" value = "Ficheiro não encontrado, por favor tente novamente."/>
+		<Message messageId = "error_no_imported_questions" value = "Não foi importada nenhuma questão."/>
 	</ErrorMessages>
 	
 	
