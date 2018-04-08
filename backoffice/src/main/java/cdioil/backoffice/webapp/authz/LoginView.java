@@ -57,6 +57,10 @@ public class LoginView extends LoginDesign implements View {
      */
     private static final String INVALID_USER_LOGIN_DESCRIPTION = "Não tem permissões para aceder à plataforma";
     /**
+     * Constant that represents the background image path
+     */
+    private static final String BACKGROUND_IMAGE_PATH ="/WEB-INF/logos/Feedback_Monkey_Full.png";
+    /**
      * Current Navigator
      */
     private final Navigator navigator;
@@ -89,7 +93,7 @@ public class LoginView extends LoginDesign implements View {
      * Gets logo from resource
      */
     private void setLogo() {
-        logo.setSource(ImageUtils.imagePathAsResource("/WEB-INF/logos/Feedback_Monkey_Full.png"));
+        logo.setSource(ImageUtils.imagePathAsResource(BACKGROUND_IMAGE_PATH));
     }
 
     /**
