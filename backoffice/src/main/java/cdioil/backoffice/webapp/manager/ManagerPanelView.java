@@ -3,9 +3,14 @@ package cdioil.backoffice.webapp.manager;
 import cdioil.backoffice.webapp.authz.LoginView;
 
 import cdioil.backoffice.webapp.utils.ImageUtils;
+import cdioil.backoffice.webapp.utils.PopupNotification;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import static com.vaadin.ui.TabSheet.Tab;
+
+import com.vaadin.shared.Position;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.UI;
 
 /**
@@ -25,6 +30,11 @@ public class ManagerPanelView extends ManagerPanelDesign implements View {
      */
     private static final String DEFAULT_IMAGE_RESOURCE="/WEB-INF/users/DEFAULT_USER_IMAGE.png";
     /**
+     * Constant that represents the title of the notification that pops up when an error occures
+     * while opening the Export Tab Page
+     */
+    private static final String ERROR_OPENING_EXPORT_TAB_TITLE="Ocorreu um erro ao abrir a pagina de exportação!";
+    /**
      * Current Navigator
      */
     private final Navigator navigator;
@@ -32,6 +42,10 @@ public class ManagerPanelView extends ManagerPanelDesign implements View {
      * Current Tab for the "Importar Button"
      */
     private Tab currentImportarTab;
+    /**
+     * Current Tab for the "Exportar Button"
+     */
+    private Tab currentExportarTab;
     /**
      * Builds a new ManagerPanelView
      */
@@ -48,6 +62,7 @@ public class ManagerPanelView extends ManagerPanelDesign implements View {
         configureManagerImage();
         configureManagerName();
         configureImportButton();
+        configureExportButton();
     }
 
     /**
@@ -84,6 +99,41 @@ public class ManagerPanelView extends ManagerPanelDesign implements View {
                 tabSheetOptions.setSelectedTab(currentImportarTab);
             }
         });
+    }
+
+    /**
+     * Configures Export button
+     */
+    private void configureExportButton(){
+        btnExportar.addClickListener(listener ->{
+            createExportTab();
+        });
+    }
+
+    /**
+     * Creates a new Export Tab
+     */
+    private void createExportTab(){
+        btnExportar.addClickListener(listener ->{
+            if(currentExportarTab==null||tabSheetOptions.getTabPosition(currentExportarTab)<0){
+                try {
+                    currentExportarTab = tabSheetOptions.addTab(new ManagerExportView(), btnExportar.getCaption());
+                    currentExportarTab.setClosable(true);
+                    tabSheetOptions.setSelectedTab(currentExportarTab);
+                }catch(IllegalStateException e){
+                    PopupNotification.show(ERROR_OPENING_EXPORT_TAB_TITLE,e.getMessage(), Notification.Type.ERROR_MESSAGE
+                            , Position.TOP_RIGHT);
+                }
+            }
+        });
+    }
+
+    /**
+     * Configures current navigator
+     */
+    private void configureNavigator(){
+        navigator.addView(ManagerImportView.VIEW_NAME,ManagerImportView.class);
+        navigator.addView(ManagerExportView.VIEW_NAME,ManagerExportView.class);
     }
 
 }

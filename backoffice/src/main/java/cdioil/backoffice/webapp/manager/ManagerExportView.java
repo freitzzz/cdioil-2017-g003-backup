@@ -1,5 +1,6 @@
 package cdioil.backoffice.webapp.manager;
 
+import cdioil.backoffice.application.ExportSurveyAnswersController;
 import cdioil.backoffice.webapp.utils.PopupNotification;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
@@ -9,7 +10,6 @@ import com.vaadin.shared.Position;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +51,17 @@ public class ManagerExportView extends ManagerExportDesign implements View {
      */
     private static final String NO_SELECTED_SURVEY_MESSAGE="Por favor selecione um Inquérito!";
     /**
+     * Constant that represents the title of the notification title that popsup if the manager 
+     * tries to export answers from a survey that does not contain any reviews
+     */
+    private static final String NO_CURRENT_REVIEWS_FOR_SURVEY_TITLE="O Inquérito não contém avaliações!";
+    /**
+     * Constant that represents the title of the notification message that popsup if the manager 
+     * tries to export answers from a survey that does not contain any reviews
+     */
+    private static final String NO_CURRENT_REVIEWS_FOR_SURVEY_MESSAGE="Não existem avaliações de momento "
+            + "para o Inquérito selecionado";
+    /**
      * Constant that represents the initial lazy load index of the surveys retrieval
      */
     private static final int INITIAL_LAZYLOAD_INDEX=0;
@@ -63,6 +74,10 @@ public class ManagerExportView extends ManagerExportDesign implements View {
      * Current Surveys
      */
     private List<Survey> currentSurveys;
+    /**
+     * Current ExportSurveyAnswers controller
+     */
+    private ExportSurveyAnswersController currentController;
 
     /**
      * Builds a new ManagerExportView
@@ -100,7 +115,7 @@ public class ManagerExportView extends ManagerExportDesign implements View {
             if(currentSelectedSurvey==null){
                 showNotificationForNoSelectedSurvey();
             }else{
-                //TO-DO: Check for existence of Reviews on the current selected Survey
+                
             }
         });
     }
@@ -113,7 +128,7 @@ public class ManagerExportView extends ManagerExportDesign implements View {
         currentSurveys.addAll(new SurveyRepositoryImpl().getSurveysByLazyLoadingIndex(INITIAL_LAZYLOAD_INDEX));
         if(currentSurveys.isEmpty())throw new IllegalStateException(NO_SURVEYS_MESSAGE);
     }
-
+    
     /**
      * Gets the current selected Survey from the Grid
      * @return Survey with the current selected survey from the Grid, null if no Survey is currently
@@ -124,7 +139,15 @@ public class ManagerExportView extends ManagerExportDesign implements View {
         return !currentSelectedItem.isEmpty() ?
                 currentSelectedItem.iterator().next() : null;
     }
-
+    
+    private void exportReviews(Survey survey){
+        try{
+            this.currentController=new ExportSurveyAnswersController(survey);
+        }catch(IllegalArgumentException e){
+            showNotificationForNoReviewsOnSelectedSurvey();
+        }
+    }
+    
     /**
      * Shows up a notification that pops up to the manager if he attemps to export the
      * answers of a Survey without selecting one
@@ -133,4 +156,15 @@ public class ManagerExportView extends ManagerExportDesign implements View {
         PopupNotification.show(NO_SELECTED_SURVEY_TITLE,NO_SELECTED_SURVEY_MESSAGE
                 , Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_RIGHT);
     }
+    
+    /**
+     * Shows up a notification that pops up if the manager tries to export reviews 
+     * from a Survey that does not contain any reviews
+     */
+    private void showNotificationForNoReviewsOnSelectedSurvey(){
+        PopupNotification.show(NO_CURRENT_REVIEWS_FOR_SURVEY_TITLE
+                    ,NO_CURRENT_REVIEWS_FOR_SURVEY_MESSAGE
+                    ,Notification.Type.ASSISTIVE_NOTIFICATION,Position.TOP_RIGHT);
+    }
+
 }
