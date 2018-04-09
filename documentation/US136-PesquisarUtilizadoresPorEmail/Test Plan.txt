@@ -1,0 +1,12 @@
+TEST PLAN
+
+	________________________________________________
+	CASO #1: Pesquisar Utilizadores Por Email
+	________________________________________________
+
+	1. Fazer login com o admin sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção 8 "Pesquisar Utilizadores Por Email"
+	3. Inserir nome ou parte do email do utilizador a procurar.
+	4. Verificar que os utilizadores apresentados tem no seu email o nome inserido anteriormente.
+	5. Guardar na base de dados.

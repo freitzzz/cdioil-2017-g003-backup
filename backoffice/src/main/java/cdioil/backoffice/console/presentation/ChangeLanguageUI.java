@@ -16,15 +16,17 @@ import org.xml.sax.SAXException;
  * @author Antonio Sousa
  */
 public class ChangeLanguageUI {
+    
+    private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
 
-    private final String REQUEST_SELECT_LANGUAGE = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_select_language");
+    private String REQUEST_SELECT_LANGUAGE = localizationHandler.getMessageValue("request_select_language");
 
-    private final String OPTION_EXIT = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_exit");
+    private String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
 
-    private final String ERROR_INVALID_OPTION = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_invalid_option");
+    private String ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
 
     private final ChangeLanguageController controller;
-    
+
     public ChangeLanguageUI() {
         controller = new ChangeLanguageController();
         showUI();
@@ -53,9 +55,11 @@ public class ChangeLanguageUI {
                         break;
                     case 1:
                         controller.changeLanguage(Language.pt_PT);
+                        refreshLocalizedMessages();
                         break;
                     case 2:
                         controller.changeLanguage(Language.en_US);
+                        refreshLocalizedMessages();
                         break;
 
                     default:
@@ -68,6 +72,16 @@ public class ChangeLanguageUI {
             }
         }
 
+    }
+
+    /**
+     * Updates UI messages.
+     */
+    private void refreshLocalizedMessages() {
+
+        REQUEST_SELECT_LANGUAGE = localizationHandler.getMessageValue("request_select_language");
+        OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
+        ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
     }
 
 }

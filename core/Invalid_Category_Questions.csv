@@ -1,0 +1,9 @@
+#DC;#UN;#CAT;#SCAT;QuestaoID;Tipo;Texto;Parametros
+10;10;1002;4;;12;SN;Bla, bla?;
+10;10;1002;4;;13;SN;Bla, bla, bla?;
+10;10;1002;4;;16;ESC;Ble, ble;"MIN=0; MAX=5"
+10;10;1002;4;2;34;EM;Bli, bli, bli;N=3
+10;10;1002;4;2;34;EM;Na, na, na;
+10;10;1002;4;2;34;EM;Ne, ne, ne,;
+10;10;1002;4;2;34;EM;Ni, ni, ni;
+10;10;1002;6;1;15;SN;Blo, blo, blo?;

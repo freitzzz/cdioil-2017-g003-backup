@@ -1,27 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
-import cdioil.domain.GlobalLibrary;
-import cdioil.domain.authz.Manager;
+import cdioil.domain.Question;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for reading questions from files.
- * 
+ *
  * @author Ana Guerra (1161191)
+ * @author António Sousa [1161371]
  */
 public interface QuestionsReader {
-    
+
     /**
-     * Imports questions from a file.
+     * Imports questions associated to categories from a file.
      *
-     * @param globalLibrary
-     * @param manager
-     * @return A biblioteca de Questoesde uma dada categoria
+     * @return map with categories' path as key and list of questions related to
+     * that category as values.
      */
-    int readQuestions(GlobalLibrary globalLibrary, Manager manager);
-    
+    Map<String, List<Question>> readCategoryQuestions();
+
+    /**
+     * Imports questions independent of categories from a file.
+     *
+     * @return list of questions read from file.
+     */
+    List<Question> readIndependentQuestions();
+
 }

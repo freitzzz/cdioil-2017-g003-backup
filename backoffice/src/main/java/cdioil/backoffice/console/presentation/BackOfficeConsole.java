@@ -20,6 +20,6 @@ public class BackOfficeConsole {
      * @param gestor Manager com o gestor que esta aceder ao backoffice
      */
     public BackOfficeConsole(Manager gestor){
-        new MainMenu().mainLoopGestor(gestor);
+        new MainMenu().mainLoopManager(gestor);
     }
 }
