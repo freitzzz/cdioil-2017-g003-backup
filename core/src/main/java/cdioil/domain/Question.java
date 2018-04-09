@@ -109,13 +109,4 @@ public abstract class Question<T> implements Serializable, ValueObject {
         }
         return this.content.equals(other.content);
     }
-
-    /**
-     * Returns a textual description of the question
-     * @return content's toString();
-     */
-    @Override
-    public String toString() {
-        return content.toString();
-    }
 }

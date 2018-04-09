@@ -97,10 +97,6 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final String PATH_IDENTIFIER = "-";
     /**
-     * Scale of the evaluation
-     */
-    private static final double SCALE = 0.5;
-    /**
      * The number of cells skipped in order to reach the start of a new question
      * in a file with questions relative to categories.
      */
@@ -264,7 +260,7 @@ public class CSVQuestionsReader implements QuestionsReader {
         pMax[1] = pMax[1].replace("\"", "").trim();
         double min = Double.parseDouble(pMin[1]);
         double max = Double.parseDouble(pMax[1]);
-        return new QuantitativeQuestion(questionText, questionID, min, max, SCALE);
+        return new QuantitativeQuestion(questionText, questionID, min, max);
     }
 
     /**
