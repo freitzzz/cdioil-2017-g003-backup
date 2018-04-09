@@ -1,0 +1,36 @@
+___________
+
+	  ANÁLISE 
+	___________
+
+	USER STORY DO SPRINT #2
+	
+	* Como Gestor pretendo importar questões sobre uma dada categoria.
+
+	* CONDIÇÔES DEFENIDAS.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	_____________________
+		
+	  TESTES UNITÁRIOS
+	_____________________
+
+
+	* Classe GlobalLibrary:
+		* testGetCatQuestionsLibrary
+
+	* Classe Manager:
+		* testIsAssociatedWithCategory
+
+	* Classe CategoryQuestionsLibrary:
+		* testAddCategory
+		* testAddQuestion
+
+	* Classe CSVQuestionsReader:
+		* testReadCategoryQuestions

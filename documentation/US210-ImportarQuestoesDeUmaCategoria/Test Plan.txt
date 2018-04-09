@@ -1,0 +1,12 @@
+TEST PLAN
+
+	________________________________________________
+	CASO #1: Pesquisar Utilizadores Por Email
+	________________________________________________
+
+	1. Fazer login com o gestor bom.gestor@sonae.pt e
+	   password Password123
+	2. Escolher a opção 1 "Importar questões sobre categorias"
+	3. Inserir caminho do ficheiro a ser importado.
+	4. Verificar que as questões com as categorias associadas ao gestor foram importadas.
+	5. Guardar na base de dados.
