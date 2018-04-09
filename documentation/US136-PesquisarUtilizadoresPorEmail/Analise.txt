@@ -1,0 +1,25 @@
+___________
+
+	  ANÁLISE 
+	___________
+
+	USER STORY DO SPRINT #2
+	
+	* Como Administrador, pretendo procurar utilizadores a partir de um email.
+
+	* CONDIÇÔES DEFENIDAS.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	_____________________
+		
+	  TESTES UNITÁRIOS
+	_____________________
+
+
+	
