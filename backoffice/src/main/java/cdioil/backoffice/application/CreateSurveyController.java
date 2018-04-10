@@ -1,7 +1,8 @@
-package cdioil.application.authz;
+package cdioil.backoffice.application;
 
 import cdioil.domain.*;
 import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
+import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,24 @@ public class CreateSurveyController {
         return list;
     }
 
+    public List<Question> questionsForCategory(Category category) {
+        GlobalLibraryRepositoryImpl repository = new GlobalLibraryRepositoryImpl();
+        GlobalLibrary globalLibrary = repository.findGlobalLibrary();
+
+        return new ArrayList<>(globalLibrary.getCatQuestionsLibrary().categoryQuestionSet(category));
+    }
+
+    public Category findCategory(String path) {
+        MarketStructureRepositoryImpl marketStructure = new MarketStructureRepositoryImpl();
+        List<Category> temporary = marketStructure.findCategoriesByPathPattern(path.toUpperCase());
+
+        if (temporary.size() > 0) {
+            return temporary.get(0);
+        }
+
+        return null;
+    }
+
     /**
      * Create a Survey for specific products or categories
      *  @param surveyItems list of survey items
@@ -32,6 +51,7 @@ public class CreateSurveyController {
                 survey.addQuestion(question);
             }
         }
+        System.out.println(survey);
         return repo.add(survey) == null;
     }
 }
