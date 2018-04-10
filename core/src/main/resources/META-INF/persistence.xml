@@ -38,6 +38,8 @@
     <class>cdioil.application.utils.AnswerEdge</class>
     <class>cdioil.application.utils.QuestionAnswerGraph</class>
     <class>cdioil.application.utils.QuestionVertex</class>
+    <class>cdioil.application.utils.LocalDateTimeAttributeConverter</class>
+    <class>cdioil.domain.SurveyItem</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

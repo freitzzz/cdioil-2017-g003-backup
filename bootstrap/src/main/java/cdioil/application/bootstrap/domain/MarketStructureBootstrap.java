@@ -30,6 +30,7 @@ public class MarketStructureBootstrap {
      */
     private void bootstrapMarketStruct() {
         MarketStructureRepositoryImpl repo = new MarketStructureRepositoryImpl();
+        MarketStructure marketStruct;
         Category cat = new Category("Bootstrap Cat", "10938DC", "10938DC");
         String eanCode = Integer.toString(Integer.MAX_VALUE);
         String qrCode = Integer.toString(Integer.MAX_VALUE - 1);
@@ -37,12 +38,14 @@ public class MarketStructureBootstrap {
         Code qr = new QRCode(qrCode);
         Product prod = new Product("Bootstrap Product", ean,
                 qr);
-        MarketStructure marketStruct;
-        CSVCategoriesReader reader = new CSVCategoriesReader(CAT_FILE);
-        marketStruct = reader.readCategories();
-        cat.addProduct(prod);
-        marketStruct.addRootCategory(cat);
-        repo.add(marketStruct);
+        marketStruct = repo.findMarketStructure();
+        if (marketStruct == null) {
+            CSVCategoriesReader reader = new CSVCategoriesReader(CAT_FILE);
+            marketStruct = reader.readCategories();
+            cat.addProduct(prod);
+            marketStruct.addRootCategory(cat);
+            repo.add(marketStruct);
+        }
     }
 
 }

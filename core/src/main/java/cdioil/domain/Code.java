@@ -30,7 +30,6 @@ public abstract class Code<T> implements Serializable, ValueObject {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private int id;
 
     /**
