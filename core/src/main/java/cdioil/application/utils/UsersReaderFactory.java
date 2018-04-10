@@ -1,5 +1,7 @@
 package cdioil.application.utils;
 
+import cdioil.files.CommonFileExtensions;
+
 /**
  * UsersReader Factory
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>

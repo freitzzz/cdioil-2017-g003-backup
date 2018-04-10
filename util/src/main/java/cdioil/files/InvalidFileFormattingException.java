@@ -1,4 +1,4 @@
-package cdioil.application.utils;
+package cdioil.files;
 
 /**
  * Exception used for identifying when a file's structure is not compliant with

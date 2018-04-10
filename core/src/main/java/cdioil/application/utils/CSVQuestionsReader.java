@@ -1,6 +1,7 @@
 package cdioil.application.utils;
 
-import static cdioil.application.utils.FileReader.readFile;
+import cdioil.files.InvalidFileFormattingException;
+import static cdioil.files.FileReader.readFile;
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.QuantitativeQuestion;

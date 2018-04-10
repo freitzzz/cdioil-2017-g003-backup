@@ -1,4 +1,4 @@
-package cdioil.application.utils;
+package cdioil.files;
 
 /**
  * Interface that represents all common file extensions used on the reader/parsers/writers of the application

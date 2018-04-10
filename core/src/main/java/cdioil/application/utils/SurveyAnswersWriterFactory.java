@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import cdioil.files.CommonFileExtensions;
 import cdioil.domain.Review;
 import java.util.List;
 

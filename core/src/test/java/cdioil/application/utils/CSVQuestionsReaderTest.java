@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.QuantitativeQuestion;

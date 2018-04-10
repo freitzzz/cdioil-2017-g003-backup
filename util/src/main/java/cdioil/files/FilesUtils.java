@@ -3,7 +3,7 @@ package cdioil.files;
 import java.util.regex.Pattern;
 
 /**
- * 
+ * FileUtils class that serves as a utiliary class regarding files
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public final class FilesUtils {
