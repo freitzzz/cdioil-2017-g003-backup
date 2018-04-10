@@ -120,13 +120,16 @@ public class CSVQuestionsReader implements QuestionsReader {
     public CSVQuestionsReader(String filename) {
         this.file = new File(filename);
     }
-
-    //TODO: improve usage of integers for checking errors; Add list of non-imported categories to return value?
+    
     @Override
-    public Map<String, List<Question>> readCategoryQuestions() {
+    public Map<String, List<Question>> readCategoryQuestions(){
 
         //int numberQuestionsNotImported = 0;
         List<String> fileContent = readFile(file);
+        
+        if(fileContent == null){
+            return null;
+        }
 
         if (!isCategoryQuestionsFileValid(fileContent)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
@@ -222,15 +225,8 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
         }
-//        //Why was it incremented?
-//        if (numberQuestionsNotImported++ != 0) {
-//            System.out.println("NÃ£o foram importadas " + numberQuestionsNotImported + " questÃµes, porque as categorias nÃ£o lhe pertencem.");
-//            return 4;
-//        }
-//        return 3;
 
         return readQuestions;
-
     }
 
     /**
