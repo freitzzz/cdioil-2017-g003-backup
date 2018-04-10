@@ -61,4 +61,17 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         List<MarketStructure> list = query.getResultList();
         return !list.isEmpty() ? list.get(0) : null;
     }
+
+    /**
+     * Method that finds products by name
+     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
+     *
+     * @param productName String with the name of the Product
+     * @return List of all products found, or null if there was any error
+     */
+    public List<Product> findProductByName(String productName) {
+        EntityManager em = entityManager();
+        Query query = em.createNativeQuery("SELECT * from PRODUCT p where p.nome regexp '" + productName + "'", Product.class);
+        return (List<Product>) query.getResultList() != null ? query.getResultList() : null;
+    }
 }
