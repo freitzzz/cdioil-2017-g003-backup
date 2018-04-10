@@ -34,7 +34,7 @@ public class QRCodeTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        
+
         Code copia = new QRCode("73534325");
 
         assertEquals("Objetos com atributos iguais deverão ter descrições iguais", copia.toString(), c.toString());
@@ -76,7 +76,8 @@ public class QRCodeTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, c);
+        assertEquals("Comparing same instances", c, c);
+        assertNotEquals("Objeto null não é igual", c, null);
         assertNotEquals("Instância de outra classe não é igual", new EAN("4324"), c);
         assertNotEquals("Instância de CodigoQR diferente", new QRCode("6032"), c);
         assertEquals("Instância de CodigoQR igual", new QRCode("73534325"), c);

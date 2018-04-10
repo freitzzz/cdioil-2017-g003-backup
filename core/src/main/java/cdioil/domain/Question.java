@@ -70,6 +70,11 @@ public abstract class Question<T> implements Serializable, ValueObject {
         return content;
     }
 
+    @Override
+    public String toString() {
+        return content.toString();
+    }
+
     /**
      * Returns an hash value based on the attributes and class type.
      *
@@ -108,14 +113,5 @@ public abstract class Question<T> implements Serializable, ValueObject {
             return false;
         }
         return this.content.equals(other.content);
-    }
-
-    /**
-     * Returns a textual description of the question
-     * @return content's toString();
-     */
-    @Override
-    public String toString() {
-        return content.toString();
     }
 }

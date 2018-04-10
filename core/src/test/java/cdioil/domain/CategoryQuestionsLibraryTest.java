@@ -78,7 +78,7 @@ public class CategoryQuestionsLibraryTest {
      */
     @Test
     public void testAddQuestion() {
-        /*System.out.println("addQuestion");
+        System.out.println("addQuestion");
         String id = "144";
         Question question = new BinaryQuestion("QuestaoTeste", id);
         Category category = new Category("CategoryTest", "100CAT",
@@ -93,8 +93,8 @@ public class CategoryQuestionsLibraryTest {
                 + "exists for this category.", instance.addQuestion(question, category));
         Category category2 = new Category();
         instance.addCategory(category2);
-        assertFalse("The condition should succeed because the same question is "
-                + "being added to a different category.", instance.addQuestion(question, category2));*/
+        assertTrue("The condition should succeed because the same question is "
+                + "being added to a different category.", instance.addQuestion(question, category2));
     }
 
     /**
@@ -128,7 +128,7 @@ public class CategoryQuestionsLibraryTest {
      */
     @Test
     public void testDoesQuestionExist() {
-        /*System.out.println("doesQuestionExist");
+        System.out.println("doesQuestionExist");
         String id = "4L";
         Question question = new BinaryQuestion("QuestaoTeste", id);
         Category category = new Category("CategoryTest", "100CAT",
@@ -145,8 +145,8 @@ public class CategoryQuestionsLibraryTest {
         Category category2 = new Category();
         instance.addCategory(category2);
         instance.addQuestion(question, category2);
-        assertFalse("The condition should succeed because the same question exists"
-                + "in another category.", instance.doesQuestionExist(question, category2));*/
+        assertTrue("The condition should succeed because the same question exists"
+                + "in another category.", instance.doesQuestionExist(question, category2));
     }
 
     /**

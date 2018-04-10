@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,7 +20,8 @@ import javax.persistence.Version;
 /**
  * Survey Manager
  *
- * Person responsible for the creation and configuration of surveys of a given market structure.
+ * Person responsible for the creation and configuration of surveys of a given
+ * market structure.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
@@ -43,7 +43,7 @@ public class Manager implements Serializable, Identifiable<Email> {
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "SYSTEMUSER")
     private SystemUser su;
-    
+
     /**
      * Category List associated with a Manager.
      */
@@ -131,12 +131,7 @@ public class Manager implements Serializable, Identifiable<Email> {
      * @return true if they were added with success, false if not
      */
     public boolean addCategories(List<Category> lc) {
-        try {
-            if (lc != null) return categories.addAll(lc);
-            else return false;
-        } catch (Exception e) {
-            return false;
-        }
+        return lc == null ? false : categories.addAll(lc);
     }
 
     /**
@@ -146,11 +141,7 @@ public class Manager implements Serializable, Identifiable<Email> {
      * @return true se forem removidas com sucesso, false se não forem removidas
      */
     public boolean removeCategories(List<Category> lc) {
-        try {
-            return categories.removeAll(lc);
-        } catch (Exception e) {
-            return false;
-        }
+        return lc == null ? false : categories.removeAll(lc);
     }
 
     /**

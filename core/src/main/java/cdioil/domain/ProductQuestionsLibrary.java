@@ -5,19 +5,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
 
 /**
- * Represents addQuestion library that holds all questions related to products (e.g. "How
- * would you rate the taste of yoghurt X?")
+ * Represents addQuestion library that holds all questions related to products
+ * (e.g. "How would you rate the taste of yoghurt X?")
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
@@ -35,15 +31,15 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     /**
-     * Map that containsQuestion all questions (values) related to products (keys). TODO
-     * check JPA annotations
+     * Map that containsQuestion all questions (values) related to products
+     * (keys). TODO check JPA annotations
      */
     @ManyToMany(cascade = CascadeType.ALL)
     private Map<Product, QuestionGroup> library;
 
     /**
-     * Builds addQuestion ProductQuestionsLibrary, creating addQuestion new hash map to hold the
- questions and the products.
+     * Builds addQuestion ProductQuestionsLibrary, creating addQuestion new hash
+     * map to hold the questions and the products.
      */
     public ProductQuestionsLibrary() {
         this.library = new HashMap<>();
@@ -75,7 +71,8 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Removes addQuestion product and all it's related questions from the library.
+     * Removes addQuestion product and all it's related questions from the
+     * library.
      *
      * @param product product to be removed
      * @return true if the product was removed, false if otherwise
@@ -109,11 +106,6 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
         if (!doesProductExist(product)) {
             return false;
         }
-        for (Product key : library.keySet()) {
-            if (!(key.equals(product)) && library.get(key).containsQuestion(question)) {
-                return false;
-            }
-        }
         if (!doesQuestionExist(question, product)) {
             return library.get(product).addQuestion(question);
         }
@@ -121,7 +113,8 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Removes addQuestion question related to addQuestion category from the hasp map
+     * Removes addQuestion question related to addQuestion category from the
+     * hasp map
      *
      * @param question question to be removed
      * @param product product that the question is related to
@@ -138,7 +131,8 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Checks whether addQuestion question related to addQuestion product already exists
+     * Checks whether addQuestion question related to addQuestion product
+     * already exists
      *
      * @param question question to be checked
      * @param product product that the question is related to

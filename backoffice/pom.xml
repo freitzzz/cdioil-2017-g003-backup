@@ -62,11 +62,6 @@
             <artifactId>h2</artifactId>
             <version>1.4.191</version>
         </dependency>
-        <dependency>
-            <groupId>cdioil-2017-g003</groupId>
-            <artifactId>app.common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency><!-- Necessary for coverage test reporting on sonarqube-->
             <groupId>org.codehaus.sonar-plugins.java</groupId>
             <artifactId>sonar-jacoco-listeners</artifactId>

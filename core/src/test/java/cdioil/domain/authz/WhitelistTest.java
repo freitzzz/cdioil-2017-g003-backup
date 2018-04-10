@@ -76,4 +76,16 @@ public class WhitelistTest {
         assertNotNull("Creation of the object shouldn't be null",new Whitelist());
     }
     
+    /**
+     * Test of method getID, of class Whitelist.
+     */
+    @Test
+    public void testGetID(){
+        System.out.println("getID");
+        String s = "isep.ipp.pt";
+        Whitelist instance = new Whitelist(s);
+        String expResult = s;
+        assertEquals(expResult,instance.getID());
+    }
+    
 }

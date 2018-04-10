@@ -59,7 +59,7 @@ public class BinaryQuestionTest {
         BinaryQuestion instance4 = new BinaryQuestion("QuestaoTeste", otherID);
         String outsiderID = "L3";
         QuantitativeQuestion outsider = new QuantitativeQuestion("QuestaoTeste",
-                outsiderID, 0.0, 5.0, 0.5);
+                outsiderID, 0.0, 5.0);
         assertEquals("The condition should succeed because we are "
                 + "comparing the same instances", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"
