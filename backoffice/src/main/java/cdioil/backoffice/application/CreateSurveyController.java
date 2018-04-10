@@ -10,6 +10,12 @@ import java.util.*;
 
 public class CreateSurveyController {
 
+    /**
+     * Gets all the questions of a given Product
+     *
+     * @param product product to search the questions
+     * @returnnList of questions for the product
+     */
     public List<Question> questionForProducts(Product product) {
         GlobalLibraryRepositoryImpl repo = new GlobalLibraryRepositoryImpl();
         HashSet<Question> hashSet = repo.findAll().iterator().next().getProdQuestionsLibrary().productQuestionSet(product);
@@ -19,6 +25,12 @@ public class CreateSurveyController {
         return list;
     }
 
+    /**
+     * Gets all the questions of a givenCategory
+     *
+     * @param category category to search the questions
+     * @return question for the category
+     */
     public List<Question> questionsForCategory(Category category) {
         GlobalLibraryRepositoryImpl repository = new GlobalLibraryRepositoryImpl();
         GlobalLibrary globalLibrary = repository.findGlobalLibrary();
@@ -26,6 +38,12 @@ public class CreateSurveyController {
         return new ArrayList<>(globalLibrary.getCatQuestionsLibrary().categoryQuestionSet(category));
     }
 
+    /**
+     * Finds category through a path
+     *
+     * @param path path to the category
+     * @return Category found or null
+     */
     public Category findCategory(String path) {
         MarketStructureRepositoryImpl marketStructure = new MarketStructureRepositoryImpl();
         List<Category> temporary = marketStructure.findCategoriesByPathPattern(path.toUpperCase());
@@ -35,6 +53,17 @@ public class CreateSurveyController {
         }
 
         return null;
+    }
+
+    /**
+     * Finds Products given a name
+     *
+     * @param productName Product name
+     * @return List of products found or null
+     */
+    public List<Product> findProducts(String productName) {
+        MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
+        return marketStructureRepository.findProductByName(".*" + productName + ".*");
     }
 
     /**
@@ -52,6 +81,6 @@ public class CreateSurveyController {
             }
         }
         System.out.println(survey);
-        return repo.add(survey) == null;
+        return repo.add(survey) != null;
     }
 }
