@@ -117,7 +117,7 @@ public class CreateSurveyUI {
                             String[] questionChoosen = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
 
                             for (String s : questionChoosen) {
-                                productMap.get(product).add(questionsFound.get(Integer.parseInt(s)));
+                                productMap.get(product).add(questionsFound.get(Integer.parseInt(s) - 1));
                             }
 
                             System.out.println("Do you want to continue add more products?");
