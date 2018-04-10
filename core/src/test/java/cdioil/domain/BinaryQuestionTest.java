@@ -102,6 +102,16 @@ public class BinaryQuestionTest {
         String result = instance.type();
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Test of toString method, of class BinaryQuestion.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        BinaryQuestion instance = createBinaryQuestion("Question", "98");
+        assertTrue(instance.toString().equals(instance.content()));
+    }
 
     /**
      * Builds a BinaryQuestion with a question and an id.

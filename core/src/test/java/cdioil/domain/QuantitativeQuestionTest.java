@@ -158,6 +158,16 @@ public class QuantitativeQuestionTest {
     }
 
     /**
+     * Test of toString method, of class QuantitativeQuestion.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        QuantitativeQuestion instance = createQQuestion("Question", "98", 0.0, 10.0);
+        assertTrue(instance.toString().equals(instance.content()));
+    }
+
+    /**
      * Builds a QuantitativeQuestion.
      *
      * @param question the question itself
