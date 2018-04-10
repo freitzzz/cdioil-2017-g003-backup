@@ -105,9 +105,7 @@ public class ManagerPanelView extends ManagerPanelDesign implements View {
      * Configures Export button
      */
     private void configureExportButton(){
-        btnExportar.addClickListener(listener ->{
-            createExportTab();
-        });
+        createExportTab();
     }
 
     /**

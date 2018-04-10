@@ -18,7 +18,7 @@ public final class FilesUtils {
      * @return boolean true if the file name is valid, false if not
      */
     public static boolean isFileNameValid(String fileName){
-        return !fileName.isEmpty() ? true : !Pattern.compile(INVALID_FILE_NAME_REGEX).matcher(fileName).find();
+        return !fileName.trim().isEmpty() ? true : !Pattern.compile(INVALID_FILE_NAME_REGEX).matcher(fileName).find();
     }
     /**
      * Method that creates a regular expression that matches a single invalid character 

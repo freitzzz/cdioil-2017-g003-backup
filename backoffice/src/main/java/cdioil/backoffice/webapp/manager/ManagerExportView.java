@@ -3,6 +3,7 @@ package cdioil.backoffice.webapp.manager;
 import cdioil.backoffice.application.ExportSurveyAnswersController;
 import cdioil.backoffice.webapp.utils.PopupNotification;
 import cdioil.domain.Survey;
+import cdioil.files.CommonFileExtensions;
 import cdioil.files.FilesUtils;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import com.vaadin.navigator.Navigator;
@@ -76,13 +77,13 @@ public class ManagerExportView extends ManagerExportDesign implements View {
      * Constant that represents the title of the notification title that pops up if an error ocures
      * while generating the file with the Survey reviews
      */
-    private static final String INVALID_FILE_GENERATION_TITLE="O Inquérito não contém avaliações!";
+    private static final String INVALID_FILE_GENERATION_TITLE="Erro";
     /**
      * Constant that represents the title of the notification message that pops up if an error ocures
      * while generating the file with the Survey reviews
      */
-    private static final String INVALID_FILE_GENERATION_MESSAGE="Não existem avaliações de momento "
-            + "para o Inquérito selecionado";
+    private static final String INVALID_FILE_GENERATION_MESSAGE="Ocorreu um erro ao gerar o ficheiro com "
+            + "as respostas!";
     /**
      * Constant that represents the title of the dialog that asks the user for the file name being generated
      */
@@ -112,6 +113,10 @@ public class ManagerExportView extends ManagerExportDesign implements View {
      * Current ExportSurveyAnswers controller
      */
     private ExportSurveyAnswersController currentController;
+    /**
+     * Survey with the current selected survey which answers are going to be exported
+     */
+    private Survey currentSelectedSurvey;
     /**
      * String with the file name being generated with the exported reviews
      */
@@ -150,6 +155,7 @@ public class ManagerExportView extends ManagerExportDesign implements View {
     private void configuration(){
         checkForSurveys();
         configureGridSurveys();
+        configureButtonExportSurveyAnswers();
     }
 
     /**
@@ -168,11 +174,11 @@ public class ManagerExportView extends ManagerExportDesign implements View {
     private void configureButtonExportSurveyAnswers(){
         btnExportSurveyAnswers.setCaption(BUTTON_EXPORT_SURVEY_ANSWERS_NAME);
         btnExportSurveyAnswers.addClickListener(clickEvent -> {
-            Survey currentSelectedSurvey=getCurrentSelectedSurvey();
+            currentSelectedSurvey=getCurrentSelectedSurvey();
             if(currentSelectedSurvey==null){
                 showNotificationForNoSelectedSurvey();
             }else{
-                
+                exportReviews();
             }
         });
     }
@@ -196,15 +202,17 @@ public class ManagerExportView extends ManagerExportDesign implements View {
         return !currentSelectedItem.isEmpty() ?
                 currentSelectedItem.iterator().next() : null;
     }
-    
-    private void exportReviews(Survey survey){
+    /**
+     * Exports the current selected Survey reviews
+     */
+    private void exportReviews(){
         try{
-            this.currentController=new ExportSurveyAnswersController(survey);
+            this.currentController=new ExportSurveyAnswersController(currentSelectedSurvey);
+            askForFileName();
         }catch(IllegalArgumentException e){
             showNotificationForNoReviewsOnSelectedSurvey();
         }
     }
-
 
     /**
      * Asks for the file name being generated with the Survey reviews on a asynchronous input dialog
@@ -230,6 +238,7 @@ public class ManagerExportView extends ManagerExportDesign implements View {
         createCancelButton();
         HorizontalLayout layoutButtons=new HorizontalLayout(btnConfirm,btnCancel);
         VerticalLayout layoutInputDialog=new VerticalLayout(txtInputDialog,layoutButtons);
+        //TO-DO: ADD RADIO BUTTON FOR DIFFERENT FILE EXTENSIONS (ALLTHOUGH FOR NOW IT IS ONLY REQUIRED CSV FILES)
         this.popupInputDialog=new PopupView("",layoutInputDialog);
     }
 
@@ -248,12 +257,19 @@ public class ManagerExportView extends ManagerExportDesign implements View {
         this.btnConfirm=new Button(CONFIRM_BUTTON);
         btnConfirm.addClickListener(clickEvent -> {
             clearInputTextField();
-            this.fileName=txtInputDialog.getValue();
+            this.fileName=txtInputDialog.getValue()+CommonFileExtensions.CSV_EXTENSION; //SEE createInputDialog()
             if(FilesUtils.isFileNameValid(this.fileName)){
-                //GO-TO: Export Survey Reviews
+		if(currentController.exportAnswersFromSurvey(fileName)){
+                    //TO-DO: ADD POPUP DIALOG THAT TELLS THE MANAGER THAT FILE HAS BEEN GENERATED 
+                    //SUCCESSFULY, AND SHOW A BUTTON THAT LETS HIM DOWNLOAD THE FILE
+                }else{
+                    showNotificationForInvalidFileGeneration();
+                }
+                closeInputDialog();
             }else{
                 showNotificationForInvalidFileName();
             }
+            clearInputTextField();
         });
     }
     /**
@@ -262,7 +278,7 @@ public class ManagerExportView extends ManagerExportDesign implements View {
      */
     private void createCancelButton(){
        btnCancel=new Button(CANCEL_BUTTON);
-       btnCancel.addClickListener(clickEvent -> {clearInputTextField();closeInputDialog();});
+       btnCancel.addClickListener(clickEvent -> {closeInputDialog();clearInputTextField();});
     }
 
     /**
