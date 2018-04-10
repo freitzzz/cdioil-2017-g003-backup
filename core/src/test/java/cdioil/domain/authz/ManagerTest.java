@@ -28,8 +28,17 @@ public class ManagerTest {
      * Builds invalid manager instance.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void criaInstanciaInvalidaDeGestorTest() {
+    public void ensureConstructorThrowsExceptionWithNullValue() {
         new Manager(null);
+    }
+
+    /**
+     * Tests empty constructor.
+     */
+    @Test
+    public void testEmptyConstructor() {
+        System.out.println("Empty constructor should not return null");
+        assertNotNull(new Manager());
     }
 
     /**

@@ -27,7 +27,7 @@ public class AnswerSurveyMain {
                 new BinaryQuestion("Did you enjoy this product?", "Q1");
         Question q2 =
                 new QuantitativeQuestion("How much would you recommend this product to other people?",
-                        "Q2", new Double(0), new Double(5), new Double(0.5));
+                        "Q2", new Double(0), new Double(5));
 
         LinkedList<String> mpOptions = new LinkedList<>();
         mpOptions.add("Very Good");

@@ -51,7 +51,8 @@ public class EANTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, ean);
+        assertEquals("Comparing same instances",ean,ean);
+        assertNotEquals("Objeto null não é igual", ean, null);
         assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), ean);
         assertNotEquals("Instância de EAN diferente", new EAN("60007896"), ean);
         assertEquals("Instância de EAN igual", new EAN("1700034560"), ean);
