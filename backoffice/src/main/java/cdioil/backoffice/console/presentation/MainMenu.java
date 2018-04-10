@@ -43,20 +43,20 @@ public class MainMenu {
         ADMIN
        ==============
      */
-    private String INFO_ADMIN_HEADER = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_admin_header");
+    private String INFO_ADMIN_HEADER = localizationHandler.getMessageValue("info_admin_header");
 
-    private String OPTION_ASSIGN_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_assign_manager");
-    private String OPTION_WHITELIST_DOMAIN = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_whitelist_domain");
-    private String OPTION_DISPLAY_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_display_users");
-    private String OPTION_IMPORT_USERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_users");
-    private String OPTION_REGISTER_USER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_register_user");
-    private String OPTION_UPDATE_DATA = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_update_data");
-    private String OPTION_IMPORT_CATEGORIES = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_import_categories");
-    private String OPTION_USER_BY_EMAIL = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_search_user_by_email");
-    private String OPTION_REMOVE_CATEGORIES_FROM_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_remove_categories_from_manager");
-    private String OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_associate_categories_to_manager");
-    private String OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_list_categories_without_managers");
-    private String OPTION_ADD_USERS_QUESTIONNAIRE = BackOfficeLocalizationHandler.getInstance().getMessageValue("option_add_users_questionnaire");
+    private String OPTION_ASSIGN_MANAGER = localizationHandler.getMessageValue("option_assign_manager");
+    private String OPTION_WHITELIST_DOMAIN = localizationHandler.getMessageValue("option_whitelist_domain");
+    private String OPTION_DISPLAY_USERS = localizationHandler.getMessageValue("option_display_users");
+    private String OPTION_IMPORT_USERS = localizationHandler.getMessageValue("option_import_users");
+    private String OPTION_REGISTER_USER = localizationHandler.getMessageValue("option_register_user");
+    private String OPTION_UPDATE_DATA = localizationHandler.getMessageValue("option_update_data");
+    private String OPTION_IMPORT_CATEGORIES = localizationHandler.getMessageValue("option_import_categories");
+    private String OPTION_USER_BY_EMAIL = localizationHandler.getMessageValue("option_search_user_by_email");
+    private String OPTION_REMOVE_CATEGORIES_FROM_MANAGER = localizationHandler.getMessageValue("option_remove_categories_from_manager");
+    private String OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = localizationHandler.getMessageValue("option_associate_categories_to_manager");
+    private String OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = localizationHandler.getMessageValue("option_list_categories_without_managers");
+    private String OPTION_ADD_USERS_QUESTIONNAIRE = localizationHandler.getMessageValue("option_add_users_questionnaire");
 
     public void mainLoopAdmin(Admin admin) {
         int opcao = 0;
@@ -99,6 +99,9 @@ public class MainMenu {
                     new ListCategoriesUI().listCategoriesWithoutManagers();
                     break;
                 case 12:
+                    new ImportQuestionsUI();
+                    break;
+                case 13:
                     new ChangeLanguageUI();
                     refreshLocalizedMessages();
                     break;
@@ -146,7 +149,7 @@ public class MainMenu {
         System.out.println(SEPARATOR);
         System.out.println(INFO_MANAGER_HEADER);
         System.out.println(SEPARATOR);
-        System.out.println("1. " + OPTION_IMPORT_QUESTIONS_TEMPLATE);
+        System.out.println("1. " + OPTION_IMPORT_QUESTIONS_CATEGORY);
         System.out.println("2. " + OPTION_CHANGE_LANGUAGE);
         System.out.println("3. " + OPTION_EXPORT_SURVEY_ANSWERS);
         System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
@@ -173,7 +176,8 @@ public class MainMenu {
         System.out.println("9. " + OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER);
         System.out.println("10. " + OPTION_REMOVE_CATEGORIES_FROM_MANAGER);
         System.out.println("11. " + OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS);
-        System.out.println("12. " + OPTION_CHANGE_LANGUAGE);
+        System.out.println("12. " + OPTION_IMPORT_QUESTIONS_TEMPLATE);
+        System.out.println("13. " + OPTION_CHANGE_LANGUAGE);
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);

@@ -1,5 +1,6 @@
 package cdioil.backoffice.application;
 
+import cdioil.application.utils.InvalidFileFormattingException;
 import cdioil.application.utils.QuestionsReaderFactory;
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
@@ -58,9 +59,11 @@ public class ImportQuestionsController {
      * Import questions related to categories from a file.
      *
      * @param filename Name of the file
-     * @return an integer with success
+     * @return number of succesfully imported questions
+     * @throws cdioil.application.utils.InvalidFileFormattingException if the
+     * file's formatting is not consistent with the file guidelines
      */
-    public int importCategoryQuestions(String filename) {
+    public int importCategoryQuestions(String filename) throws InvalidFileFormattingException {
 
         Set<Question> successfullyImportedQuestions = new HashSet<>();
 
@@ -115,8 +118,11 @@ public class ImportQuestionsController {
      * Imports questions independent of categories from a file.
      *
      * @param filename Name of the file
+     * @return number of successfully imported questions
      */
-    public void importIndependentQuestions(String filename) {
+    public Integer importIndependentQuestions(String filename) throws InvalidFileFormattingException {
+
+        Integer numImportedQuestions = 0;
 
         QuestionsReader questionsReader = QuestionsReaderFactory.create(filename);
 
@@ -130,11 +136,17 @@ public class ImportQuestionsController {
 
                 for (Question q : questions) {
 
-                    indQuestionLib.addQuestion(q);
+                    boolean added = indQuestionLib.addQuestion(q);
+                    if (added) {
+                        numImportedQuestions++;
+                    }
                 }
+            } else {
+                numImportedQuestions = null;
             }
             globalLibraryRepo.merge(globalLibrary);
         }
+        return numImportedQuestions;
     }
 
 }
