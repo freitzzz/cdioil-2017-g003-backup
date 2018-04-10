@@ -56,7 +56,7 @@ public class CreateSurveyUI {
                             String[] chooseQuestions = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
 
                             for (String s : chooseQuestions) {
-                                map.get(category).add(allQuestions.get(Integer.parseInt(s)));
+                                map.get(category).add(allQuestions.get(Integer.parseInt(s) - 1));
                             }
 
                             System.out.println("Do you want to continue add more categories?");
