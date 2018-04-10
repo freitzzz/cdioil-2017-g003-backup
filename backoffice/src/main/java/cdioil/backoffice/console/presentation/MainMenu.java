@@ -132,7 +132,7 @@ public class MainMenu {
                     new AddUsersQuestionnaireUI().addUsersQuestionnaire();
                     break;
                 case 5:
-                    //new CreateSurveyUI();
+                    new CreateSurveyUI();
                     break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);
