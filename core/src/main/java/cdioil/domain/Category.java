@@ -1,42 +1,21 @@
 package cdioil.domain;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Version;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Represents a category from the market structure.
  */
 @Entity
-public class Category implements Serializable, SurveyItem {
-
-    /**
-     * Serialization code.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Version for JPA.
-     */
-    @Version
-    private Long version;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_CATEGORY", nullable = false, updatable = false)
-    /**
-     * ID of the Category for JPA.
-     */
-    private Long id;
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "path"))
+public class Category extends SurveyItem{
 
     /**
      * Name of the Category.
@@ -51,6 +30,7 @@ public class Category implements Serializable, SurveyItem {
     /**
      * Path of the Category in the Market Structure.
      */
+    @Column(updatable = true,nullable = false)
     private String path;
 
     /**

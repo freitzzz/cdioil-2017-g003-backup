@@ -80,7 +80,6 @@ public class CreateSurveyController {
                 survey.addQuestion(question);
             }
         }
-        System.out.println(survey);
-        return repo.add(survey) != null;
+        return repo.merge(survey) != null;
     }
 }

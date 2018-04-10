@@ -21,28 +21,12 @@ import javax.persistence.Version;
  * @author António Sousa [1161371]
  */
 @Entity
-public class Product implements Serializable,SurveyItem {
-
-    /**
-     * Serialization identifier.
-     */
-    private static final long serialVersionUID = 1L;
-
+public class Product extends SurveyItem{
+    
     /**
      * Constant representing the default content of a Product's image.
      */
     private static final String IMAGEM_PRODUTO_DEFAULT = "Produto sem Imagem";
-
-    /**
-     * Auto-generated database identifier
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "PRODUCT_ID")
-    private Long id;
-    
-    @Version
-    private Long version;
 
     /**
      * Product's name.
@@ -54,7 +38,6 @@ public class Product implements Serializable,SurveyItem {
      * List of the Product's Codes.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id")
     private List<Code> codes = new ArrayList<>();
 
     /**

@@ -5,7 +5,7 @@ import cdioil.domain.MarketStructure;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import static cdioil.application.utils.FileReader.readFile;
+import cdioil.files.FileReader;
 
 /**
  * Imports Categories from .csv files.
@@ -56,7 +56,7 @@ public class CSVCategoriesReader implements CategoriesReader {
      */
     @Override
     public MarketStructure readCategories() {
-        List<String> fileContent = readFile(file);
+        List<String> fileContent = FileReader.readFile(file);
 
         if (!isFileValid(fileContent)) {
             return null;
