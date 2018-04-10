@@ -3,13 +3,13 @@ package cdioil.backoffice.webapp.manager;
 import cdioil.backoffice.application.ExportSurveyAnswersController;
 import cdioil.backoffice.webapp.utils.PopupNotification;
 import cdioil.domain.Survey;
+import cdioil.files.FilesUtils;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.shared.Position;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -51,16 +51,50 @@ public class ManagerExportView extends ManagerExportDesign implements View {
      */
     private static final String NO_SELECTED_SURVEY_MESSAGE="Por favor selecione um Inquérito!";
     /**
-     * Constant that represents the title of the notification title that popsup if the manager 
+     * Constant that represents the title of the notification title that pops up if the manager
      * tries to export answers from a survey that does not contain any reviews
      */
     private static final String NO_CURRENT_REVIEWS_FOR_SURVEY_TITLE="O Inquérito não contém avaliações!";
     /**
-     * Constant that represents the title of the notification message that popsup if the manager 
+     * Constant that represents the title of the notification message that pops up if the manager
      * tries to export answers from a survey that does not contain any reviews
      */
     private static final String NO_CURRENT_REVIEWS_FOR_SURVEY_MESSAGE="Não existem avaliações de momento "
             + "para o Inquérito selecionado";
+    /**
+     * Constant that represents the title of the notification title that pops up if the manager
+     * tries to export a file which name is invalid
+     */
+    private static final String INVALID_FILE_NAME_TITLE="Nome de ficheiro inválido!";
+    /**
+     * Constant that represents the title of the notification message that pops up if the manager
+     * tries to export answers from a survey that does not contain any reviews
+     */
+    private static final String INVALID_FILE_NAME_MESSAGE="O nome do ficheiro é invalido! Verifique "
+            + "se este não contem caratéres especiais não autorizados";
+    /**
+     * Constant that represents the title of the notification title that pops up if an error ocures
+     * while generating the file with the Survey reviews
+     */
+    private static final String INVALID_FILE_GENERATION_TITLE="O Inquérito não contém avaliações!";
+    /**
+     * Constant that represents the title of the notification message that pops up if an error ocures
+     * while generating the file with the Survey reviews
+     */
+    private static final String INVALID_FILE_GENERATION_MESSAGE="Não existem avaliações de momento "
+            + "para o Inquérito selecionado";
+    /**
+     * Constant that represents the title of the dialog that asks the user for the file name being generated
+     */
+    private static final String ASK_FOR_FILE_NAME_DIALOG_TITLE ="Insira o nome do ficheiro a ser gerado";
+    /**
+     * Constant that represents the confirm button description used on dialogs
+     */
+    private static final String CONFIRM_BUTTON="Confirmar";
+    /**
+     * Constant that represents the cancel button description used on dialogs
+     */
+    private static final String CANCEL_BUTTON="Cancel";
     /**
      * Constant that represents the initial lazy load index of the surveys retrieval
      */
@@ -78,6 +112,29 @@ public class ManagerExportView extends ManagerExportDesign implements View {
      * Current ExportSurveyAnswers controller
      */
     private ExportSurveyAnswersController currentController;
+    /**
+     * String with the file name being generated with the exported reviews
+     */
+    private String fileName;
+    /**
+     * Button with the button that is used on the input dialog that asks the user to confirm the
+     * file name that is being generated with the Survey Reviews
+     */
+    private Button btnConfirm;
+    /**
+     * Button with the button that is used on the input dialog that asks the user to cancel the
+     * file name that is being generated with the Survey Reviews
+     */
+    private Button btnCancel;
+    /**
+     * Textfield with the textfield used on the input dialog
+     */
+    private TextField txtInputDialog;
+    /**
+     * PopupView with the asynchronous input dialog that asks the user to insert the file name being
+     * generated with the Survey Reviews
+     */
+    private PopupView popupInputDialog;
 
     /**
      * Builds a new ManagerExportView
@@ -147,7 +204,77 @@ public class ManagerExportView extends ManagerExportDesign implements View {
             showNotificationForNoReviewsOnSelectedSurvey();
         }
     }
-    
+
+
+    /**
+     * Asks for the file name being generated with the Survey reviews on a asynchronous input dialog
+     */
+    private void askForFileName(){
+        if(popupInputDialog==null){
+            createInputDialog();
+            popupInputDialog.setHideOnMouseOut(false);
+        }
+        popupInputDialog.setPopupVisible(true);
+    }
+
+    /**
+     * Creates a Popupview that serves as a Popup dialog
+     * <br>Since we are working on a asynchronous environment, we cant really
+     * return the input written on dialog, so a PopupView is returned
+     * @param title String with the popup dialog
+     * @return PopupView with the
+     */
+    private void createInputDialog(){
+        createInputTextField();
+        createConfirmButton();
+        createCancelButton();
+        HorizontalLayout layoutButtons=new HorizontalLayout(btnConfirm,btnCancel);
+        VerticalLayout layoutInputDialog=new VerticalLayout(txtInputDialog,layoutButtons);
+        this.popupInputDialog=new PopupView("",layoutInputDialog);
+    }
+
+    /**
+     * Creates the Textfield used in the input dialog
+     */
+    private void createInputTextField(){
+        txtInputDialog=new TextField(ASK_FOR_FILE_NAME_DIALOG_TITLE);
+    }
+
+    /**
+     * Creates a new Button for the confirm option used on dialogs
+     * @return Button with the confirm button used on dialogs
+     */
+    private void createConfirmButton(){
+        this.btnConfirm=new Button(CONFIRM_BUTTON);
+        btnConfirm.addClickListener(clickEvent -> {
+            clearInputTextField();
+            this.fileName=txtInputDialog.getValue();
+            if(FilesUtils.isFileNameValid(this.fileName)){
+                //GO-TO: Export Survey Reviews
+            }else{
+                showNotificationForInvalidFileName();
+            }
+        });
+    }
+    /**
+     * Creates a new Button for the cancel option used on dialogs
+     * @return Button with the cancel button used on dialogs
+     */
+    private void createCancelButton(){
+       btnCancel=new Button(CANCEL_BUTTON);
+       btnCancel.addClickListener(clickEvent -> {clearInputTextField();closeInputDialog();});
+    }
+
+    /**
+     * Clears the textfield input that is on the input dialog
+     */
+    private void clearInputTextField(){this.txtInputDialog.setValue("");}
+
+    /**
+     * Closes the current open input dialog
+     */
+    private void closeInputDialog(){this.popupInputDialog.setPopupVisible(false);};
+
     /**
      * Shows up a notification that pops up to the manager if he attemps to export the
      * answers of a Survey without selecting one
@@ -156,15 +283,33 @@ public class ManagerExportView extends ManagerExportDesign implements View {
         PopupNotification.show(NO_SELECTED_SURVEY_TITLE,NO_SELECTED_SURVEY_MESSAGE
                 , Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_RIGHT);
     }
-    
+
     /**
-     * Shows up a notification that pops up if the manager tries to export reviews 
+     * Shows up a notification that pops up if the manager tries to export reviews
      * from a Survey that does not contain any reviews
      */
     private void showNotificationForNoReviewsOnSelectedSurvey(){
         PopupNotification.show(NO_CURRENT_REVIEWS_FOR_SURVEY_TITLE
-                    ,NO_CURRENT_REVIEWS_FOR_SURVEY_MESSAGE
-                    ,Notification.Type.ASSISTIVE_NOTIFICATION,Position.TOP_RIGHT);
+                ,NO_CURRENT_REVIEWS_FOR_SURVEY_MESSAGE
+                ,Notification.Type.ASSISTIVE_NOTIFICATION,Position.TOP_RIGHT);
     }
 
+    /**
+     * Shows up a notification that pops up to the manager if he attemps to export the
+     * answers of a Survey in a file which name is invalid
+     */
+    private void showNotificationForInvalidFileName(){
+        PopupNotification.show(INVALID_FILE_NAME_TITLE,INVALID_FILE_NAME_MESSAGE
+                , Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
+    }
+
+    /**
+     * Shows up a notification that pops up if an error occures while generating
+     * the file that contains the Survey reviews
+     */
+    private void showNotificationForInvalidFileGeneration(){
+        PopupNotification.show(INVALID_FILE_GENERATION_TITLE
+                ,INVALID_FILE_GENERATION_MESSAGE
+                ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
+    }
 }
