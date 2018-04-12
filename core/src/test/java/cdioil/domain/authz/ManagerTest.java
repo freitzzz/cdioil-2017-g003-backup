@@ -137,8 +137,8 @@ public class ManagerTest {
     public void testGetID() {
         System.out.println("getID");
         Manager instance = new Manager(sysUser);
-        Email expResult = new Email("lilpump@guccigang.com");
-        Email result = instance.getID();
+        SystemUser expResult=sysUser;
+        SystemUser result = instance.getID();
         assertEquals(expResult, result);
     }
 

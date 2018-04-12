@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.framework.domain.Identifiable;
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="ADMINISTRATOR", uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER_ID"}))
-public class Admin implements Serializable,Identifiable<Email> {
+public class Admin implements Serializable,AggregateRoot<SystemUser> {
     @Id
     @Column(name = "ADMINISTRATOR_ID")
     @GeneratedValue
@@ -86,8 +86,8 @@ public class Admin implements Serializable,Identifiable<Email> {
     }
 
     @Override
-    public Email getID(){
-        return sysUser.getID();
+    public SystemUser getID(){
+        return sysUser;
     }
 
 }

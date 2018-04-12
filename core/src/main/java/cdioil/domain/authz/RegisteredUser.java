@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.framework.domain.Identifiable;
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,7 +17,7 @@ import javax.persistence.Version;
  * É o responsável por avaliar produtos e fornecer feedback
  */
 @Entity
-public class RegisteredUser implements Serializable, Identifiable<Email> {
+public class RegisteredUser implements Serializable, AggregateRoot<SystemUser> {
 
     @Id
     @GeneratedValue
@@ -88,7 +88,7 @@ public class RegisteredUser implements Serializable, Identifiable<Email> {
     }
 
     @Override
-    public Email getID() {
-        return su.getID();
+    public SystemUser getID() {
+        return su;
     }
 }

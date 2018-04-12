@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.framework.domain.Identifiable;
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -12,7 +12,7 @@ import javax.persistence.Id;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Entity
-public class Whitelist implements Serializable, Identifiable<String> {
+public class Whitelist implements Serializable, AggregateRoot<String> {
     /**
      * Serializable ID
      */
