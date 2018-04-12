@@ -30,6 +30,33 @@ public class ProductTest {
     }
 
     /**
+     * Test of the constructor of class Product
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureProductDoesntHaveNullName() {
+        System.out.println("Product()");
+        Product product = new Product(null, new QRCode());
+    }
+
+    /**
+     * Test of the constructor of class Product
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureProductDoesntHaveEmptyName() {
+        System.out.println("Product()");
+        Product product = new Product("       ", new QRCode());
+    }
+
+    /**
+     * Test of the constructor of class Product
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureProductDoesntHaveNullCode() {
+        System.out.println("Product()");
+        Product product = new Product("Nome yey", null);
+    }
+
+    /**
      * Test of productName method, of class Product.
      */
     @Test
@@ -84,6 +111,12 @@ public class ProductTest {
     @Test
     public void testAlterarImagemProduto() {
         System.out.println("alterarImagemProduto");
+        //test with same instance
+        assertTrue(p.equals(p));
+        //test with null parameter
+        assertFalse(p.equals(null));
+        //test with instances of different classes
+        assertFalse(p.equals(new QRCode()));
         byte[] imagem = "Nova Imagem".getBytes();
         p.changeProductImage(imagem);
         boolean expResult = true;

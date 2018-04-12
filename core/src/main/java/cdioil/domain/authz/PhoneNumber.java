@@ -3,7 +3,7 @@ package cdioil.domain.authz;
 import org.h2.util.StringUtils;
 
 import cdioil.application.utils.OperatorsEncryption;
-import cdioil.domain.ValueObject;
+import cdioil.framework.domain.ddd.ValueObject;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.regex.Matcher;

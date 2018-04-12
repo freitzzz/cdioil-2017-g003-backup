@@ -1,7 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.domain.Category;
-import cdioil.persistence.Identifiable;
+import cdioil.framework.domain.Identifiable;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;

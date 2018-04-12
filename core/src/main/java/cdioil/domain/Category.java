@@ -3,6 +3,7 @@ package cdioil.domain;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -154,12 +155,12 @@ public class Category extends SurveyItem{
     }
 
     /**
-     * Returns the set of products associated to the Category.
+     * Returns an iterator of the set of products associated to the Category.
      *
-     * @return set of products
+     * @return iterator of the set of products
      */
-    public Set<Product> getProductSet() {
-        return products;
+    public Iterator<Product> getProductSetIterator() {
+        return products.iterator();
     }
 
     /**

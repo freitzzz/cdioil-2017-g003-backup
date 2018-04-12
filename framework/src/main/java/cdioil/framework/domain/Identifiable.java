@@ -1,4 +1,4 @@
-package cdioil.persistence;
+package cdioil.framework.domain;
 
 /**
  * Identifiable interface that serves as a way to check an object identity

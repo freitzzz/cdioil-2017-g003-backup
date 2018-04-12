@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.util.Arrays;
 import javax.persistence.Column;
@@ -14,7 +15,7 @@ import javax.persistence.Lob;
 @Embeddable
 public class Image implements Serializable,ValueObject {
     /**
-     * Constant that represents the error message that occures whenever the creation 
+     * Constant that represents the error message that occurs whenever the creation 
      * of an Image is invalid
      */
     private static final String INVALID_IMAGE_MESSAGE="Imagem Inválida!";

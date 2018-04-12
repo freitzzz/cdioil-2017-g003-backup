@@ -5,6 +5,8 @@
  */
 package cdioil.domain;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -60,6 +62,8 @@ public class CategoryTest {
     @Test
     public void testAddProduct() {
         System.out.println("addProduct");
+        //test with null parameter
+        assertFalse(c.addProduct(null));
         Product p = new Product("ProdutoTeste", new EAN("5434"));
         assertTrue("Produto pode ser adicionado", c.addProduct(p));
         c.addProduct(p);
@@ -112,6 +116,21 @@ public class CategoryTest {
     }
 
     /**
+     * Test of getProductSetIterator method, of class Category
+     */
+    @Test
+    public void testGetProductSetIterator() {
+        System.out.println("getProductSetIterator");
+        Iterator<Product> ip = c.getProductSetIterator();
+        //collection is empty
+        assertFalse(ip.hasNext());
+        c.addProduct(new Product("nome yey", new QRCode()));
+        ip = c.getProductSetIterator();
+        //collection has one item
+        assertTrue(ip.hasNext());
+    }
+
+    /**
      * Test of the method toString, of the class Category.
      */
     @Test
@@ -145,5 +164,7 @@ public class CategoryTest {
         assertNotEquals("Instância de outra classe não é igual", new QRCode("12"), c);
         assertNotEquals("Instância de Categoria diferente", new Category("OutraCategoria", "10DC-10UN-100CAT-102SCAT"), c);
         assertEquals("Instância de Categoria igual", new Category("CategoriaTeste", "10DC-10UN-100CAT"), c);
+        Category cNUll = null;
+        assertFalse(c.equals(cNUll));
     }
 }

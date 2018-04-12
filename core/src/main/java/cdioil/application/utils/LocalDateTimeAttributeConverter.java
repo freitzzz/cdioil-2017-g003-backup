@@ -18,24 +18,24 @@ public class LocalDateTimeAttributeConverter implements AttributeConverter<Local
      * Converts a LocalDateTime instance into a timestamp so that it can be
      * persisted in the database.
      *
-     * @param x localDateTime to be converted
+     * @param localDateTimeToConvert localDateTime to be converted
      * @return timestamp that will be persisted in the database
      */
     @Override
-    public Timestamp convertToDatabaseColumn(LocalDateTime x) {
-        return x == null ? null : Timestamp.valueOf(x);
+    public Timestamp convertToDatabaseColumn(LocalDateTime localDateTimeToConvert) {
+        return localDateTimeToConvert == null ? null : Timestamp.valueOf(localDateTimeToConvert);
     }
 
     /**
      * Converts a Timestamp instance that's loaded from the dabatase into a
      * LocalDateTime instance to rebuild any entity that uses LocalDateTime.
      *
-     * @param y timestamp to be converted
+     * @param timestampToConvert timestamp to be converted
      * @return localDateTime that will be used to rebuild an entity
      */
     @Override
-    public LocalDateTime convertToEntityAttribute(Timestamp y) {
-        return y == null ? null : y.toLocalDateTime();
+    public LocalDateTime convertToEntityAttribute(Timestamp timestampToConvert) {
+        return timestampToConvert == null ? null : timestampToConvert.toLocalDateTime();
     }
 
 }

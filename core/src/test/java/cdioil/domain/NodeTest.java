@@ -18,6 +18,15 @@ public class NodeTest {
     }
 
     /**
+     * Test of empty constructor of class Node
+     */
+    @Test
+    public void testEmptyConstructor() {
+        System.out.println("Node()");
+        Node node = new Node();
+    }
+
+    /**
      * Test of getParent method, of class Node.
      */
     @Test
@@ -85,7 +94,7 @@ public class NodeTest {
 
         Node child = new Node(c2);
         assertTrue(node.addChild(child));
-        
+
         assertEquals(node, child.getParent());
         assertTrue(node == child.getParent());
 
@@ -121,9 +130,9 @@ public class NodeTest {
         Node node2 = new Node(c);
 
         assertEquals(node, node2);
-        
+
         assertNotEquals(node, null);
-        
+
         assertNotEquals(node, new EAN("424242342"));
 
     }

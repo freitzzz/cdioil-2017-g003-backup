@@ -264,9 +264,9 @@ public class MarketStructure implements Serializable {
     /**
      * Checks if two Categories are directly connected.
      *
-     * @param c1 the parent Category
-     * @param c2 the child Category
-     * @return true - if both nodes are directly connected to eachother<p>
+     * @param c1 directly connected category
+     * @param c2 directly connected category 
+     * @return true - if both nodes are directly connected to each other<p>
      * false - if either of the categories do not exist in the market structure
      * or there is not a direct connection between them
      */

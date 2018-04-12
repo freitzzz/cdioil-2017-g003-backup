@@ -37,7 +37,7 @@ public class SurveyTest {
     @Before
     public void setUp() {
         data = LocalDateTime.of(0, Month.MARCH, 2, 0, 0, 0);
-        this.i = new Survey(new ArrayList<>(), data,LocalDateTime.now());
+        this.i = new Survey(new ArrayList<>(), data, LocalDateTime.now());
     }
 
     @After
@@ -45,11 +45,20 @@ public class SurveyTest {
     }
 
     /**
+     * Test of empty constructor of class Survey
+     */
+    @Test
+    public void testEmptyConstructor() {
+        System.out.println("Survey()");
+        Survey s = new Survey();
+    }
+
+    /**
      * Ensure that an exception is thrown when the item list is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullItemListThrowsException() {
-        new Survey(null,data, LocalDateTime.now());
+        new Survey(null, data, LocalDateTime.now());
     }
 
     /**
