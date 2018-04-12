@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.util.Arrays;
 import javax.persistence.Column;

@@ -1,4 +1,4 @@
-package cdioil.domain;
+package cdioil.framework.domain.ddd;
 
 /**
  * Empty interface for indicating that a CLass is indeed a Value Object, despite

@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.domain.ValueObject;
+import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
