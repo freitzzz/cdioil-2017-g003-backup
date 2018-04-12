@@ -29,20 +29,39 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
      */
     private final Navigator navigator;
 
+    /**
+     * Dashboard Button
+     */
     private Button dashboardBtn;
 
+    /**
+     * Import Button
+     */
     private Button importBtn;
 
+    /**
+     * Export Button
+     */
     private Button exportBtn;
 
-    private static final String HOME_BTN_CAPTION =
+    /**
+     * Dashboard Button Caption
+     */
+    private static final String DASHBOARD_BTN_CAPTION =
             "Dashboard";
 
+    /**
+     * Import Button Caption
+     */
     private static final String IMPORT_BTN_CAPTION =
             "Importar";
 
+    /**
+     * Export Button Caption
+     */
     private static final String EXPORT_BTN_CAPTION =
             "Exportar";
+
     /**
      * Builds a new ManagerPanelView
      */
@@ -60,8 +79,11 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
         configureExportButton();
     }
 
+    /**
+     * Prepares Home Button
+     */
     private void configureHomeButton() {
-        dashboardBtn = new Button(HOME_BTN_CAPTION, VaadinIcons.DASHBOARD);
+        dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
         dashboardBtn.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
@@ -70,9 +92,8 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
         });
     }
 
-
     /**
-     * Configures Import button
+     * Prepares Import button
      */
     private void configureImportButton(){
         importBtn = new Button(IMPORT_BTN_CAPTION, VaadinIcons.SIGN_IN);
@@ -83,7 +104,7 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
     }
 
     /**
-     * Configures Export button
+     * Prepares Export button
      */
     private void configureExportButton(){
         exportBtn = new Button(EXPORT_BTN_CAPTION, VaadinIcons.SIGN_OUT);

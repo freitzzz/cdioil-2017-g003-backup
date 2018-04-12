@@ -24,13 +24,25 @@ public class AdminPanelView extends DashboardLayoutView implements View {
      */
     private final Navigator navigator;
 
+    /**
+     * Dashboard Button
+     */
     private Button dashboardBtn;
 
+    /**
+     * Dashboard Button Caption
+     */
     private static final String DASHBOARD_BTN_CAPTION =
             "Dashboard";
 
+    /**
+     * Assign Manager Button
+     */
     private Button assignManagerButton;
 
+    /**
+     * Assign Manager Button Caption
+     */
     private static final String ASSIGNMANAGER_BTN_CAPTION =
             "Registar Gestor";
 
@@ -40,18 +52,23 @@ public class AdminPanelView extends DashboardLayoutView implements View {
     public AdminPanelView(){
         navigator= UI.getCurrent().getNavigator();
         configuration();
-        loadImages();
-        prepareButtons();
     }
 
+    /**
+     * Prepares all components
+     */
     private void configuration() {
         configureHomeButton();
         configureAssignManagerButton();
+        addButtonsToComponent();
 
         // The default right panel components
         setRightPanelContents(null); //TODO should display dashboard
     }
 
+    /**
+     * Prepares Home Button
+     */
     private void configureHomeButton() {
         dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
         dashboardBtn.addClickListener(new Button.ClickListener() {
@@ -62,6 +79,9 @@ public class AdminPanelView extends DashboardLayoutView implements View {
         });
     }
 
+    /**
+     * Prepares Assign Manager Button
+     */
     private void configureAssignManagerButton() {
         assignManagerButton = new Button(ASSIGNMANAGER_BTN_CAPTION, VaadinIcons.USER_CHECK);
         assignManagerButton.addClickListener(new Button.ClickListener() {
@@ -72,48 +92,11 @@ public class AdminPanelView extends DashboardLayoutView implements View {
         });
     }
 
-    private void loadImages() {
-    }
-
-    private void prepareButtons() {
-        initializeButtons();
-        setButtonCaptions();
-        setButtonIcons();
-        setClickListeners();
-        addButtonsToComponent();
-    }
-
-    private void initializeButtons() {
-        assignManagerButton = new Button();
-        assignManagerButton.setStyleName("valo-me");
-    }
-
-    private void setButtonCaptions() {
-        assignManagerButton.setCaption("Registar Gestor");
-    }
-
-    private void setButtonIcons() {
-        assignManagerButton.setIcon(VaadinIcons.DASHBOARD);
-        btnLogout.setIcon(VaadinIcons.CLOSE_CIRCLE);
-    }
-
-    private void setClickListeners() {
-        assignManagerButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                rightPanel.setContent(new RegisterManagerView());
-            }
-        });
-
-        btnLogout.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                navigator.navigateTo(LoginView.VIEW_NAME);
-            }
-        });
-    }
-
+    /**
+     * Adds desired buttons to left panel
+     */
     private void addButtonsToComponent() {
+        addNewButtonToLeftPanel(dashboardBtn);
         addNewButtonToLeftPanel(assignManagerButton);
     }
 
