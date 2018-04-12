@@ -3,6 +3,7 @@ package cdioil.domain;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,62 +56,8 @@ public class MarketStructure implements Serializable {
      */
     public MarketStructure() {
 
-        root = new Node(new Category("Todos os Produtos", "RAIZ", "RAIZ"));
+        root = new Node(new Category("Todos os Produtos", "RAIZ"));
         marketSize = 1;
-    }
-
-    /**
-     * Retrieves the topmost Node in the Market Structure.
-     *
-     * @return root
-     */
-    public Node getRoot() {
-        return root;
-    }
-
-    //TODO improve name since, the usage of the term "root" may cause some confusion.
-    /**
-     * Adds a new main category to the market structure.
-     *
-     * @param c new category
-     * @return true - if it is possible to add the given category<p>
-     * false - othewise
-     */
-    public boolean addRootCategory(Category c) {
-        if (c == null) {
-            throw new IllegalArgumentException("O argumento não pode ser null");
-        }
-
-        return addCategory(root.getElement(), c);
-    }
-
-    /**
-     * Adds a new Sub-Category to the given parent Category if that parent
-     * exists.
-     *
-     * @param parent the already existing parent category
-     * @param c the new category
-     * @return true - if possible to add the new category<p>
-     * false - otherwise
-     */
-    public boolean addCategory(Category parent, Category c) {
-        if (parent == null || c == null) {
-            throw new IllegalArgumentException("O argumentos não podem ser null");
-        }
-
-        //Ler: "Se o pai estiver na estrutura, mas o filho nao"
-        Node parentNode = searchNode(root, parent);
-
-        if (parentNode != null) {
-
-            Node childNode = searchNode(parentNode, c);
-
-            if (childNode == null) {
-                marketSize++;
-                return parentNode.addChild(new Node(c));
-            }
-        }
-        return false;
     }
 
     /**
@@ -123,36 +70,106 @@ public class MarketStructure implements Serializable {
     }
 
     /**
-     * Private recursive method used for searching for a given Category in the
-     * Market Structure.
+     * Adds a given <code>Category</code> to the <code>MarketStructure</code>.
      *
-     * @param node node from which the lookup is initiated (usually the root
-     * Node)
-     * @param c the Category to be searched
-     * @return the Node in which the given Category is stored if found in the
-     * Market Structure; null otherwise
+     * @param c <code>Category</code> to be added.
+     * @return true - if the new Category's parent has also been inserted into
+     * the <code>MarketStructure</code> and has yet been inserted into the
+     * parent's set of children<p>
+     * false - if the parent is not in the <code>MarketStructure</code> or the
+     * parent's set of children already contains the category
      */
-    private Node searchNode(Node node, Category c) {
-        if (node == null) {
+    public boolean addCategory(Category c) {
+        if (c == null) {
+            throw new IllegalArgumentException("O argumentos não podem ser null");
+        }
+
+        Node parentNode = searchParentNode(c);
+
+        if (parentNode != null) {
+
+            if (parentNode.addChild(new Node(c))) {
+                marketSize++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Searches for the instance of <code>Node</code> that contains the parent
+     * <code>Category</code> of the given <code>Category</code>.
+     *
+     * @param c - instance of <code>Category</code>
+     * @return the <code>Node</code> containing the parent <code>Category</code>
+     */
+    private Node searchParentNode(Category c) {
+
+        //Check if c's identifier is equal to "RAIZ"
+        if (root.getElement().categoryIdentifier().equals(c.categoryIdentifier())) {
             return null;
         }
 
-        if (node.getElement().equals(c)) {
-            return node;
+        LinkedList<String> parentPathIdentifiers = new LinkedList<>(c.categoryPathIdentifiers());
+        parentPathIdentifiers.removeLast();
+
+        //The list will only be empty if it's DC category
+        if (parentPathIdentifiers.isEmpty()) {
+            return root;
         }
 
-        List<Node> children = node.getChildren();
+        return searchNodeByPathIdentifiers(parentPathIdentifiers);
+    }
 
-        for (Node n : children) {
-            Node filho = searchNode(n, c);
+    /**
+     * Retrieve the <code>Node</code> containing a given <code>Category</code>.
+     *
+     * @param c instance of <code>Category</code> to search for.
+     * @return <code>Node</code> containing the given <code>Category</code>.
+     */
+    private Node searchNode(Category c) {
 
-            //Prevents returns if the first child was unable to find the Category
-            if (filho != null) {
-                return filho;
+        //Check if c's identifier is equal to "RAIZ"
+        if (root.getElement().categoryIdentifier().equals(c.categoryIdentifier())) {
+            return root;
+        }
+
+        return searchNodeByPathIdentifiers(new LinkedList<>(c.categoryPathIdentifiers()));
+    }
+
+    /**
+     * Uses a stack of Category path identifiers for searching for a Category in the <code>MarketStructure</code>
+     * @param stack stack of <code>String</code>
+     * @return <code>Node</code> if it has been inserted in the <code>MarketStructure</code> otherwise null
+     */
+    private Node searchNodeByPathIdentifiers(LinkedList<String> stack) {
+
+        Node node = root;
+
+        boolean hasParent = true;
+
+        while (!stack.isEmpty() && hasParent) {
+
+            String identifier = stack.removeFirst();
+
+            Set<Node> children = node.getChildren();
+
+            if (children.isEmpty()) {
+                hasParent = false;
+                break;
+            }
+
+            for (Node child : children) {
+                if (child.getElement().categoryIdentifier().equals(identifier)) {
+                    node = child;
+                    hasParent = true;
+                    break;
+                }
+                hasParent = false;
             }
         }
 
-        return null;
+        return hasParent ? node : null;
     }
 
     /**
@@ -193,19 +210,20 @@ public class MarketStructure implements Serializable {
      */
     private void searchLeaves(List<Category> leaves, Node node) {
 
-        List<Node> filhos = node.getChildren();
-
         if (isLeaf(node)) {
             leaves.add(node.getElement());
             return;
         }
 
-        for (Node filho : filhos) {
+        Set<Node> children = node.getChildren();
 
-            searchLeaves(leaves, filho);
+        for (Node child : children) {
+
+            searchLeaves(leaves, child);
         }
     }
 
+    //TODO: what happens to the products added to a node that was previously a leaf, but no longer is?
     /**
      * Adds the given Product to the given Category, if that Category is a
      * Market Structure leaf.
@@ -223,7 +241,7 @@ public class MarketStructure implements Serializable {
             throw new IllegalArgumentException("Os argumentos não podem ser null");
         }
 
-        Node node = searchNode(root, c);
+        Node node = searchNode(c);
 
         if (node != null) {
             if (isLeaf(node)) {
@@ -246,36 +264,40 @@ public class MarketStructure implements Serializable {
     /**
      * Checks if two Categories are directly connected.
      *
-     * @param parent the parent Category
-     * @param child the child Category
+     * @param c1 the parent Category
+     * @param c2 the child Category
      * @return true - if both nodes are directly connected to eachother<p>
      * false - if either of the categories do not exist in the market structure
      * or there is not a direct connection between them
      */
-    public boolean checkDirectlyConnected(Category parent, Category child) {
+    public boolean checkDirectlyConnected(Category c1, Category c2) {
 
-        if (parent == null || child == null) {
+        if (c1 == null || c2 == null) {
             throw new IllegalArgumentException("Os argumentos não podem ser null");
         }
 
-        Node parentNode = searchNode(root, parent);
+        Node node1 = searchNode(c1);
 
-        Node childNode = searchNode(root, child);
-
-        if (parentNode == null || childNode == null) {
+        if (node1 == null) {
             return false;
         }
 
-        boolean isChild = false;
+        Node node2 = searchNode(c2);
 
-        for (Node n : parentNode.getChildren()) {
-            if (n == childNode) {
-                isChild = true;
-                break;
-            }
+        if (node2 == null) {
+            return false;
         }
 
-        return childNode.getParent() == parentNode && isChild;
+        //Check if either of them are root
+        if (node1.getParent() == null) {
+            return node2.getParent().equals(node1);
+        }
+
+        if (node2.getParent() == null) {
+            return node1.getParent().equals(node2);
+        }
+
+        return node2.getParent().equals(node1) || node1.getParent().equals(node2);
     }
 
     /**
@@ -287,6 +309,8 @@ public class MarketStructure implements Serializable {
     public List<Category> getAllCategories() {
         List<Category> lc = new LinkedList<>();
         getAllCategories(lc, root);
+        lc.remove(root.getElement());
+
         return lc;
     }
 
@@ -297,11 +321,14 @@ public class MarketStructure implements Serializable {
      * @param node current node
      */
     private void getAllCategories(List<Category> lc, Node node) {
-        if (node != null) {
-            lc.add(node.getElement());
-            for (Node n : node.getChildren()) {
-                getAllCategories(lc, n);
-            }
+
+//        if(node == null){
+//            return;
+//        }
+        lc.add(node.getElement());
+
+        for (Node child : node.getChildren()) {
+            getAllCategories(lc, child);
         }
     }
 }
