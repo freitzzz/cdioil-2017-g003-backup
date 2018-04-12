@@ -1,6 +1,7 @@
 package cdioil.application.utils;
 
-import static cdioil.application.utils.FileReader.readFile;
+import cdioil.files.InvalidFileFormattingException;
+import static cdioil.files.FileReader.readFile;
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.QuantitativeQuestion;
@@ -97,10 +98,6 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final String PATH_IDENTIFIER = "-";
     /**
-     * Scale of the evaluation
-     */
-    private static final double SCALE = 0.5;
-    /**
      * The number of cells skipped in order to reach the start of a new question
      * in a file with questions relative to categories.
      */
@@ -120,13 +117,16 @@ public class CSVQuestionsReader implements QuestionsReader {
     public CSVQuestionsReader(String filename) {
         this.file = new File(filename);
     }
-
-    //TODO: improve usage of integers for checking errors; Add list of non-imported categories to return value?
+    
     @Override
-    public Map<String, List<Question>> readCategoryQuestions() {
+    public Map<String, List<Question>> readCategoryQuestions(){
 
         //int numberQuestionsNotImported = 0;
         List<String> fileContent = readFile(file);
+        
+        if(fileContent == null){
+            return null;
+        }
 
         if (!isCategoryQuestionsFileValid(fileContent)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
@@ -222,15 +222,8 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
         }
-//        //Why was it incremented?
-//        if (numberQuestionsNotImported++ != 0) {
-//            System.out.println("NÃ£o foram importadas " + numberQuestionsNotImported + " questÃµes, porque as categorias nÃ£o lhe pertencem.");
-//            return 4;
-//        }
-//        return 3;
 
         return readQuestions;
-
     }
 
     /**
@@ -264,7 +257,7 @@ public class CSVQuestionsReader implements QuestionsReader {
         pMax[1] = pMax[1].replace("\"", "").trim();
         double min = Double.parseDouble(pMin[1]);
         double max = Double.parseDouble(pMax[1]);
-        return new QuantitativeQuestion(questionText, questionID, min, max, SCALE);
+        return new QuantitativeQuestion(questionText, questionID, min, max);
     }
 
     /**

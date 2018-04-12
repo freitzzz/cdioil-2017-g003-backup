@@ -34,9 +34,8 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey,Integer> impl
      * @return List with all Surveys on a certain range
      */
     public List<Survey> getSurveysByLazyLoadingIndex(int lazyLoadIndex){
-        int minLimit=lazyLoadIndex*LAZY_LOADING_LIMIT;
-        int maxLimit=minLimit+LAZY_LOADING_LIMIT;
-        return (List<Survey>)entityManager().createQuery("SELECT s FROM Survey s LIMIT "+minLimit+","+maxLimit
+        int nextLimit=lazyLoadIndex*LAZY_LOADING_LIMIT;
+        return (List<Survey>)entityManager().createNativeQuery("SELECT * FROM Survey s OFFSET "+nextLimit+" ROWS FETCH NEXT "+LAZY_LOADING_LIMIT+" ROWS ONLY"
                ,Survey.class).getResultList();
     }
 }

@@ -59,7 +59,7 @@ public class BinaryQuestionTest {
         BinaryQuestion instance4 = new BinaryQuestion("QuestaoTeste", otherID);
         String outsiderID = "L3";
         QuantitativeQuestion outsider = new QuantitativeQuestion("QuestaoTeste",
-                outsiderID, 0.0, 5.0, 0.5);
+                outsiderID, 0.0, 5.0);
         assertEquals("The condition should succeed because we are "
                 + "comparing the same instances", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"
@@ -101,6 +101,16 @@ public class BinaryQuestionTest {
         String expResult = QuestionAnswerTypes.BINARY.toString();
         String result = instance.type();
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of toString method, of class BinaryQuestion.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        BinaryQuestion instance = createBinaryQuestion("Question", "98");
+        assertTrue(instance.toString().equals(instance.content()));
     }
 
     /**

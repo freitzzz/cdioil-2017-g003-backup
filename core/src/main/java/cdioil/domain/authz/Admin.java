@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.persistence.Identifiable;
+import cdioil.framework.domain.Identifiable;
 import java.io.Serializable;
 import javax.persistence.*;
 

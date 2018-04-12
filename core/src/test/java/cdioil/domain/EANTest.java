@@ -22,12 +22,21 @@ public class EANTest {
     EAN ean = new EAN("1700034560");
 
     /**
+     * Test of empty constructor of class EAN
+     */
+    @Test
+    public void testEmptyConstructor() {
+        System.out.println("EAN()");
+        EAN ean = new EAN();
+    }
+
+    /**
      * Test the method toString, of class EAN.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        
+
         EAN copy = new EAN("1700034560");
 
         assertEquals("Os identificadores são iguais", copy.toString(), ean.toString());
@@ -51,7 +60,8 @@ public class EANTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, ean);
+        assertEquals("Comparing same instances", ean, ean);
+        assertNotEquals("Objeto null não é igual", ean, null);
         assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), ean);
         assertNotEquals("Instância de EAN diferente", new EAN("60007896"), ean);
         assertEquals("Instância de EAN igual", new EAN("1700034560"), ean);

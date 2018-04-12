@@ -42,10 +42,6 @@ public class TimePeriod implements Serializable {
             throw new IllegalArgumentException("A data de início não pode ser "
                     + "depois da data de fim.");
         }
-        if (endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("A data de fim não pode ser "
-                    + "antes da data de início.");
-        }
         if (startDate.equals(endDate)) {
             throw new IllegalArgumentException("A data de início não pode ser "
                     + "igual à data de fim.");

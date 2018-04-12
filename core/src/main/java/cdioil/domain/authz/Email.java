@@ -1,7 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.application.utils.OperatorsEncryption;
-import cdioil.domain.ValueObject;
+import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Pattern;

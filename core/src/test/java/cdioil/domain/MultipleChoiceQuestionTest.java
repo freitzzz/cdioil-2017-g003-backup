@@ -125,6 +125,21 @@ public class MultipleChoiceQuestionTest {
     }
 
     /**
+     * Test of toString method, of class MultipleChoiceQuestion.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        LinkedList<String> list = new LinkedList<>();
+        String s = "test";
+        list.add(s);
+        String q = "Question";
+        String id = "4T";
+        MultipleChoiceQuestion instance = createMCQuestion(q, id, list);
+        assertTrue(instance.toString().equals(instance.content()));
+    }
+
+    /**
      * Builds a MultipleChoiceQuestion with a question and a set of options.
      *
      * @param question the question itself

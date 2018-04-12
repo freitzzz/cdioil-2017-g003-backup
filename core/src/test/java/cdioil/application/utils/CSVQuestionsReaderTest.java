@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.QuantitativeQuestion;
@@ -48,7 +49,7 @@ public class CSVQuestionsReaderTest {
         key1Values.add(q1);
         Question q2 = new BinaryQuestion("Bla, bla, bla?", "13");
         key1Values.add(q2);
-        Question q3 = new QuantitativeQuestion("Ble, ble", "16", new Double(0), new Double(5), 0.5);
+        Question q3 = new QuantitativeQuestion("Ble, ble", "16", new Double(0), new Double(5));
         key1Values.add(q3);
 
         expected.put(key1, key1Values);
@@ -102,7 +103,7 @@ public class CSVQuestionsReaderTest {
 
         Question q1 = new BinaryQuestion("Já adquiriu produtos de marca Continente?", "A34");
         expected.add(q1);
-        Question q2 = new QuantitativeQuestion("Qual a sua opinião global sobre os produtos de marca Continente?", "A23", new Double(0), new Double(5), 0.5);
+        Question q2 = new QuantitativeQuestion("Qual a sua opinião global sobre os produtos de marca Continente?", "A23", new Double(0), new Double(5));
         expected.add(q2);
 
         LinkedList<String> options = new LinkedList<>();

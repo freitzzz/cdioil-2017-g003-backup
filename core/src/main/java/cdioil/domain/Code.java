@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -30,7 +31,6 @@ public abstract class Code<T> implements Serializable, ValueObject {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private int id;
 
     /**

@@ -5,6 +5,8 @@
  */
 package cdioil.application.utils;
 
+import cdioil.files.CommonFileExtensions;
+
 
 /**
  * Factory de QuestionsReader.

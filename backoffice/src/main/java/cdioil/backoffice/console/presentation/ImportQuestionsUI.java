@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.utils.InvalidFileFormattingException;
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.backoffice.application.ImportQuestionsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.backoffice.utils.Console;
@@ -34,11 +34,6 @@ public class ImportQuestionsUI {
      */
     private final String ERROR_FILE_NOT_FOUND = localizationHandler.getMessageValue("error_file_not_found");
     /**
-     * Represents a message that informs the user that the format of the file is
-     * not valid.
-     */
-    private final String INVALID_FORMAT_MESSAGE = "Nenhuma questão válida foi importada!";
-    /**
      * Represents a message that delimitates the imported questions.
      */
     private final String INFO_NUM_QUESTIONS_IMPORTED = localizationHandler.getMessageValue("info_num_questions_imported");
@@ -52,6 +47,10 @@ public class ImportQuestionsUI {
 
     private final String ERROR_NO_IMPORTED_QUESTIONS = localizationHandler.getMessageValue("error_no_imported_questions");
 
+    private static final int CATEGORY_QUESTIONS_FILE_TYPE = 0;
+
+    private static final int INDEPENDENT_QUESTIONS_FILE_TYPE = 1;
+
     /**
      * Instance of Controller that intermediates the interactions between the
      * manager and the system.
@@ -63,7 +62,7 @@ public class ImportQuestionsUI {
      */
     public ImportQuestionsUI() {
         controller = new ImportQuestionsController();
-        //importIndependentQuestions();
+        importCategories(INDEPENDENT_QUESTIONS_FILE_TYPE);
     }
 
     /**
@@ -73,28 +72,37 @@ public class ImportQuestionsUI {
      */
     public ImportQuestionsUI(Manager manager) {
         controller = new ImportQuestionsController(manager);
-        importCategoryQuestions();
+        importCategories(CATEGORY_QUESTIONS_FILE_TYPE);
     }
 
     /**
-     * Method that intermediates the interactions with the manager (creates the
-     * UI itself).
+     * Method for showing the UI itself.
      */
-    private void importCategoryQuestions() {
+    private void importCategories(int fileType) {
 
         while (true) {
+
             String fileName = Console.readLine(REQUEST_FILE_PATH + "\n" + INFO_EXIT_INPUT);
 
             if (fileName.equalsIgnoreCase(OPTION_EXIT)) {
                 break;
             }
-
             try {
-                int numImportedQuestions = controller.importCategoryQuestions(fileName);
+                Integer numImportedQuestions = 0;
 
-                if (numImportedQuestions == 0) {
+                if (fileType == CATEGORY_QUESTIONS_FILE_TYPE) {
+                    numImportedQuestions = controller.importCategoryQuestions(fileName);
+
+                } else if (fileType == INDEPENDENT_QUESTIONS_FILE_TYPE) {
+                    numImportedQuestions = controller.importIndependentQuestions(fileName);
+                }
+
+                if (numImportedQuestions == null) {
+                    System.out.println(ERROR_FILE_NOT_FOUND);
+                }
+                else if (numImportedQuestions == 0) {
                     System.out.println(ERROR_NO_IMPORTED_QUESTIONS);
-                } else {
+                } else if (numImportedQuestions > 0) {
                     System.out.println(INFO_NUM_QUESTIONS_IMPORTED + " " + numImportedQuestions);
                 }
             } catch (InvalidFileFormattingException e) {
@@ -102,36 +110,5 @@ public class ImportQuestionsUI {
             }
         }
 
-//        boolean catched = false;
-//        while (!catched) {
-//            String fileName = Console.readLine(REQUEST_FILE_PATH);
-//            if (fileName.equalsIgnoreCase(OPTION_EXIT)) {
-//                return;
-//            }
-//            try {
-//                int cql = controller.importCategoryQuestions(fileName);
-//            } catch (InvalidFileFormattingException e) {
-//                System.out.println(INVALID_FORMAT_MESSAGE);
-//            }
-//
-//            if (cql == 1) {
-//                String choice = Console.readLine(ERROR_FILE_NOT_FOUND);
-//                if (choice.equalsIgnoreCase(OPTION_EXIT)) {
-//                    return;
-//                }
-//            }
-//            if (cql == 2) {
-//                System.out.println(INVALID_FORMAT_MESSAGE);
-//            }
-//            if (cql == 3) {
-//                System.out.println(INFO_NUM_QUESTIONS_IMPORTED);
-//                catched = true;
-//            }
-//            if (cql == 4) {
-//                System.out.println(IMPORTED_SOME_QUESTIONS_MESSAGE);
-//                catched = true;
-//            }
-//
-//        }
     }
 }

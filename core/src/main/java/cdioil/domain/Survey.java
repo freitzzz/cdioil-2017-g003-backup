@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.application.utils.LocalDateTimeAttributeConverter;
 import cdioil.application.utils.QuestionAnswerGraph;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import javax.persistence.*;
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class Survey implements Serializable{
+public class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,13 +32,13 @@ public class Survey implements Serializable{
     /**
      * Product associated to the survey.
      */
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<SurveyItem> itemList;
-    
+
     /**
      * Date of when the survey was done.
      */
     private LocalDateTime surveyDate;
-
 
     /**
      * Question and Answer graph.
@@ -48,8 +49,9 @@ public class Survey implements Serializable{
     /**
      * Builds an instance of survey with a product and a date.
      *
-     * @param itemList list of products or categories the survey is associated to
-     * @param date  date when the survey was done
+     * @param itemList list of products or categories the survey is associated
+     * to
+     * @param date date when the survey was done
      */
     public Survey(List<SurveyItem> itemList, LocalDateTime date, LocalDateTime endingDate) {
         if (itemList == null) {
@@ -64,14 +66,14 @@ public class Survey implements Serializable{
         this.surveyDate = date;
         this.endingDate = endingDate;
     }
-    
-    protected Survey(){
+
+    protected Survey() {
         //For ORM
     }
 
     /**
      * Adds a question to the list of questions.
-     * 
+     *
      * @param question question to be added
      * @return true, if the question is added, false if the question is invalid
      */
@@ -106,8 +108,8 @@ public class Survey implements Serializable{
     }
 
     /**
-     * Returns a description of the survey (product or category
-     * description and date)
+     * Returns a description of the survey (product or category description and
+     * date)
      *
      * @return survey's description
      */
