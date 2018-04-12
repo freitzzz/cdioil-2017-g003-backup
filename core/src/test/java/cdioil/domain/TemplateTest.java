@@ -20,7 +20,7 @@ import org.junit.Test;
  */
 public class TemplateTest {
 
-    Category cat = new Category("Pai", "10DC", "10DC");
+    Category cat = new Category("Pai", "10DC");
     Calendar data = Calendar.getInstance();
     List<Question> listaQuestoes = new LinkedList<>();
     List<Survey> listaInqueritos = new LinkedList<>();
@@ -62,7 +62,7 @@ public class TemplateTest {
 
     @Before
     public void setUp() {
-        c = new Category("Pai", "10DC", "10DC");
+        c = new Category("Pai", "10DC");
         date = Calendar.getInstance();
         questions = new LinkedList<>();
         surveys = new LinkedList<>();
@@ -164,9 +164,9 @@ public class TemplateTest {
         //test with null instance
         Template tNull = null;
         assertFalse(t.equals(tNull));
-        assertNotEquals("Instância de Template diferente", new Template(new Category("Outro", "11DC", "11DC")), t);
+        assertNotEquals("Instância de Template diferente", new Template(new Category("Outro", "11DC")), t);
         assertEquals("Instância de Template igual", new Template(c), t);
-        Template tDifferentQuestions = new Template(new Category("Outro", "11DC", "11DC"));
+        Template tDifferentQuestions = new Template(new Category("Outro", "11DC"));
         tDifferentQuestions.addQuestion(new MultipleChoiceQuestion());
         assertFalse(t.equals(tDifferentQuestions));
     }

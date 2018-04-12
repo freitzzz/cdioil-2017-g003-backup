@@ -42,6 +42,15 @@ public class UsersGroupTest {
     }
 
     /**
+     * Test of the constructors of class UsersGroup
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureUsersGroupIsBuiltCorrectly() {
+        UsersGroup uGroup = new UsersGroup();
+        uGroup = new UsersGroup(null);
+    }
+
+    /**
      * Test of the method isUserValid, of the class UsersGroup.
      */
     @Test
@@ -91,8 +100,8 @@ public class UsersGroupTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        UsersGroup oth = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), 
-                new Name("Quim","Barreiros"),new Password("M3n1n4_C0M0_e_Qu3_V41"))));
+        UsersGroup oth = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"),
+                new Name("Quim", "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         assertEquals("Deveriam ser iguais", oth.toString(), gu.toString());
     }
 
@@ -113,8 +122,20 @@ public class UsersGroupTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, gu);
-        assertNotEquals("Instância de outra classe não é igual", new QRCode("40"), gu);
-        assertEquals("Instância de GrupoUtilizadores igual", gu, gu);
+        //test with same isntance
+        assertTrue(gu.equals(gu));
+        //test with null parameter
+        assertFalse(gu.equals(null));
+        //test with object of different class
+        assertFalse(gu.equals("String"));
+        //test with null instance
+        UsersGroup uGroup = null;
+        assertFalse(gu.equals(uGroup));
+        //test with equal instances
+        assertTrue(gu.equals(new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))))));
+        //test with different instances
+        assertTrue(gu.equals(new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros1@gmail.com"), new Name("Quim",
+                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V411"))))));
     }
 }

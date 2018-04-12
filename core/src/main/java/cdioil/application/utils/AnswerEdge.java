@@ -2,15 +2,11 @@ package cdioil.application.utils;
 
 import cdioil.domain.Answer;
 import cdioil.domain.Question;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Version;
 
 /**
  * Wrapper class for the Graph's edges.
@@ -38,7 +34,7 @@ public class AnswerEdge implements Comparable<Object>, Serializable {
     /**
      * Element stored in the AnswerEdge.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Answer element;
     /**
      * AnswerEdge's weight value.
@@ -47,12 +43,12 @@ public class AnswerEdge implements Comparable<Object>, Serializable {
     /**
      * Origin Vertex.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private QuestionVertex vOrig;
     /**
      * Destination Vertex.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private QuestionVertex vDest;
 
     /**

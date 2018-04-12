@@ -7,6 +7,12 @@ import static org.junit.Assert.assertTrue;
 public class PhoneNumberTest {
 
     @Test
+    public void testEmptyConstructor() {
+        System.out.println("PhoneNumber()");
+        PhoneNumber phoneNum = new PhoneNumber();
+    }
+
+    @Test
     public void ensureEncryptAndDecryptNumberIsWorkingTest() {
         System.out.println("ensureEncryptAndDecryptNumberIsWorking");
         String originalNumber = "911111111";
@@ -25,5 +31,11 @@ public class PhoneNumberTest {
     public void ensureItDoesntAcceptNonPortugueseNumbersTest() {
         System.out.println("ensureItDoesntAcceptNonPortugueseNumbers");
         new PhoneNumber("901111111");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureItDoesNotAcceptStringsWithNonDigitCharacters() {
+        System.out.println("ensureItDoesNotAcceptStringsWithNonDigitCharacters");
+        new PhoneNumber("90blabla1");
     }
 }

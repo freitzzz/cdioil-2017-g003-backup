@@ -22,7 +22,7 @@ public class PhoneNumber implements Serializable, ValueObject {
     private static final long serialVersionUID = 6l;
 
     private static final String NUMBER_INVALID = "Número invalido";
-    private static final String CONTAINS_CHARACTERES = "Este contém caracteres";
+    private static final String CONTAINS_NON_DIGIT_CHARACTERS = "Este contém caracteres";
 
     /**
      * Regular Expression for Portuguese service providers
@@ -79,7 +79,7 @@ public class PhoneNumber implements Serializable, ValueObject {
         Matcher matcher = pattern.matcher(number);
 
         if (!StringUtils.isNumber(number)) {
-            throw new IllegalArgumentException(CONTAINS_CHARACTERES);
+            throw new IllegalArgumentException(CONTAINS_NON_DIGIT_CHARACTERS);
         }
 
         return matcher.matches();

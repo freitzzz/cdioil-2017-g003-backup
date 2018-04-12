@@ -1,6 +1,8 @@
 package cdioil.domain;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -41,11 +43,10 @@ public class Category extends SurveyItem{
     private Set<Product> products = new HashSet<>();
 
     /**
-     * Regular expression to validate the identifiers of the Category.
+     * String representing the Category's path splitter.
      */
-    private final static String IDENTIFIER_REGEX = "[0-9]+(" + Sufixes.SUFIX_CAT + "|" + Sufixes.SUFIX_SCAT
-            + "|" + Sufixes.SUFIX_UB + "|" + Sufixes.SUFIX_UN + "|" + Sufixes.SUFIX_DC + ")";
-
+    private static final String SPLITTER = "-";
+    
     /**
      * Regular expression to validate the path of the Category in the Market
      * Structure.
@@ -99,15 +100,17 @@ public class Category extends SurveyItem{
      * Creates an instance of Category, receiving its name, path and identifier.
      *
      * @param name Name of the Category
-     * @param identifier Identifier of the Category
      * @param path Path of the Category
      */
-    public Category(String name, String identifier, String path) {
-        if (isNameValid(name) && isIdentifierValid(identifier)
-                && isPathValid(path) && path.endsWith(identifier)) {
+    public Category(String name, String path) {
+        if (isNameValid(name) && isPathValid(path)) {
             this.name = name;
             this.path = path;
-            this.identifier = identifier;
+
+            String pathIdentifiers[] = path.split(SPLITTER);
+            //Identifier is always the path's last element
+            this.identifier = pathIdentifiers[pathIdentifiers.length - 1];
+            
             products = new HashSet<>();
         } else {
             throw new IllegalArgumentException("Dados de entrada inválidos.");
@@ -125,16 +128,6 @@ public class Category extends SurveyItem{
                 && !name.trim().isEmpty();
     }
 
-    /**
-     * Checks if the identifier of the Category is valid.
-     *
-     * @param identifier String to check
-     * @return true, if the identifier is valid. Otherwise, returns false
-     */
-    private boolean isIdentifierValid(String identifier) {
-        return identifier != null
-                && (identifier.matches(IDENTIFIER_REGEX) || identifier.equals("RAIZ"));
-    }
 
     /**
      * Checks if the path of the Category is valid.
@@ -186,6 +179,22 @@ public class Category extends SurveyItem{
      */
     public String categoryPath() {
         return path;
+    }
+
+    /**
+     * Returns the Category's identifier.
+     * @return
+     */
+    public String categoryIdentifier(){
+        return identifier;
+    }
+    
+    /**
+     * List of identifiers in the Category's path.
+     * @return 
+     */
+    public List<String> categoryPathIdentifiers(){
+        return Arrays.asList(path.split(SPLITTER));
     }
 
     /**

@@ -71,8 +71,7 @@ public class GlobalLibraryTest {
         Question question = new BinaryQuestion("QuestaoTeste", id);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         assertEquals("The condition should succeed because we are comparing"
                 + "the same instance.", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"

@@ -19,27 +19,30 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Password implements Serializable, ValueObject {
-    private static final long serialVersionUID=10l;
+
+    private static final long serialVersionUID = 10l;
     private static final String WEAK_PASSWORD = "Fraca!!!";
     private static final String AVERAGE_PASSWORD = "Média";
     private static final String STRONG_PASSWORD = "Forte";
+    private static final String SHA256 = "SHA-256";
     /**
      * Password default given to SystemUsers imported by Admin
      */
-    public static final String DEFAULT_PASSWORD="Password123";
+    public static final String DEFAULT_PASSWORD = "Password123";
 
     /**
-     * Variable that represents a random number of bytes with the purpose of protecting the password against attacks
+     * Variable that represents a random number of bytes with the purpose of
+     * protecting the password against attacks
      */
     private static byte[] salt;
-    @Column(name = "Gominhos")
+    @Column(name = "Cominhos")
     private String saltInString;
 
     /**
      * Variable that represents an encrypted password
      */
     private String password;
-    
+
     /**
      * Constructor of password of a SystemUser
      *
@@ -52,7 +55,7 @@ public class Password implements Serializable, ValueObject {
 
         try {
             salt = generateSalt();
-            this.saltInString= byteToString(salt);
+            this.saltInString = byteToString(salt);
             this.password = generateHash(password + this.saltInString);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -68,7 +71,7 @@ public class Password implements Serializable, ValueObject {
      * @throws NoSuchAlgorithmException
      */
     private static String generateHash(String password) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        MessageDigest messageDigest = MessageDigest.getInstance(SHA256);
         byte[] hash = messageDigest.digest(password.getBytes(StandardCharsets.UTF_8));
         StringBuffer hexString = new StringBuffer();
 
@@ -121,18 +124,22 @@ public class Password implements Serializable, ValueObject {
 
     /**
      * Tranforms a number of bytes into a String
+     *
      * @param bytes number of bytes
      * @return return a String
      */
-    private String byteToString(byte[] bytes){
+    private String byteToString(byte[] bytes) {
         String stringBytes = "";
-        for (int i = 0; i < bytes.length; i++) stringBytes += bytes[i];
+        for (int i = 0; i < bytes.length; i++) {
+            stringBytes += bytes[i];
+        }
 
-        return stringBytes ;
+        return stringBytes;
     }
 
     /**
      * Verifies if the inserted password is the correct one
+     *
      * @param password password of a SystemUser
      * @return returns true id a password is correct and false it's incorrect
      */
@@ -146,6 +153,6 @@ public class Password implements Serializable, ValueObject {
         return hash.equals(this.password);
     }
 
-    protected Password(){}
+    protected Password() {
+    }
 }
-
