@@ -64,9 +64,9 @@ public class QuestionLibrariesBootstrap {
      * Sets up a ProductQuestionsLibrary.
      */
     private void bootstrapProductQuestionsLibrary(GlobalLibrary globalLibrary) {
-        Product prod = cat.getProductSet().iterator().next();
+        Product prod = cat.getProductSetIterator().next();
         String id = "1";
-        BinaryQuestion q = new BinaryQuestion("Questao Binaria Bootstrap 1", id);
+        BinaryQuestion binQuestion = new BinaryQuestion("Questao Binaria Bootstrap 1", id);
         LinkedList<String> q2List = new LinkedList<>();
         q2List.add("A");
         q2List.add("B");
@@ -75,7 +75,7 @@ public class QuestionLibrariesBootstrap {
         MultipleChoiceQuestion q2 = new MultipleChoiceQuestion("Questao EM Bootstrap 100", "100", q2List);
         QuantitativeQuestion q3 = new QuantitativeQuestion("Questao Quantitativa Bootstrap 2000", "2000", 0.0, 10.0);
         globalLibrary.getProdQuestionsLibrary().addProduct(prod);
-        globalLibrary.getProdQuestionsLibrary().addQuestion(q, prod);
+        globalLibrary.getProdQuestionsLibrary().addQuestion(binQuestion, prod);
         globalLibrary.getProdQuestionsLibrary().addQuestion(q2, prod);
         globalLibrary.getProdQuestionsLibrary().addQuestion(q3, prod);
     }

@@ -74,6 +74,16 @@ public class TemplateTest {
     }
 
     /**
+     * Test of constructor of class Template
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureTemplateIsBuiltCorrectly() {
+        System.out.println("Template()");
+        t = new Template();
+        t = new Template(null);
+    }
+
+    /**
      * Test of the method addQuestion, of the class Template.
      */
     @Test
@@ -145,10 +155,19 @@ public class TemplateTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, t);
-        assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), t);
-        assertNotEquals("Instância de outra classe não é igual", new QRCode("1"), t);
+        //test with same instance
+        assertTrue(t.equals(t));
+        //test with null parameter
+        assertFalse(t.equals(null));
+        //test with instance of other class
+        assertFalse(t.equals(cat));
+        //test with null instance
+        Template tNull = null;
+        assertFalse(t.equals(tNull));
         assertNotEquals("Instância de Template diferente", new Template(new Category("Outro", "11DC", "11DC")), t);
         assertEquals("Instância de Template igual", new Template(c), t);
+        Template tDifferentQuestions = new Template(new Category("Outro", "11DC", "11DC"));
+        tDifferentQuestions.addQuestion(new MultipleChoiceQuestion());
+        assertFalse(t.equals(tDifferentQuestions));
     }
 }

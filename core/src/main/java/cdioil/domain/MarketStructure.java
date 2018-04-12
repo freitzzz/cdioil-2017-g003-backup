@@ -74,7 +74,7 @@ public class MarketStructure implements Serializable {
      *
      * @param c new category
      * @return true - if it is possible to add the given category<p>
-     * false - othewise
+     * false - otherwise
      */
     public boolean addRootCategory(Category c) {
         if (c == null) {
@@ -248,7 +248,7 @@ public class MarketStructure implements Serializable {
      *
      * @param parent the parent Category
      * @param child the child Category
-     * @return true - if both nodes are directly connected to eachother<p>
+     * @return true - if both nodes are directly connected to each other<p>
      * false - if either of the categories do not exist in the market structure
      * or there is not a direct connection between them
      */

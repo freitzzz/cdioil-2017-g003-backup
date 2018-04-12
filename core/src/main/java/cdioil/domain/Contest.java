@@ -17,7 +17,7 @@ public class Contest extends Event implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs an instance of Constest with a title, description, a group of
+     * Constructs an instance of Contest with a title, description, a group of
      * users and a time period.
      *
      * @param title contest's title
