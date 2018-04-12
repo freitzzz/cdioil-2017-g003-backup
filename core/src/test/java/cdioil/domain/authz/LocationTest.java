@@ -1,5 +1,6 @@
-package cdioil.domain;
+package cdioil.domain.authz;
 
+import cdioil.domain.authz.Location;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -1,14 +1,16 @@
-package cdioil.domain;
+package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Embeddable;
 
 /**
  * Location class that represents a certain location
  * <br>Value Object of SystemUser
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
+@Embeddable
 public class Location implements ValueObject,Serializable{
     /**
      * Constant that represents an empty String
