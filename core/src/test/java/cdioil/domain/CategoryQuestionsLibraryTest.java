@@ -16,8 +16,7 @@ public class CategoryQuestionsLibraryTest {
     @Test
     public void testCategoryQuestionSet() {
         System.out.println("categoryQuestionSet");
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertNull("The condition should succeed because there are no categories "
                 + "in the library.", instance.categoryQuestionSet(category));
@@ -32,8 +31,7 @@ public class CategoryQuestionsLibraryTest {
     @Test
     public void testAddCategory() {
         System.out.println("addCategory");
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertTrue("The condition should succeed because the category hasn't "
                 + "been added to the library.", instance.addCategory(category));
@@ -47,8 +45,7 @@ public class CategoryQuestionsLibraryTest {
     @Test
     public void testRemoveCategory() {
         System.out.println("removeCategory");
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category doesn't"
                 + "exist in the library.", instance.removeCategory(category));
@@ -63,8 +60,7 @@ public class CategoryQuestionsLibraryTest {
     @Test
     public void testDoesCategoryExist() {
         System.out.println("doesCategoryExist");
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category doesn't"
                 + "exist in the library.", instance.doesCategoryExist(category));
@@ -81,8 +77,7 @@ public class CategoryQuestionsLibraryTest {
         System.out.println("addQuestion");
         String id = "144";
         Question question = new BinaryQuestion("QuestaoTeste", id);
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category isn't in"
                 + "the library.", instance.addQuestion(question, category));
@@ -105,8 +100,7 @@ public class CategoryQuestionsLibraryTest {
         System.out.println("removeQuestion");
         String id = "4";
         Question question = new BinaryQuestion("QuestaoTeste", id);
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category doesn't"
                 + "exist in the library.", instance.removeQuestion(question, category));
@@ -131,8 +125,7 @@ public class CategoryQuestionsLibraryTest {
         System.out.println("doesQuestionExist");
         String id = "4L";
         Question question = new BinaryQuestion("QuestaoTeste", id);
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category doesn't"
                 + "exist in the library.", instance.doesQuestionExist(question, category));
@@ -179,8 +172,7 @@ public class CategoryQuestionsLibraryTest {
                 + "the instance to a null value.", instance.equals(null));
         assertFalse("The condition should succeed because we are comparing"
                 + "instances of different classes.", instance.equals("banana"));
-        Category cat = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category cat = new Category("CategoryTest", "10DC-10UN-100CAT");
         String id = "4B";
         BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id);
         instance.addCategory(cat);
