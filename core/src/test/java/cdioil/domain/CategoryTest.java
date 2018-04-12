@@ -167,4 +167,23 @@ public class CategoryTest {
         Category cNUll = null;
         assertFalse(c.equals(cNUll));
     }
+    
+    @Test
+    public void testSuffixesValues(){
+        
+        Category.Sufixes expected[] = {Category.Sufixes.SUFIX_DC, Category.Sufixes.SUFIX_UN,
+            Category.Sufixes.SUFIX_CAT, Category.Sufixes.SUFIX_SCAT, Category.Sufixes.SUFIX_UB};
+        
+        assertArrayEquals(expected,Category.Sufixes.values());
+    }
+    
+    @Test
+    public void testSuffixesValueOf(){
+        
+        Category.Sufixes expected = Category.Sufixes.SUFIX_CAT;
+        
+        Category.Sufixes actual = Category.Sufixes.valueOf("SUFIX_CAT");
+        
+        assertEquals(actual, expected);
+    }
 }
