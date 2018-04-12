@@ -4,10 +4,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.Month;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -29,7 +25,10 @@ public class LocalDateTimeAttributeConverterTest {
         LocalDateTimeAttributeConverter instance = new LocalDateTimeAttributeConverter();
         Timestamp expResult = Timestamp.valueOf(x);
         Timestamp result = instance.convertToDatabaseColumn(x);
-        assertEquals(expResult, result);
+        assertEquals("The condition should succeed because both instances represent"
+                + " the same date and time", expResult, result);
+        assertNull("The condition should succeed because we are sending a null "
+                + "value", instance.convertToDatabaseColumn(null));
     }
 
     /**
@@ -43,7 +42,10 @@ public class LocalDateTimeAttributeConverterTest {
         LocalDateTimeAttributeConverter instance = new LocalDateTimeAttributeConverter();
         LocalDateTime expResult = y.toLocalDateTime();
         LocalDateTime result = instance.convertToEntityAttribute(y);
-        assertEquals(expResult, result);
+        assertEquals("The condition should succeed because both instances "
+                + "represent the same date and time", expResult, result);
+        assertNull("The condition should succeed because we are sending a"
+                + " null value", instance.convertToEntityAttribute(null));
     }
 
 }
