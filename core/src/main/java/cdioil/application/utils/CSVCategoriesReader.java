@@ -20,7 +20,7 @@ public class CSVCategoriesReader implements CategoriesReader {
     private final File file;
     
     /**
-     * List with the Categoires that were read.
+     * List with the Categories that were read.
      */
     private List<Category> lc;
 
