@@ -2,6 +2,7 @@ package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.*;
 
 /**
@@ -43,10 +44,54 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     @Embedded
     private Password password;
+    /**
+     * User's Phone Number
+     */
+    @Embedded
+    private PhoneNumber phoneNumber;
+    /**
+     * User's Location
+     */
+    @Embedded
+    private Location location;
+    /**
+     * User's birth date
+     */
+    @Embedded
+    private BirthDate birthDate;
+    /**
+     * Boolean that represents if the User's account is activated or not
+     */
+    private boolean activated;
+    /**
+     * Boolean that represents if the User's account is imported or not
+     */
+    private boolean imported;
+
+    /**
+     * Builds a SystemUser instance with an email, name and password, phone number, 
+     * location and birth date
+     *
+     * @param email user's email
+     * @param nome user's name
+     * @param password user's password
+     * @param phoneNumber PhoneNumber with the user phone number
+     * @param location Location with the user location
+     * @param birthDate BirthDate with the user birth date
+     */
+    public SystemUser(Email email, Name nome, Password password, PhoneNumber phoneNumber,
+             Location location, BirthDate birthDate) {
+        this.email = email;
+        this.nome = nome;
+        this.password = password;
+        changePhoneNumber(phoneNumber);
+        changeLocation(location);
+        changeBirthDate(birthDate);
+    }
 
     /**
      * Builds a SystemUser instance with an email, name and password
-     *
+     * <br>This constructor is used for the construction of imported users
      * @param email user's email
      * @param nome user's name
      * @param password user's password
@@ -55,12 +100,44 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
         this.email = email;
         this.nome = nome;
         this.password = password;
+        this.imported=true;
     }
 
     protected SystemUser() {
         //For ORM
     }
-
+    
+    /**
+     * Changes the current SystemUser phone number
+     * @param phoneNumber PhoneNumber with the new SystemUser phone number
+     */
+    public void changePhoneNumber(PhoneNumber phoneNumber){
+        this.phoneNumber=phoneNumber;
+    }
+    
+    /**
+     * Changes the current SystemUser location
+     * @param location Location with the new SystemUser location
+     */
+    public void changeLocation(Location location){
+        this.location=location;
+    }
+    
+    /**
+     * Changes the current SystemUser birth date
+     * @param birthDate BirthDate with the new SystemUser birth date
+     */
+    public void changeBirthDate(BirthDate birthDate){
+        this.birthDate=birthDate;
+    }
+    
+    /**
+     * Activates the current system user
+     */
+    public void activateAccount() {
+        this.activated = true;
+    }
+    
     /**
      * Checks if a given password matches the user's password
      *
@@ -104,6 +181,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      *
      * @return user's description
      */
+    //TO-DO: ADD REMOVE TOSTRING ADD DTO
     @Override
     public String toString() {
         return "Nome: " + nome + "\nEmail: " + email + "\n";
@@ -122,19 +200,28 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
         try {
             switch (option) {
                 case 1://changes the user's name
-                    String[] nome = newField.split(" ");
-                    if (nome.length != 2) {
+                    String[] newNome = newField.split(" ");
+                    if (newNome.length != 2) {
                         throw new IllegalArgumentException();
                     }
-                    this.nome = new Name(nome[0], nome[1]);
+                    this.nome = new Name(newNome[0], newNome[1]);
                     break;
                 case 2://changes the user's email
-                    Email email = new Email(newField);
-                    this.email = email;
+                    Email newEmail = new Email(newField);
+                    this.email = newEmail;
                     break;
                 case 3://changes the user's password
-                    Password password = new Password(newField);
-                    this.password = password;
+                    Password newPassword = new Password(newField);
+                    this.password = newPassword;
+                    break;
+                case 4:
+                    this.phoneNumber = new PhoneNumber(newField);
+                    break;
+                case 5:
+                    this.location = new Location(newField);
+                    break;
+                case 6:
+                    this.birthDate = new BirthDate(LocalDate.parse(newField));
                     break;
                 default:
                     break;
@@ -154,5 +241,5 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     public Email getID() {
         return email;
     }
-    
+
 }
