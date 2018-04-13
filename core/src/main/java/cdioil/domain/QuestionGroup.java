@@ -42,13 +42,12 @@ public class QuestionGroup implements Serializable {
     private String title;
 
     /**
-     * Builds an instance of QuestionGroup, with a new hash set of
-     * questions.
+     * Builds an instance of QuestionGroup, with a new hash set of questions.
      *
      * @param title Title of the question group;
      */
     public QuestionGroup(String title) {
-        if(title == null || title.isEmpty()){
+        if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("O titulo do grupo de questões "
                     + "não pode ser null");
         }
@@ -135,5 +134,15 @@ public class QuestionGroup implements Serializable {
             return false;
         }
         return this.questions.equals(other.questions);
+    }
+
+    /**
+     * Returns the title of the question group
+     *
+     * @return string with the title of the question group
+     */
+    @Override
+    public String toString() {
+        return title;
     }
 }

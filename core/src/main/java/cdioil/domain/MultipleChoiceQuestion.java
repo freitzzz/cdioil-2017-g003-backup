@@ -21,7 +21,6 @@ public class MultipleChoiceQuestion extends Question implements Serializable {
      */
     public MultipleChoiceQuestion(String questionText, String questionID, List<QuestionOption> options) {
         super(questionText, questionID, options);
-        this.type = QuestionAnswerTypes.MULTIPLE_CHOICE;
     }
 
     /**

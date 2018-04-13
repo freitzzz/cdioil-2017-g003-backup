@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -34,11 +33,6 @@ public abstract class Question<T> implements Serializable {
      * Database id.
      */
     protected Long databaseID;
-
-    /**
-     * The type of question.
-     */
-    protected QuestionAnswerTypes type;
 
     /**
      * The question itself.
@@ -81,15 +75,6 @@ public abstract class Question<T> implements Serializable {
     }
 
     /**
-     * Return the question's type.
-     *
-     * @return question's type enum value
-     */
-    public String type() {
-        return type.toString();
-    }
-
-    /**
      * Returns an hash value based on the attributes and class type.
      *
      * @return hash value
@@ -98,7 +83,6 @@ public abstract class Question<T> implements Serializable {
     public int hashCode() {
         int hash = 3;
         hash = 29 * hash + Objects.hashCode(this.getClass());
-        hash = 29 * hash + Objects.hashCode(this.type);
         hash = 29 * hash + Objects.hashCode(this.questionText);
         hash = 29 * hash + Objects.hash(this.questionID);
         return hash;
@@ -120,9 +104,6 @@ public abstract class Question<T> implements Serializable {
             return false;
         }
         final Question<?> other = (Question<?>) obj;
-        if (this.type != other.type) {
-            return false;
-        }
         if (!this.questionID.equals(other.questionID)) {
             return false;
         }

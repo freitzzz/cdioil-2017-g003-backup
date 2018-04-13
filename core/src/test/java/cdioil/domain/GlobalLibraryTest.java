@@ -69,12 +69,7 @@ public class GlobalLibraryTest {
         GlobalLibrary instance = new GlobalLibrary();
         GlobalLibrary instance2 = new GlobalLibrary();
         String id = "D4";
-        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
-        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
-        LinkedList<QuestionOption> list = new LinkedList<>();
-        list.add(option1);
-        list.add(option2);
-        Question question = new BinaryQuestion("QuestaoTeste", id, list);
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
