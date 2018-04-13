@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.List;
 import javax.persistence.Entity;
 
 /**
@@ -8,32 +9,23 @@ import javax.persistence.Entity;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity(name = "BinaryQuestion")
-public class BinaryQuestion extends Question<String> {
-
-    /**
-     * Empty Constructor for JPA.
-     */
-    protected BinaryQuestion() {
-    }
+public class BinaryQuestion extends Question {
 
     /**
      * Builds an instance of BinaryQuestion receiving a question.
      *
      * @param question text of the question
      * @param questionID question's ID
+     * @param optionList
      */
-    public BinaryQuestion(String question, String questionID) {
-        if (question == null || question.isEmpty()) {
-            throw new IllegalArgumentException("O conteúdo da questão não "
-                    + "pode ser vazio.");
-        }
-        if (questionID == null || questionID.isEmpty()) {
-            throw new IllegalArgumentException("O id da questão não pode "
-                    + "ser vazio.");
-        }
-
-        this.content = question;
-        this.questionID = questionID;
+    public BinaryQuestion(String question, String questionID, List<QuestionOption> optionList) {
+        super(question, questionID, optionList);
         this.type = QuestionAnswerTypes.BINARY;
+    }
+
+    /**
+     * Empty Constructor for JPA.
+     */
+    protected BinaryQuestion() {
     }
 }

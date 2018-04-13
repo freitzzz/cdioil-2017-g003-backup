@@ -3,6 +3,8 @@ package cdioil.domain;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,8 +22,9 @@ public class SurveyTest {
     /**
      * Data for testing
      */
-    Survey i;
-    LocalDateTime data;
+    private Survey i;
+    private LocalDateTime data;
+    private List<QuestionOption> list;
 
     public SurveyTest() {
     }
@@ -38,6 +41,11 @@ public class SurveyTest {
     public void setUp() {
         data = LocalDateTime.of(0, Month.MARCH, 2, 0, 0, 0);
         this.i = new Survey(new ArrayList<>(), data, LocalDateTime.now());
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
     }
 
     @After
@@ -114,7 +122,7 @@ public class SurveyTest {
     public void testAddQuestion() {
         System.out.println("addQuestion");
         String id = "4P";
-        Question q = new BinaryQuestion("QuestaoTeste", id);
+        Question q = new BinaryQuestion("QuestaoTeste", id, list);
         assertTrue("Deveria ser possível adicionar", i.addQuestion(q));
         i.addQuestion(q);
         assertFalse("Questão null", i.addQuestion(null));
@@ -128,7 +136,7 @@ public class SurveyTest {
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
         String id = "5Q";
-        Question q = new BinaryQuestion("QuestaoTeste", id);
+        Question q = new BinaryQuestion("QuestaoTeste", id, list);
         i.addQuestion(q);
         assertTrue("Deveria ser possível remover", i.removeQuestion(q));
         i.removeQuestion(q);
@@ -143,7 +151,7 @@ public class SurveyTest {
     public void testIsValidQuestion() {
         System.out.println("isValidQuestion");
         String id = "E8";
-        Question q = new BinaryQuestion("QuestaoTeste", id);
+        Question q = new BinaryQuestion("QuestaoTeste", id, list);
         i.addQuestion(q);
         assertTrue("Deveria ser válida", i.isValidQuestion(q));
         i.removeQuestion(q);

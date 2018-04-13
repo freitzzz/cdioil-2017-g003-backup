@@ -40,6 +40,10 @@
     <class>cdioil.application.utils.QuestionVertex</class>
     <class>cdioil.application.utils.LocalDateTimeAttributeConverter</class>
     <class>cdioil.domain.SurveyItem</class>
+    <class>cdioil.domain.QuestionOption</class>
+    <class>cdioil.domain.BinaryQuestionOption</class>
+    <class>cdioil.domain.MultipleChoiceQuestionOption</class>
+    <class>cdioil.domain.QuantitativeQuestionOption</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
