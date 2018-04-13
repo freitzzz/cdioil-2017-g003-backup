@@ -1,15 +1,17 @@
 package cdioil.domain;
 
-import cdioil.framework.domain.ddd.ValueObject;
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 /**
  * Abstract class that represents a Question.
@@ -19,7 +21,7 @@ import javax.persistence.InheritanceType;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question<T> implements Serializable{
+public abstract class Question<T> implements Serializable {
 
     /**
      * Serialization code.
@@ -51,6 +53,7 @@ public abstract class Question<T> implements Serializable{
     /**
      * List of options that the question has.
      */
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<QuestionOption> optionList;
 
     public Question(String questionText, String questionID, List<QuestionOption> optionList) {
