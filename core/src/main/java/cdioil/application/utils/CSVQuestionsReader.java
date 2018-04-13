@@ -1,6 +1,7 @@
 package cdioil.application.utils;
 
-import static cdioil.application.utils.FileReader.readFile;
+import cdioil.files.InvalidFileFormattingException;
+import static cdioil.files.FileReader.readFile;
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.QuantitativeQuestion;
@@ -16,6 +17,12 @@ import java.util.Map;
  *
  * @author Ana Guerra (1161191)
  * @author António Sousa [1161371]
+ *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * =============================================================================
+ * FIXME - After the Aggregate Root Pattern has been implemented in the domain
+ * classes, fix the methods as needed. 
+ * =============================================================================
+ *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 public class CSVQuestionsReader implements QuestionsReader {
 
@@ -116,112 +123,112 @@ public class CSVQuestionsReader implements QuestionsReader {
     public CSVQuestionsReader(String filename) {
         this.file = new File(filename);
     }
-    
+
     @Override
-    public Map<String, List<Question>> readCategoryQuestions(){
-
-        //int numberQuestionsNotImported = 0;
-        List<String> fileContent = readFile(file);
-        
-        if(fileContent == null){
-            return null;
-        }
-
-        if (!isCategoryQuestionsFileValid(fileContent)) {
-            throw new InvalidFileFormattingException("Unrecognized file formatting");
-        }
-
+    public Map<String, List<Question>> readCategoryQuestions() {
+//
+//        //int numberQuestionsNotImported = 0;
+//        List<String> fileContent = readFile(file);
+//        
+//        if(fileContent == null){
+//            return null;
+//        }
+//
+//        if (!isCategoryQuestionsFileValid(fileContent)) {
+//            throw new InvalidFileFormattingException("Unrecognized file formatting");
+//        }
+//
         Map<String, List<Question>> readQuestions = new HashMap<>();
-
-        //Put the list's size in a variable to avoid checking size every iteration
-        int numLines = fileContent.size();
-
-        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
-
-            String[] currentLine = fileContent.get(i).split(SPLITTER);
-            if (currentLine.length > 0) { //Doesn't read empty lines
-
-                //TODO: remove this try/catch block and move it to the UI
-                try {
-                    String DC = currentLine[0].trim();
-
-                    //Add category identifiers incrementally rather than checking all of the possibilities
-                    //If DC empty, then skip reading this line and avoid doing all the other operations
-                    if (!DC.isEmpty()) {
-
-                        StringBuilder sb = new StringBuilder(DC);
-                        sb.append(DC_IDENTIFIER);
-                        String UN = currentLine[1].trim();
-
-                        if (!UN.isEmpty()) {
-
-                            sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
-
-                            String CAT = currentLine[2].trim();
-
-                            if (!CAT.isEmpty()) {
-
-                                sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
-
-                                String SCAT = currentLine[3].trim();
-
-                                if (!SCAT.isEmpty()) {
-
-                                    sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
-
-                                    String UB = currentLine[4].trim();
-
-                                    if (!UB.trim().isEmpty()) {
-
-                                        sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
-                                    }
-                                }
-                            }
-                        }
-
-                        String path = sb.toString();
-
-                        String questionType = currentLine[6].trim();
-
-                        Question question = null;
-
-                        if (questionType.equalsIgnoreCase(SN_QUESTION)) {
-
-                            question = readBinaryQuestion(currentLine, CATEGORIES_FILE_OFFSET);
-
-                        } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
-
-                            Object[] objects = readMultipleChoiceQuestion(currentLine, CATEGORIES_FILE_OFFSET, fileContent, i);
-
-                            i = (Integer) objects[0];
-                            question = (Question) objects[1];
-
-                        } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
-
-                            question = readQuantitativeQuestion(currentLine, CATEGORIES_FILE_OFFSET);
-                        }
-
-                        //question is only null if an unknown type of question is read
-                        if (question != null) {
-
-                            //If the map doesn't contain the key, add it to the map and make its value a new empty list
-                            if (!readQuestions.containsKey(path)) {
-
-                                List<Question> value = new LinkedList<>();
-                                readQuestions.put(path, value);
-
-                                readQuestions.put(path, value);
-                            }
-
-                            readQuestions.get(path).add(question);
-                        }
-                    }
-                } catch (IllegalArgumentException ex) {
-                    System.out.println("O formato das QuestÃµes Ã© invÃ¡lido na linha " + i + ".");
-                }
-            }
-        }
-
+//
+//        //Put the list's size in a variable to avoid checking size every iteration
+//        int numLines = fileContent.size();
+//
+//        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
+//
+//            String[] currentLine = fileContent.get(i).split(SPLITTER);
+//            if (currentLine.length > 0) { //Doesn't read empty lines
+//
+//                //TODO: remove this try/catch block and move it to the UI
+//                try {
+//                    String DC = currentLine[0].trim();
+//
+//                    //Add category identifiers incrementally rather than checking all of the possibilities
+//                    //If DC empty, then skip reading this line and avoid doing all the other operations
+//                    if (!DC.isEmpty()) {
+//
+//                        StringBuilder sb = new StringBuilder(DC);
+//                        sb.append(DC_IDENTIFIER);
+//                        String UN = currentLine[1].trim();
+//
+//                        if (!UN.isEmpty()) {
+//
+//                            sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
+//
+//                            String CAT = currentLine[2].trim();
+//
+//                            if (!CAT.isEmpty()) {
+//
+//                                sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
+//
+//                                String SCAT = currentLine[3].trim();
+//
+//                                if (!SCAT.isEmpty()) {
+//
+//                                    sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
+//
+//                                    String UB = currentLine[4].trim();
+//
+//                                    if (!UB.trim().isEmpty()) {
+//
+//                                        sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                        String path = sb.toString();
+//
+//                        String questionType = currentLine[6].trim();
+//
+//                        Question question = null;
+//
+//                        if (questionType.equalsIgnoreCase(SN_QUESTION)) {
+//
+//                            question = readBinaryQuestion(currentLine, CATEGORIES_FILE_OFFSET);
+//
+//                        } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
+//
+//                            Object[] objects = readMultipleChoiceQuestion(currentLine, CATEGORIES_FILE_OFFSET, fileContent, i);
+//
+//                            i = (Integer) objects[0];
+//                            question = (Question) objects[1];
+//
+//                        } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
+//
+//                            question = readQuantitativeQuestion(currentLine, CATEGORIES_FILE_OFFSET);
+//                        }
+//
+//                        //question is only null if an unknown type of question is read
+//                        if (question != null) {
+//
+//                            //If the map doesn't contain the key, add it to the map and make its value a new empty list
+//                            if (!readQuestions.containsKey(path)) {
+//
+//                                List<Question> value = new LinkedList<>();
+//                                readQuestions.put(path, value);
+//
+//                                readQuestions.put(path, value);
+//                            }
+//
+//                            readQuestions.get(path).add(question);
+//                        }
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    System.out.println("O formato das QuestÃµes Ã© invÃ¡lido na linha " + i + ".");
+//                }
+//            }
+//        }
+//
         return readQuestions;
     }
 
@@ -232,14 +239,13 @@ public class CSVQuestionsReader implements QuestionsReader {
      * @param offset number of cells skipped to reach the start of a question
      * @return binary question
      */
-    private Question readBinaryQuestion(String[] currentLine, int offset) {
-
-        String questionID = currentLine[offset].trim();
-        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
-
-        return new BinaryQuestion(questionText, questionID);
-    }
-
+//    private Question readBinaryQuestion(String[] currentLine, int offset) {
+//
+//        String questionID = currentLine[offset].trim();
+//        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
+//
+//        return new BinaryQuestion(questionText, questionID);
+//    }
     /**
      * Reads a quantitative question from a CSV file.
      *
@@ -247,18 +253,17 @@ public class CSVQuestionsReader implements QuestionsReader {
      * @param offset number of cells skipped to reach the start of a question
      * @return quantitative question
      */
-    private Question readQuantitativeQuestion(String[] currentLine, int offset) {
-
-        String questionID = currentLine[offset].trim();
-        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
-        String[] pMin = currentLine[offset + 3].trim().split("=");
-        String[] pMax = currentLine[offset + 4].trim().split("=");
-        pMax[1] = pMax[1].replace("\"", "").trim();
-        double min = Double.parseDouble(pMin[1]);
-        double max = Double.parseDouble(pMax[1]);
-        return new QuantitativeQuestion(questionText, questionID, min, max);
-    }
-
+//    private Question readQuantitativeQuestion(String[] currentLine, int offset) {
+//
+//        String questionID = currentLine[offset].trim();
+//        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
+//        String[] pMin = currentLine[offset + 3].trim().split("=");
+//        String[] pMax = currentLine[offset + 4].trim().split("=");
+//        pMax[1] = pMax[1].replace("\"", "").trim();
+//        double min = Double.parseDouble(pMin[1]);
+//        double max = Double.parseDouble(pMax[1]);
+//        return new QuantitativeQuestion(questionText, questionID, min, max);
+//    }
     /**
      * Reads a multiplle choice question from a CSV file.</br>This one is a bit
      * different from the other ones, since it returns an updated value of the
@@ -274,31 +279,30 @@ public class CSVQuestionsReader implements QuestionsReader {
      * first contains an updated value of the current line index, and the second
      * contains an instance of <code>MultipleChoiceQuestion</code>.
      */
-    private Object[] readMultipleChoiceQuestion(String[] currentLine, int offset, List<String> fileContent, int currentIdx) {
-
-        Object[] result = new Object[2];
-
-        String questionID = currentLine[offset].trim();
-        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
-
-        //Fetch number of options
-        String param = currentLine[offset + 3];
-        String[] pEM = param.split("=");
-        int nrEM = Integer.parseInt(pEM[1]);
-
-        LinkedList<String> options = new LinkedList<>();
-
-        for (int a = 0; a < nrEM; a++) {
-            currentLine = fileContent.get(currentIdx++).split(SPLITTER);
-            options.add(currentLine[offset + 2]);
-        }
-
-        result[0] = currentIdx;
-        result[1] = new MultipleChoiceQuestion(questionText, questionID, options);
-
-        return result;
-    }
-
+//    private Object[] readMultipleChoiceQuestion(String[] currentLine, int offset, List<String> fileContent, int currentIdx) {
+//
+//        Object[] result = new Object[2];
+//
+//        String questionID = currentLine[offset].trim();
+//        String questionText = currentLine[offset + 2].replace("\"", "").replace("\t", "");
+//
+//        //Fetch number of options
+//        String param = currentLine[offset + 3];
+//        String[] pEM = param.split("=");
+//        int nrEM = Integer.parseInt(pEM[1]);
+//
+//        LinkedList<String> options = new LinkedList<>();
+//
+//        for (int a = 0; a < nrEM; a++) {
+//            currentLine = fileContent.get(currentIdx++).split(SPLITTER);
+//            options.add(currentLine[offset + 2]);
+//        }
+//
+//        result[0] = currentIdx;
+//        result[1] = new MultipleChoiceQuestion(questionText, questionID, options);
+//
+//        return result;
+//    }
     /**
      * Checks if the content of the file is valid - not null and has all the
      * expected identifiers properly splitted.
@@ -355,18 +359,15 @@ public class CSVQuestionsReader implements QuestionsReader {
 
                 if (questionType.equalsIgnoreCase(SN_QUESTION)) {
 
-                    question = readBinaryQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
-
+//                    question = readBinaryQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
                 } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
 
-                    Object[] objects = readMultipleChoiceQuestion(currentLine, INDEPENDENT_FILE_OFFSET, fileContent, i);
-
-                    i = (Integer) objects[0];
-                    question = (Question) objects[1];
-
+//                    Object[] objects = readMultipleChoiceQuestion(currentLine, INDEPENDENT_FILE_OFFSET, fileContent, i);
+//                    i = (Integer) objects[0];
+//                    question = (Question) objects[1];
                 } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
 
-                    question = readQuantitativeQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
+//                    question = readQuantitativeQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
                 }
 
                 if (question != null) {

@@ -26,7 +26,7 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
     }
 
     public boolean exists(RegisteredUser user) {
-        return new UserRepositoryImpl().findByEmail(user.getID()) != null;
+        return new UserRepositoryImpl().findByEmail(user.getID().getID()) != null;
     }
 
     /**

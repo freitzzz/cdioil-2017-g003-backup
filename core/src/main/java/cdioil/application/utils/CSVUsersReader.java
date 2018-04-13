@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import cdioil.files.FileReader;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;

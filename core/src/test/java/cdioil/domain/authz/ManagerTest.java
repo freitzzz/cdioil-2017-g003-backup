@@ -98,8 +98,8 @@ public class ManagerTest {
         lc = new LinkedList<>();
         assertFalse(instance.addCategories(lc));
         //teste adiconar lista com elementos
-        lc.add(new Category("Fruit", "124CAT", "10DC-10UN-124CAT"));
-        lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
+        lc.add(new Category("Fruit", "10DC-10UN-124CAT"));
+        lc.add(new Category("Beverage", "10DC-10UN-100CAT-6040SCAT"));
         assertTrue(instance.addCategories(lc));
         //teste adicionar lista com elementos repetidos
         assertTrue(instance.addCategories(lc));
@@ -122,8 +122,8 @@ public class ManagerTest {
         assertFalse(instance.removeCategories(lc));
         //teste remover lista com elementos inexistentes
         //teste adiconar lista com elementos
-        lc.add(new Category("Fruit", "124CAT", "10DC-10UN-124CAT"));
-        lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
+        lc.add(new Category("Fruit", "10DC-10UN-124CAT"));
+        lc.add(new Category("Beverage", "10DC-10UN-100CAT-6040SCAT"));
         assertFalse(instance.removeCategories(lc));
         //teste adicionar lista com elementos existentes
         instance.addCategories(lc);
@@ -137,8 +137,8 @@ public class ManagerTest {
     public void testGetID() {
         System.out.println("getID");
         Manager instance = new Manager(sysUser);
-        Email expResult = new Email("lilpump@guccigang.com");
-        Email result = instance.getID();
+        SystemUser expResult=sysUser;
+        SystemUser result = instance.getID();
         assertEquals(expResult, result);
     }
 
@@ -150,11 +150,11 @@ public class ManagerTest {
         System.out.println("isAssociatedWithCategory");
         List<Category> lc = new LinkedList<>();
         Manager instance = new Manager(sysUser, lc);
-        Category c1 = new Category("Fruit", "124CAT", "10DC-10UN-124CAT");
+        Category c1 = new Category("Fruit", "10DC-10UN-124CAT");
         //test with empty list of categories
         assertFalse(instance.isAssociatedWithCategory(c1));
         //test when list does not contain category
-        lc.add(new Category("Beverage", "6040SCAT", "10DC-10UN-100CAT-6040SCAT"));
+        lc.add(new Category("Beverage", "10DC-10UN-100CAT-6040SCAT"));
         instance.addCategories(lc);
         assertFalse(instance.isAssociatedWithCategory(c1));
         //test when list does contain category

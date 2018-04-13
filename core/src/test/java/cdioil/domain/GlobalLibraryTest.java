@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -68,11 +69,15 @@ public class GlobalLibraryTest {
         GlobalLibrary instance = new GlobalLibrary();
         GlobalLibrary instance2 = new GlobalLibrary();
         String id = "D4";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
-        Category category = new Category("CategoryTest", "100CAT",
-                "10DC-10UN-100CAT");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         assertEquals("The condition should succeed because we are comparing"
                 + "the same instance.", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"

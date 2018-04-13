@@ -1,9 +1,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,7 +52,7 @@ public class Node implements Serializable {
      * A list of references to following Nodes in the structure.
      */
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<Node> children = new LinkedList<>();
+    private Set<Node> children = new LinkedHashSet<>();
 
     /**
      * The element contained in this instance.
@@ -100,7 +98,7 @@ public class Node implements Serializable {
      *
      * @return child Nodes list
      */
-    public List<Node> getChildren() {
+    public Set<Node> getChildren() {
         return children;
     }
 
@@ -116,7 +114,7 @@ public class Node implements Serializable {
      */
     public boolean addChild(Node child) {
 
-        if (child != null && !getChildren().contains(child)) {
+        if (child != null) {
             child.parent = this;
             return children.add(child);
         } else {

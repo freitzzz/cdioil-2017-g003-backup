@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.application.utils.InvalidFileFormattingException;
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.backoffice.application.ImportQuestionsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.backoffice.utils.Console;

@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -11,7 +12,9 @@ import javax.persistence.InheritanceType;
 
 /**
  * Generic abstract class to be used for concrete types of Answer. 
-*
+ * =============================================================================
+ * TODO - Discuss whether this class is worth existing or not
+ * =============================================================================
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @param <T> type of data stored in the Answer
  */

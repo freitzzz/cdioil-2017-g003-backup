@@ -1,6 +1,6 @@
 package cdioil.backoffice.application;
 
-import cdioil.application.utils.InvalidFileFormattingException;
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.application.utils.QuestionsReaderFactory;
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
@@ -60,7 +60,7 @@ public class ImportQuestionsController {
      *
      * @param filename Name of the file
      * @return number of succesfully imported questions
-     * @throws cdioil.application.utils.InvalidFileFormattingException if the
+     * @throws cdioil.files.InvalidFileFormattingException if the
      * file's formatting is not consistent with the file guidelines
      */
     public int importCategoryQuestions(String filename) throws InvalidFileFormattingException {

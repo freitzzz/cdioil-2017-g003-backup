@@ -1,34 +1,24 @@
 package cdioil.backoffice.webapp.manager;
 
-import cdioil.backoffice.webapp.authz.LoginView;
+import cdioil.backoffice.webapp.DashboardLayoutView;
 
-import cdioil.backoffice.webapp.utils.ImageUtils;
-import cdioil.backoffice.webapp.utils.PopupNotification;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.View;
-import static com.vaadin.ui.TabSheet.Tab;
 
-import com.vaadin.shared.Position;
+import com.vaadin.navigator.View;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.PopupView;
 import com.vaadin.ui.UI;
 
 /**
  * @author <a href="https://github.com/freitzzz">freitzzz</a>
  */
-public class ManagerPanelView extends ManagerPanelDesign implements View {
+public class ManagerPanelView extends DashboardLayoutView implements View {
     /**
      * Constant that represents the current page view name
      */
     public static final String VIEW_NAME="Manager Panel";
-    /**
-     * Constant that represents the default name used for the Manager name
-     */
-    private static final String DEFAULT_MANAGER_NAME ="Manager";
-    /**
-     * Constant that represents the default image resource for the Manager photo
-     */
-    private static final String DEFAULT_IMAGE_RESOURCE="/WEB-INF/users/DEFAULT_USER_IMAGE.png";
+
     /**
      * Constant that represents the title of the notification that pops up when an error occures
      * while opening the Export Tab Page
@@ -38,14 +28,40 @@ public class ManagerPanelView extends ManagerPanelDesign implements View {
      * Current Navigator
      */
     private final Navigator navigator;
+
     /**
-     * Current Tab for the "Importar Button"
+     * Dashboard Button
      */
-    private Tab currentImportarTab;
+    private Button dashboardBtn;
+
     /**
-     * Current Tab for the "Exportar Button"
+     * Import Button
      */
-    private Tab currentExportarTab;
+    private Button importBtn;
+
+    /**
+     * Export Button
+     */
+    private Button exportBtn;
+
+    /**
+     * Dashboard Button Caption
+     */
+    private static final String DASHBOARD_BTN_CAPTION =
+            "Dashboard";
+
+    /**
+     * Import Button Caption
+     */
+    private static final String IMPORT_BTN_CAPTION =
+            "Importar";
+
+    /**
+     * Export Button Caption
+     */
+    private static final String EXPORT_BTN_CAPTION =
+            "Exportar";
+
     /**
      * Builds a new ManagerPanelView
      */
@@ -58,82 +74,48 @@ public class ManagerPanelView extends ManagerPanelDesign implements View {
      * Configures current page
      */
     private void configuration(){
-        configureLogoutButton();
-        configureManagerImage();
-        configureManagerName();
+        configureHomeButton();
         configureImportButton();
         configureExportButton();
     }
 
     /**
-     * Configures Manager Image
+     * Prepares Home Button
      */
-    private void configureManagerImage(){
-        imgManager.setSource(ImageUtils.imagePathAsResource(DEFAULT_IMAGE_RESOURCE));
-    }
-
-    /**
-     * Configures Manager Name
-     */
-    private void configureManagerName(){
-        lblName.setValue(DEFAULT_MANAGER_NAME);
-    }
-
-    /**
-     * Configures Logout button
-     */
-    private void configureLogoutButton(){
-        btnLogout.addClickListener((clickEvent) ->{
-            navigator.navigateTo(LoginView.VIEW_NAME);
+    private void configureHomeButton() {
+        dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
+        dashboardBtn.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                //TODO Dashboard/Home View
+            }
         });
     }
 
     /**
-     * Configures Import button
+     * Prepares Import button
      */
     private void configureImportButton(){
-        btnImportar.addClickListener(clickEvent -> {
-            if(currentImportarTab==null||tabSheetOptions.getTabPosition(currentImportarTab)<0){
-                currentImportarTab=tabSheetOptions.addTab(new ManagerImportView(),btnImportar.getCaption());
-                currentImportarTab.setClosable(true);
-                tabSheetOptions.setSelectedTab(currentImportarTab);
-            }
+        importBtn = new Button(IMPORT_BTN_CAPTION, VaadinIcons.SIGN_IN);
+        importBtn.addClickListener(clickEvent -> {
+            setRightPanelContents(new ManagerImportView());
         });
+        addNewButtonToLeftPanel(importBtn);
     }
 
     /**
-     * Configures Export button
+     * Prepares Export button
      */
     private void configureExportButton(){
-        btnExportar.addClickListener(listener ->{
-            createExportTab();
-        });
-    }
-
-    /**
-     * Creates a new Export Tab
-     */
-    private void createExportTab(){
-        btnExportar.addClickListener(listener ->{
-            if(currentExportarTab==null||tabSheetOptions.getTabPosition(currentExportarTab)<0){
-                try {
-                    currentExportarTab = tabSheetOptions.addTab(new ManagerExportView(), btnExportar.getCaption());
-                    currentExportarTab.setClosable(true);
-                    tabSheetOptions.setSelectedTab(currentExportarTab);
-                }catch(IllegalStateException e){
-                    PopupNotification.show(ERROR_OPENING_EXPORT_TAB_TITLE,e.getMessage(), Notification.Type.ERROR_MESSAGE
-                            , Position.TOP_RIGHT);
-                }
+        exportBtn = new Button(EXPORT_BTN_CAPTION, VaadinIcons.SIGN_OUT);
+        exportBtn.addClickListener(listener -> {
+            try {
+                setRightPanelContents(new ManagerExportView());
+            } catch (IllegalStateException e) {
+                Notification.show(ERROR_OPENING_EXPORT_TAB_TITLE, Notification.Type.ERROR_MESSAGE);
             }
         });
-    }
-
-    /**
-     * Configures current navigator
-     */
-    private void configureNavigator(){
-        navigator.addView(ManagerImportView.VIEW_NAME,ManagerImportView.class);
-        navigator.addView(ManagerExportView.VIEW_NAME,ManagerExportView.class);
+        addNewButtonToLeftPanel(exportBtn);
     }
 
 }

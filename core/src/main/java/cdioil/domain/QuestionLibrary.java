@@ -6,5 +6,5 @@ package cdioil.domain;
  *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-public interface QuestionLibrary {
+public interface QuestionLibrary{
 }

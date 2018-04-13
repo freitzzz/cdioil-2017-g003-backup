@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,12 +7,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Version;
 
 /**
  * Represents a Product in a Market Structure's Category.
@@ -21,28 +15,13 @@ import javax.persistence.Version;
  * @author António Sousa [1161371]
  */
 @Entity
-public class Product implements Serializable,SurveyItem {
-
-    /**
-     * Serialization identifier.
-     */
-    private static final long serialVersionUID = 1L;
-
+public class Product extends SurveyItem{
+    
     /**
      * Constant representing the default content of a Product's image.
      */
     private static final String IMAGEM_PRODUTO_DEFAULT = "Produto sem Imagem";
-
-    /**
-     * Auto-generated database identifier
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "PRODUCT_ID")
-    private Long id;
-    
-    @Version
-    private Long version;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Product's name.
@@ -54,7 +33,6 @@ public class Product implements Serializable,SurveyItem {
      * List of the Product's Codes.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id")
     private List<Code> codes = new ArrayList<>();
 
     /**

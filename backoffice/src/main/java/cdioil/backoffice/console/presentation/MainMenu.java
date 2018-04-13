@@ -57,6 +57,7 @@ public class MainMenu {
     private String OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = localizationHandler.getMessageValue("option_associate_categories_to_manager");
     private String OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = localizationHandler.getMessageValue("option_list_categories_without_managers");
     private String OPTION_ADD_USERS_QUESTIONNAIRE = localizationHandler.getMessageValue("option_add_users_questionnaire");
+    private String OPTION_IMPORT_PRODUCTS = localizationHandler.getMessageValue("option_import_products");
 
     public void mainLoopAdmin(Admin admin) {
         int opcao = 0;
@@ -102,6 +103,9 @@ public class MainMenu {
                     new ImportQuestionsUI();
                     break;
                 case 13:
+                    new ImportProductsUI();
+                    break;
+                case 14:
                     new ChangeLanguageUI();
                     refreshLocalizedMessages();
                     break;
@@ -177,7 +181,8 @@ public class MainMenu {
         System.out.println("10. " + OPTION_REMOVE_CATEGORIES_FROM_MANAGER);
         System.out.println("11. " + OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS);
         System.out.println("12. " + OPTION_IMPORT_QUESTIONS_TEMPLATE);
-        System.out.println("13. " + OPTION_CHANGE_LANGUAGE);
+        System.out.println("13. " + OPTION_IMPORT_PRODUCTS);
+        System.out.println("14. " + OPTION_CHANGE_LANGUAGE);
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);

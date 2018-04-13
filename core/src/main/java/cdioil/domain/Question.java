@@ -1,22 +1,27 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 /**
  * Abstract class that represents a Question.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+ * @param <T> defines the type of questionText of the question
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question<T> implements Serializable, ValueObject {
+public abstract class Question<T> implements Serializable {
 
     /**
      * Serialization code.
@@ -36,20 +41,43 @@ public abstract class Question<T> implements Serializable, ValueObject {
     protected QuestionAnswerTypes type;
 
     /**
-     * The question's content.
+     * The question itself.
      */
-    protected T content;
+    private String questionText;
 
     /**
      * The question's ID.
      */
-    protected String questionID;
+    private String questionID;
+
+    /**
+     * List of options that the question has.
+     */
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<QuestionOption> optionList;
+
+    public Question(String questionText, String questionID, List<QuestionOption> optionList) {
+        if (questionText == null || questionText.isEmpty()) {
+            throw new IllegalArgumentException("O texto da questão não "
+                    + "pode ser null ou vazio.");
+        }
+        if (questionID == null || questionID.isEmpty()) {
+            throw new IllegalArgumentException("O id da questão não pode "
+                    + "ser null ou vazio.");
+        }
+        if (optionList == null || optionList.isEmpty()) {
+            throw new IllegalArgumentException("A lista de opções não pode "
+                    + "ser null ou vazia");
+        }
+        this.questionText = questionText;
+        this.questionID = questionID;
+        this.optionList = optionList;
+    }
 
     /**
      * Empty Constructor for JPA.
      */
     protected Question() {
-
     }
 
     /**
@@ -62,20 +90,6 @@ public abstract class Question<T> implements Serializable, ValueObject {
     }
 
     /**
-     * Returns the text of the question
-     *
-     * @return the question itself
-     */
-    public T content() {
-        return content;
-    }
-
-    @Override
-    public String toString() {
-        return content.toString();
-    }
-
-    /**
      * Returns an hash value based on the attributes and class type.
      *
      * @return hash value
@@ -85,7 +99,7 @@ public abstract class Question<T> implements Serializable, ValueObject {
         int hash = 3;
         hash = 29 * hash + Objects.hashCode(this.getClass());
         hash = 29 * hash + Objects.hashCode(this.type);
-        hash = 29 * hash + Objects.hashCode(this.content);
+        hash = 29 * hash + Objects.hashCode(this.questionText);
         hash = 29 * hash + Objects.hash(this.questionID);
         return hash;
     }
@@ -112,6 +126,16 @@ public abstract class Question<T> implements Serializable, ValueObject {
         if (!this.questionID.equals(other.questionID)) {
             return false;
         }
-        return this.content.equals(other.content);
+        return this.questionText.equals(other.questionText);
+    }
+
+    /**
+     * Returns the text of the question
+     *
+     * @return string containg the question
+     */
+    @Override
+    public String toString() {
+        return questionText;
     }
 }

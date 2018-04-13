@@ -23,10 +23,19 @@ public class SystemUserTest {
     }
 
     /**
+     * Test of empty constructor of class SystemUser
+     */
+    @Test
+    public void testEmptyConstructor() {
+        System.out.println("SystemUser()");
+        SystemUser sysUser = new SystemUser();
+    }
+
+    /**
      * Teste do método changeUserDatafield, da classe SystemUser
      */
     @Test
-    public void testeAlterarCampoInformacao() {
+    public void testChangeUserDataField() {
         System.out.println("alterarCampoInformacao");
         //teste alterar nome com nome sem espaços
         assertFalse(instance.changeUserDatafield("Belmiro", 1));
@@ -41,6 +50,8 @@ public class SystemUserTest {
         assertFalse(instance.changeUserDatafield("deathsticks", 3));
         //teste alterar Password com password válida
         assertTrue(instance.changeUserDatafield("WannaBuysomedeathsticks123", 3));
+        //test with invalid option
+        assertTrue(instance.changeUserDatafield("deathsticks", 7));
     }
 
     /**
@@ -92,19 +103,19 @@ public class SystemUserTest {
     @Test
     public void testeToString() {
         System.out.println("toString");
-        SystemUser other = new SystemUser(new Email("myPrecious@gmail.com"), 
+        SystemUser other = new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3"));
         assertTrue(instance.toString().equals(other.toString()));
     }
-    
+
     /**
      * Test of getID method, of class SystemUser.
      */
     @Test
-    public void testGetID(){
+    public void testGetID() {
         System.out.println("getID");
         Email expResult = new Email("myPrecious@gmail.com");
         Email result = instance.getID();
-        assertEquals(expResult,result);
+        assertEquals(expResult, result);
     }
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 /**
- * Represents addQuestion library that holds all questions related to categories
- * (e.g. "Do you think red wines are better than port wines?")
+ * Represents a library that holds all questions related to categories (e.g. "Do
+ * you think red wines are better than port wines?")
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
@@ -32,22 +33,22 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     private Long id;
 
     /**
-     * Map that containsQuestion questions (values) related to categories
-     * (keys). TODO check JPA annotations
+     * Map that contains questions (values) related to categories (keys). TODO
+     * check JPA annotations
      */
     @ManyToMany(cascade = CascadeType.ALL)
     private Map<Category, QuestionGroup> library;
 
     /**
-     * Builds addQuestion CategoryQuestionsLibrary, creating addQuestion new
-     * hash map to hold the questions and the categories.
+     * Builds a CategoryQuestionsLibrary, creating a new hash map to hold the
+     * questions and the categories.
      */
     public CategoryQuestionsLibrary() {
         this.library = new HashMap<>();
     }
 
     /**
-     * Returns all the questions related to addQuestion category
+     * Returns all the questions related to a category.
      *
      * @param category category to which the questions are related
      * @return set of questions related to addQuestion category if the category
@@ -58,7 +59,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Adds addQuestion category to the library.
+     * Adds a category to the library.
      *
      * @param category category to be added
      * @return true if the category was added, false if otherwise
@@ -72,8 +73,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Removes addQuestion category and all it's related questions from the
-     * library.
+     * Removes a category and all it's related questions from the library.
      *
      * @param category category to be removed
      * @return true if the category was removed, false if otherwise
@@ -87,7 +87,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Checks whether addQuestion category already exists in the library.
+     * Checks whether a category already exists in the library.
      *
      * @param category category to be checked
      * @return true if it already exists in the library, false if otherwise
@@ -97,7 +97,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Adds addQuestion question related to addQuestion category to the hash map
+     * Adds a question related to a category to the hash map.
      *
      * @param question question to be added
      * @param category category that the question is related to
@@ -114,8 +114,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Removes addQuestion question related to addQuestion category from the
-     * hasp map
+     * Removes a question related to a category from the hasp map
      *
      * @param question question to be removed
      * @param category category that the question is related to
@@ -132,8 +131,7 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
     }
 
     /**
-     * Checks whether addQuestion question related to addQuestion category
-     * already exists
+     * Checks whether a question related to a category already exists
      *
      * @param question question to be checked
      * @param category category that the question is related to

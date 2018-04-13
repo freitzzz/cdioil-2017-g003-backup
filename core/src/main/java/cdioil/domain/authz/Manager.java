@@ -1,7 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.domain.Category;
-import cdioil.persistence.Identifiable;
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +27,7 @@ import javax.persistence.Version;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER"}))
-public class Manager implements Serializable, Identifiable<Email> {
+public class Manager implements Serializable, AggregateRoot<SystemUser> {
 
     private static final long serialVersionUID = 1L;
 
@@ -120,8 +120,8 @@ public class Manager implements Serializable, Identifiable<Email> {
     }
 
     @Override
-    public Email getID() {
-        return su.getID();
+    public SystemUser getID() {
+        return su;
     }
 
     /**

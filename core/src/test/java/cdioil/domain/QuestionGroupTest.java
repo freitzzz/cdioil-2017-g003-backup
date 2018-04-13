@@ -1,8 +1,11 @@
 package cdioil.domain;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  * Unit tests for class QuestionGroup.
@@ -10,6 +13,17 @@ import static org.junit.Assert.*;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class QuestionGroupTest {
+
+    private List<QuestionOption> list;
+
+    @Before
+    public void setUp() {
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+    }
 
     /**
      * Constructor tests.
@@ -34,7 +48,7 @@ public class QuestionGroupTest {
         System.out.println("getQuestions");
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
         HashSet<Question> expResult = new HashSet<>();
-        HashSet<Question> result = instance.getQuestions();
+        HashSet<Question> result = (HashSet<Question>) instance.getQuestions();
         assertEquals(expResult, result);
     }
 
@@ -45,8 +59,10 @@ public class QuestionGroupTest {
     public void testContainsQuestion() {
         System.out.println("containsQuestion");
         String id = "4";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
+        assertFalse("The condition should succeed because the question doesn't"
+                + " exist in the set", instance.containsQuestion(question));
         instance.addQuestion(question);
         assertTrue("The condition should succeed because the question exists"
                 + "in the set.", instance.containsQuestion(question));
@@ -59,7 +75,7 @@ public class QuestionGroupTest {
     public void testAddQuestion() {
         System.out.println("addQuestion");
         String id = "4";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
         assertTrue("The condition should succeed because the question"
                 + "can be added.", instance.addQuestion(question));
@@ -75,7 +91,7 @@ public class QuestionGroupTest {
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
         String id = "4T";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
         assertFalse("The condition should succeed because the question"
                 + "doesn't exist.", instance.removeQuestion(question));
@@ -107,7 +123,7 @@ public class QuestionGroupTest {
         QuestionGroup instance = new QuestionGroup("Group");
         String id = "4";
         String otherID = "5";
-        Question q = new BinaryQuestion("QuestaoTeste", id);
+        Question q = new BinaryQuestion("QuestaoTeste", id, list);
         assertEquals("The condition should succeed because we are comparing"
                 + "the same instances.", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing "
@@ -117,7 +133,7 @@ public class QuestionGroupTest {
         assertEquals("The condition should succeed because we are comparing"
                 + "instances with the same properties.", instance, other);
         instance.addQuestion(q);
-        other.addQuestion(new BinaryQuestion("QuestaoTeste2", otherID));
+        other.addQuestion(new BinaryQuestion("QuestaoTeste2", otherID, list));
         assertNotEquals("The condition should succeed because we are comparing"
                 + "instances with different sets of questions.", instance, other);
         QuestionGroup instance2 = new QuestionGroup("Group2");

@@ -35,7 +35,7 @@ public class AdminRepositoryImpl extends BaseJPARepository<Admin,Long> implement
      * @param admin Admin with administrator being checked
      * @return boolean true if the administrator exists on the database, false if not
      */
-    public boolean exists(Admin admin){return new UserRepositoryImpl().findByEmail(admin.getID())!=null;}
+    public boolean exists(Admin admin){return new UserRepositoryImpl().findByEmail(admin.getID().getID())!=null;}
     
     
     @Override

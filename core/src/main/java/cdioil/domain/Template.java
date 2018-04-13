@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain;
 
 import java.io.Serializable;
@@ -16,7 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 public class Template implements Serializable {
-    
+
     /**
      * Version for JPA.
      */
@@ -38,27 +33,11 @@ public class Template implements Serializable {
     /**
      * List of Questions of the Template.
      */
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Question> questions;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private QuestionGroup questionGroup;
 
-    /**
-     * Category of the Template.
-     */
-    private Category category;
-
-    /**
-     * Creates an instance of Template, receiving a Category.
-     *
-     * @param category Category of the Template.
-     */
-    public Template(Category category) {
-        
-        if(category == null){
-            throw new IllegalArgumentException("Argumento não pode ser null");
-        }
-        
-        this.questions = new LinkedList<>();
-        this.category = category;
+    public Template(String title) {
+        this.questionGroup = new QuestionGroup(title);
     }
 
     /**
@@ -67,68 +46,8 @@ public class Template implements Serializable {
     protected Template() {
     }
 
-    /**
-     * Adds a Question to the list of questions of the Template.
-     *
-     * @param question Question to add
-     * @return true, if the question is successfully added. Otherwise, returns false
-     */
-    public boolean addQuestion(Question question) {
-        if (question == null || isQuestionValid(question)) {
-            return false;
-        }
-        return questions.add(question);
-    }
-
-    /**
-     * Removes a Question from the list of questions of the Template.
-     *
-     * @param question Question to remove
-     * @return true, if the question is successfully removed. Otherwise, returns false
-     */
-    public boolean removeQuestion(Question question) {
-        if (question == null || !isQuestionValid(question)) {
-            return false;
-        }
-        return questions.remove(question);
-    }
-
-    /**
-     * Checks if a Question already exists in the list of questions.
-     *
-     * @param question Question to check
-     * @return true, if the question already exists. Otherwise, returns false
-     */
-    public boolean isQuestionValid(Question question) {
-        return questions.contains(question);
-    }
-
-    /**
-     * Access method to the Category of the Template.
-     *
-     * @return the Category of the Template
-     */
-    private Category getCategory() {
-        return category;
-    }
-
-    /**
-     * Access method to the list of questions of the Template.
-     *
-     * @return the list with all questions of the Template
-     */
-    private List<Question> getQuestionsList() {
-        return questions;
-    }
-
-    /**
-     * Describes the Template.
-     *
-     * @return a description of the Template
-     */
-    @Override
-    public String toString() {
-        return "\nCategoria: " + getCategory() + "\nLista de Questões: " + getQuestionsList();
+    public QuestionGroup getQuestionGroup() {
+        return questionGroup;
     }
 
     /**
@@ -139,8 +58,7 @@ public class Template implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 43 * hash + Objects.hashCode(this.questions);
-        hash = 43 * hash + Objects.hashCode(this.category);
+        hash = 43 * hash + Objects.hashCode(this.questionGroup);
         return hash;
     }
 
@@ -148,20 +66,18 @@ public class Template implements Serializable {
      * Compares the Template with another Object.
      *
      * @param obj Object to compare
-     * @return true, if the two Objects have the same attributes. Otherwise, returns false
+     * @return true, if the two Objects have the same attributes. Otherwise,
+     * returns false
      */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Template)){
+        if (!(obj instanceof Template)) {
             return false;
         }
         final Template other = (Template) obj;
-        if (!this.questions.equals(other.questions)) {
-            return false;
-        }
-        return this.category.equals(other.category);
+        return this.questionGroup.equals(other.questionGroup);
     }
 }

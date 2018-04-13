@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;GENERATE_GETTERS&quot;:false,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;valo&quot;}">
+  <meta name="vaadin-version" content="8.0.5">
+ </head>
+ <body>
+  <vaadin-css-layout responsive size-full>
+   <vaadin-horizontal-layout spacing="false" responsive height-full>
+    <vaadin-panel primary-style-name="valo-menu" responsive width-auto height-full _id="leftPanel" :middle :expand="0.2">
+     <vaadin-grid-layout size-full margin>
+      <row>
+       <column expand="1">
+        <vaadin-vertical-layout :center>
+         <vaadin-image width="90px" height="90px" _id="userAvatar" :center></vaadin-image>
+         <vaadin-label height-full plain-text _id="usernameLabel" :center :expand>
+           Tiago Almeida 
+         </vaadin-label>
+        </vaadin-vertical-layout>
+       </column>
+      </row>
+      <row expand="1">
+       <column>
+        <vaadin-css-layout width-full _id="btnPanel" :center></vaadin-css-layout>
+       </column>
+      </row>
+      <row></row>
+      <row>
+       <column>
+        <vaadin-horizontal-layout width-full :bottom :center>
+         <vaadin-button primary-style-name="v-button-borderless" responsive width-full plain-text _id="btnLogout" :middle :center>
+           Logout 
+         </vaadin-button>
+        </vaadin-horizontal-layout>
+       </column>
+      </row>
+     </vaadin-grid-layout>
+    </vaadin-panel>
+    <vaadin-panel responsive size-full _id="rightPanel" :middle :center :expand="0.8"></vaadin-panel>
+   </vaadin-horizontal-layout>
+  </vaadin-css-layout>
+ </body>
+</html>

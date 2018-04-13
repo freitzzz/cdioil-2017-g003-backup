@@ -15,168 +15,271 @@ public class MarketStructureTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void verificarAdicionarCategoriaRaizNaoPermiteParametrosNulos() {
+    public void ensureAddCategoryDoesNotAllowNullParameters() {
         
         MarketStructure struct = new MarketStructure();
         
-        struct.addRootCategory(null);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void verificarAdicionarCategoriaNaoPermiteParametrosNulos() {
-        
-        MarketStructure struct = new MarketStructure();
-        
-        Category c = new Category("Bricolage", "100CAT", "10DC-10UN-100CAT");
-        
-        struct.addRootCategory(c);
-        
-        struct.addCategory(c, null);
+        struct.addCategory(null);
     }
     
     @Test
-    public void verificarAdicionarCategoriaRaizAdiciona() {
+    public void ensureCategoryCanNotBeAddedIfPathElementsHaveNotBeenAdded() {
         
         MarketStructure struct = new MarketStructure();
         
-        assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.size());
-        
-        Category c = new Category("Bens Alimentares", "109UB", "10DC-10UN-100CAT-102SCAT-109UB");
-        
-        assertTrue(struct.addRootCategory(c));
-        
-        assertTrue(struct.checkDirectlyConnected(struct.getRoot().getElement(), c));
-        
-        assertEquals(2, struct.size());
-        
+        Category c = new Category("Bricolage", "10DC-10UN-100CAT");
+
+        assertFalse("This category should not be added since 10DC nor 10UN have been added.", struct.addCategory(c));
+
+        assertEquals("Market Structure should have size equal to 1 since no other category besides the root exists.", 1, struct.size());
     }
     
     @Test
-    public void verificarAdicionarCategoriaAdiciona() {
+    public void ensureCategoryCanBeAddedIfPathElementsHaveBeenAdded(){
         
         MarketStructure struct = new MarketStructure();
+
+        Category fakeRoot = new Category("All products", "RAIZ");
+
+        assertFalse(struct.addCategory(fakeRoot));
+
+        Category c = new Category("Nome 1", "10DC");
         
-        assertEquals("A estrutura deverá conter apenas o node raiz", 1, struct.size());
+        assertTrue(struct.addCategory(c));
         
-        Category c = new Category("Bens Alimentares", "109UB", "10DC-10UN-100CAT-102SCAT-109UB");
+        Category c1 = new Category("Nome 2", "10DC-10UN");
         
-        assertTrue(struct.addRootCategory(c));
+        assertTrue(struct.addCategory(c1));
+
+        //assertTrue(struct.checkDirectlyConnected(c, c1));
         
-        assertEquals("A estrutura deverá conter dois nodes", 2, struct.size());
+        Category c2 = new Category("Nome 3", "10DC-10UN-1000CAT");
         
-        Category c2 = new Category("Bebidas", "20UN", "10DC-20UN");
-        
-        assertTrue(struct.addCategory(c, c2));
-        
-        assertEquals("A estrutura deverá agora conter três nodes", 3, struct.size());
-        
-        assertTrue(struct.checkDirectlyConnected(c, c2));
-        
+        assertTrue(struct.addCategory(c2));
+
+        //assertTrue(struct.checkDirectlyConnected(c1, c2));
+
+        assertEquals("Size should be 4 since fakeRoot was not added", 4, struct.size());
+    }
+
+
+    @Test
+    public void ensureAddCategoryWorks(){
+
+        MarketStructure struct = new MarketStructure();
+
+        for(int i = 0; i < 5; i++){
+
+            String path = "1" + i + "DC";
+
+            Category parent = new Category("Parent " + (i+1), path);
+
+            struct.addCategory(parent);
+
+            for(int j = 0; j < 2; j++){
+                Category child = new Category("Child " + i + (j+1), path + "-1"+j+"UN");
+
+                struct.addCategory(child);
+            }
+        }
+
+        assertEquals("Market Structure's size should be 16", 16, struct.size());
+
+        Category c = new Category("Category", "10DC");
+
+        assertFalse("This category should not be added since an equal one has already been added.", struct.addCategory(c));
     }
     
     @Test
-    public void verificarGetFolhasFunciona() {
+    public void ensureGetLeavesWorks() {
         
         MarketStructure struct = new MarketStructure();
-        
-        Category c1 = new Category("Casa e Decoracao", "1009SCAT", "10DC-10UN-100CAT-1009SCAT");
-        
-        Category c2 = new Category("Roupa", "20CAT", "10DC-10UN-20CAT");
-        
-        struct.addRootCategory(c1);
-        struct.addRootCategory(c2);
-        
+
         List<Category> expected = new LinkedList<>();
-        
+
+        Category root = new Category("Todos os Produtos", "RAIZ");
+
+        expected.add(root);
+
+        assertEquals("The Market Structure's leaves should only contain the root itself", expected, struct.getLeaves());
+
+
+        Category c = new Category("Alimentar", "10DC");
+
+        expected.clear();
+        expected.add(c);
+
+        struct.addCategory(c);
+
+        assertEquals("The new category should be a leaf", expected, struct.getLeaves());
+
+        Category c1 = new Category("Peixaria&Talho", "11DC");
+
+        expected.clear();
+        expected.add(c);
         expected.add(c1);
+
+        struct.addCategory(c1);
+
+        assertEquals("The new category should also be a leaf", expected, struct.getLeaves());
+
+        Category c2 =  new Category("Vinho e Espirutuosas", "10DC-17UN");
+
+        expected.clear();
         expected.add(c2);
-        
-        assertEquals(struct.getLeaves(), expected);
-        
+        expected.add(c1);
+
+        struct.addCategory(c2);
+
+        assertEquals("There should only be two leaves", expected, struct.getLeaves());
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void verficarVerificarLigadosNaoPermiteParametrosNulos() {
-        
+    public void ensureCheckDirectlyConnectedDoesNotAllowNullParameters() {
+
         MarketStructure struct = new MarketStructure();
-        
+
         struct.checkDirectlyConnected(null, null);
-        
     }
-    
-    @Test
-    public void verificaVerificarLigadosFunciona() {
-        
-        MarketStructure struct = new MarketStructure();
-        
-        Category c = new Category("Higiene", "10CAT", "10DC-10UN-10CAT");
-        
-        struct.addRootCategory(c);
-        
-        assertTrue(struct.checkDirectlyConnected(struct.getRoot().getElement(), c));
-    }
-    
+
     @Test(expected = IllegalArgumentException.class)
-    public void verificarAdicionarProdutoNaoPermiteParametrosNulos() {
-        
+    public void ensureCheckDirectlyConnectedDoesNotAllowFirstParameterToBeNull(){
+
         MarketStructure struct = new MarketStructure();
-        
+
+        struct.checkDirectlyConnected(null, new Category("Category 2", "10DC"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureCheckDirectlyConnectedDoesNotAllowSecondParameterToBeNull(){
+
+        MarketStructure struct = new MarketStructure();
+
+        struct.checkDirectlyConnected(new Category("Category 2", "10DC"), null);
+    }
+
+    @Test
+    public void ensureNotInsertedCategoriesAreNotDirectlyConnected(){
+
+        MarketStructure struct = new MarketStructure();
+
+        Category c1 = new Category("Category 1", "10DC");
+
+        Category c2 = new Category("Category 2", "11DC");
+
+        assertFalse(struct.checkDirectlyConnected(c1,c2));
+
+        struct.addCategory(c1);
+
+        assertFalse(struct.checkDirectlyConnected(c1,c2));
+    }
+
+
+    @Test
+    public void ensureThatSameCategoryIsNotDirectlyConnected() {
+
+        MarketStructure struct = new MarketStructure();
+
+        Category c = new Category("Higiene", "10DC");
+
+        struct.addCategory(c);
+
+        assertFalse(struct.checkDirectlyConnected(c,c));
+    }
+
+
+    @Test
+    public void ensureCheckDirectlyConnectedWorks(){
+
+        MarketStructure structure = new MarketStructure();
+
+        Category c1 = new Category("Category 1", "10DC");
+
+        Category c2 = new Category("Category 2", "10DC-15UN");
+
+
+        structure.addCategory(c1);
+        structure.addCategory(c2);
+
+        assertTrue(structure.checkDirectlyConnected(c1,c2));
+
+
+        Category root = new Category("Todos os Produtos", "RAIZ");
+
+        assertTrue(structure.checkDirectlyConnected(root, c1));
+
+        assertTrue(structure.checkDirectlyConnected(c1, root));
+
+
+        Category c3 = new Category("Category 3", "10DC-15UN-20CAT");
+        structure.addCategory(c3);
+
+        assertTrue(structure.checkDirectlyConnected(c2,c3));
+        assertTrue(structure.checkDirectlyConnected(c3,c2));
+        assertFalse(structure.checkDirectlyConnected(c1,c3));
+        assertFalse(structure.checkDirectlyConnected(c3,c1));
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureAddProductDoesNotAllowNullParameters() {
+
+        MarketStructure struct = new MarketStructure();
+
         struct.addProduct(null, null);
     }
-    
-    @Test
-    public void verificarAdicionarProdutoApenasAdicionaACategoriasFolhas() {
-        
-        MarketStructure struct = new MarketStructure();
-        
-        Category c1 = new Category("Categoria pai", "100CAT", "10DC-10UN-100CAT");
-        
-        struct.addRootCategory(c1);
-        
-        Category c2 = new Category("Categoria filho", "20SCAT", "10DC-10UN-100CAT-20SCAT");
-        
-        struct.addCategory(c1, c2);
-        
-        Product p = new Product("Produto", new EAN("1"));
-        
-        assertFalse("A categoria nao e uma folha", struct.addProduct(p, c1));
-        
-        assertTrue(struct.addProduct(p, c2));
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureAddProductDoesNotAllowNullCategory(){
+
+        MarketStructure struct =  new MarketStructure();
+
+        struct.addProduct(new Product("New Product", new EAN("3423432")), null);
     }
-    
-    @Test
-    public void testAdicionarSubCategorias() {
-        
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureAddProductDoesNotAllowNullProduct(){
+
         MarketStructure struct = new MarketStructure();
-        
-        Category mae = new Category("Roupa", "20UB", "10DC-10UN-100CAT-102SCAT-20UB");
-        
-        struct.addRootCategory(mae);
-        
-        for (int i = 0; i < 30; i++) {
-            
-            Category pai = new Category("Alimentar", "10UB", "10DC-10UN-100CAT-102SCAT-10UB");
-            
-            struct.addRootCategory(pai);
-            
-            Category filho = new Category("Bens Essenciais", "20DC", "20DC");
-            
-            struct.addCategory(pai, filho);
-            
-            Category filho2 = new Category("Gorduras Liquidas", "1000CAT", "10DC-10UN-1000CAT");
-            
-            struct.addCategory(filho, filho2);
-            
-            Category filho3 = new Category("Sub-Categoria " + i, "10" + i + "SCAT", "10DC-10UN-100CAT-10" + i + "SCAT");
-            
-            struct.addCategory(filho2, filho3);
-            
-            Product p = new Product("Produto " + i, new EAN("i"), new QRCode(Integer.toString(2 * i)));
-            
-            struct.addProduct(p, filho3);
-            
-        }
-        assertEquals(35, struct.size());
+
+        struct.addProduct(null, new Category("Category", "10DC"));
+    }
+
+
+    @Test
+    public void ensureAddProductDoesNotWorkForNotAddedCategories(){
+
+        MarketStructure structure = new MarketStructure();
+
+        Category c = new Category("Category", "10DC");
+
+        Product p = new Product("Product", new QRCode("1421213"));
+
+        assertFalse(structure.addProduct(p, c));
+    }
+
+    @Test
+    public void ensureAddProductOnlyAddsToLeaves() {
+
+        MarketStructure struct = new MarketStructure();
+
+        Category c1 = new Category("Parent Category", "10DC");
+
+        struct.addCategory(c1);
+
+        Category c2 = new Category("Child Category", "10DC-10UN");
+
+        struct.addCategory(c2);
+
+        Product p = new Product("Produto", new EAN("1"));
+
+        assertFalse("Can't add product, since the category is no longer a leaf", struct.addProduct(p, c1));
+
+        assertTrue("Since the category is a leaf the product can be added", struct.addProduct(p, c2));
+
+
+        //TODO: what happens to the products added to a node that was previously a leaf, but no longer is?
     }
 
     /**
@@ -186,25 +289,37 @@ public class MarketStructureTest {
     public void testGetAllCategories() {
         System.out.println("getAllCategories");
         MarketStructure struct = new MarketStructure();
-        
-        Category pai = new Category("Alimentar", "10UB", "10DC-10UN-100CAT-102SCAT-10UB");
-        struct.addRootCategory(pai);
-        Category filho = new Category("Bens Essenciais", "20DC", "20DC");
-        struct.addCategory(pai, filho);
-        Category filho2 = new Category("Gorduras Liquidas", "1000CAT", "10DC-10UN-1000CAT");
-        struct.addCategory(filho, filho2);
-        Category filho3 = new Category("Sub-Categoria", "10" + "SCAT", "10DC-10UN-100CAT-10" + "SCAT");
-        struct.addCategory(filho2, filho3);
-        Product p = new Product("Produto", new EAN("i"), new QRCode(Integer.toString(2)));
-        struct.addProduct(p, filho3);
-        
+
+        Category c1 = new Category("Alimentar", "10DC");
+        struct.addCategory(c1);
+        Category c2 = new Category("Bens Essenciais", "20DC");
+        struct.addCategory(c2);
+        Category c3 = new Category("Gorduras Liquidas", "10DC-10UN");
+        struct.addCategory(c3);
+        Category c4 = new Category("Sub-Categoria", "10DC-10UN-100CAT");
+        struct.addCategory(c4);
+        Category c5 = new Category("Outra sub-categoria", "10DC-10UN-200CAT");
+        struct.addCategory(c5);
+        Category c6 = new Category("Pteras", "20DC-10UN");
+        struct.addCategory(c6);
+
         List<Category> lc = new LinkedList<>();
-        lc.add(struct.getRoot().getElement());
-        lc.add(pai);
-        lc.add(filho);
-        lc.add(filho2);
-        lc.add(filho3);
-        
-        assertTrue(lc.equals(struct.getAllCategories()));
+
+        lc.add(c1);
+        lc.add(c3);
+        lc.add(c4);
+        lc.add(c5);
+        lc.add(c2);
+        lc.add(c6);
+
+        List<Category> categories = struct.getAllCategories();
+
+        assertTrue(lc.equals(categories));
+    }
+
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void ensureRemoveCategoryThrowsException(){
+        new MarketStructure().removeCategory(new Category("Category", "10DC"));
     }
 }

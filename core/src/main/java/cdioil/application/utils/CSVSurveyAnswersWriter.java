@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import cdioil.files.FileWriter;
 import cdioil.domain.Answer;
 import cdioil.domain.Question;
 import cdioil.domain.Review;
@@ -56,7 +57,7 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
         csvContent.add(header);
         mapQuestionAnswers.forEach((question,answers)->{
             answers.forEach((answer)->{
-                csvContent.add(question.content().toString()+CSV_DELIMITER+answer.content().toString());
+                csvContent.add(question.toString()+CSV_DELIMITER+answer.content().toString());
             });
         });
         return FileWriter.writeFile(file,csvContent);
