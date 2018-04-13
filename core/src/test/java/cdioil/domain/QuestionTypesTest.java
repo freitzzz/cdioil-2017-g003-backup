@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain;
 
 import org.junit.After;
@@ -17,7 +12,7 @@ import static org.junit.Assert.*;
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-public class QuestionAnswerTypesTest {
+public class QuestionTypesTest {
 
     /**
      * Test of values method, of class QuestionAnswerTypes.
@@ -25,9 +20,9 @@ public class QuestionAnswerTypesTest {
     @Test
     public void testValues() {
         System.out.println("values");
-        QuestionAnswerTypes[] expResult = {QuestionAnswerTypes.BINARY,
-            QuestionAnswerTypes.MULTIPLE_CHOICE, QuestionAnswerTypes.QUANTITATIVE};
-        QuestionAnswerTypes[] result = QuestionAnswerTypes.values();
+        QuestionTypes[] expResult = {QuestionTypes.BINARY,
+            QuestionTypes.MULTIPLE_CHOICE, QuestionTypes.QUANTITATIVE};
+        QuestionTypes[] result = QuestionTypes.values();
         assertArrayEquals(expResult, result);
     }
 
@@ -38,16 +33,16 @@ public class QuestionAnswerTypesTest {
     public void testValueOf() {
         System.out.println("valueOf");
         String name = "BINARY";
-        QuestionAnswerTypes expResult = QuestionAnswerTypes.BINARY;
-        QuestionAnswerTypes result = QuestionAnswerTypes.valueOf(name);
+        QuestionTypes expResult = QuestionTypes.BINARY;
+        QuestionTypes result = QuestionTypes.valueOf(name);
         assertEquals(expResult, result);
         name = "MULTIPLE_CHOICE";
-        expResult = QuestionAnswerTypes.MULTIPLE_CHOICE;
-        result = QuestionAnswerTypes.valueOf(name);
+        expResult = QuestionTypes.MULTIPLE_CHOICE;
+        result = QuestionTypes.valueOf(name);
         assertEquals(expResult, result);
         name = "QUANTITATIVE";
-        expResult = QuestionAnswerTypes.QUANTITATIVE;
-        result = QuestionAnswerTypes.valueOf(name);
+        expResult = QuestionTypes.QUANTITATIVE;
+        result = QuestionTypes.valueOf(name);
         assertEquals(expResult, result);
     }
 
@@ -59,13 +54,13 @@ public class QuestionAnswerTypesTest {
     public void testToStrings() {
         System.out.println("toStrings");
         String expResult = "Binária";
-        String result = QuestionAnswerTypes.BINARY.toString();
+        String result = QuestionTypes.BINARY.toString();
         assertEquals(expResult, result);
         expResult = "Escolha Múltipla";
-        result = QuestionAnswerTypes.MULTIPLE_CHOICE.toString();
+        result = QuestionTypes.MULTIPLE_CHOICE.toString();
         assertEquals(expResult, result);
         expResult = "Quantitativa";
-        result = QuestionAnswerTypes.QUANTITATIVE.toString();
+        result = QuestionTypes.QUANTITATIVE.toString();
         assertEquals(expResult, result);
     }
 

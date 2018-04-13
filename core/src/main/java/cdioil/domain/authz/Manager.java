@@ -19,7 +19,7 @@ import javax.persistence.Version;
 
 /**
  * Survey Manager
- *
+ * <p>
  * Person responsible for the creation and configuration of surveys of a given
  * market structure.
  *
@@ -53,7 +53,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
     /**
      * Builds a Manager with a SystemUser and a Category List
      *
-     * @param su SystemUser account
+     * @param su         SystemUser account
      * @param categories Category List
      */
     public Manager(SystemUser su, List<Category> categories) {
@@ -153,4 +153,13 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
     public boolean isAssociatedWithCategory(Category c) {
         return this.categories.contains(c);
     }
+
+    /**
+     * Returns all the categories given to the manager
+     * @return all categories
+     */
+    public List<Category> categoriesFromManager() {
+        return categories;
+    }
+
 }

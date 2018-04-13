@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,7 +19,7 @@ import javax.persistence.ManyToMany;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
+public class ProductQuestionsLibrary implements AggregateRoot<Map<Product, QuestionGroup>>, Serializable, QuestionLibrary {
 
     /**
      * Serialization number.
@@ -174,4 +175,14 @@ public class ProductQuestionsLibrary implements Serializable, QuestionLibrary {
         return this.library.equals(other.library);
     }
 
+    /**
+     * Returns the entity's identity (in this case it's a map of products and
+     * question groups)
+     *
+     * @return map of products (keys) and question groups (values)
+     */
+    @Override
+    public Map<Product, QuestionGroup> getID() {
+        return this.library;
+    }
 }

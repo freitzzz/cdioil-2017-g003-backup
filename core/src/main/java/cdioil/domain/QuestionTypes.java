@@ -1,11 +1,11 @@
 package cdioil.domain;
 
 /**
- * Enum that contains all types of answers and questions.
+ * Enum that contains all types of questions.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-public enum QuestionAnswerTypes {
+public enum QuestionTypes {
 
     /**
      * Binary Question (Yes or No answer)

@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;
@@ -9,23 +10,9 @@ import org.junit.Before;
 /**
  * Unit testing class for IndependentQuestionsLibrary class.
  *
- * TODO After all types of questions are implemented, update tests to consider
- * all types of questions in the library
- *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class IndependentQuestionsLibraryTest {
-
-    private List<QuestionOption> list;
-
-    @Before
-    public void setUp() {
-        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
-        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
-        list = new LinkedList<>();
-        list.add(option1);
-        list.add(option2);
-    }
 
     /**
      * Test of hashCode method, of class IndependentQuestionsLibrary.
@@ -59,14 +46,14 @@ public class IndependentQuestionsLibraryTest {
                 + "instances with the same properties", instance, instance2);
         String id = "5A";
         String otherID = "6B";
-        instance.addQuestion(new BinaryQuestion("QuestaoTeste", id, list));
+        instance.addQuestion(new BinaryQuestion("QuestaoTeste", id));
         assertNotEquals("The condition should succeed because we are comparing"
                 + " a library with one question to a library"
                 + " with no questions", instance, instance2);
-        instance2.addQuestion(new BinaryQuestion("QuestaoTeste", id, list));
+        instance2.addQuestion(new BinaryQuestion("QuestaoTeste", id));
         assertEquals("The condition should succeed because we are comparing"
                 + " instances with the same properties", instance, instance2);
-        instance3.addQuestion(new BinaryQuestion("TesteQuestao", otherID, list));
+        instance3.addQuestion(new BinaryQuestion("TesteQuestao", otherID));
         assertNotEquals("The condition should succeed because we are comparing"
                 + "libraries that have different questions", instance, instance3);
     }
@@ -78,7 +65,7 @@ public class IndependentQuestionsLibraryTest {
     public void testAddQuestion() {
         System.out.println("addQuestion");
         String id = "F4";
-        Question question = new BinaryQuestion("QuestaoTeste", id, list);
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
         assertTrue("The condition should be true because this question hasn't"
                 + "been added to the library.", instance.addQuestion(question));
@@ -93,7 +80,7 @@ public class IndependentQuestionsLibraryTest {
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
         String id = "H4";
-        Question question = new BinaryQuestion("QuestaoTeste", id, list);
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
         assertFalse("The condition should be false because the question doesn't"
                 + "exist in the library and therefore cannot be removed",
@@ -110,7 +97,7 @@ public class IndependentQuestionsLibraryTest {
     public void testDoesQuestionExist() {
         System.out.println("doesQuestionExist");
         String id = "R5";
-        Question question = new BinaryQuestion("QuestaoTeste", id, list);
+        Question question = new BinaryQuestion("QuestaoTeste", id);
         IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
         assertFalse("The condition should be false because the question doesn't"
                 + "exist in the library", instance.doesQuestionExist(question));
@@ -119,4 +106,14 @@ public class IndependentQuestionsLibraryTest {
                 + "to the library", instance.doesQuestionExist(question));
     }
 
+    /**
+     * Test of getID method, of class IndependentQuestionsLibrary.
+     */
+    @Test
+    public void testGetID() {
+        System.out.println("getID");
+        IndependentQuestionsLibrary instance = new IndependentQuestionsLibrary();
+        HashSet<Question> expResult = new HashSet<>();
+        assertEquals(expResult, instance.getID());
+    }
 }

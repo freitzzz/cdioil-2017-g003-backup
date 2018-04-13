@@ -25,7 +25,6 @@ public class QuestionLibrariesBootstrap {
     private static final String BOOTSTRAP_CAT_PATH = "10938DC";
     private final MarketStructureRepositoryImpl marketRepo = new MarketStructureRepositoryImpl();
     private final Category cat = marketRepo.findCategoriesByPathPattern(BOOTSTRAP_CAT_PATH).get(0);
-    private final List<QuestionOption> binaryOptionList = createBinaryOptionList();
     private final List<QuestionOption> multipleChoiceOptionList = createMultipleChoiceOptionList();
     private final List<QuestionOption> quantitativeOptionlist = createQuantitativeOptionList();
 
@@ -48,10 +47,8 @@ public class QuestionLibrariesBootstrap {
     private void bootstrapCategoryQuestionsLibrary(GlobalLibrary globalLibrary) {
         String id = "3";
         String id2 = "2";
-        BinaryQuestion q = new BinaryQuestion("Questao Binaria Bootstrap 3", id,
-                binaryOptionList);
-        BinaryQuestion q2 = new BinaryQuestion("Questao Binaria Bootstrap 2", id2,
-                binaryOptionList);
+        BinaryQuestion q = new BinaryQuestion("Questao Binaria Bootstrap 3", id);
+        BinaryQuestion q2 = new BinaryQuestion("Questao Binaria Bootstrap 2", id2);
         MultipleChoiceQuestion q3 = new MultipleChoiceQuestion("Questao EM Bootstrap 5", "5",
                 multipleChoiceOptionList);
         QuantitativeQuestion q4 = new QuantitativeQuestion("Questao Quantitativa Bootstrap 98",
@@ -72,8 +69,7 @@ public class QuestionLibrariesBootstrap {
     private void bootstrapProductQuestionsLibrary(GlobalLibrary globalLibrary) {
         Product prod = cat.getProductSetIterator().next();
         String id = "1";
-        BinaryQuestion binQuestion = new BinaryQuestion("Questao Binaria Bootstrap 1",
-                id, binaryOptionList);
+        BinaryQuestion binQuestion = new BinaryQuestion("Questao Binaria Bootstrap 1", id);
         MultipleChoiceQuestion q2 = new MultipleChoiceQuestion("Questao EM Bootstrap 100", "100",
                 multipleChoiceOptionList);
         QuantitativeQuestion q3 = new QuantitativeQuestion("Questao Quantitativa Bootstrap 2000",
@@ -90,8 +86,8 @@ public class QuestionLibrariesBootstrap {
     private void bootstrapIndependentQuestionsLibrary(GlobalLibrary globalLibrary) {
         String id = "A4";
         String id2 = "B6";
-        BinaryQuestion q = new BinaryQuestion("Questao Binaria Bootstrap A4", id, binaryOptionList);
-        BinaryQuestion q2 = new BinaryQuestion("Questao Binaria Bootstrap B6", id2, binaryOptionList);
+        BinaryQuestion q = new BinaryQuestion("Questao Binaria Bootstrap A4", id);
+        BinaryQuestion q2 = new BinaryQuestion("Questao Binaria Bootstrap B6", id2);
         MultipleChoiceQuestion q3 = new MultipleChoiceQuestion("Questao Escolha Multipla Bootstrap I5",
                 "I5", multipleChoiceOptionList);
         QuantitativeQuestion q4 = new QuantitativeQuestion("Questao Quantitativa Bootstrap M2", "M2",
@@ -100,20 +96,6 @@ public class QuestionLibrariesBootstrap {
         globalLibrary.getIndQuestionsLibrary().addQuestion(q);
         globalLibrary.getIndQuestionsLibrary().addQuestion(q3);
         globalLibrary.getIndQuestionsLibrary().addQuestion(q4);
-    }
-
-    /**
-     * Creates a binary option list.
-     *
-     * @return question option list
-     */
-    private List<QuestionOption> createBinaryOptionList() {
-        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
-        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
-        LinkedList<QuestionOption> optionList = new LinkedList<>();
-        optionList.add(option1);
-        optionList.add(option2);
-        return optionList;
     }
 
     /**
