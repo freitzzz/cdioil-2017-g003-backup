@@ -85,9 +85,13 @@ public class PhoneNumber implements Serializable, ValueObject {
         return matcher.matches();
     }
 
+    
     public boolean validatesNumber(String phoneNumber) {
         return phoneNumber.equalsIgnoreCase(decryptNumber(number));
     }
 
-
+    @Override
+    public String toString() {
+        return "Phone Number: " + number;
+    }
 }
