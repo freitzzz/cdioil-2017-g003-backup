@@ -34,7 +34,8 @@ public class Answer implements Serializable, ValueObject {
 
     public Answer(QuestionOption chosenOption) {
         if (chosenOption == null) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("A opção escolhida não pode "
+                    + "ser null");
         }
         content = chosenOption.toString();
     }

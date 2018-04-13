@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 /**
@@ -48,6 +51,8 @@ public abstract class Question<T> implements Serializable {
      * List of options that the question has.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "QUESTION_OPTIONLIST",joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
+            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID",unique = false))
     private List<QuestionOption> optionList;
 
     public Question(String questionText, String questionID, List<QuestionOption> optionList) {

@@ -3,7 +3,7 @@ package cdioil.application.bootstrap;
 import cdioil.application.bootstrap.authz.UsersBootstrap;
 import cdioil.application.bootstrap.authz.WhitelistBootstrap;
 import cdioil.application.bootstrap.domain.MarketStructureBootstrap;
-import cdioil.application.bootstrap.domain.QuestionLibrariesBootstrap;
+import cdioil.application.bootstrap.domain.LibrariesBootstrap;
 import cdioil.domain.Contest;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.Email;
@@ -37,7 +37,7 @@ public class BootstrapRunner {
         new UsersBootstrap();
         new WhitelistBootstrap();
         new MarketStructureBootstrap();
-        new QuestionLibrariesBootstrap();
+        new LibrariesBootstrap();
     }
 
     /**
