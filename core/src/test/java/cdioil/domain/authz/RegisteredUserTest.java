@@ -43,7 +43,8 @@ public class RegisteredUserTest {
     @Test
     public void testGetId() {
         System.out.println("getID");
-        RegisteredUser ur = new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")));
-        assertEquals(new Email("myPrecious@gmail.com"), ur.getID());
+        SystemUser systemUserX=new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"));
+        RegisteredUser ur = new RegisteredUser(systemUserX);
+        assertEquals(systemUserX, ur.getID());
     }
 }

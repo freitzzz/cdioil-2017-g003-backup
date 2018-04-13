@@ -91,9 +91,9 @@ public class AdminTest {
     @Test
     public void testGetID(){
         System.out.println("getID");
-        Admin a = createAdmin(sysUser);
-        Email expResult = new Email("lilpump@guccigang.com");
-        Email result = a.getID();
+        Admin realAdmin = createAdmin(sysUser);
+        SystemUser expResult=sysUser;
+        SystemUser result = realAdmin.getID();
         assertEquals(expResult,result);
     }
 

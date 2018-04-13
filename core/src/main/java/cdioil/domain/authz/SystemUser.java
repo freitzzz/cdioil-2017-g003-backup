@@ -1,6 +1,6 @@
 package cdioil.domain.authz;
 
-import cdioil.framework.domain.Identifiable;
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
-public class SystemUser implements Serializable, Identifiable<Email> {
+public class SystemUser implements Serializable, AggregateRoot<Email> {
 
     /**
      * Serialization number.
