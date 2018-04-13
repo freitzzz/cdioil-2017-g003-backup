@@ -11,9 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
- * Class that was created to allow the persistence of addQuestion map key
- * (Category or Product) that containsQuestion addQuestion set of values
- * (Questions).
+ * Represents a group of questions
  *
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
@@ -33,19 +31,18 @@ public class QuestionGroup implements Serializable {
     private Long id;
 
     /**
-     * Set of questions related to addQuestion category or addQuestion product.
+     * Set of questions.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Question> questions;
 
     /**
-     * String that will serve as addQuestion map key for
-     * CategoryQuestionsLibrary and ProductQuestionsLibrary.
+     * Title of the question group.
      */
     private String title;
 
     /**
-     * Builds an instance of QuestionGroup, with addQuestion new hash set of
+     * Builds an instance of QuestionGroup, with a new hash set of
      * questions.
      *
      * @param title Title of the question group;
@@ -64,7 +61,7 @@ public class QuestionGroup implements Serializable {
     }
 
     /**
-     * Returns addQuestion new hash set with all the questions.
+     * Returns a new hash set with all the questions.
      *
      * @return set with all questions
      */
@@ -73,7 +70,7 @@ public class QuestionGroup implements Serializable {
     }
 
     /**
-     * Checks if addQuestion question is in addQuestion set of questions.
+     * Checks if a question is in a set of questions.
      *
      * @param question question to be checked
      * @return true if the question exists in the set, false if otherwise
@@ -83,7 +80,7 @@ public class QuestionGroup implements Serializable {
     }
 
     /**
-     * Adds addQuestion question to the set.
+     * Adds a question to the set.
      *
      * @param question question to be added
      * @return true if the question was added, false if otherwise
@@ -96,7 +93,7 @@ public class QuestionGroup implements Serializable {
     }
 
     /**
-     * Removes addQuestion question from the set
+     * Removes a question from the set
      *
      * @param question question to be removed
      * @return true if the question was removed, false if otherwise

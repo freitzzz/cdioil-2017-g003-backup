@@ -1,5 +1,7 @@
 package cdioil.domain;
 
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,16 +19,25 @@ public class BinaryQuestionTest {
     public void testConstructor() {
         System.out.println("Constructor Tests");
         String id = "4";
-        assertNull("The condition should succeed because the argument is invalid",
-                createBinaryQuestion(null, id));
-        assertNull("\"The condition should succeed because the argument is invalid",
-                createBinaryQuestion("", id));
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        assertNull("The condition should succeed because the list is null",
+                createBinaryQuestion("Question", id, null));
+        assertNull("The condition should succeed because the list is empty",
+                createBinaryQuestion("Question", id, list));
+        list.add(option1);
+        list.add(option2);
+        assertNull("The condition should succeed because the question text"
+                + " is null", createBinaryQuestion(null, id, list));
+        assertNull("The condition should succeed because the question text is "
+                + "empty", createBinaryQuestion("", id, list));
         assertNull("The condition should succeed because the id is null",
-                createBinaryQuestion("Question", null));
+                createBinaryQuestion("Question", null, list));
         assertNull("The condition should succeed because the id is empty",
-                createBinaryQuestion(id, ""));
-        assertNotNull("\"The condition should succeed because the arguments are valid",
-                createBinaryQuestion("Translating things is fun :))))))", id));
+                createBinaryQuestion(id, "", list));
+        assertNotNull("The condition should succeed because the arguments are valid",
+                createBinaryQuestion("Translating things is fun :))))))", id, list));
         assertNotNull("Empty constructor test", new BinaryQuestion());
     }
 
@@ -38,9 +49,14 @@ public class BinaryQuestionTest {
         System.out.println("hashCode");
         String q = "IT'S REALLY FUN c:";
         String id = "34";
-        BinaryQuestion instance = new BinaryQuestion(q, id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        BinaryQuestion instance = new BinaryQuestion(q, id, list);
 
-        BinaryQuestion other = new BinaryQuestion(q, id);
+        BinaryQuestion other = new BinaryQuestion(q, id, list);
 
         assertEquals(instance.hashCode(), other.hashCode());
     }
@@ -53,13 +69,21 @@ public class BinaryQuestionTest {
         System.out.println("equals");
         String id = "5L";
         String otherID = "4L";
-        BinaryQuestion instance = new BinaryQuestion("QuestaoTeste", id);
-        BinaryQuestion instance2 = new BinaryQuestion("QuestaoTeste", id);
-        BinaryQuestion instance3 = new BinaryQuestion("TesteQuestao", otherID);
-        BinaryQuestion instance4 = new BinaryQuestion("QuestaoTeste", otherID);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        QuantitativeQuestionOption option3 = new QuantitativeQuestionOption(3.0);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        LinkedList<QuestionOption> outsiderList = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        outsiderList.add(option3);
+        BinaryQuestion instance = new BinaryQuestion("QuestaoTeste", id, list);
+        BinaryQuestion instance2 = new BinaryQuestion("QuestaoTeste", id, list);
+        BinaryQuestion instance3 = new BinaryQuestion("TesteQuestao", otherID, list);
+        BinaryQuestion instance4 = new BinaryQuestion("QuestaoTeste", otherID, list);
         String outsiderID = "L3";
         QuantitativeQuestion outsider = new QuantitativeQuestion("QuestaoTeste",
-                outsiderID, 0.0, 5.0);
+                outsiderID, outsiderList);
         assertEquals("The condition should succeed because we are "
                 + "comparing the same instances", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing"
@@ -77,40 +101,37 @@ public class BinaryQuestionTest {
     }
 
     /**
-     * Test of content method, of class BinaryQuestion.
-     */
-    @Test
-    public void testContent() {
-        System.out.println("content");
-        String q = "Do you like Translating Java Docs?";
-        String id = "A5";
-        BinaryQuestion instance = new BinaryQuestion(q, id);
-        String expResult = q;
-        String result = instance.content();
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of type method, of class BinaryQuestion.
      */
     @Test
     public void testType() {
         System.out.println("type");
         String id = "5";
-        BinaryQuestion instance = new BinaryQuestion("I'm lost in translation", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        BinaryQuestion instance = new BinaryQuestion("I'm lost in translation", id, list);
         String expResult = QuestionAnswerTypes.BINARY.toString();
         String result = instance.type();
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of toString method, of class BinaryQuestion.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        BinaryQuestion instance = createBinaryQuestion("Question", "98");
-        assertTrue(instance.toString().equals(instance.content()));
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        BinaryQuestion instance = createBinaryQuestion("Question", "98", list);
+        BinaryQuestion other = createBinaryQuestion("Question", "98", list);
+        assertTrue(instance.toString().equals(other.toString()));
     }
 
     /**
@@ -118,11 +139,12 @@ public class BinaryQuestionTest {
      *
      * @param question the question itself
      * @param questionID the question's ID
+     * @param optionList the question's option list
      * @return BinaryQuestion instance
      */
-    private BinaryQuestion createBinaryQuestion(String question, String questionID) {
+    private BinaryQuestion createBinaryQuestion(String question, String questionID, List<QuestionOption> optionList) {
         try {
-            return new BinaryQuestion(question, questionID);
+            return new BinaryQuestion(question, questionID, optionList);
         } catch (IllegalArgumentException e) {
             return null;
         }

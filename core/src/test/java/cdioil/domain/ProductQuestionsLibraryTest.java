@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -80,7 +81,12 @@ public class ProductQuestionsLibraryTest {
     public void testAddQuestion() {
         System.out.println("addQuestion");
         String id = "5H";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
@@ -105,7 +111,12 @@ public class ProductQuestionsLibraryTest {
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
         String id = "4";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
@@ -132,7 +143,12 @@ public class ProductQuestionsLibraryTest {
     public void testDoesQuestionExist() {
         System.out.println("doesQuestionExist");
         String id = "9A";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
@@ -185,7 +201,12 @@ public class ProductQuestionsLibraryTest {
         Product product = new Product("ProdutoTeste", new EAN("544231234"),
                 new QRCode("4324235"));
         String id = "6Y";
-        BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id, list);
         instance.addProduct(product);
         assertFalse("The condition should succeed because the instances have"
                 + "different mappings (one has a product, the other"

@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -76,7 +77,12 @@ public class CategoryQuestionsLibraryTest {
     public void testAddQuestion() {
         System.out.println("addQuestion");
         String id = "144";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category isn't in"
@@ -99,7 +105,12 @@ public class CategoryQuestionsLibraryTest {
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
         String id = "4";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category doesn't"
@@ -124,7 +135,12 @@ public class CategoryQuestionsLibraryTest {
     public void testDoesQuestionExist() {
         System.out.println("doesQuestionExist");
         String id = "4L";
-        Question question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        Question question = new BinaryQuestion("QuestaoTeste", id, list);
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
         CategoryQuestionsLibrary instance = new CategoryQuestionsLibrary();
         assertFalse("The condition should succeed because the category doesn't"
@@ -174,7 +190,12 @@ public class CategoryQuestionsLibraryTest {
                 + "instances of different classes.", instance.equals("banana"));
         Category cat = new Category("CategoryTest", "10DC-10UN-100CAT");
         String id = "4B";
-        BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id);
+        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
+        LinkedList<QuestionOption> list = new LinkedList<>();
+        list.add(option1);
+        list.add(option2);
+        BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id, list);
         instance.addCategory(cat);
         assertFalse("The condition should succeed because the instances have"
                 + "different mappings (one has a category, the other"
