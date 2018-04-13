@@ -18,15 +18,6 @@ public class BinaryQuestionTest {
     public void testConstructor() {
         System.out.println("Constructor Tests");
         String id = "4";
-        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
-        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
-        LinkedList<QuestionOption> list = new LinkedList<>();
-        assertNull("The condition should succeed because the list is null",
-                createBinaryQuestion("Question", id));
-        assertNull("The condition should succeed because the list is empty",
-                createBinaryQuestion("Question", id));
-        list.add(option1);
-        list.add(option2);
         assertNull("The condition should succeed because the question text"
                 + " is null", createBinaryQuestion(null, id));
         assertNull("The condition should succeed because the question text is "

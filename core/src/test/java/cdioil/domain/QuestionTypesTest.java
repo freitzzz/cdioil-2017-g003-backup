@@ -1,21 +1,17 @@
 package cdioil.domain;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Unit testing class for QuestionAnswerTypes enum.
+ * Unit testing class for QuestionTypes enum.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class QuestionTypesTest {
 
     /**
-     * Test of values method, of class QuestionAnswerTypes.
+     * Test of values method, of class QuestionTypes.
      */
     @Test
     public void testValues() {
@@ -27,7 +23,7 @@ public class QuestionTypesTest {
     }
 
     /**
-     * Test of valueOf method, of class QuestionAnswerTypes.
+     * Test of valueOf method, of class QuestionTypes.
      */
     @Test
     public void testValueOf() {
@@ -47,8 +43,7 @@ public class QuestionTypesTest {
     }
 
     /**
-     * Test of toString method for all the values in the QuestionAnswerTypes
-     * enum.
+     * Test of toString method for all the values in the QuestionTypes enum.
      */
     @Test
     public void testToStrings() {

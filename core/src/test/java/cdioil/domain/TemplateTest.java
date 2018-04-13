@@ -73,6 +73,7 @@ public class TemplateTest {
         assertNotEquals("Instância de Template diferente", new Template(questionGroup), t);
         questionGroup2.addQuestion(new BinaryQuestion("Question", "435"));
         assertEquals("Instância de Template igual", new Template(questionGroup2), t);
+        questionGroupDiffQuestions.addQuestion(new BinaryQuestion("Question 3", "987"));
         Template tDifferentQuestions = new Template(questionGroupDiffQuestions);
         tDifferentQuestions.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "342"));
         t.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532"));
