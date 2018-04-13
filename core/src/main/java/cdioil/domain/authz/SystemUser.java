@@ -48,6 +48,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * User's Phone Number
      */
     @Embedded
+    @Column(unique = true)
     private PhoneNumber phoneNumber;
     /**
      * User's Location
