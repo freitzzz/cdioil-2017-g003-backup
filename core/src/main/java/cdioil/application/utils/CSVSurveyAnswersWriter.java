@@ -57,7 +57,7 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
         csvContent.add(header);
         mapQuestionAnswers.forEach((question,answers)->{
             answers.forEach((answer)->{
-                csvContent.add(question.toString()+CSV_DELIMITER+answer.content().toString());
+                csvContent.add(question.toString()+CSV_DELIMITER+answer.toString());
             });
         });
         return FileWriter.writeFile(file,csvContent);

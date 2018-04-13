@@ -2,25 +2,18 @@ package cdioil.domain;
 
 import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
 /**
- * Generic abstract class to be used for concrete types of Answer. 
- * =============================================================================
- * TODO - Discuss whether this class is worth existing or not
- * =============================================================================
+ * Represents an answer (option that a user chose)
+ *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- * @param <T> type of data stored in the Answer
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Answer<T> implements Serializable, ValueObject {
+public class Answer implements Serializable, ValueObject {
 
     /**
      * Serialization code.
@@ -32,73 +25,61 @@ public abstract class Answer<T> implements Serializable, ValueObject {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
+    private Long id;
 
     /**
-     * The content of the answer.
+     * The content of the chosen option.
      */
-    protected T content;
+    private String content;
 
-    /**
-     * The type of answer.
-     */
-    protected QuestionAnswerTypes type;
+    public Answer(QuestionOption chosenOption) {
+        if (chosenOption == null) {
+            throw new IllegalArgumentException("");
+        }
+        content = chosenOption.toString();
+    }
 
     /**
      * Empty constructor JPA.
      */
     protected Answer() {
-
     }
 
     /**
-     * Return the question's type.
+     * Answer's hash code.
      *
-     * @return question's type enum value
-     */
-    public String type() {
-        return type.toString();
-    }
-
-    /**
-     * Returns the text of the answer
-     *
-     * @return the answer itself
-     */
-    public T content() {
-        return content;
-    }
-
-    /**
-     * Returns an hash value based on the attributes and class type.
-     * @return hash value
+     * @return hash code
      */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.getClass());
-        hash = 29 * hash + Objects.hashCode(this.type);
-        hash = 29 * hash + Objects.hashCode(this.content);
-        return hash;
+        return content.hashCode();
     }
 
     /**
-     * Verifies object equality based on the Answer's attributes and class type.
-     * @param obj object to be compared to
-     * @return true if the objects are truly equal, false otherwise
+     * Checks if two answers are equal.
+     *
+     * @param obj object to be compared
+     * @return true if they're equal, false if otherwise
      */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if(!(obj instanceof Answer<?>)){
+        if (!(obj instanceof Answer)) {
             return false;
         }
-        final Answer<?> other = (Answer<?>) obj;
-        if (this.type != other.type) {
-            return false;
-        }
+        final Answer other = (Answer) obj;
         return this.content.equals(other.content);
+    }
+
+    /**
+     * Returns the content of the answer.
+     *
+     * @return string with the answer's content
+     */
+    @Override
+    public String toString() {
+        return content;
     }
 }
