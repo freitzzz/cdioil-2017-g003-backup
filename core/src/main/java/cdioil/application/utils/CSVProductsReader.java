@@ -162,7 +162,7 @@ public class CSVProductsReader implements ProductsReader {
 
                         Product product = null;
 
-                        product = readProducts(currentLine, CATEGORIES_FILE_OFFSET);
+                        product = createProduct(currentLine, CATEGORIES_FILE_OFFSET);
 
                         if (product != null) {
                             if (!readProducts.containsKey(path)) {
@@ -190,7 +190,7 @@ public class CSVProductsReader implements ProductsReader {
      * @param offset number of cells skipped to reach the start of a question
      * @return product
      */
-    private Product readProducts(String[] currentLine, int offset) {
+    private Product createProduct(String[] currentLine, int offset) {
 
         String productName = currentLine[offset].trim();
         EAN ean = new EAN(currentLine[offset + 1].trim());

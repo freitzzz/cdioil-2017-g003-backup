@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
 
 /**
  * Controller for use cases US-203 (import products from file).
@@ -52,12 +53,13 @@ public class ImportProductsController {
 
         }
         Map<String, List<Product>> productByCatPath = productsReader.readProducts();
+        Map<String, Product> produtsImported = new HashMap<>();
 
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
 
         Set<Map.Entry<String, List<Product>>> entries = productByCatPath.entrySet();
 
-        for (Map.Entry<String, List<Product>> mapEntry : entries) {
+        for(Map.Entry<String, List<Product>> mapEntry : entries) {
 
             String path = mapEntry.getKey();
             List<Product> productList = mapEntry.getValue();
@@ -70,12 +72,11 @@ public class ImportProductsController {
             if (categoryList.contains(path)) {
                 productList.forEach((pro) -> {
                     successfullyImportedProducts.add(pro);
+                    produtsImported.put(path, pro);
                 });
-            } else {
-                productByCatPath.remove(path, productList);
             }
         }
-        productRepositoryImpl.merge(productByCatPath);
+        productRepositoryImpl.merge(produtsImported);
 
         return successfullyImportedProducts.size();
     }

@@ -51,7 +51,7 @@ public class SystemUserTest {
         //teste alterar Password com password válida
         assertTrue(instance.changeUserDatafield("WannaBuysomedeathsticks123", 3));
         //test with invalid option
-        assertTrue(instance.changeUserDatafield("deathsticks", 4));
+        assertTrue(instance.changeUserDatafield("deathsticks", 7));
     }
 
     /**

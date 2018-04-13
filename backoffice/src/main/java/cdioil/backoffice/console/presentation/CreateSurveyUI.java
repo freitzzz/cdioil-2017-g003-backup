@@ -3,7 +3,7 @@ package cdioil.backoffice.console.presentation;
 import cdioil.backoffice.application.CreateSurveyController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.*;
-import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
+import cdioil.domain.authz.Manager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,10 +13,12 @@ import java.util.List;
 public class CreateSurveyUI {
 
     private CreateSurveyController controller;
+    private Manager loggedManager;
 
-    public CreateSurveyUI() {
+    public CreateSurveyUI(Manager manager) {
         controller = new CreateSurveyController();
         menuLoop();
+        loggedManager = manager;
     }
 
     private void menuLoop() {
@@ -24,6 +26,7 @@ public class CreateSurveyUI {
 
         do {
             option = menuSurvey();
+            List<Category> allCategories = loggedManager.categoriesFromManager();
 
             switch (option) {
                 case 0:
@@ -35,11 +38,15 @@ public class CreateSurveyUI {
                     List<Question> questions;
                     HashMap<SurveyItem, List<Question>> map = new HashMap<>();
                     List<SurveyItem> categories = new ArrayList<>();
-
-
                     do {
-                        String path = Console.readLine("Please insert the path to the category");
-                        category = controller.findCategory(path);
+                        System.out.println("All categories: \n");
+                        for (int i = 0; i < allCategories.size(); i++) {
+                            System.out.println((i + 1) + ". " + allCategories.get(i) + "\n");
+                        }
+                        int cat = Console.readInteger("Please choose a category: \n") - 1;
+
+                        category = allCategories.get(cat);
+
 
                         questions = new ArrayList<>();
 
@@ -49,15 +56,28 @@ public class CreateSurveyUI {
 
                             allQuestions = controller.questionsForCategory(category);
 
-                            for (int i = 0; i < allQuestions.size(); i++) {
-                                System.out.println((i + 1) + ". " + allQuestions.get(i));
-                            }
+                            boolean flag;
 
-                            String[] chooseQuestions = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
+                            do {
+                                flag = false;
+                                for (int i = 0; i < allQuestions.size(); i++) {
+                                    System.out.println((i + 1) + ". " + allQuestions.get(i));
+                                }
+                                String[] chooseQuestions;
+                                try {
+                                    chooseQuestions = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
 
-                            for (String s : chooseQuestions) {
-                                map.get(category).add(allQuestions.get(Integer.parseInt(s) - 1));
-                            }
+                                    for (String s : chooseQuestions) {
+                                        map.get(category).add(allQuestions.get(Integer.parseInt(s) - 1));
+                                    }
+
+                                } catch (IllegalArgumentException e) {
+                                    flag = true;
+                                    System.out.println("ERROR");
+                                }
+
+                            } while (flag);
+
 
                             System.out.println("Do you want to continue add more categories?");
                             categoryOption = menuYesNo();
@@ -81,7 +101,6 @@ public class CreateSurveyUI {
                     List<Product> productsFound;
                     List<SurveyItem> allProducts = new ArrayList<>();
                     List<Question> questionsFound;
-                    allQuestions = new ArrayList<>();
                     HashMap<SurveyItem, List<Question>> productMap = new HashMap<>();
                     Product product = null;
                     int optionProduct = -1;
@@ -109,21 +128,34 @@ public class CreateSurveyUI {
                             System.out.println("ERROR: Product not found");
                         }
 
-                        if (product != null) {
-                            questionsFound = controller.questionForProducts(product);
-                            for (int i = 0; i < questionsFound.size(); i++) {
-                                System.out.println((i + 1) + ". " + questionsFound.get(i));
-                            }
-                            String[] questionChoosen = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
+                        boolean flagProducts;
 
-                            for (String s : questionChoosen) {
-                                productMap.get(product).add(questionsFound.get(Integer.parseInt(s) - 1));
+                        do {
+                            flagProducts = false;
+                            try {
+                                if (product != null) {
+                                    questionsFound = controller.questionForProducts(product);
+
+                                    for (int i = 0; i < questionsFound.size(); i++) {
+                                        System.out.println((i + 1) + ". " + questionsFound.get(i));
+                                    }
+                                    String[] questionChoosen = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
+
+                                    for (String s : questionChoosen) {
+                                        productMap.get(product).add(questionsFound.get(Integer.parseInt(s) - 1));
+                                    }
+                                }
+                            } catch (IllegalArgumentException e) {
+                                flagProducts = true;
+                                System.out.println("ERROR: Please try again");
                             }
+                        } while (flagProducts);
+
+                        if (product != null) {
 
                             System.out.println("Do you want to continue add more products?");
                             optionProduct = menuYesNo();
                         }
-
                     } while (optionProduct != 2);
 
                     if (product != null) {
