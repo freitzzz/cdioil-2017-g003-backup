@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import java.util.LinkedList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -78,15 +77,5 @@ public class TemplateTest {
         tDifferentQuestions.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "342"));
         t.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532"));
         assertFalse(t.equals(tDifferentQuestions));
-    }
-
-    /**
-     * Test of getID method, of class Template.
-     */
-    @Test
-    public void testGetID() {
-        System.out.println("getID");
-        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
-        assertEquals(t.getQuestionGroup(), questionGroup);
     }
 }

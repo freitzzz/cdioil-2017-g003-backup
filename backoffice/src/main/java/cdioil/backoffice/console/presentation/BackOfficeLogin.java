@@ -17,35 +17,40 @@ import cdioil.persistence.impl.UserRepositoryImpl;
 public class BackOfficeLogin {
 
     /**
+     * Localization Handler to load messages in several languages.
+     */
+    private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
+    
+    /**
      * Separator used for clarity.
      */
     private final String SEPARATOR = "===========================\n";
     /**
      * Backoffice Welcome message.
      */
-    private final String INFO_WELCOME = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_welcome");
+    private final String INFO_WELCOME = localizationHandler.getMessageValue("info_welcome");
 
     /**
      * Message that informing the user the program is about to shutdown.
      */
-    private final String INFO_SHUTDOWN = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_shutdown");
+    private final String INFO_SHUTDOWN = localizationHandler.getMessageValue("info_shutdown");
 
     /**
      * Message requesting the user for their email address.
      */
-    private final String REQUEST_EMAIL = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_email");
+    private final String REQUEST_EMAIL = localizationHandler.getMessageValue("request_email");
     /**
      * Message requesting the user for their password.
      */
-    private final String REQUEST_PASSWORD = BackOfficeLocalizationHandler.getInstance().getMessageValue("request_password");
+    private final String REQUEST_PASSWORD = localizationHandler.getMessageValue("request_password");
     /**
      * Error message informing the user of invalid credentials.
      */
-    private final String ERROR_INVALID_CREDENTIALS = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_invalid_credentials");
+    private final String ERROR_INVALID_CREDENTIALS = localizationHandler.getMessageValue("error_invalid_credentials");
     /**
      * Error message informing the user they're not authorized to use the Backoffice.
      */
-    private final String ERROR_UNAUTHORIZED_USER = BackOfficeLocalizationHandler.getInstance().getMessageValue("error_unauthorized_user");
+    private final String ERROR_UNAUTHORIZED_USER = localizationHandler.getMessageValue("error_unauthorized_user");
 
     public void backofficeLogin() {
         long id = -1;
