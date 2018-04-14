@@ -12,7 +12,7 @@ import javax.persistence.*;
  * @author Ana Guerra (1161191)
  */
 @Entity
-public class Template implements AggregateRoot<QuestionGroup>, Serializable {
+public class Template implements Serializable {
 
     /**
      * Version for JPA.
@@ -94,15 +94,5 @@ public class Template implements AggregateRoot<QuestionGroup>, Serializable {
         }
         final Template other = (Template) obj;
         return this.questionGroup.equals(other.questionGroup);
-    }
-
-    /**
-     * Returns the entity's identity (in this case it's the question group)
-     *
-     * @return QuestionGroup
-     */
-    @Override
-    public QuestionGroup getID() {
-        return this.questionGroup;
     }
 }
