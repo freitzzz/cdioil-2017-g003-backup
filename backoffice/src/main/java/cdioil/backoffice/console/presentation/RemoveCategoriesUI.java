@@ -1,6 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.authz.CategoryManagementController;
+import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.Manager;
 
@@ -12,6 +13,11 @@ import cdioil.domain.authz.Manager;
 public class RemoveCategoriesUI {
 
     /**
+     * Localization handler to load messages in several langugaes.
+     */
+    private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
+
+    /**
      * Separator used for clarity.
      */
     private static final String SEPARATOR = "=============================";
@@ -19,40 +25,40 @@ public class RemoveCategoriesUI {
     /**
      * Message to indicate the list of all managers being presented.
      */
-    private static final String MANAGER_LIST = "Lista de Todos Os Gestores\n";
+    private final String MANAGER_LIST = localizationHandler.getMessageValue
+        ("info_all_managers_list");
 
     /**
      * Message to indicate that a manager must be picked.
      */
-    private static final String PICK_MANAGER = "Insira o e-mail do gestor para "
-            + "remover categorias\n";
+    private final String PICK_MANAGER = localizationHandler.getMessageValue
+        ("request_manager_email");
 
     /**
      * Message to indicate that the admin must insert a category identifier.
      */
-    private static final String CATEGORY_ID_MESSAGE = "Insira o descritivo da(s) "
-            + "categoria(s) que quer remover ao gestor selecionado\n";
+    private final String CATEGORY_ID_MESSAGE = localizationHandler.getMessageValue
+        ("request_category_identifier_removal");
 
     /**
      * Error message for emails that are written incorrectly or don't exist.
      */
-    private static final String EMAIL_ERROR = "O e-mail que inseriu não pertence"
-            + " a um gestor/contém erros. Por favor, tente novamente.\n";
+    private final String EMAIL_ERROR = localizationHandler.getMessageValue
+        ("error_invalid_email");
 
     /**
      * Error message for categories that don't exist or that the manager isn't
      * associated to.
      */
-    private static final String CATEGORY_ERROR = "O descritivo que inseriu não "
-            + "corresponde a nenhuma categoria ou a categoria não está associada"
-            + " a este gestor.\nPor favor, tente novamente.\n";
+    private final String CATEGORY_ERROR = localizationHandler.getMessageValue
+        ("error_invalid_category");
 
     /**
      * Success message indicating that the categories were successfully removed
      * from the manager.
      */
-    private static final String SUCCESS_MESSAGE = "\nAs categorias foram removidas"
-            + " com sucesso.\n";
+    private final String SUCCESS_MESSAGE = localizationHandler.getMessageValue
+        ("info_categories_removed");
 
     /**
      * Controller class responsible for handling the communication between the
