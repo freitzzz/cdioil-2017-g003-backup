@@ -22,4 +22,12 @@ public class IndependentQuestionsLibraryRepositoryImpl extends BaseJPARepository
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
 
+    /**
+     * Retrieves the only IndependentQuestionsLibrary from the database.
+     *
+     * @return IndependentQuestionsLibrary currently stored in the database.
+     */
+    public IndependentQuestionsLibrary findLibrary() {
+        return findAll().iterator().next();
+    }
 }
