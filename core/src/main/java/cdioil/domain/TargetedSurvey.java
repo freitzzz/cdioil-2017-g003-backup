@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import cdioil.application.utils.QuestionAnswerGraph;
 import cdioil.domain.authz.UsersGroup;
 import java.io.Serializable;
 import java.time.LocalDateTime;

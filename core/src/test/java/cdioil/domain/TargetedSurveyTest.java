@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import cdioil.application.utils.QuestionAnswerGraph;
+import cdioil.application.utils.Graph;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
@@ -26,7 +26,7 @@ public class TargetedSurveyTest {
     private LocalDateTime surveyDate;
     private LocalDateTime endingDate;
     private UsersGroup gu;
-    private QuestionAnswerGraph graph;
+    private Graph graph;
 
     @Before
     public void setUp() {
@@ -35,7 +35,7 @@ public class TargetedSurveyTest {
         endingDate = LocalDateTime.of(2, Month.MARCH, 23, 10, 10);
         gu = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
-        graph = new QuestionAnswerGraph(true);
+        graph = new Graph();
     }
 
     /**
