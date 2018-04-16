@@ -1,7 +1,6 @@
 package cdioil.domain;
 
-import cdioil.application.utils.LocalDateTimeAttributeConverter;
-import cdioil.application.utils.QuestionAnswerGraph;
+import cdioil.application.utils.Graph;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,7 +43,7 @@ public class Survey implements Serializable {
      * Question and Answer graph.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
-    private QuestionAnswerGraph graph;
+    private Graph graph;
 
     /**
      * Builds an instance of survey with a product and a date.
@@ -62,7 +61,7 @@ public class Survey implements Serializable {
             throw new IllegalArgumentException("O inquérito tem que ter uma data");
         }
         this.itemList = itemList;
-        this.graph = new QuestionAnswerGraph(true);     //Directed Graph
+        this.graph = new Graph();
         this.surveyDate = date;
         this.endingDate = endingDate;
     }
@@ -104,7 +103,7 @@ public class Survey implements Serializable {
      * @return true, if it already exists in the list, false if otherwise
      */
     public boolean isValidQuestion(Question question) {
-        return graph.validVertex(question);
+        return graph.vertexExists(question);
     }
 
     /**
