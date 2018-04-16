@@ -3,8 +3,6 @@ package cdioil.domain;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -39,7 +37,7 @@ public class SurveyTest {
     @Before
     public void setUp() {
         data = LocalDateTime.of(0, Month.MARCH, 2, 0, 0, 0);
-        this.i = new Survey(new ArrayList<>(), data, LocalDateTime.now());
+        this.i = new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now());
     }
 
     @After
@@ -52,7 +50,7 @@ public class SurveyTest {
     @Test
     public void testEmptyConstructor() {
         System.out.println("Survey()");
-        Survey s = new Survey();
+        Survey s = new GlobalSurvey();
     }
 
     /**
@@ -60,7 +58,7 @@ public class SurveyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullItemListThrowsException() {
-        new Survey(null, data, LocalDateTime.now());
+        new GlobalSurvey(null, data, LocalDateTime.now());
     }
 
     /**
@@ -68,7 +66,7 @@ public class SurveyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullDateThrowsException() {
-        new Survey(new ArrayList<>(), null, LocalDateTime.now());
+        new GlobalSurvey(new ArrayList<>(), null, LocalDateTime.now());
     }
 
     /**
@@ -77,7 +75,7 @@ public class SurveyTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Survey outro = new Survey(new ArrayList<>(), data, LocalDateTime.now());
+        Survey outro = new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now());
 
         assertEquals(i.hashCode(), outro.hashCode());
     }
@@ -91,8 +89,8 @@ public class SurveyTest {
         assertNotEquals("Objeto null não é igual", null, i);
         ArrayList<SurveyItem> al = new ArrayList<>();
         al.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
-        assertNotEquals("Instância de Inquerito diferente", new Survey(al, data, LocalDateTime.now()), i);
-        assertEquals("Instância de Inquerito igual", new Survey(new ArrayList<>(), data, LocalDateTime.now()), i);
+        assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(al, data, LocalDateTime.now()), i);
+        assertEquals("Instância de Inquerito igual", new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now()), i);
         assertEquals("Compare same instance", i, i);
         assertNotEquals("Instances of different classes", i, "bananas");
     }
@@ -103,7 +101,7 @@ public class SurveyTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Survey s = new Survey(new ArrayList<>(), data, LocalDateTime.now());
+        Survey s = new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now());
         assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", i.toString(),
                 s.toString());
 
@@ -151,5 +149,21 @@ public class SurveyTest {
         i.removeQuestion(q);
         assertFalse("Questão null", i.isValidQuestion(null));
         assertFalse("Questão não existente", i.isValidQuestion(q));
+    }
+
+    /**
+     * Test of method changeState, of class Survey.
+     */
+    @Test
+    public void testChangeState() {
+        System.out.println("changeState");
+        SurveyState state = SurveyState.DRAFT;
+        assertFalse("The condition should succeed because the new state "
+                + "of the survey is equal to the past one", i.changeState(state));
+        state = SurveyState.ACTIVE;
+        assertTrue("The condition should succeed because the new state "
+                + "of the survey is different from the past one", i.changeState(state));
+        assertFalse("The condition should succeed because the new state is null",
+                i.changeState(null));
     }
 }

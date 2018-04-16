@@ -1,6 +1,6 @@
 package cdioil.persistence;
 
-import cdioil.domain.Questionnaire;
+import cdioil.domain.TargetedSurvey;
 import java.util.List;
 
 /**
@@ -15,5 +15,5 @@ public interface EventRepository {
      *
      * @return list of questionnaires
      */
-    public abstract List<Questionnaire> getQuestionnaires();
+    //public abstract List<TargetedSurvey> getQuestionnaires();
 }
