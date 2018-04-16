@@ -1,26 +1,33 @@
 package cdioil.backoffice.application;
 
 import cdioil.domain.*;
-import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * =============================================================================
+ * FIXME - GlobalLibrary no longer exists. Each library has it's own repository
+ * now.
+ * =============================================================================
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 public class CreateSurveyController {
 
     /**
      * Gets all the questions of a given Product
      *
      * @param product product to search the questions
-     * @returnnList of questions for the product
+     * @return List of questions for the product
      */
     public List<Question> questionForProducts(Product product) {
-        GlobalLibraryRepositoryImpl repo = new GlobalLibraryRepositoryImpl();
-        HashSet<Question> hashSet = repo.findAll().iterator().next().getProdQuestionsLibrary().productQuestionSet(product);
+//        GlobalLibraryRepositoryImpl repo = new GlobalLibraryRepositoryImpl();
+//        HashSet<Question> hashSet = repo.findAll().iterator().next().getProdQuestionsLibrary().productQuestionSet(product);
         List<Question> list = new ArrayList<>();
-        list.addAll(hashSet);
+//        list.addAll(hashSet);
 
         return list;
     }
@@ -32,10 +39,11 @@ public class CreateSurveyController {
      * @return question for the category
      */
     public List<Question> questionsForCategory(Category category) {
-        GlobalLibraryRepositoryImpl repository = new GlobalLibraryRepositoryImpl();
-        GlobalLibrary globalLibrary = repository.findGlobalLibrary();
-
-        return new ArrayList<>(globalLibrary.getCatQuestionsLibrary().categoryQuestionSet(category));
+//        GlobalLibraryRepositoryImpl repository = new GlobalLibraryRepositoryImpl();
+//        GlobalLibrary globalLibrary = repository.findGlobalLibrary();
+//
+//        return new ArrayList<>(globalLibrary.getCatQuestionsLibrary().categoryQuestionSet(category));
+        return new ArrayList<>();
     }
 
     /**
@@ -68,7 +76,8 @@ public class CreateSurveyController {
 
     /**
      * Create a Survey for specific products or categories
-     *  @param surveyItems list of survey items
+     *
+     * @param surveyItems list of survey items
      * @param map
      */
     public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateEnding, HashMap<SurveyItem, List<Question>> map) {

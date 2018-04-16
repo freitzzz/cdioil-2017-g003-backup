@@ -64,7 +64,7 @@ public class CategoryTemplatesLibrary implements AggregateRoot<Map<Category, Tem
      */
     public boolean addCategory(Category category) {
         if (!doesCategoryExist(category)) {
-            library.put(category, new TemplateGroup(category.categoryPath() + "Template Group"));
+            library.put(category, new TemplateGroup(category.categoryPath() + " Template Group"));
             return true;
         }
         return false;

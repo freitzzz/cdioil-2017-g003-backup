@@ -14,8 +14,6 @@ import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 /**
  * Bootstrap que persiste utilizadores na base de dados
@@ -86,8 +84,12 @@ public final class UsersBootstrap {
      */
     private SystemUser createSystemUser(String email,String password,String nome,String apelido
             ,String phoneNumber,String location,String birthDate){
-        return new SystemUser(new Email(email),new Name(nome,apelido)
-                ,new Password(password),new PhoneNumber(phoneNumber)
-                ,new Location(location),new BirthDate(LocalDate.parse(birthDate)));
+        Email emailAddress = new Email(email);
+        Password pwd = new Password(password);
+        Name name = new Name(nome,apelido);
+        PhoneNumber phone = new PhoneNumber(phoneNumber);
+        Location local = new Location(location);
+        BirthDate date = new BirthDate(LocalDate.parse(birthDate));
+        return new SystemUser(emailAddress,name,pwd,phone,local,date);
     }
 }

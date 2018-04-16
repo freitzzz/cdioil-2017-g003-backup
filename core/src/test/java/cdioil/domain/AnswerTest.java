@@ -11,6 +11,19 @@ import static org.junit.Assert.*;
 public class AnswerTest {
 
     /**
+     * Constructor tests.
+     */
+    @Test
+    public void testConstructor() {
+        System.out.println("Constructor tests");
+        assertNull("The condition should succeed because the argument is null",
+                createAnswer(null));
+        assertNotNull("Empty constructor test", new Answer());
+        assertNotNull("The condition should succeed because the argument is "
+                + "valid", createAnswer(new BinaryQuestionOption(Boolean.FALSE)));
+    }
+
+    /**
      * Test of hashCode method, of class Answer.
      */
     @Test
@@ -56,4 +69,17 @@ public class AnswerTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Builds an answer with a given option
+     *
+     * @param option instance of QuestionOption
+     * @return Answer instance or null if an exception ocurred
+     */
+    private Answer createAnswer(QuestionOption option) {
+        try {
+            return new Answer(option);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

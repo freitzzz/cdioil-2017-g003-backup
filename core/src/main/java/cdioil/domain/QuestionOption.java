@@ -2,6 +2,7 @@ package cdioil.domain;
 
 import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +30,7 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
     /**
      * Content of the option.
      */
+    @Column(unique = false)
     protected T content;
 
     /**
