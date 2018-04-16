@@ -6,7 +6,6 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 
 import com.vaadin.navigator.View;
-import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -82,6 +81,9 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
         //configureExportButton();
     }
 
+    /**
+     * Configures Left Panel Accordion
+     */
     private void configureAccordion() {
         VerticalLayout vl = new VerticalLayout();
         vl.setHeight(-1, Unit.PIXELS);

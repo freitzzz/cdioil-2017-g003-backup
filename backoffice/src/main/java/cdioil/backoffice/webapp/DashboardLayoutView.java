@@ -28,6 +28,9 @@ public class DashboardLayoutView extends DashboardLayoutDesign implements View {
         userAvatar.setSource(ImageUtils.imagePathAsResource("/WEB-INF/users/DEFAULT_USER_IMAGE.png"));
     }
 
+    /**
+     * Configures Left Panel Accordion
+     */
     private void prepareAccordion() {
         btnPanel.setSizeFull();
         accordion = new Accordion();
