@@ -30,14 +30,10 @@
     <class>cdioil.domain.Survey</class>
     <class>cdioil.domain.Contest</class>
     <class>cdioil.domain.Event</class>
-    <class>cdioil.domain.Questionnaire</class>
     <class>cdioil.domain.MultipleChoiceQuestion</class>
     <class>cdioil.domain.MultipleChoiceAnswer</class>
     <class>cdioil.domain.QuantitativeQuestion</class>
     <class>cdioil.domain.QuantitativeAnswer</class>
-    <class>cdioil.application.utils.AnswerEdge</class>
-    <class>cdioil.application.utils.QuestionAnswerGraph</class>
-    <class>cdioil.application.utils.QuestionVertex</class>
     <class>cdioil.application.utils.LocalDateTimeAttributeConverter</class>
     <class>cdioil.application.utils.LocalDateAttributeConverter</class>
     <class>cdioil.domain.SurveyItem</class>
@@ -47,6 +43,10 @@
     <class>cdioil.domain.QuantitativeQuestionOption</class>
     <class>cdioil.domain.CategoryTemplatesLibrary</class>
     <class>cdioil.domain.TemplateGroup</class>
+    <class>cdioil.application.utils.Edge</class>
+    <class>cdioil.application.utils.Graph</class>
+    <class>cdioil.application.utils.Vertex</class>
+    <class>cdioil.domain.TargetedSurvey</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

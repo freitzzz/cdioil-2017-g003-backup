@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,8 +16,8 @@ import javax.persistence.OneToMany;
  * @author António Sousa [1161371]
  */
 @Entity
-public class Product extends SurveyItem{
-    
+public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
+
     /**
      * Constant representing the default content of a Product's image.
      */
@@ -55,11 +56,11 @@ public class Product extends SurveyItem{
      * @param codes 0 or more codes
      */
     public Product(String name, Code code, Code... codes) {
-        
-        if(name == null || code == null || name.trim().isEmpty()){
+
+        if (name == null || code == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid parameters.");
         }
-        
+
         this.name = name;
 
         this.codes.add(code);
@@ -136,8 +137,7 @@ public class Product extends SurveyItem{
      * otherwise
      */
     @Override
-    public boolean equals(Object obj
-    ) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -149,4 +149,8 @@ public class Product extends SurveyItem{
         return Objects.equals(this.codes, other.codes);
     }
 
+    @Override
+    public List<Code> getID() {
+        return new ArrayList<>(codes); //create a copy of the identity
+    }
 }
