@@ -22,4 +22,12 @@ public class CategoryQuestionsLibraryRepositoryImpl extends BaseJPARepository<Ca
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
 
+    /**
+     * Retrieves the only CategoryQuestionsLibrary in the database.
+     *
+     * @return CategoryQuestionsLibrary currently stored in the database.
+     */
+    public CategoryQuestionsLibrary findLibrary() {
+        return findAll().iterator().next();
+    }
 }
