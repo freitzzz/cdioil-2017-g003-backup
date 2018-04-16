@@ -30,7 +30,6 @@
     <class>cdioil.domain.Survey</class>
     <class>cdioil.domain.Contest</class>
     <class>cdioil.domain.Event</class>
-    <class>cdioil.domain.Questionnaire</class>
     <class>cdioil.domain.MultipleChoiceQuestion</class>
     <class>cdioil.domain.MultipleChoiceAnswer</class>
     <class>cdioil.domain.QuantitativeQuestion</class>
@@ -47,6 +46,7 @@
     <class>cdioil.domain.QuantitativeQuestionOption</class>
     <class>cdioil.domain.CategoryTemplatesLibrary</class>
     <class>cdioil.domain.TemplateGroup</class>
+    <class>cdioil.domain.TargetedSurvey</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

@@ -1,7 +1,7 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.Event;
-import cdioil.domain.Questionnaire;
+import cdioil.domain.TargetedSurvey;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.EventRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
@@ -18,20 +18,6 @@ public class EventRepositoryImpl extends BaseJPARepository<Event, Long> implemen
     @Override
     protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
-    }
-
-    /**
-     * Returns all Questionnaires
-     *
-     * @return list of questionnaires
-     */
-    @Override
-    public List<Questionnaire> getQuestionnaires() {
-        Query q = entityManager().createQuery("SELECT ques FROM Questionnaire ques");
-        if (q.getResultList().isEmpty()) {
-            return null;
-        }
-        return q.getResultList();
     }
 
 }
