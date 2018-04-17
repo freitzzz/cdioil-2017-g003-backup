@@ -20,8 +20,7 @@ import javax.persistence.Version;
 /**
  * Survey Manager
  * <p>
- * Person responsible for the creation and configuration of surveys of a given
- * market structure.
+ * Person responsible for the creation and configuration of surveys of a given market structure.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
@@ -53,7 +52,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
     /**
      * Builds a Manager with a SystemUser and a Category List
      *
-     * @param su         SystemUser account
+     * @param su SystemUser account
      * @param categories Category List
      */
     public Manager(SystemUser su, List<Category> categories) {
@@ -131,17 +130,27 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
      * @return true if they were added with success, false if not
      */
     public boolean addCategories(List<Category> lc) {
-        return lc == null ? false : categories.addAll(lc);
+        if (lc != null) {
+            lc.stream().filter((c) -> (!isAssociatedWithCategory(c))).forEachOrdered((c) -> {
+                categories.add(c);
+            });
+        }
+        return false;
     }
 
     /**
      * Removes categories from the manager's list
      *
      * @param lc categories to remove
-     * @return true se forem removidas com sucesso, false se não forem removidas
+     * @return true if they were removed with success, false if not
      */
     public boolean removeCategories(List<Category> lc) {
-        return lc == null ? false : categories.removeAll(lc);
+        if (lc != null) {
+            lc.stream().filter((c) -> (isAssociatedWithCategory(c))).forEachOrdered((c) -> {
+                categories.remove(c);
+            });
+        }
+        return false;
     }
 
     /**
@@ -156,6 +165,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
 
     /**
      * Returns all the categories given to the manager
+     *
      * @return all categories
      */
     public List<Category> categoriesFromManager() {

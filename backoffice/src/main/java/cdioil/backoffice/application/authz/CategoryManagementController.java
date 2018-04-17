@@ -1,5 +1,6 @@
 package cdioil.backoffice.application.authz;
 
+import cdioil.domain.Category;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.SystemUser;
@@ -29,6 +30,12 @@ public class CategoryManagementController {
      * Prefix of the regular expression used to search categories by its identifier.
      */
     private static final String REGEX_SUFIX = ".*";
+
+    /**
+     * Regular expression to validate the path of the Category in the Market Structure.
+     */
+    private final static String PATH_REGEX = "[0-9]+" + Category.Sufixes.SUFIX_DC + "((-[0-9]+" + Category.Sufixes.SUFIX_UN + "(-[0-9]+"
+            + Category.Sufixes.SUFIX_CAT + "(-[0-9]+" + Category.Sufixes.SUFIX_SCAT + "(-[0-9]+" + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**
      * Finds all managers saved in the database.
@@ -75,7 +82,7 @@ public class CategoryManagementController {
      * Adds categories to a manager.
      *
      * @param identifier identifier of the categories
-     * @return true, if the categories are successfully added.
+     * @return true, if the categories are successfully added. Otherwise, returns false
      */
     public boolean addCategories(String identifier) {
         if (manager.addCategories(new MarketStructureRepositoryImpl().
@@ -87,5 +94,29 @@ public class CategoryManagementController {
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if the inserted path is valid.
+     *
+     * @param identifier identifier of the categories
+     * @return true, if the categories are valid. Otherwise, returns false
+     */
+    public boolean checkPath(String identifier) {
+        return identifier.matches(PATH_REGEX);
+    }
+
+    /**
+     * Returns the size of the manager list.
+     *
+     * @param managerList List with all managers
+     * @return the size of the list
+     */
+    public int size(Iterable<Manager> managerList) {
+        int size = 0;
+        for (Manager m : managerList) {
+            size++;
+        }
+        return size;
     }
 }
