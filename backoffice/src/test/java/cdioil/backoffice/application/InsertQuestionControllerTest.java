@@ -5,7 +5,6 @@
  */
 package cdioil.backoffice.application;
 
-import cdioil.domain.Category;
 import cdioil.domain.MultipleChoiceQuestionOption;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.QuestionOption;

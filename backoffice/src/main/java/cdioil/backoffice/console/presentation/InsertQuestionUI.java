@@ -8,7 +8,6 @@ package cdioil.backoffice.console.presentation;
 import cdioil.backoffice.application.InsertQuestionController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.QuestionOption;
-import cdioil.domain.QuestionTypes;
 import cdioil.domain.authz.Manager;
 import com.vaadin.sass.internal.parser.ParseException;
 import java.util.ArrayList;
@@ -171,7 +170,7 @@ public class InsertQuestionUI {
             String categoryPath = Console.readLine(CATEGORY_PATH);
             if (categoryPath != null && categoryPath.equalsIgnoreCase(EXIT_CODE)) return;
 
-            while (ctrl.findCategories(categoryPath) == null) {
+            while (ctrl.findCategories(categoryPath) == null || !ctrl.checkPath(categoryPath)) {
                 categoryPath = Console.readLine(INVALID_CATEGORY_PATH);
                 if (categoryPath.equalsIgnoreCase(EXIT_CODE)) return;
             }

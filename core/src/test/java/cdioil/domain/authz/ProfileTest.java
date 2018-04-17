@@ -20,14 +20,14 @@ public class ProfileTest {
     /**
      * Test of addReview method, of class Profile.
      */
-    @Test
-    public void testAddReview() {
-        System.out.println("addReview");
-        Review review = new Review("Popping a Xan",new Product("Xanax",new EAN("1111"),new EAN("1112")));
-        Profile profile=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
-        assertTrue("The condition should be succesful since the Review being added is valid",profile.addReview(review));
-        assertFalse("The condition should be succesful since the Review being added is not valid so it should fail",profile.addReview(null));
-    }
+//    @Test
+//    public void testAddReview() {
+//        System.out.println("addReview");
+//        Review review = new Review("Popping a Xan",new Product("Xanax",new EAN("1111"),new EAN("1112")));
+//        Profile profile=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
+//        assertTrue("The condition should be succesful since the Review being added is valid",profile.addReview(review));
+//        assertFalse("The condition should be succesful since the Review being added is not valid so it should fail",profile.addReview(null));
+//    }
 
     /**
      * Test of changeInformation method, of class Profile.

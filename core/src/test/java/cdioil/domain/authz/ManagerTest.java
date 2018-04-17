@@ -92,10 +92,9 @@ public class ManagerTest {
         Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste adiconar lista a null
-        List<Category> lc = null;
-        assertFalse(instance.addCategories(lc));
+        assertFalse(instance.addCategories(null));
         //teste adicionar lista vazia
-        lc = new LinkedList<>();
+        List<Category> lc = new LinkedList<>();
         assertFalse(instance.addCategories(lc));
         //teste adiconar lista com elementos
         lc.add(new Category("Fruit", "10DC-10UN-124CAT"));
@@ -121,7 +120,6 @@ public class ManagerTest {
         lc = new LinkedList<>();
         assertFalse(instance.removeCategories(lc));
         //teste remover lista com elementos inexistentes
-        //teste adiconar lista com elementos
         lc.add(new Category("Fruit", "10DC-10UN-124CAT"));
         lc.add(new Category("Beverage", "10DC-10UN-100CAT-6040SCAT"));
         assertFalse(instance.removeCategories(lc));

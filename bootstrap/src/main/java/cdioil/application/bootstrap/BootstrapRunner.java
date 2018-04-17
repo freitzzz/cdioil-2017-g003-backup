@@ -4,6 +4,7 @@ import cdioil.application.bootstrap.authz.UsersBootstrap;
 import cdioil.application.bootstrap.authz.WhitelistBootstrap;
 import cdioil.application.bootstrap.domain.MarketStructureBootstrap;
 import cdioil.application.bootstrap.domain.LibrariesBootstrap;
+import cdioil.application.bootstrap.domain.SurveyBootstrap;
 
 /**
  * Classe que corre o bootstrap
@@ -22,6 +23,7 @@ public class BootstrapRunner {
         new WhitelistBootstrap();
         new MarketStructureBootstrap();
         new LibrariesBootstrap();
+        new SurveyBootstrap();
     }
 
     /**

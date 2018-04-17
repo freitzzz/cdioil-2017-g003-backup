@@ -56,7 +56,7 @@ public class Category extends SurveyItem {
     /**
      * List of products of the Category.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
 
     /**

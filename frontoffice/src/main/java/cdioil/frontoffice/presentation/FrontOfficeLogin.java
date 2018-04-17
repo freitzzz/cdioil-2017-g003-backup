@@ -70,7 +70,7 @@ public class FrontOfficeLogin {
                     System.out.println(WRONG_CREDENTIALS);
                 } else {
                     id = LOGIN_ID;
-                    new FrontOfficeConsole(sysUser);
+                    new MainMenu(sysUser);
                 }
             }
         } catch (IllegalArgumentException e) {

@@ -11,6 +11,7 @@
         <Message messageId = "info_admin_header" value = "&#x9;Back Office Admin"/>
         <Message messageId = "info_exit_input" value = "Escreva 'sair' se pretender cancelar."/>
         <Message messageId = "info_num_questions_imported" value = "Número de questões importadas com sucesso:"/>
+        <Message messageId = "info_num_products_imported" value = "Número de produtos importados com sucesso:"/>
         <Message messageId = "info_all_users_list" value = "Lista de Todos os Utilizadores do Sistema&#10;"/>
         <Message messageId = "info_all_managers_list" value = "Lista de Todos os Gestores&#10;"/>
         <Message messageId = "info_categories_removed" value = "Categoria(s) removida(s) com sucesso!&#10;"/>
@@ -40,9 +41,15 @@
         <Message messageId = "error_invalid_file_format" value = "Formato de ficheiro inválido!"/>
         <Message messageId = "error_file_not_found" value = "Ficheiro não encontrado, por favor tente novamente."/>
         <Message messageId = "error_no_imported_questions" value = "Não foi importada nenhuma questão."/>
+        <Message messageId = "error_no_imported_products" value = "Não foi importada nenhum produto"/>
         <Message messageId = "error_invalid_email" value = "Email inválido! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Categoria inválida! Por favor, tente novamente.&#10;"/>
+        <Message messageId = "error_no_managers" value = "Não existem gestores, logo não é possível efetuar a associação.&#10;"/>
     </ErrorMessages>
+    
+    <InformativeMessages>
+        <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
+    </InformativeMessages>
 	
 	
     <MenuOptions>
