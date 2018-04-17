@@ -7,6 +7,8 @@ package cdioil.backoffice.application;
 
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
+import cdioil.persistence.CategoryQuestionsLibraryRepository;
+import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -135,7 +137,9 @@ public class InsertQuestionController {
      * @return the size (number of questions added) of the list
      */
     public int persistQuestion(String catPath) {
-        CategoryQuestionsLibrary categoryQuestionsLibrary = new CategoryQuestionsLibrary();
+        CategoryQuestionsLibraryRepositoryImpl categoryQuestionsLibraryRepository = new CategoryQuestionsLibraryRepositoryImpl();
+
+        CategoryQuestionsLibrary categoryQuestionsLibrary = categoryQuestionsLibraryRepository.findLibrary();
 
         List<Category> categoryList = findCategories(catPath);
         for (Category c : categoryList) {
@@ -143,7 +147,7 @@ public class InsertQuestionController {
             categoryQuestionsLibrary.addQuestion(question, c);
         }
 
-      //  new CategoryQuestionsLibrary().merge(categoryQuestionsLibrary);
+        categoryQuestionsLibraryRepository.merge(categoryQuestionsLibrary);
         return categoryList.size();
     }
 
