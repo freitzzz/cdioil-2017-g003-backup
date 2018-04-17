@@ -1,13 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain.authz;
 
 import cdioil.domain.EAN;
+import cdioil.domain.GlobalSurvey;
 import cdioil.domain.Product;
+import cdioil.domain.QRCode;
 import cdioil.domain.Review;
+import cdioil.domain.SurveyItem;
+import cdioil.time.TimePeriod;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -20,14 +22,16 @@ public class ProfileTest {
     /**
      * Test of addReview method, of class Profile.
      */
-//    @Test
-//    public void testAddReview() {
-//        System.out.println("addReview");
-//        Review review = new Review("Popping a Xan",new Product("Xanax",new EAN("1111"),new EAN("1112")));
-//        Profile profile=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
-//        assertTrue("The condition should be succesful since the Review being added is valid",profile.addReview(review));
-//        assertFalse("The condition should be succesful since the Review being added is not valid so it should fail",profile.addReview(null));
-//    }
+    @Test
+    public void testAddReview() {
+        System.out.println("addReview");
+        ArrayList<SurveyItem> list = new ArrayList<>();
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        Review review = new Review(new GlobalSurvey(list, new TimePeriod(LocalDateTime.MIN,LocalDateTime.MAX)));
+        Profile profile=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
+        assertTrue("The condition should be succesful since the Review being added is valid",profile.addReview(review));
+        assertFalse("The condition should be succesful since the Review being added is not valid so it should fail",profile.addReview(null));
+    }
 
     /**
      * Test of changeInformation method, of class Profile.

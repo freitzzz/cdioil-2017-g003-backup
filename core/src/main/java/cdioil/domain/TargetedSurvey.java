@@ -31,8 +31,7 @@ public class TargetedSurvey extends Survey implements Serializable {
      * time period.
      *
      * @param itemList survey items that the survey is about
-     * @param date date of when the survey begins
-     * @param endingDate date of when the survey ends
+     * @param surveyPeriod survey's time period
      * @param targetAudience group of users that the survey is targeted to
      */
     public TargetedSurvey(List<SurveyItem> itemList, TimePeriod surveyPeriod,

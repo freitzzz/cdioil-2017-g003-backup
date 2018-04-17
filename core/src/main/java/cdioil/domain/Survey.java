@@ -4,7 +4,6 @@ import cdioil.application.utils.Graph;
 import cdioil.time.TimePeriod;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 
@@ -59,13 +58,16 @@ public abstract class Survey implements Serializable {
      *
      * @param itemList list of products or categories the survey is associated
      * to
-     * @param date date when the survey was done
-     * @param endingDate date of when the survey is end
+     * @param surveyPeriod survey's time period (can be timed or timeless)
      */
     public Survey(List<SurveyItem> itemList, TimePeriod surveyPeriod) {
-        if (itemList == null) {
+        if (itemList == null || itemList.isEmpty()) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
+        }
+        if(surveyPeriod == null){
+            throw new IllegalArgumentException("O inquérito ter que ter um período "
+                    + "de tempo definido");
         }
         this.itemList = itemList;
         this.graph = new Graph();
@@ -105,16 +107,18 @@ public abstract class Survey implements Serializable {
 
     /**
      * Sets the next question for a given option.
+     *
      * @param origin current question
      * @param destination next question
      * @param option option leading to the next question
-     * @param weight statistical value 
-     * @return  true - if option doesn't already lead to another question<p>false - otherwise
+     * @param weight statistical value
+     * @return true - if option doesn't already lead to another question<p>
+     * false - otherwise
      */
-    public boolean setNextQuestion(Question origin, Question destination, QuestionOption option, double weight){
+    public boolean setNextQuestion(Question origin, Question destination, QuestionOption option, double weight) {
         return graph.insertEdge(origin, destination, option, 0);
     }
-    
+
     /**
      * Checks if a question already exists in the graph.
      *
@@ -138,12 +142,13 @@ public abstract class Survey implements Serializable {
         }
         return false;
     }
-    
+
     /**
      * Creates a copy of the Survey's Graph.
+     *
      * @return copy of the Graph.
      */
-    public Graph getGraphCopy(){
+    public Graph getGraphCopy() {
         return new Graph(graph);
     }
 

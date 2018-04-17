@@ -38,4 +38,12 @@ public class PhoneNumberTest {
         System.out.println("ensureItDoesNotAcceptStringsWithNonDigitCharacters");
         new PhoneNumber("90blabla1");
     }
+
+    @Test
+    public void ensureToStringWorks() {
+        System.out.println("ensureToStringWorks");
+        PhoneNumber instance = new PhoneNumber("911911911");
+        PhoneNumber other = new PhoneNumber("911911911");
+        assertTrue(instance.toString().equals(other.toString()));
+    }
 }

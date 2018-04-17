@@ -28,6 +28,15 @@ public class PhoneNumber implements Serializable, ValueObject {
      * Regular Expression for Portuguese service providers
      */
     private static final String VALID_PORTUGUESE_NUMBERS = "(91|92|93|96)([\\d]{7})";
+    
+    /**
+     * Constant that represents the encryption value being used
+     */
+    public static final int ENCRYPTION_VALUE=0xAC67D;
+    /**
+     * Constant that represents the encryption codes being used
+     */
+    public static final int ENCRYPTION_CODE=OperatorsEncryption.ADDITION_ENCRYPTION_CODE;
 
     /**
      * Variable that represents a phone number
@@ -57,7 +66,7 @@ public class PhoneNumber implements Serializable, ValueObject {
      * @return encrypted phone number
      */
     private String encryptNumber(String number) {
-        return OperatorsEncryption.encrypt(number);
+        return OperatorsEncryption.encrypt(number,ENCRYPTION_CODE,ENCRYPTION_VALUE);
     }
 
     /**
@@ -92,6 +101,6 @@ public class PhoneNumber implements Serializable, ValueObject {
 
     @Override
     public String toString() {
-        return "Phone Number: " + number;
+        return "Phone Number: " + decryptNumber(number);
     }
 }
