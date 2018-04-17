@@ -132,6 +132,14 @@ public abstract class Survey implements Serializable {
         }
         return false;
     }
+    
+    /**
+     * Creates a copy of the Survey's Graph.
+     * @return copy of the Graph.
+     */
+    public Graph getGraphCopy(){
+        return new Graph(graph);
+    }
 
     /**
      * Returns a description of the survey (product or category description and
