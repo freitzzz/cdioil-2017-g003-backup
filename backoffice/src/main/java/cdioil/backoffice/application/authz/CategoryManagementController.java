@@ -103,7 +103,7 @@ public class CategoryManagementController {
      * @return true, if the categories are valid. Otherwise, returns false
      */
     public boolean checkPath(String identifier) {
-        return identifier.matches(PATH_REGEX);
+        return identifier.toUpperCase().matches(PATH_REGEX);
     }
 
     /**

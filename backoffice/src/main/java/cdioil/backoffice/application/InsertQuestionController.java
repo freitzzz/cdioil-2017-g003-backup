@@ -31,6 +31,12 @@ public class InsertQuestionController {
     private Manager manager;
 
     /**
+     * Regular expression to validate the path of the Category in the Market Structure.
+     */
+    private final static String PATH_REGEX = "[0-9]+" + Category.Sufixes.SUFIX_DC + "((-[0-9]+" + Category.Sufixes.SUFIX_UN + "(-[0-9]+"
+            + Category.Sufixes.SUFIX_CAT + "(-[0-9]+" + Category.Sufixes.SUFIX_SCAT + "(-[0-9]+" + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
+
+    /**
      * Sufix of the regular expression used to search categories by its identifier.
      */
     private static final String REGEX_PREFIX = ".*";
@@ -186,5 +192,15 @@ public class InsertQuestionController {
      */
     public QuantitativeQuestionOption createNewQuantitativeQuestionOption(double content) {
         return new QuantitativeQuestionOption(content);
+    }
+
+    /**
+     * Checks if the inserted path is valid.
+     *
+     * @param identifier identifier of the categories
+     * @return true, if the categories are valid. Otherwise, returns false
+     */
+    public boolean checkPath(String identifier) {
+        return identifier.toUpperCase().matches(PATH_REGEX);
     }
 }
