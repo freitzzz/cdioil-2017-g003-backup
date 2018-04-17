@@ -6,6 +6,8 @@
           CASO #1: Importar Categorias
 	_______________________________
 
-	1. Introduzir nome do ficheiro com as categorias.
-	2. Mostrar todas as categorias importadas.
-	3. Guardar na base de dados.
+	1. Fazer login com o gestor sonae.lover@sonae.pt e password Password123.
+	2. Escolher a opção 7 "Importar Categoria(s)".
+	3. Introduzir nome do ficheiro com as categorias.
+	4. Mostrar todas as categorias importadas.
+	5. Guardar na base de dados.
