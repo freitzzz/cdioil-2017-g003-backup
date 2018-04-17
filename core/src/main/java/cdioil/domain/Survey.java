@@ -1,6 +1,8 @@
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
+import cdioil.time.TimePeriod;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,12 +38,8 @@ public abstract class Survey implements Serializable {
     /**
      * Date of when the survey was done.
      */
-    private LocalDateTime surveyDate;
-
-    /**
-     * Date of when the survey ends.
-     */
-    private LocalDateTime endingDate;
+    @Embedded
+    private TimePeriod surveyPeriod;
 
     /**
      * Question and Answer graph.
@@ -53,7 +51,7 @@ public abstract class Survey implements Serializable {
      * Survey's state.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
-    @Enumerated()
+    @Enumerated
     private SurveyState state;
 
     /**
@@ -64,18 +62,14 @@ public abstract class Survey implements Serializable {
      * @param date date when the survey was done
      * @param endingDate date of when the survey is end
      */
-    public Survey(List<SurveyItem> itemList, LocalDateTime date, LocalDateTime endingDate) {
+    public Survey(List<SurveyItem> itemList, TimePeriod surveyPeriod) {
         if (itemList == null) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
         }
-        if (date == null) {
-            throw new IllegalArgumentException("O inquérito tem que ter uma data");
-        }
         this.itemList = itemList;
         this.graph = new Graph();
-        this.surveyDate = date;
-        this.endingDate = endingDate;
+        this.surveyPeriod = surveyPeriod;
         this.state = SurveyState.DRAFT;
     }
 
@@ -162,7 +156,7 @@ public abstract class Survey implements Serializable {
     @Override
     public String toString() {
         return "Inquerito sobre:\n" + itemList.toString()
-                + "\nData:\n" + surveyDate;
+                + "\nData:\n" + surveyPeriod.toString();
     }
 
     /**

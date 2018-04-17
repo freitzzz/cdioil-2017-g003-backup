@@ -47,6 +47,7 @@
     <class>cdioil.application.utils.Graph</class>
     <class>cdioil.application.utils.Vertex</class>
     <class>cdioil.domain.TargetedSurvey</class>
+    <class>cdioil.domain.GlobalSurvey</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

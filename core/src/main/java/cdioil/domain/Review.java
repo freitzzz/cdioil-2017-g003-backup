@@ -9,10 +9,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 /**
@@ -41,31 +47,37 @@ public class Review implements Serializable {
     /**
      * Copy of the survey's graph, defining the overall flow of the survey.
      */
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Graph answerGraph;
 
     /**
      * Survey being answered.
      */
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Survey survey;
 
     /**
      * Map containing Questions and their respective Answers.
      */
-    private SortedMap<Question, Answer> answers;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Map<Question, Answer> answers;
 
     /**
      * Question currently being answered.
      */
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Question currentQuestion;
 
     /**
      * Items being reviewed.
      */
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<SurveyItem> itemList;
 
     /**
      * Review's final suggestion.
      */
+    @Embedded
     private Suggestion suggestion;
 
     /**
@@ -114,7 +126,7 @@ public class Review implements Serializable {
             return;
         }
         answers.remove(currentQuestion);
-        currentQuestion = answers.lastKey();
+        currentQuestion = ((TreeMap<Question, Answer>)answers).lastKey();
     }
 
     /**

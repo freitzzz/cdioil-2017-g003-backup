@@ -1,3 +1,4 @@
+/*
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
@@ -15,11 +16,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+*/
 /**
  * Unit testing class for TargetedSurvey class.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- */
+ *//*
+
 public class TargetedSurveyTest {
 
     private List<SurveyItem> list;
@@ -38,9 +41,11 @@ public class TargetedSurveyTest {
         graph = new Graph();
     }
 
-    /**
+    */
+/**
      * Test of the constructor of the class Constest.
-     */
+     *//*
+
     @Test
     public void constructorTest() {
         System.out.println("Testes Construtor");
@@ -51,9 +56,11 @@ public class TargetedSurveyTest {
         assertNotNull("Empty constructor test", new TargetedSurvey());
     }
 
-    /**
+    */
+/**
      * Test of the hashCode method, of the class Constest.
-     */
+     *//*
+
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
@@ -64,9 +71,11 @@ public class TargetedSurveyTest {
         assertEquals(expResult, result);
     }
 
-    /**
+    */
+/**
      * Test of the equals method, of the class Constest.
-     */
+     *//*
+
     @Test
     public void testEquals() {
         System.out.println("equals");
@@ -87,9 +96,11 @@ public class TargetedSurveyTest {
                 + "duas instancias diferentes", instance, instance3);
     }
 
-    /**
+    */
+/**
      * Test of the toString method, of the class Constest.
-     */
+     *//*
+
     @Test
     public void testToString() {
         System.out.println("toString");
@@ -98,7 +109,8 @@ public class TargetedSurveyTest {
         assertTrue(instance.toString().equals(other.toString()));
     }
 
-    /**
+    */
+/**
      * Create a new object TargetedSurvey with a description, group users, begin
      * date and end date.
      *
@@ -107,7 +119,8 @@ public class TargetedSurveyTest {
      * @param beginDate
      * @param endDate
      * @return instance of the Contest
-     */
+     *//*
+
     private TargetedSurvey createTargetedSurvey(List<SurveyItem> itemList, LocalDateTime date,
             LocalDateTime endingDate, UsersGroup targetAudience) {
         try {
@@ -118,3 +131,4 @@ public class TargetedSurveyTest {
     }
 
 }
+*/

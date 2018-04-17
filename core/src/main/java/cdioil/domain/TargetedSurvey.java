@@ -1,6 +1,8 @@
 package cdioil.domain;
 
 import cdioil.domain.authz.UsersGroup;
+import cdioil.time.TimePeriod;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,9 +35,9 @@ public class TargetedSurvey extends Survey implements Serializable {
      * @param endingDate date of when the survey ends
      * @param targetAudience group of users that the survey is targeted to
      */
-    public TargetedSurvey(List<SurveyItem> itemList, LocalDateTime date,
-            LocalDateTime endingDate, UsersGroup targetAudience) {
-        super(itemList, date, endingDate);
+    public TargetedSurvey(List<SurveyItem> itemList, TimePeriod surveyPeriod,
+                          UsersGroup targetAudience) {
+        super(itemList, surveyPeriod);
         if (targetAudience == null) {
             throw new IllegalArgumentException("O grupo de utilizadores não "
                     + "pode ser null");

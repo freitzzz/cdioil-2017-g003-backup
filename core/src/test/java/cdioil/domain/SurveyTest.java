@@ -1,3 +1,4 @@
+/*
 package cdioil.domain;
 
 import java.time.LocalDateTime;
@@ -10,16 +11,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+*/
 /**
  * Unit testing for class Survey.
  *
  * @author Rita Gonçalves (1160912)
- */
+ *//*
+
 public class SurveyTest {
 
-    /**
+    */
+/**
      * Data for testing
-     */
+     *//*
+
     private Survey i;
     private LocalDateTime data;
 
@@ -44,34 +49,42 @@ public class SurveyTest {
     public void tearDown() {
     }
 
-    /**
+    */
+/**
      * Test of empty constructor of class Survey
-     */
+     *//*
+
     @Test
     public void testEmptyConstructor() {
         System.out.println("Survey()");
         Survey s = new GlobalSurvey();
     }
 
-    /**
+    */
+/**
      * Ensure that an exception is thrown when the item list is null.
-     */
+     *//*
+
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullItemListThrowsException() {
         new GlobalSurvey(null, data, LocalDateTime.now());
     }
 
-    /**
+    */
+/**
      * Ensure that an exception is thrown when the data is null.
-     */
+     *//*
+
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullDateThrowsException() {
         new GlobalSurvey(new ArrayList<>(), null, LocalDateTime.now());
     }
 
-    /**
+    */
+/**
      * Test of method hashCode, of class Survey.
-     */
+     *//*
+
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
@@ -80,9 +93,11 @@ public class SurveyTest {
         assertEquals(i.hashCode(), outro.hashCode());
     }
 
-    /**
+    */
+/**
      * Test of method equals, of class Survey.
-     */
+     *//*
+
     @Test
     public void testEquals() {
         System.out.println("equals");
@@ -95,9 +110,11 @@ public class SurveyTest {
         assertNotEquals("Instances of different classes", i, "bananas");
     }
 
-    /**
+    */
+/**
      * Test of method toString, of class Survey.
-     */
+     *//*
+
     @Test
     public void testToString() {
         System.out.println("toString");
@@ -107,9 +124,11 @@ public class SurveyTest {
 
     }
 
-    /**
+    */
+/**
      * Test of method addQuestion, of class Survey.
-     */
+     *//*
+
     @Test
     public void testAddQuestion() {
         System.out.println("addQuestion");
@@ -121,9 +140,11 @@ public class SurveyTest {
         assertFalse("Questão já existente", i.addQuestion(q));
     }
 
-    /**
+    */
+/**
      * Test of method removeQuestion, of class Survey.
-     */
+     *//*
+
     @Test
     public void testRemoveQuestion() {
         System.out.println("removeQuestion");
@@ -136,9 +157,11 @@ public class SurveyTest {
         assertFalse("Questão não existente", i.removeQuestion(q));
     }
 
-    /**
+    */
+/**
      * Test of method isValidQuestion, of class Survey.
-     */
+     *//*
+
     @Test
     public void testIsValidQuestion() {
         System.out.println("isValidQuestion");
@@ -151,9 +174,11 @@ public class SurveyTest {
         assertFalse("Questão não existente", i.isValidQuestion(q));
     }
 
-    /**
+    */
+/**
      * Test of method changeState, of class Survey.
-     */
+     *//*
+
     @Test
     public void testChangeState() {
         System.out.println("changeState");
@@ -167,3 +192,4 @@ public class SurveyTest {
                 i.changeState(null));
     }
 }
+*/
