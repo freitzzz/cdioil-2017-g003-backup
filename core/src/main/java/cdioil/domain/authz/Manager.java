@@ -20,7 +20,8 @@ import javax.persistence.Version;
 /**
  * Survey Manager
  * <p>
- * Person responsible for the creation and configuration of surveys of a given market structure.
+ * Person responsible for the creation and configuration of surveys of a given
+ * market structure.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
@@ -130,12 +131,13 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
      * @return true if they were added with success, false if not
      */
     public boolean addCategories(List<Category> lc) {
-        if (lc != null) {
-            lc.stream().filter((c) -> (!isAssociatedWithCategory(c))).forEachOrdered((c) -> {
-                categories.add(c);
-            });
+        if (lc == null || lc.isEmpty()) {
+            return false;
         }
-        return false;
+        lc.stream().filter((cat) -> (!isAssociatedWithCategory(cat))).forEachOrdered((cat) -> {
+            categories.add(cat);
+        });
+        return true;
     }
 
     /**
@@ -145,12 +147,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
      * @return true if they were removed with success, false if not
      */
     public boolean removeCategories(List<Category> lc) {
-        if (lc != null) {
-            lc.stream().filter((c) -> (isAssociatedWithCategory(c))).forEachOrdered((c) -> {
-                categories.remove(c);
-            });
-        }
-        return false;
+        return lc != null ? categories.removeAll(lc) : false;
     }
 
     /**
