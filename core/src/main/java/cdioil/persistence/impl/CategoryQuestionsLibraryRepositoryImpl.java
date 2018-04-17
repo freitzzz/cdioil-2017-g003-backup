@@ -32,4 +32,12 @@ public class CategoryQuestionsLibraryRepositoryImpl extends BaseJPARepository<Ca
 
     }
 
+    /**
+     * Retrieves the only CategoryQuestionsLibrary in the database.
+     *
+     * @return CategoryQuestionsLibrary currently stored in the database.
+     */
+    public CategoryQuestionsLibrary findLibrary() {
+        return findAll().iterator().next();
+    }
 }

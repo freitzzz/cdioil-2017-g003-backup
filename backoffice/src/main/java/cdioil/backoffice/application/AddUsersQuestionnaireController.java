@@ -1,17 +1,23 @@
 package cdioil.backoffice.application;
 
-import cdioil.domain.Questionnaire;
+import cdioil.domain.TargetedSurvey;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.Whitelist;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.impl.EventRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Controller of US Add users to questionnaire
+ * Controller of US Add users to questionnaire *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * =========================================================================
+ * FIXME - Questionnaire is now TargetedSurvey
+ * =========================================================================
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  *
  * @author João
  */
@@ -34,9 +40,9 @@ public class AddUsersQuestionnaireController {
      *
      * @return list of questionnaires
      */
-    public List<Questionnaire> getQuestionnaires() {
+    public List<TargetedSurvey> getQuestionnaires() {
         EventRepositoryImpl repo = new EventRepositoryImpl();
-        List<Questionnaire> lq = repo.getQuestionnaires();
+        List<TargetedSurvey> lq = new ArrayList<>();//repo.getQuestionnaires();
         return lq;
     }
 
@@ -69,10 +75,10 @@ public class AddUsersQuestionnaireController {
      * @param questionnaire questionnaire to add users to
      * @return true if users were added successfully, false if not
      */
-    public boolean addUsersQuestionnaire(Questionnaire questionnaire) {
-        boolean b = questionnaire.addUsersToGroup(users);
+    public boolean addUsersQuestionnaire(TargetedSurvey questionnaire) {
+        /*boolean b = questionnaire.addUsersToGroup(users);
         EventRepositoryImpl repo = new EventRepositoryImpl();
-        repo.merge(questionnaire);
-        return b;
+        repo.merge(questionnaire);*/
+        return true;
     }
 }

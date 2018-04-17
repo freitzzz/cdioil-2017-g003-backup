@@ -2,13 +2,13 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.AddUsersQuestionnaireController;
 import cdioil.backoffice.utils.Console;
-import cdioil.domain.Questionnaire;
+import cdioil.domain.TargetedSurvey;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.Whitelist;
 import java.util.List;
 
 /**
- * UI of US Add Users to Questionnaire
+ * UI of US Add Users to TargetedSurvey
  *
  * @author João
  */
@@ -80,7 +80,7 @@ public class AddUsersQuestionnaireUI {
      * Adds users to a questionnaire
      */
     public void addUsersQuestionnaire() {
-        List<Questionnaire> lq = ctrl.getQuestionnaires();
+        List<TargetedSurvey> lq = ctrl.getQuestionnaires();
         //if list is null
         if (lq == null) {
             System.out.println(NO_QUESTIONNAIRES_MSG);
@@ -88,14 +88,14 @@ public class AddUsersQuestionnaireUI {
             //print questionnaires along with an int to later fetch the chosen one from the list
             int chosen = 0;
             int i = 1;
-            for (Questionnaire q : lq) {
+            for (TargetedSurvey q : lq) {
                 System.out.println(i + ". " + q);
                 i++;
             }
             while (chosen < 1 || chosen > i-1) {
                 chosen = Console.readInteger(CHOOSE_QUESTIONNAIRE_MSG);
             }
-            Questionnaire q = lq.get(chosen - 1);
+            TargetedSurvey q = lq.get(chosen - 1);
 
             List<Whitelist> whitelist = ctrl.getWhitelistedDomains();
             //if list is null

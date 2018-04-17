@@ -3,6 +3,7 @@ package cdioil.application.utils;
 import cdioil.files.FileWriter;
 import cdioil.domain.Answer;
 import cdioil.domain.Question;
+import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import java.io.File;
 import java.util.ArrayList;
@@ -51,34 +52,35 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
      */
     @Override
     public boolean write() {
-        Map<Question,List<Answer>> mapQuestionAnswers=allQuestionsPerAnswers();
-        List<String> csvContent=new ArrayList<>();
-        String header=QUESTION_LABEL+CSV_DELIMITER+ANSWER_LABEL;
-        csvContent.add(header);
-        mapQuestionAnswers.forEach((question,answers)->{
-            answers.forEach((answer)->{
-                csvContent.add(question.toString()+CSV_DELIMITER+answer.toString());
-            });
-        });
-        return FileWriter.writeFile(file,csvContent);
+//        Map<Question,List<Answer>> mapQuestionAnswers=allQuestionsPerAnswers();
+//        List<String> csvContent=new ArrayList<>();
+//        String header=QUESTION_LABEL+CSV_DELIMITER+ANSWER_LABEL;
+//        csvContent.add(header);
+//        mapQuestionAnswers.forEach((question,answers)->{
+//            answers.forEach((answer)->{
+//                csvContent.add(question.toString()+CSV_DELIMITER+answer.toString());
+//            });
+//        });
+//        return FileWriter.writeFile(file,csvContent);
+        return true;
     }
-    /**
-     * Method that returns a map with all answers given for each question
-     * @return Map with all answers given for each question
-     */
-    private Map<Question,List<Answer>> allQuestionsPerAnswers(){
-        Map<Question,List<Answer>> mapQuestionAnswers=new HashMap<>();
-        surveyReviews.forEach((t)->{
-            Map<Question,Answer> surveyAnswers=t.getReviewQuestionAnswers();
-            surveyAnswers.forEach((question,answer)->{
-                List<Answer> questionAnswers=mapQuestionAnswers.get(question);
-                if(questionAnswers==null){
-                    questionAnswers=new ArrayList<>();
-                    mapQuestionAnswers.put(question,questionAnswers);
-                }
-                questionAnswers.add(answer);
-            });
-        });
-        return mapQuestionAnswers;
-    }
+//    /**
+//     * Method that returns a map with all answers given for each question
+//     * @return Map with all answers given for each question
+//     */
+//    private Map<Question,List<Answer>> allQuestionsPerAnswers(){
+//        Map<Question,List<Answer>> mapQuestionAnswers=new HashMap<>();
+//        surveyReviews.forEach((t)->{
+//            Map<Question,Answer> surveyAnswers=t.getReviewQuestionAnswers();
+//            surveyAnswers.forEach((question,answer)->{
+//                List<Answer> questionAnswers=mapQuestionAnswers.get(question);
+//                if(questionAnswers==null){
+//                    questionAnswers=new ArrayList<>();
+//                    mapQuestionAnswers.put(question,questionAnswers);
+//                }
+//                questionAnswers.add(answer);
+//            });
+//        });
+//        return mapQuestionAnswers;
+//    }
 }

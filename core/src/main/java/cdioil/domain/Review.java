@@ -1,7 +1,7 @@
 package cdioil.domain;
 
-import cdioil.application.utils.AnswerEdge;
-import cdioil.application.utils.QuestionAnswerGraph;
+import cdioil.application.utils.Edge;
+import cdioil.application.utils.Graph;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +40,7 @@ public class Review implements Serializable {
     @OneToOne
     private Survey survey;
     private Product product;
-    private QuestionAnswerGraph answers;
+    private Graph answers;
     /**
      * Empty constructor of class Review
      */
@@ -88,17 +88,18 @@ public class Review implements Serializable {
         }
         return true;
     }
-    /**
-     * Method that returns all questions and respective answers of the current Review
-     * @return Map with all questions and respective answers of the current Review
-     */
-    public Map<Question,Answer> getReviewQuestionAnswers(){
-        Map<Question,Answer> mapAnswers=new HashMap<>();
-        Iterator<AnswerEdge> iteratorAnswers=answers.edges().iterator();
-        iteratorAnswers.forEachRemaining((answer) -> {mapAnswers
-                .put(answers.endVertices(answer)[QUESTION_INDEX_REFERENCE],answer.getElement());});
-        return mapAnswers;
-    }
+    //TODO: reimplement method
+//    /**
+//     * Method that returns all questions and respective answers of the current Review
+//     * @return Map with all questions and respective answers of the current Review
+//     */
+//    public Map<Question,Answer> getReviewQuestionAnswers(){
+//        Map<Question,Answer> mapAnswers=new HashMap<>();
+//        Iterator<AnswerEdge> iteratorAnswers=answers.edges().iterator();
+//        iteratorAnswers.forEachRemaining((answer) -> {mapAnswers
+//                .put(answers.endVertices(answer)[QUESTION_INDEX_REFERENCE],answer.getElement());});
+//        return mapAnswers;
+//    }
     /**
      * Returns a string containing the review's data
      *

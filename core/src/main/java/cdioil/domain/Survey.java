@@ -1,23 +1,21 @@
 package cdioil.domain;
 
-import cdioil.application.utils.LocalDateTimeAttributeConverter;
-import cdioil.application.utils.QuestionAnswerGraph;
+import cdioil.application.utils.Graph;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 
 /**
- * Represents a product survey
+ * Represents a survey
  *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class Survey implements Serializable {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private LocalDateTime endingDate;
 
     @Version
     private Long version;
@@ -41,10 +39,22 @@ public class Survey implements Serializable {
     private LocalDateTime surveyDate;
 
     /**
+     * Date of when the survey ends.
+     */
+    private LocalDateTime endingDate;
+
+    /**
      * Question and Answer graph.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
-    private QuestionAnswerGraph graph;
+    private Graph graph;
+
+    /**
+     * Survey's state.
+     */
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @Enumerated
+    private SurveyState state;
 
     /**
      * Builds an instance of survey with a product and a date.
@@ -52,6 +62,7 @@ public class Survey implements Serializable {
      * @param itemList list of products or categories the survey is associated
      * to
      * @param date date when the survey was done
+     * @param endingDate date of when the survey is end
      */
     public Survey(List<SurveyItem> itemList, LocalDateTime date, LocalDateTime endingDate) {
         if (itemList == null) {
@@ -62,9 +73,10 @@ public class Survey implements Serializable {
             throw new IllegalArgumentException("O inquérito tem que ter uma data");
         }
         this.itemList = itemList;
-        this.graph = new QuestionAnswerGraph(true);     //Directed Graph
+        this.graph = new Graph();
         this.surveyDate = date;
         this.endingDate = endingDate;
+        this.state = SurveyState.DRAFT;
     }
 
     protected Survey() {
@@ -104,7 +116,21 @@ public class Survey implements Serializable {
      * @return true, if it already exists in the list, false if otherwise
      */
     public boolean isValidQuestion(Question question) {
-        return graph.validVertex(question);
+        return graph.vertexExists(question);
+    }
+
+    /**
+     * Changes the state of a survey
+     *
+     * @param newState new state of the survey
+     * @return true if the state was modified, false if otherwise
+     */
+    public boolean changeState(SurveyState newState) {
+        if (newState != null && !state.equals(newState)) {
+            this.state = newState;
+            return true;
+        }
+        return false;
     }
 
     /**
