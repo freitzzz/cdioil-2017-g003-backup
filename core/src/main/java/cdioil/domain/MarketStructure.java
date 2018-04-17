@@ -41,7 +41,7 @@ public class MarketStructure implements Serializable {
     /**
      * The Market Structure's first Node.
      */
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.ALL})
     private Node root;
 
     /**

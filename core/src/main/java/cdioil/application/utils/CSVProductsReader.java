@@ -37,7 +37,7 @@ public class CSVProductsReader implements ProductsReader {
     /**
      * Max number of identifiers (columns) in the CSV file.
      */
-    private static final int MAX_NUM_IDENTIFIERS = 9;
+    private static final int MAX_NUM_IDENTIFIERS = 7;
     /**
      * Min number of identifiers (columns) in the CSV file.
      */
@@ -88,6 +88,12 @@ public class CSVProductsReader implements ProductsReader {
     private static final int INDEPENDENT_FILE_OFFSET = 0;
 
     /**
+     * Regular expression to validate the path of the Category in the Market Structure.
+     */
+    private final static String PATH_REGEX = "[0-9]+" + DC_IDENTIFIER + "-[0-9]+" + UN_IDENTIFIER + "-[0-9]+"
+            + CAT_IDENTIFIER + "-[0-9]+" + SCAT_IDENTIFIER + "-[0-9]+" + UB_IDENTIFIER;
+
+    /**
      * Creates an instance of CSVProductsReader, receiving the name of the file to read.
      *
      * @param filename Name of the file to read
@@ -113,7 +119,6 @@ public class CSVProductsReader implements ProductsReader {
         if (!isProductsFileValid(fileContent)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
-
         Map<String, List<Product>> readProducts = new HashMap<>();
 
         int numLines = fileContent.size();
@@ -126,61 +131,57 @@ public class CSVProductsReader implements ProductsReader {
                 try {
                     String DC = currentLine[0].trim();
 
-                    if (!DC.isEmpty()) {
+                    StringBuilder sb = new StringBuilder(DC);
+                    sb.append(DC_IDENTIFIER);
+                    String UN = currentLine[1].trim();
 
-                        StringBuilder sb = new StringBuilder(DC);
-                        sb.append(DC_IDENTIFIER);
-                        String UN = currentLine[1].trim();
+                    sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
 
-                        if (!UN.isEmpty()) {
+                    String CAT = currentLine[2].trim();
 
-                            sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
+                    sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
 
-                            String CAT = currentLine[2].trim();
+                    String SCAT = currentLine[3].trim();
 
-                            if (!CAT.isEmpty()) {
+                    sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
 
-                                sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
+                    String UB = currentLine[4].trim();
 
-                                String SCAT = currentLine[3].trim();
+                    sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
 
-                                if (!SCAT.isEmpty()) {
+                    String path = sb.toString();
 
-                                    sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
-
-                                    String UB = currentLine[4].trim();
-
-                                    if (!UB.trim().isEmpty()) {
-
-                                        sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
-                                    }
-                                }
-                            }
-                        }
-
-                        String path = sb.toString();
-
-                        Product product = null;
-
-                        product = createProduct(currentLine, CATEGORIES_FILE_OFFSET);
-
-                        if (product != null) {
-                            if (!readProducts.containsKey(path)) {
-                                List<Product> newList = new LinkedList<>();
-                                newList.add(product);
-                                readProducts.put(path, newList);
-                            } else {
-                                readProducts.get(path).add(product);
-                            }
+                    if (!isPathProductValid(path)) {
+                        throw new InvalidFileFormattingException("Unrecognized path of product formatting");
+                    }
+                    Product product = createProduct(currentLine, CATEGORIES_FILE_OFFSET);
+                    if (product != null) {
+                        if (!readProducts.containsKey(path)) {
+                            List<Product> newList = new LinkedList<>();
+                            newList.add(product);
+                            readProducts.put(path, newList);
+                        } else {
+                            readProducts.get(path).add(product);
                         }
                     }
                 } catch (IllegalArgumentException ex) {
-                    System.out.println("O formato das QuestÃµes Ã© invÃ¡lido na linha " + i + ".");
+                    System.out.println("O formato dos produtos é inválido na linha " + i + ".");
                 }
             }
         }
 
         return readProducts;
+    }
+
+    /**
+     * Checks if the path of the Product is valid.
+     *
+     * @param path String to check
+     * @return true, if the path is valid. Otherwise, returns false
+     */
+    public boolean isPathProductValid(String path) {
+        return path != null
+                && (path.matches(PATH_REGEX));
     }
 
     /**
@@ -212,7 +213,7 @@ public class CSVProductsReader implements ProductsReader {
 
         line[0] = line[0].replace('?', ' ').trim();
 
-        return ((line.length == MIN_NUM_IDENTIFIERS || line.length == MAX_NUM_IDENTIFIERS)
+        return ((line.length == MAX_NUM_IDENTIFIERS)
                 && line[0].contains(HASHTAG_IDENTIFIER + DC_IDENTIFIER)
                 && line[1].equalsIgnoreCase(HASHTAG_IDENTIFIER + UN_IDENTIFIER)
                 && line[2].equalsIgnoreCase(HASHTAG_IDENTIFIER + CAT_IDENTIFIER)
