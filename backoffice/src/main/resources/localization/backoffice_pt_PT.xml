@@ -70,7 +70,7 @@
             <Message messageId="option_export_survey_answers" value="Exportar Respostas de Um Inquérito"/>
             <Message messageId="option_create_survey" value="Criar Inquérito"/>
             <Message messageId="option_add_users_questionnaire" value="Adicionar Utilizadores a Inquérito"/>
-            <Message messageId="option_insert_question_category" value="Inserir Questão Sobre Categoria(s)">
+            <Message messageId="option_insert_question_category" value="Inserir Questão Sobre Categoria(s)"/>
         </ManagerMenuOptions>
 
     </MenuOptions>
