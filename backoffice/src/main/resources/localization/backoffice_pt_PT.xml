@@ -44,7 +44,12 @@
         <Message messageId = "error_no_imported_products" value = "Não foi importada nenhum produto"/>
         <Message messageId = "error_invalid_email" value = "Email inválido! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Categoria inválida! Por favor, tente novamente.&#10;"/>
+        <Message messageId = "error_no_managers" value = "Não existem gestores, logo não é possível efetuar a associação.&#10;"/>
     </ErrorMessages>
+    
+    <InformativeMessages>
+        <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
+    </InformativeMessages>
 	
 	
     <MenuOptions>
