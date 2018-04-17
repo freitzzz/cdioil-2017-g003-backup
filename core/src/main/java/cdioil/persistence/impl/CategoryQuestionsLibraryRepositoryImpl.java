@@ -5,6 +5,9 @@ import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.CategoryQuestionsLibraryRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 
+import javax.persistence.Query;
+import java.util.List;
+
 /**
  * CategoryQuestionsLibrary Repository class
  *
@@ -22,4 +25,19 @@ public class CategoryQuestionsLibraryRepositoryImpl extends BaseJPARepository<Ca
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
 
+    public CategoryQuestionsLibrary findProductQuestionLibrary() {
+        Query query = entityManager().createQuery("select p from " + CategoryQuestionsLibrary.class.getSimpleName() + " p");
+        List<CategoryQuestionsLibrary> list = query.getResultList();
+        return list.get(0);
+
+    }
+
+    /**
+     * Retrieves the only CategoryQuestionsLibrary in the database.
+     *
+     * @return CategoryQuestionsLibrary currently stored in the database.
+     */
+    public CategoryQuestionsLibrary findLibrary() {
+        return findAll().iterator().next();
+    }
 }

@@ -2,7 +2,7 @@ package cdioil.frontoffice.presentation;
 
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.presentation.authz.ChangeUserDataUI;
-import cdioil.frontoffice.presentation.authz.RegistarUtilizadorUI;
+import cdioil.frontoffice.presentation.authz.RegisterUserUI;
 
 public class MainMenu {
 
@@ -21,7 +21,7 @@ public class MainMenu {
      * Metodo que invoca a UI responsavel pela US180.
      */
     public void mainRegistoUser() {
-        RegistarUtilizadorUI registarUtilizadorUI = new RegistarUtilizadorUI();
-        registarUtilizadorUI.registarUtilizadorUI();
+        RegisterUserUI registarUtilizadorUI = new RegisterUserUI();
+        registarUtilizadorUI.registerUser();
     }
 }

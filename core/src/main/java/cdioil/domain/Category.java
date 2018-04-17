@@ -9,16 +9,33 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 
 /**
  * Represents a category from the market structure.
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "path"))
-public class Category extends SurveyItem{
+public class Category extends SurveyItem {
+
+    /**
+     * Database identifier.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    /**
+     * Database version number.
+     */
+    @Version
+    private long version;
 
     /**
      * Name of the Category.
@@ -33,7 +50,7 @@ public class Category extends SurveyItem{
     /**
      * Path of the Category in the Market Structure.
      */
-    @Column(updatable = true,nullable = false)
+    @Column(updatable = true, nullable = false)
     private String path;
 
     /**
@@ -46,7 +63,7 @@ public class Category extends SurveyItem{
      * String representing the Category's path splitter.
      */
     private static final String SPLITTER = "-";
-    
+
     /**
      * Regular expression to validate the path of the Category in the Market
      * Structure.
@@ -110,7 +127,7 @@ public class Category extends SurveyItem{
             String pathIdentifiers[] = path.split(SPLITTER);
             //Identifier is always the path's last element
             this.identifier = pathIdentifiers[pathIdentifiers.length - 1];
-            
+
             products = new HashSet<>();
         } else {
             throw new IllegalArgumentException("Dados de entrada inválidos.");
@@ -127,7 +144,6 @@ public class Category extends SurveyItem{
         return name != null
                 && !name.trim().isEmpty();
     }
-
 
     /**
      * Checks if the path of the Category is valid.
@@ -183,17 +199,19 @@ public class Category extends SurveyItem{
 
     /**
      * Returns the Category's identifier.
+     *
      * @return
      */
-    public String categoryIdentifier(){
+    public String categoryIdentifier() {
         return identifier;
     }
-    
+
     /**
      * List of identifiers in the Category's path.
-     * @return 
+     *
+     * @return
      */
-    public List<String> categoryPathIdentifiers(){
+    public List<String> categoryPathIdentifiers() {
         return Arrays.asList(path.split(SPLITTER));
     }
 

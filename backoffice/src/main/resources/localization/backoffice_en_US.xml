@@ -3,75 +3,77 @@
 <!--Tab character: &#x9; -->
 <Messages>
 
-	<InfoMessages>
-		<Message messageId = "info_welcome" value = "Welcome to the BackOffice&#10;"/>
-		<Message messageId = "info_shutdown" value = "The program will shutdown"/>
-		<Message messageId = "info_exiting" value = "Exiting..."/>
-		<Message messageId = "info_manager_header" value = "&#x9;Manager's Back Office"/>
-		<Message messageId = "info_admin_header" value = "&#x9;Admin's Back Office"/>
-		<Message messageId = "info_exit_input" value = "Type in 'exit' if you wish to cancel."/>
-		<Message messageId = "info_num_questions_imported" value = "Number of successfully imported questions:"/>
-		<Message messageId = "info_all_users_list" value = "List of all Users of the System&#10;"/>
-		<Message messageId = "info_all_managers_list" value = "List of all Managers&#10;"/>
-		<Message messageId = "info_categories_removed" value = "Category/Categories removed with success!&#10;"/>
-		<Message messageId = "info_categories_added" value = "Category/Categories added with sucess!&#10;"/>
-	</InfoMessages>
+    <InfoMessages>
+        <Message messageId = "info_welcome" value = "Welcome to the BackOffice&#10;"/>
+        <Message messageId = "info_shutdown" value = "The program will shutdown"/>
+        <Message messageId = "info_exiting" value = "Exiting..."/>
+        <Message messageId = "info_manager_header" value = "&#x9;Manager's Back Office"/>
+        <Message messageId = "info_admin_header" value = "&#x9;Admin's Back Office"/>
+        <Message messageId = "info_exit_input" value = "Type in 'exit' if you wish to cancel."/>
+        <Message messageId = "info_num_questions_imported" value = "Number of successfully imported questions:"/>
+        <Message messageId = "info_all_users_list" value = "List of all Users of the System&#10;"/>
+        <Message messageId = "info_all_managers_list" value = "List of all Managers&#10;"/>
+        <Message messageId = "info_categories_removed" value = "Category/Categories removed with success!&#10;"/>
+        <Message messageId = "info_categories_added" value = "Category/Categories added with sucess!&#10;"/>
+    </InfoMessages>
 
 	
-	<RequestMessages>
-		<Message messageId = "request_login" value = "Login: "/>
-		<Message messageId = "request_email" value = "Email: "/>
-		<Message messageId = "request_password" value = "Password: "/>
-		<Message messageId = "request_select_option" value = "Please, choose an option:&#10;"/>
-		<Message messageId = "request_new_domain" value = "Type in the email domain you wish to authorize."/>
-		<Message messageId = "request_select_language" value = "Select your language:"/>
-		<Message messageId = "request_file_path" value = "Please type in the file's path:"/>
-		<Message messageId = "request_manager_email" value = "Please select a manager by inserting his email address:&#10;"/>
-		<Message messageId = "request_category_identifier_removal" value = "Please type in the category/categories identifier(s) you wish to remove from the selected manager&#10;"/>
-		<Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
-	</RequestMessages>
+    <RequestMessages>
+        <Message messageId = "request_login" value = "Login: "/>
+        <Message messageId = "request_email" value = "Email: "/>
+        <Message messageId = "request_password" value = "Password: "/>
+        <Message messageId = "request_select_option" value = "Please, choose an option:&#10;"/>
+        <Message messageId = "request_new_domain" value = "Type in the email domain you wish to authorize."/>
+        <Message messageId = "request_select_language" value = "Select your language:"/>
+        <Message messageId = "request_file_path" value = "Please type in the file's path:"/>
+        <Message messageId = "request_manager_email" value = "Please select a manager by inserting his email address:&#10;"/>
+        <Message messageId = "request_category_identifier_removal" value = "Please type in the category/categories identifier(s) you wish to remove from the selected manager&#10;"/>
+        <Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
+    </RequestMessages>
 	
 	
-	<ErrorMessages>
-		<Message messageId = "error_unauthorized_user" value = "You're not authorized to use the BackOffice."/>
-		<Message messageId = "error_invalid_credentials" value = "Invalid credentials.&#10;Please, try again."/>
-		<Message messageId = "error_invalid_option" value = "Please, select a valid option.&#10;"/>
-		<Message messageId = "error_not_implemented" value = "Feature not yet implemented"/>
-		<Message messageId = "error_invalid_file_format" value = "Invalid file format!"/>
-		<Message messageId = "error_file_not_found" value = "File not found, please try again."/>
-		<Message messageId = "error_no_imported_questions" value = "No question was imported."/>
-		<Message messageId = "error_invalid_email" value = "Invalid email! Please, try again.&#10;"/>
-		<Message messageId = "error_invalid_category" value = "Invalid category! Please, try again.&#10;"/>
-	</ErrorMessages>
+    <ErrorMessages>
+        <Message messageId = "error_unauthorized_user" value = "You're not authorized to use the BackOffice."/>
+        <Message messageId = "error_invalid_credentials" value = "Invalid credentials.&#10;Please, try again."/>
+        <Message messageId = "error_invalid_option" value = "Please, select a valid option.&#10;"/>
+        <Message messageId = "error_not_implemented" value = "Feature not yet implemented"/>
+        <Message messageId = "error_invalid_file_format" value = "Invalid file format!"/>
+        <Message messageId = "error_file_not_found" value = "File not found, please try again."/>
+        <Message messageId = "error_no_imported_questions" value = "No question was imported."/>
+        <Message messageId = "error_invalid_email" value = "Invalid email! Please, try again.&#10;"/>
+        <Message messageId = "error_invalid_category" value = "Invalid category! Please, try again.&#10;"/>
+    </ErrorMessages>
 	
 	
-	<MenuOptions>
-		<Message messageId = "option_exit" value = "Exit"/>
-		<Message messageId = "option_change_language" value = "Change Language"/>
+    <MenuOptions>
+        <Message messageId = "option_exit" value = "Exit"/>
+        <Message messageId = "option_change_language" value = "Change Language"/>
 		
-		<AdminMenuOptions>
-			<Message messageId = "option_assign_manager" value = "Assign Manager Role"/>
-			<Message messageId = "option_whitelist_domain" value = "Whitelist Domains"/>
-			<Message messageId = "option_import_users" value = "Import Users"/>
-			<Message messageId = "option_display_users" value = "List All Users"/>
-			<Message messageId = "option_register_user" value = "Register"/>
-			<Message messageId = "option_update_data" value = "Update Data"/>
-			<Message messageId = "option_import_categories" value = "Import Categories"/>
+        <AdminMenuOptions>
+            <Message messageId = "option_assign_manager" value = "Assign Manager Role"/>
+            <Message messageId = "option_whitelist_domain" value = "Whitelist Domains"/>
+            <Message messageId = "option_import_users" value = "Import Users"/>
+            <Message messageId = "option_display_users" value = "List All Users"/>
+            <Message messageId = "option_register_user" value = "Register"/>
+            <Message messageId = "option_update_data" value = "Update Data"/>
+            <Message messageId = "option_import_categories" value = "Import Categories"/>
             <Message messageId = "option_import_products" value = "Import Products"/>
-			<Message messageId = "option_search_user_by_email" value = "Search Users by Email"/>
-			<Message messageId = "option_remove_categories_from_manager" value = "Remove Categories from Manager"/>
+            <Message messageId = "option_search_user_by_email" value = "Search Users by Email"/>
+            <Message messageId = "option_remove_categories_from_manager" value = "Remove Categories from Manager"/>
             <Message messageId = "option_associate_categories_to_manager" value = "Associate Categories to a Manager"/>
-			<Message messageId = "option_list_categories_without_managers" value = "List Categories without Managers"/>
-		</AdminMenuOptions>
+            <Message messageId = "option_list_categories_without_managers" value = "List Categories without Managers"/>
+        </AdminMenuOptions>
 		
-		<ManagerMenuOptions>
-			<Message messageId = "option_import_questions_category" value = "Import Questions about a Category"/>
-			<Message messageId = "option_import_questions_template" value = "Import Questions for New Template"/>
-			<Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
-			<Message messageId="option_create_survey" value="Create Survey"/>
-			<Message messageId="option_add_users_questionnaire" value="Add Users to Questionnaire"/>
+        <ManagerMenuOptions>
+            <Message messageId = "option_import_questions_category" value = "Import Questions about a Category"/>
+            <Message messageId = "option_import_questions_template" value = "Import Questions for New Template"/>
+            <Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
+            <Message messageId="option_create_survey" value="Create Survey"/>
+            <Message messageId="option_add_users_questionnaire" value="Add Users to Questionnaire"/>
+            <Message messageId="option_insert_question_category" value="Insert Question about one or more Categories"/>
+
         </ManagerMenuOptions>
 
-	</MenuOptions>
+    </MenuOptions>
 	
 </Messages>

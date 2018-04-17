@@ -69,19 +69,19 @@ public class Email implements Serializable,ValueObject {
     /**
      * Constant that represents the regular expression of the domain part of the general email address
      */
-    private static final String REGEX_DOMINIO_GERAL="$[A-Za-z0-9](([A-Za-z0-9]|[.](?![.]))){0,63}[.][A-Za-z]{2,6}";
+    private static final String REGEX_DOMAIN_GERAL="$[A-Za-z0-9](([A-Za-z0-9]|[.](?![.]))){0,63}[.][A-Za-z]{2,6}";
     /**
      * Constant that represents the regular expression of the domain part of the Gmail email address
      */
-    private static final String REGEX_DOMINIO_GMAIL="g(oogle)?mail.com$";
+    private static final String REGEX_DOMAIN_GMAIL="g(oogle)?mail.com$";
     /**
      * Constant that represents the regular expression of the domain part of the Hotmail/Outlook/Live email address
      */
-    private static final String REGEX_DOMINIO_HOTMAIL="(((live|outlook|hotmail).com)|(live.com|outlook).[A-Za-z]{2})$";
+    private static final String REGEX_DOMAIN_HOTMAIL="(((live|outlook|hotmail).com)|(live.com|outlook).[A-Za-z]{2})$";
     /**
      * Constant that represents the regular expression of the domain part of the Yahoo email address
      */
-    private static final String REGEX_DOMONIO_YAHOO="(yahoo|ymail|rocketmail)[.](com|in|co[.]uk)$";
+    private static final String REGEX_DOMAIN_YAHOO="(yahoo|ymail|rocketmail)[.](com|in|co[.]uk)$";
     /**
      * String that represents the identifier of an email
      */
@@ -137,11 +137,11 @@ public class Email implements Serializable,ValueObject {
     private void validateEmail(String email){
         if(email==null||email.isEmpty())throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
         String regexEmail=REGEX_GENERAL;
-        if(checkDomain(email,REGEX_DOMINIO_GMAIL)){
+        if(checkDomain(email,REGEX_DOMAIN_GMAIL)){
             regexEmail=REGEX_GMAIL;
-        }else if(checkDomain(email,REGEX_DOMINIO_HOTMAIL)){
+        }else if(checkDomain(email,REGEX_DOMAIN_HOTMAIL)){
             regexEmail=REGEX_HOTMAIL;
-        }else if(checkDomain(email,REGEX_DOMONIO_YAHOO)){
+        }else if(checkDomain(email,REGEX_DOMAIN_YAHOO)){
             regexEmail=REGEX_YAHOO;
         }
         if(!checkEmail(email,regexEmail))throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);

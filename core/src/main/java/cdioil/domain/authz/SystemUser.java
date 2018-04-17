@@ -3,6 +3,7 @@ package cdioil.domain.authz;
 import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Random;
 import javax.persistence.*;
 
 /**
@@ -68,6 +69,10 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * Boolean that represents if the User's account is imported or not
      */
     private boolean imported;
+    /**
+     * Long with the user activation code
+     */
+    private long activationCode;
 
     /**
      * Builds a SystemUser instance with an email, name and password, phone number, 
@@ -85,6 +90,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
         this.email = email;
         this.nome = nome;
         this.password = password;
+        this.activationCode=generateRandomCode();
         changePhoneNumber(phoneNumber);
         changeLocation(location);
         changeBirthDate(birthDate);
@@ -102,6 +108,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
         this.nome = nome;
         this.password = password;
         this.imported=true;
+        this.activationCode=generateRandomCode();
     }
 
     protected SystemUser() {
@@ -242,5 +249,15 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     public Email getID() {
         return email;
     }
+    /**
+     * Method that returns the generated random code for the current user
+     * @return Long with the generated random code for the current user
+     */
+    public long getActivationCode(){return activationCode;}
+    /**
+     * Method that generates a random code used to prove user authenticity
+     * @return Long with the generated random code used to prove user authenticity
+     */
+    private long generateRandomCode(){return Math.abs(new Random().nextLong());}
 
 }
