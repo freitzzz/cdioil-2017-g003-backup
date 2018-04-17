@@ -1,8 +1,7 @@
 package cdioil.backoffice.application;
 
 import cdioil.domain.*;
-import cdioil.persistence.impl.MarketStructureRepositoryImpl;
-import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.persistence.impl.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,6 +16,13 @@ import java.util.*;
  */
 public class CreateSurveyController {
 
+    private ProductQuestionsLibrary productQuestionsLibrary;
+    private CategoryTemplatesLibrary categoryTemplatesLibrary;
+    private CategoryQuestionsLibrary categoryQuestionsLibrary;
+    private IndependentQuestionsLibrary independentQuestionsLibrary;
+
+
+    //FALTA QUESTIONÁRIO PARA UM GRUPO DE UTILIZADORES
     /**
      * Gets all the questions of a given Product
      *
@@ -24,10 +30,10 @@ public class CreateSurveyController {
      * @return List of questions for the product
      */
     public List<Question> questionForProducts(Product product) {
-//        GlobalLibraryRepositoryImpl repo = new GlobalLibraryRepositoryImpl();
-//        HashSet<Question> hashSet = repo.findAll().iterator().next().getProdQuestionsLibrary().productQuestionSet(product);
+        ProductQuestionsLibraryRepositoryImpl repo = new ProductQuestionsLibraryRepositoryImpl();
+        productQuestionsLibrary = repo.findProductQuestionLibrary();
         List<Question> list = new ArrayList<>();
-//        list.addAll(hashSet);
+        list.addAll(productQuestionsLibrary.productQuestionSet(product));
 
         return list;
     }
@@ -39,12 +45,15 @@ public class CreateSurveyController {
      * @return question for the category
      */
     public List<Question> questionsForCategory(Category category) {
-//        GlobalLibraryRepositoryImpl repository = new GlobalLibraryRepositoryImpl();
-//        GlobalLibrary globalLibrary = repository.findGlobalLibrary();
-//
-//        return new ArrayList<>(globalLibrary.getCatQuestionsLibrary().categoryQuestionSet(category));
-        return new ArrayList<>();
+        CategoryQuestionsLibraryRepositoryImpl questionsRepo = new CategoryQuestionsLibraryRepositoryImpl();
+        categoryQuestionsLibrary = questionsRepo.findProductQuestionLibrary();
+
+        return new ArrayList<>(categoryQuestionsLibrary.categoryQuestionSet(category));
     }
+
+//    public List<Question> templatesForCategory(Category category) {
+//
+//    }
 
     /**
      * Finds category through a path

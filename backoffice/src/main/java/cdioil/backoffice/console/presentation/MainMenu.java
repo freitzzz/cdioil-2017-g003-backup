@@ -38,6 +38,8 @@ public class MainMenu {
     private String OPTION_IMPORT_QUESTIONS_CATEGORY = localizationHandler.getMessageValue("option_import_questions_category");
     private String OPTION_EXPORT_SURVEY_ANSWERS = localizationHandler.getMessageValue("option_export_survey_answers");
     private String OPTION_CREATE_SURVEY = localizationHandler.getMessageValue("option_create_survey");
+    private String OPTION_INSERT_QUESTION_CATEGORY = localizationHandler.getMessageValue("option_insert_question_category");
+
 
     /* ==============
         ADMIN
@@ -62,7 +64,7 @@ public class MainMenu {
     public void mainLoopAdmin(Admin admin) {
         int opcao = 0;
         do {
-            opcao = menuAdmin();
+            opcao = adminMenu();
 
             switch (opcao) {
                 case 0:
@@ -119,7 +121,7 @@ public class MainMenu {
     public void mainLoopManager(Manager manager) {
         int opcao = 0;
         do {
-            opcao = menuGestor();
+            opcao = managerMenu();
 
             switch (opcao) {
                 case 0:
@@ -148,7 +150,7 @@ public class MainMenu {
         } while (opcao != 0);
     }
 
-    private int menuGestor() {
+    private int managerMenu() {
         int option = -1;
         System.out.println(SEPARATOR);
         System.out.println(INFO_MANAGER_HEADER);
@@ -158,13 +160,14 @@ public class MainMenu {
         System.out.println("3. " + OPTION_EXPORT_SURVEY_ANSWERS);
         System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
         System.out.println("5. " + OPTION_CREATE_SURVEY);
+        System.out.println("6. " + OPTION_INSERT_QUESTION_CATEGORY);
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);
         return option;
     }
 
-    private int menuAdmin() {
+    private int adminMenu() {
         int option = -1;
         System.out.println(SEPARATOR);
         System.out.println(INFO_ADMIN_HEADER);
@@ -210,6 +213,7 @@ public class MainMenu {
         OPTION_IMPORT_QUESTIONS_CATEGORY = localizationHandler.getMessageValue("option_import_questions_category");
         OPTION_EXPORT_SURVEY_ANSWERS = localizationHandler.getMessageValue("option_export_survey_answers");
         OPTION_CREATE_SURVEY = localizationHandler.getMessageValue("option_create_survey");
+        OPTION_INSERT_QUESTION_CATEGORY = localizationHandler.getMessageValue("option_insert_question_category");
 
         INFO_ADMIN_HEADER = localizationHandler.getMessageValue("info_admin_header");
 
