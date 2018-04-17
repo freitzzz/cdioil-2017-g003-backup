@@ -5,6 +5,9 @@ import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.CategoryTemplatesLibraryRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 
+import javax.persistence.Query;
+import java.util.List;
+
 /**
  * CategoryTemplatesLibrary Repository class.
  *
@@ -21,5 +24,11 @@ public class CategoryTemplatesLibraryRepositoryImpl extends BaseJPARepository<Ca
     @Override
     protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
+    }
+
+    public CategoryTemplatesLibrary findTemplatesForCategory() {
+        Query query = entityManager().createQuery("select t from " + CategoryTemplatesLibrary.class.getSimpleName() + " t");
+        List<CategoryTemplatesLibrary> list = query.getResultList();
+        return list.get(0);
     }
 }
