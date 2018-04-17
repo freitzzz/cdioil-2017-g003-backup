@@ -110,6 +110,18 @@ public abstract class Survey implements Serializable {
     }
 
     /**
+     * Sets the next question for a given option.
+     * @param origin current question
+     * @param destination next question
+     * @param option option leading to the next question
+     * @param weight statistical value 
+     * @return  true - if option doesn't already lead to another question<p>false - otherwise
+     */
+    public boolean setNextQuestion(Question origin, Question destination, QuestionOption option, double weight){
+        return graph.insertEdge(origin, destination, option, 0);
+    }
+    
+    /**
      * Checks if a question already exists in the graph.
      *
      * @param question question to be verified
