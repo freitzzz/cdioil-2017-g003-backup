@@ -25,7 +25,7 @@ public class CategoryQuestionsLibraryRepositoryImpl extends BaseJPARepository<Ca
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
 
-    public CategoryQuestionsLibrary findProductQuestionLibrary() {
+    public CategoryQuestionsLibrary findCategoryQuestionsLibrary() {
         Query query = entityManager().createQuery("select p from " + CategoryQuestionsLibrary.class.getSimpleName() + " p");
         List<CategoryQuestionsLibrary> list = query.getResultList();
         return list.get(0);

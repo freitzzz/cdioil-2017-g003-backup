@@ -7,7 +7,6 @@ package cdioil.backoffice.application;
 
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
-import cdioil.persistence.CategoryQuestionsLibraryRepository;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.ArrayList;
@@ -162,7 +161,7 @@ public class InsertQuestionController {
         if (questionType.equalsIgnoreCase(QuestionTypes.BINARY.toString()) || questionType.equals("1")) {
             return 1; //Binary Question
         } else if (questionType.equalsIgnoreCase(QuestionTypes.MULTIPLE_CHOICE.toString()) || questionType.equals("2")) {
-            return 2; //Multiple Choice Quastion
+            return 2; //Multiple Choice Question
         } else if (questionType.equalsIgnoreCase(QuestionTypes.QUANTITATIVE.toString()) || questionType.equals("3")) {
             return 3; //Quantitative Question
         }

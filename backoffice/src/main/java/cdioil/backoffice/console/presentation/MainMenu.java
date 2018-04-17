@@ -143,6 +143,9 @@ public class MainMenu {
                 case 5:
                     new CreateSurveyUI(manager);
                     break;
+                case 6:
+                    new InsertQuestionUI(manager);
+                    break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);
                     break;

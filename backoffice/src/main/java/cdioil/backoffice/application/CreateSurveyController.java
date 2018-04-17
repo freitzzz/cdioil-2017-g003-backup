@@ -39,21 +39,43 @@ public class CreateSurveyController {
     }
 
     /**
-     * Gets all the questions of a givenCategory
+     * Gets all the questions of a given Category
      *
      * @param category category to search the questions
      * @return question for the category
      */
     public List<Question> questionsForCategory(Category category) {
         CategoryQuestionsLibraryRepositoryImpl questionsRepo = new CategoryQuestionsLibraryRepositoryImpl();
-        categoryQuestionsLibrary = questionsRepo.findProductQuestionLibrary();
+        categoryQuestionsLibrary = questionsRepo.findCategoryQuestionsLibrary();
 
         return new ArrayList<>(categoryQuestionsLibrary.categoryQuestionSet(category));
     }
 
-//    public List<Question> templatesForCategory(Category category) {
-//
-//    }
+    /**
+     * Gets all templates of a given Category
+     *
+     * @param category category to search the templates
+     * @return all templates for the category
+     */
+    public List<Template> templatesForCategory(Category category) {
+        CategoryTemplatesLibraryRepositoryImpl templatesRepo = new CategoryTemplatesLibraryRepositoryImpl();
+        categoryTemplatesLibrary = templatesRepo.findTemplatesForCategory();
+
+        return new ArrayList<>(categoryTemplatesLibrary.categoryTemplateSet(category));
+    }
+
+    /**
+     * Gets all the independent questions available
+     *
+     * @return all the independent questions
+     */
+    public List<Question> independantQuestions() {
+        IndependentQuestionsLibraryRepositoryImpl independentRepo = new IndependentQuestionsLibraryRepositoryImpl();
+        independentQuestionsLibrary = independentRepo.findLibrary();
+
+        return new ArrayList<>(independentQuestionsLibrary.getID());
+
+    }
 
     /**
      * Finds category through a path
@@ -92,6 +114,8 @@ public class CreateSurveyController {
     public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateEnding, HashMap<SurveyItem, List<Question>> map) {
         SurveyRepositoryImpl repo = new SurveyRepositoryImpl();
         //Survey survey = new Survey(surveyItems, LocalDateTime.now(), dateEnding);
+        
+
 
         for (SurveyItem surveyItem : map.keySet()) {
             for (Question question : map.get(surveyItem)) {
