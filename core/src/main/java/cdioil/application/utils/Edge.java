@@ -185,4 +185,11 @@ public class Edge implements Serializable {
 
         return Objects.equals(this.element, other.element);
     }
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "element=" + element +
+                '}';
+    }
 }

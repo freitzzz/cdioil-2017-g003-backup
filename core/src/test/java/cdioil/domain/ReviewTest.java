@@ -21,7 +21,7 @@ public class ReviewTest {
 
     @Before
     public void setUp() {
-        instance = new Review("ding dong your opinion is wrong", new Product());
+        
     }
 
     /**
@@ -41,14 +41,4 @@ public class ReviewTest {
         assertFalse(instance.equals(av));
 
     }*/
-
-    /**
-     * Test of toString method, of class Review
-     */
-    @Test
-    public void testToString() {
-        System.out.println("toString");
-        String expected = "Avaliação:\nOpinião: ding dong your opinion is wrong";
-        assertEquals(expected, instance.toString());
-    }
 }
