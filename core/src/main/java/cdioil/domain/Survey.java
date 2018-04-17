@@ -53,7 +53,7 @@ public abstract class Survey implements Serializable {
      * Survey's state.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
-    @Enumerated
+    @Enumerated()
     private SurveyState state;
 
     /**
