@@ -710,4 +710,87 @@ public class GraphTest {
         assertEquals("The graph should now only have 2 vertices", 2, g.numVertices());
         assertEquals("The graph should now only have 1 edge", 1, g.numEdges());
     }
+
+    @Test
+    public void ensureGetFirstQuestionReturnsNullIfNoVerticesHaveBeenInserted() {
+
+        Graph g = new Graph();
+
+        assertNull(g.getFirstQuestion());
+    }
+
+    @Test
+    public void ensureGetFirstQuestionReturnsFirstQuestion() {
+
+        Graph g = new Graph();
+
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+        Question q2 = new BinaryQuestion("This is yet another yes/no question", "A123");
+        Question q3 = new BinaryQuestion("A wild binary question appears!", "A423");
+
+        g.insertVertex(q1);
+        g.insertVertex(q2);
+        g.insertVertex(q3);
+
+        assertEquals(q1, g.getFirstQuestion());
+    }
+
+    @Test
+    public void ensureMultipleUsesOfGetFirstQuestionStillReturnsTheFirstQuestion() {
+        Graph g = new Graph();
+
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+        Question q2 = new BinaryQuestion("This is yet another yes/no question", "A123");
+        Question q3 = new BinaryQuestion("A wild binary question appears!", "A423");
+
+        g.insertVertex(q1);
+        g.insertVertex(q2);
+        g.insertVertex(q3);
+
+        assertEquals(q1, g.getFirstQuestion());
+        assertEquals(q1, g.getFirstQuestion());
+        assertEquals(q1, g.getFirstQuestion());
+    }
+
+    @Test
+    public void ensureOutgoingEdgesReturnsNullIfQuestionHasNotBeenInserted() {
+        Graph g = new Graph();
+
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+        Question q2 = new BinaryQuestion("This is yet another yes/no question", "A123");
+        Question q3 = new BinaryQuestion("A wild binary question appears!", "A423");
+        
+        g.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.FALSE), 0);
+        g.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.TRUE), 0);
+    
+        assertNull(g.outgoingEdges(q1));
+    }
+
+    @Test
+    public void ensureOutgoingEdgesWorks() {
+
+        Graph g = new Graph();
+
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+        Question q2 = new BinaryQuestion("This is yet another yes/no question", "A123");
+        Question q3 = new BinaryQuestion("A wild binary question appears!", "A423");
+
+        g.insertEdge(q1, q2, new BinaryQuestionOption(Boolean.TRUE), 0);
+        g.insertEdge(q1, q3, new BinaryQuestionOption(Boolean.FALSE), 0);
+
+        g.insertEdge(q2, q1, new BinaryQuestionOption(Boolean.FALSE), 0);
+        g.insertEdge(q3, q1, new BinaryQuestionOption(Boolean.FALSE), 0);
+
+        Iterator<Edge> edgeIterator = g.outgoingEdges(q1).iterator();
+
+        Edge edge = edgeIterator.next();
+        assertEquals(new BinaryQuestionOption(Boolean.TRUE), edge.getElement());
+        assertEquals(q1, edge.getOriginVertexElement());
+        assertEquals(q2, edge.getDestinationVertexElement());
+
+        edge = edgeIterator.next();
+        assertEquals(new BinaryQuestionOption(Boolean.FALSE), edge.getElement());
+        assertEquals(q1, edge.getOriginVertexElement());
+        assertEquals(q3, edge.getDestinationVertexElement());
+    }
 }
