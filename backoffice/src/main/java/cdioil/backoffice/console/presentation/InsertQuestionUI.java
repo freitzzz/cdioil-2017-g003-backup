@@ -59,9 +59,35 @@ public class InsertQuestionUI {
     private static final String CATEGORY_PATH = "Insira o caminho da categoria:";
 
     /**
-     * Represents a message that indicates the user to insert a valida category.
+     * Represents a message that indicates the user to insert a valid category.
      */
     private static final String INVALID_CATEGORY_PATH = "Insira uma categoria válida:";
+    
+    /**
+     * Represents a message that indicates the user to stop or proceed.
+     */
+    private static final String DO_YOU_WANT_TO_CONTINUE = "Deseja inserir mais questões?\nSe não, digite \"Sair\".\nSe sim, digite qualquer outra mensagem.";
+
+    /**
+     * Represents a message that indicates the user that the question was not added to any category.
+     */
+    private static final String QUESTION_NOT_ADDED = "A questão não foi adicionada a nenhuma cateogoria.";
+    
+    /**
+     * Represents a message that indicates the user how many categories the question was added to.
+     */
+    private static final String QUESTION_ADDED = "O número de cateogrias a que a questão foi adicionada foi: ";
+    
+    /**
+     * Console line separator.
+     */
+    private static final String LINE_SEPARATOR
+            = "==========================================";
+      
+    /**
+     * Instance of Controller that intermediates the interactions between the administrator and the system.
+     */
+    private final InsertQuestionController ctrl;
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //Constants for multiple choice questions
@@ -91,9 +117,9 @@ public class InsertQuestionUI {
     private static final String INVALID_OPTION = "A opção não foi adicionada, porque era inválida.";
 
     /**
-     * Represents a message that indicates that the question was not added because there were no options.
+     * Represents a message that indicates that the question was not added because it was not valid.
      */
-    private static final String INVALID_QUESTION = "A questão não foi adicionada, porque não tinha opções.";
+    private static final String INVALID_QUESTION = "A questão não foi adicionada, porque era inválida.";
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //Constants for binary questions
@@ -123,11 +149,6 @@ public class InsertQuestionUI {
     private static final String CHANGED_EXTREME_VALUES = "Os valores foram trocados, porque o mínimo era superior ao máximo.";
 
     /**
-     * Instance of Controller that intermediates the interactions between the administrator and the system.
-     */
-    private final InsertQuestionController ctrl;
-
-    /**
      * Creates a new User Interface.
      *
      * @param mng Current manager
@@ -141,30 +162,37 @@ public class InsertQuestionUI {
      * Method that intermediates the interactions with the manager (creates the UI itself).
      */
     private void insertQuestion() {
+        System.out.println(LINE_SEPARATOR);
         System.out.println(EXIT_MESSAGE);
         boolean catched = false;
         while (!catched) {
 
             //1. The user inserts the category
             String categoryPath = Console.readLine(CATEGORY_PATH);
+            if (categoryPath != null && categoryPath.equalsIgnoreCase(EXIT_CODE)) return;
+
             while (ctrl.findCategories(categoryPath) == null) {
                 categoryPath = Console.readLine(INVALID_CATEGORY_PATH);
-                if(categoryPath.equalsIgnoreCase(EXIT_CODE)) return;
+                if (categoryPath.equalsIgnoreCase(EXIT_CODE)) return;
             }
-            if(categoryPath.equalsIgnoreCase(EXIT_CODE)) return;
 
             //2. The system lists the question types
+            System.out.println(LINE_SEPARATOR + "\n");
             List<String> questionTypes = ctrl.getQuestionTypes();
             listQuestionTypes(questionTypes);
-            
+            System.out.println(LINE_SEPARATOR);
+
             //3. The user chooses a question type
             String questionType = Console.readLine(TYPE_QUESTION_MESSAGE);
+            if (questionType.equalsIgnoreCase(EXIT_CODE)) return;
             int option = ctrl.extractOption(questionType);
+            
             while (option == -1) {
                 questionType = Console.readLine(INVALID_TYPE_QUESTION_MESSAGE);
                 if (questionType.equalsIgnoreCase(EXIT_CODE)) return;
+                option = ctrl.extractOption(questionType);
             }
-            if (questionType.equalsIgnoreCase(EXIT_CODE)) return;
+
 
             //4. The user inserts que ID of the quesion
             String questionID = Console.readLine(ID_QUESTION_MESSAGE);
@@ -174,12 +202,13 @@ public class InsertQuestionUI {
             String questionText = Console.readLine(TXT_QUESTION_MESSAGE);
             if (questionText.equalsIgnoreCase(EXIT_CODE)) return;
             
+
             switch (option) {
+                case 1: //Binary
+                    ctrl.createQuestion(questionType, questionText, questionID, new LinkedList<>());
+                    break;
                 case 2:  //Multiple choice
                     insertMultipleChoiceQuestion(questionType, questionText, questionID);
-                    break;
-                case 1: //Binary
-                    insertBinaryQuestion(questionType, questionText, questionID);
                     break;
                 case 3: //Quantitative
                     insertQuantitativeQuestion(questionType, questionText, questionID);
@@ -187,6 +216,18 @@ public class InsertQuestionUI {
                 default:
                     break;
             }
+
+            //6. The system persists the question
+            int numberCategories = ctrl.persistQuestion(categoryPath);
+            
+            System.out.println(LINE_SEPARATOR);
+            if(numberCategories == 0) System.out.println(QUESTION_NOT_ADDED);
+            else System.out.println(QUESTION_ADDED + numberCategories + ".");
+            
+            //7. The system asks the user to proceed or exit
+            System.out.println(LINE_SEPARATOR);
+            String choice = Console.readLine(DO_YOU_WANT_TO_CONTINUE);
+            if(choice.equalsIgnoreCase(EXIT_CODE)) catched = true;
         }
     }
 
@@ -204,18 +245,6 @@ public class InsertQuestionUI {
     }
 
     /**
-     * Allows the user to insert a binary question.
-     *
-     * @param questionType Type of the question (binary)
-     * @param questionText Text of the question
-     * @param questionID ID of the question
-     */
-    private void insertBinaryQuestion(String questionType, String questionText, String questionID) {
-        ctrl.createQuestion(questionType, questionText, questionID, new LinkedList<>());
-
-    }
-
-    /**
      * Allows the user to insert a quantitative question.
      *
      * @param questionType Type of the question (quantitative)
@@ -230,15 +259,18 @@ public class InsertQuestionUI {
         while (!isMaxValid) {
             try {
                 max = Double.parseDouble(Console.readLine(MAXIMUM_MESSAGE));
-            } catch (ParseException ex) {
+                isMaxValid = true;
+            } catch (Exception ex) {
                 System.out.println(INVALID_VALUE);
             }
         }
+        
         boolean isMinValid = false;
         double min = 0;
         while (!isMinValid) {
             try {
                 min = Double.parseDouble(Console.readLine(MINIMUM_MESSAGE));
+                isMinValid = true;
             } catch (ParseException ex) {
                 System.out.println(INVALID_VALUE);
             }
@@ -255,7 +287,8 @@ public class InsertQuestionUI {
         for (double i = min; i < max; i++) {
             values.add(ctrl.createNewQuantitativeQuestionOption(i));
         }
-        ctrl.createQuestion(questionType, questionText, questionID, values);
+        if(ctrl.createQuestion(questionType, questionText, questionID, values) != 1)
+            System.out.println(INVALID_QUESTION);
     }
 
     /**
@@ -287,10 +320,10 @@ public class InsertQuestionUI {
 
             if (content.equalsIgnoreCase(NO_MORE_OPTIONS_CODE)) {
                 noMoreOptions = true;
-                if (options.isEmpty()) {
-                    System.out.println(INVALID_QUESTION);
-                } else {
-                    ctrl.createQuestion(questionType, questionText, questionID, options);
+                if (options.isEmpty()) System.out.println(INVALID_QUESTION);
+                else {
+                    if(ctrl.createQuestion(questionType, questionText, questionID, options) != 1)
+                        System.out.println(INVALID_QUESTION);
                 }
             }
         }
