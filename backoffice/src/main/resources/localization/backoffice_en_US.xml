@@ -42,7 +42,12 @@
         <Message messageId = "error_no_imported_questions" value = "No question was imported."/>
         <Message messageId = "error_invalid_email" value = "Invalid email! Please, try again.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Invalid category! Please, try again.&#10;"/>
+        <Message messageId = "error_no_managers" value = "There are no managers registered in the system.&#10;"/>
     </ErrorMessages>
+    
+    <InformativeMessages>
+        <Message messageId = "exit_message" value = "Type 'Exit' to exit anytime.&#10;"/>
+    </InformativeMessages>
 	
 	
     <MenuOptions>
