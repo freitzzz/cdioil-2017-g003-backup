@@ -51,13 +51,13 @@ public class Node implements Serializable {
     /**
      * A list of references to following Nodes in the structure.
      */
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Node> children = new LinkedHashSet<>();
 
     /**
      * The element contained in this instance.
      */
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.ALL})
     private Category element;
 
     /**
