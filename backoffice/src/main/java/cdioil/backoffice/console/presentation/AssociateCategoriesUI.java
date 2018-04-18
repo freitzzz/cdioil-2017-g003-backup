@@ -25,12 +25,12 @@ public class AssociateCategoriesUI {
     /**
      * Separator used for clarity.
      */
-    private static final String SEPARATOR = "=============================";
+    private final String SEPARATOR = localizationHandler.getMessageValue("separator");
 
     /**
      * Represents the exit code for the User Interface.
      */
-    private final String EXIT_CODE = localizationHandler.getMessageValue("option_message");
+    private final String EXIT_CODE = localizationHandler.getMessageValue("option_exit");
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
