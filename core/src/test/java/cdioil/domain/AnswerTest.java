@@ -70,6 +70,15 @@ public class AnswerTest {
     }
 
     /**
+     * Test of getContent method, of class Answer.
+     */
+    @Test
+    public void testGetContent(){
+        System.out.println("getContent");
+        assertEquals("4.0", createAnswer(new QuantitativeQuestionOption(4.0)).getContent());
+    }
+    
+    /**
      * Builds an answer with a given option
      *
      * @param option instance of QuestionOption
