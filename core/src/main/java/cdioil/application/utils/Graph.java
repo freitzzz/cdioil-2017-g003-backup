@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -86,13 +87,7 @@ public class Graph implements Serializable {
     public Graph(Graph g) {
         this();
         for (Vertex vertex : g.vertices.values()) {
-            Iterator<Edge> iterator = vertex.getAllOutgoingEdges().iterator();
-            ArrayList<Edge> list = new ArrayList<>();
-            while(iterator.hasNext()){
-                list.add(iterator.next());
-            }
-            for (int i = 0; i < list.size(); i++) {
-                Edge edge = list.get(i);
+            for (Edge edge : vertex.getAllOutgoingEdges()) {
                 this.insertEdge(edge.getOriginVertexElement(), edge.getDestinationVertexElement(), edge.getElement(), edge.getWeight());
             }
         }
@@ -310,7 +305,7 @@ public class Graph implements Serializable {
 
     /**
      * Inserts a new Edge into the Graph connecting the two given elements, with
- a given option and weight associated with the Edge.<p>
+     * a given option and weight associated with the Edge.<p>
      * If the elements are equal, then neither the elements nor the edge is
      * inserted into the Graph. If the elements have not yet been inserted into
      * the Graph, then new vertices are inserted, holding these elements
