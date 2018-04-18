@@ -1,16 +1,20 @@
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
+import static cdioil.domain.Event_.description;
+import static cdioil.domain.TemplateGroup_.title;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -57,6 +61,19 @@ public class TargetedSurveyTest {
         assertNotNull("The condition should succeed because the arguments are "
                 + "valid", createTargetedSurvey(list, timePeriod, gu));
         assertNotNull("Empty constructor test", new TargetedSurvey());
+    }
+
+    /**
+     * Test of addUsersToGroup method, of class TargetedSurvey
+     */
+    @Test
+    public void testAddUsersToGroup() {
+        System.out.println("addUsersToGroup");
+        TargetedSurvey tSurvey = createTargetedSurvey(list, timePeriod, gu);
+        assertFalse(tSurvey.addUsersToGroup(null));
+        List<RegisteredUser> lru = new LinkedList<>();
+        lru.add(new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"))));
+        assertTrue(tSurvey.addUsersToGroup(lru));
     }
 
     /**

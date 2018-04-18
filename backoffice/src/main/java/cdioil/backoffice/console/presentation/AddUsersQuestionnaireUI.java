@@ -1,6 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
-import cdioil.backoffice.application.AddUsersQuestionnaireController;
+import cdioil.backoffice.application.AddUsersTargetedSurveyController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.TargetedSurvey;
 import cdioil.domain.authz.RegisteredUser;
@@ -17,7 +17,7 @@ public class AddUsersQuestionnaireUI {
     /**
      * Controller of add users to questionnaire
      */
-    private AddUsersQuestionnaireController ctrl;
+    private AddUsersTargetedSurveyController ctrl;
 
     /**
      * Operation cancelled message
@@ -73,7 +73,7 @@ public class AddUsersQuestionnaireUI {
      * Constructor of AddUsersQuestionnaireUI
      */
     public AddUsersQuestionnaireUI() {
-        ctrl = new AddUsersQuestionnaireController();
+        ctrl = new AddUsersTargetedSurveyController();
     }
 
     /**

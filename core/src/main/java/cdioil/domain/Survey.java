@@ -29,9 +29,8 @@ public abstract class Survey implements Serializable {
     private int id;
 
     /**
-     * Product associated to the survey.
+     * Item associated with the survey.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
     private List<SurveyItem> itemList;
 
     /**

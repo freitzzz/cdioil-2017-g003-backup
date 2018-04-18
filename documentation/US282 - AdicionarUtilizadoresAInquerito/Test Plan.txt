@@ -8,6 +8,6 @@
 
 	1. Fazer login com o gestor bom.gestor@sonae.pt - Password: Password123
 	2. Escolher a opção 4 "Adicionar Utilizadores a Inquérito".
-	3. Escolher um questionário.
+	3. Escolher uma survey.
 	4. Escolher um domínio whitelisted.
 	5. Escrever Yes para os utilizadores serem adicionados ao Inquérito escolhido.

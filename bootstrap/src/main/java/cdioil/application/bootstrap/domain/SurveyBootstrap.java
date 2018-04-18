@@ -36,7 +36,7 @@ public class SurveyBootstrap {
                 .findCategoriesByPathPattern("10938DC").get(0));
 
         Survey survey = new GlobalSurvey(surveyItems, new TimePeriod(LocalDateTime.now(),
-                LocalDateTime.now()));
+                LocalDateTime.MAX));
 
         BinaryQuestion bq1 = new BinaryQuestion("Bin. Question 1", "bq1");
         BinaryQuestion bq2 = new BinaryQuestion("Bin. Question 2", "bq2");

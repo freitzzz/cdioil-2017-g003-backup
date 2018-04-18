@@ -9,13 +9,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.persistence.Version;
 
 /**
  * Represents a category from the market structure.
@@ -23,19 +19,6 @@ import javax.persistence.Version;
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "path"))
 public class Category extends SurveyItem {
-
-    /**
-     * Database identifier.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    /**
-     * Database version number.
-     */
-    @Version
-    private long version;
 
     /**
      * Name of the Category.
