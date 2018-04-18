@@ -15,6 +15,8 @@
 #define DEVICE_CONFIGURATION_REVIEW_SEND_TIME_IDENTIFIER "REVIEW_SEND_TIME"
 /*Identifier for the number of reviews being sent*/
 #define DEVICE_CONFIGURATION_REVIEW_QUANTITY_IDENTIFIER "REVIEW_QUANTITY"
+/*Identifier for the number of reviews being sent*/
+#define DEVICE_CONFIGURATION_NUMBER_OF_DEVICES_IDENTIFIER "DEVICE_NUMBER"
 
 /*Configures a certain DeviceSimulator according to a configuration file*/
 /*Returns Integer 1 if valid 0 if not*/
