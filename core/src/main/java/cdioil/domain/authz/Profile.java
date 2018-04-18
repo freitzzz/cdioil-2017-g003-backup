@@ -25,7 +25,7 @@ import javax.persistence.OneToOne;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Entity
-public class Profile implements Serializable,AggregateRoot<RegisteredUser> {
+public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,17 +56,20 @@ public class Profile implements Serializable,AggregateRoot<RegisteredUser> {
     //private List<Sugestao> sugestoes;
     /**
      * Builds a new Profile of a certain Registered User
-     * @param registeredUser RegisteredUser with the registered user that owns this 
-     * profile
+     *
+     * @param registeredUser RegisteredUser with the registered user that owns
+     * this profile
      */
-    public Profile(RegisteredUser registeredUser){
-        this.registeredUser=registeredUser;
-        this.reviews=new ArrayList<>();
+    public Profile(RegisteredUser registeredUser) {
+        this.registeredUser = registeredUser;
+        this.reviews = new ArrayList<>();
     }
+
     /**
      * Protected constructor in order to allow JPA persistence
      */
-    protected Profile(){}
+    protected Profile() {
+    }
 
     /**
      * Adds a review to the list of reviews
@@ -76,7 +79,7 @@ public class Profile implements Serializable,AggregateRoot<RegisteredUser> {
      * added
      */
     public boolean addReview(Review r) {
-        return r!=null ? reviews.add(r) : false;
+        return r != null ? reviews.add(r) : false;
     }
 
     /**
@@ -109,6 +112,7 @@ public class Profile implements Serializable,AggregateRoot<RegisteredUser> {
         hash = 71 * hash + Objects.hashCode(this.registeredUser);
         return hash;
     }
+
     /**
      * Checks if two instances of Profile are equal
      *
@@ -124,6 +128,7 @@ public class Profile implements Serializable,AggregateRoot<RegisteredUser> {
         Profile other = (Profile) object;
         return this.getID().equals(other.getID());
     }
+
     /**
      * Returns a string containing the profile's data
      *
@@ -133,13 +138,14 @@ public class Profile implements Serializable,AggregateRoot<RegisteredUser> {
     public String toString() {
         return "org.grupo3.cdioil.isep.feedback_monkey.domain.Perfil[ id=" + id + " ]";
     }
-    
+
     /**
      * Returns the current Profile Identity
+     *
      * @return RegisteredUser with the current profile identity
      */
     @Override
-    public RegisteredUser getID(){
+    public RegisteredUser getID() {
         return registeredUser;
     }
 

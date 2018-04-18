@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "QUESTIONTYPE")
 public abstract class Question implements Serializable, Comparable {
 
     /**
@@ -104,14 +105,21 @@ public abstract class Question implements Serializable, Comparable {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Question)) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final Question other = (Question) obj;
-        if (!this.questionID.equals(other.questionID)) {
+        if (!Objects.equals(this.questionText, other.questionText)) {
             return false;
         }
-        return this.questionText.equals(other.questionText);
+        if (!Objects.equals(this.questionID, other.questionID)) {
+            return false;
+        }
+        return true;
+
     }
 
     /**
