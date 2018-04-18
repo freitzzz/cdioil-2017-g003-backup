@@ -16,6 +16,9 @@
         <Message messageId = "info_all_managers_list" value = "List of all Managers&#10;"/>
         <Message messageId = "info_categories_removed" value = "Category/Categories removed with success!&#10;"/>
         <Message messageId = "info_categories_added" value = "Category/Categories added with sucess!&#10;"/>
+        <Message messageId = "separator" value = "========================================&#10;"/>
+        <Message messageId = "exit_message" value = "Type 'Exit' to exit anytime.&#10;"/>
+        <Message messageId = "info_number_categories_question_was_added_to" value = "The number of categories the question was added to was: "/>
     </InfoMessages>
 
 	
@@ -30,6 +33,7 @@
         <Message messageId = "request_manager_email" value = "Please select a manager by inserting his email address:&#10;"/>
         <Message messageId = "request_category_identifier_removal" value = "Please type in the category/categories identifier(s) you wish to remove from the selected manager&#10;"/>
         <Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
+        <Message messageId = "request_category_identifier_general" value = "Please type in the category/categories identifier(s):&#10;"/>
     </RequestMessages>
 	
 	
@@ -45,13 +49,9 @@
         <Message messageId = "error_invalid_email" value = "Invalid email! Please, try again.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Invalid category! Please, try again.&#10;"/>
         <Message messageId = "error_no_managers" value = "There are no managers registered in the system.&#10;"/>
+        <Message messageId = "error_survey_with_no_reviews" value = "The chosen survey doesn't have any reviews.&#10;"/>
     </ErrorMessages>
-    
-    <InformativeMessages>
-        <Message messageId = "exit_message" value = "Type 'Exit' to exit anytime.&#10;"/>
-    </InformativeMessages>
-	
-	
+
     <MenuOptions>
         <Message messageId = "option_exit" value = "Exit"/>
         <Message messageId = "option_change_language" value = "Change Language"/>

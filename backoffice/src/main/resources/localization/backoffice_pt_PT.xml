@@ -16,6 +16,9 @@
         <Message messageId = "info_all_managers_list" value = "Lista de Todos os Gestores&#10;"/>
         <Message messageId = "info_categories_removed" value = "Categoria(s) removida(s) com sucesso!&#10;"/>
         <Message messageId = "info_categories_added" value = "Categoria(s) adicionada(s) com sucesso!&#10;"/>
+        <Message messageId = "separator" value = "========================================&#10;"/>
+        <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
+        <Message messageId = "info_number_categories_question_was_added_to" value = "O número de cateogrias a que a questão foi adicionada foi: "/>
     </InfoMessages>
 
 	
@@ -30,6 +33,7 @@
         <Message messageId = "request_manager_email" value = "Por favor introduza o email de um gestor para o selecionar&#10;"/>
         <Message messageId = "request_category_identifier_removal" value = "Insira o descritivo da(s) categoria(s) que quer remover ao gestor selecionado&#10;"/>
         <Message messageId = "request_category_identifier_association" value = "Insira o descritivo da(s) categoria(s) que quer associar ao gestor selecionado&#10;"/>
+        <Message messageId = "request_category_identifier_general" value = "Insira o descritivo da(s) categoria(s):&#10;"/>
     </RequestMessages>
 	
 	
@@ -45,12 +49,8 @@
         <Message messageId = "error_invalid_email" value = "Email inválido! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Categoria inválida! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_no_managers" value = "Não existem gestores, logo não é possível efetuar a associação.&#10;"/>
+        <Message messageId = "error_survey_with_no_reviews" value = "O inquérito selecionado não tem nenhuma avaliação.&#10;"/>
     </ErrorMessages>
-    
-    <InformativeMessages>
-        <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
-    </InformativeMessages>
-	
 	
     <MenuOptions>
         <Message messageId = "option_exit" value = "Sair"/>
