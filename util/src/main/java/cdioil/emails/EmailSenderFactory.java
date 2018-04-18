@@ -70,7 +70,7 @@ public final class EmailSenderFactory {
     /**
      * Constant that represents the standard SMTP port used to communicate with email servers
      */
-    private static final String STANDARD_SMTP_PORT="567";
+    private static final String STANDARD_SMTP_PORT="587";
     /**
      * Method that creates a new EmailSender based on the email client
      * @param clientEmail String with the client email that is going to send the email
@@ -79,11 +79,11 @@ public final class EmailSenderFactory {
      * @return EmailSender with the EmailSender based on the client host protocols
      */
     public static EmailSender create(String clientEmail,String clientEmailPassword){
-        if(Pattern.compile(REGEX_DOMAIN_GMAIL).matcher(clientEmail).matches()){
+        if(Pattern.compile(REGEX_DOMAIN_GMAIL).matcher(clientEmail).find()){
             return new EmailSender(clientEmail,createSessionForGmail(clientEmail,clientEmailPassword));
-        }else if(Pattern.compile(REGEX_DOMAIN_HOTMAIL).matcher(clientEmail).matches()){
+        }else if(Pattern.compile(REGEX_DOMAIN_HOTMAIL).matcher(clientEmail).find()){
             return new EmailSender(clientEmail,createSessionForLive(clientEmail,clientEmailPassword));
-        }else if(Pattern.compile(REGEX_DOMAIN_YAHOO).matcher(clientEmail).matches()){
+        }else if(Pattern.compile(REGEX_DOMAIN_YAHOO).matcher(clientEmail).find()){
             return new EmailSender(clientEmail,createSessionForYahoo(clientEmail,clientEmailPassword));
         }
         return null;
@@ -111,7 +111,7 @@ public final class EmailSenderFactory {
      */
     private static Session createSessionForLive(String emailClient,String emailPassword){
         Properties properties=new Properties();
-        properties.setProperty(EMAIL_SMTP_HOST,GMAIL_SMTP_HOST);
+        properties.setProperty(EMAIL_SMTP_HOST,LIVE_SMTP_HOST);
         properties.put(EMAIL_SMTP_PORT,STANDARD_SMTP_PORT);
         properties.put(EMAIL_SMTP_AUTH,true);
         properties.put(EMAIL_SMTP_TLS_ENABLE,true);
@@ -126,7 +126,7 @@ public final class EmailSenderFactory {
      */
     private static Session createSessionForYahoo(String emailClient,String emailPassword){
         Properties properties=new Properties();
-        properties.setProperty(EMAIL_SMTP_HOST,GMAIL_SMTP_HOST);
+        properties.setProperty(EMAIL_SMTP_HOST,YAHOO_SMTP_HOST);
         properties.put(EMAIL_SMTP_PORT,STANDARD_SMTP_PORT);
         properties.put(EMAIL_SMTP_AUTH,true);
         properties.put(EMAIL_SMTP_TLS_ENABLE,true);
