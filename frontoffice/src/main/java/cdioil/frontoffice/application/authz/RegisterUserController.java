@@ -3,6 +3,7 @@ package cdioil.frontoffice.application.authz;
 import cdioil.application.authz.EmailSenderService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.domain.authz.*;
+import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
 import java.time.LocalDate;
 
@@ -47,22 +48,46 @@ public class RegisterUserController {
              String location, String birthDate) {
         String domainPart = email.split(EMAIL_IDENTIFIER)[1];
         System.out.println(domainPart);
-        if(new WhitelistRepositoryImpl().find(domainPart)==null)throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE); 
-        
-        SystemUser systemUser = new SystemUser(
-                new Email(email),
-                new Name(firstName, lastName),
-                new Password(password),
-                new PhoneNumber(phoneNumber),
-                new Location(location),
-                new BirthDate(LocalDate.parse(birthDate)));
-        RegisteredUser registeredUser = new RegisteredUser(systemUser);
-        
-        if(registerUserRepository.exists(registeredUser))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
-        if(sendRegisterCode(systemUser)){
-            registerUserRepository.add(registeredUser);
+        Email emailX=new Email(email);
+        SystemUser userX=new UserRepositoryImpl().findByEmail(emailX);
+        if(userX==null){
+            if(new WhitelistRepositoryImpl().find(domainPart)==null)throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE); 
+            SystemUser systemUser = new SystemUser(
+                    new Email(email),
+                    new Name(firstName, lastName),
+                    new Password(password),
+                    new PhoneNumber(phoneNumber),
+                    new Location(location),
+                    new BirthDate(LocalDate.parse(birthDate)));
+            RegisteredUser registeredUser = new RegisteredUser(systemUser);
+
+            if(registerUserRepository.exists(registeredUser))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            if(sendRegisterCode(systemUser)){
+                registerUserRepository.add(registeredUser);
+            }else{
+                throw new IllegalArgumentException(REGISTERED_USED_SUCCESS_FAILURE);
+            }
         }else{
-            throw new IllegalArgumentException(REGISTERED_USED_SUCCESS_FAILURE);
+            if(registerUserRepository.exists(new RegisteredUser(userX)))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            if(userX.isUserImported()){
+                if(userX.isUserActivated()){
+                    throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+                }else{
+                    userX.activateAccount();
+                    userX.changeUserDatafield(password,SystemUser.CHANGE_PASSWORD_OPTION);
+                    userX.changeUserDatafield(phoneNumber,SystemUser.CHANGE_PHONE_NUMBER_OPTION);
+                    userX.changeUserDatafield(location,SystemUser.CHANGE_LOCALITY_OPTION);
+                    userX.changeUserDatafield(birthDate,SystemUser.CHANGE_BIRTH_DATE_OPTION);
+                    if(sendRegisterCode(userX)){
+                        userX=new UserRepositoryImpl().merge(userX);
+                        new RegisteredUserRepositoryImpl().add(new RegisteredUser(userX));
+                    }else{
+                        throw new IllegalArgumentException(REGISTERED_USED_SUCCESS_FAILURE);
+                    }
+                }
+            }else{
+                throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            }
         }
     }
     /**
