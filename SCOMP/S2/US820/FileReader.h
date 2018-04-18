@@ -20,5 +20,5 @@
 #define NEW_LINE '\n'
 
 
-/*Reads all lines contained on a certain file*/
+/*Reads all lines contained on a certain file and puts the number of lines on a pointed Integer*/
 char** readAllLines(char *fileName,int* linesRead);
