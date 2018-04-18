@@ -20,6 +20,7 @@ public class BinaryQuestion extends Question {
      */
     public BinaryQuestion(String question, String questionID) {
         super(question, questionID, optionList());
+        super.type = QuestionTypes.BINARY;
     }
 
     /**

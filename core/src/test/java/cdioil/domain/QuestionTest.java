@@ -23,6 +23,17 @@ public class QuestionTest {
     }
 
     /**
+     * Test of getType method, of class Question.
+     */
+    @Test
+    public void testGetType() {
+        System.out.println("getType");
+        QuestionTypes expResult = QuestionTypes.BINARY;
+        QuestionTypes result = instance.getType();
+        assertEquals(result, expResult);
+    }
+
+    /**
      * Test of hashCode method, of class Question.
      */
     @Test
