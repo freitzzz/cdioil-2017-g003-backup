@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,11 +19,11 @@ import javax.persistence.OneToMany;
  * Abstract class that represents a Question.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- * @param <T> defines the type of questionText of the question
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question<T> implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "QUESTIONTYPE")
+public abstract class Question implements Serializable {
 
     /**
      * Serialization code.
@@ -100,19 +100,25 @@ public abstract class Question<T> implements Serializable {
      * @param obj object to be compared to
      * @return true if the objects are truly equal, false otherwise
      */
-    @Override
+    @Override    
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Question<?>)) {
+        if (obj == null) {
             return false;
         }
-        final Question<?> other = (Question<?>) obj;
-        if (!this.questionID.equals(other.questionID)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return this.questionText.equals(other.questionText);
+        final Question other = (Question) obj;
+        if (!Objects.equals(this.questionText, other.questionText)) {
+            return false;
+        }
+        if (!Objects.equals(this.questionID, other.questionID)) {
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -19,7 +19,7 @@ public class BinaryQuestion extends Question {
      * @param questionID question's ID
      */
     public BinaryQuestion(String question, String questionID) {
-        super(question, questionID, new ArrayList<BinaryQuestionOption>
+        super(question, questionID, new ArrayList<QuestionOption>
         (Arrays.asList(new BinaryQuestionOption(Boolean.TRUE), new BinaryQuestionOption(Boolean.FALSE))));
     }
 
