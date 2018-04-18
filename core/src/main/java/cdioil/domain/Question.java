@@ -48,6 +48,11 @@ public abstract class Question implements Serializable, Comparable {
     private String questionID;
 
     /**
+     * The question's type.
+     */
+    protected QuestionTypes type;
+
+    /**
      * List of options that the question has.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
@@ -77,6 +82,15 @@ public abstract class Question implements Serializable, Comparable {
      * Empty Constructor for JPA.
      */
     protected Question() {
+    }
+
+    /**
+     * Returns the Question's type.
+     *
+     * @return enum value
+     */
+    public QuestionTypes getType() {
+        return type;
     }
 
     /**
