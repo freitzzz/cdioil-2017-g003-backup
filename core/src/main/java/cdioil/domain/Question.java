@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "QUESTIONTYPE")
 public abstract class Question implements Serializable, Comparable {
 
