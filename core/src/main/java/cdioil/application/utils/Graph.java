@@ -310,7 +310,7 @@ public class Graph implements Serializable {
 
     /**
      * Inserts a new Edge into the Graph connecting the two given elements, with
-     * a given option and weight associated with the Edge.<p>
+ a given option and weight associated with the Edge.<p>
      * If the elements are equal, then neither the elements nor the edge is
      * inserted into the Graph. If the elements have not yet been inserted into
      * the Graph, then new vertices are inserted, holding these elements

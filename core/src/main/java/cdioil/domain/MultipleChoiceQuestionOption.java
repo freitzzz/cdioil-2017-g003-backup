@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 @Entity(name = "MultipleChoiceQuestionOption")
 public class MultipleChoiceQuestionOption extends QuestionOption<String> {
 
+    private String textContent;
+    
     /**
      * Builds a multiple choice question option with a string containing the
      * option itself
@@ -21,7 +23,7 @@ public class MultipleChoiceQuestionOption extends QuestionOption<String> {
             throw new IllegalArgumentException("A opção de uma questão de "
                     + "escolha múltipla não deve ser null ou vazia.");
         }
-        this.content = option;
+        this.textContent = option;
     }
 
     /**

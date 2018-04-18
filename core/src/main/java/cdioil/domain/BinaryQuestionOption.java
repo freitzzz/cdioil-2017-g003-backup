@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 @Entity(name = "BinaryQuestionOption")
 public class BinaryQuestionOption extends QuestionOption<Boolean> {
 
+    private Boolean booleanContent;
+    
     /**
      * Builds a BinaryQuestionOption with a boolean value
      *
@@ -20,12 +22,17 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
             throw new IllegalArgumentException("O valor da opção não pode ser "
                     + "null");
         }
-        this.content = value;
+        this.booleanContent = value;
     }
 
     /**
      * Empty constructor for JPA.
      */
     protected BinaryQuestionOption() {
+    }
+    
+    @Override
+    public String toString(){
+        return booleanContent.toString();
     }
 }

@@ -4,6 +4,8 @@ import cdioil.domain.Question;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -13,8 +15,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -36,15 +41,18 @@ public class Vertex implements Serializable {
     /**
      * Element being stored in this element.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Question element;
 
     /**
      * Map with adjacent vertices and the edges connecting them.
      */
     @ManyToMany(cascade = CascadeType.PERSIST)
-    @MapKey(name = "questionID")
+    //@MapKey(name = "questionID")
     private Map<Edge, Question> outgoingEdges;
+    
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Edge> edgeList;
 
     /**
      * JPA Constructor.
@@ -64,6 +72,7 @@ public class Vertex implements Serializable {
     Vertex(Question element) {
         this.element = element;
         outgoingEdges = new LinkedHashMap<>();
+        edgeList = new LinkedList<>();
     }
 
     /**
@@ -74,7 +83,7 @@ public class Vertex implements Serializable {
     public Question getElement() {
         return element;
     }
-
+    
     /**
      * Adds an adjacent <code>Vertex</code> with a given <code>Edge</code> and
      * element.
@@ -85,6 +94,7 @@ public class Vertex implements Serializable {
      */
     public void addAdjacentVertex(Edge edge, Question adjacentElement) {
         outgoingEdges.put(edge, adjacentElement);
+        edgeList.add(edge);
     }
 
     /**
@@ -113,6 +123,7 @@ public class Vertex implements Serializable {
 
         for (Edge edge : getEdges(adjacentElement)) {
             outgoingEdges.remove(edge);
+            edgeList.remove(edge);
         }
     }
 

@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 @Entity(name = "QuantitativeQuestionOption")
 public class QuantitativeQuestionOption extends QuestionOption<Double> {
 
+    private double numericContent;
+    
     /**
      * Builds a QuantitativeQuestionOption with a double value
      *
@@ -29,7 +31,7 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
             throw new IllegalArgumentException("O valor da opção não pode ser "
                     + "infinito e tem que ser um valor numérico");
         }
-        this.content = value;
+        this.numericContent = value;
     }
 
     /**

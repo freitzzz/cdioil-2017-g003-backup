@@ -19,7 +19,7 @@ import javax.persistence.InheritanceType;
  * binary option)
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class QuestionOption<T> implements Serializable, ValueObject {
 
     private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
     /**
      * Content of the option.
      */
-    @Column(unique = false)
-    protected T content;
+//    @Column(unique = false)
+//    protected T content;
 
     /**
      * Empty constructor for JPA.
@@ -44,10 +44,10 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
      *
      * @return hash code
      */
-    @Override
-    public int hashCode() {
-        return content.hashCode();
-    }
+//    @Override
+//    public int hashCode() {
+//        return content.hashCode();
+//    }
 
     /**
      * Checks whether two QuestionOptions are equal
@@ -55,25 +55,25 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
      * @param obj object to be compared
      * @return true if they're equal, false if otherwise
      */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof QuestionOption)) {
-            return false;
-        }
-        final QuestionOption<?> other = (QuestionOption<?>) obj;
-        return this.content.equals(other.content);
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//        if (!(obj instanceof QuestionOption)) {
+//            return false;
+//        }
+//        final QuestionOption<?> other = (QuestionOption<?>) obj;
+//        return this.content.equals(other.content);
+//    }
 
     /**
      * Returns a description of the content of the option
      *
      * @return string with the content of the option
      */
-    @Override
-    public String toString() {
-        return content.toString();
-    }
+//    @Override
+//    public String toString() {
+//        return content.toString();
+//    }
 }
