@@ -1,5 +1,6 @@
 package cdioil.backoffice.console.presentation;
 
+import cdioil.application.SurveyController;
 import cdioil.backoffice.application.ExportSurveyAnswersController;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.Survey;
@@ -140,12 +141,10 @@ public final class ExportSurveyAnswersUI {
         }
     }
     /**
-     * Method that gets all existing surveys
+     * Method that gets all current surveys
      */
     private void getAllSurveys(){
-        allSurveys=new ArrayList<>();
-        Iterable<Survey> iterableAllSurveys=new SurveyRepositoryImpl().findAll();
-        iterableAllSurveys.forEach((survey)->{allSurveys.add(survey);});
+        allSurveys=new SurveyController().getAllSurveys();
     }
     /**
      * Method that checks if the user typed the exit code
