@@ -1,6 +1,5 @@
 package cdioil.domain.authz;
 
-import cdioil.domain.QRCode;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

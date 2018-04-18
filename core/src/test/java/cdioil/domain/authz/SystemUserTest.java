@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain.authz;
 
+import java.time.LocalDate;
+import java.time.Month;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -16,10 +13,13 @@ import org.junit.Before;
 public class SystemUserTest {
 
     SystemUser instance;
+    SystemUser otherInstance;
 
     @Before
     public void setUp() {
         instance = new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"));
+        otherInstance = new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"),
+                new PhoneNumber("939999999"), new Location("Lil Pump's Mansion"), new BirthDate(LocalDate.of(1222, Month.MARCH, 23)));
     }
 
     /**
@@ -50,6 +50,12 @@ public class SystemUserTest {
         assertFalse(instance.changeUserDatafield("deathsticks", 3));
         //teste alterar Password com password válida
         assertTrue(instance.changeUserDatafield("WannaBuysomedeathsticks123", 3));
+        //change phone number test
+        assertTrue(instance.changeUserDatafield("919999999", 4));
+        //change location test
+        assertTrue(instance.changeUserDatafield("ESKEETIT", 5));
+        //change birth date test
+        assertTrue(instance.changeUserDatafield("1000-03-23", 6));
         //test with invalid option
         assertTrue(instance.changeUserDatafield("deathsticks", 7));
     }
@@ -118,4 +124,24 @@ public class SystemUserTest {
         Email result = instance.getID();
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of activateAccount method, of class SystemUser.
+     */
+    @Test
+    public void testActivateAccount() {
+        System.out.println("activateAccount");
+        instance.activateAccount();
+    }
+
+    /**
+     * Test of getActivationCode method, of class SystemUser.
+     */
+    @Test
+    public void testGetActivationCode() {
+        System.out.println("getActivationCode");
+        assertEquals(instance.getActivationCode(), instance.getActivationCode());
+    }
+    
+    
 }

@@ -91,9 +91,9 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
         this.nome = nome;
         this.password = password;
         this.activationCode=generateRandomCode();
-        changePhoneNumber(phoneNumber);
-        changeLocation(location);
-        changeBirthDate(birthDate);
+        this.phoneNumber = phoneNumber;
+        this.location = location;
+        this.birthDate = birthDate;
     }
 
     /**
@@ -113,30 +113,6 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
 
     protected SystemUser() {
         //For ORM
-    }
-    
-    /**
-     * Changes the current SystemUser phone number
-     * @param phoneNumber PhoneNumber with the new SystemUser phone number
-     */
-    public void changePhoneNumber(PhoneNumber phoneNumber){
-        this.phoneNumber=phoneNumber;
-    }
-    
-    /**
-     * Changes the current SystemUser location
-     * @param location Location with the new SystemUser location
-     */
-    public void changeLocation(Location location){
-        this.location=location;
-    }
-    
-    /**
-     * Changes the current SystemUser birth date
-     * @param birthDate BirthDate with the new SystemUser birth date
-     */
-    public void changeBirthDate(BirthDate birthDate){
-        this.birthDate=birthDate;
     }
     
     /**

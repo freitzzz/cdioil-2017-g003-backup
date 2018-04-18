@@ -1,8 +1,6 @@
 package cdioil.domain;
 
 import cdioil.time.TimePeriod;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Entity;
 
