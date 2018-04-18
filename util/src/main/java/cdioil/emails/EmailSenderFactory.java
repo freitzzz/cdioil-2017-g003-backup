@@ -133,4 +133,8 @@ public final class EmailSenderFactory {
         properties.put(EMAIL_SMTP_TLS_TRUST,YAHOO_SMTP_HOST);
         return Session.getDefaultInstance(properties,new SMTPAuthenticator(emailClient,emailPassword));
     }
+    /**
+     * Hides default consructor
+     */
+    private EmailSenderFactory(){}
 }

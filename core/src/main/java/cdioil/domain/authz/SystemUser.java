@@ -231,6 +231,11 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     public long getActivationCode(){return activationCode;}
     /**
+     * Method that returns the current user name
+     * @return Name with the current user name
+     */
+    public Name getName(){return nome;}
+    /**
      * Method that generates a random code used to prove user authenticity
      * @return Long with the generated random code used to prove user authenticity
      */
