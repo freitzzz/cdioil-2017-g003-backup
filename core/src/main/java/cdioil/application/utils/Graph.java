@@ -64,6 +64,7 @@ public class Graph implements Serializable {
      * them.
      */
     @ManyToMany(cascade = CascadeType.PERSIST)
+    @MapKey(name = "element")
     private Map<Question, Vertex> vertices;
 
     /**
