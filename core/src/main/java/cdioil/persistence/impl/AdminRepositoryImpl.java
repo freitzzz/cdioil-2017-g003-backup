@@ -1,6 +1,7 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.authz.Admin;
+import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.AdminRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.BaseJPARepository;
@@ -35,7 +36,12 @@ public class AdminRepositoryImpl extends BaseJPARepository<Admin,Long> implement
      * @param admin Admin with administrator being checked
      * @return boolean true if the administrator exists on the database, false if not
      */
-    public boolean exists(Admin admin){return new UserRepositoryImpl().findByEmail(admin.getID().getID())!=null;}
+    public boolean exists(Admin admin){
+        SystemUser sysUser=new UserRepositoryImpl().findByEmail(admin.getID().getID());
+        if(sysUser==null)return false;
+        Query query=entityManager().createQuery("SELECT AM FROM Admin AM WHERE AM.sysUser = :sysUser").setParameter("sysUser",sysUser);
+        return !query.getResultList().isEmpty();
+    }
     
     
     @Override

@@ -4,6 +4,7 @@ import cdioil.application.utils.OperatorsEncryption;
 import cdioil.domain.authz.Email;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.RegisteredUserRepository;
 import java.util.List;
@@ -28,7 +29,10 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
     }
 
     public boolean exists(RegisteredUser user) {
-        return new UserRepositoryImpl().findByEmail(user.getID().getID()) != null;
+        SystemUser sysUser=new UserRepositoryImpl().findByEmail(user.getID().getID());
+        if(sysUser==null)return false;
+        Query query=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.su = :sysUser").setParameter("sysUser",sysUser);
+        return !query.getResultList().isEmpty();
     }
 
     /**

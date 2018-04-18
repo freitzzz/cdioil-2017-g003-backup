@@ -236,6 +236,16 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     public Name getName(){return nome;}
     /**
+     * Method that checks if the current user was previously imported or not
+     * @return boolean true if the user was previously imported, false if not
+     */
+    public boolean isUserImported(){return imported;}
+    /**
+     * Method that checks if the current user is activated
+     * @return boolean true if the user is activated, false if not
+     */
+    public boolean isUserActivated(){return activated;}
+    /**
      * Method that generates a random code used to prove user authenticity
      * @return Long with the generated random code used to prove user authenticity
      */
