@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author João
  */
-public class AddUsersQuestionnaireUI {
+public class AddUsersTargetedSurvey {
 
     /**
      * Controller of add users to questionnaire
@@ -72,15 +72,15 @@ public class AddUsersQuestionnaireUI {
     /**
      * Constructor of AddUsersQuestionnaireUI
      */
-    public AddUsersQuestionnaireUI() {
+    public AddUsersTargetedSurvey() {
         ctrl = new AddUsersTargetedSurveyController();
     }
 
     /**
      * Adds users to a questionnaire
      */
-    public void addUsersQuestionnaire() {
-        List<TargetedSurvey> lq = ctrl.getQuestionnaires();
+    public void addUsersTargetedSurvey() {
+        List<TargetedSurvey> lq = ctrl.getTragetedSurveys();
         //if list is null
         if (lq == null) {
             System.out.println(NO_QUESTIONNAIRES_MSG);
@@ -92,7 +92,7 @@ public class AddUsersQuestionnaireUI {
                 System.out.println(i + ". " + q);
                 i++;
             }
-            while (chosen < 1 || chosen > i-1) {
+            while (chosen < 1 || chosen > i - 1) {
                 chosen = Console.readInteger(CHOOSE_QUESTIONNAIRE_MSG);
             }
             TargetedSurvey q = lq.get(chosen - 1);
@@ -109,7 +109,7 @@ public class AddUsersQuestionnaireUI {
                     i++;
                 }
                 chosen = 0;
-                while (chosen < 1 || chosen > i-1) {
+                while (chosen < 1 || chosen > i - 1) {
                     chosen = Console.readInteger(CHOOSE_DOMAIN_MSG);
                 }
                 Whitelist w = whitelist.get(chosen - 1);
@@ -125,7 +125,7 @@ public class AddUsersQuestionnaireUI {
                     }
                     String option = Console.readLine(ADD_USERS_MSG);
                     if (option.equalsIgnoreCase(YES)) {
-                        boolean b = ctrl.addUsersQuestionnaire(q);
+                        boolean b = ctrl.addUsersTargetedSurvey(q);
                         if (b) {
                             System.out.println(SUCCESS_MSG);
                         } else {

@@ -36,11 +36,11 @@ public class AddUsersTargetedSurveyController {
      *
      * @return list of questionnaires
      */
-    public List<TargetedSurvey> getQuestionnaires() {
+    public List<TargetedSurvey> getTragetedSurveys() {
         SurveyRepository repo = new SurveyRepositoryImpl();
-        List<TargetedSurvey> lq = new ArrayList<>();
+        List<TargetedSurvey> listTS = new ArrayList<>();
         repo.getTargetedSurveys();
-        return lq;
+        return listTS;
     }
 
     /**
@@ -72,7 +72,7 @@ public class AddUsersTargetedSurveyController {
      * @param targetedSurvey survey to add users to
      * @return true if users were added successfully, false if not
      */
-    public boolean addUsersQuestionnaire(TargetedSurvey targetedSurvey) {
+    public boolean addUsersTargetedSurvey(TargetedSurvey targetedSurvey) {
         boolean b = targetedSurvey.addUsersToGroup(users);
         BaseJPARepository repo = new SurveyRepositoryImpl();
         repo.merge(targetedSurvey);

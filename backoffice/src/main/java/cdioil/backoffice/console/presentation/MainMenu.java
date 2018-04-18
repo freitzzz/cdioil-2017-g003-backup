@@ -138,7 +138,7 @@ public class MainMenu {
                     new ExportSurveyAnswersUI();
                     break;
                 case 4:
-                    new AddUsersQuestionnaireUI().addUsersQuestionnaire();
+                    new AddUsersTargetedSurvey().addUsersTargetedSurvey();
                     break;
                 case 5:
                     new CreateSurveyUI(manager);

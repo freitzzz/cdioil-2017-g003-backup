@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "QUESTIONTYPE")
 public abstract class Question implements Serializable, Comparable {
 
@@ -36,6 +36,11 @@ public abstract class Question implements Serializable, Comparable {
      * Database id.
      */
     protected Long databaseID;
+
+    /**
+     * The question's type.
+     */
+    protected QuestionTypes type;
 
     /**
      * The question itself.
@@ -77,6 +82,24 @@ public abstract class Question implements Serializable, Comparable {
      * Empty Constructor for JPA.
      */
     protected Question() {
+    }
+
+
+    /**
+     * Get the question type
+     * @return question type
+     */
+    public QuestionTypes getType() {
+        return type;
+    }
+
+    /**
+     * Retrieves the Question's list of currently available options.
+     *
+     * @return all available options.
+     */
+    public List<QuestionOption> getOptionList() {
+        return optionList;
     }
 
     /**

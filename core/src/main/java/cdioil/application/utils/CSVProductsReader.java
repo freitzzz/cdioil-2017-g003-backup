@@ -151,18 +151,19 @@ public class CSVProductsReader implements ProductsReader {
 
                     String path = sb.toString();
 
-                    if (!isPathProductValid(path)) {
-                        throw new InvalidFileFormattingException("Unrecognized path of product formatting");
-                    }
-                    Product product = createProduct(currentLine, CATEGORIES_FILE_OFFSET);
-                    if (product != null) {
-                        if (!readProducts.containsKey(path)) {
-                            List<Product> newList = new LinkedList<>();
-                            newList.add(product);
-                            readProducts.put(path, newList);
-                        } else {
-                            readProducts.get(path).add(product);
+                    if (isPathProductValid(path)) {
+                        Product product = createProduct(currentLine, CATEGORIES_FILE_OFFSET);
+                        if (product != null) {
+                            if (!readProducts.containsKey(path)) {
+                                List<Product> newList = new LinkedList<>();
+                                newList.add(product);
+                                readProducts.put(path, newList);
+                            } else {
+                                readProducts.get(path).add(product);
+                            }
                         }
+                    }else{
+                        System.out.println("O formato da categoria é inválido na linha " + i + ".");
                     }
                 } catch (IllegalArgumentException ex) {
                     System.out.println("O formato dos produtos é inválido na linha " + i + ".");
