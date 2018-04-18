@@ -3,7 +3,6 @@ package cdioil.application.utils;
 import cdioil.files.FileWriter;
 import cdioil.domain.Answer;
 import cdioil.domain.Question;
-import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import java.io.File;
 import java.util.ArrayList;
