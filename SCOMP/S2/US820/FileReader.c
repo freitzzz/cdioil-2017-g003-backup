@@ -34,6 +34,7 @@ char** readAllLines(char *fileName,int* linesRead){
             lineLength=0;
         }
     }
+    ++nextLine;
     char **allLines=(char**)malloc(nextLine*sizeof(char*));
     for(i=0;i<nextLine;i++)allLines[i]=(char*)malloc(maxLength);
     nextLine=0;
@@ -46,5 +47,6 @@ char** readAllLines(char *fileName,int* linesRead){
         }
     }
     free(fileContent);
+    *(linesRead)=nextLine+1;
     return allLines;
 }
