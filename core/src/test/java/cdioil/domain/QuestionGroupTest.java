@@ -1,11 +1,8 @@
 package cdioil.domain;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 
 /**
  * Unit tests for class QuestionGroup.

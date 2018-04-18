@@ -21,9 +21,9 @@ import javax.persistence.OneToMany;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @DiscriminatorColumn(name = "QUESTIONTYPE")
-public abstract class Question implements Serializable {
+public abstract class Question implements Serializable, Comparable {
 
     /**
      * Serialization code.
@@ -51,8 +51,8 @@ public abstract class Question implements Serializable {
      * List of options that the question has.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "QUESTION_OPTIONLIST",joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
-            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID",unique = false))
+    @JoinTable(name = "QUESTION_OPTIONLIST", joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
+            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID", unique = false))
     private List<QuestionOption> optionList;
 
     public Question(String questionText, String questionID, List<QuestionOption> optionList) {
@@ -100,7 +100,7 @@ public abstract class Question implements Serializable {
      * @param obj object to be compared to
      * @return true if the objects are truly equal, false otherwise
      */
-    @Override    
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -119,6 +119,7 @@ public abstract class Question implements Serializable {
             return false;
         }
         return true;
+
     }
 
     /**
@@ -129,5 +130,16 @@ public abstract class Question implements Serializable {
     @Override
     public String toString() {
         return questionText;
+    }
+
+    /**
+     * Compares current question to anothe question
+     *
+     * @param o question to be compared
+     * @return 0 if they're equal, 1 or - 1 if they're different
+     */
+    @Override
+    public int compareTo(Object o) {
+        return Integer.compare(hashCode(), o.hashCode());
     }
 }
