@@ -35,7 +35,7 @@ public class TargetedSurveyTest {
     @Before
     public void setUp() {
         list = new ArrayList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544261234"), new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new EAN("544261234"), "1 L", new QRCode("4324235")));
         LocalDateTime surveyDate = LocalDateTime.of(1, Month.MARCH, 2, 0, 0);
         LocalDateTime endingDate = LocalDateTime.of(2, Month.MARCH, 23, 10, 10);
         timePeriod = new TimePeriod(surveyDate, endingDate);

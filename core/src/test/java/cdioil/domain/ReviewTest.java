@@ -31,7 +31,7 @@ public class ReviewTest {
         TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         List<SurveyItem> list = new LinkedList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
         Survey globalSurvey = new GlobalSurvey(list, timePeriod);
         BinaryQuestion firstQuestion = new BinaryQuestion("Question 1", "567");
         BinaryQuestion secondQuestion = new BinaryQuestion("Question 2", "456");
@@ -54,7 +54,7 @@ public class ReviewTest {
         TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         List<SurveyItem> list = new LinkedList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
         Survey globalSurvey = new GlobalSurvey(list, timePeriod);
         assertNotNull("The condition should succeed because the global survey is "
                 + "valid", createReview(globalSurvey));
@@ -130,7 +130,7 @@ public class ReviewTest {
         TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         List<SurveyItem> list = new LinkedList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
         Survey globalSurvey = new GlobalSurvey(list, timePeriod);
         BinaryQuestion firstQuestion = new BinaryQuestion("Question 1", "567");
         BinaryQuestion secondQuestion = new BinaryQuestion("Question 2", "456");
@@ -154,7 +154,7 @@ public class ReviewTest {
         TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         List<SurveyItem> list = new LinkedList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
         Survey globalSurvey = new GlobalSurvey(list, timePeriod);
         BinaryQuestion firstQuestion = new BinaryQuestion("Question 1", "567");
         BinaryQuestion secondQuestion = new BinaryQuestion("Question 2", "456");
@@ -175,7 +175,7 @@ public class ReviewTest {
         other.submitSuggestion("Other Suggestion");
         assertNotEquals("The condition should succeed because the reviews "
                 + "have different suggestions", instance, other);
-        list.add(new Product("Other Product", new EAN("554231234"), new QRCode("4524235")));
+        list.add(new Product("Other Product", new EAN("554231234"), "1 L", new QRCode("4524235")));
         globalSurvey = new GlobalSurvey(list, timePeriod);
         other = createReview(globalSurvey);
         assertNotEquals("The condition should succeed because the reviews are "
@@ -191,7 +191,7 @@ public class ReviewTest {
         TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         List<SurveyItem> list = new LinkedList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
         Survey globalSurvey = new GlobalSurvey(list, timePeriod);
         globalSurvey.addQuestion(new BinaryQuestion("Question 1", "567"));
         globalSurvey.addQuestion(new BinaryQuestion("Question 2", "999"));

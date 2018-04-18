@@ -30,7 +30,7 @@ public class GlobalSurveyTest {
                 + "null", createGlobalSurvey(null, timePeriod));
         assertNull("The condition should succeed because the item list is "
                 + "empty", createGlobalSurvey(list, timePeriod));
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
         assertNull("The condition should succeed because the time period "
                 + "is null", createGlobalSurvey(list, null));
         assertNotNull("The condition should succeed because both arguments "

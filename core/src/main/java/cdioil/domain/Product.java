@@ -35,7 +35,11 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
      */
     @OneToMany(cascade = CascadeType.ALL)
     private List<Code> codes = new ArrayList<>();
-
+    /**
+     * Quantity of the product.
+     */
+    @Column(name = "QUANTIDADE")
+    private String quantity;
     /**
      * The Product's image.
      */
@@ -54,8 +58,9 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
      * @param name the product's name
      * @param code ean
      * @param codes 0 or more codes
+     * @param quantity quantity
      */
-    public Product(String name, Code code,Code... codes) {
+    public Product(String name, Code code, String quantity,Code... codes) {
 
         if (name == null || code == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid parameters.");
@@ -66,6 +71,8 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
         this.codes.add(code);
 
         this.codes.addAll(Arrays.asList(codes));
+        
+        this.quantity = quantity;
 
         this.productImage = new Image(IMAGEM_PRODUTO_DEFAULT.getBytes());
     }
