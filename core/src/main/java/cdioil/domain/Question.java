@@ -19,11 +19,10 @@ import javax.persistence.OneToMany;
  * Abstract class that represents a Question.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- * @param <T> defines the type of questionText of the question
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question<T> implements Serializable {
+public abstract class Question implements Serializable, Comparable {
 
     /**
      * Serialization code.
@@ -51,8 +50,8 @@ public abstract class Question<T> implements Serializable {
      * List of options that the question has.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "QUESTION_OPTIONLIST",joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
-            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID",unique = false))
+    @JoinTable(name = "QUESTION_OPTIONLIST", joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
+            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID", unique = false))
     private List<QuestionOption> optionList;
 
     public Question(String questionText, String questionID, List<QuestionOption> optionList) {
@@ -105,10 +104,10 @@ public abstract class Question<T> implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Question<?>)) {
+        if (!(obj instanceof Question)) {
             return false;
         }
-        final Question<?> other = (Question<?>) obj;
+        final Question other = (Question) obj;
         if (!this.questionID.equals(other.questionID)) {
             return false;
         }
@@ -123,5 +122,16 @@ public abstract class Question<T> implements Serializable {
     @Override
     public String toString() {
         return questionText;
+    }
+
+    /**
+     * Compares current question to anothe question
+     *
+     * @param o question to be compared
+     * @return 0 if they're equal, 1 or - 1 if they're different
+     */
+    @Override
+    public int compareTo(Object o) {
+        return Integer.compare(hashCode(), o.hashCode());
     }
 }

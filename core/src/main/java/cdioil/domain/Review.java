@@ -92,6 +92,10 @@ public class Review implements Serializable {
      * @param survey survey being answered.
      */
     public Review(Survey survey) {
+        if(survey == null){
+            throw new IllegalArgumentException("O inquérito não pode ser "
+                    + "null");
+        }
         this.survey = survey;
         this.answerGraph = survey.getGraphCopy();
         //fetch items from survey

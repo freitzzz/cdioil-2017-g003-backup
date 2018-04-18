@@ -10,7 +10,7 @@ import javax.persistence.Entity;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity(name = "QuantitativeQuestion")
-public class QuantitativeQuestion extends Question<String> implements Serializable {
+public class QuantitativeQuestion extends Question implements Serializable {
 
     /**
      * Builds a quantitative question with the question itself, it's id, the
