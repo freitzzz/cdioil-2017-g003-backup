@@ -109,7 +109,7 @@ public class ExportSurveyStatisticsUI {
             survey = ctrl.getChosenSurvey(surveyID);
             if (survey == null) System.out.println(INVALID_SURVEY_MESSAGE);
             else isSurveyIDValid = true;
-        
+        }
             boolean isPathValid = false;
             while (!isPathValid) {
                 //3. Inserts the path of the file
@@ -123,7 +123,7 @@ public class ExportSurveyStatisticsUI {
                 } else {
                     System.out.println(EXPORTED_SURVEY_ANSWERS_FAILURE_MESSAGE);
                 }
-            }
+            
         }
     }
 
@@ -137,7 +137,7 @@ public class ExportSurveyStatisticsUI {
         if (surveys == null || surveys.isEmpty()) return false;
         int cont = 1;
         for (Survey s : surveys) {
-            System.out.println(" \n" + SURVEY_MESSAGE + cont + "\n");
+            System.out.println("\n" + SURVEY_MESSAGE + " " + cont + ":\n");
             System.out.println(s.toString());
             cont++;
         }

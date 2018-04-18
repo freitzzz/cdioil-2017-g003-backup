@@ -15,8 +15,8 @@ import cdioil.files.CommonFileExtensions;
 public final class SurveyStatsWriterFactory {
 
     /**
-     * Creates a new SurveyStatsWriter.
-     * 
+     * Creates an instance of SurveyStatsWriter.
+     *
      * @param filename Path of the file
      * @param totalBinary Total of answers to binary questions
      * @param totalQuantitative Total of answers to quantitative questions
@@ -24,14 +24,15 @@ public final class SurveyStatsWriterFactory {
      * @param quantitativeMean Average value for quantitative answers
      * @param binaryMeanDeviation Mean deviation for binary answers
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
-     * 
-     * @return the created SurveyStatsWriter. If the file is not valid, returns null. 
+     *
+     * @return the created SurveyStatsWriter. If the file is not valid, returns null.
      */
     public static SurveyStatsWriter create(String filename, int totalBinary, int totalQuantitative, double binaryMean,
             double quantitativeMean, double binaryMeanDeviation, double quantitativeMeanDeviation) {
-        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) return new CSVSurveyStatsWriter(filename, totalBinary, 
-                totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
-
+        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) {
+            return new CSVSurveyStatsWriter(filename, totalBinary, totalQuantitative, binaryMean, quantitativeMean,
+                    binaryMeanDeviation, quantitativeMeanDeviation);
+        }
         return null;
     }
 
@@ -40,5 +41,4 @@ public final class SurveyStatsWriterFactory {
      */
     private SurveyStatsWriterFactory() {
     }
-
 }
