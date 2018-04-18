@@ -152,18 +152,6 @@ public abstract class Survey implements Serializable {
     }
 
     /**
-     * Returns a description of the survey (product or category description and
-     * date)
-     *
-     * @return survey's description
-     */
-    @Override
-    public String toString() {
-        return "Inquerito sobre:\n" + itemList.toString()
-                + "\nData:\n" + surveyPeriod.toString();
-    }
-
-    /**
      * Survey's hash code.
      *
      * @return hash code
@@ -194,4 +182,25 @@ public abstract class Survey implements Serializable {
         }
         return this.graph.equals(other.graph);
     }
+
+    /**
+     * Returns a description of the survey (product or category description and
+     * date)
+     *
+     * @return survey's description
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("Inquérito:");
+
+        for (SurveyItem surveyItem :
+                itemList) {
+            stringBuilder.append("\n" + surveyItem.toString());
+        }
+
+        stringBuilder.append("\nData: " + surveyPeriod.toString());
+
+        return stringBuilder.toString();
+    }
+
 }

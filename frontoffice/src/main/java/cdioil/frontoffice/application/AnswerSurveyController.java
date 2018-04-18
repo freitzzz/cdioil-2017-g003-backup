@@ -1,5 +1,8 @@
 package cdioil.frontoffice.application;
 
+import cdioil.domain.QuestionOption;
+import cdioil.domain.QuestionOption_;
+import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 
@@ -16,6 +19,16 @@ public class AnswerSurveyController {
      * A list of all Surveys with state 'Active'
      */
     private List<Survey> activeSurveys;
+
+    /**
+     * The Survey that was chosen by the user
+     */
+    private Survey chosenSurvey;
+
+    /**
+     * Review associated to the chosen survey
+     */
+    private Review surveyReview;
 
     /**
      * Constructs a new instance of AnswerSurveyController
@@ -49,13 +62,44 @@ public class AnswerSurveyController {
     }
 
     /**
-     * Answers the Survey corresponding to the position
-     * in the activeSurveys list with the given index
-     *
-     * @param index given index
+     * Sets the Survey that was chosen by the User
+     * @param index survey's position in the activeSurveys list
      */
-    public void answerSurvey(String index) {
-        throw new UnsupportedOperationException();
+    public void selectSurvey(int index) {
+        chosenSurvey = activeSurveys.get(index);
+
+        if (chosenSurvey == null) {
+            throw new IllegalArgumentException();
+        }
+
+        surveyReview = new Review(chosenSurvey);
+    }
+
+    /**
+     * Gets the current question that is being answered
+     * @return current question from Survey
+     */
+    public String getQuestion() {
+        return surveyReview.getCurrentQuestion().toString();
+    }
+
+    public List<String> getCurrentQuestionOptions(){
+        List<QuestionOption> currentQuestionOptions = surveyReview.getCurrentQuestion().getOptionList();
+        List<String> result = new ArrayList<>();
+
+        for(QuestionOption option : currentQuestionOptions){
+            result.add(option.toString());
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     */
+    public boolean answerQuestion(int index) {
+        return surveyReview.answerQuestion(
+                surveyReview.getCurrentQuestion().getOptionList().get(index));
     }
 
 

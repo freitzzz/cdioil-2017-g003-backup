@@ -3,6 +3,7 @@ package cdioil.application.utils;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -85,7 +86,13 @@ public class Graph implements Serializable {
     public Graph(Graph g) {
         this();
         for (Vertex vertex : g.vertices.values()) {
-            for (Edge edge : vertex.getAllOutgoingEdges()) {
+            Iterator<Edge> iterator = vertex.getAllOutgoingEdges().iterator();
+            ArrayList<Edge> list = new ArrayList<>();
+            while(iterator.hasNext()){
+                list.add(iterator.next());
+            }
+            for (int i = 0; i < list.size(); i++) {
+                Edge edge = list.get(i);
                 this.insertEdge(edge.getOriginVertexElement(), edge.getDestinationVertexElement(), edge.getElement(), edge.getWeight());
             }
         }
