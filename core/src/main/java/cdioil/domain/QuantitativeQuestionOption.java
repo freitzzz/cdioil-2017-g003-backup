@@ -39,4 +39,34 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
      */
     protected QuantitativeQuestionOption() {
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.numericContent) ^ (Double.doubleToLongBits(this.numericContent) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final QuantitativeQuestionOption other = (QuantitativeQuestionOption) obj;
+        if (Double.doubleToLongBits(this.numericContent) != Double.doubleToLongBits(other.numericContent)) {
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
+    public String toString(){
+        return Double.toString(numericContent);
+    }
 }

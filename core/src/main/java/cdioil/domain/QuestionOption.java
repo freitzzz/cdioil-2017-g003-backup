@@ -27,53 +27,10 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    /**
-     * Content of the option.
-     */
-//    @Column(unique = false)
-//    protected T content;
 
     /**
      * Empty constructor for JPA.
      */
     protected QuestionOption() {
     }
-
-    /**
-     * QuestionOption's hash code.
-     *
-     * @return hash code
-     */
-//    @Override
-//    public int hashCode() {
-//        return content.hashCode();
-//    }
-
-    /**
-     * Checks whether two QuestionOptions are equal
-     *
-     * @param obj object to be compared
-     * @return true if they're equal, false if otherwise
-     */
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) {
-//            return true;
-//        }
-//        if (!(obj instanceof QuestionOption)) {
-//            return false;
-//        }
-//        final QuestionOption<?> other = (QuestionOption<?>) obj;
-//        return this.content.equals(other.content);
-//    }
-
-    /**
-     * Returns a description of the content of the option
-     *
-     * @return string with the content of the option
-     */
-//    @Override
-//    public String toString() {
-//        return content.toString();
-//    }
 }

@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 @Entity(name = "BinaryQuestionOption")
 public class BinaryQuestionOption extends QuestionOption<Boolean> {
 
-    private Boolean booleanContent;
-    
+    private boolean booleanContent;
+
     /**
      * Builds a BinaryQuestionOption with a boolean value
      *
@@ -30,9 +30,34 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
      */
     protected BinaryQuestionOption() {
     }
-    
+
     @Override
-    public String toString(){
-        return booleanContent.toString();
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + (this.booleanContent ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BinaryQuestionOption other = (BinaryQuestionOption) obj;
+        if (this.booleanContent != other.booleanContent) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return Boolean.toString(booleanContent);
     }
 }

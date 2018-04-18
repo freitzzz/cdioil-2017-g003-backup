@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 
 /**
@@ -11,7 +12,7 @@ import javax.persistence.Entity;
 public class MultipleChoiceQuestionOption extends QuestionOption<String> {
 
     private String textContent;
-    
+
     /**
      * Builds a multiple choice question option with a string containing the
      * option itself
@@ -31,4 +32,35 @@ public class MultipleChoiceQuestionOption extends QuestionOption<String> {
      */
     protected MultipleChoiceQuestionOption() {
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.textContent);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MultipleChoiceQuestionOption other = (MultipleChoiceQuestionOption) obj;
+        if (!Objects.equals(this.textContent, other.textContent)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return textContent;
+    }
+
 }
