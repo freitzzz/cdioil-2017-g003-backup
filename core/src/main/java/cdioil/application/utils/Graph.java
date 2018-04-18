@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -86,13 +87,7 @@ public class Graph implements Serializable {
     public Graph(Graph g) {
         this();
         for (Vertex vertex : g.vertices.values()) {
-            Iterator<Edge> iterator = vertex.getAllOutgoingEdges().iterator();
-            ArrayList<Edge> list = new ArrayList<>();
-            while(iterator.hasNext()){
-                list.add(iterator.next());
-            }
-            for (int i = 0; i < list.size(); i++) {
-                Edge edge = list.get(i);
+            for (Edge edge : vertex.getAllOutgoingEdges()) {
                 this.insertEdge(edge.getOriginVertexElement(), edge.getDestinationVertexElement(), edge.getElement(), edge.getWeight());
             }
         }
