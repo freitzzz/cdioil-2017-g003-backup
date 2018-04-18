@@ -104,14 +104,28 @@ public class Review implements Serializable {
     }
 
     /**
+     * Fetches the question currently being answered
+     * @return question being answered
+     */
+    public Question getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    /**
      * Answers the current question with a given option and updates the current
      * question.
      *
      * @param option selected option.
+     * @return false if current question is the last one
      */
-    public void answerQuestion(QuestionOption option) {
-
+    public boolean answerQuestion(QuestionOption option) {
         Iterable<Edge> outgoingEdges = answerGraph.outgoingEdges(currentQuestion);
+
+        // If there are no outgoing edges, maps the last answer and finishes
+        if (!outgoingEdges.iterator().hasNext()) {
+            answers.put(currentQuestion, new Answer(option));
+            return false;
+        }
 
         for (Edge edge : outgoingEdges) {
             if (edge.getElement().equals(option)) {
@@ -119,6 +133,8 @@ public class Review implements Serializable {
                 currentQuestion = edge.getDestinationVertexElement();
             }
         }
+
+        return true;
     }
 
     /**

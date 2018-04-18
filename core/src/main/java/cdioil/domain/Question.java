@@ -80,6 +80,14 @@ public abstract class Question implements Serializable, Comparable {
     }
 
     /**
+     * Retrieves the Question's list of currently available options.
+     * @return all available options.
+     */
+    public List<QuestionOption> getOptionList(){
+        return optionList;
+    }
+
+    /**
      * Returns an hash value based on the attributes and class type.
      *
      * @return hash value

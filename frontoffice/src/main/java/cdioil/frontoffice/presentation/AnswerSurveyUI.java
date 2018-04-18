@@ -92,15 +92,28 @@ public class AnswerSurveyUI {
 
 
     private void answerSurvey() {
-        String id = Console.readLine("Survey Number");
+        int idx = Console.readInteger("Survey Number");
 
         try {
-            controller.answerSurvey(id);
-        } catch (IllegalArgumentException e) {
+            controller.selectSurvey(idx);
+        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             System.out.println("Error: Can't find a survey with that number");
             return;
         }
 
-        //TODO answer survey
+        while (true) {
+            System.out.println(controller.getQuestion());
+            List<String> options = controller.getCurrentQuestionOptions();
+            for(int i = 0; i < options.size(); i++){
+                System.out.println(i + options.get(i));
+            }
+
+            idx = Console.readInteger("Select an option:\n");
+            boolean canContinue = controller.answerQuestion(idx);
+
+            if(!canContinue){
+                break;
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ package cdioil.application.bootstrap.domain;
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.BinaryQuestionOption;
 import cdioil.domain.GlobalSurvey;
+import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyItem;
 
@@ -53,7 +54,8 @@ public class SurveyBootstrap {
         survey.setNextQuestion(bq1, bq3, bqOption2, 0);
 
         survey.changeState(SurveyState.ACTIVE);
-
+        Review review = new Review(survey);
         surveyRepository.add(survey);
+        Review otherReview = new Review(surveyRepository.findAllActiveSurveys().get(0));
     }
 }
