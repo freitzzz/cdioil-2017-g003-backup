@@ -14,7 +14,30 @@ import javax.persistence.*;
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
 public class SystemUser implements Serializable, AggregateRoot<Email> {
-
+    /**
+     * Constant that represents the change name option
+     */
+    public static final int CHANGE_NAME_OPTION=1;
+    /**
+     * Constant that represents the change email option
+     */
+    public static final int CHANGE_EMAIL_OPTION=2;
+    /**
+     * Constant that represents the change password option
+     */
+    public static final int CHANGE_PASSWORD_OPTION=3;
+    /**
+     * Constant that represents the change phone number option
+     */
+    public static final int CHANGE_PHONE_NUMBER_OPTION=4;
+    /**
+     * Constant that represents the change locality option
+     */
+    public static final int CHANGE_LOCALITY_OPTION=5;
+    /**
+     * Constant that represents the change birth date option
+     */
+    public static final int CHANGE_BIRTH_DATE_OPTION=6;
     /**
      * Serialization number.
      */
@@ -183,28 +206,28 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     public boolean changeUserDatafield(String newField, int option) {
         try {
             switch (option) {
-                case 1://changes the user's name
+                case CHANGE_NAME_OPTION://changes the user's name
                     String[] newNome = newField.split(" ");
                     if (newNome.length != 2) {
                         throw new IllegalArgumentException();
                     }
                     this.nome = new Name(newNome[0], newNome[1]);
                     break;
-                case 2://changes the user's email
+                case CHANGE_EMAIL_OPTION://changes the user's email
                     Email newEmail = new Email(newField);
                     this.email = newEmail;
                     break;
-                case 3://changes the user's password
+                case CHANGE_PASSWORD_OPTION://changes the user's password
                     Password newPassword = new Password(newField);
                     this.password = newPassword;
                     break;
-                case 4:
+                case CHANGE_PHONE_NUMBER_OPTION:
                     this.phoneNumber = new PhoneNumber(newField);
                     break;
-                case 5:
+                case CHANGE_LOCALITY_OPTION:
                     this.location = new Location(newField);
                     break;
-                case 6:
+                case CHANGE_BIRTH_DATE_OPTION:
                     this.birthDate = new BirthDate(LocalDate.parse(newField));
                     break;
                 default:
