@@ -23,5 +23,5 @@
 	TESTES UNITÁRIOS
 	_____________________
 
-	* Classe QuestionnaireTest : testAddUsersToGroup()
+	* Classe TargetedSurveyTest : testAddUsersToGroup()
 	* UserGroupTest : testAddUser()
