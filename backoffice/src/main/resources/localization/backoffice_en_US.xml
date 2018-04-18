@@ -86,7 +86,7 @@
             <Message messageId="option_create_survey" value="Create Survey"/>
             <Message messageId="option_add_users_questionnaire" value="Add Users to Questionnaire"/>
             <Message messageId="option_insert_question_category" value="Insert Question about one or more Categories"/>
-
+            <Message messageId = "option_export_stats_survey" value = "Export Statistics about a Survey"/>
         </ManagerMenuOptions>
 
     </MenuOptions>
