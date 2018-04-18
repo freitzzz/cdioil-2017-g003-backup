@@ -19,6 +19,9 @@
         <Message messageId = "separator" value = "========================================&#10;"/>
         <Message messageId = "exit_message" value = "Type 'Exit' to exit anytime.&#10;"/>
         <Message messageId = "info_number_categories_question_was_added_to" value = "The number of categories the question was added to was: "/>
+        <Message messageId = "info_number_categories_imported" value = "The number of imported categories was:"/>      
+        <Message messageId = "success_exporting_stats" value = "Statistics successfully exported!&#10;"/>
+        <Message messageId = "survey_message" value = "Survey"/>
     </InfoMessages>
 
 	
@@ -34,6 +37,7 @@
         <Message messageId = "request_category_identifier_removal" value = "Please type in the category/categories identifier(s) you wish to remove from the selected manager&#10;"/>
         <Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
         <Message messageId = "request_category_identifier_general" value = "Please type in the category/categories identifier(s):&#10;"/>
+        <Message messageId = "request_select_survey" value = "Select a survey (number):&#10;"/>
     </RequestMessages>
 	
 	
@@ -48,8 +52,12 @@
         <Message messageId = "error_no_imported_products" value = "No products was imported."/>
         <Message messageId = "error_invalid_email" value = "Invalid email! Please, try again.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Invalid category! Please, try again.&#10;"/>
+        <Message messageId = "error_invalid_survey" value = "Invalid survey! Please, try again.&#10;"/>
         <Message messageId = "error_no_managers" value = "There are no managers registered in the system.&#10;"/>
         <Message messageId = "error_survey_with_no_reviews" value = "The chosen survey doesn't have any reviews.&#10;"/>
+        <Message messageId = "error_exporting_stats" value = "An error occurred while exporting the statistics of the survey!&#10;Please check if the file is valid.&#10;"/>
+        <Message messageId = "error_importing_categories" value = "File path not found! Do you wish to try again?&#10;"/>   
+        <Message messageId = "error_no_imported_categories" value = "No categories were imported."/>
     </ErrorMessages>
 
     <MenuOptions>

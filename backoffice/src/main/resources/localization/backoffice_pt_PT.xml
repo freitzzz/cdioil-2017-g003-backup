@@ -19,6 +19,9 @@
         <Message messageId = "separator" value = "========================================&#10;"/>
         <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
         <Message messageId = "info_number_categories_question_was_added_to" value = "O número de cateogrias a que a questão foi adicionada foi: "/>
+        <Message messageId = "info_number_categories_imported" value = "O número de categorias importadas foi:"/>
+            <Message messageId = "success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
+            <Message messageId = "survey_message" value = "Inquérito"/>
     </InfoMessages>
 
 	
@@ -34,6 +37,7 @@
         <Message messageId = "request_category_identifier_removal" value = "Insira o descritivo da(s) categoria(s) que quer remover ao gestor selecionado&#10;"/>
         <Message messageId = "request_category_identifier_association" value = "Insira o descritivo da(s) categoria(s) que quer associar ao gestor selecionado&#10;"/>
         <Message messageId = "request_category_identifier_general" value = "Insira o descritivo da(s) categoria(s):&#10;"/>
+        <Message messageId = "request_select_survey" value = "Selecione um inquérito (número):&#10;"/>
     </RequestMessages>
 	
 	
@@ -48,8 +52,12 @@
         <Message messageId = "error_no_imported_products" value = "Não foi importada nenhum produto"/>
         <Message messageId = "error_invalid_email" value = "Email inválido! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Categoria inválida! Por favor, tente novamente.&#10;"/>
+        <Message messageId = "error_invalid_survey" value = "Inquérito inválido! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_no_managers" value = "Não existem gestores, logo não é possível efetuar a associação.&#10;"/>
         <Message messageId = "error_survey_with_no_reviews" value = "O inquérito selecionado não tem nenhuma avaliação.&#10;"/>
+        <Message messageId = "error_exporting_stats" value = "Ocorreu um erro ao exportar as estatísticas do inquérito!&#10;Verifique se o ficheiro é valido.&#10;"/>
+        <Message messageId = "error_importing_categories" value = "Caminho de ficheiro não encontrado! Pretende continuar?&#10;"/>   
+        <Message messageId = "error_no_imported_categories" value = "Não foi importada nenhuma categoria."/>
     </ErrorMessages>
 	
     <MenuOptions>
