@@ -1,10 +1,10 @@
 package cdioil.domain;
 
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -23,7 +23,7 @@ public class TargetedSurvey extends Survey implements Serializable {
     /**
      * Question and Answer graph.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private UsersGroup targetAudience;
 
     /**
@@ -35,7 +35,7 @@ public class TargetedSurvey extends Survey implements Serializable {
      * @param targetAudience group of users that the survey is targeted to
      */
     public TargetedSurvey(List<SurveyItem> itemList, TimePeriod surveyPeriod,
-                          UsersGroup targetAudience) {
+            UsersGroup targetAudience) {
         super(itemList, surveyPeriod);
         if (targetAudience == null) {
             throw new IllegalArgumentException("O grupo de utilizadores não "
@@ -46,5 +46,21 @@ public class TargetedSurvey extends Survey implements Serializable {
 
     protected TargetedSurvey() {
         //For ORM.
+    }
+
+    /**
+     * Adds a list of users to the target audience
+     *
+     * @param users users to add to target audience
+     * @return true if users were added successfully, false if not
+     */
+    public boolean addUsersToGroup(List<RegisteredUser> users) {
+        if (users == null) {
+            return false;
+        }
+        for (RegisteredUser u : users) {
+            this.targetAudience.addUser(u);
+        }
+        return true;
     }
 }
