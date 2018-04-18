@@ -38,6 +38,11 @@ public abstract class Question implements Serializable, Comparable {
     protected Long databaseID;
 
     /**
+     * The question's type.
+     */
+    protected QuestionTypes type;
+
+    /**
      * The question itself.
      */
     private String questionText;
@@ -79,11 +84,21 @@ public abstract class Question implements Serializable, Comparable {
     protected Question() {
     }
 
+
+    /**
+     * Get the question type
+     * @return question type
+     */
+    public QuestionTypes getType() {
+        return type;
+    }
+
     /**
      * Retrieves the Question's list of currently available options.
+     *
      * @return all available options.
      */
-    public List<QuestionOption> getOptionList(){
+    public List<QuestionOption> getOptionList() {
         return optionList;
     }
 

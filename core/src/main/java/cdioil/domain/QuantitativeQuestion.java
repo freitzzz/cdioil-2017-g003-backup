@@ -24,6 +24,7 @@ public class QuantitativeQuestion extends Question implements Serializable {
      */
     public QuantitativeQuestion(String question, String questionID, List<QuestionOption> optionList) {
         super(question, questionID, optionList);
+        super.type = QuestionTypes.QUANTITATIVE;
     }
 
     /**
