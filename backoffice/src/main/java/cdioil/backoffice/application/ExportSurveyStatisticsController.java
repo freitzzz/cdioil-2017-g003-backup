@@ -6,6 +6,8 @@
 package cdioil.backoffice.application;
 
 import static cdioil.application.utils.MathUtils.*;
+import cdioil.application.utils.SurveyStatsWriter;
+import cdioil.application.utils.SurveyStatsWriterFactory;
 import cdioil.domain.Answer;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionTypes;
@@ -63,12 +65,12 @@ public class ExportSurveyStatisticsController {
     /**
      * Total of binary questions.
      */
-    private double binaryTotal;
+    private int binaryTotal;
 
     /**
      * Total of quantitative questions.
      */
-    private double quantitativeTotal;
+    private int quantitativeTotal;
 
     /**
      * Builds an instance of ExportSurveyAnswersController.
@@ -102,7 +104,7 @@ public class ExportSurveyStatisticsController {
         try {
             Survey chosenOne = surveys.get(Integer.parseInt(surveyID) - 1);
             survey = chosenOne;
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
+        } catch (NumberFormatException | IndexOutOfBoundsException ex) {
             return null;
         }
         return survey;
@@ -114,7 +116,7 @@ public class ExportSurveyStatisticsController {
      * @return the reviews of the survey
      */
     public List<Review> getSurveyReviews() {
-        List<Review> reviews = new ReviewRepositoryImpl().getReviewsBySurvey(survey);
+        reviews = new ReviewRepositoryImpl().getReviewsBySurvey(survey);
         if (reviews == null || reviews.isEmpty()) {
             return null;
         }
@@ -217,8 +219,12 @@ public class ExportSurveyStatisticsController {
      * Exports the statistics about the survey to a file.
      *
      * @param filePath Path where the file will be stored
+     * @return 
      */
     public boolean exportStatsFromSurvey(String filePath) {
-        return true;
+        SurveyStatsWriter statsWriter = SurveyStatsWriterFactory.create(filePath, binaryTotal, quantitativeTotal,
+        binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+        if(statsWriter == null) return false;
+        return statsWriter.writeStats();
     }
 }
