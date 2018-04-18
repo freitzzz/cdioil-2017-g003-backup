@@ -28,7 +28,7 @@ public final class CategoriesReaderFactory {
     }
 
     /**
-     * Hides the private constructor.
+     * Hides the default constructor.
      */
     private CategoriesReaderFactory() {
     }

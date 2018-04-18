@@ -13,7 +13,6 @@ import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
-import com.sun.mail.iap.ParsingException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,7 +74,7 @@ public class ExportSurveyStatisticsController {
      * Builds an instance of ExportSurveyAnswersController.
      *
      */
-    public void ExportSurveyAnswersController() {
+    public ExportSurveyStatisticsController() {
         surveys = new ArrayList<>();
         reviews = new ArrayList<>();
     }

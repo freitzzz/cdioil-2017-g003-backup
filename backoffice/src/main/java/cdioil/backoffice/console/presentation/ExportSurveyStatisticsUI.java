@@ -41,33 +41,32 @@ public class ExportSurveyStatisticsUI {
     /**
      * Represents a message that indicates the user that there was an error exporting the file.
      */
-    private final String EXPORTED_SURVEY_ANSWERS_FAILURE_MESSAGE = "Ocorreu um erro ao exportar as respostas do inquérito!"
-            + "\nVerifique se o ficheiro é valido.";
+    private final String EXPORTED_SURVEY_ANSWERS_FAILURE_MESSAGE = localizationHandler.getMessageValue("error_exporting_stats");
 
     /**
      * Represents a message that indicates the user that the stats were successfully exported.
      */
-    private final String EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE = "Estatísticas exportadas com sucesso";
+    private final String EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE = localizationHandler.getMessageValue("success_exporting_stats");
 
     /**
      * Represents a message that indicates the user to select a survey.
      */
-    private final String SELECT_SURVEY_MESSAGE = "Selecione um inquérito (número):";
+    private final String SELECT_SURVEY_MESSAGE = localizationHandler.getMessageValue("request_select_survey");
 
     /**
      * Represents a message used to list the surveys.
      */
-    private final String SURVEY_MESSAGE = "Inquérito";
+    private final String SURVEY_MESSAGE = localizationHandler.getMessageValue("survey_message");
 
     /**
      * Represents a message that informs the user that the survey is not valid.
      */
-    private final String INVALID_SURVEY_MESSAGE = "Inquérito inválido.";
+    private final String INVALID_SURVEY_MESSAGE = localizationHandler.getMessageValue("error_invalid_survey");
 
     /**
      * Represents a message that indicates the user to insert .
      */
-    private final String INSERT_PATH_MESSAGE = "Insira o caminho da pasta onde será armazenado o ficheiro:";
+    private final String INSERT_PATH_MESSAGE = localizationHandler.getMessageValue("request_file_path");
 
     /**
      * Separator used for clarity.
@@ -105,24 +104,18 @@ public class ExportSurveyStatisticsUI {
 
         while (!isSurveyIDValid) {
             String surveyID = Console.readLine(SELECT_SURVEY_MESSAGE);
-            if (surveyID != null && surveyID.equalsIgnoreCase(EXIT_CODE)) {
-                return;
-            }
+            if (surveyID != null && surveyID.equalsIgnoreCase(EXIT_CODE)) return;
+            
             survey = ctrl.getChosenSurvey(surveyID);
-            if (survey == null) {
-                System.out.println(INVALID_SURVEY_MESSAGE);
-            } else {
-                isSurveyIDValid = true;
-            }
-
+            if (survey == null) System.out.println(INVALID_SURVEY_MESSAGE);
+            else isSurveyIDValid = true;
+        
             boolean isPathValid = false;
             while (!isPathValid) {
                 //3. Inserts the path of the file
                 String filePath = Console.readLine(INSERT_PATH_MESSAGE);
-                if (filePath != null && filePath.equalsIgnoreCase(EXIT_CODE)) {
-                    return;
-                }
-
+                if (filePath != null && filePath.equalsIgnoreCase(EXIT_CODE)) return;
+       
                 //3. Exports the file
                 if (ctrl.exportStatsFromSurvey(filePath)) {
                     System.out.println(EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE);
@@ -141,15 +134,12 @@ public class ExportSurveyStatisticsUI {
      * @return true, if there are surveys to list. Otherwise, returns false
      */
     private boolean listAllSurveys(List<Survey> surveys) {
-        if (surveys == null || surveys.isEmpty()) {
-            return false;
-        } else {
-            int cont = 1;
-            for (Survey s : surveys) {
-                System.out.println(" \n" + SURVEY_MESSAGE + cont + "\n");
-                System.out.println(s.toString());
-                cont++;
-            }
+        if (surveys == null || surveys.isEmpty()) return false;
+        int cont = 1;
+        for (Survey s : surveys) {
+            System.out.println(" \n" + SURVEY_MESSAGE + cont + "\n");
+            System.out.println(s.toString());
+            cont++;
         }
         return true;
     }

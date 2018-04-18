@@ -6,6 +6,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.ImportCategoriesController;
+import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.MarketStructure;
 
@@ -17,37 +18,45 @@ import cdioil.domain.MarketStructure;
 public class ImportCategoriesUI {
 
     /**
+     * Localization handler to load messages in several langugaes.
+     */
+    private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
+
+    /**
      * Represents the exit code for the User Interface.
      */
-    private static final String EXIT_CODE = "Sair";
+    private final String EXIT_CODE = localizationHandler.getMessageValue("option_exit");
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private static final String EXIT_MESSAGE = "A qualquer momento digite \"" + EXIT_CODE + "\" para sair.";
+    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("exit_message");
 
     /**
      * Represents a message that indicates the user to insert the path of the file to import.
      */
-    private static final String FILEPATH_MESSAGE = "Por favor indique o caminho do "
-            + "ficheiro que pretende importar:";
+    private final String FILEPATH_MESSAGE = localizationHandler.getMessageValue("request_file_path");
 
     /**
      * Represents a message that informs the user that the inserted filepath was not found.
      */
-    private static final String FILEPATH_NOT_FOUND_MESSAGE = "Caminho de ficheiro "
-            + "não encontrado!\nPretende continuar? " + EXIT_MESSAGE;
+    private final String FILEPATH_NOT_FOUND_MESSAGE = localizationHandler.getMessageValue
+        ("error_importing_categories") + EXIT_MESSAGE;
+    
+   /**
+    * Represents a message that informs the user about how many categories were imported.
+    */
+    private final String NUMBER_CATEGORIES_IMPORTED = localizationHandler.getMessageValue("info_number_categories_imported");
+            
+    /**
+     * Represents a message that informs the user that no category was imported.
+     */
+    private final String INVALID_CATEGORIES_MESSAGE = localizationHandler.getMessageValue("error_no_imported_categories");
 
     /**
-     * Represents a message that informs the user that the format of the file is not valid.
+     * Separator used for clarity.
      */
-    private static final String INVALID_CATEGORIES_MESSAGE = "Nenhuma categoria foi importada.";
-
-    /**
-     * Represents a message that delimitates the imported categories.
-     */
-    private static final String[] IMPORTED_CATEGORIES_MESSAGE = {"#####Categorias Importadas#####",
-        "#####                       #####"};
+    private final String SEPARATOR = localizationHandler.getMessageValue("separator");
 
     /**
      * Instance of Controller that intermediates the interactions between the administrator and the system.
@@ -66,6 +75,7 @@ public class ImportCategoriesUI {
      * Method that intermediates the interactions with the administrator (creates the UI itself).
      */
     private void importCategories() {
+        System.out.println(SEPARATOR);
         System.out.println(EXIT_MESSAGE);
         boolean catched = false;
         while (!catched) {
@@ -84,8 +94,7 @@ public class ImportCategoriesUI {
                 if (ctrl.getNumberOfCategoriesRead() == 0) {
                     System.out.println(INVALID_CATEGORIES_MESSAGE);
                 } else {
-                    System.out.println("Foram lidas " + ctrl.getNumberOfCategoriesRead() + " categorias.");
-                    System.out.println(IMPORTED_CATEGORIES_MESSAGE[1]);
+                    System.out.println(NUMBER_CATEGORIES_IMPORTED + " " + ctrl.getNumberOfCategoriesRead());
                     catched = true;
                 }
             }

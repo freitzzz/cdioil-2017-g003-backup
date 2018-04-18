@@ -41,22 +41,22 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to select a type of question.
      */
-    private static final String TYPE_QUESTION_MESSAGE = "Por favor selecione o tipo de questão:";
+    private final String TYPE_QUESTION_MESSAGE = "Por favor selecione o tipo de questão:";
 
     /**
      * Represents a message that indicates the user to select a valid type of question.
      */
-    private static final String INVALID_TYPE_QUESTION_MESSAGE = "Insira um tipo de questão válido:";
+    private final String INVALID_TYPE_QUESTION_MESSAGE = "Insira um tipo de questão válido:";
 
     /**
      * Represents a message that indicates the user to insert the ID of the question.
      */
-    private static final String ID_QUESTION_MESSAGE = "Por favor insira o ID da questão:";
+    private final String ID_QUESTION_MESSAGE = "Por favor insira o ID da questão:";
 
     /**
      * Represents a message that indicates the user to insert the question itself.
      */
-    private static final String TXT_QUESTION_MESSAGE = "Por favor insira a questão:";
+    private final String TXT_QUESTION_MESSAGE = "Por favor insira a questão:";
 
     /**
      * Reprensents a message that indicates the user to insert the path of the category.
@@ -71,12 +71,12 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to stop or proceed.
      */
-    private static final String DO_YOU_WANT_TO_CONTINUE = "Deseja inserir mais questões?\nSe não, digite \"Sair\".\nSe sim, digite qualquer outra mensagem.";
+    private final String DO_YOU_WANT_TO_CONTINUE = "Deseja inserir mais questões?\nSe não, digite \"Sair\".\nSe sim, digite qualquer outra mensagem.";
 
     /**
      * Represents a message that indicates the user that the question was not added to any category.
      */
-    private static final String QUESTION_NOT_ADDED = "A questão não foi adicionada a nenhuma cateogoria.";
+    private final String QUESTION_NOT_ADDED = "A questão não foi adicionada a nenhuma cateogoria.";
 
     /**
      * Represents a message that indicates the user how many categories the question was added to.
@@ -98,59 +98,59 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to insert the options for that question.
      */
-    private static final String OPTIONS_QUESTION_MESSAGE = "Por favor insira as opções:";
+    private final String OPTIONS_QUESTION_MESSAGE = "Por favor insira as opções:";
 
     /**
      * Represents a message that indicates the user to insert an option.
      */
-    private static final String OPTION_MESSAGE = "Opção ";
+    private final String OPTION_MESSAGE = "Opção ";
 
     /**
      * Represents the exit code for inserting more options.
      */
-    private static final String NO_MORE_OPTIONS_CODE = "0";
+    private final String NO_MORE_OPTIONS_CODE = "0";
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private static final String NO_MORE_OPTIONS_MESSAGE = "Para terminar a inserção de opções escreva \"" + NO_MORE_OPTIONS_CODE + ".\"";
+    private final String NO_MORE_OPTIONS_MESSAGE = "Para terminar a inserção de opções escreva \"" + NO_MORE_OPTIONS_CODE + ".\"";
 
     /**
      * Represents a message that indicates the user to insert a valid option.
      */
-    private static final String INVALID_OPTION = "A opção não foi adicionada, porque era inválida.";
+    private final String INVALID_OPTION = "A opção não foi adicionada, porque era inválida.";
 
     /**
      * Represents a message that indicates that the question was not added because it was not valid.
      */
-    private static final String INVALID_QUESTION = "A questão não foi adicionada, porque era inválida.";
+    private final String INVALID_QUESTION = "A questão não foi adicionada, porque era inválida.";
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //Constants for binary questions
     /**
      * Represents a message that indicates the user to insert the maximum and minimum values of the scale.
      */
-    private static final String INSERT_EXTREMES_MESSAGE = "Insira os valores mínimo e máximo para a escala:";
+    private final String INSERT_EXTREMES_MESSAGE = "Insira os valores mínimo e máximo para a escala:";
 
     /**
      * Represents a message that indicates the user to insert the maximum value of the scale.
      */
-    private static final String MAXIMUM_MESSAGE = "Insira o valor máximo:";
+    private final String MAXIMUM_MESSAGE = "Insira o valor máximo:";
 
     /**
      * Represents a message that indicates the user to insert the minimum value of the scale.
      */
-    private static final String MINIMUM_MESSAGE = "Insira o valor mínimo:";
+    private final String MINIMUM_MESSAGE = "Insira o valor mínimo:";
 
     /**
      * Represents a message that indicates the user to insert a valid number.
      */
-    private static final String INVALID_VALUE = "Valor inválido!";
+    private final String INVALID_VALUE = "Valor inválido!";
 
     /**
      * Represents a message that indicates the user that the extreme values have been changed.
      */
-    private static final String CHANGED_EXTREME_VALUES = "Os valores foram trocados, porque o mínimo era superior ao máximo.";
+    private final String CHANGED_EXTREME_VALUES = "Os valores foram trocados, porque o mínimo era superior ao máximo.";
 
     /**
      * Creates a new User Interface.
