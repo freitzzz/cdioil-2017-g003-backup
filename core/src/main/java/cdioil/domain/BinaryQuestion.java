@@ -1,6 +1,7 @@
 package cdioil.domain;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.persistence.Entity;
 
 /**
@@ -16,11 +17,10 @@ public class BinaryQuestion extends Question {
      *
      * @param question text of the question
      * @param questionID question's ID
-     * @param optionList
      */
-    public BinaryQuestion(String question, String questionID, List<QuestionOption> optionList) {
-        super(question, questionID, optionList);
-        this.type = QuestionAnswerTypes.BINARY;
+    public BinaryQuestion(String question, String questionID) {
+        super(question, questionID, new ArrayList<QuestionOption>
+        (Arrays.asList(new BinaryQuestionOption(Boolean.TRUE), new BinaryQuestionOption(Boolean.FALSE))));
     }
 
     /**

@@ -9,6 +9,8 @@ import cdioil.domain.Product;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ProductRepository;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,5 +26,4 @@ public class ProductRepositoryImpl extends BaseJPARepository<Map<String, Product
     protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
-    
 }

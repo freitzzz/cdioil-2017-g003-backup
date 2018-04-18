@@ -1,6 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.authz.ListUsersController;
+import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.domain.authz.SystemUser;
 
 /**
@@ -11,6 +12,10 @@ import cdioil.domain.authz.SystemUser;
 public class ListUsersUI {
 
     /**
+     * Localization handler to load messages in several langugaes.
+     */
+    private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
+    /**
      * Separator used for clarity.
      */
     private static final String SEPARATOR = "=============================";
@@ -18,11 +23,10 @@ public class ListUsersUI {
      * Message that identifies that this is US130 - Listar Todos Os Utilizadores
      * Do Sistema.
      */
-    private static final String ALL_USERS = "Lista de Todos os Utilizadores"
-            + " do Sistema\n";
+    private final String ALL_USERS = localizationHandler.getMessageValue("info_all_users_list");
     /**
-     * Controller responsible for the communication between the UI classes
-     * and the domain classes.
+     * Controller responsible for the communication between the UI classes and
+     * the domain classes.
      */
     private ListUsersController controller = new ListUsersController();
 

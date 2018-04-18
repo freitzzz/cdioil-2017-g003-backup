@@ -1,27 +1,29 @@
 package cdioil.domain;
 
-import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 /**
  * Abstract class that represents a Question.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- * @param <T> defines the type of questionText of the question
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question<T> implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "QUESTIONTYPE")
+public abstract class Question implements Serializable {
 
     /**
      * Serialization code.
@@ -34,11 +36,6 @@ public abstract class Question<T> implements Serializable {
      * Database id.
      */
     protected Long databaseID;
-
-    /**
-     * The type of question.
-     */
-    protected QuestionAnswerTypes type;
 
     /**
      * The question itself.
@@ -54,6 +51,8 @@ public abstract class Question<T> implements Serializable {
      * List of options that the question has.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "QUESTION_OPTIONLIST",joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
+            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID",unique = false))
     private List<QuestionOption> optionList;
 
     public Question(String questionText, String questionID, List<QuestionOption> optionList) {
@@ -81,15 +80,6 @@ public abstract class Question<T> implements Serializable {
     }
 
     /**
-     * Return the question's type.
-     *
-     * @return question's type enum value
-     */
-    public String type() {
-        return type.toString();
-    }
-
-    /**
      * Returns an hash value based on the attributes and class type.
      *
      * @return hash value
@@ -98,7 +88,6 @@ public abstract class Question<T> implements Serializable {
     public int hashCode() {
         int hash = 3;
         hash = 29 * hash + Objects.hashCode(this.getClass());
-        hash = 29 * hash + Objects.hashCode(this.type);
         hash = 29 * hash + Objects.hashCode(this.questionText);
         hash = 29 * hash + Objects.hash(this.questionID);
         return hash;
@@ -111,22 +100,25 @@ public abstract class Question<T> implements Serializable {
      * @param obj object to be compared to
      * @return true if the objects are truly equal, false otherwise
      */
-    @Override
+    @Override    
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Question<?>)) {
+        if (obj == null) {
             return false;
         }
-        final Question<?> other = (Question<?>) obj;
-        if (this.type != other.type) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        if (!this.questionID.equals(other.questionID)) {
+        final Question other = (Question) obj;
+        if (!Objects.equals(this.questionText, other.questionText)) {
             return false;
         }
-        return this.questionText.equals(other.questionText);
+        if (!Objects.equals(this.questionID, other.questionID)) {
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -1,10 +1,13 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.Survey;
+import cdioil.domain.SurveyState;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.SurveyRepository;
 
+import javax.persistence.Query;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -37,5 +40,19 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey,Integer> impl
         int nextLimit=lazyLoadIndex*LAZY_LOADING_LIMIT;
         return (List<Survey>)entityManager().createNativeQuery("SELECT * FROM Survey s OFFSET "+nextLimit+" ROWS FETCH NEXT "+LAZY_LOADING_LIMIT+" ROWS ONLY"
                ,Survey.class).getResultList();
+    }
+
+    /**
+     * Finds all surveys with state 'Active'
+     * @return List of Surveys
+     */
+    public List<Survey> findAllActiveSurveys() {
+        List<Survey> activeSurveys = (List<Survey>) entityManager()
+                .createQuery("SELECT s FROM Survey s WHERE s.state = :surveyState")
+                .setParameter("surveyState", SurveyState.ACTIVE)
+                .getResultList();
+
+
+        return activeSurveys;
     }
 }

@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import java.util.LinkedList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -22,7 +21,9 @@ public class TemplateTest {
 
     @Before
     public void setUp() {
-        t = new Template("QuestionGroup");
+        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
+        questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
+        t = new Template(questionGroup);
     }
 
     /**
@@ -33,6 +34,7 @@ public class TemplateTest {
         System.out.println("Template()");
         t = new Template();
         t = new Template(null);
+        t = new Template(new QuestionGroup("QuestionGroup"));
     }
 
     /**
@@ -41,7 +43,9 @@ public class TemplateTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Template t2 = new Template("QuestionGroup");
+        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
+        questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
+        Template t2 = new Template(questionGroup);
 
         assertEquals("Hash codes iguais", t2.hashCode(), t.hashCode());
     }
@@ -61,16 +65,17 @@ public class TemplateTest {
         //test with null instance
         Template tNull = null;
         assertFalse(t.equals(tNull));
-        assertNotEquals("Instância de Template diferente", new Template("QuestionGroup 2"), t);
-        assertEquals("Instância de Template igual", new Template("QuestionGroup"), t);
-        Template tDifferentQuestions = new Template("Different Questions");
-        BinaryQuestionOption option1 = new BinaryQuestionOption(Boolean.FALSE);
-        BinaryQuestionOption option2 = new BinaryQuestionOption(Boolean.TRUE);
-        LinkedList<QuestionOption> list = new LinkedList<>();
-        list.add(option1);
-        list.add(option2);
-        tDifferentQuestions.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "342", list));
-        t.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532", list));
+        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup 2");
+        questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
+        QuestionGroup questionGroup2 = new QuestionGroup("QuestionGroup");
+        QuestionGroup questionGroupDiffQuestions = new QuestionGroup("QuestionGroup Different Questions");
+        assertNotEquals("Instância de Template diferente", new Template(questionGroup), t);
+        questionGroup2.addQuestion(new BinaryQuestion("Question", "435"));
+        assertEquals("Instância de Template igual", new Template(questionGroup2), t);
+        questionGroupDiffQuestions.addQuestion(new BinaryQuestion("Question 3", "987"));
+        Template tDifferentQuestions = new Template(questionGroupDiffQuestions);
+        tDifferentQuestions.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "342"));
+        t.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532"));
         assertFalse(t.equals(tDifferentQuestions));
     }
 }

@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "path"))
-public class Category extends SurveyItem{
+public class Category extends SurveyItem {
 
     /**
      * Name of the Category.
@@ -33,20 +33,20 @@ public class Category extends SurveyItem{
     /**
      * Path of the Category in the Market Structure.
      */
-    @Column(updatable = true,nullable = false)
+    @Column(updatable = true, nullable = false)
     private String path;
 
     /**
      * List of products of the Category.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
 
     /**
      * String representing the Category's path splitter.
      */
     private static final String SPLITTER = "-";
-    
+
     /**
      * Regular expression to validate the path of the Category in the Market
      * Structure.
@@ -110,7 +110,7 @@ public class Category extends SurveyItem{
             String pathIdentifiers[] = path.split(SPLITTER);
             //Identifier is always the path's last element
             this.identifier = pathIdentifiers[pathIdentifiers.length - 1];
-            
+
             products = new HashSet<>();
         } else {
             throw new IllegalArgumentException("Dados de entrada inválidos.");
@@ -127,7 +127,6 @@ public class Category extends SurveyItem{
         return name != null
                 && !name.trim().isEmpty();
     }
-
 
     /**
      * Checks if the path of the Category is valid.
@@ -183,17 +182,19 @@ public class Category extends SurveyItem{
 
     /**
      * Returns the Category's identifier.
+     *
      * @return
      */
-    public String categoryIdentifier(){
+    public String categoryIdentifier() {
         return identifier;
     }
-    
+
     /**
      * List of identifiers in the Category's path.
-     * @return 
+     *
+     * @return
      */
-    public List<String> categoryPathIdentifiers(){
+    public List<String> categoryPathIdentifiers() {
         return Arrays.asList(path.split(SPLITTER));
     }
 

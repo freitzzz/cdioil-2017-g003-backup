@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,8 +18,9 @@ import javax.persistence.OneToMany;
  *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity()
-public class IndependentQuestionsLibrary implements Serializable, QuestionLibrary {
+@Entity
+public class IndependentQuestionsLibrary implements AggregateRoot<Set<Question>>,
+        Serializable, QuestionLibrary {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -98,6 +100,16 @@ public class IndependentQuestionsLibrary implements Serializable, QuestionLibrar
      */
     public boolean doesQuestionExist(Question question) {
         return library.contains(question);
+    }
+
+    /**
+     * Returns the entity's identity (in this case it's a set of questions)
+     *
+     * @return set of questions
+     */
+    @Override
+    public Set<Question> getID() {
+        return this.library;
     }
 
 }

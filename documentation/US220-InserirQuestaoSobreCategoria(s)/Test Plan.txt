@@ -1,0 +1,11 @@
+TEST PLAN
+
+	________________________________________________
+	CASO #1: Inserir Questão sobre Categoria(s)
+	________________________________________________
+
+	1. Fazer login com o gestor bom.gestor@sonae.pt e password Password123.
+	2. Escolher a opção 6 "Inserir Questão sobre Categoria(s)".
+	3. Inserir caminho da(s) categoria(s) e a informação sobre a questão.
+	4. Verificar que a questão foi importada para as categorias associadas ao gestor.
+	5. Guardar na base de dados.

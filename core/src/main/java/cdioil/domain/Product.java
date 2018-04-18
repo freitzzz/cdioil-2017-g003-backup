@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,8 +16,8 @@ import javax.persistence.OneToMany;
  * @author António Sousa [1161371]
  */
 @Entity
-public class Product extends SurveyItem{
-    
+public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
+
     /**
      * Constant representing the default content of a Product's image.
      */
@@ -32,7 +33,7 @@ public class Product extends SurveyItem{
     /**
      * List of the Product's Codes.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Code> codes = new ArrayList<>();
 
     /**
@@ -51,15 +52,15 @@ public class Product extends SurveyItem{
      *
      *
      * @param name the product's name
-     * @param code code
+     * @param code ean
      * @param codes 0 or more codes
      */
-    public Product(String name, Code code, Code... codes) {
-        
-        if(name == null || code == null || name.trim().isEmpty()){
+    public Product(String name, Code code,Code... codes) {
+
+        if (name == null || code == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid parameters.");
         }
-        
+
         this.name = name;
 
         this.codes.add(code);
@@ -74,8 +75,7 @@ public class Product extends SurveyItem{
      *
      *
      * @param imagem Byte Array with the image's content
-     * @return boolean true if the Image was altered successfully, false if an
-     * error has occured
+     * @return boolean true if the Image was altered successfully, false if an error has occured
      *
      */
     public boolean changeProductImage(byte[] imagem) {
@@ -132,12 +132,10 @@ public class Product extends SurveyItem{
      * Compares this instance with another Object.
      *
      * @param obj object to compare to
-     * @return true, if the Products have the same list of Code elements, false
-     * otherwise
+     * @return true, if the Products have the same list of Code elements, false otherwise
      */
     @Override
-    public boolean equals(Object obj
-    ) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -149,4 +147,8 @@ public class Product extends SurveyItem{
         return Objects.equals(this.codes, other.codes);
     }
 
+    @Override
+    public List<Code> getID() {
+        return new ArrayList<>(codes); //create a copy of the identity
+    }
 }

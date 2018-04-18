@@ -4,8 +4,9 @@ import cdioil.files.InvalidFileFormattingException;
 import cdioil.application.utils.QuestionsReaderFactory;
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
-import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
 import cdioil.application.utils.QuestionsReader;
+import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
+import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.HashSet;
 
@@ -23,16 +24,6 @@ import java.util.Set;
 public class ImportQuestionsController {
 
     /**
-     * Instance of Global Library.
-     */
-    private final GlobalLibrary globalLibrary;
-
-    /**
-     * Instance of Global Library Repository.
-     */
-    private final GlobalLibraryRepositoryImpl globalLibraryRepo;
-
-    /**
      * Currrently logged-in manager.
      */
     private Manager manager;
@@ -41,8 +32,6 @@ public class ImportQuestionsController {
      * Instantiates a controller for importing independent questions (US-205).
      */
     public ImportQuestionsController() {
-        this.globalLibraryRepo = new GlobalLibraryRepositoryImpl();
-        this.globalLibrary = globalLibraryRepo.findGlobalLibrary();
     }
 
     /**
@@ -51,7 +40,6 @@ public class ImportQuestionsController {
      * @param manager Manager currently logged-in Manager
      */
     public ImportQuestionsController(Manager manager) {
-        this();
         this.manager = manager;
     }
 
@@ -60,8 +48,8 @@ public class ImportQuestionsController {
      *
      * @param filename Name of the file
      * @return number of succesfully imported questions
-     * @throws cdioil.files.InvalidFileFormattingException if the
-     * file's formatting is not consistent with the file guidelines
+     * @throws cdioil.files.InvalidFileFormattingException if the file's
+     * formatting is not consistent with the file guidelines
      */
     public int importCategoryQuestions(String filename) throws InvalidFileFormattingException {
 
@@ -74,7 +62,9 @@ public class ImportQuestionsController {
 
             MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
 
-            CategoryQuestionsLibrary categoryQuestionsLibrary = globalLibrary.getCatQuestionsLibrary();
+            CategoryQuestionsLibraryRepositoryImpl categoryQuestionsRepo = new CategoryQuestionsLibraryRepositoryImpl();
+            
+            CategoryQuestionsLibrary categoryQuestionsLibrary = categoryQuestionsRepo.findLibrary();
 
             Set<Map.Entry<String, List<Question>>> entries = questionsByCatPath.entrySet();
 
@@ -108,7 +98,7 @@ public class ImportQuestionsController {
                     }
                 }
             }
-            globalLibraryRepo.merge(globalLibrary);
+            categoryQuestionsRepo.merge(categoryQuestionsLibrary);
         }
 
         return successfullyImportedQuestions.size();
@@ -128,7 +118,9 @@ public class ImportQuestionsController {
 
         if (questionsReader != null) {
 
-            IndependentQuestionsLibrary indQuestionLib = globalLibrary.getIndQuestionsLibrary();
+            IndependentQuestionsLibraryRepositoryImpl indQuestionLibRepo = new IndependentQuestionsLibraryRepositoryImpl();
+
+            IndependentQuestionsLibrary indQuestionLib = indQuestionLibRepo.findLibrary();
 
             List<Question> questions = questionsReader.readIndependentQuestions();
 
@@ -144,7 +136,7 @@ public class ImportQuestionsController {
             } else {
                 numImportedQuestions = null;
             }
-            globalLibraryRepo.merge(globalLibrary);
+            indQuestionLibRepo.merge(indQuestionLib);
         }
         return numImportedQuestions;
     }

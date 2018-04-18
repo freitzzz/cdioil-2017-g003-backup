@@ -160,6 +160,6 @@ public class UsersGroup implements Serializable {
 
         UsersGroup other = (UsersGroup) obj;
 
-        return this.id == other.id;
+        return this.users.equals(other.users);
     }
 }

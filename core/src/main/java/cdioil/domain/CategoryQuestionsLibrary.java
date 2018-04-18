@@ -1,10 +1,10 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +19,7 @@ import javax.persistence.ManyToMany;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
+public class CategoryQuestionsLibrary implements AggregateRoot<Map<Category, QuestionGroup>>, Serializable, QuestionLibrary {
 
     /**
      * Serialization number.
@@ -173,4 +173,14 @@ public class CategoryQuestionsLibrary implements Serializable, QuestionLibrary {
         return this.library.equals(other.library);
     }
 
+    /**
+     * Returns the identity of this entity (in this case it's the category and
+     * question group map)
+     *
+     * @return a map of categories(keys) and question groups (values)
+     */
+    @Override
+    public Map<Category, QuestionGroup> getID() {
+        return this.library;
+    }
 }

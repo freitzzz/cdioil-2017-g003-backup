@@ -53,7 +53,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
     /**
      * Builds a Manager with a SystemUser and a Category List
      *
-     * @param su         SystemUser account
+     * @param su SystemUser account
      * @param categories Category List
      */
     public Manager(SystemUser su, List<Category> categories) {
@@ -131,17 +131,23 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
      * @return true if they were added with success, false if not
      */
     public boolean addCategories(List<Category> lc) {
-        return lc == null ? false : categories.addAll(lc);
+        if (lc == null || lc.isEmpty()) {
+            return false;
+        }
+        lc.stream().filter((cat) -> (!isAssociatedWithCategory(cat))).forEachOrdered((cat) -> {
+            categories.add(cat);
+        });
+        return true;
     }
 
     /**
      * Removes categories from the manager's list
      *
      * @param lc categories to remove
-     * @return true se forem removidas com sucesso, false se não forem removidas
+     * @return true if they were removed with success, false if not
      */
     public boolean removeCategories(List<Category> lc) {
-        return lc == null ? false : categories.removeAll(lc);
+        return lc != null ? categories.removeAll(lc) : false;
     }
 
     /**
@@ -156,6 +162,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
 
     /**
      * Returns all the categories given to the manager
+     *
      * @return all categories
      */
     public List<Category> categoriesFromManager() {

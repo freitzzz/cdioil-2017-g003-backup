@@ -1,7 +1,9 @@
 package cdioil.domain;
 
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -36,8 +38,12 @@ public class Template implements Serializable {
     @OneToOne(cascade = CascadeType.PERSIST)
     private QuestionGroup questionGroup;
 
-    public Template(String title) {
-        this.questionGroup = new QuestionGroup(title);
+    public Template(QuestionGroup questionGroup) {
+        if(questionGroup == null || questionGroup.getQuestions().isEmpty()){
+            throw new IllegalArgumentException("O conjunto de questões do "
+                    + "template não pode ser vazio nem null");
+        }
+        this.questionGroup = questionGroup;
     }
 
     /**
@@ -46,8 +52,17 @@ public class Template implements Serializable {
     protected Template() {
     }
 
+    /**
+     * Returns a copy of the group of questions
+     *
+     * @return QuestionGroup
+     */
     public QuestionGroup getQuestionGroup() {
-        return questionGroup;
+        String title = questionGroup.toString();
+        Set<Question> setCopy = questionGroup.getQuestions();
+        QuestionGroup questionGroupCopy = new QuestionGroup(title);
+        questionGroupCopy.getQuestions().addAll(setCopy);
+        return questionGroupCopy;
     }
 
     /**

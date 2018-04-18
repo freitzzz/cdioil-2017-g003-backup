@@ -1,23 +1,22 @@
 package cdioil.domain;
 
-import cdioil.application.utils.LocalDateTimeAttributeConverter;
-import cdioil.application.utils.QuestionAnswerGraph;
+import cdioil.application.utils.Graph;
+import cdioil.time.TimePeriod;
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 
 /**
- * Represents a product survey
+ * Represents a survey
  *
  * @author @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
-public class Survey implements Serializable {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private LocalDateTime endingDate;
 
     @Version
     private Long version;
@@ -30,41 +29,49 @@ public class Survey implements Serializable {
     private int id;
 
     /**
-     * Product associated to the survey.
+     * Item associated with the survey.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
     private List<SurveyItem> itemList;
 
     /**
      * Date of when the survey was done.
      */
-    private LocalDateTime surveyDate;
+    @Embedded
+    private TimePeriod surveyPeriod;
 
     /**
      * Question and Answer graph.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
-    private QuestionAnswerGraph graph;
+    private Graph graph;
+
+    /**
+     * Survey's state.
+     */
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @Enumerated
+    private SurveyState state;
 
     /**
      * Builds an instance of survey with a product and a date.
      *
      * @param itemList list of products or categories the survey is associated
      * to
-     * @param date date when the survey was done
+     * @param surveyPeriod survey's time period (can be timed or timeless)
      */
-    public Survey(List<SurveyItem> itemList, LocalDateTime date, LocalDateTime endingDate) {
-        if (itemList == null) {
+    public Survey(List<SurveyItem> itemList, TimePeriod surveyPeriod) {
+        if (itemList == null || itemList.isEmpty()) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
         }
-        if (date == null) {
-            throw new IllegalArgumentException("O inquérito tem que ter uma data");
+        if(surveyPeriod == null){
+            throw new IllegalArgumentException("O inquérito ter que ter um período "
+                    + "de tempo definido");
         }
         this.itemList = itemList;
-        this.graph = new QuestionAnswerGraph(true);     //Directed Graph
-        this.surveyDate = date;
-        this.endingDate = endingDate;
+        this.graph = new Graph();
+        this.surveyPeriod = surveyPeriod;
+        this.state = SurveyState.DRAFT;
     }
 
     protected Survey() {
@@ -98,13 +105,50 @@ public class Survey implements Serializable {
     }
 
     /**
+     * Sets the next question for a given option.
+     *
+     * @param origin current question
+     * @param destination next question
+     * @param option option leading to the next question
+     * @param weight statistical value
+     * @return true - if option doesn't already lead to another question<p>
+     * false - otherwise
+     */
+    public boolean setNextQuestion(Question origin, Question destination, QuestionOption option, double weight) {
+        return graph.insertEdge(origin, destination, option, 0);
+    }
+
+    /**
      * Checks if a question already exists in the graph.
      *
      * @param question question to be verified
      * @return true, if it already exists in the list, false if otherwise
      */
     public boolean isValidQuestion(Question question) {
-        return graph.validVertex(question);
+        return graph.vertexExists(question);
+    }
+
+    /**
+     * Changes the state of a survey
+     *
+     * @param newState new state of the survey
+     * @return true if the state was modified, false if otherwise
+     */
+    public boolean changeState(SurveyState newState) {
+        if (newState != null && !state.equals(newState)) {
+            this.state = newState;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Creates a copy of the Survey's Graph.
+     *
+     * @return copy of the Graph.
+     */
+    public Graph getGraphCopy() {
+        return new Graph(graph);
     }
 
     /**
@@ -116,7 +160,7 @@ public class Survey implements Serializable {
     @Override
     public String toString() {
         return "Inquerito sobre:\n" + itemList.toString()
-                + "\nData:\n" + surveyDate;
+                + "\nData:\n" + surveyPeriod.toString();
     }
 
     /**

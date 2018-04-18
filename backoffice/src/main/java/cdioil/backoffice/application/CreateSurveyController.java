@@ -1,41 +1,80 @@
 package cdioil.backoffice.application;
 
 import cdioil.domain.*;
-import cdioil.persistence.impl.GlobalLibraryRepositoryImpl;
-import cdioil.persistence.impl.MarketStructureRepositoryImpl;
-import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.persistence.impl.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * =============================================================================
+ * FIXME - GlobalLibrary no longer exists. Each library has it's own repository
+ * now. Survey is an abstract class and cannot be instantiated.
+ * =============================================================================
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 public class CreateSurveyController {
 
+    private ProductQuestionsLibrary productQuestionsLibrary;
+    private CategoryTemplatesLibrary categoryTemplatesLibrary;
+    private CategoryQuestionsLibrary categoryQuestionsLibrary;
+    private IndependentQuestionsLibrary independentQuestionsLibrary;
+
+
+    //FALTA QUESTIONÁRIO PARA UM GRUPO DE UTILIZADORES
     /**
      * Gets all the questions of a given Product
      *
      * @param product product to search the questions
-     * @returnnList of questions for the product
+     * @return List of questions for the product
      */
     public List<Question> questionForProducts(Product product) {
-        GlobalLibraryRepositoryImpl repo = new GlobalLibraryRepositoryImpl();
-        HashSet<Question> hashSet = repo.findAll().iterator().next().getProdQuestionsLibrary().productQuestionSet(product);
+        ProductQuestionsLibraryRepositoryImpl repo = new ProductQuestionsLibraryRepositoryImpl();
+        productQuestionsLibrary = repo.findProductQuestionLibrary();
         List<Question> list = new ArrayList<>();
-        list.addAll(hashSet);
+        list.addAll(productQuestionsLibrary.productQuestionSet(product));
 
         return list;
     }
 
     /**
-     * Gets all the questions of a givenCategory
+     * Gets all the questions of a given Category
      *
      * @param category category to search the questions
      * @return question for the category
      */
     public List<Question> questionsForCategory(Category category) {
-        GlobalLibraryRepositoryImpl repository = new GlobalLibraryRepositoryImpl();
-        GlobalLibrary globalLibrary = repository.findGlobalLibrary();
+        CategoryQuestionsLibraryRepositoryImpl questionsRepo = new CategoryQuestionsLibraryRepositoryImpl();
+        categoryQuestionsLibrary = questionsRepo.findCategoryQuestionsLibrary();
 
-        return new ArrayList<>(globalLibrary.getCatQuestionsLibrary().categoryQuestionSet(category));
+        return new ArrayList<>(categoryQuestionsLibrary.categoryQuestionSet(category));
+    }
+
+    /**
+     * Gets all templates of a given Category
+     *
+     * @param category category to search the templates
+     * @return all templates for the category
+     */
+    public List<Template> templatesForCategory(Category category) {
+        CategoryTemplatesLibraryRepositoryImpl templatesRepo = new CategoryTemplatesLibraryRepositoryImpl();
+        categoryTemplatesLibrary = templatesRepo.findTemplatesForCategory();
+
+        return new ArrayList<>(categoryTemplatesLibrary.categoryTemplateSet(category));
+    }
+
+    /**
+     * Gets all the independent questions available
+     *
+     * @return all the independent questions
+     */
+    public List<Question> independantQuestions() {
+        IndependentQuestionsLibraryRepositoryImpl independentRepo = new IndependentQuestionsLibraryRepositoryImpl();
+        independentQuestionsLibrary = independentRepo.findLibrary();
+
+        return new ArrayList<>(independentQuestionsLibrary.getID());
+
     }
 
     /**
@@ -68,18 +107,22 @@ public class CreateSurveyController {
 
     /**
      * Create a Survey for specific products or categories
-     *  @param surveyItems list of survey items
+     *
+     * @param surveyItems list of survey items
      * @param map
      */
     public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateEnding, HashMap<SurveyItem, List<Question>> map) {
         SurveyRepositoryImpl repo = new SurveyRepositoryImpl();
-        Survey survey = new Survey(surveyItems, LocalDateTime.now(), dateEnding);
+        //Survey survey = new Survey(surveyItems, LocalDateTime.now(), dateEnding);
+        
+
 
         for (SurveyItem surveyItem : map.keySet()) {
             for (Question question : map.get(surveyItem)) {
-                survey.addQuestion(question);
+               // survey.addQuestion(question);
             }
         }
-        return repo.merge(survey) != null;
+        //return repo.merge(survey) != null;
+        return true;
     }
 }

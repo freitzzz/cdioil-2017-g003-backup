@@ -2,26 +2,63 @@ package cdioil.frontoffice.presentation;
 
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.presentation.authz.ChangeUserDataUI;
-import cdioil.frontoffice.presentation.authz.RegistarUtilizadorUI;
+import cdioil.frontoffice.presentation.authz.RegisterUserUI;
+import cdioil.frontoffice.utils.Console;
 
+/**
+ * FrontOffice Main Menu
+ */
 public class MainMenu {
 
     /**
-     * Metodo que invoca a UI responsavel pela US183.
-     *
-     * @param loggedUser user com sessao iniciada
+     * Logged User
      */
-    public void mainAlterarDados(SystemUser loggedUser) {
-        ChangeUserDataUI mui = new ChangeUserDataUI(loggedUser);
-        mui.changeData();
-    }
-    
-    
+    private SystemUser systemUser;
+
     /**
-     * Metodo que invoca a UI responsavel pela US180.
+     * Line Separator for console UI
      */
-    public void mainRegistoUser() {
-        RegistarUtilizadorUI registarUtilizadorUI = new RegistarUtilizadorUI();
-        registarUtilizadorUI.registarUtilizadorUI();
+    private static final String LINE_SEPARATOR =
+            "======================";
+
+    /**
+     * Constructs an instance of the the front office login
+     * @param systemUser logged system user
+     */
+    public MainMenu(SystemUser systemUser) {
+        this.systemUser = systemUser;
+        showMenu();
+    }
+
+    /**
+     * Shows application Main Menu
+     */
+    private void showMenu() {
+        while (true) {
+            System.out.println(LINE_SEPARATOR);
+            System.out.println("      Main Menu");
+            System.out.println(LINE_SEPARATOR);
+
+            System.out.println("1 - Alterar Dados");
+            System.out.println("2 - Responder Inquérito");
+            System.out.println("0 - Sair");
+
+            int option = Console.readInteger("Opção");
+
+            switch (option) {
+                case 0:
+                    return;
+                case 1:
+                    ChangeUserDataUI mui = new ChangeUserDataUI(systemUser);
+                    mui.changeData();
+                    break;
+                case 2:
+                    new AnswerSurveyUI();
+                    break;
+                default:
+                    System.out.println("Invalid Option");
+                    break;
+            }
+        }
     }
 }
