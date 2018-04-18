@@ -47,7 +47,7 @@ public class Profile implements Serializable {
      */
     //private List<Sugestao> sugestoes;
     /**
-     * empty construcotr of Profile class
+     * empty constructor of Profile class
      */
     protected Profile() {
     }
