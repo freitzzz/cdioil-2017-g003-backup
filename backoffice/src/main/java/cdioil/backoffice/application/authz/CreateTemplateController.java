@@ -53,4 +53,25 @@ public class CreateTemplateController {
         return new ArrayList<>(independentQuestionsLibrary.getID());
     }
 
+    /**
+     * Creates Templates and persists it
+     *
+     * @param category category for the template
+     * @param title tile of the template
+     * @param questionGroup questionGroup of the template
+     * @return true is the template was persisted with success and false if it wasn't persisted
+     */
+    public boolean createTemplate(Category category, String title, QuestionGroup questionGroup) {
+        Template template = new Template(title, questionGroup);
+        CategoryTemplatesLibraryRepositoryImpl categoryTemplatesLibraryRepository = new CategoryTemplatesLibraryRepositoryImpl();
+        CategoryTemplatesLibrary templatesLibrary = categoryTemplatesLibraryRepository.findTemplatesForCategory();
+        templatesLibrary.addTemplate(category, template);
+
+        return categoryTemplatesLibraryRepository.merge(templatesLibrary) != null;
+    }
+
+
+
+
+
 }
