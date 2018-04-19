@@ -22,9 +22,9 @@ public class BootstrapRunner {
     public static void main(String[] args) {
         new UsersBootstrap();
         new WhitelistBootstrap();
-//        new MarketStructureBootstrap();
-//        new LibrariesBootstrap();
-        //new SurveyBootstrap();
+        new MarketStructureBootstrap();
+        new LibrariesBootstrap();
+        new SurveyBootstrap();
         new EmailSendersBootstrap();
     }
 

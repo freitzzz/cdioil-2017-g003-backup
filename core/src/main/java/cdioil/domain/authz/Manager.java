@@ -40,7 +40,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser> {
     /**
      * SystemUser associated with a Manager.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SYSTEMUSER")
     private SystemUser su;
 

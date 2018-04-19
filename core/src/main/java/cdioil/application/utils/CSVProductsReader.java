@@ -5,16 +5,17 @@
  */
 package cdioil.application.utils;
 
+import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.domain.SKU;
 import static cdioil.files.FileReader.readFile;
 import cdioil.files.InvalidFileFormattingException;
+import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import static org.eclipse.persistence.expressions.ExpressionOperator.trim;
 
 /**
  * Class used for importing Products from a file with the .csv extension.
@@ -123,6 +124,9 @@ public class CSVProductsReader implements ProductsReader {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
         Map<String, List<Product>> readProducts = new HashMap<>();
+        
+         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
+         
 
         int numLines = fileContent.size();
 
@@ -132,12 +136,12 @@ public class CSVProductsReader implements ProductsReader {
             if (currentLine.length > 0) { //Doesn't read empty lines
 
                 try {
-                    
                     currentLine[0] = currentLine[0].replace('"', ' ').trim();
-                    String path = reateProductPath(currentLine[0].trim());
-                    if (isPathProductValid(path)) {
+                    String path = createProductPath(currentLine[0].trim());
+                    List<Category> list = marketStructureRepository.findCategoriesByPathPattern(path);
+                    if (isPathProductValid(path) && list.size() == 1) {
                         Product product = createProduct(currentLine, CATEGORIES_FILE_OFFSET);
-                        if (product != null) {
+                        if (product != null && marketStructureRepository.findIfProductExist(product.productName())) {
                             if (!readProducts.containsKey(path)) {
                                 List<Product> newList = new LinkedList<>();
                                 newList.add(product);
@@ -145,10 +149,12 @@ public class CSVProductsReader implements ProductsReader {
                             } else {
                                 readProducts.get(path).add(product);
                             }
+                        }else{
+                            System.out.println("O produto da linha " + i + " já existe na estrutra mercadológica.");
                         }
                     } else {
                         System.out.println("A categoria na linha " + i + 
-                                "não é folha, logo não pode ser adicionado um produto.");
+                                " não é folha, logo não pode ser adicionado um produto.");
                     }
                 } catch (IllegalArgumentException ex) {
                     System.out.println("O formato dos produtos é inválido na linha " + i + ".");
@@ -159,28 +165,27 @@ public class CSVProductsReader implements ProductsReader {
         return readProducts;
     }
 
-    public String reateProductPath(String path) {
+    public String createProductPath(String path) {
 
+        
+        StringBuilder sb = new StringBuilder();
+        
         String DC = path.charAt(0)+ "" + path.charAt(1);
-
-
-        StringBuilder sb = new StringBuilder(DC);
-        sb.append(DC_IDENTIFIER);
+        sb.append(DC).append(DC_IDENTIFIER);
+        
         String UN = path.charAt(2)+ "" + path.charAt(3);
-
         sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
 
         String CAT = path.charAt(4)+ "" + path.charAt(5) + ""+ path.charAt(6) + ""+ path.charAt(7);
-
         sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
 
-        String SCAT = ""+ path.charAt(9);
+        String SCAT = path.charAt(8) + ""+ path.charAt(9);
+        int scat = Integer.parseInt(SCAT);
+        sb.append(PATH_IDENTIFIER).append(scat).append(SCAT_IDENTIFIER);
 
-        sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
-
-        String UB = ""+  path.charAt(11);
-
-        sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
+        String UB = path.charAt(10) + ""+  path.charAt(11);
+        int ub = Integer.parseInt(UB);
+        sb.append(PATH_IDENTIFIER).append(ub).append(UB_IDENTIFIER);
         
         return sb.toString();
     }
@@ -208,9 +213,8 @@ public class CSVProductsReader implements ProductsReader {
         SKU sku = new SKU(currentLine[offset].trim());
         String productName = currentLine[offset + 1].trim();
         String quantity = currentLine[offset + 2].trim();
-        String unit = currentLine[offset + 2].trim();
 
-        return new Product(productName, sku, quantity + " " + unit);
+        return new Product(productName, sku,quantity );
     }
 
     /**
