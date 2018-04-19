@@ -1,5 +1,6 @@
 package cdioil.application.bootstrap;
 
+import cdioil.application.bootstrap.authz.EmailSendersBootstrap;
 import cdioil.application.bootstrap.authz.UsersBootstrap;
 import cdioil.application.bootstrap.authz.WhitelistBootstrap;
 import cdioil.application.bootstrap.domain.MarketStructureBootstrap;
@@ -21,9 +22,10 @@ public class BootstrapRunner {
     public static void main(String[] args) {
         new UsersBootstrap();
         new WhitelistBootstrap();
-        new MarketStructureBootstrap();
-        new LibrariesBootstrap();
-        new SurveyBootstrap();
+//        new MarketStructureBootstrap();
+//        new LibrariesBootstrap();
+        //new SurveyBootstrap();
+        new EmailSendersBootstrap();
     }
 
     /**
