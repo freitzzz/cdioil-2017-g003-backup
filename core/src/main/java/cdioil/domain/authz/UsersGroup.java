@@ -41,7 +41,7 @@ public class UsersGroup implements Serializable {
     /**
      * Manager that created the UsersGroup.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.MERGE)
     private Manager manager;
 
     /**
