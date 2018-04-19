@@ -143,6 +143,9 @@ public class MainMenu {
                 case 5:
                     new CreateSurveyUI(manager);
                     break;
+                case 7:
+                    new CreateTemplateUI(manager);
+                    break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);
                     break;
@@ -161,6 +164,7 @@ public class MainMenu {
         System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
         System.out.println("5. " + OPTION_CREATE_SURVEY);
         System.out.println("6. " + OPTION_INSERT_QUESTION_CATEGORY);
+        System.out.println("7. Create Template");
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);
