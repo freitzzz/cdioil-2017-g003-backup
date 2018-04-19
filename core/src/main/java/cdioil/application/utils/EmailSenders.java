@@ -46,7 +46,7 @@ public class EmailSenders implements Serializable {
      */
     public EmailSenders(String email,String password){
         this.senderEmail=new Email(email);
-        this.senderPassword=prepareEncryption(email);
+        this.senderPassword=prepareEncryption(password);
     }
     /**
      * Returns the sender email
@@ -92,7 +92,7 @@ public class EmailSenders implements Serializable {
      * @return String with the decrypted sender password
      */
     private String decryptSenderPassword(String senderPassword){
-        return OperatorsEncryption.encrypt(senderPassword);
+        return OperatorsEncryption.decrypt(senderPassword);
     }
     /**
      * Protected constructor in order to allow JPA persistence
