@@ -44,4 +44,13 @@ public class CreateTemplateController {
         return new ArrayList<>(categoryQuestionsLibrary.categoryQuestionSet(category));
     }
 
+    /**
+     * Lists all the independent questions
+     *
+     * @return all the independent questions available
+     */
+    public List<Question> listIndependentQuestions() {
+        return new ArrayList<>(independentQuestionsLibrary.getID());
+    }
+
 }
