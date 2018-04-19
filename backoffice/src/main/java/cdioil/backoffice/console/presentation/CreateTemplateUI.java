@@ -6,7 +6,6 @@ import cdioil.backoffice.utils.Console;
 import cdioil.domain.Category;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionGroup;
-import cdioil.domain.Template;
 import cdioil.domain.authz.Manager;
 
 import java.util.ArrayList;
@@ -108,7 +107,11 @@ public class CreateTemplateUI {
             questionGroup.addQuestion(question);
         }
 
-        new Template(title, questionGroup);
+        if (controller.createTemplate(category, title, questionGroup)) {
+            System.out.println("The template was created with success");
+        } else {
+            System.out.println("Couldn't create template");
+        }
     }
 
     private int menuYesNo() {
