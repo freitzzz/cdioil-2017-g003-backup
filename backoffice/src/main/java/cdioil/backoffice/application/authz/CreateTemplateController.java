@@ -23,4 +23,15 @@ public class CreateTemplateController {
         independentQuestionsLibrary = independentQuestionsLibraryRepository.findLibrary();
 
     }
+
+    /**
+     * Lists all the categories available for the manager
+     *
+     * @param manager manager to search the categories for
+     * @return all categories assigned to the manager by the admin
+     */
+    public List<Category> listAllCategoriesForManager(Manager manager) {
+        return manager.categoriesFromManager();
+    }
+
 }
