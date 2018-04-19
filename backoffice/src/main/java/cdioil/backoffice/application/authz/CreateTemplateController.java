@@ -34,4 +34,14 @@ public class CreateTemplateController {
         return manager.categoriesFromManager();
     }
 
+    /**
+     * Lists all the questions for the category
+     *
+     * @param category category chosen by the manager
+     * @return all questions for the category
+     */
+    public List<Question> listQuestionsForCategory(Category category) {
+        return new ArrayList<>(categoryQuestionsLibrary.categoryQuestionSet(category));
+    }
+
 }
