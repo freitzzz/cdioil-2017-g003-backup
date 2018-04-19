@@ -12,7 +12,6 @@ import cdioil.domain.MarketStructure;
 import cdioil.domain.Product;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
-import cdioil.persistence.impl.ProductRepositoryImpl;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import java.util.Set;
  * @author Ana Guerra (1161191)
  */
 public class ImportProductsController {
+
     /**
      * Import products from a file.
      *
@@ -33,44 +33,35 @@ public class ImportProductsController {
      */
     public Integer importProducts(String fileName) throws InvalidFileFormattingException {
 
-        Set<Product> successfullyImportedProducts = new HashSet<>();
-    
         ProductsReader productsReader = ProductsReaderFactory.create(fileName);
-        if (productsReader != null) {
-
-        
-        Map<String, List<Product>> productByCatPath = productsReader.readProducts();
-
+        Set<Product> successfullyImportedProducts = new HashSet<>();
 
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         MarketStructure marketStructure = marketStructureRepository.findMarketStructure();
 
-        Set<Map.Entry<String, List<Product>>> entries = productByCatPath.entrySet();
+        if (productsReader != null) {
 
-        for (Map.Entry<String, List<Product>> mapEntry : entries) {
-            String path = mapEntry.getKey();
-            List<Product> productList = mapEntry.getValue();
+            Map<String, List<Product>> productByCatPath = productsReader.readProducts();
+            Set<Map.Entry<String, List<Product>>> entries = productByCatPath.entrySet();
 
-            List<Category> categoryList = marketStructure.getAllCategories();
-            if (categoryList == null) {
-                continue;
+            for (Map.Entry<String, List<Product>> mapEntry : entries) {
+                String path = mapEntry.getKey();
+                List<Product> productList = mapEntry.getValue();
+                List<Category> categoryList = marketStructureRepository.findCategoriesByPathPattern(path);
+                if (categoryList != null) {
+                    for (Category cat : categoryList) {
+                        if (cat.categoryPath().equalsIgnoreCase(path)) {
+                            productList.forEach((pro) -> {
+                                if(marketStructure.addProduct(pro, cat)) {
+                                    successfullyImportedProducts.add(pro);
+                                }
+                            });
+                        }
+                    }
+                }
             }
-            for (Category cat : categoryList) {
-                
-                if (cat.categoryPath().equalsIgnoreCase(path)) {
-                    productList.forEach((pro) -> {
-                        successfullyImportedProducts.add(pro);
-                       marketStructure.addProduct(pro, cat);
+            new MarketStructureRepositoryImpl().merge(marketStructure);
 
-                    });
-                }//else{
-//                    System.out.println("A categoria " + path + " não existe na estrutura mercadologica");
-//                }
-            }
-
-        }
-
-//        marketStructureRepository.merge(marketStructure);
         }
         return successfullyImportedProducts.size();
     }

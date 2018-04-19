@@ -64,12 +64,10 @@ public class ImportProductsUI {
      */
     private void importProducts() {
 
-        while (true) {
-
             String fileName = Console.readLine(REQUEST_FILE_PATH + "\n" + INFO_EXIT_INPUT);
 
             if (fileName.equalsIgnoreCase(OPTION_EXIT)) {
-                break;
+                return;
             }
             try {
                 Integer numImportedProducts = controller.importProducts(fileName);
@@ -85,8 +83,6 @@ public class ImportProductsUI {
             } catch (InvalidFileFormattingException e) {
                 System.out.println(ERROR_INVALID_FILE_FORMAT);
             }
-        }
-
     }
     
 }

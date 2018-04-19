@@ -1,4 +1,4 @@
-package cdioil.backoffice.application.authz;
+package cdioil.backoffice.application;
 
 
 import cdioil.domain.*;

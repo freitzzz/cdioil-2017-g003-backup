@@ -22,6 +22,10 @@
         <Message messageId = "info_number_categories_imported" value = "The number of imported categories was:"/>      
         <Message messageId = "success_exporting_stats" value = "Statistics successfully exported!&#10;"/>
         <Message messageId = "survey_message" value = "Survey"/>
+        <Message messageId = "option_message" value= "Option
+        <Message messageId ="no_more_options" value = "To finish inserting options type"/>
+        <Message messageId = "changed_extreme_values" value ="The extreme values were exchanged, because the minimum was higher than the maximum."/>
+
     </InfoMessages>
 
 	
@@ -38,8 +42,16 @@
         <Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
         <Message messageId = "request_category_identifier_general" value = "Please type in the category/categories identifier(s):&#10;"/>
         <Message messageId = "request_select_survey" value = "Select a survey (number):&#10;"/>
+        <Message messageId = "request_select_question_type" value = "Please select the question type:"/>
+        <Message messageId = "request_confirmation_to_continue" value = "Do you wish to insert more questions? If yes, type a different message from 'Exit'.&#10;"/>
+        <Message messageId = "request_question_id" value = "Please insert the ID of the question:"/>
+        <Message messageId = "request_question_txt" value = "Please insert the question itself:"/>
+        <Message messageId = "please_insert_options" value="Please insert the options:"/>
+        <Message messageId="insert_extremes" value = "Insert the maximum and minumum values:"/>
+        <Message messageId="insert_max" value = "Insert the maximum value:"/>
+        <Message messageId="insert_min" value = "Insert the minimum value:"/>
     </RequestMessages>
-	
+
 	
     <ErrorMessages>
         <Message messageId = "error_unauthorized_user" value = "You're not authorized to use the BackOffice."/>
@@ -58,6 +70,12 @@
         <Message messageId = "error_exporting_stats" value = "An error occurred while exporting the statistics of the survey!&#10;Please check if the file is valid.&#10;"/>
         <Message messageId = "error_importing_categories" value = "File path not found! Do you wish to try again?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "No categories were imported."/>
+        <Message messageId = "error_no_surveys_available" value = "There are no surveys.&#10;"/>
+        <Message messageId = "error_select_a_valid_question_type" value = "Insert a valid question type:"/>
+        <Message messageId = "error_question_not_added_to_any_category" value = "The question wasn't added to any category."/>
+        <Message messageId = "invalid_option" value = "The option wasn't added because it was invalid."/>     
+        <Message messageId = "invalid_question" value = "The question wasn't added because it was invalid."/> 
+        <Message messageId = "invalid_value" value = "Invalid value!"/>
     </ErrorMessages>
 
     <MenuOptions>

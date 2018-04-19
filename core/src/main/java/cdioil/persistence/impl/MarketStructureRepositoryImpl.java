@@ -33,7 +33,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + identifierPattern + "'", Category.class);
         return (List<Category>) queryRegexed.getResultList();
     }
-    
+
     /**
      * Method that finds all categories with a certain path pattern
      * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
@@ -44,15 +44,18 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
     public List<Category> findCategoriesByPathPattern(String pathPattern) {
         EntityManager em = entityManager();
         Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + pathPattern + "'", Category.class);
-        if((List<Category>) queryRegexed.getResultList()==null) return null;
+        if ((List<Category>) queryRegexed.getResultList() == null) {
+            return null;
+        }
         return (List<Category>) queryRegexed.getResultList();
     }
-    
+
     /**
      * Returns the market structure persisted in the database.
+     *
      * @return market structure
      */
-    public MarketStructure findMarketStructure(){
+    public MarketStructure findMarketStructure() {
         Query query = entityManager().createQuery("SELECT e FROM " + MarketStructure.class.getSimpleName() + " e");
         List<MarketStructure> list = query.getResultList();
         return !list.isEmpty() ? list.get(0) : null;
@@ -69,5 +72,22 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         EntityManager em = entityManager();
         Query query = em.createNativeQuery("SELECT * from PRODUCT p where p.nome regexp '" + productName + "'", Product.class);
         return (List<Product>) query.getResultList() != null ? query.getResultList() : null;
+    }
+
+     /**
+     * Method that verifies if a product exists by its name
+     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
+     *
+     * @param product String with the name of the Product
+     * @return true is the product exists, or false if not
+     */
+    public boolean findIfProductExist(String product) {
+        EntityManager em = entityManager();
+        Query query = em.createNativeQuery("SELECT * from PRODUCT p where p.nome regexp '" + product + "'", Product.class);
+        
+        if((List<Product>) query.getResultList() == null || 
+                ( (List<Product>) query.getResultList()).isEmpty()) return true;
+        
+        return false;
     }
 }

@@ -20,8 +20,11 @@
         <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
         <Message messageId = "info_number_categories_question_was_added_to" value = "O número de cateogrias a que a questão foi adicionada foi: "/>
         <Message messageId = "info_number_categories_imported" value = "O número de categorias importadas foi:"/>
-            <Message messageId = "success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
-            <Message messageId = "survey_message" value = "Inquérito"/>
+        <Message messageId = "success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
+        <Message messageId = "survey_message" value = "Inquérito"/>
+        <Message messageId = "option_message" value= "Opção"/>
+        <Message messageId ="no_more_options" value = "Para terminar a inserção de opções escreva"/>
+        <Message messageId = "changed_extreme_values" value ="Os valores foram trocados, porque o mínimo era superior ao máximo."/>
     </InfoMessages>
 
 	
@@ -38,6 +41,14 @@
         <Message messageId = "request_category_identifier_association" value = "Insira o descritivo da(s) categoria(s) que quer associar ao gestor selecionado&#10;"/>
         <Message messageId = "request_category_identifier_general" value = "Insira o descritivo da(s) categoria(s):&#10;"/>
         <Message messageId = "request_select_survey" value = "Selecione um inquérito (número):&#10;"/>
+        <Message messageId = "request_select_question_type" value = "Por favor selecione o tipo de questão:"/>
+        <Message messageId = "request_confirmation_to_continue" value = "Deseja inserir mais questões? Se sim, escreva uma mensagem diferente de 'Sair'.&#10;"/>
+        <Message messageId = "request_question_id" value = "Por favor insira o ID da questão:"/>
+        <Message messageId = "request_question_txt" value = "Por favor insira a questão:"/> 
+        <Message messageId = "please_insert_options" value="Por favor insira as opções:"/>                       
+        <Message messageId="insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
+        <Message messageId="insert_max" value = "Insira o valor máximo:"/>
+        <Message messageId="insert_min" value = "Insira o valor mínimo:"/>
     </RequestMessages>
 	
 	
@@ -58,6 +69,12 @@
         <Message messageId = "error_exporting_stats" value = "Ocorreu um erro ao exportar as estatísticas do inquérito!&#10;Verifique se o ficheiro é valido.&#10;"/>
         <Message messageId = "error_importing_categories" value = "Caminho de ficheiro não encontrado! Pretende continuar?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "Não foi importada nenhuma categoria."/>
+        <Message messageId = "error_no_surveys_available" value = "Não existem inquéritos.&#10;"/>
+        <Message messageId = "error_select_a_valid_question_type" value = "Insira um tipo de questão válido:"/>
+        <Message messageId = "error_question_not_added_to_any_category" value = "A questão não foi adicionada a nenhuma cateogoria."/>
+        <Message messageId = "invalid_option" value = "A opção não foi adicionada, porque era inválida."/>    
+        <Message messageId = "invalid_question" value = "A questão não foi adicionada, porque era inválida."/>
+        <Message messageId = "invalid_value" value = "Valor inválido!"/>
     </ErrorMessages>
 	
     <MenuOptions>
