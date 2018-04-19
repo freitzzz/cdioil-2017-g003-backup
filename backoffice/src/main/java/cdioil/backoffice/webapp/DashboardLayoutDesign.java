@@ -25,6 +25,7 @@ public class DashboardLayoutDesign extends CssLayout {
     protected Image userAvatar;
     protected Label usernameLabel;
     protected CssLayout btnPanel;
+    protected CssLayout btnPanel1;
     protected Button btnLogout;
     protected Panel rightPanel;
 

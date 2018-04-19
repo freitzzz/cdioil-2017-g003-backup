@@ -69,40 +69,16 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
     public ManagerPanelView(){
         navigator=UI.getCurrent().getNavigator();
         configuration();
+        setRightPanelContents(new ManagerDashBoard());
     }
 
     /**
      * Configures current page
      */
     private void configuration(){
-        configureAccordion();
-        //configureHomeButton();
-        //configureImportButton();
-        //configureExportButton();
-    }
-
-    /**
-     * Configures Left Panel Accordion
-     */
-    private void configureAccordion() {
-        VerticalLayout vl = new VerticalLayout();
-        vl.setHeight(-1, Unit.PIXELS);
-        vl.setWidth(100.0f, Unit.PERCENTAGE);
-        Button b1 = createButton("Importar");
-        Button b2 = createButton("Exportar");
-
-        Button b3 = createButton("Criar Inquerito");
-        Button b4 = createButton("Eliminar Inquerito");
-        Button b5 = createButton("Ver Inqueritos");
-
-        vl.addComponentsAndExpand(b1, b2);
-        addTabToAccordion("Importar", vl, VaadinIcons.DASHBOARD);
-
-        vl = new VerticalLayout();
-        vl.setHeight(-1, Unit.PIXELS);
-        vl.setWidth(100.0f, Unit.PERCENTAGE);
-        vl.addComponentsAndExpand(b3, b4, b5);
-        addTabToAccordion("Inqueritos", vl, VaadinIcons.BAR_CHART);
+        configureHomeButton();
+        configureImportButton();
+        configureExportButton();
     }
 
     /**
@@ -113,9 +89,10 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
         dashboardBtn.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //TODO Dashboard/Home View
+                setRightPanelContents(new ManagerDashBoard());
             }
         });
+        addNewButtonToLeftPanel(dashboardBtn);
     }
 
     /**
