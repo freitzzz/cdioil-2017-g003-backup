@@ -64,7 +64,7 @@ public class CategoryTest {
         System.out.println("addProduct");
         //test with null parameter
         assertFalse(c.addProduct(null));
-        Product p = new Product("ProdutoTeste", new EAN("5434"));
+        Product p = new Product("ProdutoTeste", new EAN("5434"), "1 L");
         assertTrue("Produto pode ser adicionado", c.addProduct(p));
         c.addProduct(p);
         assertFalse("Produto já existente no Set", c.addProduct(p));
@@ -124,7 +124,7 @@ public class CategoryTest {
         Iterator<Product> ip = c.getProductSetIterator();
         //collection is empty
         assertFalse(ip.hasNext());
-        c.addProduct(new Product("nome yey", new QRCode()));
+        c.addProduct(new Product("nome yey", new QRCode(), "1 L"));
         ip = c.getProductSetIterator();
         //collection has one item
         assertTrue(ip.hasNext());

@@ -5,8 +5,8 @@
  */
 package cdioil.application.utils;
 
-import cdioil.domain.EAN;
 import cdioil.domain.Product;
+import cdioil.domain.SKU;
 import static cdioil.files.FileReader.readFile;
 import cdioil.files.InvalidFileFormattingException;
 import java.io.File;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import static org.eclipse.persistence.expressions.ExpressionOperator.trim;
 
 /**
  * Class used for importing Products from a file with the .csv extension.
@@ -35,17 +36,9 @@ public class CSVProductsReader implements ProductsReader {
      */
     private static final int IDENTIFIERS_LINE = 0;
     /**
-     * Max number of identifiers (columns) in the CSV file.
+     * Number of identifiers (columns) in the CSV file.
      */
-    private static final int MAX_NUM_IDENTIFIERS = 7;
-    /**
-     * Min number of identifiers (columns) in the CSV file.
-     */
-    private static final int MIN_NUM_IDENTIFIERS = 8;
-    /**
-     * Hashtag Identifier.
-     */
-    private static final String HASHTAG_IDENTIFIER = "#";
+    private static final int NUM_IDENTIFIERS = 5;
     /**
      * Categories' DC Identifier.
      */
@@ -67,13 +60,25 @@ public class CSVProductsReader implements ProductsReader {
      */
     private static final String UB_IDENTIFIER = "UB";
     /**
-     * ProductSs Identifier.
+     * Categories Identifier.
      */
-    private static final String PRODUCT_IDENTIFIER = "Produto";
+    private static final String CATEGORY_IDENTIFIER = "ClasseID";
     /**
-     * Codigo Identifier.
+     * Code Identifier.
      */
-    private static final String EAN_IDENTIFIER = "Codigo";
+    private static final String SKU_IDENTIFIER = "ProdutoID";
+    /**
+     * Products Identifier.
+     */
+    private static final String PRODUCT_IDENTIFIER = "Designacao";
+    /**
+     * Unit Identifier.
+     */
+    private static final String UNIT_IDENTIFIER = "Unidade";
+    /**
+     * Quantity Identifier.
+     */
+    private static final String QUANTITY_IDENTIFIER = "Quantidade";
     /**
      * Path Identifier.
      */
@@ -81,7 +86,7 @@ public class CSVProductsReader implements ProductsReader {
     /**
      * The number of cells skipped in order to reach the start of a new question in a file with questions relative to categories.
      */
-    private static final int CATEGORIES_FILE_OFFSET = 5;
+    private static final int CATEGORIES_FILE_OFFSET = 1;
     /**
      * The number of cells skipped in order to reach the start of a new question in a file with independent questions.
      */
@@ -111,11 +116,9 @@ public class CSVProductsReader implements ProductsReader {
     public Map<String, List<Product>> readProducts() {
 
         List<String> fileContent = readFile(file);
-
         if (fileContent == null) {
             return null;
         }
-
         if (!isProductsFileValid(fileContent)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
@@ -129,28 +132,9 @@ public class CSVProductsReader implements ProductsReader {
             if (currentLine.length > 0) { //Doesn't read empty lines
 
                 try {
-                    String DC = currentLine[0].trim();
-
-                    StringBuilder sb = new StringBuilder(DC);
-                    sb.append(DC_IDENTIFIER);
-                    String UN = currentLine[1].trim();
-
-                    sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
-
-                    String CAT = currentLine[2].trim();
-
-                    sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
-
-                    String SCAT = currentLine[3].trim();
-
-                    sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
-
-                    String UB = currentLine[4].trim();
-
-                    sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
-
-                    String path = sb.toString();
-
+                    
+                    currentLine[0] = currentLine[0].replace('"', ' ').trim();
+                    String path = reateProductPath(currentLine[0].trim());
                     if (isPathProductValid(path)) {
                         Product product = createProduct(currentLine, CATEGORIES_FILE_OFFSET);
                         if (product != null) {
@@ -162,8 +146,9 @@ public class CSVProductsReader implements ProductsReader {
                                 readProducts.get(path).add(product);
                             }
                         }
-                    }else{
-                        System.out.println("O formato da categoria é inválido na linha " + i + ".");
+                    } else {
+                        System.out.println("A categoria na linha " + i + 
+                                "não é folha, logo não pode ser adicionado um produto.");
                     }
                 } catch (IllegalArgumentException ex) {
                     System.out.println("O formato dos produtos é inválido na linha " + i + ".");
@@ -172,6 +157,32 @@ public class CSVProductsReader implements ProductsReader {
         }
 
         return readProducts;
+    }
+
+    public String reateProductPath(String path) {
+
+        String DC = path.charAt(0)+ "" + path.charAt(1);
+
+
+        StringBuilder sb = new StringBuilder(DC);
+        sb.append(DC_IDENTIFIER);
+        String UN = path.charAt(2)+ "" + path.charAt(3);
+
+        sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
+
+        String CAT = path.charAt(4)+ "" + path.charAt(5) + ""+ path.charAt(6) + ""+ path.charAt(7);
+
+        sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
+
+        String SCAT = ""+ path.charAt(9);
+
+        sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
+
+        String UB = ""+  path.charAt(11);
+
+        sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
+        
+        return sb.toString();
     }
 
     /**
@@ -194,10 +205,12 @@ public class CSVProductsReader implements ProductsReader {
      */
     private Product createProduct(String[] currentLine, int offset) {
 
-        String productName = currentLine[offset].trim();
-        EAN ean = new EAN(currentLine[offset + 1].trim());
+        SKU sku = new SKU(currentLine[offset].trim());
+        String productName = currentLine[offset + 1].trim();
+        String quantity = currentLine[offset + 2].trim();
+        String unit = currentLine[offset + 2].trim();
 
-        return new Product(productName, ean);
+        return new Product(productName, sku, quantity + " " + unit);
     }
 
     /**
@@ -214,14 +227,12 @@ public class CSVProductsReader implements ProductsReader {
 
         line[0] = line[0].replace('?', ' ').trim();
 
-        return ((line.length == MAX_NUM_IDENTIFIERS)
-                && line[0].contains(HASHTAG_IDENTIFIER + DC_IDENTIFIER)
-                && line[1].equalsIgnoreCase(HASHTAG_IDENTIFIER + UN_IDENTIFIER)
-                && line[2].equalsIgnoreCase(HASHTAG_IDENTIFIER + CAT_IDENTIFIER)
-                && line[3].equalsIgnoreCase(HASHTAG_IDENTIFIER + SCAT_IDENTIFIER)
-                && line[4].equalsIgnoreCase(HASHTAG_IDENTIFIER + UB_IDENTIFIER)
-                && line[5].equalsIgnoreCase(PRODUCT_IDENTIFIER)
-                && line[6].equalsIgnoreCase(EAN_IDENTIFIER));
+        return ((line.length == NUM_IDENTIFIERS)
+                && line[0].contains(CATEGORY_IDENTIFIER)
+                && line[1].trim().equalsIgnoreCase(SKU_IDENTIFIER)
+                && line[2].trim().equalsIgnoreCase(PRODUCT_IDENTIFIER)
+                && line[3].trim().equalsIgnoreCase(QUANTITY_IDENTIFIER)
+                && line[4].trim().equalsIgnoreCase(UNIT_IDENTIFIER));
 
     }
 }

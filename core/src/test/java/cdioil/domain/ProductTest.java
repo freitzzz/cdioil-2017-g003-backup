@@ -26,7 +26,7 @@ public class ProductTest {
 
     @Before
     public void setUp() {
-        this.p = new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
+        this.p = new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235"));
     }
 
     /**
@@ -35,7 +35,7 @@ public class ProductTest {
     @Test(expected = IllegalArgumentException.class)
     public void ensureProductDoesntHaveNullName() {
         System.out.println("Product()");
-        Product product = new Product(null, new QRCode());
+        Product product = new Product(null, new QRCode(), "1 L");
     }
 
     /**
@@ -44,7 +44,7 @@ public class ProductTest {
     @Test(expected = IllegalArgumentException.class)
     public void ensureProductDoesntHaveEmptyName() {
         System.out.println("Product()");
-        Product product = new Product("       ", new QRCode());
+        Product product = new Product("       ", new QRCode(), "1 L");
     }
 
     /**
@@ -53,7 +53,7 @@ public class ProductTest {
     @Test(expected = IllegalArgumentException.class)
     public void ensureProductDoesntHaveNullCode() {
         System.out.println("Product()");
-        Product product = new Product("Nome yey", null);
+        Product product = new Product("Nome yey", null, "1 L");
     }
 
     /**
@@ -74,7 +74,7 @@ public class ProductTest {
         System.out.println("toString");
         System.out.println(p.toString());
 
-        Product copia = new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
+        Product copia = new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235"));
 
         assertEquals(p.toString(), copia.toString());
     }
@@ -86,7 +86,7 @@ public class ProductTest {
     public void testHashCode() {
         System.out.println("hashCode");
 
-        Product copia = new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235"));
+        Product copia = new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235"));
 
         assertEquals(p.hashCode(), copia.hashCode());
 
@@ -101,8 +101,8 @@ public class ProductTest {
         assertNotEquals("Objeto null não é igual", null, p);
         assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), p);
 
-        assertNotEquals("Instância de Produto diferente", new Product("ProdutoTeste", new EAN("33312118"), new QRCode("552671")), p);
-        assertEquals("Instância com códigos iguais igual", new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")), p);
+        assertNotEquals("Instância de Produto diferente", new Product("ProdutoTeste", new EAN("33312118"), "1 L", new QRCode("552671")), p);
+        assertEquals("Instância com códigos iguais igual", new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")), p);
     }
 
     /**
