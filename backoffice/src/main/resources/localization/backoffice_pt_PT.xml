@@ -48,7 +48,7 @@
         <Message messageId = "please_insert_options" value="Por favor insira as opções:"/>                       
         <Message messageId="insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
         <Message messageId="insert_max" value = "Insira o valor máximo:"/>
-        <Message messageId="insert_min" value = "Insira o valor mínimo"/>
+        <Message messageId="insert_min" value = "Insira o valor mínimo:"/>
     </RequestMessages>
 	
 	
@@ -69,7 +69,7 @@
         <Message messageId = "error_exporting_stats" value = "Ocorreu um erro ao exportar as estatísticas do inquérito!&#10;Verifique se o ficheiro é valido.&#10;"/>
         <Message messageId = "error_importing_categories" value = "Caminho de ficheiro não encontrado! Pretende continuar?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "Não foi importada nenhuma categoria."/>
-        <Message messageId = "error_no_surveys_available" value = "Não existem inquéritos&#10;."/>
+        <Message messageId = "error_no_surveys_available" value = "Não existem inquéritos.&#10;"/>
         <Message messageId = "error_select_a_valid_question_type" value = "Insira um tipo de questão válido:"/>
         <Message messageId = "error_question_not_added_to_any_category" value = "A questão não foi adicionada a nenhuma cateogoria."/>
         <Message messageId = "invalid_option" value = "A opção não foi adicionada, porque era inválida."/>    
