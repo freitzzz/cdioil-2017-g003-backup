@@ -1,0 +1,31 @@
+	___________
+
+	  ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #3
+	
+	* Como Gestor, pretendo exportar todas as estatísticas de um determinado inquérito para um ficheiro.
+	* As estatísticas incluem o número total de respostas, a sua média e o desvio padrão.
+	* As estatísticas só se aplicam para questões binárias e quantitativas, excluindo as de escolha múltipla.
+	* Os ficheiros a serem exportados deverão ser do formato CSV.
+
+	______________________
+
+	  REGRAS DE NEGÓCIO
+	_____________________
+
+
+	-----------------------------------------------------
+
+	______________________
+		
+	  TESTES UNITÁRIOS
+	______________________
+
+	* Classe MathUtils:
+		* testCalculateMean;
+		* testCalculateMeanDeviation;
+		* testValidateValues
+		
+	

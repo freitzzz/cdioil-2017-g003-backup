@@ -3,7 +3,7 @@
 	  ANÁLISE 
 	___________
 
-	USER STORY DO SPRINT #2
+	USER STORY DO SPRINT #3
 	
 	* Como Gestor pretendo inserir uma questão sobre uma ou mais categorias.
 
