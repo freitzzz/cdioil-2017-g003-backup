@@ -41,22 +41,22 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to select a type of question.
      */
-    private final String TYPE_QUESTION_MESSAGE = "Por favor selecione o tipo de questão:";
+    private final String TYPE_QUESTION_MESSAGE = localizationHandler.getMessageValue("request_select_question_type");
 
     /**
      * Represents a message that indicates the user to select a valid type of question.
      */
-    private final String INVALID_TYPE_QUESTION_MESSAGE = "Insira um tipo de questão válido:";
+    private final String INVALID_TYPE_QUESTION_MESSAGE = localizationHandler.getMessageValue("error_select_a_valid_question_type");
 
     /**
      * Represents a message that indicates the user to insert the ID of the question.
      */
-    private final String ID_QUESTION_MESSAGE = "Por favor insira o ID da questão:";
+    private final String ID_QUESTION_MESSAGE = localizationHandler.getMessageValue("request_question_id");
 
     /**
      * Represents a message that indicates the user to insert the question itself.
      */
-    private final String TXT_QUESTION_MESSAGE = "Por favor insira a questão:";
+    private final String TXT_QUESTION_MESSAGE = localizationHandler.getMessageValue("request_question_txt");
 
     /**
      * Reprensents a message that indicates the user to insert the path of the category.
@@ -71,12 +71,12 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to stop or proceed.
      */
-    private final String DO_YOU_WANT_TO_CONTINUE = "Deseja inserir mais questões?\nSe não, digite \"Sair\".\nSe sim, digite qualquer outra mensagem.";
+    private final String DO_YOU_WANT_TO_CONTINUE = localizationHandler.getMessageValue("request_confirmation_to_continue");
 
     /**
      * Represents a message that indicates the user that the question was not added to any category.
      */
-    private final String QUESTION_NOT_ADDED = "A questão não foi adicionada a nenhuma cateogoria.";
+    private final String QUESTION_NOT_ADDED = localizationHandler.getMessageValue("error_question_not_added_to_any_category" );
 
     /**
      * Represents a message that indicates the user how many categories the question was added to.
@@ -98,12 +98,12 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to insert the options for that question.
      */
-    private final String OPTIONS_QUESTION_MESSAGE = "Por favor insira as opções:";
+    private final String OPTIONS_QUESTION_MESSAGE = localizationHandler.getMessageValue("please_insert_options");
 
     /**
      * Represents a message that indicates the user to insert an option.
      */
-    private final String OPTION_MESSAGE = "Opção ";
+    private final String OPTION_MESSAGE = localizationHandler.getMessageValue("option_message");
 
     /**
      * Represents the exit code for inserting more options.
@@ -113,44 +113,44 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String NO_MORE_OPTIONS_MESSAGE = "Para terminar a inserção de opções escreva \"" + NO_MORE_OPTIONS_CODE + ".\"";
+    private final String NO_MORE_OPTIONS_MESSAGE = localizationHandler.getMessageValue("no_more_options")+ " " + NO_MORE_OPTIONS_CODE;
 
     /**
      * Represents a message that indicates the user to insert a valid option.
      */
-    private final String INVALID_OPTION = "A opção não foi adicionada, porque era inválida.";
+    private final String INVALID_OPTION = localizationHandler.getMessageValue("invalid_option");
 
     /**
      * Represents a message that indicates that the question was not added because it was not valid.
      */
-    private final String INVALID_QUESTION = "A questão não foi adicionada, porque era inválida.";
+    private final String INVALID_QUESTION = localizationHandler.getMessageValue("invalid_question");
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //Constants for binary questions
     /**
      * Represents a message that indicates the user to insert the maximum and minimum values of the scale.
      */
-    private final String INSERT_EXTREMES_MESSAGE = "Insira os valores mínimo e máximo para a escala:";
+    private final String INSERT_EXTREMES_MESSAGE = localizationHandler.getMessageValue("insert_extremes");
 
     /**
      * Represents a message that indicates the user to insert the maximum value of the scale.
      */
-    private final String MAXIMUM_MESSAGE = "Insira o valor máximo:";
+    private final String MAXIMUM_MESSAGE = localizationHandler.getMessageValue("insert_max");
 
     /**
      * Represents a message that indicates the user to insert the minimum value of the scale.
      */
-    private final String MINIMUM_MESSAGE = "Insira o valor mínimo:";
+    private final String MINIMUM_MESSAGE = localizationHandler.getMessageValue("insert_min");
 
     /**
      * Represents a message that indicates the user to insert a valid number.
      */
-    private final String INVALID_VALUE = "Valor inválido!";
+    private final String INVALID_VALUE = localizationHandler.getMessageValue("invalid_value");
 
     /**
      * Represents a message that indicates the user that the extreme values have been changed.
      */
-    private final String CHANGED_EXTREME_VALUES = "Os valores foram trocados, porque o mínimo era superior ao máximo.";
+    private final String CHANGED_EXTREME_VALUES = localizationHandler.getMessageValue("changed_extreme_values");
 
     /**
      * Creates a new User Interface.
@@ -241,7 +241,7 @@ public class InsertQuestionUI {
 
             //7. The system asks the user to proceed or exit
             System.out.println(SEPARATOR);
-            String choice = Console.readLine(DO_YOU_WANT_TO_CONTINUE);
+            String choice = Console.readLine(DO_YOU_WANT_TO_CONTINUE + EXIT_MESSAGE);
             if (choice.equalsIgnoreCase(EXIT_CODE)) {
                 catched = true;
             }
@@ -325,7 +325,7 @@ public class InsertQuestionUI {
         List<QuestionOption> options = new ArrayList<>();
 
         while (!noMoreOptions) {
-            String content = Console.readLine(OPTION_MESSAGE + optionNumber + ":");
+            String content = Console.readLine(OPTION_MESSAGE + " " + optionNumber + ":");
             try {
                 QuestionOption newOption = ctrl.createNewMultipleChoiceOption(content);
                 options.add(newOption);

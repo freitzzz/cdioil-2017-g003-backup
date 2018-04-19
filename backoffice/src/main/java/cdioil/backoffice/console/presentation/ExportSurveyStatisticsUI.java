@@ -27,6 +27,11 @@ public class ExportSurveyStatisticsUI {
      * Represents a message that indicates the user that the chosen survey doesn't have any reviews.
      */
     private final String SURVEY_WITH_NO_REVIEWS_MESSAGE = localizationHandler.getMessageValue("error_survey_with_no_reviews");
+    
+    /**
+     * Represents a message that indicates the user that there aren't any available surveys.
+     */
+    private final String NO_SURVEYS = localizationHandler.getMessageValue("error_no_surveys_available");
 
     /**
      * Represents the exit code for the User Interface.
@@ -93,7 +98,8 @@ public class ExportSurveyStatisticsUI {
         //1. List all surveys
         List<Survey> surveys = ctrl.getAllSurveys();
         if (listAllSurveys(surveys) == false) {
-            System.out.println(SURVEY_WITH_NO_REVIEWS_MESSAGE);
+            System.out.println(NO_SURVEYS);
+            System.out.println(SEPARATOR);
             return;
         }
         System.out.println(SEPARATOR);
@@ -108,6 +114,7 @@ public class ExportSurveyStatisticsUI {
             
             survey = ctrl.getChosenSurvey(surveyID);
             if (survey == null) System.out.println(INVALID_SURVEY_MESSAGE);
+            else if(ctrl.getSurveyReviews() == null) System.out.println(SURVEY_WITH_NO_REVIEWS_MESSAGE + " " + EXIT_MESSAGE);
             else isSurveyIDValid = true;
         }
             boolean isPathValid = false;

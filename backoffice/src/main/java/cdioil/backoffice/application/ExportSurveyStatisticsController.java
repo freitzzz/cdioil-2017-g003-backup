@@ -117,9 +117,8 @@ public class ExportSurveyStatisticsController {
      */
     public List<Review> getSurveyReviews() {
         reviews = new ReviewRepositoryImpl().getReviewsBySurvey(survey);
-        if (reviews == null || reviews.isEmpty()) {
-            return null;
-        }
+        if (reviews == null || reviews.isEmpty()) return null;
+            for(Review r : reviews) System.out.println(r.toString());
         return reviews;
     }
 
