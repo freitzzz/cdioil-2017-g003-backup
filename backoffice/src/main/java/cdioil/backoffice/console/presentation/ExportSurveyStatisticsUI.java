@@ -69,7 +69,7 @@ public class ExportSurveyStatisticsUI {
     private final String INVALID_SURVEY_MESSAGE = localizationHandler.getMessageValue("error_invalid_survey");
 
     /**
-     * Represents a message that indicates the user to insert .
+     * Represents a message that indicates the user to insert the path of the file.
      */
     private final String INSERT_PATH_MESSAGE = localizationHandler.getMessageValue("request_file_path");
 

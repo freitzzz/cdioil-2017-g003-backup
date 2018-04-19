@@ -70,8 +70,8 @@
         <Message messageId = "error_exporting_stats" value = "An error occurred while exporting the statistics of the survey!&#10;Please check if the file is valid.&#10;"/>
         <Message messageId = "error_importing_categories" value = "File path not found! Do you wish to try again?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "No categories were imported."/>
-        <Message messageId = "error_no_surveys_available" value = "There are no surveys&#10;."/>
-        <Message messageId = "error_select_a_valid_question_type" value = "Insira um tipo de questão válido:"/>
+        <Message messageId = "error_no_surveys_available" value = "There are no surveys.&#10;"/>
+        <Message messageId = "error_select_a_valid_question_type" value = "Insert a valid question type:"/>
         <Message messageId = "error_question_not_added_to_any_category" value = "The question wasn't added to any category."/>
         <Message messageId = "invalid_option" value = "The option wasn't added because it was invalid."/>     
         <Message messageId = "invalid_question" value = "The question wasn't added because it was invalid."/> 
