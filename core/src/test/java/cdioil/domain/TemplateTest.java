@@ -23,7 +23,7 @@ public class TemplateTest {
     public void setUp() {
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
-        t = new Template(questionGroup);
+        t = new Template("template", questionGroup);
     }
 
     /**
@@ -33,8 +33,8 @@ public class TemplateTest {
     public void ensureTemplateIsBuiltCorrectly() {
         System.out.println("Template()");
         t = new Template();
-        t = new Template(null);
-        t = new Template(new QuestionGroup("QuestionGroup"));
+        t = new Template(null, null);
+        t = new Template("template", new QuestionGroup("QuestionGroup"));
     }
 
     /**
@@ -45,7 +45,7 @@ public class TemplateTest {
         System.out.println("hashCode");
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
-        Template t2 = new Template(questionGroup);
+        Template t2 = new Template("template", questionGroup);
 
         assertEquals("Hash codes iguais", t2.hashCode(), t.hashCode());
     }
@@ -69,11 +69,11 @@ public class TemplateTest {
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
         QuestionGroup questionGroup2 = new QuestionGroup("QuestionGroup");
         QuestionGroup questionGroupDiffQuestions = new QuestionGroup("QuestionGroup Different Questions");
-        assertNotEquals("Instância de Template diferente", new Template(questionGroup), t);
+        assertNotEquals("Instância de Template diferente", new Template("template", questionGroup), t);
         questionGroup2.addQuestion(new BinaryQuestion("Question", "435"));
-        assertEquals("Instância de Template igual", new Template(questionGroup2), t);
+        assertEquals("Instância de Template igual", new Template("template", questionGroup2), t);
         questionGroupDiffQuestions.addQuestion(new BinaryQuestion("Question 3", "987"));
-        Template tDifferentQuestions = new Template(questionGroupDiffQuestions);
+        Template tDifferentQuestions = new Template("template", questionGroupDiffQuestions);
         tDifferentQuestions.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "342"));
         t.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532"));
         assertFalse(t.equals(tDifferentQuestions));
