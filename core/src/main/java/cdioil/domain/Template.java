@@ -33,12 +33,19 @@ public class Template implements Serializable {
     private int id;
 
     /**
+     * Template title
+     */
+    private String title;
+
+    /**
      * List of Questions of the Template.
      */
     @OneToOne(cascade = CascadeType.PERSIST)
     private QuestionGroup questionGroup;
 
-    public Template(QuestionGroup questionGroup) {
+    public Template(String title, QuestionGroup questionGroup) {
+        this.title = title;
+
         if(questionGroup == null || questionGroup.getQuestions().isEmpty()){
             throw new IllegalArgumentException("O conjunto de questões do "
                     + "template não pode ser vazio nem null");
@@ -95,4 +102,14 @@ public class Template implements Serializable {
         final Template other = (Template) obj;
         return this.questionGroup.equals(other.questionGroup);
     }
+
+    /**
+     * ToString of the class template
+     *
+     * @return title of template
+     */
+    public String toString() {
+        return title;
+    }
 }
+

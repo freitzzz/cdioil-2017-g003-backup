@@ -1,19 +1,13 @@
 package cdioil.backoffice.application;
 
 import cdioil.domain.*;
+import cdioil.domain.authz.UsersGroup;
 import cdioil.persistence.impl.*;
+import cdioil.time.TimePeriod;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-/**
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * =============================================================================
- * FIXME - GlobalLibrary no longer exists. Each library has it's own repository
- * now. Survey is an abstract class and cannot be instantiated.
- * =============================================================================
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
 public class CreateSurveyController {
 
     private ProductQuestionsLibrary productQuestionsLibrary;
@@ -22,7 +16,6 @@ public class CreateSurveyController {
     private IndependentQuestionsLibrary independentQuestionsLibrary;
 
 
-    //FALTA QUESTIONÁRIO PARA UM GRUPO DE UTILIZADORES
     /**
      * Gets all the questions of a given Product
      *
@@ -111,18 +104,23 @@ public class CreateSurveyController {
      * @param surveyItems list of survey items
      * @param map
      */
-    public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateEnding, HashMap<SurveyItem, List<Question>> map) {
+    public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateBeginning, LocalDateTime dateEnding, HashMap<SurveyItem, List<Question>> map, UsersGroup targetAudience) {
         SurveyRepositoryImpl repo = new SurveyRepositoryImpl();
-        //Survey survey = new Survey(surveyItems, LocalDateTime.now(), dateEnding);
-        
+        Survey survey;
 
+        TimePeriod timePeriod = new TimePeriod(dateBeginning, dateEnding);
+
+        if (targetAudience == null) {
+            survey = new GlobalSurvey(surveyItems, timePeriod);
+        } else {
+            survey = new TargetedSurvey(surveyItems, timePeriod, targetAudience);
+        }
 
         for (SurveyItem surveyItem : map.keySet()) {
             for (Question question : map.get(surveyItem)) {
-               // survey.addQuestion(question);
+               survey.addQuestion(question);
             }
         }
-        //return repo.merge(survey) != null;
-        return true;
+        return repo.merge(survey) != null;
     }
 }

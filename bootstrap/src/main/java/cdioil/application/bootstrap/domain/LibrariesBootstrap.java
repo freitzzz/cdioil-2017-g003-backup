@@ -131,7 +131,7 @@ public class LibrariesBootstrap {
         bootstrapQuestionGroup.addQuestion(q2);
         bootstrapQuestionGroup.addQuestion(q3);
         bootstrapQuestionGroup.addQuestion(q4);
-        Template bootstrapTemplate = new Template(bootstrapQuestionGroup);
+        Template bootstrapTemplate = new Template("template", bootstrapQuestionGroup);
         categoryTemplatesLibrary.addCategory(cat);
         categoryTemplatesLibrary.addTemplate(cat, bootstrapTemplate);
     }

@@ -47,7 +47,7 @@ public class TemplateGroupTest {
         System.out.println("containsTemplate");
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template(questionGroup);
+        Template template = new Template("Template1", questionGroup);
         TemplateGroup instance = new TemplateGroup("TemplateGroup");
         assertFalse("The condition should succeed because the question doesn't "
                 + "exist in the set", instance.containsTemplate(template));
@@ -64,7 +64,7 @@ public class TemplateGroupTest {
         System.out.println("addTemplate");
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template(questionGroup);
+        Template template = new Template("Template2", questionGroup);
         TemplateGroup instance = createTemplateGroup("TemplateGroup");
         assertTrue("The condition should succeed because the template"
                 + "can be added.", instance.addTemplate(template));
@@ -81,7 +81,7 @@ public class TemplateGroupTest {
         System.out.println("removeTemplate");
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template(questionGroup);
+        Template template = new Template("template3", questionGroup);
         TemplateGroup instance = createTemplateGroup("TemplateGroup");
         assertFalse("The condition should succeed because the template"
                 + "doesn't exist.", instance.removeTemplate(template));
@@ -101,7 +101,7 @@ public class TemplateGroupTest {
         TemplateGroup other = createTemplateGroup(title);
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template t = new Template(questionGroup);
+        Template t = new Template("template4", questionGroup);
         instance.addTemplate(t);
         other.addTemplate(t);
         assertTrue(instance.hashCode() == other.hashCode());
@@ -117,7 +117,7 @@ public class TemplateGroupTest {
         TemplateGroup instance = createTemplateGroup("Group");
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template(questionGroup);
+        Template template = new Template("Template5", questionGroup);
         template.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "43"));
         assertEquals("The condition should succeed because we are comparing"
                 + "the same instances.", instance, instance);
@@ -130,7 +130,7 @@ public class TemplateGroupTest {
         instance.addTemplate(template);
         QuestionGroup anotherQuestionGroup = new QuestionGroup("QuestionGroup 2");
         anotherQuestionGroup.addQuestion(new BinaryQuestion("Question 2", "345"));
-        other.addTemplate(new Template(anotherQuestionGroup));
+        other.addTemplate(new Template("Template5", anotherQuestionGroup));
         assertNotEquals("The condition should succeed because we are comparing"
                 + "instances with different sets of templates.", instance, other);
         TemplateGroup instance2 = createTemplateGroup("Group2");

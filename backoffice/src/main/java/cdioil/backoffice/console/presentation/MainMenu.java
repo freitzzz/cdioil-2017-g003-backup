@@ -147,8 +147,11 @@ public class MainMenu {
                 case 6:
                     new InsertQuestionUI(manager);
                     break;
-                case 7: 
+                case 7:
                     new ExportSurveyStatisticsUI();
+                    break;
+                case 8:
+                    new CreateTemplateUI(manager);
                     break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);
@@ -169,6 +172,7 @@ public class MainMenu {
         System.out.println("5. " + OPTION_CREATE_SURVEY);
         System.out.println("6. " + OPTION_INSERT_QUESTION_CATEGORY);
         System.out.println("7. " + OPTION_EXPORT_STATISTICS_SURVEY);
+        System.out.println("8. Create Template");
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);

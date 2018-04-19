@@ -29,10 +29,8 @@ public final class SurveyStatsWriterFactory {
      */
     public static SurveyStatsWriter create(String filename, int totalBinary, int totalQuantitative, double binaryMean,
             double quantitativeMean, double binaryMeanDeviation, double quantitativeMeanDeviation) {
-        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) {
-            return new CSVSurveyStatsWriter(filename, totalBinary, totalQuantitative, binaryMean, quantitativeMean,
-                    binaryMeanDeviation, quantitativeMeanDeviation);
-        }
+        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) return new CSVSurveyStatsWriter(filename, totalBinary, 
+                totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         return null;
     }
 
