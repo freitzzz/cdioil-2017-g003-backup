@@ -1,8 +1,10 @@
 package cdioil.domain;
 
+import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,7 +23,8 @@ public class SurveyTest {
      * Data for testing
      */
     private Survey i;
-    private LocalDateTime data;
+    private TimePeriod timePeriod;
+    private LinkedList<SurveyItem> list;
 
     public SurveyTest() {
     }
@@ -36,8 +39,11 @@ public class SurveyTest {
 
     @Before
     public void setUp() {
-        data = LocalDateTime.of(0, Month.MARCH, 2, 0, 0, 0);
-        this.i = new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now());
+        timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
+                LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
+        list = new LinkedList<>();
+        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
+        this.i = new GlobalSurvey(list, timePeriod);
     }
 
     @After
@@ -58,7 +64,7 @@ public class SurveyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullItemListThrowsException() {
-        new GlobalSurvey(null, data, LocalDateTime.now());
+        new GlobalSurvey(null, timePeriod);
     }
 
     /**
@@ -66,7 +72,7 @@ public class SurveyTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullDateThrowsException() {
-        new GlobalSurvey(new ArrayList<>(), null, LocalDateTime.now());
+        new GlobalSurvey(new ArrayList<>(), null);
     }
 
     /**
@@ -75,7 +81,7 @@ public class SurveyTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Survey outro = new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now());
+        Survey outro = new GlobalSurvey(list, timePeriod);
 
         assertEquals(i.hashCode(), outro.hashCode());
     }
@@ -87,10 +93,10 @@ public class SurveyTest {
     public void testEquals() {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
-        ArrayList<SurveyItem> al = new ArrayList<>();
-        al.add(new Product("ProdutoTeste", new EAN("544231234"), new QRCode("4324235")));
-        assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(al, data, LocalDateTime.now()), i);
-        assertEquals("Instância de Inquerito igual", new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now()), i);
+        ArrayList<SurveyItem> otherList = new ArrayList<>();
+        otherList.add(new Product("Other Product", new EAN("4444444444"), "1 L", new QRCode("235245246")));
+        assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(otherList, timePeriod), i);
+        assertEquals("Instância de Inquerito igual", new GlobalSurvey(list, timePeriod), i);
         assertEquals("Compare same instance", i, i);
         assertNotEquals("Instances of different classes", i, "bananas");
     }
@@ -101,7 +107,7 @@ public class SurveyTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Survey s = new GlobalSurvey(new ArrayList<>(), data, LocalDateTime.now());
+        Survey s = new GlobalSurvey(list, timePeriod);
         assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", i.toString(),
                 s.toString());
 
@@ -165,5 +171,22 @@ public class SurveyTest {
                 + "of the survey is different from the past one", i.changeState(state));
         assertFalse("The condition should succeed because the new state is null",
                 i.changeState(null));
+    }
+
+    /**
+     * Test of method setNextQuestion, of class Survey.
+     */
+    @Test
+    public void testSetNextQuestion() {
+        System.out.println("setNextQuestion");
+        assertFalse("The condition should succeed because the origin vertex is "
+                + "equal to the destination vertex", i.setNextQuestion(new BinaryQuestion("Question", "QuestionID"),
+                        new BinaryQuestion("Question", "QuestionID"), new BinaryQuestionOption(Boolean.FALSE), 0));
+        assertTrue("The condition should succeed because the arguments are all valid",
+                i.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
+                        new BinaryQuestionOption(Boolean.TRUE), 0));
+        assertFalse("The condition should succeed because we are trying to insert "
+                + "the same edge twice", i.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
+                        new BinaryQuestionOption(Boolean.TRUE), 0));
     }
 }

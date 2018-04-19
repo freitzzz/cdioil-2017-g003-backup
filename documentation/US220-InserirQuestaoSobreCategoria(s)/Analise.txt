@@ -1,0 +1,41 @@
+        ___________
+
+	  ANÁLISE 
+	___________
+
+	USER STORY DO SPRINT #2
+	
+	* Como Gestor pretendo inserir uma questão sobre uma ou mais categorias.
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	_____________________
+		
+	  TESTES UNITÁRIOS
+	_____________________
+
+
+	* Classe Manager:
+		* testIsAssociatedWithCategory
+
+	* Classe CategoryQuestionsLibrary:
+		* testAddCategory
+		* testAddQuestion
+
+	* Classe InsertQuestionController:
+		* testGetQuestionTypes
+		* testCreateBinaryQuestion
+		* testInvalidCreateBinaryQuestion
+		* testCreateMulyipleChoiceQuestion
+		* testExtractBinaryOption
+		* testExtractMultipleChoiceOption
+		* testExtractQuantitativeOption
+		* testExtractInvalidOption
+		* testCreateNewMultipleChoiceOption
+		* testCreateNewQuantitativeOption

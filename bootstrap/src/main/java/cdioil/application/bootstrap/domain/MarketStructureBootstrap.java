@@ -36,7 +36,8 @@ public class MarketStructureBootstrap {
         String qrCode = Integer.toString(Integer.MAX_VALUE - 1);
         Code ean = new EAN(eanCode);
         Code qr = new QRCode(qrCode);
-        Product prod = new Product("Bootstrap Product", ean,
+        String quantity = "1 L";
+        Product prod = new Product("Bootstrap Product", ean,quantity,
                 qr);
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {

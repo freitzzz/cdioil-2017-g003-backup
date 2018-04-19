@@ -92,10 +92,9 @@ public class ManagerTest {
         Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
         //teste adiconar lista a null
-        List<Category> lc = null;
-        assertFalse(instance.addCategories(lc));
+        assertFalse(instance.addCategories(null));
         //teste adicionar lista vazia
-        lc = new LinkedList<>();
+        List<Category> lc = new LinkedList<>();
         assertFalse(instance.addCategories(lc));
         //teste adiconar lista com elementos
         lc.add(new Category("Fruit", "10DC-10UN-124CAT"));
@@ -110,7 +109,7 @@ public class ManagerTest {
      */
     @Test
     public void testRemoveCategories() {
-        System.out.println("removerCategorias");
+        System.out.println("removeCategories");
 
         Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
                 new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
@@ -121,7 +120,6 @@ public class ManagerTest {
         lc = new LinkedList<>();
         assertFalse(instance.removeCategories(lc));
         //teste remover lista com elementos inexistentes
-        //teste adiconar lista com elementos
         lc.add(new Category("Fruit", "10DC-10UN-124CAT"));
         lc.add(new Category("Beverage", "10DC-10UN-100CAT-6040SCAT"));
         assertFalse(instance.removeCategories(lc));
@@ -131,13 +129,29 @@ public class ManagerTest {
     }
 
     /**
+     * Test of categoriesFromManager method, of class Manager.
+     */
+    @Test
+    public void testCategoriesFromManager() {
+        System.out.println("categoriesFromManager");
+        Manager instance = new Manager(new SystemUser(new Email("myPrecious@gmail.com"),
+                new Name("Gollum", "Smeagol"), new Password("Precious3")), new LinkedList<>());
+        LinkedList<Category> catList = new LinkedList<>();
+        catList.add(new Category("Fruit", "10DC-10UN-124CAT"));
+        catList.add(new Category("Beverage", "10DC-10UN-100CAT-6040SCAT"));
+        instance.addCategories(catList);
+        assertTrue("The condition should succeed because the lists are equal",
+                instance.categoriesFromManager().equals(catList));
+    }
+
+    /**
      * Test of getID method, of class Manager.
      */
     @Test
     public void testGetID() {
         System.out.println("getID");
         Manager instance = new Manager(sysUser);
-        SystemUser expResult=sysUser;
+        SystemUser expResult = sysUser;
         SystemUser result = instance.getID();
         assertEquals(expResult, result);
     }

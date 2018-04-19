@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
 /**
@@ -38,7 +38,7 @@ public class Edge implements Serializable {
     /**
      * Option associated to this Edge.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private QuestionOption element;
 
     /**
@@ -49,13 +49,13 @@ public class Edge implements Serializable {
     /**
      * Edge's origin endpoint.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Vertex originVertex;
 
     /**
      * Edge's destination endpoint.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Vertex destinationVertex;
 
     /**
@@ -129,7 +129,7 @@ public class Edge implements Serializable {
 
     /**
      * Retrieves both of the of the elements stored in the Vertices being
-     * connected by the Edge.
+ connected by the Edge.
      *
      * @return Questions
      */
@@ -184,5 +184,12 @@ public class Edge implements Serializable {
         final Edge other = (Edge) obj;
 
         return Objects.equals(this.element, other.element);
+    }
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "element=" + element +
+                '}';
     }
 }

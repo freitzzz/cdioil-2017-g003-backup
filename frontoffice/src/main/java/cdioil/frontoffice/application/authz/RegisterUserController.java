@@ -1,8 +1,9 @@
 package cdioil.frontoffice.application.authz;
 
+import cdioil.application.authz.EmailSenderService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.domain.authz.*;
-import cdioil.emails.EmailSenderFactory;
+import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
 import java.time.LocalDate;
 
@@ -21,30 +22,13 @@ public class RegisterUserController {
      */
     private static final String EMAIL_ALREADY_IN_USE_MESSAGE="O email já está em uso!";
     /**
+     * Constant that represents the message that ocures if the user was not registed with success
+     */
+    private static final String REGISTERED_USED_SUCCESS_FAILURE="Ocorreu um erro ao registar o email!\nPor favor volte a tentar mais tarde";
+    /**
      * Constant that represents the Email identifier (<b>@</b>)
      */
     private static final String EMAIL_IDENTIFIER = "@";
-    /**
-     * Hardcoded email that is used to send the activation code
-     */
-    private static final String EMAIL_SENDER="hardcodedmail@hardcoded.com";
-    /**
-     * Hardcoded email password that is used to send the activation code
-     */
-    private static final String EMAIL_SENDER_PASSWORD="ThisIsNotAReallyGoodSolution";
-    /**
-     * Constant that represents the title of the email that contains the message sent 
-     * to the user with the activation code
-     */
-    private static final String EMAIL_ACTIVATION_CODE_TITLE="Código de Activação FeedBack Monkey";
-    /**
-     * Constant that represents the message of the email that contains the message sent 
-     * to the user with the activation code
-     */
-    private static final String EMAIL_ACTIVATION_CODE_MESSAGE="Olá %s %s!"
-                + "\nReparamos que acabaste de te registar na nossa aplicação com o endereço %s."
-                + "\nDe modo a provar-mos a tua autenticidade, pedimos que insiras o seguinte código %d"
-                + "aquando o inicio da aplicação.\n\nIsto é uma mensagem automática por favor não responda para este endereço!";
     /**
      * Registered Users repository
      */
@@ -64,31 +48,53 @@ public class RegisterUserController {
              String location, String birthDate) {
         String domainPart = email.split(EMAIL_IDENTIFIER)[1];
         System.out.println(domainPart);
-        if(new WhitelistRepositoryImpl().find(domainPart)==null)throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE); 
-        
-        SystemUser systemUser = new SystemUser(
-                new Email(email),
-                new Name(firstName, lastName),
-                new Password(password),
-                new PhoneNumber(phoneNumber),
-                new Location(location),
-                new BirthDate(LocalDate.parse(birthDate)));
-        RegisteredUser registeredUser = new RegisteredUser(systemUser);
-        
-        if(registerUserRepository.exists(registeredUser))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
-        registerUserRepository.add(registeredUser);
+        Email emailX=new Email(email);
+        SystemUser userX=new UserRepositoryImpl().findByEmail(emailX);
+        if(userX==null){
+            if(new WhitelistRepositoryImpl().find(domainPart)==null)throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE); 
+            SystemUser systemUser = new SystemUser(
+                    new Email(email),
+                    new Name(firstName, lastName),
+                    new Password(password),
+                    new PhoneNumber(phoneNumber),
+                    new Location(location),
+                    new BirthDate(LocalDate.parse(birthDate)));
+            RegisteredUser registeredUser = new RegisteredUser(systemUser);
+
+            if(registerUserRepository.exists(registeredUser))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            if(sendRegisterCode(systemUser)){
+                registerUserRepository.add(registeredUser);
+            }else{
+                throw new IllegalArgumentException(REGISTERED_USED_SUCCESS_FAILURE);
+            }
+        }else{
+            if(registerUserRepository.exists(new RegisteredUser(userX)))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            if(userX.isUserImported()){
+                if(userX.isUserActivated()){
+                    throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+                }else{
+                    userX.activateAccount();
+                    userX.changeUserDatafield(password,SystemUser.CHANGE_PASSWORD_OPTION);
+                    userX.changeUserDatafield(phoneNumber,SystemUser.CHANGE_PHONE_NUMBER_OPTION);
+                    userX.changeUserDatafield(location,SystemUser.CHANGE_LOCALITY_OPTION);
+                    userX.changeUserDatafield(birthDate,SystemUser.CHANGE_BIRTH_DATE_OPTION);
+                    if(sendRegisterCode(userX)){
+                        userX=new UserRepositoryImpl().merge(userX);
+                        new RegisteredUserRepositoryImpl().add(new RegisteredUser(userX));
+                    }else{
+                        throw new IllegalArgumentException(REGISTERED_USED_SUCCESS_FAILURE);
+                    }
+                }
+            }else{
+                throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            }
+        }
     }
     /**
      * Method that sends a registration code to the user email address in order to prove it's authencity
-     * <br>In the future replace with service
-     * @param firstName String with the user first name
-     * @param lastName String with the user last name
-     * @param email String with the user email
-     * @param activationCode Long with the user activation code
+     * @param SystemUser SystemUser with the user that is going to send the activation code
      */
-    private void sendRegisterCode(String firstName,String lastName,String email,long activationCode){
-        String formatedMessage=String.format(EMAIL_ACTIVATION_CODE_MESSAGE,firstName,lastName,email,activationCode);
-        EmailSenderFactory.create(EMAIL_SENDER,EMAIL_SENDER_PASSWORD)
-                .sendEmail(email,EMAIL_ACTIVATION_CODE_TITLE,formatedMessage);
+    private boolean sendRegisterCode(SystemUser user){
+        return new EmailSenderService(user).sendActivationCode();
     }
 }

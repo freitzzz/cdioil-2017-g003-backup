@@ -3,9 +3,11 @@ package cdioil.application.utils;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -64,6 +66,7 @@ public class Graph implements Serializable {
      * them.
      */
     @ManyToMany(cascade = CascadeType.PERSIST)
+    @MapKey(name = "element")
     private Map<Question, Vertex> vertices;
 
     /**
@@ -244,6 +247,21 @@ public class Graph implements Serializable {
     }
 
     /**
+     * Retrieves an Iterable Collection of the Vertex's outgoing edges.
+     *
+     * @param element element contained within a Vertex
+     * @return all of the Vertex's outgoing edges.
+     */
+    public Iterable<Edge> outgoingEdges(Question element) {
+
+        if (!vertexExists(element)) {
+            return null;
+        }
+
+        return vertices.get(element).getAllOutgoingEdges();
+    }
+
+    /**
      * Inserts a new Vertex containing the given element into the Graph.
      *
      * @param element element to insert
@@ -370,6 +388,20 @@ public class Graph implements Serializable {
         numEdges -= numRemovedEdges;
 
         return true;
+    }
+
+    /**
+     * Returns the first Question in the Graph.
+     *
+     * @return the first Question.
+     */
+    public Question getFirstQuestion() {
+
+        if (vertices.isEmpty()) {
+            return null;
+        }
+
+        return vertices.keySet().iterator().next();
     }
 
     @Override

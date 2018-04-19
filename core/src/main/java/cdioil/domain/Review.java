@@ -2,15 +2,24 @@ package cdioil.domain;
 
 import cdioil.application.utils.Edge;
 import cdioil.application.utils.Graph;
+import cdioil.domain.authz.Suggestion;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 /**
  * Review class.
@@ -21,26 +30,56 @@ import javax.persistence.OneToOne;
 public class Review implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     /**
-     * Constant that represents the index reference for the "real" question on the graph
+     * Database identifier.
      */
-    private static final int QUESTION_INDEX_REFERENCE=0;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     /**
-     * user's opinion on the reviewed product
+     * Database version number.
      */
-    private String opinion;
+    @Version
+    private long version;
 
     /**
-     * product subject to review
+     * Copy of the survey's graph, defining the overall flow of the survey.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Graph answerGraph;
+
+    /**
+     * Survey being answered.
+     */
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Survey survey;
-    private Product product;
-    private Graph answers;
+
+    /**
+     * Map containing Questions and their respective Answers.
+     */
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Map<Question, Answer> answers;
+
+    /**
+     * Question currently being answered.
+     */
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Question currentQuestion;
+
+    /**
+     * Items being reviewed.
+     */
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<SurveyItem> itemList;
+
+    /**
+     * Review's final suggestion.
+     */
+    @Embedded
+    private Suggestion suggestion;
+
     /**
      * Empty constructor of class Review
      */
@@ -48,14 +87,97 @@ public class Review implements Serializable {
     }
 
     /**
-     * Review constructor
+     * Constructs a new Review for a given Survey.
      *
-     * @param opinion user's opinion
-     * @param product product subject to review
+     * @param survey survey being answered.
      */
-    public Review(String opinion, Product product) {
-        this.opinion = opinion;
-        this.product = product;
+    public Review(Survey survey) {
+        if(survey == null){
+            throw new IllegalArgumentException("O inquérito não pode ser "
+                    + "null");
+        }
+        this.survey = survey;
+        this.answerGraph = survey.getGraphCopy();
+        //fetch items from survey
+        this.answers = new TreeMap<>();
+        this.currentQuestion = answerGraph.getFirstQuestion();
+    }
+
+    /**
+     * Fetches the question currently being answered
+     * @return question being answered
+     */
+    public Question getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    /**
+     * Answers the current question with a given option and updates the current
+     * question.
+     *
+     * @param option selected option.
+     * @return false if current question is the last one
+     */
+    public boolean answerQuestion(QuestionOption option) {
+        Iterable<Edge> outgoingEdges = answerGraph.outgoingEdges(currentQuestion);
+
+        // If there are no outgoing edges, maps the last answer and finishes
+        if (!outgoingEdges.iterator().hasNext()) {
+            answers.put(currentQuestion, new Answer(option));
+            return false;
+        }
+
+        for (Edge edge : outgoingEdges) {
+            if (edge.getElement().equals(option)) {
+                answers.put(currentQuestion, new Answer(option));
+                currentQuestion = edge.getDestinationVertexElement();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Removes the answer to current question and updates current question to
+     * the previous.
+     */
+    public void undoAnswer() {
+        if (answers.isEmpty()) {
+            return;
+        }
+        answers.remove(currentQuestion);
+        currentQuestion = ((TreeMap<Question, Answer>)answers).lastKey();
+    }
+
+    /**
+     * Submits a suggestion associated to this review.
+     *
+     * @param suggestionText the suggestion's text.
+     */
+    public void submitSuggestion(String suggestionText) {
+        suggestion = new Suggestion(suggestionText);
+    }
+
+    /**
+     * Method that returns all questions and respective answers of the current
+     * Review
+     *
+     * @return Map with all questions and respective answers of the current
+     * Review
+     */
+    public Map<Question, Answer> getReviewQuestionAnswers() {
+        return new TreeMap<>(answers);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + Objects.hashCode(this.answerGraph);
+        hash = 19 * hash + Objects.hashCode(this.answers);
+        hash = 19 * hash + Objects.hashCode(this.currentQuestion);
+        hash = 19 * hash + Objects.hashCode(this.itemList);
+        hash = 19 * hash + Objects.hashCode(this.suggestion);
+        return hash;
     }
 
     /**
@@ -64,42 +186,32 @@ public class Review implements Serializable {
      * @return review's hash code
      */
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     * Checks if two instances of Review are equal
-     *
-     * @param object object to be compared
-     * @return true if instances are equal, false if not
-     */
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Review)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Review other = (Review) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Review other = (Review) obj;
+        if (!Objects.equals(this.answerGraph, other.answerGraph)) {
+            return false;
+        }
+        if (!Objects.equals(this.answers, other.answers)) {
+            return false;
+        }
+        if (!Objects.equals(this.itemList, other.itemList)) {
+            return false;
+        }
+        if (!Objects.equals(this.suggestion, other.suggestion)) {
             return false;
         }
         return true;
     }
-    //TODO: reimplement method
-//    /**
-//     * Method that returns all questions and respective answers of the current Review
-//     * @return Map with all questions and respective answers of the current Review
-//     */
-//    public Map<Question,Answer> getReviewQuestionAnswers(){
-//        Map<Question,Answer> mapAnswers=new HashMap<>();
-//        Iterator<AnswerEdge> iteratorAnswers=answers.edges().iterator();
-//        iteratorAnswers.forEachRemaining((answer) -> {mapAnswers
-//                .put(answers.endVertices(answer)[QUESTION_INDEX_REFERENCE],answer.getElement());});
-//        return mapAnswers;
-//    }
+
     /**
      * Returns a string containing the review's data
      *
@@ -107,7 +219,7 @@ public class Review implements Serializable {
      */
     @Override
     public String toString() {
-        return "Avaliação:\nOpinião: " + opinion;
+        return "Avaliação:\nOpinião: " + suggestion;
     }
 
 }

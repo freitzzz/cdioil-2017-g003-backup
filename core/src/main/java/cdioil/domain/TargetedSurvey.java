@@ -1,8 +1,10 @@
 package cdioil.domain;
 
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.UsersGroup;
+import cdioil.time.TimePeriod;
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,7 +23,7 @@ public class TargetedSurvey extends Survey implements Serializable {
     /**
      * Question and Answer graph.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private UsersGroup targetAudience;
 
     /**
@@ -29,13 +31,12 @@ public class TargetedSurvey extends Survey implements Serializable {
      * time period.
      *
      * @param itemList survey items that the survey is about
-     * @param date date of when the survey begins
-     * @param endingDate date of when the survey ends
+     * @param surveyPeriod survey's time period
      * @param targetAudience group of users that the survey is targeted to
      */
-    public TargetedSurvey(List<SurveyItem> itemList, LocalDateTime date,
-            LocalDateTime endingDate, UsersGroup targetAudience) {
-        super(itemList, date, endingDate);
+    public TargetedSurvey(List<SurveyItem> itemList, TimePeriod surveyPeriod,
+            UsersGroup targetAudience) {
+        super(itemList, surveyPeriod);
         if (targetAudience == null) {
             throw new IllegalArgumentException("O grupo de utilizadores não "
                     + "pode ser null");
@@ -45,5 +46,21 @@ public class TargetedSurvey extends Survey implements Serializable {
 
     protected TargetedSurvey() {
         //For ORM.
+    }
+
+    /**
+     * Adds a list of users to the target audience
+     *
+     * @param users users to add to target audience
+     * @return true if users were added successfully, false if not
+     */
+    public boolean addUsersToGroup(List<RegisteredUser> users) {
+        if (users == null) {
+            return false;
+        }
+        for (RegisteredUser u : users) {
+            this.targetAudience.addUser(u);
+        }
+        return true;
     }
 }

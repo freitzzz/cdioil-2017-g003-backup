@@ -6,6 +6,6 @@
 
 
 
-   	Classes do domínio: Questionnaire, UserGroup
-   	Controller: AddUsersQuestionnaireController
-   	Repository: EventRepository, RegisteredUserRepository, WhitelistReposiotry
+   	Classes do domínio: TargetedSurvey, UserGroup
+   	Controller: AddUsersTargetedSurveyController
+   	Repository: SurveyRepository, RegisteredUserRepository, WhitelistReposiotry

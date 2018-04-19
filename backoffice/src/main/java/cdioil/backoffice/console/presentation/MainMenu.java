@@ -39,6 +39,7 @@ public class MainMenu {
     private String OPTION_EXPORT_SURVEY_ANSWERS = localizationHandler.getMessageValue("option_export_survey_answers");
     private String OPTION_CREATE_SURVEY = localizationHandler.getMessageValue("option_create_survey");
     private String OPTION_INSERT_QUESTION_CATEGORY = localizationHandler.getMessageValue("option_insert_question_category");
+    private String OPTION_EXPORT_STATISTICS_SURVEY = localizationHandler.getMessageValue("option_export_stats_survey");
 
 
     /* ==============
@@ -138,12 +139,18 @@ public class MainMenu {
                     new ExportSurveyAnswersUI();
                     break;
                 case 4:
-                    new AddUsersQuestionnaireUI().addUsersQuestionnaire();
+                    new AddUsersTargetedSurvey().addUsersTargetedSurvey();
                     break;
                 case 5:
                     new CreateSurveyUI(manager);
                     break;
+                case 6:
+                    new InsertQuestionUI(manager);
+                    break;
                 case 7:
+                    new ExportSurveyStatisticsUI();
+                    break;
+                case 8:
                     new CreateTemplateUI(manager);
                     break;
                 default:
@@ -164,7 +171,8 @@ public class MainMenu {
         System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
         System.out.println("5. " + OPTION_CREATE_SURVEY);
         System.out.println("6. " + OPTION_INSERT_QUESTION_CATEGORY);
-        System.out.println("7. Create Template");
+        System.out.println("7. " + OPTION_EXPORT_STATISTICS_SURVEY);
+        System.out.println("8. Create Template");
         System.out.println(SEPARATOR);
         System.out.println("0. " + OPTION_EXIT);
         option = Console.readInteger(REQUEST_SELECT_OPTION);

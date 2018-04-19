@@ -11,10 +11,17 @@
         <Message messageId = "info_admin_header" value = "&#x9;Back Office Admin"/>
         <Message messageId = "info_exit_input" value = "Escreva 'sair' se pretender cancelar."/>
         <Message messageId = "info_num_questions_imported" value = "Número de questões importadas com sucesso:"/>
+        <Message messageId = "info_num_products_imported" value = "Número de produtos importados com sucesso:"/>
         <Message messageId = "info_all_users_list" value = "Lista de Todos os Utilizadores do Sistema&#10;"/>
         <Message messageId = "info_all_managers_list" value = "Lista de Todos os Gestores&#10;"/>
         <Message messageId = "info_categories_removed" value = "Categoria(s) removida(s) com sucesso!&#10;"/>
         <Message messageId = "info_categories_added" value = "Categoria(s) adicionada(s) com sucesso!&#10;"/>
+        <Message messageId = "separator" value = "========================================&#10;"/>
+        <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
+        <Message messageId = "info_number_categories_question_was_added_to" value = "O número de cateogrias a que a questão foi adicionada foi: "/>
+        <Message messageId = "info_number_categories_imported" value = "O número de categorias importadas foi:"/>
+            <Message messageId = "success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
+            <Message messageId = "survey_message" value = "Inquérito"/>
     </InfoMessages>
 
 	
@@ -29,6 +36,8 @@
         <Message messageId = "request_manager_email" value = "Por favor introduza o email de um gestor para o selecionar&#10;"/>
         <Message messageId = "request_category_identifier_removal" value = "Insira o descritivo da(s) categoria(s) que quer remover ao gestor selecionado&#10;"/>
         <Message messageId = "request_category_identifier_association" value = "Insira o descritivo da(s) categoria(s) que quer associar ao gestor selecionado&#10;"/>
+        <Message messageId = "request_category_identifier_general" value = "Insira o descritivo da(s) categoria(s):&#10;"/>
+        <Message messageId = "request_select_survey" value = "Selecione um inquérito (número):&#10;"/>
     </RequestMessages>
 	
 	
@@ -40,10 +49,16 @@
         <Message messageId = "error_invalid_file_format" value = "Formato de ficheiro inválido!"/>
         <Message messageId = "error_file_not_found" value = "Ficheiro não encontrado, por favor tente novamente."/>
         <Message messageId = "error_no_imported_questions" value = "Não foi importada nenhuma questão."/>
+        <Message messageId = "error_no_imported_products" value = "Não foi importada nenhum produto"/>
         <Message messageId = "error_invalid_email" value = "Email inválido! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Categoria inválida! Por favor, tente novamente.&#10;"/>
+        <Message messageId = "error_invalid_survey" value = "Inquérito inválido! Por favor, tente novamente.&#10;"/>
+        <Message messageId = "error_no_managers" value = "Não existem gestores, logo não é possível efetuar a associação.&#10;"/>
+        <Message messageId = "error_survey_with_no_reviews" value = "O inquérito selecionado não tem nenhuma avaliação.&#10;"/>
+        <Message messageId = "error_exporting_stats" value = "Ocorreu um erro ao exportar as estatísticas do inquérito!&#10;Verifique se o ficheiro é valido.&#10;"/>
+        <Message messageId = "error_importing_categories" value = "Caminho de ficheiro não encontrado! Pretende continuar?&#10;"/>   
+        <Message messageId = "error_no_imported_categories" value = "Não foi importada nenhuma categoria."/>
     </ErrorMessages>
-	
 	
     <MenuOptions>
         <Message messageId = "option_exit" value = "Sair"/>
@@ -71,6 +86,7 @@
             <Message messageId="option_create_survey" value="Criar Inquérito"/>
             <Message messageId="option_add_users_questionnaire" value="Adicionar Utilizadores a Inquérito"/>
             <Message messageId="option_insert_question_category" value="Inserir Questão Sobre Categoria(s)"/>
+            <Message messageId = "option_export_stats_survey" value = "Exportar Estatísticas sobre Inquérito"/>
         </ManagerMenuOptions>
 
     </MenuOptions>

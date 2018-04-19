@@ -1,6 +1,6 @@
 package cdioil.frontoffice.presentation;
 
-import cdioil.domain.authz.SystemUser;
+import cdioil.frontoffice.presentation.authz.RegisterUserUI;
 
 /**
  * Classe que representa a consola de açoes do backoffice.
@@ -9,12 +9,15 @@ import cdioil.domain.authz.SystemUser;
  */
 public class FrontOfficeConsole {
     
-    public FrontOfficeConsole(SystemUser loggedUser){
-        new MainMenu().mainAlterarDados(loggedUser);
-    }
-    
     public FrontOfficeConsole(){
-        new MainMenu().mainRegistoUser();
+        mainRegistoUser();
     }
-    
+
+    /**
+     * Metodo que invoca a UI responsavel pela US180.
+     */
+    public void mainRegistoUser() {
+        RegisterUserUI registarUtilizadorUI = new RegisterUserUI();
+        registarUtilizadorUI.registerUser();
+    }
 }

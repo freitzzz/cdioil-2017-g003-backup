@@ -1,7 +1,10 @@
 package cdioil.persistence.impl;
 
+import cdioil.application.utils.OperatorsEncryption;
+import cdioil.domain.authz.Email;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.RegisteredUserRepository;
 import java.util.List;
@@ -26,7 +29,10 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
     }
 
     public boolean exists(RegisteredUser user) {
-        return new UserRepositoryImpl().findByEmail(user.getID().getID()) != null;
+        SystemUser sysUser=new UserRepositoryImpl().findByEmail(user.getID().getID());
+        if(sysUser==null)return false;
+        Query query=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.su = :sysUser").setParameter("sysUser",sysUser);
+        return !query.getResultList().isEmpty();
     }
 
     /**
@@ -37,8 +43,9 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
      */
     @Override
     public List<RegisteredUser> getUsersByDomain(String domain) {
-        Query q = entityManager().createQuery("SELECT r FROM RegisteredUser r WHERE r.su.email.email LIKE :pattern");
-        q.setParameter("pattern", "%@" + domain);
+        String encryptedDomain = OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
+        Query q = entityManager().createQuery("SELECT r FROM RegisteredUser r WHERE r.su.email.email REGEXP :pattern");
+        q.setParameter("pattern", ".*" + encryptedDomain);
         if (q.getResultList().isEmpty()) {
             return null;
         }

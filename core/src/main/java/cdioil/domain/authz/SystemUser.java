@@ -14,7 +14,30 @@ import javax.persistence.*;
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
 public class SystemUser implements Serializable, AggregateRoot<Email> {
-
+    /**
+     * Constant that represents the change name option
+     */
+    public static final int CHANGE_NAME_OPTION=1;
+    /**
+     * Constant that represents the change email option
+     */
+    public static final int CHANGE_EMAIL_OPTION=2;
+    /**
+     * Constant that represents the change password option
+     */
+    public static final int CHANGE_PASSWORD_OPTION=3;
+    /**
+     * Constant that represents the change phone number option
+     */
+    public static final int CHANGE_PHONE_NUMBER_OPTION=4;
+    /**
+     * Constant that represents the change locality option
+     */
+    public static final int CHANGE_LOCALITY_OPTION=5;
+    /**
+     * Constant that represents the change birth date option
+     */
+    public static final int CHANGE_BIRTH_DATE_OPTION=6;
     /**
      * Serialization number.
      */
@@ -91,9 +114,9 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
         this.nome = nome;
         this.password = password;
         this.activationCode=generateRandomCode();
-        changePhoneNumber(phoneNumber);
-        changeLocation(location);
-        changeBirthDate(birthDate);
+        this.phoneNumber = phoneNumber;
+        this.location = location;
+        this.birthDate = birthDate;
     }
 
     /**
@@ -113,30 +136,6 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
 
     protected SystemUser() {
         //For ORM
-    }
-    
-    /**
-     * Changes the current SystemUser phone number
-     * @param phoneNumber PhoneNumber with the new SystemUser phone number
-     */
-    public void changePhoneNumber(PhoneNumber phoneNumber){
-        this.phoneNumber=phoneNumber;
-    }
-    
-    /**
-     * Changes the current SystemUser location
-     * @param location Location with the new SystemUser location
-     */
-    public void changeLocation(Location location){
-        this.location=location;
-    }
-    
-    /**
-     * Changes the current SystemUser birth date
-     * @param birthDate BirthDate with the new SystemUser birth date
-     */
-    public void changeBirthDate(BirthDate birthDate){
-        this.birthDate=birthDate;
     }
     
     /**
@@ -207,28 +206,28 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     public boolean changeUserDatafield(String newField, int option) {
         try {
             switch (option) {
-                case 1://changes the user's name
+                case CHANGE_NAME_OPTION://changes the user's name
                     String[] newNome = newField.split(" ");
                     if (newNome.length != 2) {
                         throw new IllegalArgumentException();
                     }
                     this.nome = new Name(newNome[0], newNome[1]);
                     break;
-                case 2://changes the user's email
+                case CHANGE_EMAIL_OPTION://changes the user's email
                     Email newEmail = new Email(newField);
                     this.email = newEmail;
                     break;
-                case 3://changes the user's password
+                case CHANGE_PASSWORD_OPTION://changes the user's password
                     Password newPassword = new Password(newField);
                     this.password = newPassword;
                     break;
-                case 4:
+                case CHANGE_PHONE_NUMBER_OPTION:
                     this.phoneNumber = new PhoneNumber(newField);
                     break;
-                case 5:
+                case CHANGE_LOCALITY_OPTION:
                     this.location = new Location(newField);
                     break;
-                case 6:
+                case CHANGE_BIRTH_DATE_OPTION:
                     this.birthDate = new BirthDate(LocalDate.parse(newField));
                     break;
                 default:
@@ -254,6 +253,21 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * @return Long with the generated random code for the current user
      */
     public long getActivationCode(){return activationCode;}
+    /**
+     * Method that returns the current user name
+     * @return Name with the current user name
+     */
+    public Name getName(){return nome;}
+    /**
+     * Method that checks if the current user was previously imported or not
+     * @return boolean true if the user was previously imported, false if not
+     */
+    public boolean isUserImported(){return imported;}
+    /**
+     * Method that checks if the current user is activated
+     * @return boolean true if the user is activated, false if not
+     */
+    public boolean isUserActivated(){return activated;}
     /**
      * Method that generates a random code used to prove user authenticity
      * @return Long with the generated random code used to prove user authenticity

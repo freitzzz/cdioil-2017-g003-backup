@@ -5,7 +5,6 @@
  */
 package cdioil.backoffice.application;
 
-import cdioil.domain.Category;
 import cdioil.domain.MultipleChoiceQuestionOption;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.QuestionOption;
@@ -102,7 +101,7 @@ public class InsertQuestionControllerTest {
      * Test of createQuestion method, of class InsertQuestionController (checks if the return is 1).
      */
     @Test
-    public void testCreateMulyipleChoiceQuestion() {
+    public void testCreateMultipleChoiceQuestion() {
         System.out.println("createQuestion - multiple choice");
         String questionType = "Escolha Múltipla";
         String questionText = "This is my content";
@@ -120,7 +119,7 @@ public class InsertQuestionControllerTest {
      * Test of createQuestion method, of class InsertQuestionController (checks if the return is 0).
      */
     @Test
-    public void testCreateInvalidMulyipleChoiceQuestion() {
+    public void testCreateInvalidMultipleChoiceQuestion() {
         System.out.println("createQuestion - multiple choice");
         String questionType = "Escolha Múltipla";
         String questionText = "";

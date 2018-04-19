@@ -7,7 +7,6 @@ package cdioil.backoffice.application;
 
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
-import cdioil.persistence.CategoryQuestionsLibraryRepository;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.ArrayList;
@@ -30,6 +29,12 @@ public class InsertQuestionController {
      * Current manager.
      */
     private Manager manager;
+
+    /**
+     * Regular expression to validate the path of the Category in the Market Structure.
+     */
+    private final static String PATH_REGEX = "[0-9]+" + Category.Sufixes.SUFIX_DC + "((-[0-9]+" + Category.Sufixes.SUFIX_UN + "(-[0-9]+"
+            + Category.Sufixes.SUFIX_CAT + "(-[0-9]+" + Category.Sufixes.SUFIX_SCAT + "(-[0-9]+" + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**
      * Sufix of the regular expression used to search categories by its identifier.
@@ -162,7 +167,7 @@ public class InsertQuestionController {
         if (questionType.equalsIgnoreCase(QuestionTypes.BINARY.toString()) || questionType.equals("1")) {
             return 1; //Binary Question
         } else if (questionType.equalsIgnoreCase(QuestionTypes.MULTIPLE_CHOICE.toString()) || questionType.equals("2")) {
-            return 2; //Multiple Choice Quastion
+            return 2; //Multiple Choice Question
         } else if (questionType.equalsIgnoreCase(QuestionTypes.QUANTITATIVE.toString()) || questionType.equals("3")) {
             return 3; //Quantitative Question
         }
@@ -187,5 +192,15 @@ public class InsertQuestionController {
      */
     public QuantitativeQuestionOption createNewQuantitativeQuestionOption(double content) {
         return new QuantitativeQuestionOption(content);
+    }
+
+    /**
+     * Checks if the inserted path is valid.
+     *
+     * @param identifier identifier of the categories
+     * @return true, if the categories are valid. Otherwise, returns false
+     */
+    public boolean checkPath(String identifier) {
+        return identifier.toUpperCase().matches(PATH_REGEX);
     }
 }

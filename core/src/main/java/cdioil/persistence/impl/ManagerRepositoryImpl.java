@@ -36,7 +36,12 @@ public class ManagerRepositoryImpl extends BaseJPARepository<Manager,Long> imple
      * @param manager Manager with manager being checked
      * @return boolean true if the manager exists on the database, false if not
      */
-    public boolean exists(Manager manager){return new UserRepositoryImpl().findByEmail(manager.getID().getID())!=null;}
+    public boolean exists(Manager manager){
+        SystemUser sysUser=new UserRepositoryImpl().findByEmail(manager.getID().getID());
+        if(sysUser==null)return false;
+        Query query=entityManager().createQuery("SELECT MA FROM Manager MA WHERE MA.su = :sysUser").setParameter("sysUser",sysUser);
+        return !query.getResultList().isEmpty();
+    }
 
     @Override
     public Manager findByUserID(long dataBaseId) {

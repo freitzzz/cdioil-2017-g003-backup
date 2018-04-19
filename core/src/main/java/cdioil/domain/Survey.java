@@ -1,8 +1,9 @@
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
+import cdioil.time.TimePeriod;
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 
@@ -28,20 +29,15 @@ public abstract class Survey implements Serializable {
     private int id;
 
     /**
-     * Product associated to the survey.
+     * Item associated with the survey.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
     private List<SurveyItem> itemList;
 
     /**
      * Date of when the survey was done.
      */
-    private LocalDateTime surveyDate;
-
-    /**
-     * Date of when the survey ends.
-     */
-    private LocalDateTime endingDate;
+    @Embedded
+    private TimePeriod surveyPeriod;
 
     /**
      * Question and Answer graph.
@@ -61,21 +57,20 @@ public abstract class Survey implements Serializable {
      *
      * @param itemList list of products or categories the survey is associated
      * to
-     * @param date date when the survey was done
-     * @param endingDate date of when the survey is end
+     * @param surveyPeriod survey's time period (can be timed or timeless)
      */
-    public Survey(List<SurveyItem> itemList, LocalDateTime date, LocalDateTime endingDate) {
-        if (itemList == null) {
+    public Survey(List<SurveyItem> itemList, TimePeriod surveyPeriod) {
+        if (itemList == null || itemList.isEmpty()) {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
         }
-        if (date == null) {
-            throw new IllegalArgumentException("O inquérito tem que ter uma data");
+        if(surveyPeriod == null){
+            throw new IllegalArgumentException("O inquérito ter que ter um período "
+                    + "de tempo definido");
         }
         this.itemList = itemList;
         this.graph = new Graph();
-        this.surveyDate = date;
-        this.endingDate = endingDate;
+        this.surveyPeriod = surveyPeriod;
         this.state = SurveyState.DRAFT;
     }
 
@@ -110,6 +105,20 @@ public abstract class Survey implements Serializable {
     }
 
     /**
+     * Sets the next question for a given option.
+     *
+     * @param origin current question
+     * @param destination next question
+     * @param option option leading to the next question
+     * @param weight statistical value
+     * @return true - if option doesn't already lead to another question<p>
+     * false - otherwise
+     */
+    public boolean setNextQuestion(Question origin, Question destination, QuestionOption option, double weight) {
+        return graph.insertEdge(origin, destination, option, 0);
+    }
+
+    /**
      * Checks if a question already exists in the graph.
      *
      * @param question question to be verified
@@ -134,15 +143,12 @@ public abstract class Survey implements Serializable {
     }
 
     /**
-     * Returns a description of the survey (product or category description and
-     * date)
+     * Creates a copy of the Survey's Graph.
      *
-     * @return survey's description
+     * @return copy of the Graph.
      */
-    @Override
-    public String toString() {
-        return "Inquerito sobre:\n" + itemList.toString()
-                + "\nData:\n" + surveyDate;
+    public Graph getGraphCopy() {
+        return new Graph(graph);
     }
 
     /**
@@ -176,4 +182,25 @@ public abstract class Survey implements Serializable {
         }
         return this.graph.equals(other.graph);
     }
+
+    /**
+     * Returns a description of the survey (product or category description and
+     * date)
+     *
+     * @return survey's description
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("Inquérito:");
+
+        for (SurveyItem surveyItem :
+                itemList) {
+            stringBuilder.append("\n" + surveyItem.toString());
+        }
+
+        stringBuilder.append("\nData: " + surveyPeriod.toString());
+
+        return stringBuilder.toString();
+    }
+
 }

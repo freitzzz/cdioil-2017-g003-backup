@@ -43,10 +43,11 @@
     <class>cdioil.domain.QuantitativeQuestionOption</class>
     <class>cdioil.domain.CategoryTemplatesLibrary</class>
     <class>cdioil.domain.TemplateGroup</class>
-    <class>cdioil.application.utils.Edge</class>
     <class>cdioil.application.utils.Graph</class>
     <class>cdioil.application.utils.Vertex</class>
     <class>cdioil.domain.TargetedSurvey</class>
+    <class>cdioil.domain.GlobalSurvey</class>
+    <class>cdioil.application.utils.Edge</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

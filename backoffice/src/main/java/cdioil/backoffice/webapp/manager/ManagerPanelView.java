@@ -9,6 +9,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 /**
  * @author <a href="https://github.com/freitzzz">freitzzz</a>
@@ -74,9 +75,34 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
      * Configures current page
      */
     private void configuration(){
-        configureHomeButton();
-        configureImportButton();
-        configureExportButton();
+        configureAccordion();
+        //configureHomeButton();
+        //configureImportButton();
+        //configureExportButton();
+    }
+
+    /**
+     * Configures Left Panel Accordion
+     */
+    private void configureAccordion() {
+        VerticalLayout vl = new VerticalLayout();
+        vl.setHeight(-1, Unit.PIXELS);
+        vl.setWidth(100.0f, Unit.PERCENTAGE);
+        Button b1 = createButton("Importar");
+        Button b2 = createButton("Exportar");
+
+        Button b3 = createButton("Criar Inquerito");
+        Button b4 = createButton("Eliminar Inquerito");
+        Button b5 = createButton("Ver Inqueritos");
+
+        vl.addComponentsAndExpand(b1, b2);
+        addTabToAccordion("Importar", vl, VaadinIcons.DASHBOARD);
+
+        vl = new VerticalLayout();
+        vl.setHeight(-1, Unit.PIXELS);
+        vl.setWidth(100.0f, Unit.PERCENTAGE);
+        vl.addComponentsAndExpand(b3, b4, b5);
+        addTabToAccordion("Inqueritos", vl, VaadinIcons.BAR_CHART);
     }
 
     /**

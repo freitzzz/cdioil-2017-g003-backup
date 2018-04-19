@@ -6,28 +6,36 @@
 package cdioil.domain.authz;
 
 import cdioil.domain.Review;
+import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * Profile class.
  *
  * @author João
+ * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Entity
-public class Profile implements Serializable {
+public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
 
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    /**
+     * RegisterdUser that owns the profile
+     */
+    @OneToOne
+    private RegisteredUser registeredUser;
     /**
      * Information of the user's profile
      */
@@ -47,7 +55,18 @@ public class Profile implements Serializable {
      */
     //private List<Sugestao> sugestoes;
     /**
-     * empty construcotr of Profile class
+     * Builds a new Profile of a certain Registered User
+     *
+     * @param registeredUser RegisteredUser with the registered user that owns
+     * this profile
+     */
+    public Profile(RegisteredUser registeredUser) {
+        this.registeredUser = registeredUser;
+        this.reviews = new ArrayList<>();
+    }
+
+    /**
+     * Protected constructor in order to allow JPA persistence
      */
     protected Profile() {
     }
@@ -60,7 +79,7 @@ public class Profile implements Serializable {
      * added
      */
     public boolean addReview(Review r) {
-        return reviews.add(r);
+        return r != null ? reviews.add(r) : false;
     }
 
     /**
@@ -89,8 +108,8 @@ public class Profile implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.registeredUser);
         return hash;
     }
 
@@ -107,10 +126,7 @@ public class Profile implements Serializable {
             return false;
         }
         Profile other = (Profile) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return this.getID().equals(other.getID());
     }
 
     /**
@@ -121,6 +137,16 @@ public class Profile implements Serializable {
     @Override
     public String toString() {
         return "org.grupo3.cdioil.isep.feedback_monkey.domain.Perfil[ id=" + id + " ]";
+    }
+
+    /**
+     * Returns the current Profile Identity
+     *
+     * @return RegisteredUser with the current profile identity
+     */
+    @Override
+    public RegisteredUser getID() {
+        return registeredUser;
     }
 
 }

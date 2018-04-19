@@ -1,6 +1,6 @@
 package cdioil.domain;
 
-import java.time.LocalDateTime;
+import cdioil.time.TimePeriod;
 import java.util.List;
 import javax.persistence.Entity;
 
@@ -12,8 +12,8 @@ import javax.persistence.Entity;
 @Entity(name = "GlobalSurvey")
 public class GlobalSurvey extends Survey{
 
-    public GlobalSurvey(List<SurveyItem> itemList, LocalDateTime date, LocalDateTime endingDate){
-        super(itemList,date,endingDate);
+    public GlobalSurvey(List<SurveyItem> itemList, TimePeriod surveyPeriod){
+        super(itemList,surveyPeriod);
     }
     
     /**

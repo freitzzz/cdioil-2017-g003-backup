@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,11 +19,11 @@ import javax.persistence.OneToMany;
  * Abstract class that represents a Question.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- * @param <T> defines the type of questionText of the question
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question<T> implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "QUESTIONTYPE")
+public abstract class Question implements Serializable, Comparable {
 
     /**
      * Serialization code.
@@ -36,6 +36,11 @@ public abstract class Question<T> implements Serializable {
      * Database id.
      */
     protected Long databaseID;
+
+    /**
+     * The question's type.
+     */
+    protected QuestionTypes type;
 
     /**
      * The question itself.
@@ -51,8 +56,8 @@ public abstract class Question<T> implements Serializable {
      * List of options that the question has.
      */
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "QUESTION_OPTIONLIST",joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
-            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID",unique = false))
+    @JoinTable(name = "QUESTION_OPTIONLIST", joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
+            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID", unique = false))
     private List<QuestionOption> optionList;
 
     public Question(String questionText, String questionID, List<QuestionOption> optionList) {
@@ -77,6 +82,24 @@ public abstract class Question<T> implements Serializable {
      * Empty Constructor for JPA.
      */
     protected Question() {
+    }
+
+
+    /**
+     * Get the question type
+     * @return question type
+     */
+    public QuestionTypes getType() {
+        return type;
+    }
+
+    /**
+     * Retrieves the Question's list of currently available options.
+     *
+     * @return all available options.
+     */
+    public List<QuestionOption> getOptionList() {
+        return optionList;
     }
 
     /**
@@ -105,14 +128,21 @@ public abstract class Question<T> implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Question<?>)) {
+        if (obj == null) {
             return false;
         }
-        final Question<?> other = (Question<?>) obj;
-        if (!this.questionID.equals(other.questionID)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return this.questionText.equals(other.questionText);
+        final Question other = (Question) obj;
+        if (!Objects.equals(this.questionText, other.questionText)) {
+            return false;
+        }
+        if (!Objects.equals(this.questionID, other.questionID)) {
+            return false;
+        }
+        return true;
+
     }
 
     /**
@@ -123,5 +153,16 @@ public abstract class Question<T> implements Serializable {
     @Override
     public String toString() {
         return questionText;
+    }
+
+    /**
+     * Compares current question to anothe question
+     *
+     * @param o question to be compared
+     * @return 0 if they're equal, 1 or - 1 if they're different
+     */
+    @Override
+    public int compareTo(Object o) {
+        return Integer.compare(hashCode(), o.hashCode());
     }
 }

@@ -33,9 +33,13 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
     /**
      * List of the Product's Codes.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Code> codes = new ArrayList<>();
-
+    /**
+     * Quantity of the product.
+     */
+    @Column(name = "QUANTIDADE")
+    private String quantity;
     /**
      * The Product's image.
      */
@@ -52,10 +56,11 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
      *
      *
      * @param name the product's name
-     * @param code code
+     * @param code ean
      * @param codes 0 or more codes
+     * @param quantity quantity
      */
-    public Product(String name, Code code, Code... codes) {
+    public Product(String name, Code code, String quantity,Code... codes) {
 
         if (name == null || code == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid parameters.");
@@ -66,6 +71,8 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
         this.codes.add(code);
 
         this.codes.addAll(Arrays.asList(codes));
+        
+        this.quantity = quantity;
 
         this.productImage = new Image(IMAGEM_PRODUTO_DEFAULT.getBytes());
     }
@@ -75,8 +82,7 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
      *
      *
      * @param imagem Byte Array with the image's content
-     * @return boolean true if the Image was altered successfully, false if an
-     * error has occured
+     * @return boolean true if the Image was altered successfully, false if an error has occured
      *
      */
     public boolean changeProductImage(byte[] imagem) {
@@ -133,8 +139,7 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
      * Compares this instance with another Object.
      *
      * @param obj object to compare to
-     * @return true, if the Products have the same list of Code elements, false
-     * otherwise
+     * @return true, if the Products have the same list of Code elements, false otherwise
      */
     @Override
     public boolean equals(Object obj) {

@@ -4,24 +4,20 @@ import cdioil.domain.TargetedSurvey;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.Whitelist;
 import cdioil.persistence.BaseJPARepository;
-import cdioil.persistence.impl.EventRepositoryImpl;
+import cdioil.persistence.SurveyRepository;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
+import cdioil.persistence.impl.SurveyRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Controller of US Add users to questionnaire *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * =========================================================================
- * FIXME - Questionnaire is now TargetedSurvey
- * =========================================================================
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Controller of US Add users to targeted survey
  *
  * @author João
  */
-public class AddUsersQuestionnaireController {
+public class AddUsersTargetedSurveyController {
 
     /**
      * List of users to be added
@@ -31,7 +27,7 @@ public class AddUsersQuestionnaireController {
     /**
      * Constructor of AddUsersQuestionnaireController
      */
-    public AddUsersQuestionnaireController() {
+    public AddUsersTargetedSurveyController() {
         users = new LinkedList<>();
     }
 
@@ -40,10 +36,11 @@ public class AddUsersQuestionnaireController {
      *
      * @return list of questionnaires
      */
-    public List<TargetedSurvey> getQuestionnaires() {
-        EventRepositoryImpl repo = new EventRepositoryImpl();
-        List<TargetedSurvey> lq = new ArrayList<>();//repo.getQuestionnaires();
-        return lq;
+    public List<TargetedSurvey> getTragetedSurveys() {
+        SurveyRepository repo = new SurveyRepositoryImpl();
+        List<TargetedSurvey> listTS = new ArrayList<>();
+        repo.getTargetedSurveys();
+        return listTS;
     }
 
     /**
@@ -70,15 +67,15 @@ public class AddUsersQuestionnaireController {
     }
 
     /**
-     * Adds the users to the questionnaire
+     * Adds the users to the targeted survey
      *
-     * @param questionnaire questionnaire to add users to
+     * @param targetedSurvey survey to add users to
      * @return true if users were added successfully, false if not
      */
-    public boolean addUsersQuestionnaire(TargetedSurvey questionnaire) {
-        /*boolean b = questionnaire.addUsersToGroup(users);
-        EventRepositoryImpl repo = new EventRepositoryImpl();
-        repo.merge(questionnaire);*/
+    public boolean addUsersTargetedSurvey(TargetedSurvey targetedSurvey) {
+        boolean b = targetedSurvey.addUsersToGroup(users);
+        BaseJPARepository repo = new SurveyRepositoryImpl();
+        repo.merge(targetedSurvey);
         return true;
     }
 }

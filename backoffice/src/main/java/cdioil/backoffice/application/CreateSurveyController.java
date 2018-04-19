@@ -3,6 +3,7 @@ package cdioil.backoffice.application;
 import cdioil.domain.*;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.persistence.impl.*;
+import cdioil.time.TimePeriod;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -107,10 +108,12 @@ public class CreateSurveyController {
         SurveyRepositoryImpl repo = new SurveyRepositoryImpl();
         Survey survey;
 
+        TimePeriod timePeriod = new TimePeriod(dateBeginning, dateEnding);
+
         if (targetAudience == null) {
-            survey = new GlobalSurvey(surveyItems, dateBeginning, dateEnding);
+            survey = new GlobalSurvey(surveyItems, timePeriod);
         } else {
-            survey = new TargetedSurvey(surveyItems, dateBeginning, dateEnding, targetAudience);
+            survey = new TargetedSurvey(surveyItems, timePeriod, targetAudience);
         }
 
         for (SurveyItem surveyItem : map.keySet()) {
