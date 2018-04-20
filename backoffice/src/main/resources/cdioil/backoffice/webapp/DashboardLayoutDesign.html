@@ -7,12 +7,12 @@
  </head>
  <body>
   <vaadin-css-layout responsive size-full>
-   <vaadin-horizontal-layout spacing="false" responsive height-full>
-    <vaadin-panel primary-style-name="valo-menu" responsive width-auto height-full _id="leftPanel" :middle :expand="0.4">
+   <vaadin-horizontal-layout spacing="false" responsive size-full>
+    <vaadin-panel primary-style-name="valo-menu" size-full _id="leftPanel" :expand="0.2">
      <vaadin-grid-layout size-full margin>
       <row>
        <column expand="1">
-        <vaadin-vertical-layout spacing="false" :center>
+        <vaadin-vertical-layout :center>
          <vaadin-image width="90px" height="90px" _id="userAvatar" :center></vaadin-image>
          <vaadin-label height-full plain-text _id="usernameLabel" :center :expand>
            Tiago Almeida 
@@ -22,20 +22,23 @@
       </row>
       <row expand="1">
        <column>
-        <vaadin-css-layout width-full _id="btnPanel" :middle></vaadin-css-layout>
+        <vaadin-css-layout width-full _id="btnPanel" :center></vaadin-css-layout>
        </column>
       </row>
-      <row>
+      <row expand="1">
        <column>
-        <vaadin-button primary-style-name="v-button-borderless" responsive width-full plain-text _id="btnLogout">
-          Logout 
-        </vaadin-button>
+        <vaadin-css-layout width-full _id="btnPanel1" :middle :center>
+         <vaadin-button primary-style-name="v-button-borderless" size-full plain-text _id="btnLogout">
+           Logout 
+         </vaadin-button>
+        </vaadin-css-layout>
        </column>
       </row>
       <row></row>
+      <row></row>
      </vaadin-grid-layout>
     </vaadin-panel>
-    <vaadin-panel responsive size-full _id="rightPanel" :middle :center :expand="0.7"></vaadin-panel>
+    <vaadin-panel responsive size-full _id="rightPanel" :middle :center :expand="0.8"></vaadin-panel>
    </vaadin-horizontal-layout>
   </vaadin-css-layout>
  </body>
