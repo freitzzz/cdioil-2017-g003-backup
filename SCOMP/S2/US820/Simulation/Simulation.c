@@ -68,6 +68,15 @@ void destroySemaphore(char *semaphoreName){
 }
 
 /*Executes the semaphore simulation*/
+/* Currently uses four semaphores in order to send reviews atomically through a shared memory zone
+ * - One for the father to communicate with the childs telling them that they can send a review
+ * - One for the childs to comunicate with the parent telling him that a review was sent
+ * - One for the parent to communicate with the childs telling them that the review was received with success
+ * - One for the childs to communicate with the parent telling him that the success message was printed 
+ *   (This one is also used for the father to know that the childs simulation ended, in order to end the simulations)
+ * <br><b>Nota:</b> Note: Since we are using only one receipt (father) the simulation only sends one review per 
+ * time to the father
+ */
 void executeSemaphoreSimulation(DeviceSimulatorStruct simulator){
 	int deviceNumber,reviewQuantity,reviewSendTime;
 	short randomQuantity,randomSendTime;
