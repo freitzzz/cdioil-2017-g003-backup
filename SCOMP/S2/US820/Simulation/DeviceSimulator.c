@@ -38,8 +38,12 @@ void startSimulation(char *fileName){
     }
 }
 
-/*Executes a certain Device Simulation*/
-/*Execute with -h parameters for help*/
+/**
+ * Sprint III US-820 - Configure simulation through parameters
+ * <br>Uses a configuration file to configure the simulation 
+ * Executes a certain Device Simulation
+ * Execute with -h parameters for help
+ */
 int main(int argc,char* argv[]){
     clearScreen();
     if(argc==1 || argc>NUMBER_OF_POSSIBLE_PARAMETERS+1){
