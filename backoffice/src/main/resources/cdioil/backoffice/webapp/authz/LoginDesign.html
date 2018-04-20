@@ -11,12 +11,12 @@
     <row expand="2">
      <column expand="2">
       <vaadin-horizontal-layout responsive margin _id="horizontalLayout" :middle :center>
-       <vaadin-image responsive _id="logo" :middle :center :expand="2"></vaadin-image>
-       <vaadin-grid-layout style-name="animate-in" size-full :middle :center>
+       <vaadin-image responsive width="70%" height="70%" _id="logo" :middle :center :expand></vaadin-image>
+       <vaadin-grid-layout style-name="animate-in" :middle :center>
         <row>
          <column expand="1">
-          <vaadin-panel caption="<center>Login</center>" width-auto height="304px" _id="panelLogin" :middle :center>
-           <vaadin-vertical-layout size-auto>
+          <vaadin-panel caption="<center>Login</center>" size-auto _id="panelLogin" :middle :center>
+           <vaadin-vertical-layout size-auto _id="panelLoginLayout">
             <vaadin-label plain-text _id="lblUsername" :center>
               Username 
             </vaadin-label>
@@ -25,9 +25,14 @@
               Password 
             </vaadin-label>
             <vaadin-password-field _id="txtPassword"></vaadin-password-field>
-            <vaadin-button plain-text _id="btnLogin" :middle :center>
-              Login 
-            </vaadin-button>
+            <vaadin-horizontal-layout _id="buttonsLayout" :middle :center>
+             <vaadin-button plain-text _id="btnLogin" :middle :center>
+               Login 
+             </vaadin-button>
+             <vaadin-button plain-text _id="btnSignUp" :middle :center>
+               Registar 
+             </vaadin-button>
+            </vaadin-horizontal-layout>
            </vaadin-vertical-layout>
           </vaadin-panel>
          </column>

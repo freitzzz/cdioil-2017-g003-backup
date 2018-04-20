@@ -1,7 +1,9 @@
 package cdioil.application.authz;
 
+import cdioil.application.utils.EmailSenders;
 import cdioil.domain.authz.SystemUser;
 import cdioil.emails.EmailSenderFactory;
+import cdioil.persistence.impl.EmailSendersRepositoryImpl;
 
 /**
  * Service class that sends the account activation code to the SystemUser email
@@ -27,14 +29,6 @@ public final class EmailSenderService {
      */
     private final SystemUser currentSystemUser;
     /**
-     * String with the current email address that is going to send a certain email
-     */
-    private String emailSenderAddress;
-    /**
-     * String with the current email address password that is going to send a certain email
-     */
-    private String emailSenderAddressPassword;
-    /**
      * Builds a new EmailSenderService with the System User which email is going to 
      * be sent to
      * @param currentSystemUser SystemUser with the system user which email is going 
@@ -48,11 +42,13 @@ public final class EmailSenderService {
      * false if not
      */
     public boolean sendActivationCode(){
+        EmailSenders sender=new EmailSendersRepositoryImpl().getRandomEmailSender();
+        if(sender==null)return false;
         String toEmail=currentSystemUser.getID().toString();
         String content=String.format(FORMATED_EMAIL_ACTIVATION_CODE_CONTENT
                 ,currentSystemUser.getName().toString(),toEmail,currentSystemUser.getActivationCode());
         return EmailSenderFactory
-                .create(emailSenderAddress,emailSenderAddressPassword)
+                .create(sender.getEmail(),sender.getPassword())
                 .sendEmail(toEmail,EMAIL_ACTIVATION_CODE_TITLE,content);
     }
 }

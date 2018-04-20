@@ -70,7 +70,7 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Integer> imp
      */
     @Override
     public List<TargetedSurvey> getTargetedSurveys() {
-        Query q = entityManager().createQuery("SELCT tSurvey FROM TargetedSurvey tSurvey");
+        Query q = entityManager().createQuery("SELECT tSurvey FROM TargetedSurvey tSurvey");
         if (q.getResultList().isEmpty()) {
             return null;
         }

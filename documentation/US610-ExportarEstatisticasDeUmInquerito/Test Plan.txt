@@ -1,0 +1,16 @@
+	
+
+	TEST PLAN
+
+	_______________________________
+
+	CASO #1: Exportar Estatísticas de um Inquérito para um ficheiro do formato CSV
+	_______________________________
+
+	1. Mostrar os inquéritos disponiveis
+	2. Escolher um inquérito
+	3. Encontrar todas as respostas do inquérito
+	4. Pedir informação sobre o caminho do ficheiro
+	6. Inserir informação sobre o caminho do ficheiro
+	7. Calcular as estatísticas e exportá-las para o ficheiro CSV
+	8. Informar o sucesso da operação

@@ -48,6 +48,8 @@
     <class>cdioil.domain.TargetedSurvey</class>
     <class>cdioil.domain.GlobalSurvey</class>
     <class>cdioil.application.utils.Edge</class>
+    <class>cdioil.application.utils.EmailSenders</class>
+    <class>cdioil.domain.SKU</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

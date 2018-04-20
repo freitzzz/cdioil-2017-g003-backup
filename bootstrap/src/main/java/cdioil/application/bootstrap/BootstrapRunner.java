@@ -1,5 +1,6 @@
 package cdioil.application.bootstrap;
 
+import cdioil.application.bootstrap.authz.EmailSendersBootstrap;
 import cdioil.application.bootstrap.authz.UsersBootstrap;
 import cdioil.application.bootstrap.authz.WhitelistBootstrap;
 import cdioil.application.bootstrap.domain.MarketStructureBootstrap;
@@ -24,6 +25,7 @@ public class BootstrapRunner {
         new MarketStructureBootstrap();
         new LibrariesBootstrap();
         new SurveyBootstrap();
+        new EmailSendersBootstrap();
     }
 
     /**

@@ -10,11 +10,15 @@ import cdioil.domain.authz.Manager;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.shared.Position;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * Login View class that extends LoginDesign class designed with Vaadin Design
@@ -74,19 +78,43 @@ public class LoginView extends LoginDesign implements View {
     private Manager manager;
 
     /**
+     * Popup View for the Register User button
+     */
+    private PopupView popupView;
+
+    /**
      * Creates a new LoginView
      */
     public LoginView() {
         navigator = UI.getCurrent().getNavigator();
+        prepareComponents();
+    }
+
+    private void prepareComponents() {
+        txtUsername.setIcon(VaadinIcons.USER);
+        txtPassword.setIcon(VaadinIcons.PASSWORD);
+        txtUsername.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        txtPassword.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
         setLogo();
         configurateLogin();
     }
 
     /**
-     * Configuares login
+     * Configures login
      */
     private void configurateLogin() {
+        configurePopupView();
         configurateLoginButton();
+        configureSignupButton();
+    }
+
+    /**
+     * Configures the Register User Popup View
+     */
+    private void configurePopupView() {
+        popupView = new PopupView(new RegisterPopupViewContent());
+        popupView.setHideOnMouseOut(false);
+        panelLoginLayout.addComponentsAndExpand(popupView);
     }
 
     /**
@@ -116,6 +144,19 @@ public class LoginView extends LoginDesign implements View {
                 }
             } else {
                 showInvalidUsernameNotification();
+            }
+        });
+    }
+
+    /**
+     * Configures Signup button
+     */
+    private void configureSignupButton() {
+        buttonsLayout.addComponentsAndExpand(new PopupView(new RegisterPopupViewContent()));
+        btnSignUp.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                popupView.setPopupVisible(true);
             }
         });
     }
