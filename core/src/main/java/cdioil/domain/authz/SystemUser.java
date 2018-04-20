@@ -70,7 +70,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * User's name.
      */
     @Embedded
-    private Name nome;
+    private Name name;
     /**
      * User's password.
      */
@@ -86,11 +86,13 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * User's Location
      */
     @Embedded
+    @Column(nullable = true)
     private Location location;
     /**
      * User's birth date
      */
     @Embedded
+    @Column(nullable = true)
     private BirthDate birthDate;
     /**
      * Boolean that represents if the User's account is activated or not
@@ -110,21 +112,24 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * location and birth date
      *
      * @param email user's email
-     * @param nome user's name
+     * @param name user's name
      * @param password user's password
      * @param phoneNumber PhoneNumber with the user phone number
      * @param location Location with the user location
      * @param birthDate BirthDate with the user birth date
      */
-    public SystemUser(Email email, Name nome, Password password, PhoneNumber phoneNumber,
+    public SystemUser(Email email, Name name, Password password, PhoneNumber phoneNumber,
              Location location, BirthDate birthDate) {
+        if(email==null)throw new IllegalArgumentException("O email não pode ser null!");
+        if(password==null)throw new IllegalArgumentException("A password não pode ser null!");
+        if(name==null)throw new IllegalArgumentException("O nome não pode ser null!");
+        if(phoneNumber==null)throw new IllegalArgumentException("O número de telemóvel não pode ser null!");
         this.email = email;
-        this.nome = nome;
+        this.name = name;
         this.password = password;
-        this.activationCode=generateRandomCode();
         this.phoneNumber = phoneNumber;
-        this.location = location;
         this.birthDate = birthDate;
+        this.activationCode=generateRandomCode();
     }
 
     /**
@@ -136,7 +141,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     public SystemUser(Email email, Name nome, Password password) {
         this.email = email;
-        this.nome = nome;
+        this.name = nome;
         this.password = password;
         this.imported=true;
         this.activationCode=generateRandomCode();
@@ -199,7 +204,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     //TO-DO: ADD REMOVE TOSTRING ADD DTO
     @Override
     public String toString() {
-        return "Nome: " + nome + "\nEmail: " + email + "\n";
+        return "Nome: " + name + "\nEmail: " + email + "\n";
     }
 
     /**
@@ -219,7 +224,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
                     if (newNome.length != 2) {
                         throw new IllegalArgumentException();
                     }
-                    this.nome = new Name(newNome[0], newNome[1]);
+                    this.name = new Name(newNome[0], newNome[1]);
                     break;
                 case CHANGE_EMAIL_OPTION://changes the user's email
                     Email newEmail = new Email(newField);
@@ -265,7 +270,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * Method that returns the current user name
      * @return Name with the current user name
      */
-    public Name getName(){return nome;}
+    public Name getName(){return name;}
     /**
      * Method that checks if the current user was previously imported or not
      * @return boolean true if the user was previously imported, false if not
