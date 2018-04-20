@@ -13,13 +13,18 @@ public class AnswerSurveyUI {
     /**
      * Line separator
      */
-    private static final String LINE_SEPARATOR =
-            "===================================";
+    private static final String LINE_SEPARATOR
+            = "===================================";
 
     /**
      * Controller class
      */
     private AnswerSurveyController controller;
+
+    /**
+     * String with the text Yes.
+     */
+    private static final String YES = "Yes";
 
     /**
      * Constructor
@@ -90,7 +95,6 @@ public class AnswerSurveyUI {
         }
     }
 
-
     private void answerSurvey() {
         int idx = Console.readInteger("Survey Number");
 
@@ -104,14 +108,31 @@ public class AnswerSurveyUI {
         while (true) {
             System.out.println(controller.getQuestion());
             List<String> options = controller.getCurrentQuestionOptions();
-            for(int i = 0; i < options.size(); i++){
+            for (int i = 0; i < options.size(); i++) {
                 System.out.println(i + options.get(i));
             }
 
             idx = Console.readInteger("Select an option:\n");
             boolean canContinue = controller.answerQuestion(idx);
 
-            if(!canContinue){
+            if (!canContinue) {
+                if (Console.readLine("Would you like to leave a suggestion about the items?").equals(YES)) {
+                    boolean suggestionFlag = true;
+                    while (suggestionFlag) {
+                        try {
+                            if (controller.submitSuggestion(Console.readLine("Insert your suggestion:\n"))) {
+                                System.out.println("Your suggestion has been saved!\n");
+                                suggestionFlag = false;
+                            }
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("There was an error with your suggestion, please try again.\n");
+                        }
+                    }
+                }
+
+                if (controller.saveReview()) {
+                    System.out.println("Avaliação submetida com sucesso!");
+                }
                 break;
             }
         }

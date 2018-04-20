@@ -31,5 +31,6 @@ public class WhitelistBootstrap {
         whiteRepo.add(new Whitelist("loja.continente.sonae.pt"));
         whiteRepo.add(new Whitelist("compras.continente.sonae.pt"));
         whiteRepo.add(new Whitelist("isep.ipp.pt"));
+        whiteRepo.add(new Whitelist("email.com"));
     }
 }

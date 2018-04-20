@@ -2,6 +2,7 @@ package cdioil.domain;
 
 import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,20 +13,13 @@ import javax.persistence.Id;
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity
+@Embeddable
 public class Answer implements Serializable, ValueObject {
 
     /**
      * Serialization code.
      */
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Database identifier.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     /**
      * The content of the chosen option.
@@ -45,14 +39,16 @@ public class Answer implements Serializable, ValueObject {
      */
     protected Answer() {
     }
-    
+
     /**
      * Access method to the content of the question.
-     * 
+     *
      * @return the content of the question
      */
-    public String getContent(){ return this.content; }
-    
+    public String getContent() {
+        return this.content;
+    }
+
     /**
      * Answer's hash code.
      *

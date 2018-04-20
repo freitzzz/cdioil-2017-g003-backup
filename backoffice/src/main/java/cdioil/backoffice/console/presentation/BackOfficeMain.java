@@ -20,9 +20,11 @@ import org.xml.sax.SAXException;
 public class BackOfficeMain {
     public static void main(String[] args) {
 
-        if (args[0].equals("-load")) {
-            new LoadAnswersUI();
-            return;
+        if (args.length != 0) {
+            if (args[0].equals("-load")) {
+                new LoadAnswersUI();
+                return;
+            }
         }
 
         //Load localize strings

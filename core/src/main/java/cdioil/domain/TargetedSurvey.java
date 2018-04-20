@@ -1,10 +1,12 @@
 package cdioil.domain;
 
+import cdioil.application.utils.Graph;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,7 +27,7 @@ public class TargetedSurvey extends Survey implements Serializable {
      */
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private UsersGroup targetAudience;
-
+    
     /**
      * Builds a Questionnaire with a title, description, target audience and
      * time period.
@@ -63,4 +65,6 @@ public class TargetedSurvey extends Survey implements Serializable {
         }
         return true;
     }
+
+    
 }

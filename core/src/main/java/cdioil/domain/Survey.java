@@ -42,13 +42,13 @@ public abstract class Survey implements Serializable {
     /**
      * Question and Answer graph.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     private Graph graph;
 
     /**
      * Survey's state.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @Enumerated
     private SurveyState state;
 

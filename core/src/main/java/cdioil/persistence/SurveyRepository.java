@@ -15,5 +15,5 @@ public interface SurveyRepository {
      *
      * @return list of targeted surveys
      */
-    public abstract List<TargetedSurvey> getTargetedSurveys();
+    public abstract List<TargetedSurvey> getActiveTargetedSurveys();
 }

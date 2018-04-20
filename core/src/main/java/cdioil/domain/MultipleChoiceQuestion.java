@@ -23,6 +23,11 @@ public class MultipleChoiceQuestion extends Question implements Serializable {
         super(questionText, questionID, options);
         super.type = QuestionTypes.MULTIPLE_CHOICE;
     }
+    
+    public MultipleChoiceQuestion(Question question){
+        super(question.getQuestionText(),question.getQuestionID(),question.getOptionList());
+        super.type = QuestionTypes.MULTIPLE_CHOICE;
+    }
 
     /**
      * Empty constructor for JPA.

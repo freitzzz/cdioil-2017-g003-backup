@@ -22,6 +22,11 @@ public class BinaryQuestion extends Question {
         super(question, questionID, optionList());
         super.type = QuestionTypes.BINARY;
     }
+    
+    public BinaryQuestion(Question question){
+        super(question.getQuestionText(),question.getQuestionID(),question.getOptionList());
+        super.type = QuestionTypes.BINARY;
+    }
 
     /**
      * Builds the option list for a Binary Question.
