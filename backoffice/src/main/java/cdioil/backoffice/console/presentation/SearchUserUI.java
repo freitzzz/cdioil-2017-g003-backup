@@ -6,6 +6,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.authz.SearchUserController;
+import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.backoffice.utils.Console;
 import cdioil.domain.authz.SystemUser;
 import java.util.List;
@@ -16,35 +17,41 @@ import java.util.List;
  * @author Ana Guerra (1161191)
  */
 public class SearchUserUI {
-     /**
+
+    /**
+     * Single instance of <code>BackOfficeLocalizationHandler</code>.
+     */
+    private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
+    /**
      * Represents the exit code for the User Interface.
      */
-    private static final String EXIT_CODE = "Sair";
-
+    private final String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
     /**
      * Represents a message that indicates the administrator to enter the exit code in order to exit.
      */
-    private static final String EXIT_MESSAGE = "A qualquer momento digite \"" + EXIT_CODE + "\" para sair.";
-
+    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_input");
     /**
      * Represents a message that indicates the administrator to insert the email to search.
      */
-    private static final String MESSAGE_EMAIL = "Por favor indique o email do "
-            + "uilizador a pesquisar:";
-    
-   /**
+    private final String MESSAGE_EMAIL = localizationHandler.getMessageValue("request_user_email");
+    /**
      * Represents a message that informs the administrator that no user found.
      */
-    private static final String MENSAGEM_USER_NOT_FOUND = "Nenhum utilizador encontrado!";
+    private final String MENSAGEM_USER_NOT_FOUND = localizationHandler.getMessageValue("error_user_not_found");
     /**
      * Represents a message that delimitates the list of the users.
      */
-    private static final String[] MENSAGEM_LIST_USER = {"#####Utilizadores#####",
-        "#####                       #####"};
+    private final String MENSAGEM_LIST_USER = localizationHandler.getMessageValue("info_users");
+    /**
+     * Separator used for clarity.
+     */
+    private final String SEPARATOR = localizationHandler.getMessageValue("separator");
+
     /**
      * Instance of Controller that intermediates the interactions between the administrator and the system.
      */
     private final SearchUserController ctrl;
+
     /**
      * Creates a new User Interface.
      */
@@ -52,6 +59,7 @@ public class SearchUserUI {
         ctrl = new SearchUserController();
         searchUsers();
     }
+
     /**
      * Method that intermediates the interactions with the administrator (creates the UI itself).
      */
@@ -61,21 +69,20 @@ public class SearchUserUI {
         boolean catched = false;
         while (!catched) {
             String email = Console.readLine(MESSAGE_EMAIL);
-            if (email.equalsIgnoreCase(EXIT_CODE)) {
+            if (email.equalsIgnoreCase(OPTION_EXIT)) {
                 return;
             }
             List<SystemUser> listaU = ctrl.usersByEmail(email);
             if (listaU.isEmpty()) {
                 System.out.println(MENSAGEM_USER_NOT_FOUND);
             } else {
-                System.out.println(MENSAGEM_LIST_USER[0]);
+                System.out.println(MENSAGEM_LIST_USER);
                 listaU.forEach((c) -> {
                     System.out.println(c.toString());
                 });
-                System.out.println(MENSAGEM_LIST_USER[1]);
+                System.out.println(SEPARATOR);
                 catched = true;
             }
         }
     }
 }
-
