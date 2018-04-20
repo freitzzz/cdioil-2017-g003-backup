@@ -15,6 +15,14 @@ import javax.persistence.*;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
 public class SystemUser implements Serializable, AggregateRoot<Email> {
     /**
+     * Constant that represents the number of digits of the activation code
+     */
+    private static final short ACTIVATION_CODE_DIGITS=4;
+    /**
+     * Constant that represents all digits in a plain String
+     */
+    private static final String ALL_DIGITS="0123456789";
+    /**
      * Constant that represents the change name option
      */
     public static final int CHANGE_NAME_OPTION=1;
@@ -93,9 +101,9 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     private boolean imported;
     /**
-     * Long with the user activation code
+     * String with the user activation code
      */
-    private long activationCode;
+    private String activationCode;
 
     /**
      * Builds a SystemUser instance with an email, name and password, phone number, 
@@ -250,9 +258,9 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     }
     /**
      * Method that returns the generated random code for the current user
-     * @return Long with the generated random code for the current user
+     * @return String with the generated random code for the current user
      */
-    public long getActivationCode(){return activationCode;}
+    public String getActivationCode(){return activationCode;}
     /**
      * Method that returns the current user name
      * @return Name with the current user name
@@ -270,8 +278,12 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     public boolean isUserActivated(){return activated;}
     /**
      * Method that generates a random code used to prove user authenticity
-     * @return Long with the generated random code used to prove user authenticity
+     * @return String with the generated random code used to prove user authenticity
      */
-    private long generateRandomCode(){return Math.abs(new Random().nextLong());}
+    private String generateRandomCode(){
+        String randomCode=new String();
+        for(int i=0;i<ACTIVATION_CODE_DIGITS;i++)randomCode+=ALL_DIGITS.charAt(new Random().nextInt(ALL_DIGITS.length()));
+        return randomCode;
+    }
 
 }
