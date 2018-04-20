@@ -22,13 +22,6 @@ public class Answer implements Serializable, ValueObject {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Database identifier.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    /**
      * The content of the chosen option.
      */
     private String content;
@@ -46,14 +39,16 @@ public class Answer implements Serializable, ValueObject {
      */
     protected Answer() {
     }
-    
+
     /**
      * Access method to the content of the question.
-     * 
+     *
      * @return the content of the question
      */
-    public String getContent(){ return this.content; }
-    
+    public String getContent() {
+        return this.content;
+    }
+
     /**
      * Answer's hash code.
      *

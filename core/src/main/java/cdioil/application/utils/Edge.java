@@ -38,7 +38,7 @@ public class Edge implements Serializable {
     /**
      * Option associated to this Edge.
      */
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private QuestionOption element;
 
     /**
@@ -49,13 +49,13 @@ public class Edge implements Serializable {
     /**
      * Edge's origin endpoint.
      */
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Vertex originVertex;
 
     /**
      * Edge's destination endpoint.
      */
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Vertex destinationVertex;
 
     /**

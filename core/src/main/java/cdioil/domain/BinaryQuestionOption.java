@@ -24,6 +24,10 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
         }
         this.booleanContent = value;
     }
+    
+    public BinaryQuestionOption(QuestionOption questionOption){
+        this.booleanContent = (boolean) questionOption.getContent();
+    }
 
     /**
      * Empty constructor for JPA.
@@ -59,5 +63,10 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
     @Override
     public String toString() {
         return Boolean.toString(booleanContent);
+    }
+
+    @Override
+    public Boolean getContent() {
+        return booleanContent;
     }
 }

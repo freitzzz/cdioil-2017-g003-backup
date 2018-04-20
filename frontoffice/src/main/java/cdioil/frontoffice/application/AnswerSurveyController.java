@@ -4,6 +4,7 @@ import cdioil.domain.QuestionOption;
 import cdioil.domain.QuestionOption_;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
+import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 
 import java.util.ArrayList;
@@ -101,6 +102,14 @@ public class AnswerSurveyController {
         return surveyReview.answerQuestion(
                 surveyReview.getCurrentQuestion().getOptionList().get(index));
     }
-
+    
+    public boolean saveReview(){
+        surveyReview.setUpQuestionIDs();
+        return new ReviewRepositoryImpl().add(surveyReview) != null;
+    }
+    
+    public boolean submitSuggestion(String text){
+        return surveyReview.submitSuggestion(text);
+    }
 
 }

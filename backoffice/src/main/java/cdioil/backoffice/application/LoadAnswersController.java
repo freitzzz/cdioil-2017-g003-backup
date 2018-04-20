@@ -26,8 +26,7 @@ import java.util.Random;
 /**
  * Controller Class
  *
- * Stress Tests the application by loading
- * hundreds of survey reviews on runtime
+ * Stress Tests the application by loading hundreds of survey reviews on runtime
  */
 public class LoadAnswersController {
 
@@ -38,8 +37,8 @@ public class LoadAnswersController {
     }
 
     /**
-     * Loads hundreds of generated survey reviews
-     * into the application in runtime
+     * Loads hundreds of generated survey reviews into the application in
+     * runtime
      *
      * @return time (in ms) that took to load
      */
@@ -59,7 +58,6 @@ public class LoadAnswersController {
 
         List<QuestionOption> questionOptionsMultiple = Arrays.asList(mo1, mo2, mo3);
 
-
         // Criar Questoes
         BinaryQuestion bq12
                 = new BinaryQuestion("Bla, bla?", "12");
@@ -69,10 +67,10 @@ public class LoadAnswersController {
                 = new BinaryQuestion("Bla, bla, bla?", "15");
         QuantitativeQuestion q16
                 = new QuantitativeQuestion("Ble, ble", "16",
-                questionOptionsQuantitative);
+                        questionOptionsQuantitative);
         MultipleChoiceQuestion mc34
                 = new MultipleChoiceQuestion("Bli, bli, bli", "34",
-                questionOptionsMultiple);
+                        questionOptionsMultiple);
 
         List<SurveyItem> items = new LinkedList<>();
         items.add(new Category("c1", "10938DC"));
@@ -95,13 +93,14 @@ public class LoadAnswersController {
         List<Review> allReviews = new LinkedList<>();
 
         Random randomNumber = new Random(100);
-
+        Review currentReview;
+        int generatedNumber;
+        Question currentQuestion;
         for (int i = 0; i < 100000; i++) {
-            Review currentReview = new Review(survey);
-
+            currentReview = new Review(survey);
             while (!currentReview.isFinished()) {
-                int generatedNumber = randomNumber.nextInt();
-                Question currentQuestion = currentReview.getCurrentQuestion();
+                generatedNumber = randomNumber.nextInt();
+                currentQuestion = currentReview.getCurrentQuestion();
 
                 if (currentQuestion.equals(mc34)) {
                     if (generatedNumber <= 20) {
@@ -147,8 +146,6 @@ public class LoadAnswersController {
         }
 
         final long endTime = System.currentTimeMillis();
-
-
 
         return endTime - startTime;
     }

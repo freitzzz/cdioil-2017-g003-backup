@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,12 +27,6 @@ import javax.persistence.OneToMany;
 public abstract class Question implements Serializable, Comparable {
 
     /**
-     * The question's ID.
-     */
-    @Id
-    private String questionID;
-
-    /**
      * Serialization code.
      */
     private static final long serialVersionUID = 1L;
@@ -45,6 +40,7 @@ public abstract class Question implements Serializable, Comparable {
     /**
      * The question's type.
      */
+    @Enumerated
     protected QuestionTypes type;
 
     /**
@@ -53,9 +49,19 @@ public abstract class Question implements Serializable, Comparable {
     private String questionText;
 
     /**
+     * The question's ID.
+     */
+    @Id
+    private String questionID;
+
+    public void setQuestionID(String newQuestionID){
+        this.questionID = newQuestionID;
+    }
+    
+    /**
      * List of options that the question has.
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "QUESTION_OPTIONLIST", joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
             inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID", unique = false))
     private List<QuestionOption> optionList;
@@ -84,6 +90,13 @@ public abstract class Question implements Serializable, Comparable {
     protected Question() {
     }
 
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public String getQuestionID() {
+        return questionID;
+    }
 
     /**
      * Get the question type
