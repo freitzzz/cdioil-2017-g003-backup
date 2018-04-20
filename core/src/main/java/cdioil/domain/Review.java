@@ -10,15 +10,19 @@ import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -47,25 +51,37 @@ public class Review implements Serializable {
     /**
      * Copy of the survey's graph, defining the overall flow of the survey.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    //@OneToOne(cascade = CascadeType.PERSIST)
+    @Transient
     private Graph answerGraph;
 
     /**
      * Survey being answered.
      */
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    //@ManyToOne(cascade = CascadeType.PERSIST)
+    @Transient
     private Survey survey;
+
+    /**
+     *
+     */
+    @Transient
+    private ReviewState state;
 
     /**
      * Map containing Questions and their respective Answers.
      */
+    //@ManyToMany(cascade = CascadeType.PERSIST)
+    @ElementCollection
     @ManyToMany(cascade = CascadeType.PERSIST)
+    @MapKeyJoinColumn(name = "QUESTION_ID")
     private Map<Question, Answer> answers;
 
     /**
      * Question currently being answered.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
+    //@OneToOne(cascade = CascadeType.PERSIST)
+    @Transient
     private Question currentQuestion;
 
     /**
@@ -101,6 +117,7 @@ public class Review implements Serializable {
         //fetch items from survey
         this.answers = new TreeMap<>();
         this.currentQuestion = answerGraph.getFirstQuestion();
+        state = ReviewState.PENDING;
     }
 
     /**
@@ -109,6 +126,14 @@ public class Review implements Serializable {
      */
     public Question getCurrentQuestion() {
         return currentQuestion;
+    }
+
+    /**
+     * Checks if there are no more questions to answer in the survey
+     * @return true if review is finished
+     */
+    public boolean isFinished() {
+        return state.equals(ReviewState.FINISHED);
     }
 
     /**
@@ -124,6 +149,7 @@ public class Review implements Serializable {
         // If there are no outgoing edges, maps the last answer and finishes
         if (!outgoingEdges.iterator().hasNext()) {
             answers.put(currentQuestion, new Answer(option));
+            state = ReviewState.FINISHED;
             return false;
         }
 
@@ -222,4 +248,9 @@ public class Review implements Serializable {
         return "Avaliação:\nOpinião: " + suggestion;
     }
 
+}
+
+enum ReviewState {
+
+    PENDING,FINISHED;
 }

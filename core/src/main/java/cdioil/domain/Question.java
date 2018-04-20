@@ -26,15 +26,20 @@ import javax.persistence.OneToMany;
 public abstract class Question implements Serializable, Comparable {
 
     /**
+     * The question's ID.
+     */
+    @Id
+    private String questionID;
+
+    /**
      * Serialization code.
      */
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     /**
      * Database id.
      */
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long databaseID;
 
     /**
@@ -46,11 +51,6 @@ public abstract class Question implements Serializable, Comparable {
      * The question itself.
      */
     private String questionText;
-
-    /**
-     * The question's ID.
-     */
-    private String questionID;
 
     /**
      * List of options that the question has.
@@ -87,6 +87,7 @@ public abstract class Question implements Serializable, Comparable {
 
     /**
      * Get the question type
+     *
      * @return question type
      */
     public QuestionTypes getType() {
