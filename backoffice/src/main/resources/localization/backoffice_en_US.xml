@@ -22,7 +22,7 @@
         <Message messageId = "info_number_categories_imported" value = "The number of imported categories was:"/>      
         <Message messageId = "success_exporting_stats" value = "Statistics successfully exported!&#10;"/>
         <Message messageId = "survey_message" value = "Survey"/>
-        <Message messageId = "option_message" value= "Option
+        <Message messageId = "option_message" value= "Option"/>
         <Message messageId ="no_more_options" value = "To finish inserting options type"/>
         <Message messageId = "changed_extreme_values" value ="The extreme values were exchanged, because the minimum was higher than the maximum."/>
 
