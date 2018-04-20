@@ -129,6 +129,8 @@
 			<Message messageId = "option_filter_year" value = "Filtrar por ano de nascimento"/>
 			<Message messageId = "option_filter_location" value = "Filtrar por localidade"/>
 		<!--END OF US-280/282 options-->
+
+            <Message messageId="option_create_template" value="Criar Template"/>
         </ManagerMenuOptions>
 
     </MenuOptions>
