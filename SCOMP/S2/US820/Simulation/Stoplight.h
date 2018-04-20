@@ -1,13 +1,14 @@
 /*Include Header File for Semaphores*/
 #include <semaphore.h>
 
-/*Constant that represents the semaphore name that alows the child to send a review*/
+/*Constant that represents the semaphore name that allows the child to send a review*/
 #define PARENT_SEMAPHORE_NAME "/looksonalegend"
-/*Constant that represents the semaphore name that alows the parent to receive*/
+/*Constant that represents the semaphore name that allows the parent to receive*/
 #define CHILD_SEMAPHORE_NAME "/lookdadisawthelegend"
-/*Constant that represents the semaphore name that alows the the child to print the operation success*/
+/*Constant that represents the semaphore name that allows the the child to print the operation success*/
 #define PRINT_SEMAPHORE_NAME "/icanfinallyprint"
-
+/*Constant that represents the semaphore name that allows the the child to print the operation success*/
+#define CHILDS_PRINTED_SEMAPHORE_NAME "/dadijustprinted"
 /*Constant that represents the initial value of the Parent Semaphore*/
 #define SEMAPHORE_PARENT_INTIAL_VALUE 0
 /*Constant that represents the initial value of the Child Semaphore*/

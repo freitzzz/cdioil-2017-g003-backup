@@ -17,9 +17,9 @@
 typedef struct
 {
 	char nomeProduto[20];
-	int shm_flag;
 	int valor;
 	int id;
+	int deadDevices;
 } Avaliacao;
 
 

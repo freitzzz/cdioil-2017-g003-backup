@@ -5,6 +5,8 @@ typedef struct{
     int reviewSendTime;
     int reviewQuantity;
     int deviceNumber;
+    short randomSendTime;
+    short randomQuantity;
 }DeviceSimulatorStruct;
 
 /*Constant that represents the name of the Help Parameter*/
@@ -19,5 +21,9 @@ typedef struct{
 #define INVALID_CONFIGURATION_FILE_MESSAGE "Invalid Configuration file!\n Please check your local configuration example file"
 /*Constant that represents the number of possible parameters that can be passed on the execution of a Device Simulation*/
 #define NUMBER_OF_POSSIBLE_PARAMETERS 1
+/*Constant that represents a boolean true*/
+#define TRUE 1
+/*Constant that represents a boolean false*/
+#define FALSE 0
 
 #endif
