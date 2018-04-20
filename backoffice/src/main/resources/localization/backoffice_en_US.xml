@@ -15,7 +15,7 @@
         <Message messageId = "info_all_users_list" value = "List of all Users of the System&#10;"/>
         <Message messageId = "info_all_managers_list" value = "List of all Managers&#10;"/>
         <Message messageId = "info_categories_removed" value = "Category/Categories removed with success!&#10;"/>
-        <Message messageId = "info_categories_added" value = "Category/Categories added with sucess!&#10;"/>
+        <Message messageId = "info_categories_added" value = "Category/Categories added with success!&#10;"/>
         <Message messageId = "separator" value = "========================================&#10;"/>
         <Message messageId = "exit_message" value = "Type 'Exit' to exit anytime.&#10;"/>
         <Message messageId = "info_number_categories_question_was_added_to" value = "The number of categories the question was added to was: "/>
@@ -23,9 +23,8 @@
         <Message messageId = "success_exporting_stats" value = "Statistics successfully exported!&#10;"/>
         <Message messageId = "survey_message" value = "Survey"/>
         <Message messageId = "option_message" value= "Option"/>
-        <Message messageId ="no_more_options" value = "To finish inserting options type"/>
+        <Message messageId = "no_more_options" value = "To finish inserting options type"/>
         <Message messageId = "changed_extreme_values" value ="The extreme values were exchanged, because the minimum was higher than the maximum."/>
-
     </InfoMessages>
 
 	
@@ -47,7 +46,7 @@
         <Message messageId = "request_question_id" value = "Please insert the ID of the question:"/>
         <Message messageId = "request_question_txt" value = "Please insert the question itself:"/>
         <Message messageId = "please_insert_options" value="Please insert the options:"/>
-        <Message messageId="insert_extremes" value = "Insert the maximum and minumum values:"/>
+        <Message messageId="insert_extremes" value = "Insert the maximum and minimum values:"/>
         <Message messageId="insert_max" value = "Insert the maximum value:"/>
         <Message messageId="insert_min" value = "Insert the minimum value:"/>
     </RequestMessages>
