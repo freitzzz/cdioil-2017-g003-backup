@@ -1,0 +1,32 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #1
+	
+	* Como Utilizador não Registado pretendo registar-me no sistema utilizando como identificador de autenticação um email.
+	* Os dominios/subdominios devem ser validados
+
+	USER STORY DE SPRINT #3
+	
+	* Deverá ser enviado um código de activação para o meu email
+	* Deverei fornecer informação extra como a Localidade e ano de nascimento
+	* Posso utilizar um email previamente carregado
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	
