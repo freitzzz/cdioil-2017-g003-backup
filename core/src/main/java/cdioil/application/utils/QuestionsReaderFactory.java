@@ -16,10 +16,10 @@ import cdioil.files.CommonFileExtensions;
 public final class QuestionsReaderFactory {
 
     /**
-     * Cria uma instância de QuestionsReader de acordo com o formato do ficheiro a ler.
+     * Creates a QuestionsReader instance according to the format of the file being read.
      *
-     * @param filename Nome do ficheiro a ler
-     * @return uma instância de QuestionsReader
+     * @param filename file name
+     * @return an instance of QuestionsReader
      */
     public static QuestionsReader create(String filename) {
         if (filename.endsWith((CommonFileExtensions.CSV_EXTENSION))) {
@@ -27,9 +27,8 @@ public final class QuestionsReaderFactory {
         }
         return null;
     }
-
     /**
-     * Esconde o construtor privado
+     * Hides default constructoro
      */
     private QuestionsReaderFactory() {
     }
