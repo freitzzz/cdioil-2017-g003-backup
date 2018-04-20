@@ -1,0 +1,23 @@
+	
+
+	TEST PLAN
+
+	_______________________________
+	CASO #1: Registar um utilizador nao importado
+	_______________________________
+
+	1. Mostrar os dados a preencher
+	2. Preencher os dados
+	3. Verificar os dados
+	4. Enviar um email ao utilizador com o codigo de activacao de registo
+
+	_______________________________
+	CASO #2: Registar um utilizador previamente importado
+	_______________________________
+
+	1. Mostrar os dados a preencher
+	2. Preencher os dados
+	3. Verificar os dados
+	4. Verificar se o utilizador foi importado
+	5. Alterar os dados do utilizador previamente importado
+	6. Enviar um email ao utilizador com o codigo de activacao de registo
