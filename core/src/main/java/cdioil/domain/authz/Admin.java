@@ -11,7 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="ADMINISTRATOR", uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER_ID"}))
-public class Admin implements Serializable,AggregateRoot<SystemUser> {
+public class Admin implements Serializable,AggregateRoot<SystemUser>,User{
     @Id
     @Column(name = "ADMINISTRATOR_ID")
     @GeneratedValue

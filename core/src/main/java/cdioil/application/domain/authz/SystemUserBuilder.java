@@ -12,6 +12,7 @@ import java.time.LocalDate;
 /**
  * Builder class that builds a new SystemUser
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
+ * @since Version 4.0 of FeedbackMonkey
  */
 public final class SystemUserBuilder {
     /**
