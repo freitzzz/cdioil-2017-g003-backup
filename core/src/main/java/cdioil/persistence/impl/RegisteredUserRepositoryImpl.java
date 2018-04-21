@@ -34,7 +34,20 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
         Query query=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.su = :sysUser").setParameter("sysUser",sysUser);
         return !query.getResultList().isEmpty();
     }
-
+    
+    /**
+     * Method that finds a certain RegisteredUser with a certain user ID
+     * @param dataBaseId Long with the user ID
+     * @return RegisteredUser with the registered user with a certain user ID, null 
+     * if no registered user was found
+     */
+    public RegisteredUser findByUserID(long dataBaseId) {
+        Query q = entityManager().createQuery("SELECT ru FROM RegisteredUser ru WHERE ru.su.id = :databaseId");
+        q.setParameter("databaseId", dataBaseId);
+        if (q.getResultList().isEmpty())return null;
+        return (RegisteredUser)q.getSingleResult();
+    }
+    
     /**
      * Retrieves a list of users based on a domain
      *
