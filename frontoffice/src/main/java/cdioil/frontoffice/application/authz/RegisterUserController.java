@@ -6,12 +6,11 @@ import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.domain.authz.*;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
-import java.time.LocalDate;
 
 /**
  * Controller for the Register User use case (US-180)
  */
-public class RegisterUserController {
+public final class RegisterUserController {
     /**
      * Constant that represents the regular expression that represents blank spaces
      */
@@ -56,9 +55,13 @@ public class RegisterUserController {
      * @param email String with the user email
      */
     public void addEmail(String email){
-        if(new WhitelistRepositoryImpl().find(email.split(EMAIL_IDENTIFIER)[1])==null)
+        try{
+            if(new WhitelistRepositoryImpl().find(email.split(EMAIL_IDENTIFIER)[1])==null)
+                throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE);
+            userBuilder.withEmail(email);
+        }catch(IndexOutOfBoundsException e){
             throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE);
-        userBuilder.withEmail(email);
+        }
     }
     /**
      * Adds the password of the user to the current registration process
@@ -105,7 +108,7 @@ public class RegisterUserController {
         SystemUser builtUser=userBuilder.build();
         SystemUser importedUser=new UserRepositoryImpl().findByEmail(builtUser.getID());
         if(importedUser==null){
-            registerNonExistingUser(new RegisteredUser(builtUser));
+            registerUser(new RegisteredUser(builtUser));
         }else if(importedUser.isUserImported() && !importedUser.isUserActivated()){
             registerImportedUser(importedUser,builtUser);
         }else{
@@ -116,7 +119,7 @@ public class RegisterUserController {
      * Registers the current user by sending an activation code to his email
      * @param registeredUser RegisteredUser with the user being registered
      */
-    private void registerNonExistingUser(RegisteredUser registeredUser){
+    private void registerUser(RegisteredUser registeredUser){
         if(sendRegisterCode(registeredUser.getID())){
             registerUserRepository.add(registeredUser);
         }else{
@@ -132,66 +135,12 @@ public class RegisterUserController {
     private void registerImportedUser(SystemUser importedUser,SystemUser builtUser){
         if(!registerUserRepository.exists(new RegisteredUser(importedUser))){
             importedUser.mergeImportedSystemUser(builtUser);
-            registerUserRepository.add(new RegisteredUser(new UserRepositoryImpl().merge(importedUser)));
+            registerUser(new RegisteredUser(new UserRepositoryImpl().merge(importedUser)));
         }else{
             throw new IllegalStateException(EMAIL_ALREADY_IN_USE_MESSAGE);
         }
     }
-    /**
-     * Method that registers a certain user
-     * @param firstName String with the user first name
-     * @param lastName String with the user last name
-     * @param email String with the user email
-     * @param password String with the user password
-     * @param phoneNumber String with the user phone number
-     * @param location String with the user location
-     * @param birthDate String with the user birth date
-     */
-    public void registerUser(String firstName, String lastName, String email, String password, String phoneNumber,
-             String location, String birthDate) {
-        String domainPart = email.split(EMAIL_IDENTIFIER)[1];
-        Email emailX=new Email(email);
-        SystemUser userX=new UserRepositoryImpl().findByEmail(emailX);
-        if(userX==null){
-             
-            SystemUser systemUser = new SystemUser(
-                    new Email(email),
-                    new Name(firstName, lastName),
-                    new Password(password),
-                    new PhoneNumber(phoneNumber),
-                    new Location(location),
-                    new BirthDate(LocalDate.parse(birthDate)));
-            RegisteredUser registeredUser = new RegisteredUser(systemUser);
 
-            if(registerUserRepository.exists(registeredUser))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
-            if(sendRegisterCode(systemUser)){
-                registerUserRepository.add(registeredUser);
-            }else{
-                throw new IllegalArgumentException(REGISTERED_USED_SUCCESS_FAILURE);
-            }
-        }else{
-            if(registerUserRepository.exists(new RegisteredUser(userX)))throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
-            if(userX.isUserImported()){
-                if(userX.isUserActivated()){
-                    throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
-                }else{
-                    userX.activateAccount();
-                    userX.changeUserDatafield(password,SystemUser.CHANGE_PASSWORD_OPTION);
-                    userX.changeUserDatafield(phoneNumber,SystemUser.CHANGE_PHONE_NUMBER_OPTION);
-                    userX.changeUserDatafield(location,SystemUser.CHANGE_LOCALITY_OPTION);
-                    userX.changeUserDatafield(birthDate,SystemUser.CHANGE_BIRTH_DATE_OPTION);
-                    if(sendRegisterCode(userX)){
-                        userX=new UserRepositoryImpl().merge(userX);
-                        new RegisteredUserRepositoryImpl().add(new RegisteredUser(userX));
-                    }else{
-                        throw new IllegalArgumentException(REGISTERED_USED_SUCCESS_FAILURE);
-                    }
-                }
-            }else{
-                throw new IllegalArgumentException(EMAIL_ALREADY_IN_USE_MESSAGE);
-            }
-        }
-    }
     /**
      * Method that sends a registration code to the user email address in order to prove it's authencity
      * @param SystemUser SystemUser with the user that is going to send the activation code

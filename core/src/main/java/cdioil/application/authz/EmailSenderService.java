@@ -15,14 +15,14 @@ public final class EmailSenderService {
      * Constant that represents the email activation title which is going to be sent to a 
      * certain user email
      */
-    private static final String EMAIL_ACTIVATION_CODE_TITLE="Código de Ativação 🍌";
+    private static final String EMAIL_ACTIVATION_CODE_TITLE="Código de Ativação";
     /**
      * Constant that represents the email activation content which is going to be sent to a 
      * certain user email
      */
     private static final String FORMATED_EMAIL_ACTIVATION_CODE_CONTENT="Olá %s!"
                 + "\nReparamos que acabaste de te registar na nossa aplicação com o endereço %s."
-                + "\nDe modo a provarmos a tua autenticidade, pedimos que insiras o seguinte código %d "
+                + "\nDe modo a provarmos a tua autenticidade, pedimos que insiras o seguinte código %s "
                 + "aquando o inicio da aplicação.\n\nIsto é uma mensagem automática, por favor não responda para este endereço!";
     /**
      * SystemUser with the current system user that is going to be sent the email
