@@ -272,6 +272,19 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     public Name getName(){return name;}
     /**
+     * Method that merges a current imported SystemUser with a certain SystemUser
+     * @param user SystemUser with the imported previously imported SystemUser 
+     * @return boolean true if the imported SystemUser was merged with success, false if not
+     */
+    public boolean mergeImportedSystemUser(SystemUser user){
+        if(!imported)return false;
+        this.password=user.password;
+        this.phoneNumber=user.phoneNumber;
+        this.location=user.location;
+        this.birthDate=user.birthDate;
+        return true;
+    }
+    /**
      * Method that checks if the current user was previously imported or not
      * @return boolean true if the user was previously imported, false if not
      */
