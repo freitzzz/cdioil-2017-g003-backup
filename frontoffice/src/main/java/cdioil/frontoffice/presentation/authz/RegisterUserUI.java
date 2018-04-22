@@ -2,7 +2,7 @@ package cdioil.frontoffice.presentation.authz;
 
 
 import cdioil.frontoffice.application.authz.RegisterUserController;
-import cdioil.frontoffice.utils.Console;
+import cdioil.console.Console;
 import java.time.format.DateTimeParseException;
 
 /**
@@ -61,7 +61,7 @@ public class RegisterUserUI {
     /**
      * Constant that represents the exit message
      */
-    private static final String EXIT_MESSAGE="Pretende continuar? Caso não queira digite \"Sair\" para sair";
+    private static final String EXIT_MESSAGE="Pretende continuar? Caso não queira digite \""+EXIT_CODE+"\" para sair";
     /**
      * Array Constant with all the obligatory fields used in the registration process
      */

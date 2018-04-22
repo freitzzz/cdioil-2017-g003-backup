@@ -6,6 +6,7 @@ import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
@@ -48,6 +49,25 @@ public final class AuthenticationService {
         return createSessionForManager(userID);
     }
     /**
+     * Method that activates a certain user
+     * @param email String with the user email
+     * @param password String with the user password
+     * @param activationCode String with the activation code
+     * @return boolean true if the account was activated with success, false if not
+     */
+    public boolean activate(String email,String password,String activationCode){
+        UserRepositoryImpl userRepo=new UserRepositoryImpl();
+        long userID=userRepo.login(new Email(email),password);
+        if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
+                ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
+        SystemUser user=userRepo.find(userID);
+        if(user.activateAccount(activationCode)){
+            userRepo.merge(user);
+            return true;
+        }
+        return false;
+    }
+    /**
      * Method that creates a session for a registered user
      * @param userID Long with the user ID
      * @return UserSession with the registered user session
@@ -76,7 +96,8 @@ public final class AuthenticationService {
     }
     /**
      * Returns the SystemUser ID that is trying to login with certain credentials
-     * <br>Throws an <b>IllegalAuthenticationService</b> if the user credentials are invalid
+     * <br>Throws an <b>IllegalAuthenticationService</b> if the user credentials are invalid,
+     * or if the account is not activated
      * @param email String with the user email
      * @param password String with the user password
      * @return Long with the user ID of the user trying to login

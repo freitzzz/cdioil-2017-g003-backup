@@ -113,8 +113,10 @@ public class BackOfficeLogin {
      * Asks for the account activation code
      * @param email Byte array with the user email
      * @param password Byte array with the user password
+     * @return boolean true if the user inserted the activation code with success, 
+     * false if the user stopped the activation code process
      */
-    private void askForActivationCode(byte[] email,byte[] password){
+    private boolean askForActivationCode(byte[] email,byte[] password){
         boolean catched=false;
         while(!catched){
             String code=Console.readLine(ACTIVATION_CODE_MESSAGE);
@@ -127,5 +129,6 @@ public class BackOfficeLogin {
                 if(Console.readLine(EXIT_MESSAGE).equalsIgnoreCase(EXIT_CODE))return false;
             }
         }
+        return catched;
     }
 }

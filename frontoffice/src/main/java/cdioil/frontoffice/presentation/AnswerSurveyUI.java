@@ -1,7 +1,7 @@
 package cdioil.frontoffice.presentation;
 
 import cdioil.frontoffice.application.AnswerSurveyController;
-import cdioil.frontoffice.utils.Console;
+import cdioil.console.Console;
 
 import java.util.List;
 

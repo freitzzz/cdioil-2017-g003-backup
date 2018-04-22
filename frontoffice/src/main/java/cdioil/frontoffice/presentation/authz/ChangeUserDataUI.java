@@ -2,7 +2,7 @@ package cdioil.frontoffice.presentation.authz;
 
 import cdioil.frontoffice.application.authz.ChangeUserDataController;
 import cdioil.domain.authz.SystemUser;
-import cdioil.frontoffice.utils.Console;
+import cdioil.console.Console;
 
 /**
  * UI of US Change User's Data

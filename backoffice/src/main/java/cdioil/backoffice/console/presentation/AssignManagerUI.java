@@ -1,7 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.authz.AssignManagerController;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;

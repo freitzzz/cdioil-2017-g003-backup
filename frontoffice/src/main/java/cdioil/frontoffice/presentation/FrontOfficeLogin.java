@@ -2,7 +2,7 @@ package cdioil.frontoffice.presentation;
 
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.SystemUser;
-import cdioil.frontoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.persistence.impl.UserRepositoryImpl;
 
 /**

@@ -45,6 +45,13 @@ public final class UserSession {
      */
     public boolean isSessionForRegisteredUser(){return sessionUser instanceof RegisteredUser;}
     /**
+     * Method that returns the current session user
+     * <br>Method to be deprecated very soon, only is here due to need on some 
+     * backoffice classes
+     * @return User with the current session user
+     */
+    public User getUser(){return sessionUser;}
+    /**
      * Hides default constructor
      */
     protected UserSession(){}
