@@ -6,4 +6,4 @@
 
    	Classes do domínio: 
    	Controlador: SearchUserController
-   	Repository: UserRepositoryRepository 
+   	Repository: UserRepository
