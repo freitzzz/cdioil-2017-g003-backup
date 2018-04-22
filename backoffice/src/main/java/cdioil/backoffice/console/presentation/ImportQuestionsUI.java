@@ -3,7 +3,7 @@ package cdioil.backoffice.console.presentation;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.backoffice.application.ImportQuestionsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.domain.authz.Manager;
 
 /**

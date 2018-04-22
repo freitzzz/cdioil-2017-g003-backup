@@ -1,13 +1,9 @@
 package cdioil.backoffice.console.presentation;
 
+import cdioil.application.authz.AuthenticationController;
+import cdioil.application.domain.authz.exceptions.AuthenticationException;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
-import cdioil.backoffice.utils.Console;
-import cdioil.domain.authz.Admin;
-import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Manager;
-import cdioil.persistence.impl.AdminRepositoryImpl;
-import cdioil.persistence.impl.ManagerRepositoryImpl;
-import cdioil.persistence.impl.UserRepositoryImpl;
+import cdioil.console.Console;
 
 /**
  * Class responsible for the Application's Backoffice login.
@@ -51,36 +47,84 @@ public class BackOfficeLogin {
      * Error message informing the user they're not authorized to use the Backoffice.
      */
     private final String ERROR_UNAUTHORIZED_USER = localizationHandler.getMessageValue("error_unauthorized_user");
-
+    /**
+     * Constant that represents the message that ocures if the system asks the user for the activation code
+     */
+    private static final String ACTIVATION_CODE_MESSAGE="Por favor insira o código de activação da sua conta";
+    /**
+     * Constant that represents the exit code
+     */
+    private static final String EXIT_CODE="Sair";
+    /**
+     * Constant that represents the exit message
+     */
+    private static final String EXIT_MESSAGE="Se desejar sair digite \""+EXIT_CODE+"\"";
+    /**
+     * Constant that represents the message that ocures if the account being activated was 
+     * activated with success
+     */
+    private static final String ACCOUNT_ACTIVATED_SUCCESS="A conta foi activada com successo!";
+    /**
+     * Constant that represents the message that ocures if the account being activated was 
+     * not activated with success
+     */
+    private static final String ACCOUNT_ACTIVATED_FAILURE="O código inserido não é igual ao enviado!";
+    /**
+     * Current authentication controller
+     */
+    private final AuthenticationController authenticationController=new AuthenticationController();
+    
+    /**
+     * Logins into backoffice
+     */
     public void backofficeLogin() {
         long id = -1;
         System.out.println(SEPARATOR);
         System.out.println(INFO_WELCOME);
-        while (id == -1) {
-            String emailS = Console.readLine(REQUEST_EMAIL);
-            String passwordS = Console.readLine(REQUEST_PASSWORD);
-            try {
-                Email email = new Email(emailS);
-                id = new UserRepositoryImpl().login(email, passwordS);
-                if (id == -1) {
-                    System.out.println(ERROR_INVALID_CREDENTIALS);
-                } else {
-                    Admin admin = new AdminRepositoryImpl().findByUserID(id);
-                    Manager manager = new ManagerRepositoryImpl().findByUserID(id);
-                    if (admin == null && manager == null) {
-                        System.out.println(ERROR_UNAUTHORIZED_USER);
-                        System.out.println(INFO_SHUTDOWN);
-                        System.exit(0);
-                    }
-                    if (admin == null && manager != null) {
-                        new BackOfficeConsole(manager);
-                    }
-                    if (manager == null && admin != null) {
-                        new BackOfficeConsole(admin);
-                    }
+        while (id != 1) {
+            byte[] email = Console.readLine(REQUEST_EMAIL).getBytes();
+            byte[] password = Console.readLine(REQUEST_PASSWORD).getBytes();
+            try{
+                if(authenticationController.login(new String(email),new String(password))){
+                    id=1;
+                    clearAuthCredentials(email,password);
+                    BackOfficeConsole.enterBackoffice(authenticationController);
                 }
-            } catch (IllegalArgumentException e) {
-                System.out.println(ERROR_INVALID_CREDENTIALS);
+            }catch(IllegalStateException|IllegalArgumentException e){
+                Console.logError(e.getMessage());
+            }catch(AuthenticationException f){
+                Console.logError(f.getMessage());
+                if(f.getAuthenticatioExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.NOT_ACTIVATED)){
+                    if(askForActivationCode(email,password))id=0;
+                }
+            }
+        }
+    }
+    /**
+     * Clears the current authentication credentials from the memory
+     * @param email Byte array with the user email
+     * @param password Byte array with the user password
+     */
+    private void clearAuthCredentials(byte[] email,byte[] password){
+        email=null;
+        password=null;
+    }
+    /**
+     * Asks for the account activation code
+     * @param email Byte array with the user email
+     * @param password Byte array with the user password
+     */
+    private void askForActivationCode(byte[] email,byte[] password){
+        boolean catched=false;
+        while(!catched){
+            String code=Console.readLine(ACTIVATION_CODE_MESSAGE);
+            if(authenticationController.activateAccount(new String(email)
+                    ,new String(password),code)){
+                Console.log(ACCOUNT_ACTIVATED_SUCCESS,Console.ConsoleColors.BLUE);
+                return true;
+            }else{
+                Console.logError(ACCOUNT_ACTIVATED_FAILURE);
+                if(Console.readLine(EXIT_MESSAGE).equalsIgnoreCase(EXIT_CODE))return false;
             }
         }
     }

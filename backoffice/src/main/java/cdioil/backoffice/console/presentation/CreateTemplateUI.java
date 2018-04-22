@@ -2,7 +2,7 @@ package cdioil.backoffice.console.presentation;
 
 
 import cdioil.backoffice.application.CreateTemplateController;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.domain.Category;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionGroup;

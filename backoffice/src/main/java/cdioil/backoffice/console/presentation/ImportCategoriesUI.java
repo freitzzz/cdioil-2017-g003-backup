@@ -7,7 +7,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.ImportCategoriesController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.domain.MarketStructure;
 
 /**

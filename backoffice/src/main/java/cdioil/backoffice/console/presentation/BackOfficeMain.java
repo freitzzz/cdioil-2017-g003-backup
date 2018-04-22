@@ -3,9 +3,6 @@ package cdioil.backoffice.console.presentation;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;

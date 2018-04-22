@@ -153,9 +153,15 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     
     /**
      * Activates the current system user
+     * @param activationCode String with the activation code
+     * @return boolean treu if the account was activated with success, false if not
      */
-    public void activateAccount() {
-        this.activated = true;
+    public boolean activateAccount(String activationCode) {
+        if(this.activationCode.equals(activationCode)){
+            this.activated = true;
+            return true;
+        }
+        return false;
     }
     
     /**
