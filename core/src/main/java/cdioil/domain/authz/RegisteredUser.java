@@ -17,7 +17,7 @@ import javax.persistence.Version;
  * É o responsável por avaliar produtos e fornecer feedback
  */
 @Entity
-public class RegisteredUser implements Serializable, AggregateRoot<SystemUser> {
+public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>,User{
 
     @Id
     @GeneratedValue

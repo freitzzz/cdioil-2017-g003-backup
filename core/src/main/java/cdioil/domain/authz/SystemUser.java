@@ -15,6 +15,14 @@ import javax.persistence.*;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
 public class SystemUser implements Serializable, AggregateRoot<Email> {
     /**
+     * Constant that represents the number of digits of the activation code
+     */
+    private static final short ACTIVATION_CODE_DIGITS=4;
+    /**
+     * Constant that represents all digits in a plain String
+     */
+    private static final String ALL_DIGITS="0123456789";
+    /**
      * Constant that represents the change name option
      */
     public static final int CHANGE_NAME_OPTION=1;
@@ -62,7 +70,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * User's name.
      */
     @Embedded
-    private Name nome;
+    private Name name;
     /**
      * User's password.
      */
@@ -78,11 +86,13 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      * User's Location
      */
     @Embedded
+    @Column(nullable = true)
     private Location location;
     /**
      * User's birth date
      */
     @Embedded
+    @Column(nullable = true)
     private BirthDate birthDate;
     /**
      * Boolean that represents if the User's account is activated or not
@@ -93,30 +103,33 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     private boolean imported;
     /**
-     * Long with the user activation code
+     * String with the user activation code
      */
-    private long activationCode;
+    private String activationCode;
 
     /**
      * Builds a SystemUser instance with an email, name and password, phone number, 
      * location and birth date
      *
      * @param email user's email
-     * @param nome user's name
+     * @param name user's name
      * @param password user's password
      * @param phoneNumber PhoneNumber with the user phone number
      * @param location Location with the user location
      * @param birthDate BirthDate with the user birth date
      */
-    public SystemUser(Email email, Name nome, Password password, PhoneNumber phoneNumber,
+    public SystemUser(Email email, Name name, Password password, PhoneNumber phoneNumber,
              Location location, BirthDate birthDate) {
+        if(email==null)throw new IllegalArgumentException("O email não pode ser null!");
+        if(password==null)throw new IllegalArgumentException("A password não pode ser null!");
+        if(name==null)throw new IllegalArgumentException("O nome não pode ser null!");
+        if(phoneNumber==null)throw new IllegalArgumentException("O número de telemóvel não pode ser null!");
         this.email = email;
-        this.nome = nome;
+        this.name = name;
         this.password = password;
-        this.activationCode=generateRandomCode();
         this.phoneNumber = phoneNumber;
-        this.location = location;
         this.birthDate = birthDate;
+        this.activationCode=generateRandomCode();
     }
 
     /**
@@ -128,7 +141,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
      */
     public SystemUser(Email email, Name nome, Password password) {
         this.email = email;
-        this.nome = nome;
+        this.name = nome;
         this.password = password;
         this.imported=true;
         this.activationCode=generateRandomCode();
@@ -140,9 +153,15 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     
     /**
      * Activates the current system user
+     * @param activationCode String with the activation code
+     * @return boolean treu if the account was activated with success, false if not
      */
-    public void activateAccount() {
-        this.activated = true;
+    public boolean activateAccount(String activationCode) {
+        if(this.activationCode.equals(activationCode)){
+            this.activated = true;
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -191,7 +210,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     //TO-DO: ADD REMOVE TOSTRING ADD DTO
     @Override
     public String toString() {
-        return "Nome: " + nome + "\nEmail: " + email + "\n";
+        return "Nome: " + name + "\nEmail: " + email + "\n";
     }
 
     /**
@@ -211,7 +230,7 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
                     if (newNome.length != 2) {
                         throw new IllegalArgumentException();
                     }
-                    this.nome = new Name(newNome[0], newNome[1]);
+                    this.name = new Name(newNome[0], newNome[1]);
                     break;
                 case CHANGE_EMAIL_OPTION://changes the user's email
                     Email newEmail = new Email(newField);
@@ -250,14 +269,27 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     }
     /**
      * Method that returns the generated random code for the current user
-     * @return Long with the generated random code for the current user
+     * @return String with the generated random code for the current user
      */
-    public long getActivationCode(){return activationCode;}
+    public String getActivationCode(){return activationCode;}
     /**
      * Method that returns the current user name
      * @return Name with the current user name
      */
-    public Name getName(){return nome;}
+    public Name getName(){return name;}
+    /**
+     * Method that merges a current imported SystemUser with a certain SystemUser
+     * @param user SystemUser with the imported previously imported SystemUser 
+     * @return boolean true if the imported SystemUser was merged with success, false if not
+     */
+    public boolean mergeImportedSystemUser(SystemUser user){
+        if(!imported)return false;
+        this.password=user.password;
+        this.phoneNumber=user.phoneNumber;
+        this.location=user.location;
+        this.birthDate=user.birthDate;
+        return true;
+    }
     /**
      * Method that checks if the current user was previously imported or not
      * @return boolean true if the user was previously imported, false if not
@@ -270,8 +302,12 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
     public boolean isUserActivated(){return activated;}
     /**
      * Method that generates a random code used to prove user authenticity
-     * @return Long with the generated random code used to prove user authenticity
+     * @return String with the generated random code used to prove user authenticity
      */
-    private long generateRandomCode(){return Math.abs(new Random().nextLong());}
+    private String generateRandomCode(){
+        String randomCode=new String();
+        for(int i=0;i<ACTIVATION_CODE_DIGITS;i++)randomCode+=ALL_DIGITS.charAt(new Random().nextInt(ALL_DIGITS.length()));
+        return randomCode;
+    }
 
 }

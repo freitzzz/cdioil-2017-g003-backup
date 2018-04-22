@@ -3,7 +3,7 @@ package cdioil.frontoffice.presentation;
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.presentation.authz.ChangeUserDataUI;
 import cdioil.frontoffice.presentation.authz.RegisterUserUI;
-import cdioil.frontoffice.utils.Console;
+import cdioil.console.Console;
 
 /**
  * FrontOffice Main Menu

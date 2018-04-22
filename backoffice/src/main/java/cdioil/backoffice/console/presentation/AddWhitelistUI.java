@@ -2,7 +2,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.authz.AddWhitelistController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 
 /**
  * User story 103's user interface.

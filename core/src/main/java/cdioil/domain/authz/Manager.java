@@ -27,7 +27,7 @@ import javax.persistence.Version;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER"}))
-public class Manager implements Serializable, AggregateRoot<SystemUser> {
+public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
 
     private static final long serialVersionUID = 1L;
 

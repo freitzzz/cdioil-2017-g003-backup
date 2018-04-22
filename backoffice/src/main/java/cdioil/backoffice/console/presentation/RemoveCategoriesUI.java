@@ -2,7 +2,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.authz.CategoryManagementController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.domain.authz.Manager;
 
 /**

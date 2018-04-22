@@ -2,10 +2,8 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.application.SurveyController;
 import cdioil.backoffice.application.ExportSurveyAnswersController;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.domain.Survey;
-import cdioil.persistence.impl.SurveyRepositoryImpl;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

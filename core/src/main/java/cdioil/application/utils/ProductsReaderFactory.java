@@ -18,7 +18,7 @@ public class ProductsReaderFactory {
      * Creates a ProductsReader instance according to the format of the file being read.
      *
      * @param filename file name
-     * @return ProductsReader
+     * @return an instance of QuestionsReader
      */
     public static ProductsReader create(String filename) {
         if (filename.endsWith((CommonFileExtensions.CSV_EXTENSION))) {

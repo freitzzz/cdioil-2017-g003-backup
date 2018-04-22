@@ -2,7 +2,7 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.ChangeLanguageController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.langs.Language;
 import java.io.IOException;
 import java.util.logging.Level;

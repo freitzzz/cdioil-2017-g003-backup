@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cdioil-2017-g003</groupId>
     <artifactId>backoffice</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 
@@ -43,19 +43,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>cdioil-2017-g003</groupId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>framework</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cdioil-2017-g003</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>frontoffice</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>cdioil-2017-g003</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
@@ -108,7 +108,6 @@
             <artifactId>opencsv</artifactId>
             <version>4.0</version>
         </dependency>
-
     </dependencies>
 
     <build><!-- Necessary for coverage test reporting on sonarqube-->
