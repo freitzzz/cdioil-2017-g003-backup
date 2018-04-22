@@ -1,0 +1,9 @@
+	_________
+
+  	 DESIGN
+	_________
+
+
+   	Classes do domínio:MarketStructure
+   	Controlador: ImportProductsController
+   	Repository: MarketStructureRepository

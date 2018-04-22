@@ -1,0 +1,34 @@
+	___________
+
+	  ANÁLISE 
+	___________
+
+	USER STORY DO SPRINT #1
+	
+	* Como Administrador, pretendo importar produtos para o sistema através de ficheiros.
+
+	* O produto tem uma categoria.
+	* A catgeoria tem de estar na Estrutura Mercadológica. (Reunia com o cliente 20 de Abril)
+	* Se o produto já existir, saber se o utilizador deja actualizar ou não. (Reunia com o cliente 20 de Abril)
+	* Os formato dos ficheiros é CSV.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	_____________________
+		
+	  TESTES UNITÁRIOS
+	_____________________
+
+
+	* Classe CSVProductsReaderTest:
+		* testReadProducts
+
+	* Classe MarketStructureTest - todos os testes
+
+	* Classe ProductTest:
+		* testProductName
