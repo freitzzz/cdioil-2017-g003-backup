@@ -1,0 +1,15 @@
+
+	TEST PLAN
+
+	_______________________________
+	
+          CASO #1: Importar Produtos
+	_______________________________
+
+
+	1. Fazer login com o admin sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção 13 "Importar Produtos"
+	3. Inserir o caminho do ficheiro CSV a ser importado.
+	4. Informar do número de produtos importados, e dos não importados.
+	5. Guardar na base de dados.

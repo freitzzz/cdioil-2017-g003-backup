@@ -1,0 +1,29 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #3
+	
+	* Como Gestor, quero poder adicionar lista de utilizadores a um inquérito. Pretendo usar expressões regulares
+	para adicionar utilizadores ou domínios/subdomínios. Deve permitir filtrar por diversos dados do utilizador,
+	nomeadamente a localidade e ano de nascimento.
+
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+	* Classe TargetedSurveyTest : testAddUsersToGroup()
+	* UserGroupTest : testAddUser()

@@ -1,0 +1,15 @@
+
+	TEST PLAN
+
+	_______________________________
+	
+          CASO #1: Importar Questões Independentes
+	_______________________________
+
+
+	1. Fazer login com o admin sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção 12 "Importar Questões para Um Novo Template"
+	3. Inserir o caminho do ficheiro CSV a ser lido.
+	4. Informar do número de questões importadas.
+	5. Guardar na base de dados.

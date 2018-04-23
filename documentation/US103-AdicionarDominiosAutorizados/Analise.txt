@@ -1,0 +1,23 @@
+	___________
+
+	  ANÁLISE 
+	___________
+
+	USER STORY DO SPRINT #1
+	
+	* Como Administrador, pretendo adicionar domínios/subdomínios de email autorizados.
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+	Um domínio já existente não pode ser inserido de novo.
+	--------------------------------------------------------------
+
+	_____________________
+		
+	  TESTES UNITÁRIOS
+	_____________________
+
+	Testes de WhitelistTest

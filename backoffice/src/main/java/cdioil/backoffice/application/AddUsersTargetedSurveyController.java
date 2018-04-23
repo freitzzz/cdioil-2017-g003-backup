@@ -67,7 +67,6 @@ public class AddUsersTargetedSurveyController {
         selectedBirthYear = null;
         selectedLocation = null;
         surveyRepository = new SurveyRepositoryImpl();
-        whitelistedDomains = new ArrayList<>();
     }
 
     /**
@@ -99,7 +98,8 @@ public class AddUsersTargetedSurveyController {
      * @return list of string representing whitelisted email domains.
      */
     public List<String> getWhitelistedDomains() {
-
+        
+        whitelistedDomains = new ArrayList<>();
         WhitelistRepositoryImpl whitelistRepository = new WhitelistRepositoryImpl();
         Iterable<Whitelist> domainWhitelist = whitelistRepository.findAll();
         List<String> result = new ArrayList<>();
