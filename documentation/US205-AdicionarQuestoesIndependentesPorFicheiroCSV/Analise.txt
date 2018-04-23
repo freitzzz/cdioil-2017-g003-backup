@@ -1,0 +1,32 @@
+	___________
+
+	  ANÁLISE 
+	___________
+
+	USER STORY DO SPRINT #2
+	
+	* Como Administrador, quero poder carregar questões independentes de categorias via um ficheiro de texto em
+	formato CSV.
+
+	* Os formato dos ficheiros é CSV.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	_____________________
+		
+	  TESTES UNITÁRIOS
+	_____________________
+
+
+	* Classe CSVQuestionsReaderTest:
+		* ensureIsIndependentQuestionsFileValidThrowsException
+		* testReadIndependentQuestions
+		
+	* Classe QuestionTest
+
+	* Classe IndependentQuestionsLibraryTest

@@ -1,0 +1,14 @@
+
+	TEST PLAN
+
+	_______________________________
+	
+          CASO #1: Adicionar domínios autorizados
+	_______________________________
+
+
+	1. Fazer login com o admin sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção 2 "Adicionar Domínios de Email Autorizados"
+	3. Escrever o novo domínio a autorizar.
+	4. Guardar na base de dados.

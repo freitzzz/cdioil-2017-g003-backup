@@ -1,0 +1,9 @@
+	_________
+
+  	 DESIGN
+	_________
+
+
+   	Classes do domínio: Question(e todas as subclasses), IndependentQuestionsLibrary
+   	Controlador: ImportQuestionsController
+   	Repository: IndependentQuestionsLibraryRepository
