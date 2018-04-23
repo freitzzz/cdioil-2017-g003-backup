@@ -135,7 +135,11 @@ public final class RegisterUserController {
     private void registerImportedUser(SystemUser importedUser,SystemUser builtUser){
         if(!registerUserRepository.exists(new RegisteredUser(importedUser))){
             importedUser.mergeImportedSystemUser(builtUser);
-            registerUser(new RegisteredUser(new UserRepositoryImpl().merge(importedUser)));
+            if(sendRegisterCode(builtUser)){
+                registerUser(new RegisteredUser(new UserRepositoryImpl().merge(importedUser)));
+            }else{
+                throw new IllegalStateException(REGISTERED_USED_SUCCESS_FAILURE);
+            }
         }else{
             throw new IllegalStateException(EMAIL_ALREADY_IN_USE_MESSAGE);
         }
