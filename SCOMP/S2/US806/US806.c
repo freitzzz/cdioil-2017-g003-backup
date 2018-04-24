@@ -58,16 +58,21 @@ int criarFilhos(int size)
 }
 
 /*
- * Sprint II US-805
+ * Sprint III US-806
  *
- * Receção concorrente da avaliação de produtos através de memória partilhada.
+ * Receção da avaliação de produtos através de memória partilhada atómicamente
+ * usando semáforos como processo de sincronização.
+ * <br>Usado três semaforos:
+ * - Um para o pai comunicar com os filhos que podem enviar uma avaliação
+ * - Um para os filhos comunicarem com o pai dizendo que enviaram uma avaliação
+ * - Um para o pai dizer aos filhos que enviou recebeu a avaliação com sucesso
+ * <br><b>Nota:</b> Apenas um filho envia uma avaliação ao pai por cada iteração
  */
 int main()
 {
 
 	int nMaquinas, tempoEntreAvaliacoes;
 	char sucesso[] = "Recebido com sucesso!";
-	char erro[] = "Erro na receção de dados!";
 
 	printf("========================\n");
 	printf("Feedback Monkey\n");

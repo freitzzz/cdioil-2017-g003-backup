@@ -1,7 +1,9 @@
 package cdioil.backoffice.webapp.authz;
 
+import cdioil.backoffice.webapp.utils.PopupNotification;
 import cdioil.frontoffice.application.authz.RegisterUserController;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -105,17 +107,16 @@ public class RegisterPopupViewContent implements PopupView.Content {
                 }
 
                 try {
-                    controller.registerUser(firstName, lastName, email,
-                            password, phone, city, birthday.toString());
+//                    new RegisterUserController().registerUser(firstName, lastName, email,
+//                            password, phone, city, birthday.toString());
                 } catch (IllegalArgumentException e) {
                     Notification.show(e.getMessage(),
                             Notification.Type.ERROR_MESSAGE);
                     e.printStackTrace();
                     return;
                 }
-
-                Notification.show("Utilizador Registado com sucesso!",
-                        Notification.Type.HUMANIZED_MESSAGE);
+              PopupNotification.show("Utilizador Registado com sucesso!","Verifique a sua caixa de correio",
+                        Notification.Type.HUMANIZED_MESSAGE,Position.TOP_RIGHT);
             }
         });
     }

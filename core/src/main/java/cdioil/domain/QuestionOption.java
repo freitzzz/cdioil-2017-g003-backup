@@ -33,4 +33,7 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
      */
     protected QuestionOption() {
     }
+    
+    abstract T getContent();
+        
 }

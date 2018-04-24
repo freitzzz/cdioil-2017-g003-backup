@@ -1,32 +1,37 @@
 package cdioil.frontoffice.presentation;
 
+import cdioil.application.authz.AuthenticationController;
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.presentation.authz.ChangeUserDataUI;
-import cdioil.frontoffice.presentation.authz.RegisterUserUI;
-import cdioil.frontoffice.utils.Console;
+import cdioil.console.Console;
+import cdioil.domain.authz.Admin;
+import cdioil.domain.authz.Manager;
+import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.User;
 
 /**
  * FrontOffice Main Menu
  */
 public class MainMenu {
-
-    /**
-     * Logged User
-     */
-    private SystemUser systemUser;
-
+    
     /**
      * Line Separator for console UI
      */
     private static final String LINE_SEPARATOR =
             "======================";
+    
+    /**
+     * Current AuthenticationController
+     */
+    private final AuthenticationController authenticationController;
 
     /**
      * Constructs an instance of the the front office login
-     * @param systemUser logged system user
+     * @param authenticationController AuthenticationConroller with the autentication controller of 
+     * the current session
      */
-    public MainMenu(SystemUser systemUser) {
-        this.systemUser = systemUser;
+    public MainMenu(AuthenticationController authenticationController) {
+        this.authenticationController=authenticationController;
         showMenu();
     }
 
@@ -49,7 +54,7 @@ public class MainMenu {
                 case 0:
                     return;
                 case 1:
-                    ChangeUserDataUI mui = new ChangeUserDataUI(systemUser);
+                    ChangeUserDataUI mui = new ChangeUserDataUI(getSystemUser());
                     mui.changeData();
                     break;
                 case 2:
@@ -60,5 +65,16 @@ public class MainMenu {
                     break;
             }
         }
+    }
+    /**
+     * Temporary Solution since an ui uses a SystemUser instance (unfortunately)
+     * <br>To be removed on a near future
+     * @return SystemUser with the current user
+     */
+    private SystemUser getSystemUser(){
+        User user=authenticationController.getUser();
+        if(user instanceof RegisteredUser)return ((RegisteredUser)user).getID();
+        if(user instanceof Admin)return ((Admin) user).getID();
+        return ((Manager)user).getID();
     }
 }

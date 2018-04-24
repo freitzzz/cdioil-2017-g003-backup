@@ -126,7 +126,7 @@ public class LibrariesBootstrap {
         MultipleChoiceQuestion q3 = new MultipleChoiceQuestion("Questao EM Template "
                 + "Bootstrap Q123", "Q123", createMultipleChoiceOptionList());
         QuantitativeQuestion q4 = new QuantitativeQuestion("Questao Quantitativa Template Bootstrap V956",
-                "M2", createQuantitativeOptionList());
+                "V956", createQuantitativeOptionList());
         bootstrapQuestionGroup.addQuestion(q);
         bootstrapQuestionGroup.addQuestion(q2);
         bootstrapQuestionGroup.addQuestion(q3);

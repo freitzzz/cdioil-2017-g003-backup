@@ -1,7 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.CreateSurveyController;
-import cdioil.backoffice.utils.Console;
+import cdioil.console.Console;
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
 
@@ -17,8 +17,9 @@ public class CreateSurveyUI {
 
     public CreateSurveyUI(Manager manager) {
         controller = new CreateSurveyController();
-        menuLoop();
         loggedManager = manager;
+        System.out.println("->>>>>>>>>>>>>>>>>>"+loggedManager);
+        menuLoop();
     }
 
     private void menuLoop() {

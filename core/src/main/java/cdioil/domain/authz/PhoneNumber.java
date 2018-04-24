@@ -32,7 +32,7 @@ public class PhoneNumber implements Serializable, ValueObject {
     /**
      * Constant that represents the encryption value being used
      */
-    public static final int ENCRYPTION_VALUE=0xAC67D;
+    public static final int ENCRYPTION_VALUE=0xBC67D;
     /**
      * Constant that represents the encryption codes being used
      */

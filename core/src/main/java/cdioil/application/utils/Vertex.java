@@ -16,10 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -41,17 +38,17 @@ public class Vertex implements Serializable {
     /**
      * Element being stored in this element.
      */
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Question element;
 
     /**
      * Map with adjacent vertices and the edges connecting them.
      */
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     //@MapKey(name = "questionID")
     private Map<Edge, Question> outgoingEdges;
     
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Edge> edgeList;
 
     /**

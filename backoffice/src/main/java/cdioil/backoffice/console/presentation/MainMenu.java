@@ -1,8 +1,8 @@
 package cdioil.backoffice.console.presentation;
 
+import cdioil.application.authz.AuthenticationController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
-import cdioil.backoffice.utils.Console;
-import cdioil.domain.authz.Admin;
+import cdioil.console.Console;
 import cdioil.domain.authz.Manager;
 
 /**
@@ -63,7 +63,7 @@ public class MainMenu {
     private String OPTION_ADD_USERS_QUESTIONNAIRE = localizationHandler.getMessageValue("option_add_users_questionnaire");
     private String OPTION_IMPORT_PRODUCTS = localizationHandler.getMessageValue("option_import_products");
 
-    public void mainLoopAdmin(Admin admin) {
+    public void mainLoopAdmin(AuthenticationController authenticationController) {
         int opcao = 0;
         do {
             opcao = adminMenu();
@@ -120,7 +120,7 @@ public class MainMenu {
         } while (opcao != 0);
     }
 
-    public void mainLoopManager(Manager manager) {
+    public void mainLoopManager(AuthenticationController controller) {
         int opcao = 0;
         do {
             opcao = managerMenu();
@@ -130,7 +130,7 @@ public class MainMenu {
                     System.out.println(INFO_SHUTDOWN);
                     break;
                 case 1:
-                    new ImportQuestionsUI(manager);
+                    new ImportQuestionsUI((Manager)controller.getUser());
                     break;
                 case 2:
                     new ChangeLanguageUI();
@@ -140,19 +140,20 @@ public class MainMenu {
                     new ExportSurveyAnswersUI();
                     break;
                 case 4:
-                    new AddUsersTargetedSurvey().addUsersTargetedSurvey();
+                    new AddUsersTargetedSurveyUI();
                     break;
                 case 5:
-                    new CreateSurveyUI(manager);
+                    System.out.println(controller.getUser());
+                    new CreateSurveyUI((Manager)controller.getUser());
                     break;
                 case 6:
-                    new InsertQuestionUI(manager);
+                    new InsertQuestionUI((Manager)controller.getUser());
                     break;
                 case 7:
                     new ExportSurveyStatisticsUI();
                     break;
                 case 8:
-                    new CreateTemplateUI(manager);
+                    new CreateTemplateUI((Manager)controller.getUser());
                     break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);

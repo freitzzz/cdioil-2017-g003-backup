@@ -131,7 +131,11 @@ public class SystemUserTest {
     @Test
     public void testActivateAccount() {
         System.out.println("activateAccount");
-        instance.activateAccount();
+        String activationCode=instance.getActivationCode();
+        assertFalse("The condition should be successful since the activation code is different",
+                instance.activateAccount(""));
+        assertTrue("The condition should be successful since the activation code is the same",
+                instance.activateAccount(activationCode));
     }
 
     /**

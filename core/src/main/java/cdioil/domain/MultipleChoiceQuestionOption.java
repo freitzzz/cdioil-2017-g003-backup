@@ -27,6 +27,10 @@ public class MultipleChoiceQuestionOption extends QuestionOption<String> {
         this.textContent = option;
     }
 
+    public MultipleChoiceQuestionOption(QuestionOption option){
+        this.textContent = (String) option.getContent();
+    }
+    
     /**
      * Empty constructor for JPA.
      */
@@ -60,6 +64,11 @@ public class MultipleChoiceQuestionOption extends QuestionOption<String> {
 
     @Override
     public String toString() {
+        return textContent;
+    }
+
+    @Override
+    public String getContent() {
         return textContent;
     }
 

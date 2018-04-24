@@ -8,6 +8,7 @@ ___________
 	* Como Gestor pretendo importar questões sobre uma dada categoria.
 
 	* CONDIÇÔES DEFENIDAS.
+		Apenas pode importar questões cujas categorias lhe sejam associadas
 	______________________
 
 	REGRAS DE NEGÓCIO
@@ -21,9 +22,6 @@ ___________
 	  TESTES UNITÁRIOS
 	_____________________
 
-
-	* Classe GlobalLibrary:
-		* testGetCatQuestionsLibrary
 
 	* Classe Manager:
 		* testIsAssociatedWithCategory

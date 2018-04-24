@@ -90,6 +90,8 @@ public final class UsersBootstrap {
         PhoneNumber phone = new PhoneNumber(phoneNumber);
         Location local = new Location(location);
         BirthDate date = new BirthDate(LocalDate.parse(birthDate));
-        return new SystemUser(emailAddress,name,pwd,phone,local,date);
+        SystemUser user=new SystemUser(emailAddress,name,pwd,phone,local,date);
+        user.activateAccount(user.getActivationCode());
+        return user;
     }
 }

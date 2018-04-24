@@ -33,6 +33,10 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
         }
         this.numericContent = value;
     }
+    
+    public QuantitativeQuestionOption(QuestionOption option){
+        this.numericContent = (double) option.getContent();
+    }
 
     /**
      * Empty constructor for JPA.
@@ -68,5 +72,10 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
     @Override
     public String toString(){
         return Double.toString(numericContent);
+    }
+
+    @Override
+    public Double getContent() {
+       return numericContent;
     }
 }

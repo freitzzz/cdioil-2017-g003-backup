@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cdioil.frontoffice.utils;
+package cdioil.console;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -51,6 +51,34 @@ public class Console {
             }
 
         } while (true);
+    }
+    /**
+     * Logs in console a certain message with a certain color
+     * @param outputToLog String with the message to be logged
+     * @param color ConsoleColor enum with the color being used
+     */
+    public static void log(String outputToLog,ConsoleColors color){
+        System.out.println(color+outputToLog+ConsoleColors.RESET);
+    }
+    /**
+     * Logs in console a certain message with the red color (Like err)
+     * @param outputToLog String with the message to be logged
+     */
+    public static void logError(String outputToLog){
+        System.out.println(ConsoleColors.RED+outputToLog+ConsoleColors.RESET);
+    }
+    /**
+     * Enum for ANSI representations of colors that can be used in console
+     */
+    public enum ConsoleColors{
+        RED{@Override public String toString(){return "\u001B[31m";}},
+        BLUE{@Override public String toString(){return "\u001B[34m";}},
+        GREEN{@Override public String toString(){return "\u001B[32m";}},
+        YELLOW{@Override public String toString(){return "\u001B[33m";}},
+        PURPLE{@Override public String toString(){return "\u001B[35m";}},
+        WHITE{@Override public String toString(){return "\u001B[37m";}},
+        CYAN{@Override public String toString(){return "\u001B[36m";}},
+        RESET{@Override public String toString(){return "\u001B[0m";}}
     }
     
 }

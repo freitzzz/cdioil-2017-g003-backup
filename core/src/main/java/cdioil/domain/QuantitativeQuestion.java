@@ -26,6 +26,11 @@ public class QuantitativeQuestion extends Question implements Serializable {
         super(question, questionID, optionList);
         super.type = QuestionTypes.QUANTITATIVE;
     }
+    
+    public QuantitativeQuestion(Question question){
+        super(question.getQuestionText(),question.getQuestionID(),question.getOptionList());
+        super.type = QuestionTypes.MULTIPLE_CHOICE;
+    }
 
     /**
      * Empty Constructor for JPA.
