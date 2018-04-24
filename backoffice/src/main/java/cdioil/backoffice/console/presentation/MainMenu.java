@@ -242,6 +242,8 @@ public class MainMenu {
         OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = localizationHandler.getMessageValue("option_associate_categories_to_manager");
         OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = localizationHandler.getMessageValue("option_list_categories_without_managers");
         OPTION_ADD_USERS_QUESTIONNAIRE = localizationHandler.getMessageValue("option_add_users_questionnaire");
+        OPTION_EXPORT_STATISTICS_SURVEY = localizationHandler.getMessageValue("option_export_stats_survey");
+        OPTION_CREATE_TEMPLATE = localizationHandler.getMessageValue("option_create_template");
     }
 
 }
