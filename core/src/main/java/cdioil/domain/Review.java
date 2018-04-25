@@ -27,6 +27,7 @@ import javax.persistence.Version;
  * @author João
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @author António Sousa [1161371]
+ * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Entity
 public class Review implements Serializable {
@@ -59,21 +60,16 @@ public class Review implements Serializable {
     private Survey survey;
 
     /**
-<<<<<<< Updated upstream
-     *
+     * State of the Review
      */
     @Enumerated
     private ReviewState reviewState;
-
 
     /*
      * Map containing Questions IDs and their respective Answers.
      */
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private Map<Question, Answer> answers;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Question> questionList;
 
     /**
      * Question ID of the question currently being answered.
@@ -82,31 +78,13 @@ public class Review implements Serializable {
     private Question currentQuestion;
 
     /**
-     * Items being reviewed.
-     */
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<SurveyItem> itemList;
-
-    /**
-     * Review's final suggestion.
+     * Review's suggestion.
      */
     @Embedded
     private Suggestion suggestion;
 
-    public void setUpQuestionIDs() {
-        int i = 0;
-        for (Question question : questionList) {
-            question.setQuestionID(question.getQuestionID()+ i);
-            System.out.println(question.getQuestionID());
-            i++;
-        }
-        i++;
-        currentQuestion.setQuestionID(currentQuestion.getQuestionID()+ i);
-        System.out.println(currentQuestion.getQuestionID());
-    }
-
     /**
-     * Empty constructor of class Review
+     * Empty constructor of class Review for JPA.
      */
     protected Review() {
     }
@@ -121,22 +99,11 @@ public class Review implements Serializable {
             throw new IllegalArgumentException("O inquérito não pode ser "
                     + "null");
         }
-        System.out.println("?");
         this.survey = survey;
-        System.out.println("??");
         this.answerGraph = survey.getGraphCopy();
-        System.out.println("???");
-        //fetch items from survey
         this.answers = new TreeMap<>();
-        System.out.println("????");
-        this.currentQuestion = buildQuestion(answerGraph.getFirstQuestion());
-        System.out.println("?????");
-        this.questionList = new LinkedList<>();
-        System.out.println("??????");
-        questionList.add(buildQuestion(currentQuestion));
-        System.out.println("???????");
+        this.currentQuestion = /*buildQuestion*/(answerGraph.getFirstQuestion());
         this.reviewState = ReviewState.PENDING;
-        System.out.println("????????");
     }
 
     /**
@@ -168,17 +135,15 @@ public class Review implements Serializable {
 
         // If there are no outgoing edges, maps the last answer and finishes
         if (!outgoingEdges.iterator().hasNext()) {
-            answers.put(buildQuestion(currentQuestion), new Answer(option));
-            questionList.add(buildQuestion(currentQuestion));
+            answers.put(/*buildQuestion*/(currentQuestion), new Answer(option));
             reviewState = ReviewState.FINISHED; //state must also be updated
             return false;
         }
 
         for (Edge edge : outgoingEdges) {
-            if (buildQuestionOption(edge.getElement()).equals(option)) {
-                answers.put(buildQuestion(currentQuestion), new Answer(option));
-                currentQuestion = buildQuestion(edge.getDestinationVertexElement());
-                questionList.add(buildQuestion(currentQuestion));
+            if (/*buildQuestionOption*/(edge.getElement()).equals(option)) {
+                answers.put(/*buildQuestion*/(currentQuestion), new Answer(option));
+                currentQuestion = /*buildQuestion*/(edge.getDestinationVertexElement());
             }
         }
 
@@ -194,8 +159,7 @@ public class Review implements Serializable {
             return;
         }
         answers.remove(currentQuestion);
-        questionList.remove(currentQuestion);
-        currentQuestion = buildQuestion(((TreeMap<Question,Answer>) answers).lastKey());
+        currentQuestion = /*buildQuestion*/(((TreeMap<Question,Answer>) answers).lastKey());
     }
 
     /**
@@ -220,31 +184,31 @@ public class Review implements Serializable {
         return new TreeMap<>(answers);
     }
 
-    private Question buildQuestion(Question question) {
-        if (question instanceof BinaryQuestion) {
-            return new BinaryQuestion(question);
-        }
-        if (question instanceof MultipleChoiceQuestion) {
-            return new MultipleChoiceQuestion(question);
-        }
-        if (question instanceof QuantitativeQuestion) {
-            return new QuantitativeQuestion(question);
-        }
-        return null;
-    }
-
-    private QuestionOption buildQuestionOption(QuestionOption option) {
-        if (option instanceof BinaryQuestionOption) {
-            return new BinaryQuestionOption(option);
-        }
-        if (option instanceof MultipleChoiceQuestionOption) {
-            return new MultipleChoiceQuestionOption(option);
-        }
-        if (option instanceof QuantitativeQuestionOption) {
-            return new QuantitativeQuestionOption(option);
-        }
-        return null;
-    }
+//    private Question buildQuestion(Question question) {
+//        if (question instanceof BinaryQuestion) {
+//            return new BinaryQuestion(question);
+//        }
+//        if (question instanceof MultipleChoiceQuestion) {
+//            return new MultipleChoiceQuestion(question);
+//        }
+//        if (question instanceof QuantitativeQuestion) {
+//            return new QuantitativeQuestion(question);
+//        }
+//        return null;
+//    }
+//
+//    private QuestionOption buildQuestionOption(QuestionOption option) {
+//        if (option instanceof BinaryQuestionOption) {
+//            return new BinaryQuestionOption(option);
+//        }
+//        if (option instanceof MultipleChoiceQuestionOption) {
+//            return new MultipleChoiceQuestionOption(option);
+//        }
+//        if (option instanceof QuantitativeQuestionOption) {
+//            return new QuantitativeQuestionOption(option);
+//        }
+//        return null;
+//    }
 
     @Override
     public int hashCode() {
@@ -252,7 +216,6 @@ public class Review implements Serializable {
         hash = 19 * hash + Objects.hashCode(this.answerGraph);
         hash = 19 * hash + Objects.hashCode(this.answers);
         hash = 19 * hash + Objects.hashCode(this.currentQuestion);
-        hash = 19 * hash + Objects.hashCode(this.itemList);
         hash = 19 * hash + Objects.hashCode(this.suggestion);
         return hash;
     }
@@ -267,10 +230,7 @@ public class Review implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof Review)) {
             return false;
         }
         final Review other = (Review) obj;
@@ -278,9 +238,6 @@ public class Review implements Serializable {
             return false;
         }
         if (!Objects.equals(this.answers, other.answers)) {
-            return false;
-        }
-        if (!Objects.equals(this.itemList, other.itemList)) {
             return false;
         }
         if (!Objects.equals(this.suggestion, other.suggestion)) {
@@ -299,9 +256,4 @@ public class Review implements Serializable {
         return "Avaliação:\nOpinião: " + suggestion;
     }
 
-}
-
-enum ReviewState {
-
-    PENDING,FINISHED;
 }
