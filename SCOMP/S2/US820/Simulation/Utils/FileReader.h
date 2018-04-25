@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 /*Constant that defines the initial buffer size of the array that contains all lines of a file*/
-#define INITIAL_BUFFER_SIZE 1024
+#define INITIAL_BUFFER_SIZE 10240
 /*Constant that defines the resizing factor of the buffer size of the array that contains all lines of a file*/
 #define RESIZE_FACTOR 1.5
 /*Constant that defines the identifier of a new line*/
