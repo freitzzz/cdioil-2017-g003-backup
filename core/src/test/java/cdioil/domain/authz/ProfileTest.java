@@ -9,7 +9,6 @@ import cdioil.domain.SurveyItem;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -31,18 +30,6 @@ public class ProfileTest {
         Profile profile=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
         assertTrue("The condition should be succesful since the Review being added is valid",profile.addReview(review));
         assertFalse("The condition should be succesful since the Review being added is not valid so it should fail",profile.addReview(null));
-    }
-
-    /**
-     * Test of changeInformation method, of class Profile.
-     */
-    @Test
-    public void testChangeInformation() {
-        System.out.println("changeInformation");
-        String newInfo = "Also I sip Lean";
-        Profile profile=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
-        profile.changeInformation(newInfo);
-        //TO-DO: João check for valid info
     }
 
     /**
@@ -95,26 +82,7 @@ public class ProfileTest {
         assertEquals("The condition should be successful since both profiles identities are the same",registeredUser
                 ,result);
     }
-
-    /**
-     * Test of adicionarAvaliacao method, of class Perfil.
-     */
-    /*@Test
-    public void testAdicionarAvaliacao() {
-        System.out.println("adicionarAvaliacao");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
-
-    /**
-     * Test of mudarInformacao method, of class Perfil.
-     */
-    /*@Test
-    public void testMudarInformacao() {
-        System.out.println("mudarInformacao");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+    
     /**
      * Miscellaneous tests
      */
