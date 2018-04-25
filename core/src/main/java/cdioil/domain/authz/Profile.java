@@ -37,10 +37,6 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     @OneToOne
     private RegisteredUser registeredUser;
     /**
-     * Information of the user's profile
-     */
-    private String information;
-    /**
      * list of the user's reviews
      */
     @OneToMany
@@ -50,10 +46,7 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
      * list of the user's badges
      */
     //private List<Badge> badges;
-    /**
-     * list of user sugestions
-     */
-    //private List<Sugestao> sugestoes;
+    
     /**
      * Builds a new Profile of a certain Registered User
      *
@@ -83,25 +76,6 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     }
 
     /**
-     * Adds a sugestions to the list of seguestions
-     *
-     * @param s sugestion to be added
-     * @return true if the sugestion was added successfully, false if it was not
-     * added
-     */
-    /*public boolean addSugestion(Sugestao s) {
-        return sugestoes.add(s);
-    }*/
-    /**
-     * Changes the profile's information
-     *
-     * @param newInfo profile's new information
-     */
-    public void changeInformation(String newInfo) {
-        information = newInfo;
-    }
-
-    /**
      * Profile's hash code
      *
      * @return profile's hash code
@@ -121,7 +95,6 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
      */
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Profile)) {
             return false;
         }
@@ -136,7 +109,7 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
      */
     @Override
     public String toString() {
-        return "org.grupo3.cdioil.isep.feedback_monkey.domain.Perfil[ id=" + id + " ]";
+        return registeredUser.toString();
     }
 
     /**

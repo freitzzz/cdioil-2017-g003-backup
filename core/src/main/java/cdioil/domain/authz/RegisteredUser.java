@@ -12,12 +12,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 /**
- * O utilizador que pertence ao publico-alvo da aplicação
+ * Represents a registered user of the app.
  *
- * É o responsável por avaliar produtos e fornecer feedback
  */
 @Entity
-public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>,User{
+public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, User {
 
     @Id
     @GeneratedValue
@@ -26,69 +25,83 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>,U
     @Version
     private Long version;
     /**
-     * Conta de SystemUser associada a esta instância de RegisteredUser
+     * SystemUser account associated to the registered user.
      */
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "SYSTEMUSER")
-    private SystemUser su;
+    private SystemUser sysUser;
+    /**
+     * The registered user's profile.
+     */
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    private Profile profile;
 
     /**
-     * Cria uma nova instância de UserRegistado
+     * Builds a new RegisteredUser
      *
-     * @param su conta de SystemUser a associar
+     * @param sysUser SystemUser account to associate to
      */
-    public RegisteredUser(SystemUser su) {
-        if (su == null) {
+    public RegisteredUser(SystemUser sysUser) {
+        if (sysUser == null) {
             throw new IllegalArgumentException("Instância de SystemUser atribuida é null");
         }
-        this.su = su;
+        this.sysUser = sysUser;
+        this.profile = new Profile();
     }
 
     /**
-     * Compara esta instância de RegisteredUser a outro Objeto arbitrário
+     * Checks if two instances of RegisteredUser are the same
      *
-     * @param o outro objeto a comparar
-     * @return true se os dois elementos da comparação forem iguais
+     * @param obj object to be compared to
+     * @return true if they're equal, false if otherwise
      */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
-        RegisteredUser that = (RegisteredUser) o;
+        RegisteredUser that = (RegisteredUser) obj;
 
-        return su.equals(that.su);
+        return sysUser.equals(that.sysUser);
     }
 
     /**
-     * Descreve textualmente o RegisteredUser.
+     * Returns a text description of the user
      *
-     * @return a informação relativa ao seu SystemUser
+     * @return SystemUser's toString
      */
     @Override
     public String toString() {
-        return su.toString();
+        return sysUser.toString();
     }
 
     /**
-     * Calcula o hashcode desta instancia de RegisteredUser
+     * RegisteredUser's hashCode
      *
      * @return hashcode
      */
     @Override
     public int hashCode() {
-        return su.hashCode();
+        return sysUser.hashCode();
     }
 
+    /**
+     * Empty constructor for JPA.
+     */
     protected RegisteredUser() {
     }
 
+    /**
+     * Returns the identity of the registered user.
+     *
+     * @return system user associated to the registered user
+     */
     @Override
     public SystemUser getID() {
-        return su;
+        return sysUser;
     }
 }
