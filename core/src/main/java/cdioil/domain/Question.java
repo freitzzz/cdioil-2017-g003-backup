@@ -1,12 +1,15 @@
 package cdioil.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,8 +37,9 @@ public abstract class Question implements Serializable, Comparable {
     /**
      * Database id.
      */
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long databaseID;
+    private long databaseID;
 
     /**
      * The question's type.
@@ -51,19 +55,23 @@ public abstract class Question implements Serializable, Comparable {
     /**
      * The question's ID.
      */
-    @Id
+//    @Id
     private String questionID;
 
     public void setQuestionID(String newQuestionID){
         this.questionID = newQuestionID;
     }
-    
+    public void bro(int ok){
+        databaseID=ok;
+    }
     /**
      * List of options that the question has.
      */
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "QUESTION_OPTIONLIST", joinColumns = @JoinColumn(name = "QUESTIONDATABASEID"),
-            inverseJoinColumns = @JoinColumn(name = "QUESTIONOPTION_ID", unique = false))
+    @OneToMany(
+            cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "QUESTION_OPTIONLIST",
+            joinColumns = {@JoinColumn(name = "QUESTIONDATABASEID")}
+    )
     private List<QuestionOption> optionList;
 
     public Question(String questionText, String questionID, List<QuestionOption> optionList) {
@@ -113,6 +121,7 @@ public abstract class Question implements Serializable, Comparable {
      * @return all available options.
      */
     public List<QuestionOption> getOptionList() {
+        if(optionList==null)return new ArrayList<>();
         return optionList;
     }
 

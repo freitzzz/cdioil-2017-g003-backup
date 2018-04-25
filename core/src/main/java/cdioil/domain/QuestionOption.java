@@ -25,7 +25,8 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "QUESTIONOPTION_ID")
+    private long id;
 
 
     /**

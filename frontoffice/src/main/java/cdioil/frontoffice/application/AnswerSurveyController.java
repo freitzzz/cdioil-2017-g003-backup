@@ -72,8 +72,9 @@ public class AnswerSurveyController {
         if (chosenSurvey == null) {
             throw new IllegalArgumentException();
         }
-
+        System.out.println("xD");
         surveyReview = new Review(chosenSurvey);
+        System.out.println("xDD");
     }
 
     /**
@@ -105,7 +106,7 @@ public class AnswerSurveyController {
     
     public boolean saveReview(){
         surveyReview.setUpQuestionIDs();
-        return new ReviewRepositoryImpl().add(surveyReview) != null;
+        return new ReviewRepositoryImpl().merge(surveyReview) != null;
     }
     
     public boolean submitSuggestion(String text){

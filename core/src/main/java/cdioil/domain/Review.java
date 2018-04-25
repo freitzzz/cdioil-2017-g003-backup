@@ -9,24 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
-import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -46,7 +38,7 @@ public class Review implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     /**
      * Database version number.
@@ -57,42 +49,36 @@ public class Review implements Serializable {
     /**
      * Copy of the survey's graph, defining the overall flow of the survey.
      */
-    //@OneToOne(cascade = CascadeType.ALL)
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
     private Graph answerGraph;
 
     /**
      * Survey being answered.
      */
-    //@OneToOne(cascade = CascadeType.ALL)
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
     private Survey survey;
 
     /**
 <<<<<<< Updated upstream
      *
      */
-    @Transient
-    private ReviewState state;
+    @Enumerated
+    private ReviewState reviewState;
 
 
     /*
      * Map containing Questions IDs and their respective Answers.
      */
-    @ElementCollection
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @MapKeyJoinColumn(name = "QUESTION_ID")
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private Map<Question, Answer> answers;
 
-    //@OneToMany(cascade = CascadeType.ALL)
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Question> questionList;
 
     /**
      * Question ID of the question currently being answered.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
-    //@Transient
+    @OneToOne(cascade = CascadeType.ALL)
     private Question currentQuestion;
 
     /**
@@ -135,14 +121,22 @@ public class Review implements Serializable {
             throw new IllegalArgumentException("O inquérito não pode ser "
                     + "null");
         }
+        System.out.println("?");
         this.survey = survey;
+        System.out.println("??");
         this.answerGraph = survey.getGraphCopy();
+        System.out.println("???");
         //fetch items from survey
         this.answers = new TreeMap<>();
+        System.out.println("????");
         this.currentQuestion = buildQuestion(answerGraph.getFirstQuestion());
+        System.out.println("?????");
         this.questionList = new LinkedList<>();
+        System.out.println("??????");
         questionList.add(buildQuestion(currentQuestion));
-        this.state = ReviewState.PENDING;
+        System.out.println("???????");
+        this.reviewState = ReviewState.PENDING;
+        System.out.println("????????");
     }
 
     /**
@@ -159,7 +153,7 @@ public class Review implements Serializable {
      * @return true if review is finished
      */
     public boolean isFinished() {
-        return state.equals(ReviewState.FINISHED);
+        return reviewState.equals(ReviewState.FINISHED);
     }
 
     /**
@@ -200,7 +194,7 @@ public class Review implements Serializable {
         }
         answers.remove(currentQuestion);
         questionList.remove(currentQuestion);
-        currentQuestion = buildQuestion(((TreeMap<Question, Answer>) answers).lastKey());
+        currentQuestion = buildQuestion(((TreeMap<Question,Answer>) answers).lastKey());
     }
 
     /**
@@ -221,7 +215,7 @@ public class Review implements Serializable {
      * @return Map with all questions and respective answers of the current
      * Review
      */
-    public Map<Question, Answer> getReviewQuestionAnswers() {
+    public Map<Question,Answer> getReviewQuestionAnswers() {
         return new TreeMap<>(answers);
     }
 

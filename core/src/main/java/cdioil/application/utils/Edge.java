@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 /**
@@ -38,7 +39,7 @@ public class Edge implements Serializable {
     /**
      * Option associated to this Edge.
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private QuestionOption element;
 
     /**
@@ -49,13 +50,13 @@ public class Edge implements Serializable {
     /**
      * Edge's origin endpoint.
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Vertex originVertex;
 
     /**
      * Edge's destination endpoint.
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Vertex destinationVertex;
 
     /**

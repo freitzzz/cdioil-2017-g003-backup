@@ -80,7 +80,7 @@ public class AnswerSurveyUI {
     private void showSurveys() {
         List<String> surveys = controller.getActiveSurveyIDs();
 
-        if (surveys.size() == 0) {
+        if (surveys.isEmpty()) {
             System.out.println("There are no available surveys!");
             return;
         }
