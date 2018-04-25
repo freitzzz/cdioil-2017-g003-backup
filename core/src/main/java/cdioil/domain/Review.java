@@ -170,7 +170,7 @@ public class Review implements Serializable {
         if (!outgoingEdges.iterator().hasNext()) {
             answers.put(buildQuestion(currentQuestion), new Answer(option));
             questionList.add(buildQuestion(currentQuestion));
-            state = ReviewState.FINISHED; //state must also be updated
+            reviewState = ReviewState.FINISHED; //state must also be updated
             return false;
         }
 
