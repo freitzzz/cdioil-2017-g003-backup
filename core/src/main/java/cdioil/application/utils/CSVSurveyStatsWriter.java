@@ -5,10 +5,12 @@
  */
 package cdioil.application.utils;
 
+import cdioil.domain.Question;
 import cdioil.files.FileWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Exports statistics of a survey to a .csv file.
@@ -32,32 +34,57 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
     /**
      * Average value for answers of binary questions.
      */
-    private double binaryMean;
+    private Map<Question, Double> binaryMean;
 
     /**
      * Average value for answers of quantitative questions.
      */
-    private double quantitativeMean;
+    private Map<Question, Double> quantitativeMean;
 
     /**
      * Mean deviation for answers of binary questions.
      */
-    private double binaryMeanDeviation;
+    private Map<Question, Double> binaryMeanDeviation;
 
     /**
      * Mean deviation for answers of quantitative questions.
      */
-    private double quantitativeMeanDeviation;
+    private Map<Question, Double> quantitativeMeanDeviation;
 
     /**
      * Total of binary questions.
      */
-    private double totalBinary;
+    private Map<Question, Integer> binaryTotal;
 
     /**
      * Total of quantitative questions.
      */
-    private double totalQuantitative;
+    private Map<Question, Integer> quantitativeTotal;
+
+    /**
+     * Field that identifies the question by its ID.
+     */
+    private final static String QUESTION_ID = "Questão (ID)";
+    
+    /**
+     * Field that identifies the type of the question.
+     */
+    private final static String QUESTION_TYPE = "Tipo";
+    
+    /**
+     * Field that contains the number of answers to the question.
+     */
+    private final static String TOTAL = "Total";
+    
+    /**
+     * Field that contains the average of the answers to the question.
+     */
+    private final static String AVG = "Média";
+    
+    /**
+     * Field that contains the mean deviation of the answers to the question.
+     */
+    private final static String MEAN_DEVIATION = "Desvio Padrão";
 
     /**
      * Creates a new CSVSurveyStatsWriter.
@@ -71,11 +98,11 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
      */
-    public CSVSurveyStatsWriter(String filename, int totalBinary, int totalQuantitative, double binaryMean,
-            double quantitativeMean, double binaryMeanDeviation, double quantitativeMeanDeviation) {
+    public CSVSurveyStatsWriter(String filename, Map<Question, Integer> totalBinary, Map<Question, Integer> totalQuantitative, Map<Question, Double> binaryMean,
+            Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
         this.file = new File(filename);
-        this.totalBinary = totalBinary;
-        this.totalQuantitative = totalQuantitative;
+        this.binaryTotal = totalBinary;
+        this.quantitativeTotal = totalQuantitative;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
         this.binaryMeanDeviation = binaryMeanDeviation;
         this.quantitativeMean = quantitativeMean;
@@ -90,13 +117,21 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
     @Override
     public boolean writeStats() {
         List<String> fileContent = new ArrayList<>();
-        String header = "Tipo" + SPLITTER + "Total" + SPLITTER + "Média" + SPLITTER + "Desvio Padrão";
+        String header = QUESTION_ID + SPLITTER + QUESTION_TYPE + SPLITTER + TOTAL + SPLITTER + AVG + SPLITTER + MEAN_DEVIATION;
         fileContent.add(header);
-        fileContent.add("Quantitativa" + SPLITTER + totalQuantitative + SPLITTER + quantitativeMean
-                + SPLITTER + quantitativeMeanDeviation);
-        fileContent.add("Binária" + SPLITTER + totalBinary + SPLITTER + binaryMean
-                + SPLITTER + binaryMeanDeviation);
         
+        for(Question q : binaryMean.keySet()){
+            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + binaryTotal.get(q) + SPLITTER
+                    + binaryMean.get(q) + binaryMeanDeviation.get(q);
+            fileContent.add(info);
+        }       
+        
+        for(Question q : quantitativeMean.keySet()){
+            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + quantitativeTotal.get(q) + SPLITTER
+                    + quantitativeMean.get(q) + binaryMeanDeviation.get(q);
+            fileContent.add(info);
+        }
+
         return FileWriter.writeFile(file, fileContent);
     }
 }
