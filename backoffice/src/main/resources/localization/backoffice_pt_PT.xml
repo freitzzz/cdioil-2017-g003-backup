@@ -25,6 +25,7 @@
         <Message messageId = "success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
         <Message messageId = "survey_message" value = "Inquérito"/>
         <Message messageId = "option_message" value= "Opção"/>
+         <Message messageId = "info_atualization_products" value= "Insira a opção Sim se pretende actualizar o produto já existente: "/>
         <Message messageId ="no_more_options" value = "Para terminar a inserção de opções escreva"/>
         <Message messageId = "changed_extreme_values" value ="Os valores foram trocados, porque o mínimo era superior ao máximo."/>
         <!--US-280/282 infos-->
