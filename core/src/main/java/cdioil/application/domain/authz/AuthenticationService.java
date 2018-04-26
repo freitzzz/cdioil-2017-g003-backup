@@ -74,7 +74,7 @@ public final class AuthenticationService {
      */
     private UserSession createSessionForRegisteredUser(long userID){
         RegisteredUser registeredUser=getRegisteredUser(userID);
-        return registeredUser!=null ? new UserSession(registeredUser) : null;
+        return registeredUser!=null ? new UserSession(registeredUser.getID()) : null;
     }
     /**
      * Method that creates a session for an admin
@@ -83,7 +83,7 @@ public final class AuthenticationService {
      */
     private UserSession createSessionForAdmin(long userID){
         Admin admin=getAdmin(userID);
-        return admin!=null ? new UserSession(admin) : null;
+        return admin!=null ? new UserSession(admin.getID()) : null;
     }
     /**
      * Method that creates a session for a manager
@@ -92,7 +92,7 @@ public final class AuthenticationService {
      */
     private UserSession createSessionForManager(long userID){
         Manager manager=getManager(userID);
-        return manager!=null ? new UserSession(manager) : null;
+        return manager!=null ? new UserSession(manager.getID()) : null;
     }
     /**
      * Returns the SystemUser ID that is trying to login with certain credentials
