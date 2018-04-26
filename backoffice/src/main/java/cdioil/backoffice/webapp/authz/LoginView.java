@@ -1,5 +1,7 @@
 package cdioil.backoffice.webapp.authz;
 
+import cdioil.application.authz.AuthenticationController;
+import cdioil.application.domain.authz.exceptions.AuthenticationException;
 import cdioil.backoffice.webapp.admin.AdminPanelView;
 import cdioil.backoffice.webapp.manager.ManagerPanelView;
 import cdioil.backoffice.webapp.utils.ImageUtils;
@@ -69,13 +71,9 @@ public class LoginView extends LoginDesign implements View {
      */
     private final Navigator navigator;
     /**
-     * Admin that just logged in
+     * Current Authentication Controller
      */
-    private Admin admin;
-    /**
-     * Manager that just logged in
-     */
-    private Manager manager;
+    private AuthenticationController authenticationController;
 
     /**
      * Popup View for the Register User button
@@ -129,21 +127,14 @@ public class LoginView extends LoginDesign implements View {
      */
     private void configurateLoginButton() {
         btnLogin.addClickListener((event) -> {
-            if (checkForUsername()) {
-                if (checkForLoginCredentials()) {
-                    if (admin != null) {
-                        navigator.navigateTo(AdminPanelView.VIEW_NAME);
-                    } else if (manager != null) {
-                        navigator.navigateTo(ManagerPanelView.VIEW_NAME);
-                    } else {
-                        showInvalidUserNotification();
-                    }
-
-                } else {
-                    showInvalidLoginCredentialsNotification();
+            if(tryToLogin()){
+                if(authenticationController.canAccessAdminBackoffice()){
+                    navigator.navigateTo(AdminPanelView.VIEW_NAME);
+                }else if(authenticationController.canAccessManagerBackoffice()){
+                    navigator.navigateTo(ManagerPanelView.VIEW_NAME);
+                }else{
+                    showInvalidUserNotification();
                 }
-            } else {
-                showInvalidUsernameNotification();
             }
         });
     }
@@ -153,50 +144,37 @@ public class LoginView extends LoginDesign implements View {
      */
     private void configureSignupButton() {
         buttonsLayout.addComponentsAndExpand(new PopupView(new RegisterPopupViewContent()));
-        btnSignUp.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                popupView.setPopupVisible(true);
-            }
+        btnSignUp.addClickListener((Button.ClickEvent clickEvent) -> {
+            popupView.setPopupVisible(true);
         });
     }
-
     /**
-     * Checks if the username that the user is trying to login is valid
-     *
-     * @return boolean true if the username is valid for login, false if not
+     * Method that tries to login into the webapp
+     * @return boolean true if the user logged in succesfully, false if not
      */
-    private boolean checkForUsername() {
-        try {
-            new Email(txtUsername.getValue());
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
+    private boolean tryToLogin(){
+        authenticationController=new AuthenticationController();
+        try{
+            return authenticationController.login(txtUsername.getValue(),txtPassword.getValue());
+        }catch(AuthenticationException authenticationException){
+            treatAuthenticationFailure(authenticationException);
+        }catch(IllegalArgumentException invalidFieldsException){
+            showInvalidUsernameNotification();
+        }
+        return false;
+    }
+    /**
+     * Treats the Authentication failure that ocures if a AuthenticationException is thrown
+     * @param authenticationException AuthenticationException with the exception thrown if the authentication failed
+     */
+    private void treatAuthenticationFailure(AuthenticationException authenticationException){
+        if(authenticationException.getAuthenticatioExceptionCause()
+                .equals(AuthenticationException.AuthenticationExceptionCause.INVALID_CREDENTIALS)){
+            showInvalidLoginCredentialsNotification();
+        }else{
+            showActivationCodePopup();
         }
     }
-
-    /**
-     * Checks if the user credentials are valid and if it can login in the backoffice
-     *
-     * @return Admin if the
-     */
-    private boolean checkForLoginCredentials() {
-        long userID = new UserRepositoryImpl().login(new Email(txtUsername.getValue())
-                , txtPassword.getValue());
-        if (userID == -1) return false;
-        admin = new AdminRepositoryImpl().findByUserID(userID);
-        if (admin == null) manager = new ManagerRepositoryImpl().findByUserID(userID);
-        return true;
-    }
-
-    /**
-     * Pops up a notification informing the user that the username is invalid
-     */
-    private void showInvalidUsernameNotification() {
-        PopupNotification.show(INVALID_USERNAME_NAME, INVALID_USERNAME_DESCRIPTION
-                , Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
-    }
-
     /**
      * Pops up a notification informing the user that login credentials are invalid
      */
@@ -204,12 +182,24 @@ public class LoginView extends LoginDesign implements View {
         PopupNotification.show(INVALID_LOGIN_CREDENTIALS_NAME, INVALID_LOGIN_CREDENTIALS_DESCRIPTION
                 , Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
     }
-
+    /**
+     * Pops up a notification informing the user that the username is invalid
+     */
+    private void showInvalidUsernameNotification() {
+        PopupNotification.show(INVALID_USERNAME_NAME, INVALID_USERNAME_DESCRIPTION
+                , Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
+    }
+    
     /**
      * Pops up a notification informing the user that he is not valid to access backoffice
      */
     private void showInvalidUserNotification() {
         PopupNotification.show(INVALID_USER_LOGIN_NAME, INVALID_USER_LOGIN_DESCRIPTION
                 , Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
+    }
+    /**
+     * Shows a popup dialog that asks the user about the activation code
+     */
+    private void showActivationCodePopup(){
     }
 }
