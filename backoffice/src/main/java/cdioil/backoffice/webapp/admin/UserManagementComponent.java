@@ -1,7 +1,9 @@
 package cdioil.backoffice.webapp.admin;
 
+import cdioil.backoffice.application.authz.ListUsersController;
+import cdioil.backoffice.application.authz.UserManagementController;
 import cdioil.backoffice.webapp.DefaultPanelView;
-import cdioil.domain.dto.UserDTO;
+import cdioil.framework.dto.SystemUserDTO;
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Responsive;
@@ -13,23 +15,33 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
 
 /**
  * The User Management View of the AdminPanel
  */
 public class UserManagementComponent extends DefaultPanelView {
 
-    private Grid<UserDTO> userGrid;
+    private UserManagementController userManagementController;
+
+    private ListUsersController listUsersController;
+
+    private Grid<SystemUserDTO> userGrid;
 
     /**
      * Constructs an instance of the User Management view
      */
     public UserManagementComponent() {
         super("User Management");
+        instantiateComponents();
         prepareComponents();
+    }
+
+    private void instantiateComponents() {
+        userManagementController = new UserManagementController();
+        listUsersController = new ListUsersController();
+        userGrid = new Grid<>();
     }
 
     /**
@@ -90,21 +102,14 @@ public class UserManagementComponent extends DefaultPanelView {
 
 
     private void prepareUserTable() {
-        List<UserDTO> dummyUserList = new ArrayList<>(Arrays.asList(
-                new UserDTO("Pedro", "Portela", "email1"),
-                new UserDTO("Andre", "Sousa", "email2"),
-                new UserDTO("Gil", "Silva", "email3"),
-                new UserDTO("Joao", "Moreira", "email4")));
+        List<SystemUserDTO> allUsers = userManagementController.findAllSystemUsersDTO();
 
-        userGrid = new Grid<>();
-        userGrid.setItems(dummyUserList);
-
-        userGrid.addColumn(UserDTO::getFirstName).setCaption("First Name").setResizable(false);
-        userGrid.addColumn(UserDTO::getLastName).setCaption("Last Name").setResizable(false);
-        userGrid.addColumn(UserDTO::getEmail).setCaption("Email").setResizable(false);
+        userGrid.setItems(allUsers);
+        userGrid.addColumn(SystemUserDTO::getFirstName).setCaption("First Name").setResizable(false);
+        userGrid.addColumn(SystemUserDTO::getLastName).setCaption("Last Name").setResizable(false);
+        userGrid.addColumn(SystemUserDTO::getEmail).setCaption("Email").setResizable(false);
 
         userGrid.setSizeFull();
-
         addComponent(userGrid);
     }
 }
