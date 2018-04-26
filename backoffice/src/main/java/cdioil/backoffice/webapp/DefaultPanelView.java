@@ -19,7 +19,7 @@ public abstract class DefaultPanelView extends VerticalLayout {
      *
      * Contains the header and other possible items
      */
-    private HorizontalLayout headerLayout;
+    protected HorizontalLayout headerLayout;
 
     /**
      * The title label
@@ -42,6 +42,7 @@ public abstract class DefaultPanelView extends VerticalLayout {
         instantiateComponents();
         prepareHeader(headerLabel);
         addStyleName(ValoTheme.PANEL_BORDERLESS);
+        setSpacing(true);
         setSizeFull();
     }
 
@@ -57,8 +58,8 @@ public abstract class DefaultPanelView extends VerticalLayout {
      * @param headerLabel header title
      */
     private void prepareHeader(String headerLabel) {
+        headerLayout.setWidth("100%");
         headerLayout.addStyleName("viewheader");
-        headerLayout.setMargin(new MarginInfo(false, false, false, true));
 
         headerTitleLabel = new Label(headerLabel);
         headerTitleLabel.setSizeUndefined();
