@@ -1,0 +1,46 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Submeter Sugestão
+	________________________________________________
+
+	1. Correr bootstrap para ter informação na base de dados local.
+	2. Correr o projeto frontoffice.
+	3. Efetuar login com o email joao@email.com e password
+	   Password123.
+	4. Escolher opção 1 "Listar Inquéritos"
+	5. Escolher opção 3 "Responder a Inquérito"
+	6. Introduzir o nº 0 para selecionar o Inquérito criado
+	   pelo bootstrap.
+	7. Responder às questões do inquérito.
+	8. Escrever "Sim" para submeter sugestão após responder a 
+	   todas as perguntas.
+	9. Escrever um texto qualquer para a sugestão.
+        10. Verificar que na consola apareceu a mensagem "A sua
+	    sugestão foi submetida com sucesso!"
+	11. Verificar na tabela REVIEW da base de dados se na coluna
+	    SUGGESTIONTEXT se encontra o texto submetido no passo 9.
+
+	________________________________________________
+	CASO #2: Não Submeter Sugestão
+	________________________________________________
+
+	1. Correr bootstrap para ter informação na base de dados local.
+	2. Correr o projeto frontoffice.
+	3. Efetuar login com o email joao@email.com e password
+	   Password123.
+	4. Escolher opção 1 "Listar Inquéritos"
+	5. Escolher opção 2 "Responder a Inquérito"
+	6. Introduzir o nº 0 para selecionar o Inquérito criado
+	   pelo bootstrap.
+	7. Responder às questões do inquérito.
+	8. Escrever "Não" ou outro texto qualquer exceto "Sim"
+	   para não submeter sugestão após responder a todas as perguntas.
+        9. Verificar que na consola apareceu a mensagem "A sua
+	    avaliação foi registada com sucesso!"
+	10. Verificar na tabela REVIEW da base de dados se na coluna
+	    SUGGESTIONTEXT o campo está a NULL.
+
+

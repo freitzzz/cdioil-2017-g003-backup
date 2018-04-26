@@ -58,7 +58,7 @@ public class MainMenu {
                     mui.changeData();
                     break;
                 case 2:
-                    new AnswerSurveyUI();
+                    new AnswerSurveyUI(getRegisteredUser());
                     break;
                 default:
                     System.out.println("Invalid Option");
@@ -67,7 +67,7 @@ public class MainMenu {
         }
     }
     /**
-     * Temporary Solution since an ui uses a SystemUser instance (unfortunately)
+     * Temporary Solution since an ui uses a SystemUser instance
      * <br>To be removed on a near future
      * @return SystemUser with the current user
      */
@@ -76,5 +76,19 @@ public class MainMenu {
         if(user instanceof RegisteredUser)return ((RegisteredUser)user).getID();
         if(user instanceof Admin)return ((Admin) user).getID();
         return ((Manager)user).getID();
+    }
+    
+    /**
+     * Temporary Solution so that AnswerSurveyUI can have a RegisteredUser
+     * instance
+     * <br>To be removed or updated in the future
+     * @return RegisteredUser that logged in
+     */
+    private RegisteredUser getRegisteredUser(){
+        User user = authenticationController.getUser();
+        if(user instanceof RegisteredUser){
+            return (RegisteredUser) user;
+        }
+        return null;
     }
 }

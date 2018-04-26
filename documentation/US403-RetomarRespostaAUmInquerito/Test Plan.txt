@@ -1,0 +1,29 @@
+	
+
+	TEST PLAN
+
+	____________________________________________________________
+	CASO #1: Iniciar resposta ao inquérito e retomar mais tarde
+	____________________________________________________________
+
+	1. Correr bootstrap para ter informação na base de dados local.
+	2. Correr o projeto frontoffice.
+	3. Efetuar login com o email joao@email.com e password
+	   Password123.
+	4. Escolher opção 1 "Listar Inquéritos".
+	5. Escolher opção 3 "Responder a Inquérito".
+	6. Introduzir o nº 0 para selecionar o Inquérito criado
+	   pelo bootstrap.
+	7. Responder a uma ou zero perguntas. 
+	8. Escrever "EXIT" para sair do processo de resposta ao inquérito.
+	9. Terminar o front office ou fazer sempre exit até chegar ao menu de login novamente.
+	10. Efetuar os passos 1-3 novamente.
+	11. Escolher opção 2 "Listar Avaliações pendentes".
+	12. Verificar que é apresentada na consola uma Avaliação #0.
+	13. Escolher opção 4 "Continuar uma avaliação".
+	14. Introduzir o nº 0 para selecionar a avaliação pendente.
+	15. Responder ao resto das perguntas.
+	16. Verificar que na base de dados, na tabela Review existe
+	    um registo.
+
+
