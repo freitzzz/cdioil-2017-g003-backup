@@ -31,7 +31,7 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
     public boolean exists(RegisteredUser user) {
         SystemUser sysUser=new UserRepositoryImpl().findByEmail(user.getID().getID());
         if(sysUser==null)return false;
-        Query query=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.su = :sysUser").setParameter("sysUser",sysUser);
+        Query query=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.sysUser = :sysUser").setParameter("sysUser",sysUser);
         return !query.getResultList().isEmpty();
     }
     
@@ -42,7 +42,7 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
      * if no registered user was found
      */
     public RegisteredUser findByUserID(long dataBaseId) {
-        Query q = entityManager().createQuery("SELECT ru FROM RegisteredUser ru WHERE ru.su.id = :databaseId");
+        Query q = entityManager().createQuery("SELECT ru FROM RegisteredUser ru WHERE ru.sysUser.id = :databaseId");
         q.setParameter("databaseId", dataBaseId);
         if (q.getResultList().isEmpty())return null;
         return (RegisteredUser)q.getSingleResult();
@@ -57,14 +57,24 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
     @Override
     public List<RegisteredUser> getUsersByDomain(String domain) {
         String encryptedDomain = OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
-        Query q = entityManager().createQuery("SELECT r FROM RegisteredUser r WHERE r.su.email.email REGEXP :pattern");
+        Query q = entityManager().createQuery("SELECT r FROM RegisteredUser r WHERE r.sysUser.email.email REGEXP :pattern");
         q.setParameter("pattern", ".*" + encryptedDomain);
         if (q.getResultList().isEmpty()) {
             return null;
         }
         return q.getResultList();
     }
-
+    /**
+     * Method that finds a certain admin by it's SystemUser
+     * @param systemUser SystemUser with the admin system user
+     * @return RegisteredUser with the admin that has a certain SystemUser
+     */
+    public RegisteredUser findBySystemUser(SystemUser systemUser){
+        if(systemUser==null)return null;
+        Query querySystemUser=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.sysUser= :systemUser")
+                .setParameter("systemUser",systemUser);
+        return !querySystemUser.getResultList().isEmpty() ? (RegisteredUser)querySystemUser.getSingleResult() : null;
+    }
     @Override
     public List<RegisteredUser> getUsersByFilters(String domain, String username, String birthYear, String location) {
 
