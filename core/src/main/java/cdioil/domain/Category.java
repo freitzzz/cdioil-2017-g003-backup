@@ -48,8 +48,7 @@ public class Category extends SurveyItem {
     private static final String SPLITTER = "-";
 
     /**
-     * Regular expression to validate the path of the Category in the Market
-     * Structure.
+     * Regular expression to validate the path of the Category in the Market Structure.
      */
     private final static String PATH_REGEX = "[0-9]+" + Sufixes.SUFIX_DC + "((-[0-9]+" + Sufixes.SUFIX_UN + "(-[0-9]+"
             + Sufixes.SUFIX_CAT + "(-[0-9]+" + Sufixes.SUFIX_SCAT + "(-[0-9]+" + Sufixes.SUFIX_UB + ")?)?)?)?)";
@@ -143,8 +142,7 @@ public class Category extends SurveyItem {
      * Adds a product to the list of products of the Category.
      *
      * @param p product to add
-     * @return true if the product is successfully added. Otherwise, returns
-     * false
+     * @return true if the product is successfully added. Otherwise, returns false
      */
     public boolean addProduct(Product p) {
         if (p == null) {
@@ -199,13 +197,30 @@ public class Category extends SurveyItem {
     }
 
     /**
+     * Removes the first two unecessary numbers in the CAT identifier of the path.
+     *
+     * @return the path without the first two numbers in the CAT identifier
+     */
+    private String getActualIdentifier() {
+        if (path.toUpperCase().contains("CAT")) {
+            try {
+                String removableNumbers = path.substring(8, 9);
+                return path.replace(removableNumbers, "");
+            } catch (IndexOutOfBoundsException ex) {
+                return path;
+            }
+        }
+        return path;
+    }
+
+    /**
      * Describes a Category through its name and identifier.
      *
      * @return description of the Category
      */
     @Override
     public String toString() {
-        return String.format("Nome: %s\nDescritivo: %s\n", name, identifier);
+        return String.format("Nome: %s\nDescritivo: %s\n", name, getActualIdentifier());
     }
 
     /**
@@ -224,8 +239,7 @@ public class Category extends SurveyItem {
      * Compares a Category with another Object.
      *
      * @param obj Object to compare
-     * @return true, if the two Categories have the same path. Otherwise,
-     * returns false
+     * @return true, if the two Categories have the same path. Otherwise, returns false
      */
     @Override
     public boolean equals(Object obj) {
