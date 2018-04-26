@@ -13,6 +13,7 @@
                 <Message messageId = "info_users" value = "Users"/>
         <Message messageId = "info_num_questions_imported" value = "Number of successfully imported questions:"/>
         <Message messageId = "info_num_products_imported" value = "Number of successfully imported products:"/>
+         <Message messageId = "info_num_products_exported" value = "Number of exported products:"/>
         <Message messageId = "info_all_users_list" value = "List of all Users of the System&#10;"/>
         <Message messageId = "info_all_managers_list" value = "List of all Managers&#10;"/>
         <Message messageId = "info_categories_removed" value = "Category/Categories removed with success!&#10;"/>
@@ -38,6 +39,7 @@
         <Message messageId = "request_user_email" value = "Type the email of the user to search:"/>
         <Message messageId = "request_select_language" value = "Select your language:"/>
         <Message messageId = "request_file_path" value = "Please type in the file's path:"/>
+        <Message messageId = "request_file_path_export" value = "Please type in the file's path to export invalid products:"/>
         <Message messageId = "request_manager_email" value = "Please select a manager by inserting his email address:&#10;"/>
         <Message messageId = "request_category_identifier_removal" value = "Please type in the category/categories identifier(s) you wish to remove from the selected manager&#10;"/>
         <Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
