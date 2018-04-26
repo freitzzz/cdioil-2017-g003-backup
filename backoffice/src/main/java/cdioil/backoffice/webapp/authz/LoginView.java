@@ -6,12 +6,6 @@ import cdioil.backoffice.webapp.admin.AdminPanelView;
 import cdioil.backoffice.webapp.manager.ManagerPanelView;
 import cdioil.backoffice.webapp.utils.ImageUtils;
 import cdioil.backoffice.webapp.utils.PopupNotification;
-import cdioil.domain.authz.Admin;
-import cdioil.domain.authz.Email;
-import cdioil.domain.authz.Manager;
-import cdioil.persistence.impl.AdminRepositoryImpl;
-import cdioil.persistence.impl.ManagerRepositoryImpl;
-import cdioil.persistence.impl.UserRepositoryImpl;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -24,7 +18,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * Login View class that extends LoginDesign class designed with Vaadin Design
- *
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public class LoginView extends LoginDesign implements View {
@@ -58,6 +51,20 @@ public class LoginView extends LoginDesign implements View {
      */
     private static final String INVALID_USER_LOGIN_NAME = "Acesso Invalido!";
     /**
+     * Constant that represents the title of the popup notification of the activation code
+     */
+    private static final String ACTIVATION_CODE_TITLE="Código Ativação";
+    /**
+     * Constant that represents the message of the error dialog that pops up if the user inserts a 
+     * invalid activation code
+     */
+    private static final String INVALID_ACTIVATION_MESSAGE="O código de ativação que inseriu é inválido!";
+    /**
+     * Constant that represents the message of the information dialog that pops up if the user inserts a 
+     * valid activation code
+     */
+    private static final String VALID_ACTIVATION_MESSAGE="A sua conta foi ativada com sucesso!";
+    /**
      * Constant that represents the message that pops up if the user
      * tries to login with an invalid user for backoffice
      */
@@ -73,21 +80,28 @@ public class LoginView extends LoginDesign implements View {
     /**
      * Current Authentication Controller
      */
-    private AuthenticationController authenticationController;
+    private final AuthenticationController authenticationController;
 
     /**
      * Popup View for the Register User button
      */
-    private PopupView popupView;
+    private PopupView registeredUserPopupView;
+    /**
+     * PopupView with the current act
+     */
+    private PopupView sendActivationCodePopupView;
 
     /**
      * Creates a new LoginView
      */
     public LoginView() {
         navigator = UI.getCurrent().getNavigator();
+        authenticationController=new AuthenticationController();
         prepareComponents();
     }
-
+    /**
+     * Prepares current view components
+     */
     private void prepareComponents() {
         txtUsername.setIcon(VaadinIcons.USER);
         txtPassword.setIcon(VaadinIcons.PASSWORD);
@@ -101,20 +115,42 @@ public class LoginView extends LoginDesign implements View {
      * Configures login
      */
     private void configurateLogin() {
-        configurePopupView();
+        configureRegisterUserPopupView();
         configurateLoginButton();
         configureSignupButton();
+        configureSendActivationCodePopupView();
     }
 
     /**
      * Configures the Register User Popup View
      */
-    private void configurePopupView() {
-        popupView = new PopupView(new RegisterPopupViewContent());
-        popupView.setHideOnMouseOut(false);
-        panelLoginLayout.addComponentsAndExpand(popupView);
+    private void configureRegisterUserPopupView() {
+        registeredUserPopupView = new PopupView(new RegisterPopupViewContent());
+        registeredUserPopupView.setHideOnMouseOut(false);
+        panelLoginLayout.addComponentsAndExpand(registeredUserPopupView);
     }
-
+    /**
+     * Configures the send activation code popup view
+     */
+    private void configureSendActivationCodePopupView(){
+        sendActivationCodePopupView=new PopupView(new ActivationCodePopupViewContent());
+        sendActivationCodePopupView.setHideOnMouseOut(false);
+        configureSendActivationCodeButton();
+    }
+    /**
+     * Configures the send activation code button
+     */
+    private void configureSendActivationCodeButton(){
+        Button btnSendActivationCode=((ActivationCodePopupViewContent)sendActivationCodePopupView.getContent()).getActivationCodeButton();
+        btnSendActivationCode.addClickListener((sendActivationCodeButtonEvent)->{
+            if(authenticationController.activateAccount(txtUsername.getValue(),txtPassword.getValue()
+                    ,btnSendActivationCode.getCaption())){
+                showValidActivationCodeNotification();
+            }else{
+                showInvalidActivationCodeNotification();
+            }
+        });
+    }
     /**
      * Gets logo from resource
      */
@@ -126,7 +162,7 @@ public class LoginView extends LoginDesign implements View {
      * Configurates login button
      */
     private void configurateLoginButton() {
-        btnLogin.addClickListener((event) -> {
+        btnLogin.addClickListener((loginButtonClickEvent) -> {
             if(tryToLogin()){
                 if(authenticationController.canAccessAdminBackoffice()){
                     navigator.navigateTo(AdminPanelView.VIEW_NAME);
@@ -145,7 +181,7 @@ public class LoginView extends LoginDesign implements View {
     private void configureSignupButton() {
         buttonsLayout.addComponentsAndExpand(new PopupView(new RegisterPopupViewContent()));
         btnSignUp.addClickListener((Button.ClickEvent clickEvent) -> {
-            popupView.setPopupVisible(true);
+            registeredUserPopupView.setPopupVisible(true);
         });
     }
     /**
@@ -153,7 +189,6 @@ public class LoginView extends LoginDesign implements View {
      * @return boolean true if the user logged in succesfully, false if not
      */
     private boolean tryToLogin(){
-        authenticationController=new AuthenticationController();
         try{
             return authenticationController.login(txtUsername.getValue(),txtPassword.getValue());
         }catch(AuthenticationException authenticationException){
@@ -198,8 +233,21 @@ public class LoginView extends LoginDesign implements View {
                 , Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
     }
     /**
+     * Pops up a notification informing the user the activation code that he inserted is invalid
+     */
+    private void showValidActivationCodeNotification(){
+        PopupNotification.show(ACTIVATION_CODE_TITLE,VALID_ACTIVATION_MESSAGE,Notification.Type.ASSISTIVE_NOTIFICATION,Position.TOP_RIGHT);
+    }
+    /**
+     * Pops up a notification informing the user the activation code that he inserted is invalid
+     */
+    private void showInvalidActivationCodeNotification(){
+        PopupNotification.show(ACTIVATION_CODE_TITLE,INVALID_ACTIVATION_MESSAGE,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
+    }
+    /**
      * Shows a popup dialog that asks the user about the activation code
      */
     private void showActivationCodePopup(){
+        sendActivationCodePopupView.setPopupVisible(true);
     }
 }
