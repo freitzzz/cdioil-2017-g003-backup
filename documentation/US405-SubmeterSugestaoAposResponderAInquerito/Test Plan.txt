@@ -11,7 +11,7 @@
 	3. Efetuar login com o email joao@email.com e password
 	   Password123.
 	4. Escolher opção 1 "Listar Inquéritos"
-	5. Escolher opção 2 "Responder a Inquérito"
+	5. Escolher opção 3 "Responder a Inquérito"
 	6. Introduzir o nº 0 para selecionar o Inquérito criado
 	   pelo bootstrap.
 	7. Responder às questões do inquérito.
