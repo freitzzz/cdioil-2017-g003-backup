@@ -41,7 +41,7 @@ public class ExportSurveyStatisticsUI {
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("exit_message");
+    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_message");
 
     /**
      * Represents a message that indicates the user that there was an error exporting the file.
@@ -51,7 +51,7 @@ public class ExportSurveyStatisticsUI {
     /**
      * Represents a message that indicates the user that the stats were successfully exported.
      */
-    private final String EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE = localizationHandler.getMessageValue("success_exporting_stats");
+    private final String EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE = localizationHandler.getMessageValue("info_success_exporting_stats");
 
     /**
      * Represents a message that indicates the user to select a survey.
@@ -61,7 +61,7 @@ public class ExportSurveyStatisticsUI {
     /**
      * Represents a message used to list the surveys.
      */
-    private final String SURVEY_MESSAGE = localizationHandler.getMessageValue("survey_message");
+    private final String SURVEY_MESSAGE = localizationHandler.getMessageValue("info_survey_message");
 
     /**
      * Represents a message that informs the user that the survey is not valid.
