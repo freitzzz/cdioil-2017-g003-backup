@@ -33,7 +33,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
     /**
      * The registered user's profile.
      */
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REFRESH})
     private Profile profile;
 
     /**
@@ -46,7 +46,15 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
             throw new IllegalArgumentException("Instância de SystemUser atribuida é null");
         }
         this.su = sysUser;
-        this.profile = new Profile();
+        this.profile = new Profile(this);
+    }
+    
+    /**
+     * Returns the user's profile.
+     * @return Profile instance.
+     */
+    public Profile getProfile(){
+        return profile;
     }
 
     /**

@@ -1,7 +1,10 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.Review;
+import cdioil.domain.ReviewState;
 import cdioil.domain.Survey;
+import cdioil.domain.authz.Profile;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ReviewRepository;
@@ -32,5 +35,18 @@ public final class ReviewRepositoryImpl extends BaseJPARepository<Review,Long> i
         return (List<Review>)entityManager().createQuery("SELECT r FROM Review r "
                 + "WHERE r.survey= :survey").setParameter("survey",survey).getResultList();
     }
-    
+    /**
+     * TODO Update method with lazy loading
+     * Method that returns all the pending reviews of a certain user
+     * @param loggedUserProfile profile of a user
+     * @return list of all the pending reviews user that a registered user has
+     */
+    @Override
+    public List<Review> findUserPendingReviews(Profile loggedUserProfile) {
+        if(loggedUserProfile == null) return null;
+        return (List<Review>)entityManager().createQuery("SELECT r from Review r,"
+                + "Profile p WHERE r.reviewState= :reviewState AND p = :profile")
+                .setParameter("reviewState",ReviewState.PENDING)
+                .setParameter("profile", loggedUserProfile).getResultList();
+    }  
 }

@@ -114,6 +114,15 @@ public class Review implements Serializable {
     public Question getCurrentQuestion() {
         return currentQuestion;
     }
+    
+    /**
+     * Returns the survey the review is associated with.
+     * 
+     * @return Survey the review is associated with
+     */
+    public Survey getSurvey(){
+        return survey;
+    }
 
     /**
      * Checks if there are no more questions to answer in the survey

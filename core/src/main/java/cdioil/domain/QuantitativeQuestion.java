@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity(name = "QuantitiveQuestion")
+@Entity(name = "QuantitativeQuestion")
 public class QuantitativeQuestion extends Question implements Serializable {
 
     /**
