@@ -1,6 +1,6 @@
 package cdioil.backoffice.webapp.manager;
 
-import cdioil.backoffice.webapp.DashboardLayoutView;
+import cdioil.backoffice.webapp.MainLayoutView;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
@@ -9,12 +9,11 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 /**
  * @author <a href="https://github.com/freitzzz">freitzzz</a>
  */
-public class ManagerPanelView extends DashboardLayoutView implements View {
+public class ManagerPanelView extends MainLayoutView implements View {
     /**
      * Constant that represents the current page view name
      */
@@ -69,16 +68,16 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
     public ManagerPanelView(){
         navigator=UI.getCurrent().getNavigator();
         configuration();
-        setRightPanelContents(new ManagerDashBoard());
+        setRightPanelContents(new DashboardComponent());
     }
 
     /**
      * Configures current page
      */
     private void configuration(){
-        configureHomeButton();
-        configureImportButton();
-        configureExportButton();
+        //configureHomeButton();
+        //configureImportButton();
+        //configureExportButton();
     }
 
     /**
@@ -89,7 +88,7 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
         dashboardBtn.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                setRightPanelContents(new ManagerDashBoard());
+                setRightPanelContents(new DashboardComponent());
             }
         });
         addNewButtonToLeftPanel(dashboardBtn);
@@ -101,7 +100,7 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
     private void configureImportButton(){
         importBtn = new Button(IMPORT_BTN_CAPTION, VaadinIcons.SIGN_IN);
         importBtn.addClickListener(clickEvent -> {
-            setRightPanelContents(new ManagerImportView());
+            setRightPanelContents(null);
         });
         addNewButtonToLeftPanel(importBtn);
     }
@@ -113,7 +112,7 @@ public class ManagerPanelView extends DashboardLayoutView implements View {
         exportBtn = new Button(EXPORT_BTN_CAPTION, VaadinIcons.SIGN_OUT);
         exportBtn.addClickListener(listener -> {
             try {
-                setRightPanelContents(new ManagerExportView());
+                setRightPanelContents(null);
             } catch (IllegalStateException e) {
                 Notification.show(ERROR_OPENING_EXPORT_TAB_TITLE, Notification.Type.ERROR_MESSAGE);
             }

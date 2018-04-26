@@ -42,7 +42,7 @@ public class SurveyTest {
         timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         list = new LinkedList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
         this.i = new GlobalSurvey(list, timePeriod);
     }
 
@@ -94,7 +94,7 @@ public class SurveyTest {
         System.out.println("equals");
         assertNotEquals("Objeto null não é igual", null, i);
         ArrayList<SurveyItem> otherList = new ArrayList<>();
-        otherList.add(new Product("Other Product", new EAN("4444444444"), "1 L", new QRCode("235245246")));
+        otherList.add(new Product("Other Product", new SKU("4444444444"), "1 L", new QRCode("235245246")));
         assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(otherList, timePeriod), i);
         assertEquals("Instância de Inquerito igual", new GlobalSurvey(list, timePeriod), i);
         assertEquals("Compare same instance", i, i);

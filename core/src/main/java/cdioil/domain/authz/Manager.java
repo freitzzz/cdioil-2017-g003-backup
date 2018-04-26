@@ -42,7 +42,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
      */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SYSTEMUSER")
-    private SystemUser su;
+    private SystemUser sysUser;
 
     /**
      * Category List associated with a Manager.
@@ -57,7 +57,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
      * @param categories Category List
      */
     public Manager(SystemUser su, List<Category> categories) {
-        this.su = su;
+        this.sysUser = su;
         this.categories = categories;
     }
 
@@ -72,7 +72,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
                     + "não pode ser null.");
         }
         this.categories = new LinkedList<>();
-        this.su = su;
+        this.sysUser = su;
     }
 
     /**
@@ -82,7 +82,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
      */
     @Override
     public String toString() {
-        return su.toString();
+        return sysUser.toString();
     }
 
     /**
@@ -102,7 +102,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
 
         Manager manager = (Manager) o;
 
-        return su.equals(manager.su);
+        return sysUser.equals(manager.sysUser);
     }
 
     /**
@@ -112,7 +112,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
      */
     @Override
     public int hashCode() {
-        return su.hashCode();
+        return sysUser.hashCode();
     }
 
     protected Manager() {
@@ -121,7 +121,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
 
     @Override
     public SystemUser getID() {
-        return su;
+        return sysUser;
     }
 
     /**

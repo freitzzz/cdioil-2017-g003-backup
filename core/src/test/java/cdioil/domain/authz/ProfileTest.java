@@ -5,6 +5,7 @@ import cdioil.domain.GlobalSurvey;
 import cdioil.domain.Product;
 import cdioil.domain.QRCode;
 import cdioil.domain.Review;
+import cdioil.domain.SKU;
 import cdioil.domain.SurveyItem;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class ProfileTest {
     public void testAddReview() {
         System.out.println("addReview");
         ArrayList<SurveyItem> list = new ArrayList<>();
-        list.add(new Product("ProdutoTeste", new EAN("544231234"), "1 L", new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
         Review review = new Review(new GlobalSurvey(list, new TimePeriod(LocalDateTime.MIN,LocalDateTime.MAX)));
         Profile profile=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
         assertTrue("The condition should be succesful since the Review being added is valid",profile.addReview(review));

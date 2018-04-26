@@ -8,7 +8,9 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * Represents a Product in a Market Structure's Category.
@@ -16,7 +18,7 @@ import javax.persistence.OneToMany;
  * @author António Sousa [1161371]
  */
 @Entity
-public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
+public class Product extends SurveyItem implements AggregateRoot<SKU> {
 
     /**
      * Constant representing the default content of a Product's image.
@@ -30,6 +32,13 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
     @Column(name = "NOME")
     private String name;
 
+    /**
+     * Product's Stock Keeping Unit.
+     */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private SKU sku;
+    
     /**
      * List of the Product's Codes.
      */
@@ -56,19 +65,19 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
      *
      *
      * @param name the product's name
-     * @param code ean
+     * @param sku product's stock keeping unit
      * @param codes 0 or more codes
      * @param quantity quantity
      */
-    public Product(String name, Code code, String quantity,Code... codes) {
+    public Product(String name, SKU sku, String quantity,Code... codes) {
 
-        if (name == null || code == null || name.trim().isEmpty()) {
+        if (name == null || sku == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid parameters.");
         }
 
         this.name = name;
 
-        this.codes.add(code);
+        this.sku = sku;
 
         this.codes.addAll(Arrays.asList(codes));
         
@@ -113,6 +122,10 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
 
         String result = String.format("Nome: %s\n", name);
 
+        result += "SKU:\n";
+        
+        result += sku.toString();
+        
         result += "Códigos:\n";
 
         for (Code c : codes) {
@@ -131,7 +144,7 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.codes);
+        hash = 67 * hash + Objects.hashCode(this.sku);
         return hash;
     }
 
@@ -151,11 +164,11 @@ public class Product extends SurveyItem implements AggregateRoot<List<Code>> {
         }
         final Product other = (Product) obj;
 
-        return Objects.equals(this.codes, other.codes);
+        return Objects.equals(this.sku, other.sku);
     }
 
     @Override
-    public List<Code> getID() {
-        return new ArrayList<>(codes); //create a copy of the identity
+    public SKU getID() {
+        return sku;
     }
 }

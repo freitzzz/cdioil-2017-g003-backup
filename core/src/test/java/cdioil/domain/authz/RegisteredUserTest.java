@@ -48,7 +48,7 @@ public class RegisteredUserTest {
     public void testToString() {
         System.out.println("toString");
         RegisteredUser ur = new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")));
-        String expected = "Nome: Gollum  Smeagol\nEmail: myprecious@gmail.com\n";
+        String expected = "Nome: Gollum Smeagol\nEmail: myprecious@gmail.com\n";
         assertEquals(expected, ur.toString());
     }
 

@@ -81,19 +81,19 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
         StringBuilder baseQueryStringBuilder = new StringBuilder("SELECT r FROM RegisteredUser r");
 
         if (domain != null && !domain.trim().isEmpty()) {
-            baseQueryStringBuilder.append(" WHERE r.su.email.email REGEXP :p_domain");
+            baseQueryStringBuilder.append(" WHERE r.sysUser.email.email REGEXP :p_domain");
         }
         if (username != null && !username.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            baseQueryStringBuilder.append("r.su.email.email REGEXP :p_username");
+            baseQueryStringBuilder.append("r.sysUser.email.email REGEXP :p_username");
         }
         if (birthYear != null && !birthYear.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            baseQueryStringBuilder.append("EXTRACT (YEAR FROM r.su.birthDate.birthDate) = :p_birthyear");
+            baseQueryStringBuilder.append("EXTRACT (YEAR FROM r.sysUser.birthDate.birthDate) = :p_birthyear");
         }
         if (location != null && !location.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            baseQueryStringBuilder.append("r.su.location.location = :p_location");
+            baseQueryStringBuilder.append("r.sysUser.location.location = :p_location");
         }
 
         String queryString = baseQueryStringBuilder.toString();

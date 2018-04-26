@@ -1,18 +1,18 @@
 package cdioil.backoffice.webapp.admin;
 
-import cdioil.backoffice.webapp.DashboardLayoutView;
-import cdioil.backoffice.webapp.authz.LoginView;
-import cdioil.backoffice.webapp.utils.ImageUtils;
+import cdioil.backoffice.webapp.MainLayoutView;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
 /**
  * @author <a href="https://github.com/freitzzz">freitzzz</a>
  */
-public class AdminPanelView extends DashboardLayoutView implements View {
+public class AdminPanelView extends MainLayoutView implements View {
 
     /**
      * Constant that represents the current page view name
@@ -36,15 +36,37 @@ public class AdminPanelView extends DashboardLayoutView implements View {
             "Dashboard";
 
     /**
-     * Assign Manager Button
+     * Admin Users Panel Button
      */
-    private Button assignManagerButton;
+    private Button usersBtn;
 
     /**
-     * Assign Manager Button Caption
+     * Admin Users Panel Button
      */
-    private static final String ASSIGNMANAGER_BTN_CAPTION =
-            "Registar Gestor";
+    private static final String USERS_BTN_CAPTION =
+            "Utilizadores";
+
+    /**
+     * Admin Manager Panel Button
+     */
+    private Button managersBtn;
+
+    /**
+     * Admin Manager Panel Button Caption
+     */
+    private static final String MANAGERS_BTN_CAPTION =
+            "Gestores";
+
+    /**
+     * Admin Market Struct Panel Button
+     */
+    private Button marketStructBtn;
+
+    /**
+     * Admin Market Struct Panel Button
+     */
+    private static final String MARKET_STRUCT_BTN_CAPTION =
+            "Estrutura Mercadológica";
 
     /**
      * Builds a new AdminPanelView
@@ -58,36 +80,64 @@ public class AdminPanelView extends DashboardLayoutView implements View {
      * Prepares all components
      */
     private void configuration() {
-        configureHomeButton();
-        configureAssignManagerButton();
+        configureDashboardButton();
+        configureUsersBtn();
+        configureManagersBtn();
+        configureMarketStructBtn();
         addButtonsToComponent();
 
         // The default right panel components
-        setRightPanelContents(null); //TODO should display dashboard
+        rightPanel.setContent(new DashboardComponent());
     }
 
     /**
      * Prepares Home Button
      */
-    private void configureHomeButton() {
+    private void configureDashboardButton() {
         dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
         dashboardBtn.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //TODO create dashboard view
+                setRightPanelContents(new DashboardComponent());
             }
         });
     }
 
     /**
-     * Prepares Assign Manager Button
+     * Prepares Users Button
      */
-    private void configureAssignManagerButton() {
-        assignManagerButton = new Button(ASSIGNMANAGER_BTN_CAPTION, VaadinIcons.USER_CHECK);
-        assignManagerButton.addClickListener(new Button.ClickListener() {
+    private void configureUsersBtn() {
+        usersBtn = new Button(USERS_BTN_CAPTION, VaadinIcons.USERS);
+        usersBtn.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                setRightPanelContents(new RegisterManagerView());
+                setRightPanelContents(new UserManagementComponent());
+            }
+        });
+    }
+
+    /**
+     * Prepares Managers Button
+     */
+    private void configureManagersBtn() {
+        managersBtn = new Button(MANAGERS_BTN_CAPTION, VaadinIcons.USER_STAR);
+        managersBtn.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                setRightPanelContents(new ManagerManagementComponent());
+            }
+        });
+    }
+
+    /**
+     * Prepares Market Struct Button
+     */
+    private void configureMarketStructBtn() {
+        marketStructBtn = new Button(MARKET_STRUCT_BTN_CAPTION, VaadinIcons.TREE_TABLE);
+        marketStructBtn.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                setRightPanelContents(new MarketStructureComponent());
             }
         });
     }
@@ -97,7 +147,9 @@ public class AdminPanelView extends DashboardLayoutView implements View {
      */
     private void addButtonsToComponent() {
         addNewButtonToLeftPanel(dashboardBtn);
-        addNewButtonToLeftPanel(assignManagerButton);
+        addNewButtonToLeftPanel(usersBtn);
+        addNewButtonToLeftPanel(managersBtn);
+        addNewButtonToLeftPanel(marketStructBtn);
     }
 
 }

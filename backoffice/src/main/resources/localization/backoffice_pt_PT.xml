@@ -22,15 +22,14 @@
         <Message messageId = "info_exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
         <Message messageId = "info_number_categories_question_was_added_to" value = "O número de cateogrias a que a questão foi adicionada foi: "/>
         <Message messageId = "info_number_categories_imported" value = "O número de categorias importadas foi:"/>
+        <Message messageId = "info_atualization_products" value= "Insira a opção Sim se pretende actualizar o produto já existente: "/>
         <Message messageId = "info_success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
         <Message messageId = "info_survey_message" value = "Inquérito"/>
         <Message messageId = "info_option_message" value= "Opção"/>
-        <Message messageId ="info_no_more_options" value = "Para terminar a inserção de opções escreva"/>
+        <Message messageId = "info_no_more_options" value = "Para terminar a inserção de opções escreva"/>
         <Message messageId = "info_changed_extreme_values" value ="Os valores foram trocados, porque o mínimo era superior ao máximo."/>
-        <!--US-280/282 infos-->
         <Message messageId = "info_active_surveys" value = "Inquéritos atualmente ativos"/>
         <Message messageId = "info_num_users_added_survey" value = "Número de utilizador(es) adicionado(s) ao inquérito"/>
-        <!--END OF US-280/282 infos-->
     </InfoMessages>
 
 	
@@ -57,14 +56,12 @@
         <Message messageId="request_insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
         <Message messageId="request_insert_max" value = "Insira o valor máximo:"/>
         <Message messageId="request_insert_min" value = "Insira o valor mínimo:"/>
-        <!--US-280/282 requests-->
         <Message messageId = "request_survey" value = "Por favor, selecione um inquérito"/>
         <Message messageId = "request_domain" value = "Por favor, selecione um domínio"/>
         <Message messageId = "request_username" value = "Por favor, insira um nome de utilizador"/>
         <Message messageId = "request_birth_year" value = "Por favor, insira um ano de nascimento"/>
         <Message messageId = "request_location" value = "Por favor, insira uma localidade"/>
         <Message messageId = "request_continue" value = "Pretende continuar? (SIM/NÃO)"/>
-        <!--END OF US-280/282 requests-->
     </RequestMessages>
 	
 	
@@ -125,13 +122,11 @@
             <Message messageId = "option_add_users_questionnaire" value = "Adicionar Utilizadores a Inquérito"/>
             <Message messageId = "option_insert_question_category" value = "Inserir Questão Sobre Categoria(s)"/>
             <Message messageId = "option_export_stats_survey" value = "Exportar Estatísticas sobre Inquérito"/>
-			<Message messageId="option_create_template" value="Criar Template"/>
-            <!--US-280/282 options-->
+            <Message messageId="option_create_template" value="Criar Template"/>
             <Message messageId = "option_filter_domain" value = "Filtrar por domínio"/>
             <Message messageId = "option_filter_username" value = "Filtrar por nome de utilizador"/>
             <Message messageId = "option_filter_year" value = "Filtrar por ano de nascimento"/>
             <Message messageId = "option_filter_location" value = "Filtrar por localidade"/>
-            <!--END OF US-280/282 options-->
         </ManagerMenuOptions>
 
     </MenuOptions>
