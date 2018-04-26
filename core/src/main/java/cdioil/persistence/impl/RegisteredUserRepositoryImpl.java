@@ -71,36 +71,38 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
         StringBuilder baseQueryStringBuilder = new StringBuilder("SELECT r FROM RegisteredUser r");
 
         if (domain != null && !domain.trim().isEmpty()) {
-            domain = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
-            baseQueryStringBuilder.append(" WHERE r.su.email.email REGEXP '");
-            baseQueryStringBuilder.append(domain);
-            baseQueryStringBuilder.append("'");
+            baseQueryStringBuilder.append(" WHERE r.su.email.email REGEXP :p_domain");
         }
-
         if (username != null && !username.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            username = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt(username, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE)) + ".*";
-            baseQueryStringBuilder.append("r.su.email.email REGEXP '");
-            baseQueryStringBuilder.append(username);
-            baseQueryStringBuilder.append("'");
+            baseQueryStringBuilder.append("r.su.email.email REGEXP :p_username");
         }
-
         if (birthYear != null && !birthYear.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            baseQueryStringBuilder.append("r.su.birthDate.birthDate REGEXP '");
-            baseQueryStringBuilder.append(birthYear);
-            baseQueryStringBuilder.append(".*");
+            baseQueryStringBuilder.append("EXTRACT (YEAR FROM r.su.birthDate.birthDate) = :p_birthyear");
         }
-
         if (location != null && !location.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            baseQueryStringBuilder.append("r.su.location.location = '");
-            baseQueryStringBuilder.append(location);
-            baseQueryStringBuilder.append("'");
+            baseQueryStringBuilder.append("r.su.location.location = :p_location");
         }
 
         String queryString = baseQueryStringBuilder.toString();
         Query q = entityManager().createQuery(queryString);
+
+        if (domain != null && !domain.trim().isEmpty()) {
+            domain = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
+            q.setParameter("p_domain", domain);
+        }
+        if (username != null && !username.trim().isEmpty()) {
+            username = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt(username, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE)) + ".*";
+            q.setParameter("p_username", username);
+        }
+        if (birthYear != null && !birthYear.trim().isEmpty()) {
+            q.setParameter("p_birthyear", birthYear);
+        }
+        if (location != null && !location.trim().isEmpty()) {
+            q.setParameter("p_location", location);
+        }
 
         List<RegisteredUser> registeredUsers = q.getResultList();
         if (registeredUsers.isEmpty()) {
