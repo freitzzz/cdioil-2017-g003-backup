@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import cdioil.files.FileReader;
+import cdioil.files.InvalidFileFormattingException;
 
 /**
  * Imports Categories from .csv files.
@@ -38,6 +39,8 @@ public class CSVCategoriesReader implements CategoriesReader {
      * Number of identifiers (columns) in the CSV file.
      */
     private static final int NUMBER_OF_IDENTIFIERS = 10;
+    
+    private static final String UNRECOGNIZED_FILE_FORMAT = "Unrecognized file formatting";
 
     /**
      * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.
@@ -59,7 +62,7 @@ public class CSVCategoriesReader implements CategoriesReader {
         List<String> fileContent = FileReader.readFile(file);
 
         if (!isFileValid(fileContent)) {
-            return null;
+           throw new InvalidFileFormattingException(UNRECOGNIZED_FILE_FORMAT);
         }
 
         MarketStructure em = new MarketStructure();
@@ -95,7 +98,7 @@ public class CSVCategoriesReader implements CategoriesReader {
                     if(added) lc.add(c4);
                     
                 } catch (IllegalArgumentException ex) {
-                    System.out.println("O formato das Categorias inválido na linha " + i + ".");
+                    System.out.println("The category in the line " + i + " is not valid.");
                 }
             }
         }

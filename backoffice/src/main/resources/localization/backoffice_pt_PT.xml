@@ -54,7 +54,7 @@
         <Message messageId = "request_confirmation_to_continue" value = "Deseja inserir mais questões? Se sim, escreva uma mensagem diferente de 'Sair'.&#10;"/>
         <Message messageId = "request_question_id" value = "Por favor insira o ID da questão:"/>
         <Message messageId = "request_question_txt" value = "Por favor insira a questão:"/> 
-        <Message messageId = "please_insert_options" value = "Por favor insira as opções:"/>                       
+        <Message messageId = "request_insert_options" value = "Por favor insira as opções:"/>                       
         <Message messageId="request_insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
         <Message messageId="request_insert_max" value = "Insira o valor máximo:"/>
         <Message messageId="request_insert_min" value = "Insira o valor mínimo:"/>
@@ -90,7 +90,6 @@
         <Message messageId = "error_select_a_valid_question_type" value = "Insira um tipo de questão válido:"/>
         <Message messageId = "error_user_not_found" value = "Nenhum utilizador encontrado."/>
         <Message messageId = "error_question_not_added_to_any_category" value = "A questão não foi adicionada a nenhuma cateogoria."/>
-        <Message messageId = "error_invalid_option" value = "A opção não foi adicionada, porque era inválida."/>    
         <Message messageId = "error_invalid_question" value = "A questão não foi adicionada, porque era inválida."/>
         <Message messageId = "error_invalid_value" value = "Valor inválido!"/>
         <Message messageId = "error_no_whitelist" value = "Não existem domínios autorizados"/>
