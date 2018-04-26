@@ -9,6 +9,7 @@ import cdioil.domain.authz.User;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
+import cdioil.persistence.impl.UserSessionRepositoryImpl;
 
 /**
  * AuthenticationController that controls all user actions
@@ -31,11 +32,12 @@ public final class AuthenticationController {
      * @return boolean true if the user logged in successfully, false if not
      */
     public boolean login(String email,String password){
-        if(currentUserSession!=null)return false;
-        this.currentUserSession=AuthenticationService.create().login(email,password);
-        if((currentUser=getRegisteredUser())!=null)return true;
-        if((currentUser=getAdmin())!=null)return true;
-        return (currentUser=getManager())!=null;
+        if(tryToLogin(email,password)){
+            logSessionStart();
+            return true;
+        }else{
+            return false;
+        }
     }
     /**
      * Method that logouts the current user of the application
@@ -43,6 +45,7 @@ public final class AuthenticationController {
      */
     public boolean logout(){
         if(currentUserSession!=null)return false;
+        logSessionEnd();
         currentUserSession=null;
         return true;
     }
@@ -123,5 +126,31 @@ public final class AuthenticationController {
         return currentUserSession!=null ? new RegisteredUserRepositoryImpl()
                 .findBySystemUser(currentUserSession.getUser())
                 : null;
+    }
+    /**
+     * Method that tries to login a certain user into the application
+     * @param email String with the user email
+     * @param password String with the user password
+     * @return boolean true if the user logged in successfully, false if not
+     */
+    private boolean tryToLogin(String email,String password){
+        if(currentUserSession!=null)return false;
+        this.currentUserSession=AuthenticationService.create().login(email,password);
+        if((currentUser=getRegisteredUser())!=null)return true;
+        if((currentUser=getAdmin())!=null)return true;
+        return (currentUser=getManager())!=null;
+    }
+    /**
+     * Logs the start of the user session
+     */
+    private void logSessionStart(){
+        new UserSessionRepositoryImpl().add(currentUserSession);
+    }
+    /**
+     * Logs the end of the user session
+     */
+    private void logSessionEnd(){
+        currentUserSession.logSessionEnd();
+        currentUserSession=new UserSessionRepositoryImpl().merge(currentUserSession);
     }
 }

@@ -1,6 +1,7 @@
 package cdioil.application.domain.authz;
 
 import cdioil.domain.authz.SystemUser;
+import com.sun.istack.internal.Nullable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
@@ -26,6 +27,11 @@ public class UserSession implements Serializable{
      */
     private LocalDateTime sessionStartDate;
     /**
+     * LocalDateTime with the session end date
+     */
+    @Nullable
+    private LocalDateTime sessionEndDate;
+    /**
      * User with the session user
      */
     @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.MERGE})
@@ -37,6 +43,12 @@ public class UserSession implements Serializable{
     public UserSession(SystemUser sessionUser){
         this.sessionUser=sessionUser;
         this.sessionStartDate=LocalDateTime.now();
+    }
+    /**
+     * Logs the end of the user session
+     */
+    public void logSessionEnd(){
+        this.sessionEndDate=LocalDateTime.now();
     }
     /**
      * Method that returns the current session user
