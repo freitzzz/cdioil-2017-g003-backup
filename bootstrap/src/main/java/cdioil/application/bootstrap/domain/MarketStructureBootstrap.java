@@ -3,10 +3,10 @@ package cdioil.application.bootstrap.domain;
 import cdioil.application.utils.CSVCategoriesReader;
 import cdioil.domain.Category;
 import cdioil.domain.Code;
-import cdioil.domain.EAN;
 import cdioil.domain.MarketStructure;
 import cdioil.domain.Product;
 import cdioil.domain.QRCode;
+import cdioil.domain.SKU;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 
 /**
@@ -32,12 +32,12 @@ public class MarketStructureBootstrap {
         MarketStructureRepositoryImpl repo = new MarketStructureRepositoryImpl();
         MarketStructure marketStruct;
         Category cat = new Category("Bootstrap Cat", "10938DC");
-        String eanCode = Integer.toString(Integer.MAX_VALUE);
+        String skuCode = Integer.toString(Integer.MAX_VALUE);
         String qrCode = Integer.toString(Integer.MAX_VALUE - 1);
-        Code ean = new EAN(eanCode);
+        SKU sku = new SKU(skuCode);
         Code qr = new QRCode(qrCode);
         String quantity = "1 L";
-        Product prod = new Product("Bootstrap Product", ean,quantity,
+        Product prod = new Product("Bootstrap Product", sku,quantity,
                 qr);
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {

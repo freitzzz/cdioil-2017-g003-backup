@@ -18,7 +18,7 @@ public class ProductQuestionsLibraryTest {
     @Test
     public void testProductQuestionSet() {
         System.out.println("productQuestionSet");
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
         assertNull("The condition should succeed because there aren't any"
@@ -34,7 +34,7 @@ public class ProductQuestionsLibraryTest {
     @Test
     public void testAddProduct() {
         System.out.println("addProduct");
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
         assertTrue("The condition should succeed because the product hasn't "
@@ -49,7 +49,7 @@ public class ProductQuestionsLibraryTest {
     @Test
     public void testRemoveProduct() {
         System.out.println("removeProduct");
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
         assertFalse("The condition should succeed because the product doesn't"
@@ -65,7 +65,7 @@ public class ProductQuestionsLibraryTest {
     @Test
     public void testDoesProductExist() {
         System.out.println("doesProductExist");
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
         assertFalse("The condition should succeed because the product doesn't"
@@ -83,7 +83,7 @@ public class ProductQuestionsLibraryTest {
         System.out.println("addQuestion");
         String id = "5H";
         Question question = new BinaryQuestion("QuestaoTeste", id);
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
         assertFalse("The condition should succeed because the product isn't in"
@@ -93,7 +93,7 @@ public class ProductQuestionsLibraryTest {
                 + "in the library.", instance.addQuestion(question, product));
         assertFalse("The condition should succeed because the question already"
                 + "exists for this product.", instance.addQuestion(question, product));
-        Product product2 = new Product("ProdutoTest2e", new EAN("644231234"), "1 L",
+        Product product2 = new Product("ProdutoTest2e", new SKU("644231234"), "1 L",
                 new QRCode("5324235"));
         instance.addProduct(product2);
         assertTrue("The condition should succeed because the same question is "
@@ -108,7 +108,7 @@ public class ProductQuestionsLibraryTest {
         System.out.println("removeQuestion");
         String id = "4";
         Question question = new BinaryQuestion("QuestaoTeste", id);
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
         assertFalse("The condition should succeed because the product doesn't"
@@ -119,7 +119,7 @@ public class ProductQuestionsLibraryTest {
         instance.addQuestion(question, product);
         assertTrue("The condition should succeed because the question exists"
                 + "for that product.", instance.removeQuestion(question, product));
-        Product product2 = new Product("ProdutoTest2e", new EAN("644231234"), "1 L",
+        Product product2 = new Product("ProdutoTest2e", new SKU("644231234"), "1 L",
                 new QRCode("5324235"));
         instance.addProduct(product2);
         instance.addQuestion(question, product2);
@@ -135,7 +135,7 @@ public class ProductQuestionsLibraryTest {
         System.out.println("doesQuestionExist");
         String id = "9A";
         Question question = new BinaryQuestion("QuestaoTeste", id);
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         ProductQuestionsLibrary instance = new ProductQuestionsLibrary();
         assertFalse("The condition should succeed because the product doesn't"
@@ -146,7 +146,7 @@ public class ProductQuestionsLibraryTest {
         instance.addQuestion(question, product);
         assertTrue("The condition should succeed because the question exists"
                 + "for the product", instance.doesQuestionExist(question, product));
-        Product product2 = new Product("ProdutoTest2e", new EAN("644231234"), "1 L",
+        Product product2 = new Product("ProdutoTest2e", new SKU("644231234"), "1 L",
                 new QRCode("5324235"));
         instance.addProduct(product2);
         instance.addQuestion(question, product2);
@@ -184,7 +184,7 @@ public class ProductQuestionsLibraryTest {
                 + "the instance to a null value.", instance.equals(null));
         assertFalse("The condition should succeed because we are comparing "
                 + "instances of different classes.", instance.equals("banana"));
-        Product product = new Product("ProdutoTeste", new EAN("544231234"), "1 L",
+        Product product = new Product("ProdutoTeste", new SKU("544231234"), "1 L",
                 new QRCode("4324235"));
         String id = "6Y";
         BinaryQuestion question = new BinaryQuestion("QuestaoTeste", id);
