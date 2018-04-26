@@ -1,10 +1,10 @@
 package cdioil.application.domain.authz;
 
 import cdioil.domain.authz.SystemUser;
-import com.sun.istack.internal.Nullable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +29,7 @@ public class UserSession implements Serializable{
     /**
      * LocalDateTime with the session end date
      */
-    @Nullable
+    @Column(nullable = true)
     private LocalDateTime sessionEndDate;
     /**
      * User with the session user
