@@ -91,7 +91,7 @@ public class NameTest {
     public void testToString() {
         System.out.println("toString");
         Name instance = createName("Lil", "Pump");
-        String expResult = "Lil  Pump";
+        String expResult = "Lil Pump";
         String result = instance.toString();
         assertEquals(expResult, result);
     }
