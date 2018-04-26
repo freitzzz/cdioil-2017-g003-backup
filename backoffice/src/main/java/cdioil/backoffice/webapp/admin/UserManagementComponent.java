@@ -12,7 +12,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
@@ -50,6 +53,8 @@ public class UserManagementComponent extends DefaultPanelView {
     private void prepareComponents() {
         prepareHeader();
         prepareUserTable();
+
+
 
         setExpandRatio(headerLayout, 0.10f);
         setExpandRatio(userGrid, 0.90f);
@@ -94,10 +99,25 @@ public class UserManagementComponent extends DefaultPanelView {
     }
 
     private Component createOptionsDropDown() {
-        Button optionsButton = new Button(VaadinIcons.ANGLE_DOWN);
-        optionsButton.setSizeUndefined();
+        MenuBar settingsMenuBar = new MenuBar();
+        MenuItem menuItem = settingsMenuBar.addItem("", null);
 
-        return optionsButton;
+        menuItem.addItem("Gerir Whitelist",
+                VaadinIcons.BAN, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuItem menuItem) {
+                UI.getCurrent().addWindow(new WhitelistManagementWindow());
+            }
+        });
+
+        menuItem.addItem("Importar Utilizadores", VaadinIcons.USERS, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuItem menuItem) {
+                //TODO Importar Utilizadores
+            }
+        });
+
+        return settingsMenuBar;
     }
 
 
