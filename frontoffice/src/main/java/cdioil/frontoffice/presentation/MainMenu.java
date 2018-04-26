@@ -52,6 +52,7 @@ public class MainMenu {
 
             switch (option) {
                 case 0:
+                    authenticationController.logout();
                     return;
                 case 1:
                     ChangeUserDataUI mui = new ChangeUserDataUI(getSystemUser());

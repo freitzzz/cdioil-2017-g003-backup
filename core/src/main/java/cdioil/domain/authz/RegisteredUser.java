@@ -29,7 +29,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
      */
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "SYSTEMUSER")
-    private SystemUser su;
+    private SystemUser sysUser;
     /**
      * The registered user's profile.
      */
@@ -45,7 +45,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
         if (sysUser == null) {
             throw new IllegalArgumentException("Instância de SystemUser atribuida é null");
         }
-        this.su = sysUser;
+        this.sysUser = sysUser;
         this.profile = new Profile(this);
     }
     
@@ -74,7 +74,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
 
         RegisteredUser that = (RegisteredUser) obj;
 
-        return su.equals(that.su);
+        return sysUser.equals(that.sysUser);
     }
 
     /**
@@ -84,7 +84,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
      */
     @Override
     public String toString() {
-        return su.toString();
+        return sysUser.toString();
     }
 
     /**
@@ -94,7 +94,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
      */
     @Override
     public int hashCode() {
-        return su.hashCode();
+        return sysUser.hashCode();
     }
 
     /**
@@ -110,6 +110,6 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
      */
     @Override
     public SystemUser getID() {
-        return su;
+        return sysUser;
     }
 }

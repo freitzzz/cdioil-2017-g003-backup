@@ -29,7 +29,7 @@ public class UserSession implements Serializable{
     /**
      * LocalDateTime with the session end date
      */
-    @Column(nullable = true)
+    @Column(updatable = true,nullable = true)
     private LocalDateTime sessionEndDate;
     /**
      * User with the session user

@@ -4,7 +4,6 @@ import cdioil.domain.Review;
 import cdioil.domain.ReviewState;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.Profile;
-import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ReviewRepository;

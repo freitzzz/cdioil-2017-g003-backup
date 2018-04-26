@@ -44,7 +44,7 @@ public final class AuthenticationController {
      * @return boolean true if the user logged out successfully, false if not
      */
     public boolean logout(){
-        if(currentUserSession!=null)return false;
+        if(currentUserSession==null)return false;
         logSessionEnd();
         currentUserSession=null;
         return true;
