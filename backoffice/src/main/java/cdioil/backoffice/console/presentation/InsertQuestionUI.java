@@ -36,7 +36,7 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("exit_message");
+    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_message");
 
     /**
      * Represents a message that indicates the user to select a type of question.
@@ -98,12 +98,12 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to insert the options for that question.
      */
-    private final String OPTIONS_QUESTION_MESSAGE = localizationHandler.getMessageValue("please_insert_options");
+    private final String OPTIONS_QUESTION_MESSAGE = localizationHandler.getMessageValue("request_insert_options");
 
     /**
      * Represents a message that indicates the user to insert an option.
      */
-    private final String OPTION_MESSAGE = localizationHandler.getMessageValue("option_message");
+    private final String OPTION_MESSAGE = localizationHandler.getMessageValue("info_option_message");
 
     /**
      * Represents the exit code for inserting more options.
@@ -113,44 +113,44 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String NO_MORE_OPTIONS_MESSAGE = localizationHandler.getMessageValue("no_more_options")+ " " + NO_MORE_OPTIONS_CODE;
+    private final String NO_MORE_OPTIONS_MESSAGE = localizationHandler.getMessageValue("info_no_more_options")+ " " + NO_MORE_OPTIONS_CODE;
 
     /**
      * Represents a message that indicates the user to insert a valid option.
      */
-    private final String INVALID_OPTION = localizationHandler.getMessageValue("invalid_option");
+    private final String INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
 
     /**
      * Represents a message that indicates that the question was not added because it was not valid.
      */
-    private final String INVALID_QUESTION = localizationHandler.getMessageValue("invalid_question");
+    private final String INVALID_QUESTION = localizationHandler.getMessageValue("error_invalid_question");
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //Constants for binary questions
     /**
      * Represents a message that indicates the user to insert the maximum and minimum values of the scale.
      */
-    private final String INSERT_EXTREMES_MESSAGE = localizationHandler.getMessageValue("insert_extremes");
+    private final String INSERT_EXTREMES_MESSAGE = localizationHandler.getMessageValue("request_insert_extremes");
 
     /**
      * Represents a message that indicates the user to insert the maximum value of the scale.
      */
-    private final String MAXIMUM_MESSAGE = localizationHandler.getMessageValue("insert_max");
+    private final String MAXIMUM_MESSAGE = localizationHandler.getMessageValue("request_insert_max");
 
     /**
      * Represents a message that indicates the user to insert the minimum value of the scale.
      */
-    private final String MINIMUM_MESSAGE = localizationHandler.getMessageValue("insert_min");
+    private final String MINIMUM_MESSAGE = localizationHandler.getMessageValue("request_insert_min");
 
     /**
      * Represents a message that indicates the user to insert a valid number.
      */
-    private final String INVALID_VALUE = localizationHandler.getMessageValue("invalid_value");
+    private final String INVALID_VALUE = localizationHandler.getMessageValue("error_invalid_value");
 
     /**
      * Represents a message that indicates the user that the extreme values have been changed.
      */
-    private final String CHANGED_EXTREME_VALUES = localizationHandler.getMessageValue("changed_extreme_values");
+    private final String CHANGED_EXTREME_VALUES = localizationHandler.getMessageValue("info_changed_extreme_values");
 
     /**
      * Creates a new User Interface.

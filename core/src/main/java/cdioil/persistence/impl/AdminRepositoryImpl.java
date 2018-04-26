@@ -42,7 +42,17 @@ public class AdminRepositoryImpl extends BaseJPARepository<Admin,Long> implement
         Query query=entityManager().createQuery("SELECT AM FROM Admin AM WHERE AM.sysUser = :sysUser").setParameter("sysUser",sysUser);
         return !query.getResultList().isEmpty();
     }
-    
+    /**
+     * Method that finds a certain admin by it's SystemUser
+     * @param systemUser SystemUser with the admin system user
+     * @return Admin with the admin that has a certain SystemUser
+     */
+    public Admin findBySystemUser(SystemUser systemUser){
+        if(systemUser==null)return null;
+        Query querySystemUser=entityManager().createQuery("SELECT AM FROM Admin AM WHERE AM.sysUser= :systemUser")
+                .setParameter("systemUser",systemUser);
+        return !querySystemUser.getResultList().isEmpty() ? (Admin)querySystemUser.getSingleResult() : null;
+    }
     
     @Override
     public Admin findByUserID(long databaseId) {

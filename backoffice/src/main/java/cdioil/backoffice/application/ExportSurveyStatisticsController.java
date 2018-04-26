@@ -211,57 +211,6 @@ public class ExportSurveyStatisticsController {
     }
 
     /**
-     * Fills a list with all the answers for binary questions.
-     *
-     * @param binaryReviews List with all binary reviews
-     * @return a list with the answer values
-     */
-    private List<Double> getBinaryEvaluations(List<Review> binaryReviews) {
-        List<Double> evaluations = new ArrayList<>();
-        for (Review r : binaryReviews) {
-            Map<Question, Answer> answers = r.getReviewQuestionAnswers();
-            for (Answer a : answers.values()) {
-                String value = a.getContent();
-                double content = -1;
-                if (value.equalsIgnoreCase("Sim")) {
-                    content = 1;
-                }
-                if (value.equalsIgnoreCase("Não")) {
-                    content = 0;
-                }
-                if (content == -1) {
-                    binaryReviews.remove(r);
-                } else {
-                    evaluations.add(content);
-                }
-            }
-        }
-        return evaluations;
-    }
-
-    /**
-     * Fills a list with all the answers for quantitative questions.
-     *
-     * @param binaryReviews List with all quantitative reviews
-     * @return a list with the answer values
-     */
-    private List<Double> getQuantitativeEvaluations(List<Review> quantitativeReviews) {
-        List<Double> evaluations = new ArrayList<>();
-        for (Review r : quantitativeReviews) {
-            Map<Question, Answer> answers = r.getReviewQuestionAnswers();
-            for (Answer a : answers.values()) {
-                try {
-                    double content = Double.parseDouble(a.getContent());
-                    evaluations.add(content);
-                } catch (NumberFormatException ex) {
-                    quantitativeReviews.remove(r);
-                }
-            }
-        }
-        return evaluations;
-    }
-
-    /**
      * Exports the statistics about the survey to a file.
      *
      * @param filePath Path where the file will be stored

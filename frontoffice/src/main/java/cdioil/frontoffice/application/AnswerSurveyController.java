@@ -172,8 +172,7 @@ public class AnswerSurveyController {
      */
     public boolean saveReview() {
         loggedUser.getProfile().addReview(surveyReview);
-        return new ReviewRepositoryImpl().merge(surveyReview) != null
-                && new RegisteredUserRepositoryImpl().merge(loggedUser) != null;
+        return new RegisteredUserRepositoryImpl().merge(loggedUser) != null;
     }
 
     /**

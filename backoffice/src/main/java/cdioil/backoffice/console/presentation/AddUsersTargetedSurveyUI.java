@@ -40,7 +40,7 @@ public class AddUsersTargetedSurveyUI {
 
     private final String ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
 
-    private final String ERROR_INVALID_VALUE = localizationHandler.getMessageValue("invalid_value");
+    private final String ERROR_INVALID_VALUE = localizationHandler.getMessageValue("error_invalid_value");
 
     private final String ERROR_NO_SURVEYS_AVAILABLE = localizationHandler.getMessageValue("error_no_surveys_available");
 

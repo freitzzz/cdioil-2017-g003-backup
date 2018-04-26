@@ -1,12 +1,12 @@
 package cdioil.frontoffice.presentation;
 
 import cdioil.application.authz.AuthenticationController;
-import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.presentation.authz.ChangeUserDataUI;
 import cdioil.console.Console;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.User;
 
 /**
@@ -52,6 +52,7 @@ public class MainMenu {
 
             switch (option) {
                 case 0:
+                    authenticationController.logout();
                     return;
                 case 1:
                     ChangeUserDataUI mui = new ChangeUserDataUI(getSystemUser());
