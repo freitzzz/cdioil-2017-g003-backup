@@ -13,6 +13,7 @@
         <Message messageId = "info_users" value = "Utilizadores:"/>
         <Message messageId = "info_num_questions_imported" value = "Número de questões importadas com sucesso:"/>
         <Message messageId = "info_num_products_imported" value = "Número de produtos importados com sucesso:"/>
+        <Message messageId = "info_num_products_exported" value = "Número de produtos exportados:"/>
         <Message messageId = "info_all_users_list" value = "Lista de Todos os Utilizadores do Sistema&#10;"/>
         <Message messageId = "info_all_managers_list" value = "Lista de Todos os Gestores&#10;"/>
         <Message messageId = "info_categories_removed" value = "Categoria(s) removida(s) com sucesso!&#10;"/>
@@ -42,6 +43,7 @@
         <Message messageId = "request_new_domain" value = "Escreva o dominio de email que pretende autorizar."/>
         <Message messageId = "request_select_language" value = "Selecione o seu idioma:"/>
         <Message messageId = "request_file_path" value = "Por favor introduza o caminho do ficheiro:"/>
+        <Message messageId = "request_file_path_export" value = "Por favor introduza o caminho do ficheiro para exportar produtos inválidos:"/>
         <Message messageId = "request_user_email" value = "Por favor indique o email do uilizador a pesquisar:"/>
         <Message messageId = "request_manager_email" value = "Por favor introduza o email de um gestor para o selecionar&#10;"/>
         <Message messageId = "request_category_identifier_removal" value = "Insira o descritivo da(s) categoria(s) que quer remover ao gestor selecionado&#10;"/>

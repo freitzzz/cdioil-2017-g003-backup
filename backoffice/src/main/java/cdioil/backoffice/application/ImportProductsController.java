@@ -23,24 +23,23 @@ import java.util.Set;
  * @author Ana Guerra (1161191)
  */
 public class ImportProductsController {
-
     /**
      * Import products from a file.
      *
      * @param fileName Name of the file
+     * @param fileExp Name of the fil to export
      * @return number of succesfully imported products
      * @throws cdioil.files.InvalidFileFormattingException if the file's formatting is not consistent with the file guidelines
      */
-    public Integer importProducts(String fileName) throws InvalidFileFormattingException {
+    public Integer importProducts(String fileName, String fileExp) throws InvalidFileFormattingException {
 
-        ProductsReader productsReader = ProductsReaderFactory.create(fileName);
+        ProductsReader productsReader = ProductsReaderFactory.create(fileName, fileExp);
         Set<Product> successfullyImportedProducts = new HashSet<>();
 
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         MarketStructure marketStructure = marketStructureRepository.findMarketStructure();
 
         if (productsReader != null) {
-
             Map<String, List<Product>> productByCatPath = productsReader.readProducts();
             Set<Map.Entry<String, List<Product>>> entries = productByCatPath.entrySet();
 
@@ -52,7 +51,7 @@ public class ImportProductsController {
                     for (Category cat : categoryList) {
                         if (cat.categoryPath().equalsIgnoreCase(path)) {
                             productList.forEach((pro) -> {
-                                if(marketStructure.addProduct(pro, cat)) {
+                                if (marketStructure.addProduct(pro, cat)) {
                                     successfullyImportedProducts.add(pro);
                                 }
                             });
@@ -65,5 +64,4 @@ public class ImportProductsController {
         }
         return successfullyImportedProducts.size();
     }
-
 }
