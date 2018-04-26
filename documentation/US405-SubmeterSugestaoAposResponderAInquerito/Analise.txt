@@ -1,0 +1,30 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #3
+	
+	* Como Utilizador, no final de responder a um inquérito
+	(não impactando a concretização da avaliação, i.e. depois
+	de já ter sido como "finalizada" a avaliação do elemento)
+	quero poder enviar uma sugestão de melhoria relativamente
+	ao item avaliado.
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------

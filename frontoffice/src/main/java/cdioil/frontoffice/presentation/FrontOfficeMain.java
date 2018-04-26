@@ -1,7 +1,7 @@
 package cdioil.frontoffice.presentation;
 
 /**
- * Classe main do FrontOffice da aplicação.
+ * Main class that runs the frontoffice of the app.
  * 
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */

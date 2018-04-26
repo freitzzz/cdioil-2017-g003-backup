@@ -70,7 +70,8 @@ public class MainMenu {
 
             switch (opcao) {
                 case 0:
-                    System.out.println(INFO_SHUTDOWN);
+                    System.out.println(authenticationController.logout());
+                    Console.log(INFO_SHUTDOWN,Console.ConsoleColors.PURPLE);
                     break;
                 case 1:
                     new AssignManagerUI();
@@ -120,17 +121,18 @@ public class MainMenu {
         } while (opcao != 0);
     }
 
-    public void mainLoopManager(AuthenticationController controller) {
+    public void mainLoopManager(AuthenticationController authenticationController) {
         int opcao = 0;
         do {
             opcao = managerMenu();
 
             switch (opcao) {
                 case 0:
-                    System.out.println(INFO_SHUTDOWN);
+                    authenticationController.logout();
+                    Console.log(INFO_SHUTDOWN,Console.ConsoleColors.PURPLE);
                     break;
                 case 1:
-                    new ImportQuestionsUI((Manager)controller.getUser());
+                    new ImportQuestionsUI((Manager)authenticationController.getUser());
                     break;
                 case 2:
                     new ChangeLanguageUI();
@@ -143,17 +145,17 @@ public class MainMenu {
                     new AddUsersTargetedSurveyUI();
                     break;
                 case 5:
-                    System.out.println(controller.getUser());
-                    new CreateSurveyUI((Manager)controller.getUser());
+                    System.out.println(authenticationController.getUser());
+                    new CreateSurveyUI((Manager)authenticationController.getUser());
                     break;
                 case 6:
-                    new InsertQuestionUI((Manager)controller.getUser());
+                    new InsertQuestionUI((Manager)authenticationController.getUser());
                     break;
                 case 7:
                     new ExportSurveyStatisticsUI();
                     break;
                 case 8:
-                    new CreateTemplateUI((Manager)controller.getUser());
+                    new CreateTemplateUI((Manager)authenticationController.getUser());
                     break;
                 default:
                     System.out.println(ERROR_INVALID_OPTION);

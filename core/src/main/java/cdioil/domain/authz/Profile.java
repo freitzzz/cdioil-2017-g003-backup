@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,28 +33,21 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     /**
-     * RegisterdUser that owns the profile
+     * RegisteredUser that owns the profile
      */
     @OneToOne
     private RegisteredUser registeredUser;
     /**
-     * Information of the user's profile
-     */
-    private String information;
-    /**
      * list of the user's reviews
      */
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private List<Review> reviews;
 
     /**
      * list of the user's badges
      */
     //private List<Badge> badges;
-    /**
-     * list of user sugestions
-     */
-    //private List<Sugestao> sugestoes;
+    
     /**
      * Builds a new Profile of a certain Registered User
      *
@@ -83,25 +77,6 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     }
 
     /**
-     * Adds a sugestions to the list of seguestions
-     *
-     * @param s sugestion to be added
-     * @return true if the sugestion was added successfully, false if it was not
-     * added
-     */
-    /*public boolean addSugestion(Sugestao s) {
-        return sugestoes.add(s);
-    }*/
-    /**
-     * Changes the profile's information
-     *
-     * @param newInfo profile's new information
-     */
-    public void changeInformation(String newInfo) {
-        information = newInfo;
-    }
-
-    /**
      * Profile's hash code
      *
      * @return profile's hash code
@@ -121,7 +96,6 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
      */
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Profile)) {
             return false;
         }
@@ -136,7 +110,7 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
      */
     @Override
     public String toString() {
-        return "org.grupo3.cdioil.isep.feedback_monkey.domain.Perfil[ id=" + id + " ]";
+        return registeredUser.toString();
     }
 
     /**

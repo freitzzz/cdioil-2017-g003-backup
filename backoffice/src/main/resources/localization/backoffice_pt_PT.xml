@@ -13,26 +13,25 @@
         <Message messageId = "info_users" value = "Utilizadores:"/>
         <Message messageId = "info_num_questions_imported" value = "Número de questões importadas com sucesso:"/>
         <Message messageId = "info_num_products_imported" value = "Número de produtos importados com sucesso:"/>
+        <Message messageId = "info_num_products_exported" value = "Número de produtos exportados:"/>
         <Message messageId = "info_all_users_list" value = "Lista de Todos os Utilizadores do Sistema&#10;"/>
         <Message messageId = "info_all_managers_list" value = "Lista de Todos os Gestores&#10;"/>
         <Message messageId = "info_categories_removed" value = "Categoria(s) removida(s) com sucesso!&#10;"/>
         <Message messageId = "info_categories_added" value = "Categoria(s) adicionada(s) com sucesso!&#10;"/>
         <Message messageId = "separator" value = "========================================&#10;"/>
-        <Message messageId = "exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
+        <Message messageId = "info_exit_message" value = "A qualquer momento digite 'Sair' para sair.&#10;"/>
         <Message messageId = "info_number_categories_question_was_added_to" value = "O número de cateogrias a que a questão foi adicionada foi: "/>
         <Message messageId = "info_number_categories_imported" value = "O número de categorias importadas foi:"/>
-        <Message messageId = "success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
-        <Message messageId = "survey_message" value = "Inquérito"/>
-        <Message messageId = "option_message" value= "Opção"/>
-        <Message messageId ="no_more_options" value = "Para terminar a inserção de opções escreva"/>
-        <Message messageId = "changed_extreme_values" value ="Os valores foram trocados, porque o mínimo era superior ao máximo."/>
-        <!--US-280/282 infos-->
+        <Message messageId = "info_atualization_products" value= "Insira a opção Sim se pretende actualizar o produto já existente: "/>
+        <Message messageId = "info_success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
+        <Message messageId = "info_survey_message" value = "Inquérito"/>
+        <Message messageId = "info_option_message" value= "Opção"/>
+        <Message messageId = "info_no_more_options" value = "Para terminar a inserção de opções escreva"/>
+        <Message messageId = "info_changed_extreme_values" value ="Os valores foram trocados, porque o mínimo era superior ao máximo."/>
         <Message messageId = "info_active_surveys" value = "Inquéritos atualmente ativos"/>
         <Message messageId = "info_num_users_added_survey" value = "Número de utilizador(es) adicionado(s) ao inquérito"/>
-        <!--END OF US-280/282 infos-->
     </InfoMessages>
 
-	
 	
     <RequestMessages>
         <Message messageId = "request_login" value = "Login: "/>
@@ -42,6 +41,7 @@
         <Message messageId = "request_new_domain" value = "Escreva o dominio de email que pretende autorizar."/>
         <Message messageId = "request_select_language" value = "Selecione o seu idioma:"/>
         <Message messageId = "request_file_path" value = "Por favor introduza o caminho do ficheiro:"/>
+        <Message messageId = "request_file_path_export" value = "Por favor introduza o caminho do ficheiro para exportar produtos inválidos:"/>
         <Message messageId = "request_user_email" value = "Por favor indique o email do uilizador a pesquisar:"/>
         <Message messageId = "request_manager_email" value = "Por favor introduza o email de um gestor para o selecionar&#10;"/>
         <Message messageId = "request_category_identifier_removal" value = "Insira o descritivo da(s) categoria(s) que quer remover ao gestor selecionado&#10;"/>
@@ -52,18 +52,16 @@
         <Message messageId = "request_confirmation_to_continue" value = "Deseja inserir mais questões? Se sim, escreva uma mensagem diferente de 'Sair'.&#10;"/>
         <Message messageId = "request_question_id" value = "Por favor insira o ID da questão:"/>
         <Message messageId = "request_question_txt" value = "Por favor insira a questão:"/> 
-        <Message messageId = "please_insert_options" value="Por favor insira as opções:"/>                       
-        <Message messageId="insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
-        <Message messageId="insert_max" value = "Insira o valor máximo:"/>
-        <Message messageId="insert_min" value = "Insira o valor mínimo:"/>
-        <!--US-280/282 requests-->
+        <Message messageId = "request_insert_options" value = "Por favor insira as opções:"/>                       
+        <Message messageId="request_insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
+        <Message messageId="request_insert_max" value = "Insira o valor máximo:"/>
+        <Message messageId="request_insert_min" value = "Insira o valor mínimo:"/>
         <Message messageId = "request_survey" value = "Por favor, selecione um inquérito"/>
         <Message messageId = "request_domain" value = "Por favor, selecione um domínio"/>
         <Message messageId = "request_username" value = "Por favor, insira um nome de utilizador"/>
         <Message messageId = "request_birth_year" value = "Por favor, insira um ano de nascimento"/>
         <Message messageId = "request_location" value = "Por favor, insira uma localidade"/>
         <Message messageId = "request_continue" value = "Pretende continuar? (SIM/NÃO)"/>
-        <!--END OF US-280/282 requests-->
     </RequestMessages>
 	
 	
@@ -88,11 +86,9 @@
         <Message messageId = "error_select_a_valid_question_type" value = "Insira um tipo de questão válido:"/>
         <Message messageId = "error_user_not_found" value = "Nenhum utilizador encontrado."/>
         <Message messageId = "error_question_not_added_to_any_category" value = "A questão não foi adicionada a nenhuma cateogoria."/>
-        <Message messageId = "invalid_option" value = "A opção não foi adicionada, porque era inválida."/>    
-        <Message messageId = "invalid_question" value = "A questão não foi adicionada, porque era inválida."/>
-        <Message messageId = "invalid_value" value = "Valor inválido!"/>
+        <Message messageId = "error_invalid_question" value = "A questão não foi adicionada, porque era inválida."/>
+        <Message messageId = "error_invalid_value" value = "Valor inválido!"/>
         <Message messageId = "error_no_whitelist" value = "Não existem domínios autorizados"/>
-		
         <Message messageId = "error_no_users_added_survey" value = "Não foram adicionados utilizadores ao inquérito"/>
     </ErrorMessages>
 	
@@ -121,19 +117,16 @@
         <ManagerMenuOptions>
             <Message messageId = "option_import_questions_category" value = "Importar Questões sobre Categorias"/>
             <Message messageId = "option_import_questions_template" value = "Importar Questões para um novo Template"/>
-            <Message messageId="option_export_survey_answers" value="Exportar Respostas de Um Inquérito"/>
-            <Message messageId="option_create_survey" value="Criar Inquérito"/>
-            <Message messageId="option_add_users_questionnaire" value="Adicionar Utilizadores a Inquérito"/>
-            <Message messageId="option_insert_question_category" value="Inserir Questão Sobre Categoria(s)"/>
+            <Message messageId="option_export_survey_answers" value = "Exportar Respostas de Um Inquérito"/>
+            <Message messageId = "option_create_survey" value = "Criar Inquérito"/>
+            <Message messageId = "option_add_users_questionnaire" value = "Adicionar Utilizadores a Inquérito"/>
+            <Message messageId = "option_insert_question_category" value = "Inserir Questão Sobre Categoria(s)"/>
             <Message messageId = "option_export_stats_survey" value = "Exportar Estatísticas sobre Inquérito"/>
-            <!--US-280/282 options-->
+            <Message messageId="option_create_template" value="Criar Template"/>
             <Message messageId = "option_filter_domain" value = "Filtrar por domínio"/>
             <Message messageId = "option_filter_username" value = "Filtrar por nome de utilizador"/>
             <Message messageId = "option_filter_year" value = "Filtrar por ano de nascimento"/>
             <Message messageId = "option_filter_location" value = "Filtrar por localidade"/>
-            <!--END OF US-280/282 options-->
-
-            <Message messageId="option_create_template" value="Criar Template"/>
         </ManagerMenuOptions>
 
     </MenuOptions>

@@ -4,14 +4,14 @@
 
 /*Reads all lines contained on a certain file*/
 char** readAllLines(char *fileName,int* linesRead){
-    int fileDescription=open(fileName,O_RDONLY,S_IRUSR);
-    if(fileDescription<0)return NULL;
+    int fileDescriptor=open(fileName,O_RDONLY,S_IRUSR);
+    if(fileDescriptor<0)return NULL;
     int currentBufferUsage=0;
     int maxBufferSize=INITIAL_BUFFER_SIZE;
     char *fileContent=malloc(INITIAL_BUFFER_SIZE);
     char *readBytes=malloc(INITIAL_BUFFER_SIZE);
     int nextBytes=0;
-    while((nextBytes=read(fileDescription,readBytes,INITIAL_BUFFER_SIZE))){
+    while((nextBytes=read(fileDescriptor,readBytes,INITIAL_BUFFER_SIZE))){
         if(nextBytes>0){
             currentBufferUsage+=nextBytes;
             if(currentBufferUsage>maxBufferSize){
@@ -22,6 +22,7 @@ char** readAllLines(char *fileName,int* linesRead){
             strcat(fileContent,readBytes);
         }
     }
+    close(fileDescriptor);
     int i;
     int nextLine=0;
     int lineLength=0;

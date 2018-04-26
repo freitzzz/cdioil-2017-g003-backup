@@ -2,7 +2,6 @@ package cdioil.domain;
 
 import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +12,7 @@ import javax.persistence.Id;
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Embeddable
+@Entity
 public class Answer implements Serializable, ValueObject {
 
     /**
@@ -25,6 +24,9 @@ public class Answer implements Serializable, ValueObject {
      * The content of the chosen option.
      */
     private String content;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     public Answer(QuestionOption chosenOption) {
         if (chosenOption == null) {

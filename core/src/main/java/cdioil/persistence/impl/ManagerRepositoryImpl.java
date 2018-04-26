@@ -62,5 +62,5 @@ public class ManagerRepositoryImpl extends BaseJPARepository<Manager,Long> imple
         q.setParameter("sysUser", sysUser);
         if(q.getResultList().isEmpty())return null;
         return (Manager) q.getSingleResult();
-    } 
+    }
 }

@@ -15,15 +15,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
+import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -70,11 +71,13 @@ public class Graph implements Serializable {
      * Map containing all of the inserted elements and the vertices containing
      * them.
      */
-    @ManyToMany(cascade = CascadeType.ALL)
-    @MapKey(name = "element")
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @MapKeyClass(Question.class)
     private Map<Question, Vertex> vertices;
-    
-    @OneToMany(cascade = CascadeType.REFRESH)
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @ElementCollection(targetClass = Question.class)
     private List<Question> questionList;
 
     /**
@@ -97,43 +100,42 @@ public class Graph implements Serializable {
         this();
         for (Vertex vertex : g.vertices.values()) {
             for (Edge edge : vertex.getAllOutgoingEdges()) {
-                Question originQuestion = buildQuestion(edge.getOriginVertexElement());
-                Question destinationQuestion = buildQuestion(edge.getDestinationVertexElement());
-                QuestionOption edgeQuestionOption = buildQuestionOption(edge.getElement());
-                this.questionList.add(buildQuestion(originQuestion));
-                this.questionList.add(buildQuestion(destinationQuestion));
+                Question originQuestion = /*buildQuestion*/ (edge.getOriginVertexElement());
+                Question destinationQuestion = /*buildQuestion*/ (edge.getDestinationVertexElement());
+                QuestionOption edgeQuestionOption = /*buildQuestionOption*/ (edge.getElement());
+                this.questionList.add(/*buildQuestion*/(originQuestion));
+                this.questionList.add(/*buildQuestion*/(destinationQuestion));
                 double edgeWeight = edge.getWeight();
-                this.insertEdge(originQuestion,destinationQuestion,edgeQuestionOption,edgeWeight);
+                this.insertEdge(originQuestion, destinationQuestion, edgeQuestionOption, edgeWeight);
             }
         }
     }
-    
-    private Question buildQuestion(Question question){
-        if(question instanceof BinaryQuestion){
-            return new BinaryQuestion(question);
-        }
-        if(question instanceof MultipleChoiceQuestion){
-            return new MultipleChoiceQuestion(question);
-        }
-        if(question instanceof QuantitativeQuestion){
-            return new QuantitativeQuestion(question);
-        }
-        return null;
-    }
-    
-    private QuestionOption buildQuestionOption(QuestionOption option){
-        if(option instanceof BinaryQuestionOption){
-            return new BinaryQuestionOption(option);
-        }
-        if(option instanceof MultipleChoiceQuestionOption){
-            return new MultipleChoiceQuestionOption(option);
-        }
-        if(option instanceof QuantitativeQuestionOption){
-            return new QuantitativeQuestionOption(option);
-        }
-        return null;
-    }
 
+//    private Question buildQuestion(Question question){
+//        if(question instanceof BinaryQuestion){
+//            return new BinaryQuestion(question);
+//        }
+//        if(question instanceof MultipleChoiceQuestion){
+//            return new MultipleChoiceQuestion(question);
+//        }
+//        if(question instanceof QuantitativeQuestion){
+//            return new QuantitativeQuestion(question);
+//        }
+//        return null;
+//    }
+//    
+//    private QuestionOption buildQuestionOption(QuestionOption option){
+//        if(option instanceof BinaryQuestionOption){
+//            return new BinaryQuestionOption(option);
+//        }
+//        if(option instanceof MultipleChoiceQuestionOption){
+//            return new MultipleChoiceQuestionOption(option);
+//        }
+//        if(option instanceof QuantitativeQuestionOption){
+//            return new QuantitativeQuestionOption(option);
+//        }
+//        return null;
+//    }
     /**
      * Checks if the vertex has already been inserted into the graph.
      *

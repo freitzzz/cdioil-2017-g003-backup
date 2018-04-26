@@ -33,9 +33,7 @@ public class ImportCategoriesController {
 
         if (categoriesReader != null) {
             MarketStructure em = categoriesReader.readCategories();
-            if (new MarketStructureRepositoryImpl().merge(em) != null) {
-                return em;
-            }
+            if (new MarketStructureRepositoryImpl().merge(em) != null) return em;
         }
         return null;
     }

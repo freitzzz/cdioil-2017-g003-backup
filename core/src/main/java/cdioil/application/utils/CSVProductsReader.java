@@ -9,9 +9,11 @@ import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.domain.SKU;
 import static cdioil.files.FileReader.readFile;
+import cdioil.files.FileWriter;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +30,11 @@ public class CSVProductsReader implements ProductsReader {
      * File being read.
      */
     private final File file;
+    
+     /**
+     * File to export.
+     */
+    private final File fileExp;
     /**
      * Character used for splitting data within the file.
      */
@@ -39,7 +46,7 @@ public class CSVProductsReader implements ProductsReader {
     /**
      * Number of identifiers (columns) in the CSV file.
      */
-    private static final int NUM_IDENTIFIERS = 5;
+    private static final int NUM_IDENTIFIERS = 4;
     /**
      * Categories' DC Identifier.
      */
@@ -75,11 +82,11 @@ public class CSVProductsReader implements ProductsReader {
     /**
      * Unit Identifier.
      */
-    private static final String UNIT_IDENTIFIER = "Unidade";
-    /**
-     * Quantity Identifier.
-     */
-    private static final String QUANTITY_IDENTIFIER = "Quantidade";
+    private static final String UNIT_IDENTIFIER = "QuantidadeUnidade";
+//    /**
+//     * Quantity Identifier.
+//     */
+//    private static final String QUANTITY_IDENTIFIER = "Quantidade";
     /**
      * Path Identifier.
      */
@@ -104,8 +111,9 @@ public class CSVProductsReader implements ProductsReader {
      *
      * @param filename Name of the file to read
      */
-    public CSVProductsReader(String filename) {
+    public CSVProductsReader(String filename, String fileExport) {
         this.file = new File(filename);
+        this.fileExp = new File(fileExport);
     }
 
     /**
@@ -124,11 +132,11 @@ public class CSVProductsReader implements ProductsReader {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
         Map<String, List<Product>> readProducts = new HashMap<>();
-        
-         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
-         
-
+        MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         int numLines = fileContent.size();
+        List<Product> existsProducts = new LinkedList<>();
+
+        Map<Integer, Integer> invalidProducts = new HashMap<>();
 
         for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
 
@@ -149,44 +157,53 @@ public class CSVProductsReader implements ProductsReader {
                             } else {
                                 readProducts.get(path).add(product);
                             }
-                        }else{
-                            System.out.println("O produto da linha " + i + " já existe na estrutra mercadológica.");
+//                        } else {
+//                            if(product != null){
+//                                existProduct(path, currentLine, CATEGORIES_FILE_OFFSET, existsProducts);
+//                            }
                         }
                     } else {
-                        System.out.println("A categoria na linha " + i + 
-                                " não é folha, logo não pode ser adicionado um produto.");
+                        
+                        if (!isPathProductValid(path)) {
+                            invalidProducts.put(i, 1);
+                        }
+                        if (list.size() != 1) {
+                            invalidProducts.put(i, 2);
+                        }
                     }
+
                 } catch (IllegalArgumentException ex) {
                     System.out.println("O formato dos produtos é inválido na linha " + i + ".");
                 }
             }
         }
-
+        if(!invalidProducts.isEmpty()) {
+            notImportedProducstFile(invalidProducts);
+        }
         return readProducts;
     }
 
-    public String createProductPath(String path) {
+    private String createProductPath(String path) {
 
-        
         StringBuilder sb = new StringBuilder();
-        
-        String DC = path.charAt(0)+ "" + path.charAt(1);
+
+        String DC = path.charAt(0) + "" + path.charAt(1);
         sb.append(DC).append(DC_IDENTIFIER);
-        
-        String UN = path.charAt(2)+ "" + path.charAt(3);
+
+        String UN = path.charAt(2) + "" + path.charAt(3);
         sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
 
-        String CAT = path.charAt(4)+ "" + path.charAt(5) + ""+ path.charAt(6) + ""+ path.charAt(7);
+        String CAT = path.charAt(4) + "" + path.charAt(5) + "" + path.charAt(6) + "" + path.charAt(7);
         sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
 
-        String SCAT = path.charAt(8) + ""+ path.charAt(9);
+        String SCAT = path.charAt(8) + "" + path.charAt(9);
         int scat = Integer.parseInt(SCAT);
         sb.append(PATH_IDENTIFIER).append(scat).append(SCAT_IDENTIFIER);
 
-        String UB = path.charAt(10) + ""+  path.charAt(11);
+        String UB = path.charAt(10) + "" + path.charAt(11);
         int ub = Integer.parseInt(UB);
         sb.append(PATH_IDENTIFIER).append(ub).append(UB_IDENTIFIER);
-        
+
         return sb.toString();
     }
 
@@ -196,7 +213,7 @@ public class CSVProductsReader implements ProductsReader {
      * @param path String to check
      * @return true, if the path is valid. Otherwise, returns false
      */
-    public boolean isPathProductValid(String path) {
+    private boolean isPathProductValid(String path) {
         return path != null
                 && (path.matches(PATH_REGEX));
     }
@@ -205,7 +222,7 @@ public class CSVProductsReader implements ProductsReader {
      * Reads a product from a CSV file.
      *
      * @param currentLine the line currently being read in the file
-     * @param offset number of cells skipped to reach the start of a question
+     * @param offset number of cells skipped to reach the start of a product
      * @return product
      */
     private Product createProduct(String[] currentLine, int offset) {
@@ -214,7 +231,7 @@ public class CSVProductsReader implements ProductsReader {
         String productName = currentLine[offset + 1].trim();
         String quantity = currentLine[offset + 2].trim();
 
-        return new Product(productName, sku,quantity );
+        return new Product(productName, sku, quantity);
     }
 
     /**
@@ -232,11 +249,29 @@ public class CSVProductsReader implements ProductsReader {
         line[0] = line[0].replace('?', ' ').trim();
 
         return ((line.length == NUM_IDENTIFIERS)
-                && line[0].contains(CATEGORY_IDENTIFIER)
+                && line[0].trim().contains(CATEGORY_IDENTIFIER)
                 && line[1].trim().equalsIgnoreCase(SKU_IDENTIFIER)
                 && line[2].trim().equalsIgnoreCase(PRODUCT_IDENTIFIER)
-                && line[3].trim().equalsIgnoreCase(QUANTITY_IDENTIFIER)
-                && line[4].trim().equalsIgnoreCase(UNIT_IDENTIFIER));
+                && line[3].trim().contains(UNIT_IDENTIFIER));
 
+    }
+
+    /**
+     * Method that exports no imported products successfully
+     *
+     */
+    private void notImportedProducstFile(Map<Integer, Integer> invalidProducts) {
+        List<String> fileContent = new ArrayList<>();
+        String header = "Linha" + SPLITTER + "Razao";
+        fileContent.add(header);
+        for (Integer line : invalidProducts.keySet()) {
+            if (invalidProducts.get(line) == 1) {
+                fileContent.add(line + SPLITTER + "Caminho da categoria não válido!");
+            }
+            if (invalidProducts.get(line) == 2) {
+                fileContent.add(line + SPLITTER + "Categoria não folha, logo não é possível adicionar um produto!");
+            }
+        }
+        FileWriter.writeFile(fileExp, fileContent);
     }
 }

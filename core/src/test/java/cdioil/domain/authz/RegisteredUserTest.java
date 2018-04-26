@@ -31,6 +31,18 @@ public class RegisteredUserTest {
         //test with equal instances
         assertTrue(ur.equals(new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")))));
     }
+    
+    /**
+     * Test of getProfile method, of class RegisteredUser.
+     */
+    @Test
+    public void testGetProfile(){
+        System.out.println("getProfile");
+        RegisteredUser instance =  new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")));
+        Profile expResult = new Profile(instance);
+        Profile result = instance.getProfile();
+        assertEquals(result,expResult);
+    }
 
     @Test
     public void testToString() {

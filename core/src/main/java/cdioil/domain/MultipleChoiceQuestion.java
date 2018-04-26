@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity(name = "MultipleChoiceQuestion")
+@Entity(name="MultipleChoiceQuestion")
 public class MultipleChoiceQuestion extends Question implements Serializable {
 
     /**

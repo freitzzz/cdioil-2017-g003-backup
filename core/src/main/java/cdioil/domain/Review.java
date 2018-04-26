@@ -9,24 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
-import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -35,6 +27,7 @@ import javax.persistence.Version;
  * @author João
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @author António Sousa [1161371]
+ * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 @Entity
 public class Review implements Serializable {
@@ -46,7 +39,7 @@ public class Review implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     /**
      * Database version number.
@@ -57,70 +50,41 @@ public class Review implements Serializable {
     /**
      * Copy of the survey's graph, defining the overall flow of the survey.
      */
-    //@OneToOne(cascade = CascadeType.ALL)
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
     private Graph answerGraph;
 
     /**
      * Survey being answered.
      */
-    //@OneToOne(cascade = CascadeType.ALL)
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
     private Survey survey;
 
     /**
-<<<<<<< Updated upstream
-     *
+     * State of the Review
      */
-    @Transient
-    private ReviewState state;
-
+    @Enumerated
+    private ReviewState reviewState;
 
     /*
      * Map containing Questions IDs and their respective Answers.
      */
-    @ElementCollection
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @MapKeyJoinColumn(name = "QUESTION_ID")
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private Map<Question, Answer> answers;
-
-    //@OneToMany(cascade = CascadeType.ALL)
-    @Transient
-    private List<Question> questionList;
 
     /**
      * Question ID of the question currently being answered.
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
-    //@Transient
+    @OneToOne(cascade = CascadeType.ALL)
     private Question currentQuestion;
 
     /**
-     * Items being reviewed.
-     */
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<SurveyItem> itemList;
-
-    /**
-     * Review's final suggestion.
+     * Review's suggestion.
      */
     @Embedded
     private Suggestion suggestion;
 
-    public void setUpQuestionIDs() {
-        int i = 0;
-        for (Question question : questionList) {
-            question.setQuestionID(question.getQuestionID()+ i);
-            System.out.println(question.getQuestionID());
-            i++;
-        }
-        i++;
-        currentQuestion.setQuestionID(currentQuestion.getQuestionID()+ i);
-        System.out.println(currentQuestion.getQuestionID());
-    }
-
     /**
-     * Empty constructor of class Review
+     * Empty constructor of class Review for JPA.
      */
     protected Review() {
     }
@@ -137,12 +101,9 @@ public class Review implements Serializable {
         }
         this.survey = survey;
         this.answerGraph = survey.getGraphCopy();
-        //fetch items from survey
         this.answers = new TreeMap<>();
-        this.currentQuestion = buildQuestion(answerGraph.getFirstQuestion());
-        this.questionList = new LinkedList<>();
-        questionList.add(buildQuestion(currentQuestion));
-        this.state = ReviewState.PENDING;
+        this.currentQuestion = /*buildQuestion*/(answerGraph.getFirstQuestion());
+        this.reviewState = ReviewState.PENDING;
     }
 
     /**
@@ -153,13 +114,22 @@ public class Review implements Serializable {
     public Question getCurrentQuestion() {
         return currentQuestion;
     }
+    
+    /**
+     * Returns the survey the review is associated with.
+     * 
+     * @return Survey the review is associated with
+     */
+    public Survey getSurvey(){
+        return survey;
+    }
 
     /**
      * Checks if there are no more questions to answer in the survey
      * @return true if review is finished
      */
     public boolean isFinished() {
-        return state.equals(ReviewState.FINISHED);
+        return reviewState.equals(ReviewState.FINISHED);
     }
 
     /**
@@ -174,17 +144,15 @@ public class Review implements Serializable {
 
         // If there are no outgoing edges, maps the last answer and finishes
         if (!outgoingEdges.iterator().hasNext()) {
-            answers.put(buildQuestion(currentQuestion), new Answer(option));
-            questionList.add(buildQuestion(currentQuestion));
-            state = ReviewState.FINISHED; //state must also be updated
+            answers.put(/*buildQuestion*/(currentQuestion), new Answer(option));
+            reviewState = ReviewState.FINISHED; //state must also be updated
             return false;
         }
 
         for (Edge edge : outgoingEdges) {
-            if (buildQuestionOption(edge.getElement()).equals(option)) {
-                answers.put(buildQuestion(currentQuestion), new Answer(option));
-                currentQuestion = buildQuestion(edge.getDestinationVertexElement());
-                questionList.add(buildQuestion(currentQuestion));
+            if (/*buildQuestionOption*/(edge.getElement()).equals(option)) {
+                answers.put(/*buildQuestion*/(currentQuestion), new Answer(option));
+                currentQuestion = /*buildQuestion*/(edge.getDestinationVertexElement());
             }
         }
 
@@ -200,8 +168,7 @@ public class Review implements Serializable {
             return;
         }
         answers.remove(currentQuestion);
-        questionList.remove(currentQuestion);
-        currentQuestion = buildQuestion(((TreeMap<Question, Answer>) answers).lastKey());
+        currentQuestion = /*buildQuestion*/(((TreeMap<Question,Answer>) answers).lastKey());
     }
 
     /**
@@ -222,35 +189,35 @@ public class Review implements Serializable {
      * @return Map with all questions and respective answers of the current
      * Review
      */
-    public Map<Question, Answer> getReviewQuestionAnswers() {
+    public Map<Question,Answer> getReviewQuestionAnswers() {
         return new TreeMap<>(answers);
     }
 
-    private Question buildQuestion(Question question) {
-        if (question instanceof BinaryQuestion) {
-            return new BinaryQuestion(question);
-        }
-        if (question instanceof MultipleChoiceQuestion) {
-            return new MultipleChoiceQuestion(question);
-        }
-        if (question instanceof QuantitativeQuestion) {
-            return new QuantitativeQuestion(question);
-        }
-        return null;
-    }
-
-    private QuestionOption buildQuestionOption(QuestionOption option) {
-        if (option instanceof BinaryQuestionOption) {
-            return new BinaryQuestionOption(option);
-        }
-        if (option instanceof MultipleChoiceQuestionOption) {
-            return new MultipleChoiceQuestionOption(option);
-        }
-        if (option instanceof QuantitativeQuestionOption) {
-            return new QuantitativeQuestionOption(option);
-        }
-        return null;
-    }
+//    private Question buildQuestion(Question question) {
+//        if (question instanceof BinaryQuestion) {
+//            return new BinaryQuestion(question);
+//        }
+//        if (question instanceof MultipleChoiceQuestion) {
+//            return new MultipleChoiceQuestion(question);
+//        }
+//        if (question instanceof QuantitativeQuestion) {
+//            return new QuantitativeQuestion(question);
+//        }
+//        return null;
+//    }
+//
+//    private QuestionOption buildQuestionOption(QuestionOption option) {
+//        if (option instanceof BinaryQuestionOption) {
+//            return new BinaryQuestionOption(option);
+//        }
+//        if (option instanceof MultipleChoiceQuestionOption) {
+//            return new MultipleChoiceQuestionOption(option);
+//        }
+//        if (option instanceof QuantitativeQuestionOption) {
+//            return new QuantitativeQuestionOption(option);
+//        }
+//        return null;
+//    }
 
     @Override
     public int hashCode() {
@@ -258,7 +225,6 @@ public class Review implements Serializable {
         hash = 19 * hash + Objects.hashCode(this.answerGraph);
         hash = 19 * hash + Objects.hashCode(this.answers);
         hash = 19 * hash + Objects.hashCode(this.currentQuestion);
-        hash = 19 * hash + Objects.hashCode(this.itemList);
         hash = 19 * hash + Objects.hashCode(this.suggestion);
         return hash;
     }
@@ -273,10 +239,7 @@ public class Review implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof Review)) {
             return false;
         }
         final Review other = (Review) obj;
@@ -284,9 +247,6 @@ public class Review implements Serializable {
             return false;
         }
         if (!Objects.equals(this.answers, other.answers)) {
-            return false;
-        }
-        if (!Objects.equals(this.itemList, other.itemList)) {
             return false;
         }
         if (!Objects.equals(this.suggestion, other.suggestion)) {
@@ -305,9 +265,4 @@ public class Review implements Serializable {
         return "Avaliação:\nOpinião: " + suggestion;
     }
 
-}
-
-enum ReviewState {
-
-    PENDING,FINISHED;
 }

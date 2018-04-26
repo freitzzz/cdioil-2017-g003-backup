@@ -15,7 +15,7 @@ public final class EmailSenderService {
      * Constant that represents the email activation title which is going to be sent to a 
      * certain user email
      */
-    private static final String EMAIL_ACTIVATION_CODE_TITLE="Código de Ativação";
+    private static final String EMAIL_ACTIVATION_CODE_TITLE="Código de Ativação 🍌";
     /**
      * Constant that represents the email activation content which is going to be sent to a 
      * certain user email
