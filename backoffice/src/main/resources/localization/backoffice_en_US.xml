@@ -7,6 +7,8 @@
         <Message messageId = "info_welcome" value = "Welcome to the BackOffice&#10;"/>
         <Message messageId = "info_shutdown" value = "The program will shutdown"/>
         <Message messageId = "info_exiting" value = "Exiting..."/>
+        
+         <Message messageId = "info_atualization_products" value= "Insert the option Yes if atualization the exists product: "/>
         <Message messageId = "info_manager_header" value = "&#x9;Manager's Back Office"/>
         <Message messageId = "info_admin_header" value = "&#x9;Admin's Back Office"/>
         <Message messageId = "info_exit_input" value = "Type in 'exit' if you wish to cancel."/>
