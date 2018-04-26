@@ -25,12 +25,12 @@ public class RemoveCategoriesUI {
     /**
      * Represents the exit code for the User Interface.
      */
-    private final String EXIT_CODE = localizationHandler.getMessageValue("option_message");
+    private final String EXIT_CODE = localizationHandler.getMessageValue("info_option_message");
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("exit_message");
+    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_message");
 
     /**
      * Message to indicate the list of all managers being presented.

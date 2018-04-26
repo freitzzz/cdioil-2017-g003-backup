@@ -10,7 +10,7 @@
         <Message messageId = "info_manager_header" value = "&#x9;Manager's Back Office"/>
         <Message messageId = "info_admin_header" value = "&#x9;Admin's Back Office"/>
         <Message messageId = "info_exit_input" value = "Type in 'exit' if you wish to cancel."/>
-                <Message messageId = "info_users" value = "Users"/>
+        <Message messageId = "info_users" value = "Users"/>
         <Message messageId = "info_num_questions_imported" value = "Number of successfully imported questions:"/>
         <Message messageId = "info_num_products_imported" value = "Number of successfully imported products:"/>
         <Message messageId = "info_all_users_list" value = "List of all Users of the System&#10;"/>
@@ -18,14 +18,14 @@
         <Message messageId = "info_categories_removed" value = "Category/Categories removed with success!&#10;"/>
         <Message messageId = "info_categories_added" value = "Category/Categories added with success!&#10;"/>
         <Message messageId = "separator" value = "========================================&#10;"/>
-        <Message messageId = "exit_message" value = "Type 'Exit' to exit anytime.&#10;"/>
+        <Message messageId = "info_exit_message" value = "Type 'Exit' to exit anytime.&#10;"/>
         <Message messageId = "info_number_categories_question_was_added_to" value = "The number of categories the question was added to was: "/>
         <Message messageId = "info_number_categories_imported" value = "The number of imported categories was:"/>      
-        <Message messageId = "success_exporting_stats" value = "Statistics successfully exported!&#10;"/>
-        <Message messageId = "survey_message" value = "Survey"/>
-        <Message messageId = "option_message" value= "Option"/>
-        <Message messageId = "no_more_options" value = "To finish inserting options type"/>
-        <Message messageId = "changed_extreme_values" value ="The extreme values were exchanged, because the minimum was higher than the maximum."/>
+        <Message messageId = "info_success_exporting_stats" value = "Statistics successfully exported!&#10;"/>
+        <Message messageId = "info_survey_message" value = "Survey"/>
+        <Message messageId = "info_option_message" value= "Option"/>
+        <Message messageId = "info_no_more_options" value = "To finish inserting options type"/>
+        <Message messageId = "info_changed_extreme_values" value = "The extreme values were exchanged, because the minimum was higher than the maximum."/>
     </InfoMessages>
 
 	
@@ -48,9 +48,9 @@
         <Message messageId = "request_question_id" value = "Please insert the ID of the question:"/>
         <Message messageId = "request_question_txt" value = "Please insert the question itself:"/>
         <Message messageId = "please_insert_options" value="Please insert the options:"/>
-        <Message messageId="insert_extremes" value = "Insert the maximum and minimum values:"/>
-        <Message messageId="insert_max" value = "Insert the maximum value:"/>
-        <Message messageId="insert_min" value = "Insert the minimum value:"/>
+        <Message messageId = "request_insert_extremes" value = "Insert the maximum and minimum values:"/>
+        <Message messageId = "request_insert_max" value = "Insert the maximum value:"/>
+        <Message messageId = "request_insert_min" value = "Insert the minimum value:"/>
     </RequestMessages>
 
 	
@@ -75,9 +75,9 @@
         <Message messageId = "error_select_a_valid_question_type" value = "Insert a valid question type:"/>
         <Message messageId = "error_user_not_found" value = "No user found."/>
         <Message messageId = "error_question_not_added_to_any_category" value = "The question wasn't added to any category."/>
-        <Message messageId = "invalid_option" value = "The option wasn't added because it was invalid."/>     
-        <Message messageId = "invalid_question" value = "The question wasn't added because it was invalid."/> 
-        <Message messageId = "invalid_value" value = "Invalid value!"/>
+        <Message messageId = "error_invalid_option" value = "The option wasn't added because it was invalid."/>     
+        <Message messageId = "error_invalid_question" value = "The question wasn't added because it was invalid."/> 
+        <Message messageId = "error_invalid_value" value = "Invalid value!"/>
     </ErrorMessages>
 
     <MenuOptions>
@@ -103,11 +103,11 @@
             <Message messageId = "option_import_questions_category" value = "Import Questions about a Category"/>
             <Message messageId = "option_import_questions_template" value = "Import Questions for New Template"/>
             <Message messageId="option_export_survey_answers" value="Export Survey Answers"/>
-            <Message messageId="option_create_survey" value="Create Survey"/>
-            <Message messageId="option_add_users_questionnaire" value="Add Users to Questionnaire"/>
-            <Message messageId="option_insert_question_category" value="Insert Question about one or more Categories"/>
+            <Message messageId="option_create_survey" value = "Create Survey"/>
+            <Message messageId="option_add_users_questionnaire" value = "Add Users to Questionnaire"/>
+            <Message messageId="option_insert_question_category" value = "Insert Question about one or more Categories"/>
             <Message messageId = "option_export_stats_survey" value = "Export Statistics about a Survey"/>
-            <Message messageId="option_create_template" value="Create Template"/>
+            <Message messageId="option_create_template" value = "Create Template"/>
         </ManagerMenuOptions>
 
     </MenuOptions>

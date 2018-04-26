@@ -35,7 +35,7 @@ public class AssociateCategoriesUI {
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("exit_message");
+    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_message");
 
     /**
      * Message to indicate the list of all managers being presented.
