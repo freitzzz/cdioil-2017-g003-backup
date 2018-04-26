@@ -80,20 +80,15 @@ public class ImportCategoriesUI {
         boolean catched = false;
         while (!catched) {
             String filePath = Console.readLine(FILEPATH_MESSAGE);
-            if (filePath.equalsIgnoreCase(EXIT_CODE)) {
-                return;
-            }
-
+            if (filePath.equalsIgnoreCase(EXIT_CODE)) return;
             MarketStructure em = ctrl.readCategories(filePath);
+            
             if (em == null) {
                 String option = Console.readLine(FILEPATH_NOT_FOUND_MESSAGE);
-                if (option.equalsIgnoreCase(EXIT_CODE)) {
-                    return;
-                }
+                if (option.equalsIgnoreCase(EXIT_CODE)) return;
             } else {
-                if (ctrl.getNumberOfCategoriesRead() == 0) {
-                    System.out.println(INVALID_CATEGORIES_MESSAGE);
-                } else {
+                if (ctrl.getNumberOfCategoriesRead() == 0) System.out.println(INVALID_CATEGORIES_MESSAGE);
+                else {
                     System.out.println(NUMBER_CATEGORIES_IMPORTED + " " + ctrl.getNumberOfCategoriesRead());
                     catched = true;
                 }

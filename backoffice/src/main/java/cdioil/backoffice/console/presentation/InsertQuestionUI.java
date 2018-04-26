@@ -98,7 +98,7 @@ public class InsertQuestionUI {
     /**
      * Represents a message that indicates the user to insert the options for that question.
      */
-    private final String OPTIONS_QUESTION_MESSAGE = localizationHandler.getMessageValue("please_insert_options");
+    private final String OPTIONS_QUESTION_MESSAGE = localizationHandler.getMessageValue("request_insert_options");
 
     /**
      * Represents a message that indicates the user to insert an option.
