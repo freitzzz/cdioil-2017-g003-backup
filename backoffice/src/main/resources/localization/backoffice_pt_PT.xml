@@ -34,7 +34,6 @@
     </InfoMessages>
 
 	
-	
     <RequestMessages>
         <Message messageId = "request_login" value = "Login: "/>
         <Message messageId = "request_email" value = "Email: "/>
@@ -126,13 +125,13 @@
             <Message messageId = "option_add_users_questionnaire" value = "Adicionar Utilizadores a Inquérito"/>
             <Message messageId = "option_insert_question_category" value = "Inserir Questão Sobre Categoria(s)"/>
             <Message messageId = "option_export_stats_survey" value = "Exportar Estatísticas sobre Inquérito"/>
+			<Message messageId="option_create_template" value="Criar Template"/>
             <!--US-280/282 options-->
             <Message messageId = "option_filter_domain" value = "Filtrar por domínio"/>
             <Message messageId = "option_filter_username" value = "Filtrar por nome de utilizador"/>
             <Message messageId = "option_filter_year" value = "Filtrar por ano de nascimento"/>
             <Message messageId = "option_filter_location" value = "Filtrar por localidade"/>
             <!--END OF US-280/282 options-->
-            <Message messageId="option_create_template" value = "Criar Template"/>
         </ManagerMenuOptions>
 
     </MenuOptions>
