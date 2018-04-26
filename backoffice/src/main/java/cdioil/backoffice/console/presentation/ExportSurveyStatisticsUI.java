@@ -114,7 +114,7 @@ public class ExportSurveyStatisticsUI {
             
             survey = ctrl.getChosenSurvey(surveyID);
             if (survey == null) System.out.println(INVALID_SURVEY_MESSAGE);
-            else if(ctrl.getSurveyReviews() == null) System.out.println(SURVEY_WITH_NO_REVIEWS_MESSAGE + " " + EXIT_MESSAGE);
+            else if(ctrl.getAllReviews() == null) System.out.println(SURVEY_WITH_NO_REVIEWS_MESSAGE + " " + EXIT_MESSAGE);
             else isSurveyIDValid = true;
         }
             boolean isPathValid = false;
