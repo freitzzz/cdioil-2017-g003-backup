@@ -235,7 +235,7 @@ public class MarketStructureTest {
 
         MarketStructure struct =  new MarketStructure();
 
-        struct.addProduct(new Product("New Product", new EAN("3423432"), "1 L"), null);
+        struct.addProduct(new Product("New Product", new SKU("3423432"), "1 L"), null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -254,7 +254,7 @@ public class MarketStructureTest {
 
         Category c = new Category("Category", "10DC");
 
-        Product p = new Product("Product", new QRCode("1421213"), "1 L");
+        Product p = new Product("Product", new SKU("1421213"), "1 L");
 
         assertFalse(structure.addProduct(p, c));
     }
@@ -272,7 +272,7 @@ public class MarketStructureTest {
 
         struct.addCategory(c2);
 
-        Product p = new Product("Produto", new EAN("1"), "1 L");
+        Product p = new Product("Produto", new SKU("1"), "1 L");
 
         assertFalse("Can't add product, since the category is no longer a leaf", struct.addProduct(p, c1));
 

@@ -1,6 +1,10 @@
 package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.AggregateRoot;
+import cdioil.framework.dto.DTOable;
+import cdioil.framework.dto.GenericDTO;
+import cdioil.framework.dto.SystemUserDTO;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Random;
@@ -13,7 +17,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
-public class SystemUser implements Serializable, AggregateRoot<Email> {
+public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
     /**
      * Constant that represents the number of digits of the activation code
      */
@@ -310,4 +314,20 @@ public class SystemUser implements Serializable, AggregateRoot<Email> {
         return randomCode;
     }
 
+    /**
+     * Creates a Data Transfer Object with name and email
+     * @return GenericDTO
+     */
+    @Override
+    public SystemUserDTO toDTO() {
+        String[] fullName = name.toString().split(" ");
+        final String firstName = fullName[0];
+        String lastName = "";
+
+        for (int i = 1; i < fullName.length; i++) {
+            lastName += fullName[i] + " ";
+        }
+
+        return new SystemUserDTO("systemUser", firstName, lastName, email.toString());
+    }
 }

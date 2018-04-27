@@ -35,7 +35,7 @@ public class WhitelistRepositoryImpl extends BaseJPARepository<Whitelist, String
         }
         String newDomain = domain.toLowerCase();
         List<Whitelist> list= entityManager().createQuery("SELECT w FROM Whitelist "
-                + "w WHERE w.domain = '" + newDomain + "'").getResultList();
+                + "w WHERE w.domain = :p_domain").setParameter("p_domain", newDomain).getResultList();
         if(list.isEmpty())return null;
         return list.get(0);
     }

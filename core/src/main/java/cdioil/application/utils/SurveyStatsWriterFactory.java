@@ -5,7 +5,9 @@
  */
 package cdioil.application.utils;
 
+import cdioil.domain.Question;
 import cdioil.files.CommonFileExtensions;
+import java.util.Map;
 
 /**
  * Factory of SurveyStatsWriter.
@@ -27,8 +29,9 @@ public final class SurveyStatsWriterFactory {
      *
      * @return the created SurveyStatsWriter. If the file is not valid, returns null.
      */
-    public static SurveyStatsWriter create(String filename, int totalBinary, int totalQuantitative, double binaryMean,
-            double quantitativeMean, double binaryMeanDeviation, double quantitativeMeanDeviation) {
+    public static SurveyStatsWriter create(String filename, Map<Question, Integer> totalBinary, Map<Question, Integer> totalQuantitative,
+            Map<Question, Double> binaryMean, Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation,
+            Map<Question, Double> quantitativeMeanDeviation) {
         if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) return new CSVSurveyStatsWriter(filename, totalBinary, 
                 totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         return null;

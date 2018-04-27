@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,14 +33,14 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     /**
-     * RegisterdUser that owns the profile
+     * RegisteredUser that owns the profile
      */
     @OneToOne
     private RegisteredUser registeredUser;
     /**
      * list of the user's reviews
      */
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     private List<Review> reviews;
 
     /**

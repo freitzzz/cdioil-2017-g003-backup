@@ -24,8 +24,7 @@ public class Admin implements Serializable,AggregateRoot<SystemUser>,User{
     /**
      * SystemUser associated with the admin.
      */
-    
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "SYSTEMUSER_ID")
     private SystemUser sysUser;
 

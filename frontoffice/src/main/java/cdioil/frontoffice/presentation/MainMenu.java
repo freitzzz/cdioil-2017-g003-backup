@@ -1,12 +1,12 @@
 package cdioil.frontoffice.presentation;
 
 import cdioil.application.authz.AuthenticationController;
-import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.presentation.authz.ChangeUserDataUI;
 import cdioil.console.Console;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.User;
 
 /**
@@ -52,13 +52,14 @@ public class MainMenu {
 
             switch (option) {
                 case 0:
+                    authenticationController.logout();
                     return;
                 case 1:
                     ChangeUserDataUI mui = new ChangeUserDataUI(getSystemUser());
                     mui.changeData();
                     break;
                 case 2:
-                    new AnswerSurveyUI();
+                    new AnswerSurveyUI(getRegisteredUser());
                     break;
                 default:
                     System.out.println("Invalid Option");
@@ -67,7 +68,7 @@ public class MainMenu {
         }
     }
     /**
-     * Temporary Solution since an ui uses a SystemUser instance (unfortunately)
+     * Temporary Solution since an ui uses a SystemUser instance
      * <br>To be removed on a near future
      * @return SystemUser with the current user
      */
@@ -76,5 +77,19 @@ public class MainMenu {
         if(user instanceof RegisteredUser)return ((RegisteredUser)user).getID();
         if(user instanceof Admin)return ((Admin) user).getID();
         return ((Manager)user).getID();
+    }
+    
+    /**
+     * Temporary Solution so that AnswerSurveyUI can have a RegisteredUser
+     * instance
+     * <br>To be removed or updated in the future
+     * @return RegisteredUser that logged in
+     */
+    private RegisteredUser getRegisteredUser(){
+        User user = authenticationController.getUser();
+        if(user instanceof RegisteredUser){
+            return (RegisteredUser) user;
+        }
+        return null;
     }
 }

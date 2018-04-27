@@ -98,6 +98,6 @@ public class Name implements Serializable, ValueObject {
      */
     @Override
     public String toString() {
-        return firstName + "  " + surname;
+        return firstName + " " + surname;
     }
 }

@@ -1,0 +1,27 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #3
+	
+	* Como Utilizador, quero poder interromper 
+	  a resposta a um inquérito e retomar no mesmo ponto mais tarde.
+
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------

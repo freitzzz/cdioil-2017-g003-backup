@@ -39,13 +39,13 @@ public class ManagerRepositoryImpl extends BaseJPARepository<Manager,Long> imple
     public boolean exists(Manager manager){
         SystemUser sysUser=new UserRepositoryImpl().findByEmail(manager.getID().getID());
         if(sysUser==null)return false;
-        Query query=entityManager().createQuery("SELECT MA FROM Manager MA WHERE MA.su = :sysUser").setParameter("sysUser",sysUser);
+        Query query=entityManager().createQuery("SELECT MA FROM Manager MA WHERE MA.sysUser = :sysUser").setParameter("sysUser",sysUser);
         return !query.getResultList().isEmpty();
     }
 
     @Override
     public Manager findByUserID(long dataBaseId) {
-        Query q = entityManager().createQuery("SELECT m FROM Manager m WHERE m.su.id = :databaseId");
+        Query q = entityManager().createQuery("SELECT m FROM Manager m WHERE m.sysUser.id = :databaseId");
         q.setParameter("databaseId", dataBaseId);
         if (q.getResultList().isEmpty())return null;
         return (Manager) q.getSingleResult();
@@ -58,9 +58,9 @@ public class ManagerRepositoryImpl extends BaseJPARepository<Manager,Long> imple
      * if the manager doesn't exist
      */
     public Manager findBySystemUser(SystemUser sysUser) {
-        Query q = entityManager().createQuery("SELECT m FROM Manager m WHERE m.su = :sysUser");
+        Query q = entityManager().createQuery("SELECT m FROM Manager m WHERE m.sysUser = :sysUser");
         q.setParameter("sysUser", sysUser);
         if(q.getResultList().isEmpty())return null;
         return (Manager) q.getSingleResult();
-    } 
+    }
 }

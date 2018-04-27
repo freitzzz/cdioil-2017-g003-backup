@@ -7,7 +7,7 @@
  </head>
  <body>
   <vaadin-css-layout responsive size-full>
-   <vaadin-horizontal-layout spacing="false" responsive size-full>
+   <vaadin-horizontal-layout spacing="false" responsive size-full _id="leftAndRightLayout">
     <vaadin-panel primary-style-name="valo-menu" size-full _id="leftPanel" :expand="0.2">
      <vaadin-grid-layout size-full margin>
       <row>
@@ -22,18 +22,10 @@
       </row>
       <row expand="1">
        <column>
-        <vaadin-css-layout width-full _id="btnPanel" :center></vaadin-css-layout>
+        <vaadin-css-layout width-full _id="btnPanel"></vaadin-css-layout>
        </column>
       </row>
-      <row expand="1">
-       <column>
-        <vaadin-css-layout width-full _id="btnPanel1" :middle :center>
-         <vaadin-button primary-style-name="v-button-borderless" size-full plain-text _id="btnLogout">
-           Logout 
-         </vaadin-button>
-        </vaadin-css-layout>
-       </column>
-      </row>
+      <row expand="1"></row>
       <row></row>
       <row></row>
      </vaadin-grid-layout>

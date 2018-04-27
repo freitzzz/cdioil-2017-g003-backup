@@ -50,12 +50,14 @@
     <class>cdioil.application.utils.Edge</class>
     <class>cdioil.application.utils.EmailSenders</class>
     <class>cdioil.domain.SKU</class>
+    <class>cdioil.application.domain.authz.UserSession</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
       <property name="javax.persistence.jdbc.password" value=""/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="eclipselink.logging.level" value="OFF"/>
     </properties>
   </persistence-unit>
 </persistence>
