@@ -108,7 +108,7 @@ public final class RegisterUserController {
         SystemUser builtUser=userBuilder.build();
         SystemUser importedUser=new UserRepositoryImpl().findByEmail(builtUser.getID());
         if(importedUser==null){
-            registerUser(new RegisteredUser(builtUser));
+            registerUser(builtUser,false);
         }else if(importedUser.isUserImported() && !importedUser.isUserActivated()){
             registerImportedUser(importedUser,builtUser);
         }else{
@@ -117,10 +117,13 @@ public final class RegisterUserController {
     }
     /**
      * Registers the current user by sending an activation code to his email
-     * @param registeredUser RegisteredUser with the user being registered
+     * @param systemUser SystemUser with the user being registered
      */
-    private void registerUser(RegisteredUser registeredUser){
-        if(sendRegisterCode(registeredUser.getID())){
+    private void registerUser(SystemUser systemUser,boolean imported){
+        if(sendRegisterCode(systemUser)){
+            RegisteredUser registeredUser= imported
+                    ? new RegisteredUser(new UserRepositoryImpl().merge(systemUser)) 
+                    : new RegisteredUser(new UserRepositoryImpl().add(systemUser));
             registerUserRepository.add(registeredUser);
         }else{
             throw new IllegalStateException(REGISTERED_USED_SUCCESS_FAILURE);
@@ -135,11 +138,7 @@ public final class RegisterUserController {
     private void registerImportedUser(SystemUser importedUser,SystemUser builtUser){
         if(!registerUserRepository.exists(new RegisteredUser(importedUser))){
             importedUser.mergeImportedSystemUser(builtUser);
-            if(sendRegisterCode(builtUser)){
-                registerUser(new RegisteredUser(new UserRepositoryImpl().merge(importedUser)));
-            }else{
-                throw new IllegalStateException(REGISTERED_USED_SUCCESS_FAILURE);
-            }
+            registerUser(importedUser,true);
         }else{
             throw new IllegalStateException(EMAIL_ALREADY_IN_USE_MESSAGE);
         }
