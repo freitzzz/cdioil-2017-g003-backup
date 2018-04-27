@@ -27,7 +27,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
     /**
      * SystemUser account associated to the registered user.
      */
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "SYSTEMUSER")
     private SystemUser sysUser;
     /**

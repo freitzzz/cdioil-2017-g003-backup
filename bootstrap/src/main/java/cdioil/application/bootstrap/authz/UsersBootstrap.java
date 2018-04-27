@@ -13,6 +13,7 @@ import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
+import cdioil.persistence.impl.UserRepositoryImpl;
 import java.time.LocalDate;
 
 /**
@@ -92,6 +93,6 @@ public final class UsersBootstrap {
         BirthDate date = new BirthDate(LocalDate.parse(birthDate));
         SystemUser user=new SystemUser(emailAddress,name,pwd,phone,local,date);
         user.activateAccount(user.getActivationCode());
-        return user;
+        return new UserRepositoryImpl().add(user);
     }
 }
