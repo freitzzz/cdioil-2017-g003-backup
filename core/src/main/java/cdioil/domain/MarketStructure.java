@@ -1,6 +1,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -14,8 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 /**
- * Class representing a Market Structure which is composed of various product
- * Categories, of which only the leaves have Products.
+ * Class representing a Market Structure which is composed of various product Categories, of which only the leaves have Products.
  *
  * @author António Sousa [1161371]
  */
@@ -51,8 +51,7 @@ public class MarketStructure implements Serializable {
 
     /**
      * Public Constructor for instantiating a Market Structure.<p>
-     * Also doubles as the JPA's default constructor since no parameters are
-     * given.
+     * Also doubles as the JPA's default constructor since no parameters are given.
      */
     public MarketStructure() {
 
@@ -70,14 +69,31 @@ public class MarketStructure implements Serializable {
     }
 
     /**
+     * Update the product in Market Structure
+     *
+     * @param cat Category
+     * @param pro Product
+     */
+    public void updateProduct(Category cat, Product pro) {
+
+        Iterator<Product> iterator = cat.getProductSetIterator();
+
+        while (iterator.hasNext()) {
+            Product removable = iterator.next();
+            if (removable.equals(pro)) {
+                cat.removeProduct(removable);
+                break;
+            }          
+        }
+        cat.addProduct(pro);
+    }
+
+    /**
      * Adds a given <code>Category</code> to the <code>MarketStructure</code>.
      *
      * @param c <code>Category</code> to be added.
-     * @return true - if the new Category's parent has also been inserted into
-     * the <code>MarketStructure</code> and has yet been inserted into the
-     * parent's set of children<p>
-     * false - if the parent is not in the <code>MarketStructure</code> or the
-     * parent's set of children already contains the category
+     * @return true - if the new Category's parent has also been inserted into the <code>MarketStructure</code> and has yet been inserted into the parent's set of children<p>
+     * false - if the parent is not in the <code>MarketStructure</code> or the parent's set of children already contains the category
      */
     public boolean addCategory(Category c) {
         if (c == null) {
@@ -97,8 +113,7 @@ public class MarketStructure implements Serializable {
     }
 
     /**
-     * Searches for the instance of <code>Node</code> that contains the parent
-     * <code>Category</code> of the given <code>Category</code>.
+     * Searches for the instance of <code>Node</code> that contains the parent <code>Category</code> of the given <code>Category</code>.
      *
      * @param c - instance of <code>Category</code>
      * @return the <code>Node</code> containing the parent <code>Category</code>
@@ -139,6 +154,7 @@ public class MarketStructure implements Serializable {
 
     /**
      * Uses a stack of Category path identifiers for searching for a Category in the <code>MarketStructure</code>
+     *
      * @param stack stack of <code>String</code>
      * @return <code>Node</code> if it has been inserted in the <code>MarketStructure</code> otherwise null
      */
@@ -174,8 +190,7 @@ public class MarketStructure implements Serializable {
 
     /**
      * Checks if the given Node is a leaf in the Market Structure.<p>
-     * A Node is a leaf when it does not hold any references to child Nodes,
-     * thus being capable of holding Products.
+     * A Node is a leaf when it does not hold any references to child Nodes, thus being capable of holding Products.
      *
      * @param node
      * @return true if node does not possess any children<p>
@@ -189,8 +204,7 @@ public class MarketStructure implements Serializable {
      * Returns a collection of all the leaf Categories in the Market Structure.
      *
      *
-     * @return an iterable containing all the Categories on the bottom of the
-     * Market Structure
+     * @return an iterable containing all the Categories on the bottom of the Market Structure
      */
     public Iterable<Category> getLeaves() {
 
@@ -202,8 +216,7 @@ public class MarketStructure implements Serializable {
     }
 
     /**
-     * Recursively searches for all the nodes in the the Market Structure and
-     * adds their elements to the list.
+     * Recursively searches for all the nodes in the the Market Structure and adds their elements to the list.
      *
      * @param leaves list of leaf Categories
      * @param node the current node
@@ -225,15 +238,12 @@ public class MarketStructure implements Serializable {
 
     //TODO: what happens to the products added to a node that was previously a leaf, but no longer is?
     /**
-     * Adds the given Product to the given Category, if that Category is a
-     * Market Structure leaf.
+     * Adds the given Product to the given Category, if that Category is a Market Structure leaf.
      *
      * @param p
      * @param c
-     * @return true - if the Category is a Market Structure leaf and does not
-     * already contain an equal Product<p>
-     * false - if the Category does not exist in the Market Structure or the
-     * Category already holds an equal Product
+     * @return true - if the Category is a Market Structure leaf and does not already contain an equal Product<p>
+     * false - if the Category does not exist in the Market Structure or the Category already holds an equal Product
      */
     public boolean addProduct(Product p, Category c) {
 
@@ -265,10 +275,9 @@ public class MarketStructure implements Serializable {
      * Checks if two Categories are directly connected.
      *
      * @param c1 directly connected category
-     * @param c2 directly connected category 
+     * @param c2 directly connected category
      * @return true - if both nodes are directly connected to each other<p>
-     * false - if either of the categories do not exist in the market structure
-     * or there is not a direct connection between them
+     * false - if either of the categories do not exist in the market structure or there is not a direct connection between them
      */
     public boolean checkDirectlyConnected(Category c1, Category c2) {
 
@@ -301,8 +310,7 @@ public class MarketStructure implements Serializable {
     }
 
     /**
-     * Lists all the categories in the structure, call recursive method of the
-     * same name
+     * Lists all the categories in the structure, call recursive method of the same name
      *
      * @return list of the categories in the structure
      */

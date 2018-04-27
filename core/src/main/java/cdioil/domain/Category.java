@@ -150,6 +150,15 @@ public class Category extends SurveyItem {
         }
         return products.add(p);
     }
+    /**
+     * Removes a product from the list of products of the Category.
+     *
+     * @param p product to remove
+     * @return true if the product is successfully removed. Otherwise, returns false
+     */
+    public boolean removeProduct(Product p){
+         return products.remove(p);
+    }
 
     /**
      * Returns an iterator of the set of products associated to the Category.

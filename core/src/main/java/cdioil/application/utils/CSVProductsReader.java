@@ -30,11 +30,15 @@ public class CSVProductsReader implements ProductsReader {
      * File being read.
      */
     private final File file;
-    
-     /**
+
+    /**
      * File to export.
      */
     private final File fileExp;
+    /**
+     * List with the product
+     */
+    private final Map<String, List<Product>> existsProducts;
     /**
      * Character used for splitting data within the file.
      */
@@ -110,10 +114,13 @@ public class CSVProductsReader implements ProductsReader {
      * Creates an instance of CSVProductsReader, receiving the name of the file to read.
      *
      * @param filename Name of the file to read
+     * @param fileExport Name of the file to export
+     * @param existsProducts List of the products
      */
-    public CSVProductsReader(String filename, String fileExport) {
+    public CSVProductsReader(String filename, String fileExport, Map<String, List<Product>> existsProducts) {
         this.file = new File(filename);
         this.fileExp = new File(fileExport);
+        this.existsProducts = existsProducts;
     }
 
     /**
@@ -134,7 +141,6 @@ public class CSVProductsReader implements ProductsReader {
         Map<String, List<Product>> readProducts = new HashMap<>();
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         int numLines = fileContent.size();
-        List<Product> existsProducts = new LinkedList<>();
 
         Map<Integer, Integer> invalidProducts = new HashMap<>();
 
@@ -157,13 +163,19 @@ public class CSVProductsReader implements ProductsReader {
                             } else {
                                 readProducts.get(path).add(product);
                             }
-//                        } else {
-//                            if(product != null){
-//                                existProduct(path, currentLine, CATEGORIES_FILE_OFFSET, existsProducts);
-//                            }
+                        } else {
+                            if (product != null) {
+                                if (existsProducts.containsKey(path)) {
+                                    existsProducts.get(path).add(product);
+                                } else {
+                                    List<Product> listE = new LinkedList<>();
+                                    listE.add(product);
+                                    existsProducts.put(path, listE);
+                                }
+                            }
                         }
                     } else {
-                        
+
                         if (!isPathProductValid(path)) {
                             invalidProducts.put(i, 1);
                         }
@@ -177,7 +189,7 @@ public class CSVProductsReader implements ProductsReader {
                 }
             }
         }
-        if(!invalidProducts.isEmpty()) {
+        if (!invalidProducts.isEmpty()) {
             notImportedProducstFile(invalidProducts);
         }
         return readProducts;
@@ -270,6 +282,9 @@ public class CSVProductsReader implements ProductsReader {
             }
             if (invalidProducts.get(line) == 2) {
                 fileContent.add(line + SPLITTER + "Categoria não folha, logo não é possível adicionar um produto!");
+            }
+            if (invalidProducts.get(line) == 3) {
+                fileContent.add(line + SPLITTER + "Produto já existe!");
             }
         }
         FileWriter.writeFile(fileExp, fileContent);
