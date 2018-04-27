@@ -139,14 +139,14 @@ public class CreateSurveyUI {
 
                     if (category != null) {
                         System.out.println("Please choose the date of beginning of the survey");
-                        startDate = dateMenu(menuYesNo());
+                        startDate = dateMenu(1);
                         System.out.println("Want to insert the data of when the survey ends? \n");
                         endDate = dateMenu(menuYesNo());
                     }
 
                     System.out.println("Would you like to add a target audience?\n");
                     int targetAudienceOption = menuYesNo();
-                    targetAudience(targetAudienceOption, usersGroup);
+                    usersGroup = targetAudience(targetAudienceOption);
 
                     controller.createSurvey(categories, startDate, endDate, map, usersGroup);
                     
@@ -233,14 +233,14 @@ public class CreateSurveyUI {
 
                     if (product != null) {
                         System.out.println("Please choose the date of beginning of the survey: \n");
-                        beginingDate = dateMenu(menuYesNo());
+                        beginingDate = dateMenu(1);
                         System.out.println("Want to insert the data of when the survey ends? \n");
                         endingDate = dateMenu(menuYesNo());
                     }
 
                     System.out.println("Would you like to add a target audience?\n");
                     int productTargetAudienceOption = menuYesNo();
-                    targetAudience(productTargetAudienceOption, productUsersGroup);
+                    productUsersGroup = targetAudience(productTargetAudienceOption);
 
                     controller.createSurvey(allProducts, beginingDate, endingDate, productMap, productUsersGroup);
 
@@ -268,7 +268,8 @@ public class CreateSurveyUI {
         }
     }
 
-    private void targetAudience(int targetAudienceOption, UsersGroup usersGroup) {
+    private UsersGroup targetAudience(int targetAudienceOption) {
+        UsersGroup usersGroup = null;
         if (targetAudienceOption == 1) {
             Iterator allUsers = controller.findAll().iterator();
             LinkedList<RegisteredUser> userList = new LinkedList<>();
@@ -292,6 +293,7 @@ public class CreateSurveyUI {
                 System.out.println("Error: please try again");
             }
         }
+        return usersGroup;
     }
 
 
