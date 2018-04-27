@@ -58,6 +58,11 @@ public final class ActivationCodePopupViewContent implements PopupView.Content{
      */
     public Button getActivationCodeButton(){return btnConfirmActivationCode;}
     /**
+     * Method that gets the activation code that the textfield holds
+     * @return String with the textfield activation code
+     */
+    public String getActivationCode(){return txtFieldActivationCode.getValue();}
+    /**
      * Method that configures the current popup view components
      */
     private void configureComponents(){

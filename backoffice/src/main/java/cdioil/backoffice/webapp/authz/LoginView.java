@@ -135,6 +135,7 @@ public class LoginView extends LoginDesign implements View {
     private void configureSendActivationCodePopupView(){
         sendActivationCodePopupView=new PopupView(new ActivationCodePopupViewContent());
         sendActivationCodePopupView.setHideOnMouseOut(false);
+        panelLoginLayout.addComponentsAndExpand(sendActivationCodePopupView);
         configureSendActivationCodeButton();
     }
     /**
@@ -144,7 +145,7 @@ public class LoginView extends LoginDesign implements View {
         Button btnSendActivationCode=((ActivationCodePopupViewContent)sendActivationCodePopupView.getContent()).getActivationCodeButton();
         btnSendActivationCode.addClickListener((sendActivationCodeButtonEvent)->{
             if(authenticationController.activateAccount(txtUsername.getValue(),txtPassword.getValue()
-                    ,btnSendActivationCode.getCaption())){
+                    ,((ActivationCodePopupViewContent)sendActivationCodePopupView.getContent()).getActivationCode())){
                 showValidActivationCodeNotification();
             }else{
                 showInvalidActivationCodeNotification();
