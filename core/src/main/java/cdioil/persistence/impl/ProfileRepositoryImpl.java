@@ -11,9 +11,7 @@ import cdioil.domain.authz.Profile;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ProfileRepository;
-import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Query;
 
 /**
  *
@@ -44,14 +42,14 @@ public class ProfileRepositoryImpl extends BaseJPARepository<Profile, Long>
         if (loggedUserProfile == null) {
             return null;
         }
-//        SELECT R FROM REVIEW R WHERE R.REVIEWSTATE=PENDING
-//AND R.ID in (SELECT PR.REVIEWS_ID 
-//                FROM PROFILE_REVIEW PR 
-//                WHERE PR.PROFILE_ID=:profile.id)
-        return (List<Review>) entityManager().createNativeQuery("select * from Review r "
-                + "where r.reviewState = 0 and r.id in(select pr.reviews_id from "
-                + "profile_review pr where pr.profile_id =:profile)")
-                .setParameter("profile", loggedUserProfile)
+        long profileID=(long)entityManager().createQuery("SELECT PR.id FROM Profile PR "
+                + "WHERE PR=:PROFILE")
+                .setParameter("PROFILE",loggedUserProfile)
+                .getSingleResult();
+        return (List<Review>)entityManager().createNativeQuery("SELECT * FROM REVIEW RE WHERE RE.REVIEWSTATE=?1 "
+                + "AND RE.ID IN (SELECT PR.REVIEWS_ID FROM PROFILE_REVIEW PR WHERE PR.PROFILE_ID= ?2)",Review.class)
+                .setParameter(1,ReviewState.PENDING.ordinal())
+                .setParameter(2,profileID)
                 .getResultList();
     }
 }
