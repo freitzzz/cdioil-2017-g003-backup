@@ -107,8 +107,7 @@ public class RegisterPopupViewContent implements PopupView.Content {
                 }
 
                 try {
-//                    new RegisterUserController().registerUser(firstName, lastName, email,
-//                            password, phone, city, birthday.toString());
+                    //#TO-DO: Rework 
                 } catch (IllegalArgumentException e) {
                     Notification.show(e.getMessage(),
                             Notification.Type.ERROR_MESSAGE);
