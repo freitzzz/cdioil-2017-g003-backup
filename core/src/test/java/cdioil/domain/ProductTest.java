@@ -28,6 +28,12 @@ public class ProductTest {
     public void setUp() {
         this.p = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
     }
+    
+    @Test
+    public void ensureEmptyConstructorCreatesInstance(){
+        Product p1 = new Product();
+        assertNotNull(p1);
+    }
 
     /**
      * Test of the constructor of class Product
@@ -122,5 +128,18 @@ public class ProductTest {
         boolean expResult = true;
         assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo", p.changeProductImage(imagem));
         assertFalse("A condição acertar pois a Imagem do produto é invalida", p.changeProductImage(null));
+    }
+    
+    /**
+     * Test of getID method, of class Product.
+     */
+    @Test
+    public void testGetID(){
+        System.out.println("getID");
+        
+        Product p1 = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
+        SKU expected = new SKU("544231234");
+     
+        assertEquals(p1.getID(), expected);
     }
 }

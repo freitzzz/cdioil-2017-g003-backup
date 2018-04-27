@@ -186,4 +186,32 @@ public class CategoryTest {
         
         assertEquals(actual, expected);
     }
+    
+    @Test
+    public void ensureRemoveProductReturnsFalseIfProductWasNotPresent(){
+        
+        Category c1 = new Category("Category", "1932DC");
+        
+        Product p = new Product("Good product", new SKU("8463842"), "1 L");
+        
+        assertFalse(c1.removeProduct(p));
+    }
+    
+    @Test
+    public void ensureRemoveProductReturnsFalseIfProductIsNull(){
+        Category c1 = new Category("Category", "1932DC");
+        
+        assertFalse(c1.removeProduct(null));
+    }
+    
+    @Test
+    public void ensureRemoveProductReturnsTrueIfProductWasPresent(){
+        Category c1 = new Category("Category", "1932DC");
+        
+        Product p = new Product("Good product", new SKU("8463842"), "1 L");
+        
+        c1.addProduct(p);
+        
+        assertTrue(c1.removeProduct(p));
+    }
 }

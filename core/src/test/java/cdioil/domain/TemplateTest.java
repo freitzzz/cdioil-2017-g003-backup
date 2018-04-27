@@ -3,6 +3,7 @@ package cdioil.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,18 +26,23 @@ public class TemplateTest {
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
         t = new Template("template", questionGroup);
     }
-
-    /**
-     * Test of constructor of class Template
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void ensureTemplateIsBuiltCorrectly() {
-        System.out.println("Template()");
+    
+    @Test
+    public void ensureJPAConstructorCreatesInstance(){
         t = new Template();
-        t = new Template(null, null);
-        t = new Template("template", new QuestionGroup("QuestionGroup"));
+        assertNotNull(t);
     }
-
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureNullQuestionGroupThrowsException(){
+        t = new Template("Template", null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureEmptyQuestionGroupThrowsException(){
+        t = new Template("Template", new QuestionGroup("Empty Question Group"));
+    }
+    
     /**
      * Test of the method hashCode, of the class Template.
      */
@@ -77,5 +83,20 @@ public class TemplateTest {
         tDifferentQuestions.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "342"));
         t.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532"));
         assertFalse(t.equals(tDifferentQuestions));
+    }
+    
+    /**
+     * Test of the method toString, of the class Template.
+     */
+    @Test
+    public void testToString(){
+        System.out.println("toString");
+        Question q1 = new BinaryQuestion("Do you like apples?", "A32");
+        QuestionGroup questionGroup1 = new QuestionGroup("QuestionGroup 1");
+        questionGroup1.addQuestion(q1);
+        Template t1 = new Template("Template", questionGroup1);
+        Template t2 = new Template("Template", questionGroup1);
+        
+        assertEquals(t1.toString(), t2.toString());
     }
 }
