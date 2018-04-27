@@ -3,6 +3,7 @@ package cdioil.backoffice.webapp.authz;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupView;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -14,6 +15,10 @@ import com.vaadin.ui.VerticalLayout;
  * @since Version 4.0 of FeedbackMonkey
  */
 public final class ActivationCodePopupViewContent implements PopupView.Content{
+    /**
+     * Constant that represents the activation code label message
+     */
+    private static final String ACTIVATION_CODE_LABEL_MESSAGE="Código Ativação";
     /**
      * Constant that represents the confirm activation code button message
      */
@@ -68,7 +73,7 @@ public final class ActivationCodePopupViewContent implements PopupView.Content{
     private void configureComponents(){
         txtFieldActivationCode=new TextField();
         createConfirmActivationCodeButton();
-        componentLayout=new VerticalLayout(new HorizontalLayout(txtFieldActivationCode,btnConfirmActivationCode));
+        componentLayout=new VerticalLayout(new Label(ACTIVATION_CODE_LABEL_MESSAGE),new HorizontalLayout(txtFieldActivationCode,btnConfirmActivationCode));
     }
     /**
      * Method that creates the confirm activation code button
