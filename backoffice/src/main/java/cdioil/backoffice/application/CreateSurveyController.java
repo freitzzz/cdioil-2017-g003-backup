@@ -1,6 +1,9 @@
 package cdioil.backoffice.application;
 
 import cdioil.domain.*;
+import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
+import cdioil.domain.authz.User;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.persistence.impl.*;
 import cdioil.time.TimePeriod;
@@ -96,6 +99,16 @@ public class CreateSurveyController {
     public List<Product> findProducts(String productName) {
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         return marketStructureRepository.findProductByName(".*" + productName + ".*");
+    }
+
+    /**
+     * Finds all users
+     *
+     * @return Iterable of registered users
+     */
+    public Iterable<RegisteredUser> findAll() {
+        RegisteredUserRepositoryImpl registeredUserRepository = new RegisteredUserRepositoryImpl();
+        return registeredUserRepository.findAll();
     }
 
     /**
