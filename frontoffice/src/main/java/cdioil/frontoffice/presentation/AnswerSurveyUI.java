@@ -154,7 +154,7 @@ public class AnswerSurveyUI {
             System.out.println("Type EXIT to leave at any time\n");
             option = Console.readLine("Select an option:\n");
             if (option.equalsIgnoreCase("EXIT")) {
-                if (controller.saveReview()) {
+                if (controller.saveReview(true)) {
                     System.out.println("A sua avaliacao foi gravada com sucesso. "
                             + "Podera continuar a responder ao inquerito em qualquer"
                             + " altura");
@@ -178,7 +178,7 @@ public class AnswerSurveyUI {
                         }
                     }
 
-                    if (controller.saveReview()) {
+                    if (controller.saveReview(true)) {
                         System.out.println("Avaliação submetida com sucesso!");
                     }
                     break;
@@ -207,7 +207,7 @@ public class AnswerSurveyUI {
             System.out.println("Type EXIT to leave at any time\n");
             option = Console.readLine("Select an option:\n");
             if (option.equalsIgnoreCase("EXIT")) {
-                if (controller.saveReview()) {
+                if (controller.saveReview(false)) {
                     System.out.println("A sua avaliacao foi gravada com sucesso. "
                             + "Podera continuar a responder ao inquerito em qualquer"
                             + " altura");
@@ -231,7 +231,7 @@ public class AnswerSurveyUI {
                         }
                     }
 
-                    if (controller.saveReview()) {
+                    if (controller.saveReview(false)) {
                         System.out.println("Avaliação submetida com sucesso!");
                     }
                     break;

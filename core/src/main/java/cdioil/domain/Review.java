@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -62,7 +63,7 @@ public class Review implements Serializable {
     /**
      * State of the Review
      */
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     private ReviewState reviewState;
 
     /*

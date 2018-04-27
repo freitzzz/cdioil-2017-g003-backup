@@ -17,10 +17,4 @@ public interface ReviewRepository {
      * @return List with all reviews made for a certain survey
      */
     public abstract List<Review> getReviewsBySurvey(Survey survey);
-    /**
-     * Method that returns all the pending reviews of a certain user
-     * @param loggedUserProfile profile of a user
-     * @return list of all the pending reviews user that a registered user has
-     */
-    public abstract List<Review> findUserPendingReviews(Profile loggedUserProfile);
 }

@@ -40,7 +40,7 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     /**
      * list of the user's reviews
      */
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
     private List<Review> reviews;
 
     /**

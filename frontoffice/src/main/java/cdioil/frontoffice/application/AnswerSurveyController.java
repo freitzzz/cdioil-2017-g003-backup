@@ -5,6 +5,7 @@ import cdioil.domain.QuestionOption_;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.persistence.impl.ProfileRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
@@ -69,7 +70,7 @@ public class AnswerSurveyController {
      * @return LinkedList of the user's pending reviews
      */
     private List<Review> findPendingReviews() {
-        ReviewRepositoryImpl repo = new ReviewRepositoryImpl();
+        ProfileRepositoryImpl repo = new ProfileRepositoryImpl();
         return repo.findUserPendingReviews(loggedUser.getProfile());
     }
 
@@ -168,11 +169,16 @@ public class AnswerSurveyController {
     /**
      * Saves the review to the database
      *
+     * @param firstTimeSaving boolean to check if the review being done already
+     * is in the database or not
      * @return true if the review was saved, false if otherwise
      */
-    public boolean saveReview() {
-        loggedUser.getProfile().addReview(surveyReview);
-        return new RegisteredUserRepositoryImpl().merge(loggedUser) != null;
+    public boolean saveReview(boolean firstTimeSaving) {
+        if (firstTimeSaving) {
+            loggedUser.getProfile().addReview(surveyReview);
+            return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
+        }
+        return new ReviewRepositoryImpl().merge(surveyReview) != null;
     }
 
     /**
