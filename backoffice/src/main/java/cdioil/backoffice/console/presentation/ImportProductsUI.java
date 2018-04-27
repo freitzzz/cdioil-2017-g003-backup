@@ -8,7 +8,14 @@ package cdioil.backoffice.console.presentation;
 import cdioil.backoffice.application.ImportProductsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.console.Console;
+import cdioil.domain.Category;
+import cdioil.domain.Product;
 import cdioil.files.InvalidFileFormattingException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User Interface for use cases US-203 (import products from file)
@@ -25,6 +32,10 @@ public class ImportProductsUI {
      * Represents the exit code for the User Interface.
      */
     private final String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
+    /**
+     * Represents the exit code for the User Interface.
+     */
+    private final String OPTION_YES = localizationHandler.getMessageValue("option_yes");
     /**
      * Represents a message that indicates the user to insert the path of the file to import.
      */
@@ -46,6 +57,10 @@ public class ImportProductsUI {
      */
     private final String INFO_NUM_PRODUCTS_EXPORTED = localizationHandler.getMessageValue("info_num_products_exported");
 
+    /**
+     * Represents a message that informs if product .
+     */
+    private final String INFO_ATUALIZAR_PRODUTO = localizationHandler.getMessageValue("info_atualization_products");
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
@@ -81,8 +96,27 @@ public class ImportProductsUI {
         if (fileExport.equalsIgnoreCase(OPTION_EXIT)) {
             return;
         }
+        Map<String, List<Product>> existsProducts = new HashMap<>();
+        Map<String, Product> atualizationProducts = new HashMap<>();
+
         try {
-            Integer numImportedProducts = controller.importProducts(fileRead, fileExport);
+            Integer numImportedProducts = controller.importProducts(fileRead, fileExport, existsProducts);
+            if (!existsProducts.isEmpty()) {
+
+                Set<Map.Entry<String, List<Product>>> entries = existsProducts.entrySet();
+                for (Map.Entry<String, List<Product>> mapEntry : entries) {
+                    String path = mapEntry.getKey();
+                    List<Product> productList = mapEntry.getValue();
+                    for (Product pro : productList) {
+                        String op = Console.readLine(INFO_ATUALIZAR_PRODUTO + "\n" + pro.toString());
+                        if (op.equalsIgnoreCase(OPTION_YES)) {
+                            atualizationProducts.put(path, pro);
+                            numImportedProducts += controller.updateProducts(atualizationProducts);
+
+                        }
+                    }
+                }
+            }
             if (numImportedProducts == null) {
                 System.out.println(ERROR_FILE_NOT_FOUND);
             } else if (numImportedProducts == 0) {
