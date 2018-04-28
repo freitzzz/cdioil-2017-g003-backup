@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +26,25 @@ import javax.persistence.OneToMany;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "QUESTIONTYPE")
 public abstract class Question implements Serializable, Comparable {
+
+    /**
+     * Returns an exact copy of the given Question.
+     *
+     * @param question question being copied
+     * @return copied question
+     */
+    public static Question copyQuestion(Question question) {
+        if (question instanceof BinaryQuestion) {
+            return new BinaryQuestion(question);
+        }
+        if (question instanceof MultipleChoiceQuestion) {
+            return new MultipleChoiceQuestion(question);
+        }
+        if (question instanceof QuantitativeQuestion) {
+            return new QuantitativeQuestion(question);
+        }
+        return null;
+    }
 
     /**
      * Serialization code.
@@ -55,22 +72,16 @@ public abstract class Question implements Serializable, Comparable {
     /**
      * The question's ID.
      */
-//    @Id
     private String questionID;
 
-    public void setQuestionID(String newQuestionID){
-        this.questionID = newQuestionID;
-    }
-    public void bro(int ok){
-        databaseID=ok;
-    }
     /**
      * List of options that the question has.
      */
     @OneToMany(
-            cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+            cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "QUESTION_OPTIONLIST",
-            joinColumns = {@JoinColumn(name = "QUESTIONDATABASEID")}
+            joinColumns = {
+                @JoinColumn(name = "QUESTIONDATABASEID")}
     )
     private List<QuestionOption> optionList;
 
@@ -121,7 +132,9 @@ public abstract class Question implements Serializable, Comparable {
      * @return all available options.
      */
     public List<QuestionOption> getOptionList() {
-        if(optionList==null)return new ArrayList<>();
+        if (optionList == null) {
+            return new ArrayList<>();
+        }
         return optionList;
     }
 

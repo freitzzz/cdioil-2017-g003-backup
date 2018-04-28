@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -59,7 +60,8 @@ public class Review implements Serializable {
     /**
      * Survey being answered.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    //A survey can be reviewed multiple times and changes made to the review should not cascade to the survey
+    @ManyToOne
     private Survey survey;
 
     /**
@@ -77,7 +79,7 @@ public class Review implements Serializable {
     /**
      * Question ID of the question currently being answered.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     private Question currentQuestion;
 
     /**
@@ -105,7 +107,7 @@ public class Review implements Serializable {
         this.survey = survey;
         this.answerGraph = survey.getGraphCopy();
         this.answers = new TreeMap<>();
-        this.currentQuestion = /*buildQuestion*/ (answerGraph.getFirstQuestion());
+        this.currentQuestion = answerGraph.getFirstQuestion();
         this.reviewState = ReviewState.PENDING;
     }
 
@@ -148,15 +150,15 @@ public class Review implements Serializable {
 
         // If there are no outgoing edges, maps the last answer and finishes
         if (!outgoingEdges.iterator().hasNext()) {
-            answers.put(/*buildQuestion*/(currentQuestion), new Answer(option));
+            answers.put(currentQuestion, new Answer(option));
             reviewState = ReviewState.FINISHED; //state must also be updated
             return false;
         }
 
         for (Edge edge : outgoingEdges) {
-            if (/*buildQuestionOption*/(edge.getElement()).equals(option)) {
-                answers.put(/*buildQuestion*/(currentQuestion), new Answer(option));
-                currentQuestion = /*buildQuestion*/ (edge.getDestinationVertexElement());
+            if (edge.getElement().equals(option)) {
+                answers.put(currentQuestion, new Answer(option));
+                currentQuestion = edge.getDestinationVertexElement();
             }
         }
 
@@ -172,7 +174,7 @@ public class Review implements Serializable {
             return;
         }
         answers.remove(currentQuestion);
-        currentQuestion = /*buildQuestion*/ (((TreeMap<Question, Answer>) answers).lastKey());
+        currentQuestion = (((TreeMap<Question, Answer>) answers).lastKey());
     }
 
     /**
@@ -197,31 +199,6 @@ public class Review implements Serializable {
         return new TreeMap<>(answers);
     }
 
-//    private Question buildQuestion(Question question) {
-//        if (question instanceof BinaryQuestion) {
-//            return new BinaryQuestion(question);
-//        }
-//        if (question instanceof MultipleChoiceQuestion) {
-//            return new MultipleChoiceQuestion(question);
-//        }
-//        if (question instanceof QuantitativeQuestion) {
-//            return new QuantitativeQuestion(question);
-//        }
-//        return null;
-//    }
-//
-//    private QuestionOption buildQuestionOption(QuestionOption option) {
-//        if (option instanceof BinaryQuestionOption) {
-//            return new BinaryQuestionOption(option);
-//        }
-//        if (option instanceof MultipleChoiceQuestionOption) {
-//            return new MultipleChoiceQuestionOption(option);
-//        }
-//        if (option instanceof QuantitativeQuestionOption) {
-//            return new QuantitativeQuestionOption(option);
-//        }
-//        return null;
-//    }
     @Override
     public int hashCode() {
         int hash = 7;
