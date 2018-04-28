@@ -68,12 +68,9 @@ public class SurveyBootstrap {
         survey.addQuestion(question2);
         survey.addQuestion(question3);
 
-        BinaryQuestionOption option1 = new BinaryQuestionOption(true);
-        BinaryQuestionOption option2 = new BinaryQuestionOption(false);
-
-        survey.setNextQuestion(question1, question2, option1, 0);
-        survey.setNextQuestion(question1, question3, option2, 0);
-
+        survey.setNextQuestion(question1, question2, question1.getOptionList().get(0), 0); //true
+        survey.setNextQuestion(question1, question3, question1.getOptionList().get(1), 0); //false
+        
         survey.changeState(SurveyState.ACTIVE);
         //Review review = new Review(survey);
         surveyRepository.add(survey);
