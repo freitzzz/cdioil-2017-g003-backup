@@ -42,8 +42,6 @@ public class MyUI extends UI {
      */
     private void registerViews(){
         navigator.addView(LoginView.VIEW_NAME,LoginView.class);
-        navigator.addView(AdminPanelView.VIEW_NAME,AdminPanelView.class);
-        navigator.addView(ManagerPanelView.VIEW_NAME,ManagerPanelView.class);
         navigator.navigateTo(LoginView.VIEW_NAME);
     }
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
