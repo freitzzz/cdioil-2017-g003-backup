@@ -21,6 +21,62 @@ public class BinaryQuestionOptionTest {
                 + " null", createBinaryQuestionOption(null));
         assertNotNull("The condition should succeed because the boolean value is "
                 + "a valid one", createBinaryQuestionOption(Boolean.FALSE));
+        assertNull("The condition should succeed because the question option is null",
+                createBinaryQuestionOptionCopy(null));
+        assertNotNull("The condition should succeed because the question option is "
+                + "valid", createBinaryQuestionOptionCopy(createBinaryQuestionOption(Boolean.FALSE)));
+    }
+
+    /**
+     * Test of hashCode method, of class BinaryQuestionOption.
+     */
+    @Test
+    public void testHashCode() {
+        System.out.println("hashCode");
+        BinaryQuestionOption instance = createBinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption other = createBinaryQuestionOption(Boolean.FALSE);
+        assertEquals(instance.hashCode(), other.hashCode());
+    }
+
+    /**
+     * Test of equals method, of class BinaryQuestionOption.
+     */
+    @Test
+    public void testEquals() {
+        System.out.println("equals");
+        BinaryQuestionOption instance = createBinaryQuestionOption(Boolean.FALSE);
+        BinaryQuestionOption other = createBinaryQuestionOption(Boolean.FALSE);
+        assertEquals("The condition should succeed because we are comparing "
+                + "the same instance", instance, instance);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "an instance with a null value", instance, null);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "instances of different classes", instance, "bananas");
+        assertEquals("The condition should succeed because we are comparing "
+                + "options with the same content", instance, other);
+        other = createBinaryQuestionOption(Boolean.TRUE);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "options with different contents", instance, other);
+    }
+
+    /**
+     * Test of toString method, of class BinaryQuestionOption.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        BinaryQuestionOption instance = createBinaryQuestionOption(Boolean.FALSE);
+        assertEquals(instance.toString(), Boolean.toString(Boolean.FALSE));
+    }
+
+    /**
+     * Test of getContent method, of class BinaryQuestionOption.
+     */
+    @Test
+    public void testGetContent() {
+        System.out.println("getContent");
+        BinaryQuestionOption instance = createBinaryQuestionOption(Boolean.FALSE);
+        assertEquals(instance.getContent(), Boolean.FALSE);
     }
 
     /**
@@ -37,4 +93,17 @@ public class BinaryQuestionOptionTest {
         }
     }
 
+    /**
+     * Builds a BinaryQuestionOption instance from another question option
+     *
+     * @param option the option we want to copy
+     * @return BinaryQuestionOption instance
+     */
+    private BinaryQuestionOption createBinaryQuestionOptionCopy(QuestionOption option) {
+        try {
+            return new BinaryQuestionOption(option);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

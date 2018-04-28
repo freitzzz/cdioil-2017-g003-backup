@@ -12,48 +12,24 @@ import static org.junit.Assert.*;
 public class QuestionOptionTest {
 
     /**
-     * Test of hashCode method, of class QuestionOption.
+     * Test of the copyQuestionOption method, of the class QuestionOption.
      */
     @Test
-    public void testHashCode() {
-        System.out.println("hashCode");
-        QuestionOption instance = new BinaryQuestionOption(true);
-        QuestionOption other = new BinaryQuestionOption(true);
-        int expResult = other.hashCode();
-        int result = instance.hashCode();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of equals method, of class QuestionOption.
-     */
-    @Test
-    public void testEquals() {
-        System.out.println("equals");
-        QuestionOption instance = new BinaryQuestionOption(true);
-        QuestionOption same = new BinaryQuestionOption(true);
-        QuestionOption other = new BinaryQuestionOption(false);
-        assertNotEquals("The condition should succeed because we are comparing "
-                + "an instance to a null value", instance, null);
-        assertEquals("The condition should succeed because we are comparing "
-                + "the same instance", instance, instance);
-        assertNotEquals("The condition should succeed because we are comparing "
-                + "instances of different classes", instance, "bananas");
-        assertEquals("The condition should succeed because we are comparing "
-                + "instances that have the same option value", instance, same);
-        assertNotEquals("The condition should succeed because we are comparing "
-                + "instances that have different option values", instance, other);
-    }
-
-    /**
-     * Test of toString method, of class QuestionOption.
-     */
-    @Test
-    public void testToString() {
-        System.out.println("toString");
-        QuestionOption instance = new BinaryQuestionOption(true);;
-        String expResult = Boolean.toString(true);
-        String result = instance.toString();
-        assertEquals(expResult, result);
+    public void testCopyQuestionOption() {
+        System.out.println("copyQuestionOption");
+        assertNull("The condition should succeed because the value is null ",
+                QuestionOption.copyQuestionOption(null));
+        BinaryQuestionOption binQuestionOption = new BinaryQuestionOption(Boolean.TRUE);
+        assertEquals("The condition should succeed because the copy we receive "
+                + "is equal to the instance", binQuestionOption,
+                QuestionOption.copyQuestionOption(binQuestionOption));
+        MultipleChoiceQuestionOption multChoiceQuestionOption = new MultipleChoiceQuestionOption("Option A");
+        assertEquals("The condition should succeed because the copy we receive "
+                + "is equal to the instance", multChoiceQuestionOption,
+                QuestionOption.copyQuestionOption(multChoiceQuestionOption));
+        QuantitativeQuestionOption quantQuestionOption = new QuantitativeQuestionOption(Double.MAX_VALUE);
+        assertEquals("The condition should succeed because the copy we receive "
+                + "is equal to the instance", quantQuestionOption,
+                QuestionOption.copyQuestionOption(quantQuestionOption));
     }
 }

@@ -39,6 +39,10 @@ public class MultipleChoiceQuestionTest {
         assertNull("The condition should succeed because the set is null",
                 createMCQuestion("Question", id, null));
         assertNotNull("Empty constructor test", new MultipleChoiceQuestion());
+        assertEquals("The condition should succeed because the question we received "
+                + "is equal to the one we sent",
+                createMCQuestionCopy(createMCQuestion("Question", id, list)),
+                createMCQuestion("Question", id, list));
     }
 
     /**
@@ -52,6 +56,20 @@ public class MultipleChoiceQuestionTest {
     private MultipleChoiceQuestion createMCQuestion(String question, String questionID, List<QuestionOption> optionList) {
         try {
             return new MultipleChoiceQuestion(question, questionID, optionList);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Builds a MultipleChoiceQuestion from another Question.
+     *
+     * @param question Question instance
+     * @return MultipleChoiceQuestion instance
+     */
+    private MultipleChoiceQuestion createMCQuestionCopy(Question question) {
+        try {
+            return new MultipleChoiceQuestion(question);
         } catch (IllegalArgumentException e) {
             return null;
         }

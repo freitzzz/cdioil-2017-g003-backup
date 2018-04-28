@@ -13,9 +13,8 @@ import javax.persistence.Entity;
 public class QuantitativeQuestion extends Question implements Serializable {
 
     /**
-     * Builds a quantitative question with the question itself, it's id, the
-     * minimum value a user can answer the question, the maximum value a user
-     * can answer the question and the increment value.
+     * Builds a quantitative question with the question itself, it's id and the
+     * list of options
      *
      * @param question the question itself
      * @param questionID the question's ID
@@ -26,9 +25,14 @@ public class QuantitativeQuestion extends Question implements Serializable {
         super(question, questionID, optionList);
         super.type = QuestionTypes.QUANTITATIVE;
     }
-    
-    public QuantitativeQuestion(Question question){
-        super(question.getQuestionText(),question.getQuestionID(),question.getOptionList());
+
+    /**
+     * Builds a quantitative question from another question
+     *
+     * @param question question we want to copy
+     */
+    public QuantitativeQuestion(Question question) {
+        super(question.getQuestionText(), question.getQuestionID(), question.getOptionList());
         super.type = QuestionTypes.MULTIPLE_CHOICE;
     }
 

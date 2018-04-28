@@ -28,25 +28,6 @@ import javax.persistence.OneToMany;
 public abstract class Question implements Serializable, Comparable {
 
     /**
-     * Returns an exact copy of the given Question.
-     *
-     * @param question question being copied
-     * @return copied question
-     */
-    public static Question copyQuestion(Question question) {
-        if (question instanceof BinaryQuestion) {
-            return new BinaryQuestion(question);
-        }
-        if (question instanceof MultipleChoiceQuestion) {
-            return new MultipleChoiceQuestion(question);
-        }
-        if (question instanceof QuantitativeQuestion) {
-            return new QuantitativeQuestion(question);
-        }
-        return null;
-    }
-
-    /**
      * Serialization code.
      */
     private static final long serialVersionUID = 1L;
@@ -104,6 +85,25 @@ public abstract class Question implements Serializable, Comparable {
     }
 
     /**
+     * Returns an exact copy of the given Question.
+     *
+     * @param question question being copied
+     * @return copied question
+     */
+    public static Question copyQuestion(Question question) {
+        if (question instanceof BinaryQuestion) {
+            return new BinaryQuestion(question);
+        }
+        if (question instanceof MultipleChoiceQuestion) {
+            return new MultipleChoiceQuestion(question);
+        }
+        if (question instanceof QuantitativeQuestion) {
+            return new QuantitativeQuestion(question);
+        }
+        return null;
+    }
+
+    /**
      * Empty Constructor for JPA.
      */
     protected Question() {
@@ -132,9 +132,6 @@ public abstract class Question implements Serializable, Comparable {
      * @return all available options.
      */
     public List<QuestionOption> getOptionList() {
-        if (optionList == null) {
-            return new ArrayList<>();
-        }
         return optionList;
     }
 

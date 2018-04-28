@@ -66,6 +66,36 @@ public class ReviewTest {
     }
 
     /**
+     * Test of getSurvey method, of class Review.
+     */
+    @Test
+    public void testGetSurvey() {
+        System.out.println("getSurvey");
+        TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
+                LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
+        List<SurveyItem> list = new LinkedList<>();
+        list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
+        Survey globalSurvey = new GlobalSurvey(list, timePeriod);
+        BinaryQuestion firstQuestion = new BinaryQuestion("Question 1", "567");
+        BinaryQuestion secondQuestion = new BinaryQuestion("Question 2", "456");
+        BinaryQuestion thirdQuestion = new BinaryQuestion("Question 3", "345");
+        globalSurvey.addQuestion(firstQuestion);
+        globalSurvey.setNextQuestion(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
+        globalSurvey.setNextQuestion(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
+        assertEquals(globalSurvey, instance.getSurvey());
+    }
+
+    /**
+     * Test of getCurrentQuestion method, of class Review.
+     */
+    @Test
+    public void testGetCurrentQuestion() {
+        System.out.println("getCurrentQuestion");
+        BinaryQuestion expQuestion = new BinaryQuestion("Question 1", "567");
+        assertEquals(expQuestion, instance.getCurrentQuestion());
+    }
+
+    /**
      * Test of answerQuestion method, of class Review.
      */
     @Test
@@ -74,6 +104,31 @@ public class ReviewTest {
         instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
         assertNotNull("The condition should succeed because a question was "
                 + "answered", instance.getReviewQuestionAnswers());
+        instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
+    }
+
+    /**
+     * Test of isFinished method, of class Review.
+     */
+    @Test
+    public void testIsFinished() {
+        System.out.println("isFinished");
+        TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
+                LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
+        List<SurveyItem> list = new LinkedList<>();
+        list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
+        Survey globalSurvey = new GlobalSurvey(list, timePeriod);
+        BinaryQuestion firstQuestion = new BinaryQuestion("Question 1", "567");
+        BinaryQuestion secondQuestion = new BinaryQuestion("Question 2", "456");
+        BinaryQuestion thirdQuestion = new BinaryQuestion("Question 3", "345");
+        globalSurvey.addQuestion(firstQuestion);
+        globalSurvey.setNextQuestion(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
+        globalSurvey.setNextQuestion(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
+        Review review = createReview(globalSurvey);
+        review.answerQuestion(new BinaryQuestionOption(Boolean.TRUE));
+        assertFalse("Review isn't finished yet", review.isFinished());
+        review.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
+        assertTrue("Review is finished", review.isFinished());
     }
 
     /**
@@ -105,7 +160,7 @@ public class ReviewTest {
     @Test
     public void ensureSubmitSuggestionWorks() {
         System.out.println("ensureSubmitSuggestionWorks");
-        instance.submitSuggestion("Suggestion 1");
+        assertTrue(instance.submitSuggestion("Suggestion 1"));
     }
 
     /**

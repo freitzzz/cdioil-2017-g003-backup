@@ -11,8 +11,11 @@ import javax.persistence.Entity;
 @Entity(name = "QuantitativeQuestionOption")
 public class QuantitativeQuestionOption extends QuestionOption<Double> {
 
+    /**
+     * The content of the option.
+     */
     private double numericContent;
-    
+
     /**
      * Builds a QuantitativeQuestionOption with a double value
      *
@@ -33,8 +36,16 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
         }
         this.numericContent = value;
     }
-    
-    public QuantitativeQuestionOption(QuestionOption option){
+
+    /**
+     * Builds a quantitative question option based on another question option.
+     *
+     * @param option question option that we want to copy
+     */
+    public QuantitativeQuestionOption(QuestionOption option) {
+        if (option == null) {
+            throw new IllegalArgumentException("A opção não pode ser null");
+        }
         this.numericContent = (double) option.getContent();
     }
 
@@ -44,13 +55,22 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
     protected QuantitativeQuestionOption() {
     }
 
+    /**
+     * QuantitativeQuestionOption's hash code
+     *
+     * @return hash code
+     */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 61 * hash + (int) (Double.doubleToLongBits(this.numericContent) ^ (Double.doubleToLongBits(this.numericContent) >>> 32));
-        return hash;
+        return Double.hashCode(numericContent);
     }
 
+    /**
+     * Checks if two QuantitativeQuestionOptions are equal
+     *
+     * @param obj question option to be compared
+     * @return true if they're equal, false if otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -63,19 +83,26 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
             return false;
         }
         final QuantitativeQuestionOption other = (QuantitativeQuestionOption) obj;
-        if (Double.doubleToLongBits(this.numericContent) != Double.doubleToLongBits(other.numericContent)) {
-            return false;
-        }
-        return true;
+        return Double.compare(this.numericContent, other.numericContent) == 0;
     }
-    
+
+    /**
+     * Returns the content of the option in a String
+     *
+     * @return String with the numeric content
+     */
     @Override
-    public String toString(){
+    public String toString() {
         return Double.toString(numericContent);
     }
 
+    /**
+     * Returns the content of the question option
+     *
+     * @return double value
+     */
     @Override
     public Double getContent() {
-       return numericContent;
+        return numericContent;
     }
 }

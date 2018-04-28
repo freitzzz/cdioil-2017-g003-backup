@@ -10,6 +10,9 @@ import javax.persistence.Entity;
 @Entity(name = "BinaryQuestionOption")
 public class BinaryQuestionOption extends QuestionOption<Boolean> {
 
+    /**
+     * Content of the option.
+     */
     private boolean booleanContent;
 
     /**
@@ -24,8 +27,16 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
         }
         this.booleanContent = value;
     }
-    
-    public BinaryQuestionOption(QuestionOption questionOption){
+
+    /**
+     * Builds a BinaryQuestionOption from another question option
+     *
+     * @param questionOption question option we want to copy
+     */
+    public BinaryQuestionOption(QuestionOption questionOption) {
+        if (questionOption == null) {
+            throw new IllegalArgumentException("A opção não pode ser null");
+        }
         this.booleanContent = (boolean) questionOption.getContent();
     }
 
@@ -35,13 +46,22 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
     protected BinaryQuestionOption() {
     }
 
+    /**
+     * BinaryQuestionOption's hash code
+     *
+     * @return hash code
+     */
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 67 * hash + (this.booleanContent ? 1 : 0);
-        return hash;
+        return Boolean.hashCode(booleanContent);
     }
 
+    /**
+     * Checks if two BinaryQuestionOption objects are equal
+     *
+     * @param obj object to be compared
+     * @return true if they're the same, false if otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -60,11 +80,21 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
         return true;
     }
 
+    /**
+     * Returns a string description of the option's content
+     *
+     * @return string with the value of the content
+     */
     @Override
     public String toString() {
         return Boolean.toString(booleanContent);
     }
 
+    /**
+     * Returns the content of the question option
+     *
+     * @return Boolean value
+     */
     @Override
     public Boolean getContent() {
         return booleanContent;

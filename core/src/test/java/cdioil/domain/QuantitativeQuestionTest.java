@@ -51,10 +51,14 @@ public class QuantitativeQuestionTest {
         assertNull("The condition should succeed because question id is "
                 + "empty", createQQuestion(q, "", list));
 
-        assertNotNull("The condition should succeed becaue all arguments are valid",
+        assertNotNull("The condition should succeed because all arguments are valid",
                 createQQuestion(q, id, list));
 
         assertNotNull("Empty constructor test", new QuantitativeQuestion());
+
+        assertEquals("The condition should succeed because the question we sent "
+                + "is equal to the one we receive", createQQuestion(q, id, list),
+                createQQuestionCopy(createQQuestion(q, id, list)));
     }
 
     /**
@@ -73,4 +77,17 @@ public class QuantitativeQuestionTest {
         }
     }
 
+    /**
+     * Builds a QuantitativeQuestion from another question
+     *
+     * @param question question we want to copy
+     * @return QuantitativeQuestion instance
+     */
+    private QuantitativeQuestion createQQuestionCopy(Question question) {
+        try {
+            return new QuantitativeQuestion(question);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }
