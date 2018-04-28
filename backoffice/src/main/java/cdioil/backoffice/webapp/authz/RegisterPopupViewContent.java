@@ -12,16 +12,54 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.PopupView;
-import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class RegisterPopupViewContent implements PopupView.Content {
-
+    /**
+     * Constant that represents the title of the popup notification that 
+     * ocures when the user tries to register with an invalid field
+     */
+    private static final String INVALID_FIELD_TITLE="Campo Inválido";
+    /**
+     * Constant that represents the title of the popup notification that ocures when the 
+     * user tries to register and an error ocures
+     */
+    private static final String REGISTER_USER_FAILURE_TITLE="Erro no registo do utilizador";
+    /**
+     * Constant that represents the title of the popup notification that ocures when the 
+     * user registers his account with success
+     */
+    private static final String REGISTER_USER_SUCCESS_TITLE="Utilizador Registado com sucesso!";
+    /**
+     * Constant that represents the message of the popup notification that ocures when the 
+     * user registers his account with success
+     */
+    private static final String REGISTER_USER_SUCCESS_MESSAGE="Verifique a sua caixa de correio";
+    /**
+     * Constant that represents the title of the popup notification that ocures when the 
+     * user doesn't fill an obligatory field
+     */
+    private static final String OBLIGATORY_FIELD_TITLE="Campo Obrigatório";
+    /**
+     * Constant that represents the message of the popup notification that ocures when the 
+     * user doesn't fill an obligatory field
+     */
+    private static final String FORMATED_OBLIGATORY_FIELD_MESSAGE="O campo %s é obrigatório! Por favor preencha-o";
+    /**
+     * Constant that represents the title of the popup notification that ocures when the user 
+     * inserts two passwords which are not equal
+     */
+    private static final String PASSWORDS_NOT_EQUAL_TITLE="Passwords inválidas";
+    /**
+     * Constant that represents the message of the popup notification that ocures when the user 
+     * inserts two passwords which are not equal
+     */
+    private static final String PASSWORDS_NOT_EQUAL_MESSAGE="As passwords não coincidem!";
+    
     private VerticalLayout mainLayout;
-
     private TextField firstNameTextField;
     private TextField lastNameTextField;
     private TextField emailTextField;
@@ -39,7 +77,17 @@ public class RegisterPopupViewContent implements PopupView.Content {
         prepareComponent();
         prepareConfirmButton();
     }
+    
+    @Override
+    public String getMinimizedValueAsHTML() {
+        return null;
+    }
 
+    @Override
+    public Component getPopupComponent() {
+        return mainLayout;
+    }
+    
     private void instantiateComponents() {
         controller = new RegisterUserController();
         mainLayout = new VerticalLayout();
@@ -72,61 +120,57 @@ public class RegisterPopupViewContent implements PopupView.Content {
         mainLayout.addComponentsAndExpand(confirmButton);
         mainLayout.setComponentAlignment(confirmButton, Alignment.MIDDLE_CENTER);
     }
-
+    /**
+     * Prepares the confirm button
+     */
     private void prepareConfirmButton() {
-        confirmButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                final String firstName = firstNameTextField.getValue();
-                final String lastName = lastNameTextField.getValue();
-                final String email = emailTextField.getValue();
-                final String phone = phoneTextField.getValue();
-                final String password = passwordField.getValue();
-                final String repeatPassword = repeatPasswordField.getValue();
-                final String city = cityTextField.getValue();
-                final LocalDate birthday = birthdayField.getValue();
-
-                // Checks if passwords match
-                if (!password.equals(repeatPassword)) {
-                    Notification.show("Passwords não são coincidem", Notification.Type.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Check for blank fields
-                if (firstName == null
-                        || lastName == null
-                        || email == null
-                        || phone == null
-                        || password == null
-                        || repeatPassword == null
-                        || city == null
-                        || birthday == null) {
-                    Notification.show("Todos os campos são de preenchimento obrigatório",
-                            Notification.Type.ERROR_MESSAGE);
-                    return;
-                }
-
-                try {
-                    //#TO-DO: Rework 
-                } catch (IllegalArgumentException e) {
-                    Notification.show(e.getMessage(),
-                            Notification.Type.ERROR_MESSAGE);
-                    e.printStackTrace();
-                    return;
-                }
-              PopupNotification.show("Utilizador Registado com sucesso!","Verifique a sua caixa de correio",
-                        Notification.Type.HUMANIZED_MESSAGE,Position.TOP_RIGHT);
+        confirmButton.addClickListener((Button.ClickEvent clickEvent) -> {
+            if(!checkForObligatoryFields(firstNameTextField,lastNameTextField,emailTextField,passwordField
+                ,repeatPasswordField,phoneTextField))return;
+            
+            // Checks if passwords match
+            if (!passwordField.getValue().equals(repeatPasswordField.getValue())){
+                PopupNotification.show(PASSWORDS_NOT_EQUAL_TITLE,PASSWORDS_NOT_EQUAL_MESSAGE
+                        ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
+                return;
             }
+            
+            try {
+                RegisterUserController registerController=new RegisterUserController();
+                registerController.addEmail(emailTextField.getValue());
+                registerController.addPassword(passwordField.getValue());
+                registerController.addName(firstNameTextField.getValue()+" "+lastNameTextField.getValue());
+                registerController.addPhoneNumber(phoneTextField.getValue());
+                if(cityTextField.getValue()!=null&&!cityTextField.getValue().isEmpty())
+                    registerController.addLocation(cityTextField.getValue());
+                if(birthdayField.getValue()!=null)registerController.addBirthDate(birthdayField.getValue().toString());
+                registerController.registerUser();
+            } catch (IllegalArgumentException|DateTimeParseException invalidFieldException) {
+                PopupNotification.show(INVALID_FIELD_TITLE,invalidFieldException.getMessage(),
+                    Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
+                return;
+            }catch(IllegalStateException registrationFailureException){
+                PopupNotification.show(REGISTER_USER_FAILURE_TITLE,registrationFailureException.getMessage()
+                        ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
+            }
+            PopupNotification.show(REGISTER_USER_SUCCESS_TITLE,REGISTER_USER_SUCCESS_MESSAGE,
+                    Notification.Type.HUMANIZED_MESSAGE,Position.TOP_RIGHT);
         });
     }
-
-    @Override
-    public String getMinimizedValueAsHTML() {
-        return null;
-    }
-
-    @Override
-    public Component getPopupComponent() {
-        return mainLayout;
+    /**
+     * Method that checks if all obligatory fields are filled
+     * @param obligatoryFields Array with the obligatory fields
+     * @return boolean true if all obligatory fields are filled, false if not
+     */
+    private boolean checkForObligatoryFields(TextField... obligatoryFields){
+        for(int i=0;i<obligatoryFields.length;i++){
+            if(obligatoryFields[i].getValue()==null|obligatoryFields[i].getValue().isEmpty()){
+                PopupNotification.show(OBLIGATORY_FIELD_TITLE
+                        ,String.format(FORMATED_OBLIGATORY_FIELD_MESSAGE,obligatoryFields[i].getCaption())
+                        ,Notification.Type.ERROR_MESSAGE, Position.TOP_RIGHT);
+                return false;
+            }
+        }
+        return true;
     }
 }

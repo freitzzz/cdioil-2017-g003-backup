@@ -132,6 +132,7 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
         this.name = name;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.location=location;
         this.birthDate = birthDate;
         this.activationCode=generateRandomCode();
     }
