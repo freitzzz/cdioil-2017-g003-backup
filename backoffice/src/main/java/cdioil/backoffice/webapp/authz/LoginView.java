@@ -166,8 +166,10 @@ public class LoginView extends LoginDesign implements View {
         btnLogin.addClickListener((loginButtonClickEvent) -> {
             if(tryToLogin()){
                 if(authenticationController.canAccessAdminBackoffice()){
+                    navigator.addView(AdminPanelView.VIEW_NAME,new AdminPanelView(authenticationController));
                     navigator.navigateTo(AdminPanelView.VIEW_NAME);
                 }else if(authenticationController.canAccessManagerBackoffice()){
+                    navigator.addView(ManagerPanelView.VIEW_NAME,new ManagerPanelView(authenticationController));
                     navigator.navigateTo(ManagerPanelView.VIEW_NAME);
                 }else{
                     showInvalidUserNotification();

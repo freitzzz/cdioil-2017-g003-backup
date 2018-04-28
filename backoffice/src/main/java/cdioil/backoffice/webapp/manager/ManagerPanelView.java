@@ -1,5 +1,6 @@
 package cdioil.backoffice.webapp.manager;
 
+import cdioil.application.authz.AuthenticationController;
 import cdioil.backoffice.webapp.MainLayoutView;
 
 import com.vaadin.icons.VaadinIcons;
@@ -24,26 +25,7 @@ public class ManagerPanelView extends MainLayoutView implements View {
      * while opening the Export Tab Page
      */
     private static final String ERROR_OPENING_EXPORT_TAB_TITLE="Ocorreu um erro ao abrir a pagina de exportação!";
-    /**
-     * Current Navigator
-     */
-    private final Navigator navigator;
-
-    /**
-     * Dashboard Button
-     */
-    private Button dashboardBtn;
-
-    /**
-     * Import Button
-     */
-    private Button importBtn;
-
-    /**
-     * Export Button
-     */
-    private Button exportBtn;
-
+    
     /**
      * Dashboard Button Caption
      */
@@ -61,12 +43,39 @@ public class ManagerPanelView extends MainLayoutView implements View {
      */
     private static final String EXPORT_BTN_CAPTION =
             "Exportar";
+    
+    /**
+     * Current Navigator
+     */
+    private final Navigator navigator;
+    /**
+     * Current Authentication controller
+     */
+    private final AuthenticationController authenticationController;
+
+    /**
+     * Dashboard Button
+     */
+    private Button dashboardBtn;
+
+    /**
+     * Import Button
+     */
+    private Button importBtn;
+
+    /**
+     * Export Button
+     */
+    private Button exportBtn;
 
     /**
      * Builds a new ManagerPanelView
+     * @param authenticationController AuthenticationController with the current 
+     * authentication controller
      */
-    public ManagerPanelView(){
+    public ManagerPanelView(AuthenticationController authenticationController){
         navigator=UI.getCurrent().getNavigator();
+        this.authenticationController=authenticationController;
         configuration();
         setRightPanelContents(new DashboardComponent());
     }
@@ -85,11 +94,8 @@ public class ManagerPanelView extends MainLayoutView implements View {
      */
     private void configureHomeButton() {
         dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
-        dashboardBtn.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                setRightPanelContents(new DashboardComponent());
-            }
+        dashboardBtn.addClickListener((Button.ClickEvent clickEvent) -> {
+            setRightPanelContents(new DashboardComponent());
         });
         addNewButtonToLeftPanel(dashboardBtn);
     }

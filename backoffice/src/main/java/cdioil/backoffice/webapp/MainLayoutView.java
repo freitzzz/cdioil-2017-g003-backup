@@ -34,7 +34,7 @@ public class MainLayoutView extends MainLayoutDesign implements View {
      * Changes right panel's content
      * @param layout new layout/content
      */
-    protected void setRightPanelContents(VerticalLayout layout) {
+    protected final void setRightPanelContents(VerticalLayout layout) {
         rightPanel.setContent(layout);
     }
 }

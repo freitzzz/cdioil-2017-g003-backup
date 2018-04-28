@@ -1,12 +1,11 @@
 package cdioil.backoffice.webapp.admin;
 
+import cdioil.application.authz.AuthenticationController;
 import cdioil.backoffice.webapp.MainLayoutView;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
 /**
@@ -18,61 +17,64 @@ public class AdminPanelView extends MainLayoutView implements View {
      * Constant that represents the current page view name
      */
     public static final String VIEW_NAME="Admin Panel";
-
     /**
-     * Current Navigator
+     * Admin Manager Panel Button Caption
      */
-    private final Navigator navigator;
-
-    /**
-     * Dashboard Button
-     */
-    private Button dashboardBtn;
-
+    private static final String MANAGERS_BTN_CAPTION =
+            "Gestores";
     /**
      * Dashboard Button Caption
      */
     private static final String DASHBOARD_BTN_CAPTION =
             "Dashboard";
+    /**
+     * Admin Users Panel Button
+     */
+    private static final String USERS_BTN_CAPTION =
+            "Utilizadores";
+    /**
+     * Admin Market Struct Panel Button
+     */
+    private static final String MARKET_STRUCT_BTN_CAPTION =
+            "Estrutura Mercadológica";
+    /**
+     * Current Navigator
+     */
+    private final Navigator navigator;
+    
+    /**
+     * Current Authentication controller
+     */
+    private final AuthenticationController authenticationController;
 
+    /**
+     * Dashboard Button
+     */
+    private Button dashboardBtn;
+    
     /**
      * Admin Users Panel Button
      */
     private Button usersBtn;
 
     /**
-     * Admin Users Panel Button
-     */
-    private static final String USERS_BTN_CAPTION =
-            "Utilizadores";
-
-    /**
      * Admin Manager Panel Button
      */
     private Button managersBtn;
-
-    /**
-     * Admin Manager Panel Button Caption
-     */
-    private static final String MANAGERS_BTN_CAPTION =
-            "Gestores";
-
+    
     /**
      * Admin Market Struct Panel Button
      */
     private Button marketStructBtn;
 
     /**
-     * Admin Market Struct Panel Button
-     */
-    private static final String MARKET_STRUCT_BTN_CAPTION =
-            "Estrutura Mercadológica";
-
-    /**
      * Builds a new AdminPanelView
+     * @param authenticationController AuthenticationController with the current 
+     * authentication controller
      */
-    public AdminPanelView(){
+    public AdminPanelView(AuthenticationController authenticationController){
         navigator= UI.getCurrent().getNavigator();
+        this.authenticationController=authenticationController;
         configuration();
     }
 
@@ -95,11 +97,8 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureDashboardButton() {
         dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
-        dashboardBtn.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                setRightPanelContents(new DashboardComponent());
-            }
+        dashboardBtn.addClickListener((Button.ClickEvent clickEvent) -> {
+            setRightPanelContents(new DashboardComponent());
         });
     }
 
@@ -108,11 +107,8 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureUsersBtn() {
         usersBtn = new Button(USERS_BTN_CAPTION, VaadinIcons.USERS);
-        usersBtn.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                setRightPanelContents(new UserManagementComponent());
-            }
+        usersBtn.addClickListener((Button.ClickEvent clickEvent) -> {
+            setRightPanelContents(new UserManagementComponent());
         });
     }
 
@@ -121,11 +117,8 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureManagersBtn() {
         managersBtn = new Button(MANAGERS_BTN_CAPTION, VaadinIcons.USER_STAR);
-        managersBtn.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                setRightPanelContents(new ManagerManagementComponent());
-            }
+        managersBtn.addClickListener((Button.ClickEvent clickEvent) -> {
+            setRightPanelContents(new ManagerManagementComponent());
         });
     }
 
@@ -134,11 +127,8 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureMarketStructBtn() {
         marketStructBtn = new Button(MARKET_STRUCT_BTN_CAPTION, VaadinIcons.TREE_TABLE);
-        marketStructBtn.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                setRightPanelContents(new MarketStructureComponent());
-            }
+        marketStructBtn.addClickListener((Button.ClickEvent clickEvent) -> {
+            setRightPanelContents(new MarketStructureComponent());
         });
     }
 
