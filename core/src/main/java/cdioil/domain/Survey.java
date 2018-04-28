@@ -31,6 +31,7 @@ public abstract class Survey implements Serializable {
     /**
      * Item associated with the survey.
      */
+    @ManyToMany
     private List<SurveyItem> itemList;
 
     /**
