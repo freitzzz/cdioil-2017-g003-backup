@@ -1,7 +1,6 @@
 package cdioil.frontoffice.application;
 
 import cdioil.domain.QuestionOption;
-import cdioil.domain.QuestionOption_;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.RegisteredUser;
@@ -59,8 +58,7 @@ public class AnswerSurveyController {
      * @return LinkedList of active surveys
      */
     private List<Survey> findActiveSurveys() {
-        SurveyRepositoryImpl repo = new SurveyRepositoryImpl();
-        return repo.findAllActiveSurveys();
+        return new SurveyRepositoryImpl().findAllActiveSurveys();
     }
 
     /**
@@ -70,8 +68,7 @@ public class AnswerSurveyController {
      * @return LinkedList of the user's pending reviews
      */
     private List<Review> findPendingReviews() {
-        ProfileRepositoryImpl repo = new ProfileRepositoryImpl();
-        return repo.findUserPendingReviews(loggedUser.getProfile());
+        return new ProfileRepositoryImpl().findUserPendingReviews(loggedUser.getProfile());
     }
 
     /**
@@ -176,9 +173,14 @@ public class AnswerSurveyController {
     public boolean saveReview(boolean firstTimeSaving) {
         if (firstTimeSaving) {
             loggedUser.getProfile().addReview(surveyReview);
-            return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
+            if(new ProfileRepositoryImpl().merge(loggedUser.getProfile())!=null){
+                updateRegisteredUserProfile();
+                return true;
+            }
+            return false;
         }
-        return new ReviewRepositoryImpl().merge(surveyReview) != null;
+        surveyReview=new ReviewRepositoryImpl().merge(surveyReview);
+        return surveyReview!= null;
     }
 
     /**
@@ -189,5 +191,13 @@ public class AnswerSurveyController {
      */
     public boolean submitSuggestion(String text) {
         return surveyReview.submitSuggestion(text);
+    }
+    /**
+     * Updates the current registerd user profile due to changes on reviews
+     * <br>Introduced due to bug on duplication reviews (since review uses a sequence, the id of the object is 
+     * only generated after posted to the database)
+     */
+    private void updateRegisteredUserProfile(){
+        loggedUser=new RegisteredUserRepositoryImpl().findBySystemUser(loggedUser.getID());
     }
 }
