@@ -22,19 +22,37 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class QuestionOption<T> implements Serializable, ValueObject {
 
+    /**
+     * Returns an exact copy of the given QuestionOption.
+     *
+     * @param option option being copied
+     * @return copied option
+     */
+    public static QuestionOption copyQuestionOption(QuestionOption option) {
+        if (option instanceof BinaryQuestionOption) {
+            return new BinaryQuestionOption(option);
+        }
+        if (option instanceof MultipleChoiceQuestionOption) {
+            return new MultipleChoiceQuestionOption(option);
+        }
+        if (option instanceof QuantitativeQuestionOption) {
+            return new QuantitativeQuestionOption(option);
+        }
+        return null;
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "QUESTIONOPTION_ID")
     private long id;
 
-
     /**
      * Empty constructor for JPA.
      */
     protected QuestionOption() {
     }
-    
+
     abstract T getContent();
-        
+
 }
