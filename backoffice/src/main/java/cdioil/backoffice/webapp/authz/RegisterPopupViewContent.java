@@ -12,11 +12,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.PopupView;
-import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class RegisterPopupViewContent implements PopupView.Content {
 
@@ -74,49 +74,54 @@ public class RegisterPopupViewContent implements PopupView.Content {
     }
 
     private void prepareConfirmButton() {
-        confirmButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                final String firstName = firstNameTextField.getValue();
-                final String lastName = lastNameTextField.getValue();
-                final String email = emailTextField.getValue();
-                final String phone = phoneTextField.getValue();
-                final String password = passwordField.getValue();
-                final String repeatPassword = repeatPasswordField.getValue();
-                final String city = cityTextField.getValue();
-                final LocalDate birthday = birthdayField.getValue();
-
-                // Checks if passwords match
-                if (!password.equals(repeatPassword)) {
-                    Notification.show("Passwords não são coincidem", Notification.Type.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Check for blank fields
-                if (firstName == null
-                        || lastName == null
-                        || email == null
-                        || phone == null
-                        || password == null
-                        || repeatPassword == null
-                        || city == null
-                        || birthday == null) {
-                    Notification.show("Todos os campos são de preenchimento obrigatório",
-                            Notification.Type.ERROR_MESSAGE);
-                    return;
-                }
-
-                try {
-                    //#TO-DO: Rework 
-                } catch (IllegalArgumentException e) {
-                    Notification.show(e.getMessage(),
-                            Notification.Type.ERROR_MESSAGE);
-                    e.printStackTrace();
-                    return;
-                }
-              PopupNotification.show("Utilizador Registado com sucesso!","Verifique a sua caixa de correio",
-                        Notification.Type.HUMANIZED_MESSAGE,Position.TOP_RIGHT);
+        confirmButton.addClickListener((Button.ClickEvent clickEvent) -> {
+            final String firstName = firstNameTextField.getValue();
+            final String lastName = lastNameTextField.getValue();
+            final String email = emailTextField.getValue();
+            final String phone = phoneTextField.getValue();
+            final String password = passwordField.getValue();
+            final String repeatPassword = repeatPasswordField.getValue();
+            final String city = cityTextField.getValue();
+            final LocalDate birthday = birthdayField.getValue();
+            
+            // Checks if passwords match
+            if (!password.equals(repeatPassword)) {
+                Notification.show("Passwords não são coincidem", Notification.Type.ERROR_MESSAGE);
+                return;
             }
+            
+            // Check for blank fields
+            if (firstName == null
+                    || lastName == null
+                    || email == null
+                    || phone == null
+                    || repeatPassword == null
+                    || city == null
+                    || birthday == null) {
+                Notification.show("Todos os campos são de preenchimento obrigatório",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            
+            try {
+                RegisterUserController registerController=new RegisterUserController();
+                registerController.addEmail(email);
+                registerController.addPassword(password);
+                registerController.addName(firstName+" "+lastName);
+                registerController.addPhoneNumber(phone);
+                registerController.addLocation(city);
+                System.out.println(birthday.toString());
+                registerController.addBirthDate(birthday.toString());
+                System.out.println(birthday.toString());
+                registerController.registerUser();
+            } catch (IllegalArgumentException|DateTimeParseException|IllegalStateException e) {
+                Notification.show(e.getMessage(),
+                        Notification.Type.ERROR_MESSAGE);
+                e.printStackTrace();
+                return;
+            }
+            PopupNotification.show("Utilizador Registado com sucesso!","Verifique a sua caixa de correio",
+                    Notification.Type.HUMANIZED_MESSAGE,Position.TOP_RIGHT);
         });
     }
 
