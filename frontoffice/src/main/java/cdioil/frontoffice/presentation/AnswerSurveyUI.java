@@ -29,6 +29,8 @@ public class AnswerSurveyUI {
      */
     private static final String YES = "Yes";
 
+    private static final String NUMERIC_REGEX = "[0-9]+";
+
     /**
      * Constructor
      */
@@ -145,43 +147,54 @@ public class AnswerSurveyUI {
             for (int i = 0; i < options.size(); i++) {
                 System.out.println(i + options.get(i));
             }
-            System.out.println("Type EXIT to leave at any time\n");
-            option = Console.readLine("Select an option:\n");
-            if (option.equalsIgnoreCase("EXIT")) {
-                if (controller.saveReview(true)) {
-                    System.out.println("A sua avaliacao foi gravada com sucesso. "
-                            + "Podera continuar a responder ao inquerito em qualquer"
-                            + " altura");
-                    break;
-                }
-            } else {
-                boolean canContinue = controller.answerQuestion(idx);
 
-                if (!canContinue) {
-                    if (Console.readLine("Would you like to leave a suggestion about the items?").equals(YES)) {
-                        boolean suggestionFlag = true;
-                        while (suggestionFlag) {
-                            try {
-                                if (controller.submitSuggestion(Console.readLine("Insert your suggestion:\n"))) {
-                                    System.out.println("Your suggestion has been saved!\n");
-                                    suggestionFlag = false;
-                                }
-                            } catch (IllegalArgumentException e) {
-                                System.out.println("There was an error with your suggestion, please try again.\n");
-                            }
-                        }
-                    }
+            boolean isValidOption = false;
 
+            while (!isValidOption) {
+
+                System.out.println("Type EXIT to leave at any time\n");
+                option = Console.readLine("Select an option:\n");
+
+                if (option.equalsIgnoreCase("EXIT")) {
                     if (controller.saveReview(true)) {
-                        System.out.println("Avaliação submetida com sucesso!");
+                        System.out.println("A sua avaliacao foi gravada com sucesso. "
+                                + "Podera continuar a responder ao inquerito em qualquer"
+                                + " altura");
+                        return;
                     }
-                    break;
+                } else if (option.matches(NUMERIC_REGEX)) {
+                    idx = Integer.parseInt(option);
+                    if (idx < options.size()) {
+                        isValidOption = true;
+                    }
                 }
             }
 
+            boolean canContinue = controller.answerQuestion(idx);
+
+            if (!canContinue) {
+                if (Console.readLine("Would you like to leave a suggestion about the items?").equalsIgnoreCase(YES)) {
+                    boolean suggestionFlag = true;
+                    while (suggestionFlag) {
+                        try {
+                            if (controller.submitSuggestion(Console.readLine("Insert your suggestion:\n"))) {
+                                System.out.println("Your suggestion has been saved!\n");
+                                suggestionFlag = false;
+                            }
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("There was an error with your suggestion, please try again.\n");
+                        }
+                    }
+                }
+
+                if (controller.saveReview(true)) {
+                    System.out.println("Avaliação submetida com sucesso!");
+                }
+                break;
+            }
         }
     }
-    
+
     private void answerPendingReview() {
         int idx = Console.readInteger("Review Number");
         String option;
@@ -198,38 +211,49 @@ public class AnswerSurveyUI {
             for (int i = 0; i < options.size(); i++) {
                 System.out.println(i + options.get(i));
             }
-            System.out.println("Type EXIT to leave at any time\n");
-            option = Console.readLine("Select an option:\n");
-            if (option.equalsIgnoreCase("EXIT")) {
-                if (controller.saveReview(false)) {
-                    System.out.println("A sua avaliacao foi gravada com sucesso. "
-                            + "Podera continuar a responder ao inquerito em qualquer"
-                            + " altura");
-                    break;
-                }
-            } else {
-                boolean canContinue = controller.answerQuestion(idx);
 
-                if (!canContinue) {
-                    if (Console.readLine("Would you like to leave a suggestion about the items?").equals(YES)) {
-                        boolean suggestionFlag = true;
-                        while (suggestionFlag) {
-                            try {
-                                if (controller.submitSuggestion(Console.readLine("Insert your suggestion:\n"))) {
-                                    System.out.println("Your suggestion has been saved!\n");
-                                    suggestionFlag = false;
-                                }
-                            } catch (IllegalArgumentException e) {
-                                System.out.println("There was an error with your suggestion, please try again.\n");
+            boolean isValidOption = false;
+
+            while (!isValidOption) {
+
+                System.out.println("Type EXIT to leave at any time\n");
+                option = Console.readLine("Select an option:\n");
+
+                if (option.equalsIgnoreCase("EXIT")) {
+                    if (controller.saveReview(false)) {
+                        System.out.println("A sua avaliacao foi gravada com sucesso. "
+                                + "Podera continuar a responder ao inquerito em qualquer"
+                                + " altura");
+                        return;
+                    }
+                } else if (option.matches(NUMERIC_REGEX)) {
+                    idx = Integer.parseInt(option);
+                    if (idx < options.size()) {
+                        isValidOption = true;
+                    }
+                }
+            }
+            boolean canContinue = controller.answerQuestion(idx);
+
+            if (!canContinue) {
+                if (Console.readLine("Would you like to leave a suggestion about the items?").equalsIgnoreCase(YES)) {
+                    boolean suggestionFlag = true;
+                    while (suggestionFlag) {
+                        try {
+                            if (controller.submitSuggestion(Console.readLine("Insert your suggestion:\n"))) {
+                                System.out.println("Your suggestion has been saved!\n");
+                                suggestionFlag = false;
                             }
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("There was an error with your suggestion, please try again.\n");
                         }
                     }
-
-                    if (controller.saveReview(false)) {
-                        System.out.println("Avaliação submetida com sucesso!");
-                    }
-                    break;
                 }
+
+                if (controller.saveReview(false)) {
+                    System.out.println("Avaliação submetida com sucesso!");
+                }
+                break;
             }
 
         }
