@@ -2,7 +2,6 @@ package cdioil.frontoffice.presentation;
 
 import cdioil.frontoffice.application.AnswerSurveyController;
 import cdioil.console.Console;
-import cdioil.domain.Review;
 import cdioil.domain.authz.RegisteredUser;
 import java.util.LinkedList;
 
@@ -24,10 +23,6 @@ public class AnswerSurveyUI {
      */
     private AnswerSurveyController controller;
 
-    /**
-     * User that's logged in.
-     */
-    private RegisteredUser loggedUser;
 
     /**
      * String with the text Yes.
@@ -39,8 +34,7 @@ public class AnswerSurveyUI {
      */
     public AnswerSurveyUI(RegisteredUser loggedUser) {
         try {
-            this.loggedUser = loggedUser;
-            controller = new AnswerSurveyController(this.loggedUser);
+            controller = new AnswerSurveyController(loggedUser);
         } catch (NullPointerException e) {
             e.printStackTrace();
             System.out.println("ERROR: Error fetching Surveys.");
