@@ -1,11 +1,5 @@
 package cdioil.application.utils;
 
-import cdioil.domain.BinaryQuestion;
-import cdioil.domain.BinaryQuestionOption;
-import cdioil.domain.MultipleChoiceQuestion;
-import cdioil.domain.MultipleChoiceQuestionOption;
-import cdioil.domain.QuantitativeQuestion;
-import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import java.io.Serializable;
@@ -15,16 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKeyClass;
-import javax.persistence.OneToMany;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -71,15 +64,15 @@ public class Graph implements Serializable {
      * Map containing all of the inserted elements and the vertices containing
      * them.
      */
-    @ManyToMany(
-            cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
-    @MapKeyClass(Question.class)
+    @Transient
     private Map<Question, Vertex> vertices;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
-    @ElementCollection(targetClass = Question.class)
-    private List<Question> questionList;
-
+    /**
+     * List used exclusively for persisting instances of Question.
+     */
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Vertex> vertexList;
+    
     /**
      * Creates a new instance of <code>Graph</code>.
      */
@@ -87,7 +80,7 @@ public class Graph implements Serializable {
         numVertices = 0;
         numEdges = 0;
         vertices = new LinkedHashMap<>();
-        questionList = new LinkedList<>();
+        vertexList = new LinkedList<>();
     }
 
     /**
@@ -100,42 +93,36 @@ public class Graph implements Serializable {
         this();
         for (Vertex vertex : g.vertices.values()) {
             for (Edge edge : vertex.getAllOutgoingEdges()) {
-                Question originQuestion = /*buildQuestion*/ (edge.getOriginVertexElement());
-                Question destinationQuestion = /*buildQuestion*/ (edge.getDestinationVertexElement());
-                QuestionOption edgeQuestionOption = /*buildQuestionOption*/ (edge.getElement());
-                this.questionList.add(/*buildQuestion*/(originQuestion));
-                this.questionList.add(/*buildQuestion*/(destinationQuestion));
+                Question originQuestion = Question.copyQuestion(edge.getOriginVertexElement());
+                Question destinationQuestion = Question.copyQuestion(edge.getDestinationVertexElement());
+                QuestionOption edgeQuestionOption = QuestionOption.copyQuestionOption(edge.getElement());
                 double edgeWeight = edge.getWeight();
                 this.insertEdge(originQuestion, destinationQuestion, edgeQuestionOption, edgeWeight);
             }
         }
     }
 
-//    private Question buildQuestion(Question question){
-//        if(question instanceof BinaryQuestion){
-//            return new BinaryQuestion(question);
-//        }
-//        if(question instanceof MultipleChoiceQuestion){
-//            return new MultipleChoiceQuestion(question);
-//        }
-//        if(question instanceof QuantitativeQuestion){
-//            return new QuantitativeQuestion(question);
-//        }
-//        return null;
-//    }
-//    
-//    private QuestionOption buildQuestionOption(QuestionOption option){
-//        if(option instanceof BinaryQuestionOption){
-//            return new BinaryQuestionOption(option);
-//        }
-//        if(option instanceof MultipleChoiceQuestionOption){
-//            return new MultipleChoiceQuestionOption(option);
-//        }
-//        if(option instanceof QuantitativeQuestionOption){
-//            return new QuantitativeQuestionOption(option);
-//        }
-//        return null;
-//    }
+    @PrePersist
+    private void setupPersistence(){
+        for(Map.Entry<Question, Vertex> entry : vertices.entrySet()){
+            vertexList.add(entry.getValue());
+        }
+    }
+    
+    @PostLoad
+    private void initialize(){
+        Iterator<Vertex> vertexIterator = vertexList.iterator();
+        
+        vertices = new LinkedHashMap<>();   //a new map is created since it's null upon loading
+        
+        while(vertexIterator.hasNext()){
+            Vertex vertex = vertexIterator.next();
+            vertices.put(vertex.getElement(), vertex);
+        }
+        
+        vertexList.clear();     //lists are cleared in order to save memory
+    }
+
     /**
      * Checks if the vertex has already been inserted into the graph.
      *
@@ -319,7 +306,6 @@ public class Graph implements Serializable {
         Vertex vertex = new Vertex(element);
         vertices.put(element, vertex);
         numVertices++;
-        questionList.add(element);
 
         return true;
     }
@@ -343,7 +329,6 @@ public class Graph implements Serializable {
 
         //Removing the vertex also removes all of its outgoing edges
         vertices.remove(element);
-        questionList.remove(element);
         numVertices--;
         return true;
     }

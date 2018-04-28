@@ -2,6 +2,7 @@ package cdioil.application.utils;
 
 import cdioil.domain.Question;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -16,9 +17,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -40,18 +43,20 @@ public class Vertex implements Serializable {
     /**
      * Element being stored in this element.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Question element;
 
     /**
      * Map with adjacent vertices and the edges connecting them.
      */
-    @ManyToMany(cascade = CascadeType.ALL)
-    @MapKeyClass(Edge.class)
+    @Transient
     private Map<Edge, Question> outgoingEdges;
-    
+
+    /**
+     * List used exclusively for persisting instances of Edge.
+     */
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Edge> edgeList;
+    private Set<Edge> edgeSet;
 
     /**
      * JPA Constructor.
@@ -71,7 +76,28 @@ public class Vertex implements Serializable {
     Vertex(Question element) {
         this.element = element;
         outgoingEdges = new LinkedHashMap<>();
-        edgeList = new LinkedList<>();
+        edgeSet = new LinkedHashSet<>();
+    }
+
+    @PrePersist
+    private void setupPersistence() {
+        for (Map.Entry<Edge, Question> entry : outgoingEdges.entrySet()) {
+            edgeSet.add(entry.getKey());
+        }
+    }
+
+    @PostLoad
+    private void initialize() {
+        Iterator<Edge> edgeIterator = edgeSet.iterator();
+
+        outgoingEdges = new LinkedHashMap<>();
+
+        while (edgeIterator.hasNext()) {
+            Edge edge = edgeIterator.next();
+            outgoingEdges.put(edge, edge.getDestinationVertexElement());
+        }
+        
+        edgeSet.clear();
     }
 
     /**
@@ -82,7 +108,7 @@ public class Vertex implements Serializable {
     public Question getElement() {
         return element;
     }
-    
+
     /**
      * Adds an adjacent <code>Vertex</code> with a given <code>Edge</code> and
      * element.
@@ -93,7 +119,6 @@ public class Vertex implements Serializable {
      */
     public void addAdjacentVertex(Edge edge, Question adjacentElement) {
         outgoingEdges.put(edge, adjacentElement);
-        edgeList.add(edge);
     }
 
     /**
@@ -122,7 +147,6 @@ public class Vertex implements Serializable {
 
         for (Edge edge : getEdges(adjacentElement)) {
             outgoingEdges.remove(edge);
-            edgeList.remove(edge);
         }
     }
 

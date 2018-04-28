@@ -39,7 +39,7 @@ public class Edge implements Serializable {
     /**
      * Option associated to this Edge.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     private QuestionOption element;
 
     /**
@@ -50,13 +50,13 @@ public class Edge implements Serializable {
     /**
      * Edge's origin endpoint.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Vertex originVertex;
 
     /**
      * Edge's destination endpoint.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Vertex destinationVertex;
 
     /**
@@ -130,7 +130,7 @@ public class Edge implements Serializable {
 
     /**
      * Retrieves both of the of the elements stored in the Vertices being
- connected by the Edge.
+     * connected by the Edge.
      *
      * @return Questions
      */
@@ -189,8 +189,8 @@ public class Edge implements Serializable {
 
     @Override
     public String toString() {
-        return "Edge{" +
-                "element=" + element +
-                '}';
+        return "Edge{"
+                + "element=" + element
+                + '}';
     }
 }
