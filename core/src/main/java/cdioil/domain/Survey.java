@@ -22,16 +22,16 @@ public abstract class Survey implements Serializable {
     private Long version;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     /**
      * Database id.
      */
-    private int id;
+    private long id;
 
     /**
      * Item associated with the survey.
      */
-    @ManyToMany
+    @OneToMany(cascade = {CascadeType.REFRESH})
     private List<SurveyItem> itemList;
 
     /**
@@ -43,14 +43,14 @@ public abstract class Survey implements Serializable {
     /**
      * Question and Answer graph.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private Graph graph;
 
     /**
      * Survey's state.
      */
     @OneToOne(cascade = CascadeType.ALL)
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private SurveyState state;
 
     /**
@@ -149,6 +149,7 @@ public abstract class Survey implements Serializable {
      * @return copy of the Graph.
      */
     public Graph getGraphCopy() {
+        //return graph;
         return new Graph(graph);
     }
 

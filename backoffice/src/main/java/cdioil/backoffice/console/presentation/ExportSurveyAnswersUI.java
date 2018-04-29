@@ -159,7 +159,7 @@ public final class ExportSurveyAnswersUI {
     private Survey getChoosenSurvey(String choosenSurvey){
         try{
             return allSurveys.get(Integer.parseInt(choosenSurvey)-1);
-        }catch(NumberFormatException | ArrayIndexOutOfBoundsException e){
+        }catch(NumberFormatException | IndexOutOfBoundsException e){
             return null;
         }
     }

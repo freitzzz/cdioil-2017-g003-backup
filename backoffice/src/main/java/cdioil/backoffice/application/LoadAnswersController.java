@@ -14,7 +14,9 @@ import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyItem;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
+import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
+import cdioil.persistence.impl.SurveyRepositoryImpl;
 import cdioil.time.TimePeriod;
 
 import java.time.LocalDateTime;
@@ -73,10 +75,14 @@ public class LoadAnswersController {
                         questionOptionsMultiple);
 
         List<SurveyItem> items = new LinkedList<>();
-        items.add(new Category("c1", "10938DC"));
+        //Dont change. The items of a survey need to exist previously, in this case
+        //the category identified by "10938DC" cannot be created from another state, 
+        //otherwise a unique violation will ocure
+        items.add(new MarketStructureRepositoryImpl().findCategoriesByIdentifierPattern("10938DC").get(0));
         Survey survey = new GlobalSurvey(items,
                 new TimePeriod(LocalDateTime.now(),
                         LocalDateTime.MAX));
+        survey=new SurveyRepositoryImpl().add(survey);
         survey.addQuestion(mc34);
         survey.addQuestion(bq12);
         survey.addQuestion(bq13);
@@ -96,7 +102,7 @@ public class LoadAnswersController {
         Review currentReview;
         int generatedNumber;
         Question currentQuestion;
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 1; i++) {
             currentReview = new Review(survey);
             while (!currentReview.isFinished()) {
                 generatedNumber = randomNumber.nextInt();
@@ -142,7 +148,7 @@ public class LoadAnswersController {
             }
 
             allReviews.add(currentReview);
-            reviewRepository.add(currentReview);
+            reviewRepository.merge(currentReview);
         }
 
         final long endTime = System.currentTimeMillis();

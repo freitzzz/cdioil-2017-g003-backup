@@ -3,13 +3,11 @@ package cdioil.persistence.impl;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyState;
 import cdioil.domain.TargetedSurvey;
-import cdioil.domain.authz.Manager;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.SurveyRepository;
 
 import javax.persistence.Query;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,7 +16,7 @@ import java.util.List;
  * @see cdioil.persistence.SurveyRepository
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Integer> implements SurveyRepository {
+public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implements SurveyRepository {
 
     /**
      * Constant that represents the lii

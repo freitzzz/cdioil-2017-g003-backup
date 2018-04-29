@@ -39,7 +39,7 @@ public class Edge implements Serializable {
     /**
      * Option associated to this Edge.
      */
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.MERGE})
     private QuestionOption element;
 
     /**
