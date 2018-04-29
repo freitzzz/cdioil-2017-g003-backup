@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.framework.dto.SystemUserDTO;
 import java.time.LocalDate;
 import java.time.Month;
 import org.junit.Test;
@@ -29,6 +30,89 @@ public class SystemUserTest {
     public void testEmptyConstructor() {
         System.out.println("SystemUser()");
         SystemUser sysUser = new SystemUser();
+    }
+
+    /**
+     * Test to ensure null email throws exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureNullEmailThrowsException() {
+        System.out.println("ensureNullEmailThrowsException");
+        new SystemUser(null, new Name("Gollum", "Smeagol"), new Password("Precious3"),
+                new PhoneNumber("939999999"), new Location("Lil Pump's Mansion"),
+                new BirthDate(LocalDate.of(1222, Month.MARCH, 23)));
+    }
+
+    /**
+     * Test to ensure null password throws exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureNullPasswordThrowsException() {
+        System.out.println("ensureNullPasswordThrowsException");
+        new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), null,
+                new PhoneNumber("939999999"), new Location("Lil Pump's Mansion"),
+                new BirthDate(LocalDate.of(1222, Month.MARCH, 23)));
+    }
+
+    /**
+     * Test to ensure null name throws exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureNullNameThrowsException() {
+        System.out.println("ensureNullNameThrowsException");
+        new SystemUser(new Email("myPrecious@gmail.com"), null, new Password("Precious3"),
+                new PhoneNumber("939999999"), new Location("Lil Pump's Mansion"),
+                new BirthDate(LocalDate.of(1222, Month.MARCH, 23)));
+    }
+
+    /**
+     * Test of getName method, of class SystemUser.
+     */
+    @Test
+    public void testGetName() {
+        System.out.println("getName");
+        Name name = new Name("Test", "Name");
+        SystemUser instance = new SystemUser(new Email("myPrecious@gmail.com"),
+                name, new Password("Precious3"));
+        assertEquals(name, instance.getName());
+    }
+
+    /**
+     * Test of isImported method, of class SystemUser.
+     */
+    @Test
+    public void testIsImported() {
+        System.out.println("isImported");
+        assertTrue(instance.isUserImported());
+        assertFalse(otherInstance.isUserImported());
+    }
+
+    /**
+     * Test of isActivated method, of class SystemUser.
+     */
+    @Test
+    public void testIsActivated() {
+        System.out.println("isActivated");
+        SystemUser another = new SystemUser(new Email("myPrecious@gmail.com"),
+                new Name("Gollum", "Smeagol"), new Password("Precious3"));
+        assertFalse(another.isUserActivated());
+        another.activateAccount(another.getActivationCode());
+        assertTrue(another.isUserActivated());
+    }
+
+    /**
+     * Test of mergeImportedSystemUser method, of class SystemUser.
+     */
+    @Test
+    public void testMergeImportedSystemUser() {
+        System.out.println("mergeImportedSystemUser");
+        SystemUser another = new SystemUser(new Email("myPrecious@gmail.com"),
+                new Name("Gollum", "Smeagol"), new Password("Precious3"), new PhoneNumber("939999999"),
+                new Location("Lil Pump's Mansion"), new BirthDate(LocalDate.of(1222, Month.MARCH, 23)));
+        assertFalse(another.mergeImportedSystemUser(another));
+        SystemUser anotherOne = new SystemUser(new Email("myPrecious@gmail.com"),
+                new Name("Gollum", "Smeagol"), new Password("Precious3"));
+        assertTrue(anotherOne.mergeImportedSystemUser(anotherOne));
     }
 
     /**
@@ -131,7 +215,7 @@ public class SystemUserTest {
     @Test
     public void testActivateAccount() {
         System.out.println("activateAccount");
-        String activationCode=instance.getActivationCode();
+        String activationCode = instance.getActivationCode();
         assertFalse("The condition should be successful since the activation code is different",
                 instance.activateAccount(""));
         assertTrue("The condition should be successful since the activation code is the same",
@@ -146,6 +230,19 @@ public class SystemUserTest {
         System.out.println("getActivationCode");
         assertEquals(instance.getActivationCode(), instance.getActivationCode());
     }
-    
-    
+
+    /**
+     * Test of toDTO method, of class SystemUser.
+     */
+    @Test
+    public void testToDTO() {
+        System.out.println("toDTO");
+        SystemUser another = new SystemUser(new Email("myPrecious@gmail.com"), 
+                new Name("Gollum", "Smeagol"), new Password("Precious3"));
+        SystemUserDTO instanceDTO = instance.toDTO();
+        SystemUserDTO anotherDTO = another.toDTO();
+        assertTrue(instanceDTO.getFirstName().equals(anotherDTO.getFirstName()));
+        assertTrue(instanceDTO.getLastName().equals(anotherDTO.getLastName()));
+        assertTrue(instanceDTO.getEmail().equals(anotherDTO.getEmail()));
+    }
 }

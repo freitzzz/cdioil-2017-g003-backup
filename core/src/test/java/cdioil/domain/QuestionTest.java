@@ -34,6 +34,18 @@ public class QuestionTest {
     }
 
     /**
+     * Test of getOptionList method, of class Question.
+     */
+    @Test
+    public void testGetOptionList() {
+        System.out.println("getOptionList");
+        BinaryQuestion other = new BinaryQuestion("text", "id");
+        assertEquals("The condition should succeed because binary questions "
+                + "always have the same option list", instance.getOptionList(),
+                other.getOptionList());
+    }
+
+    /**
      * Test of hashCode method, of class Question.
      */
     @Test
@@ -76,6 +88,38 @@ public class QuestionTest {
         other = new BinaryQuestion(question, otherID);
         assertNotEquals("The condition should succeed because we are comparing "
                 + "questions that have different ids", instance, other);
+    }
+
+    /**
+     * Test of copyQuestion method, of class Question.
+     */
+    @Test
+    public void testCopyQuestion() {
+        System.out.println("copyQuestion");
+        String text = "Questao";
+        String id = "234";
+        assertNull("The condition should succeed because the argument isn't "
+                + "an instance of a Question subclass", Question.copyQuestion(null));
+        BinaryQuestion binaryQuestion = new BinaryQuestion(text, id);
+        assertEquals("The condition should succeed because the instance returned "
+                + "is a copy of the one we gave", Question.copyQuestion(binaryQuestion),
+                binaryQuestion);
+        LinkedList<QuestionOption> multipleChoiceOptionList = new LinkedList<>();
+        MultipleChoiceQuestionOption multipleChoiceOption = new MultipleChoiceQuestionOption("Option 1");
+        multipleChoiceOptionList.add(multipleChoiceOption);
+        MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion(text,
+                id, multipleChoiceOptionList);
+        assertEquals("The condition should succeed because the instance returned "
+                + "is a copy of the one we gave", Question.copyQuestion(multipleChoiceQuestion),
+                multipleChoiceQuestion);
+        LinkedList<QuestionOption> quantitativeOptionList = new LinkedList<>();
+        double value = 5.0;
+        QuantitativeQuestionOption quantitativeOption = new QuantitativeQuestionOption(value);
+        quantitativeOptionList.add(quantitativeOption);
+        QuantitativeQuestion quantitativeQuestion = new QuantitativeQuestion(text, id, quantitativeOptionList);
+        assertEquals("The condition should succeed because the instance returned "
+                + "is a copy of the one we gave", Question.copyQuestion(quantitativeQuestion),
+                quantitativeQuestion);
     }
 
     /**

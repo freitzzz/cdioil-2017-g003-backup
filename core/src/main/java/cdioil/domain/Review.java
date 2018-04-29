@@ -184,11 +184,12 @@ public class Review implements Serializable {
      * Submits a suggestion associated to this review.
      *
      * @param suggestionText the suggestion's text.
-     * @return true if the suggestion was created, false if otherwise
+     * @return always returns true because the suggestion can never be null.
+     * (the boolean return is to control some aspects of the UI of US405)
      */
     public boolean submitSuggestion(String suggestionText) {
         suggestion = new Suggestion(suggestionText);
-        return suggestion != null;
+        return true;
     }
 
     /**
@@ -226,16 +227,10 @@ public class Review implements Serializable {
             return false;
         }
         final Review other = (Review) obj;
-        if (!Objects.equals(this.answerGraph, other.answerGraph)) {
+        if (!this.answerGraph.equals(other.answerGraph)) {
             return false;
         }
-        if (!Objects.equals(this.answers, other.answers)) {
-            return false;
-        }
-        if (!Objects.equals(this.suggestion, other.suggestion)) {
-            return false;
-        }
-        return true;
+        return this.answers.equals(other.answers);
     }
 
     /**
