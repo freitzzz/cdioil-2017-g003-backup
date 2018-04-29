@@ -4,8 +4,6 @@ import cdioil.application.utils.Edge;
 import cdioil.application.utils.Graph;
 import cdioil.domain.authz.Suggestion;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -19,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
@@ -54,14 +51,17 @@ public class Review implements Serializable {
     /**
      * Copy of the survey's graph, defining the overall flow of the survey.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    //The graph of the review is a copy of the Survey Graph, and his never changed 
+    //since it defines the Survey flow, so it should only refresh, never update or persist
+    @OneToOne(cascade = {CascadeType.REFRESH})
     private Graph answerGraph;
 
     /**
      * Survey being answered.
      */
     //A survey can be reviewed multiple times and changes made to the review should not cascade to the survey
-    @ManyToOne
+    //A review only exists if a Survey exists, so it should only cascade as refresh
+    @ManyToOne(cascade = {CascadeType.REFRESH})
     private Survey survey;
 
     /**
@@ -73,13 +73,15 @@ public class Review implements Serializable {
     /*
      * Map containing Questions IDs and their respective Answers.
      */
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    //The review answers can be either persisted or updated
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REFRESH})
     private Map<Question, Answer> answers;
 
     /**
      * Question ID of the question currently being answered.
      */
-    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    //TO-DO: In discussion regarding anotation
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.MERGE})
     private Question currentQuestion;
 
     /**
@@ -146,8 +148,9 @@ public class Review implements Serializable {
      * @return false if current question is the last one
      */
     public boolean answerQuestion(QuestionOption option) {
+        System.out.println("->>>>>> "+currentQuestion);
         Iterable<Edge> outgoingEdges = answerGraph.outgoingEdges(currentQuestion);
-
+        System.out.println("->>>>>> "+currentQuestion);
         // If there are no outgoing edges, maps the last answer and finishes
         if (!outgoingEdges.iterator().hasNext()) {
             answers.put(currentQuestion, new Answer(option));
