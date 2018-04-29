@@ -90,7 +90,7 @@ public class NodeTest {
 
         assertFalse(node.addChild(null));
 
-        Category c2 = new Category("Oh he need some milk","15DC-12UN");
+        Category c2 = new Category("Oh he need some milk", "15DC-12UN");
 
         Node child = new Node(c2);
         assertTrue(node.addChild(child));
@@ -115,6 +115,10 @@ public class NodeTest {
 
         assertEquals(node.hashCode(), node2.hashCode());
 
+        //Mutation tests
+        assertNotEquals("".hashCode(), node.hashCode());
+        int num = 97 * 7 + node.getElement().hashCode();
+        assertEquals(num, node.hashCode());
     }
 
     /**
@@ -151,6 +155,8 @@ public class NodeTest {
 
         assertEquals(node.toString(), node2.toString());
 
+        //Mutation test
+        assertNotEquals(node.toString(),null);
     }
 
 }

@@ -156,6 +156,8 @@ public class CategoryQuestionsLibraryTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        instance.addCategory(new Category("name","10938DC"));
+        assertNotEquals("".hashCode(),instance.hashCode());
     }
 
     /**

@@ -37,6 +37,9 @@ public class BirthDateTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        
+        //Mutation test
+        assertNotEquals("".hashCode(),instance.hashCode());
     }
 
     /**

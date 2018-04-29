@@ -165,6 +165,8 @@ public class ProductQuestionsLibraryTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        instance.addProduct(new Product("Name",new SKU("O15KK"),"quantity",new EAN("1786487")));
+        assertNotEquals("".hashCode(),instance.hashCode());
     }
 
     /**

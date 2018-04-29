@@ -74,14 +74,14 @@ public class Review implements Serializable {
      * Map containing Questions IDs and their respective Answers.
      */
     //The review answers can be either persisted or updated
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Map<Question, Answer> answers;
 
     /**
      * Question ID of the question currently being answered.
      */
     //TO-DO: In discussion regarding anotation
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private Question currentQuestion;
 
     /**
@@ -148,9 +148,7 @@ public class Review implements Serializable {
      * @return false if current question is the last one
      */
     public boolean answerQuestion(QuestionOption option) {
-        System.out.println("->>>>>> "+currentQuestion);
         Iterable<Edge> outgoingEdges = answerGraph.outgoingEdges(currentQuestion);
-        System.out.println("->>>>>> "+currentQuestion);
         // If there are no outgoing edges, maps the last answer and finishes
         if (!outgoingEdges.iterator().hasNext()) {
             answers.put(currentQuestion, new Answer(option));
@@ -203,6 +201,11 @@ public class Review implements Serializable {
         return new TreeMap<>(answers);
     }
 
+    /**
+     * Review's hash code
+     *
+     * @return hash code
+     */
     @Override
     public int hashCode() {
         int hash = 7;

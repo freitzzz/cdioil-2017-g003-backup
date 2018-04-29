@@ -57,6 +57,11 @@ public class QuestionTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        
+        //Mutation tests
+        assertNotEquals("".hashCode(),instance.hashCode());
+        assertEquals(instance.getClass().hashCode()+question.hashCode()+
+                id.hashCode(),instance.hashCode());
     }
 
     /**

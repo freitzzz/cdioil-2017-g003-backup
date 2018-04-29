@@ -9,8 +9,10 @@ import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -101,10 +103,11 @@ public class ReviewTest {
     @Test
     public void testAnswerQuestion() {
         System.out.println("answerQuestion");
-        instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
+        instance.answerQuestion(new QuantitativeQuestionOption(4.0)); //Mutation test
+        assertTrue(instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE)));
         assertNotNull("The condition should succeed because a question was "
                 + "answered", instance.getReviewQuestionAnswers());
-        instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
+        assertFalse(instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE)));
     }
 
     /**
@@ -195,6 +198,15 @@ public class ReviewTest {
         globalSurvey.setNextQuestion(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
         Review other = createReview(globalSurvey);
         assertEquals(instance.hashCode(), other.hashCode());
+
+        //Mutation tests
+        assertNotEquals("".hashCode(), instance.hashCode());
+        other.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
+        other.submitSuggestion("Suggestion");
+        int num = 19 * (19 * (19 * (19 * 7 + globalSurvey.getGraphCopy().hashCode())
+                + other.getReviewQuestionAnswers().hashCode())
+                + secondQuestion.hashCode()) + "Suggestion".hashCode();
+        assertEquals(num, other.hashCode());
     }
 
     @Test
@@ -255,6 +267,7 @@ public class ReviewTest {
         String expResult = other.toString();
         String result = instance.toString();
         assertEquals(result, expResult);
+        assertNotEquals(result, null);
     }
 
     /**

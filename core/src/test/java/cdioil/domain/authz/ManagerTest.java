@@ -83,6 +83,20 @@ public class ManagerTest {
     }
 
     /**
+     * Test of toString method, of class Manager.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        Manager instance = new Manager(sysUser);
+        Manager other = new Manager(sysUser);
+        assertEquals(instance.toString(), other.toString());
+
+        //Mutation test
+        assertNotEquals(null, instance.toString());
+    }
+
+    /**
      * Test addCategories method, of class Manager.
      */
     @Test

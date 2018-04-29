@@ -25,6 +25,8 @@ public class IndependentQuestionsLibraryTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        instance.addQuestion(new BinaryQuestion("Text","ID"));
+        assertNotEquals("".hashCode(),instance.hashCode());
     }
 
     /**
