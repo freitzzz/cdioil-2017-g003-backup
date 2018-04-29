@@ -5,19 +5,20 @@ import cdioil.domain.QuestionOption;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
-import javax.persistence.Transient;
+import javax.persistence.MapKeyClass;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 /**
@@ -64,14 +65,16 @@ public class Graph implements Serializable {
      * Map containing all of the inserted elements and the vertices containing
      * them.
      */
-    @Transient
+    //@Transient
+    @ManyToMany(cascade = CascadeType.ALL)
+    @MapKeyClass(Question.class)
     private Map<Question, Vertex> vertices;
 
     /**
-     * List used exclusively for persisting instances of Question.
+     * Set used exclusively for persisting instances of Question.
      */
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<Vertex> vertexList;
+    private Set<Question> questionSet;
     
     /**
      * Creates a new instance of <code>Graph</code>.
@@ -80,7 +83,7 @@ public class Graph implements Serializable {
         numVertices = 0;
         numEdges = 0;
         vertices = new LinkedHashMap<>();
-        vertexList = new LinkedList<>();
+        questionSet = new LinkedHashSet<>();
     }
 
     /**
@@ -102,26 +105,26 @@ public class Graph implements Serializable {
         }
     }
 
-    @PrePersist
-    private void setupPersistence(){
-        for(Map.Entry<Question, Vertex> entry : vertices.entrySet()){
-            vertexList.add(entry.getValue());
-        }
-    }
-    
-    @PostLoad
-    private void initialize(){
-        Iterator<Vertex> vertexIterator = vertexList.iterator();
-        
-        vertices = new LinkedHashMap<>();   //a new map is created since it's null upon loading
-        
-        while(vertexIterator.hasNext()){
-            Vertex vertex = vertexIterator.next();
-            vertices.put(vertex.getElement(), vertex);
-        }
-        
-        vertexList.clear();     //lists are cleared in order to save memory
-    }
+//    @PrePersist
+//    private void setupPersistence(){
+//        for(Map.Entry<Question, Vertex> entry : vertices.entrySet()){
+//            vertexList.add(entry.getValue());
+//        }
+//    }
+//    
+//    @PostLoad
+//    private void initialize(){
+//        Iterator<Vertex> vertexIterator = vertexList.iterator();
+//        
+//        vertices = new LinkedHashMap<>();   //a new map is created since it's null upon loading
+//        
+//        while(vertexIterator.hasNext()){
+//            Vertex vertex = vertexIterator.next();
+//            vertices.put(vertex.getElement(), vertex);
+//        }
+//        
+//        vertexList.clear();     //lists are cleared in order to save memory
+//    }
 
     /**
      * Checks if the vertex has already been inserted into the graph.
@@ -305,6 +308,7 @@ public class Graph implements Serializable {
         }
         Vertex vertex = new Vertex(element);
         vertices.put(element, vertex);
+        questionSet.add(element);
         numVertices++;
 
         return true;
@@ -329,6 +333,7 @@ public class Graph implements Serializable {
 
         //Removing the vertex also removes all of its outgoing edges
         vertices.remove(element);
+        questionSet.remove(element);
         numVertices--;
         return true;
     }

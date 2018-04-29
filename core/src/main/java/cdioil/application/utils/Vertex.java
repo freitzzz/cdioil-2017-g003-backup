@@ -17,10 +17,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
+import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -49,7 +53,9 @@ public class Vertex implements Serializable {
     /**
      * Map with adjacent vertices and the edges connecting them.
      */
-    @Transient
+    //@Transient
+    @ManyToMany(cascade = CascadeType.ALL)
+    @MapKeyClass(Edge.class)
     private Map<Edge, Question> outgoingEdges;
 
     /**
@@ -79,26 +85,26 @@ public class Vertex implements Serializable {
         edgeSet = new LinkedHashSet<>();
     }
 
-    @PrePersist
-    private void setupPersistence() {
-        for (Map.Entry<Edge, Question> entry : outgoingEdges.entrySet()) {
-            edgeSet.add(entry.getKey());
-        }
-    }
-
-    @PostLoad
-    private void initialize() {
-        Iterator<Edge> edgeIterator = edgeSet.iterator();
-
-        outgoingEdges = new LinkedHashMap<>();
-
-        while (edgeIterator.hasNext()) {
-            Edge edge = edgeIterator.next();
-            outgoingEdges.put(edge, edge.getDestinationVertexElement());
-        }
-        
-        edgeSet.clear();
-    }
+//    @PrePersist
+//    private void setupPersistence() {
+//        for (Map.Entry<Edge, Question> entry : outgoingEdges.entrySet()) {
+//            edgeSet.add(entry.getKey());
+//        }
+//    }
+//
+//    @PostLoad
+//    private void initialize() {
+//        Iterator<Edge> edgeIterator = edgeSet.iterator();
+//
+//        outgoingEdges = new LinkedHashMap<>();
+//
+//        while (edgeIterator.hasNext()) {
+//            Edge edge = edgeIterator.next();
+//            outgoingEdges.put(edge, edge.getDestinationVertexElement());
+//        }
+//        
+//        edgeSet.clear();
+//    }
 
     /**
      * Retrieves the element currently stored in this <code>Vertex</code>.
@@ -119,6 +125,7 @@ public class Vertex implements Serializable {
      */
     public void addAdjacentVertex(Edge edge, Question adjacentElement) {
         outgoingEdges.put(edge, adjacentElement);
+        edgeSet.add(edge);
     }
 
     /**
@@ -147,6 +154,7 @@ public class Vertex implements Serializable {
 
         for (Edge edge : getEdges(adjacentElement)) {
             outgoingEdges.remove(edge);
+            edgeSet.remove(edge);
         }
     }
 
