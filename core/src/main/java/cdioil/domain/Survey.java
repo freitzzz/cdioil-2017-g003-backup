@@ -31,7 +31,8 @@ public abstract class Survey implements Serializable {
     /**
      * Item associated with the survey.
      */
-    @OneToMany(cascade = {CascadeType.REFRESH})
+    //The items on this list can be added to multiple different surveys
+    @ManyToMany(cascade = {CascadeType.REFRESH})
     private List<SurveyItem> itemList;
 
     /**
@@ -149,7 +150,6 @@ public abstract class Survey implements Serializable {
      * @return copy of the Graph.
      */
     public Graph getGraphCopy() {
-        //return graph;
         return new Graph(graph);
     }
 
