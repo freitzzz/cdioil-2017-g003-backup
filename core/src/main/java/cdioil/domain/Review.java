@@ -75,7 +75,7 @@ public class Review implements Serializable {
      * Map containing Questions IDs and their respective Answers.
      */
     //The review answers can be either persisted or updated
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Map<Question, Answer> answers;
 
     /**
@@ -202,6 +202,11 @@ public class Review implements Serializable {
         return new TreeMap<>(answers);
     }
 
+    /**
+     * Review's hash code
+     *
+     * @return hash code
+     */
     @Override
     public int hashCode() {
         int hash = 7;

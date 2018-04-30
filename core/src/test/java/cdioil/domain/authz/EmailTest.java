@@ -1,5 +1,8 @@
 package cdioil.domain.authz;
 
+import cdioil.application.utils.OperatorsEncryption;
+import static cdioil.domain.authz.Email.ENCRYPTION_CODE;
+import static cdioil.domain.authz.Email.ENCRYPTION_VALUE;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -165,6 +168,11 @@ public class EmailTest {
         Email other = new Email(email);
         assertEquals("A condição deve acertar pois os valores são iguais",
                 instance.hashCode(),other.hashCode());
+        
+        //Mutation tests
+        assertNotEquals("".hashCode(),instance.hashCode());
+        int num = 89 * 5 + OperatorsEncryption.encrypt(email,ENCRYPTION_CODE,ENCRYPTION_VALUE).hashCode();
+        assertEquals(num,instance.hashCode());
     }
 
     /**

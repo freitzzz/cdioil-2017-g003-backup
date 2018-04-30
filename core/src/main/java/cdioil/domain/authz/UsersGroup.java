@@ -137,7 +137,7 @@ public class UsersGroup implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + this.id;
+        hash = 47 * hash + this.users.hashCode();
         return hash;
     }
 

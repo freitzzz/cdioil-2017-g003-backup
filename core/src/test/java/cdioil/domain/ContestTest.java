@@ -75,6 +75,10 @@ public class ContestTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        
+        //Mutation tests
+        assertEquals(title.hashCode()+description.hashCode(),result);
+        assertNotEquals("".hashCode(),result);
     }
 
     /**

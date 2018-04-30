@@ -43,6 +43,11 @@ public class ProfileTest {
         Profile profileY=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
         assertEquals("The condition should be successul since both profiles have the same hashcode",
                 profileX.hashCode(),profileY.hashCode());
+        
+        //Mutation tests
+        assertNotEquals("".hashCode(),profileX.hashCode());
+        int num = 71 * 7 + new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))).hashCode();
+        assertEquals(num,profileX.hashCode());
     }
 
     /**
@@ -69,6 +74,9 @@ public class ProfileTest {
         Profile profileY=createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"),new Name("Lil","Pump"),new Password("Password123"))));
         assertEquals("The condition should be successful since both profiles are the same",profileX.toString()
                 ,profileY.toString());
+        
+        //Mutation test
+        assertNotEquals(null,profileX.toString());
     }
 
     /**

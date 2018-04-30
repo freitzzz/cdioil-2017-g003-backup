@@ -45,6 +45,7 @@ public class QuantitativeQuestionOptionTest {
         QuantitativeQuestionOption instance = createQQuestionOption(value);
         QuantitativeQuestionOption other = createQQuestionOption(value);
         assertEquals(instance.hashCode(), other.hashCode());
+        assertNotEquals("".hashCode(),instance.hashCode());
     }
 
     /**

@@ -18,29 +18,29 @@ public class TemplateTest {
     /**
      * Template for test purposes.
      */
-    private Template t;
+    private Template instance;
 
     @Before
     public void setUp() {
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
-        t = new Template("template", questionGroup);
+        instance = new Template("template", questionGroup);
     }
     
     @Test
     public void ensureJPAConstructorCreatesInstance(){
-        t = new Template();
-        assertNotNull(t);
+        instance = new Template();
+        assertNotNull(instance);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void ensureNullQuestionGroupThrowsException(){
-        t = new Template("Template", null);
+        instance = new Template("Template", null);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void ensureEmptyQuestionGroupThrowsException(){
-        t = new Template("Template", new QuestionGroup("Empty Question Group"));
+        instance = new Template("Template", new QuestionGroup("Empty Question Group"));
     }
     
     /**
@@ -51,9 +51,13 @@ public class TemplateTest {
         System.out.println("hashCode");
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
-        Template t2 = new Template("template", questionGroup);
-
-        assertEquals("Hash codes iguais", t2.hashCode(), t.hashCode());
+        Template other = new Template("template", questionGroup);
+        assertEquals("Hash codes iguais", other.hashCode(), instance.hashCode());
+        
+        //Mutation tests
+        assertNotEquals("".hashCode(),instance.hashCode());
+        int num = 43 * 7 + questionGroup.hashCode();
+        assertEquals(num,instance.hashCode());
     }
 
     /**
@@ -63,26 +67,26 @@ public class TemplateTest {
     public void testEquals() {
         System.out.println("equals");
         //test with same instance
-        assertTrue(t.equals(t));
+        assertTrue(instance.equals(instance));
         //test with null parameter
-        assertFalse(t.equals(null));
+        assertFalse(instance.equals(null));
         //test with instance of other class
-        assertFalse(t.equals("bananas"));
+        assertFalse(instance.equals("bananas"));
         //test with null instance
         Template tNull = null;
-        assertFalse(t.equals(tNull));
+        assertFalse(instance.equals(tNull));
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup 2");
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
         QuestionGroup questionGroup2 = new QuestionGroup("QuestionGroup");
         QuestionGroup questionGroupDiffQuestions = new QuestionGroup("QuestionGroup Different Questions");
-        assertNotEquals("Instância de Template diferente", new Template("template", questionGroup), t);
+        assertNotEquals("Instância de Template diferente", new Template("template", questionGroup), instance);
         questionGroup2.addQuestion(new BinaryQuestion("Question", "435"));
-        assertEquals("Instância de Template igual", new Template("template", questionGroup2), t);
+        assertEquals("Instância de Template igual", new Template("template", questionGroup2), instance);
         questionGroupDiffQuestions.addQuestion(new BinaryQuestion("Question 3", "987"));
         Template tDifferentQuestions = new Template("template", questionGroupDiffQuestions);
         tDifferentQuestions.getQuestionGroup().addQuestion(new BinaryQuestion("Question", "342"));
-        t.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532"));
-        assertFalse(t.equals(tDifferentQuestions));
+        instance.getQuestionGroup().addQuestion(new BinaryQuestion("Question 2", "2532"));
+        assertFalse(instance.equals(tDifferentQuestions));
     }
     
     /**
@@ -91,12 +95,15 @@ public class TemplateTest {
     @Test
     public void testToString(){
         System.out.println("toString");
-        Question q1 = new BinaryQuestion("Do you like apples?", "A32");
-        QuestionGroup questionGroup1 = new QuestionGroup("QuestionGroup 1");
-        questionGroup1.addQuestion(q1);
-        Template t1 = new Template("Template", questionGroup1);
-        Template t2 = new Template("Template", questionGroup1);
+        Question question = new BinaryQuestion("Do you like apples?", "A32");
+        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup 1");
+        questionGroup.addQuestion(question);
+        Template other = new Template("Template", questionGroup);
+        Template another = new Template("Template", questionGroup);
         
-        assertEquals(t1.toString(), t2.toString());
+        assertEquals(other.toString(), another.toString());
+        
+        //Mutation test
+        assertNotEquals(other.toString(),null);
     }
 }

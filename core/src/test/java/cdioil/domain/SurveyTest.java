@@ -22,7 +22,7 @@ public class SurveyTest {
     /**
      * Data for testing
      */
-    private Survey i;
+    private Survey testSurvey;
     private TimePeriod timePeriod;
     private LinkedList<SurveyItem> list;
 
@@ -43,7 +43,7 @@ public class SurveyTest {
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         list = new LinkedList<>();
         list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
-        this.i = new GlobalSurvey(list, timePeriod);
+        this.testSurvey = new GlobalSurvey(list, timePeriod);
     }
 
     @After
@@ -83,7 +83,12 @@ public class SurveyTest {
         System.out.println("hashCode");
         Survey outro = new GlobalSurvey(list, timePeriod);
 
-        assertEquals(i.hashCode(), outro.hashCode());
+        assertEquals(testSurvey.hashCode(), outro.hashCode());
+        
+        //Mutation tests
+        assertNotEquals("".hashCode(),testSurvey.hashCode());
+        assertEquals(testSurvey.getGraphCopy().hashCode() + list.hashCode()
+                ,testSurvey.hashCode());
     }
 
     /**
@@ -92,13 +97,13 @@ public class SurveyTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, i);
+        assertNotEquals("Objeto null não é igual", null, testSurvey);
         ArrayList<SurveyItem> otherList = new ArrayList<>();
         otherList.add(new Product("Other Product", new SKU("4444444444"), "1 L", new QRCode("235245246")));
-        assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(otherList, timePeriod), i);
-        assertEquals("Instância de Inquerito igual", new GlobalSurvey(list, timePeriod), i);
-        assertEquals("Compare same instance", i, i);
-        assertNotEquals("Instances of different classes", i, "bananas");
+        assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(otherList, timePeriod), testSurvey);
+        assertEquals("Instância de Inquerito igual", new GlobalSurvey(list, timePeriod), testSurvey);
+        assertEquals("Compare same instance", testSurvey, testSurvey);
+        assertNotEquals("Instances of different classes", testSurvey, "bananas");
     }
 
     /**
@@ -108,9 +113,9 @@ public class SurveyTest {
     public void testToString() {
         System.out.println("toString");
         Survey s = new GlobalSurvey(list, timePeriod);
-        assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", i.toString(),
+        assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", testSurvey.toString(),
                 s.toString());
-
+        assertNotEquals(testSurvey.toString(),null);
     }
 
     /**
@@ -121,10 +126,10 @@ public class SurveyTest {
         System.out.println("addQuestion");
         String id = "4P";
         Question q = new BinaryQuestion("QuestaoTeste", id);
-        assertTrue("Deveria ser possível adicionar", i.addQuestion(q));
-        i.addQuestion(q);
-        assertFalse("Questão null", i.addQuestion(null));
-        assertFalse("Questão já existente", i.addQuestion(q));
+        assertTrue("Deveria ser possível adicionar", testSurvey.addQuestion(q));
+        testSurvey.addQuestion(q);
+        assertFalse("Questão null", testSurvey.addQuestion(null));
+        assertFalse("Questão já existente", testSurvey.addQuestion(q));
     }
 
     /**
@@ -135,11 +140,11 @@ public class SurveyTest {
         System.out.println("removeQuestion");
         String id = "5Q";
         Question q = new BinaryQuestion("QuestaoTeste", id);
-        i.addQuestion(q);
-        assertTrue("Deveria ser possível remover", i.removeQuestion(q));
-        i.removeQuestion(q);
-        assertFalse("Questão null", i.removeQuestion(null));
-        assertFalse("Questão não existente", i.removeQuestion(q));
+        testSurvey.addQuestion(q);
+        assertTrue("Deveria ser possível remover", testSurvey.removeQuestion(q));
+        testSurvey.removeQuestion(q);
+        assertFalse("Questão null", testSurvey.removeQuestion(null));
+        assertFalse("Questão não existente", testSurvey.removeQuestion(q));
     }
 
     /**
@@ -150,11 +155,11 @@ public class SurveyTest {
         System.out.println("isValidQuestion");
         String id = "E8";
         Question q = new BinaryQuestion("QuestaoTeste", id);
-        i.addQuestion(q);
-        assertTrue("Deveria ser válida", i.isValidQuestion(q));
-        i.removeQuestion(q);
-        assertFalse("Questão null", i.isValidQuestion(null));
-        assertFalse("Questão não existente", i.isValidQuestion(q));
+        testSurvey.addQuestion(q);
+        assertTrue("Deveria ser válida", testSurvey.isValidQuestion(q));
+        testSurvey.removeQuestion(q);
+        assertFalse("Questão null", testSurvey.isValidQuestion(null));
+        assertFalse("Questão não existente", testSurvey.isValidQuestion(q));
     }
 
     /**
@@ -165,12 +170,12 @@ public class SurveyTest {
         System.out.println("changeState");
         SurveyState state = SurveyState.DRAFT;
         assertFalse("The condition should succeed because the new state "
-                + "of the survey is equal to the past one", i.changeState(state));
+                + "of the survey is equal to the past one", testSurvey.changeState(state));
         state = SurveyState.ACTIVE;
         assertTrue("The condition should succeed because the new state "
-                + "of the survey is different from the past one", i.changeState(state));
+                + "of the survey is different from the past one", testSurvey.changeState(state));
         assertFalse("The condition should succeed because the new state is null",
-                i.changeState(null));
+                testSurvey.changeState(null));
     }
 
     /**
@@ -180,13 +185,13 @@ public class SurveyTest {
     public void testSetNextQuestion() {
         System.out.println("setNextQuestion");
         assertFalse("The condition should succeed because the origin vertex is "
-                + "equal to the destination vertex", i.setNextQuestion(new BinaryQuestion("Question", "QuestionID"),
+                + "equal to the destination vertex", testSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"),
                         new BinaryQuestion("Question", "QuestionID"), new BinaryQuestionOption(Boolean.FALSE), 0));
         assertTrue("The condition should succeed because the arguments are all valid",
-                i.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
+                testSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
                         new BinaryQuestionOption(Boolean.TRUE), 0));
         assertFalse("The condition should succeed because we are trying to insert "
-                + "the same edge twice", i.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
+                + "the same edge twice", testSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
                         new BinaryQuestionOption(Boolean.TRUE), 0));
     }
 }

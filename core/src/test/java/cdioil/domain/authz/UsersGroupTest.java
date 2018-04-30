@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import java.util.LinkedList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,7 +18,7 @@ public class UsersGroupTest {
     /**
      * Instance of UsersGroup for test purposes.
      */
-    private UsersGroup gu;
+    private UsersGroup usersGroup;
 
     public UsersGroupTest() {
     }
@@ -32,7 +33,7 @@ public class UsersGroupTest {
 
     @Before
     public void setUp() {
-        this.gu = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        this.usersGroup = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
     }
 
@@ -56,12 +57,12 @@ public class UsersGroupTest {
     public void testIsUserValido() {
         System.out.println("isUserValid");
         RegisteredUser u = null;
-        assertFalse("Objeto null não é válido", gu.isUserValid(u));
+        assertFalse("Objeto null não é válido", usersGroup.isUserValid(u));
         u = new RegisteredUser(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
-        assertFalse("Objeto não pertence à lista", gu.isUserValid(u));
-        gu.addUser(u);
-        assertTrue("Objeto existente na lista é válido", gu.isUserValid(u));
+        assertFalse("Objeto não pertence à lista", usersGroup.isUserValid(u));
+        usersGroup.addUser(u);
+        assertTrue("Objeto existente na lista é válido", usersGroup.isUserValid(u));
     }
 
     /**
@@ -70,12 +71,12 @@ public class UsersGroupTest {
     @Test
     public void testAdicionarUser() {
         System.out.println("addUser");
-        assertFalse("Objeto null não é válido", gu.addUser(null));
+        assertFalse("Objeto null não é válido", usersGroup.addUser(null));
         RegisteredUser u = new RegisteredUser(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
-        assertTrue("Objeto não pertence à lista, logo pode ser adicionado", gu.addUser(u));
-        gu.addUser(u);
-        assertFalse("Objeto existente na lista, logo não pode ser adicionado", gu.addUser(u));
+        assertTrue("Objeto não pertence à lista, logo pode ser adicionado", usersGroup.addUser(u));
+        usersGroup.addUser(u);
+        assertFalse("Objeto existente na lista, logo não pode ser adicionado", usersGroup.addUser(u));
     }
 
     /**
@@ -85,12 +86,12 @@ public class UsersGroupTest {
     public void testRemoverUser() {
         System.out.println("removeUser");
         RegisteredUser u = null;
-        assertFalse("Objeto null não é válido", gu.removeUser(u));
+        assertFalse("Objeto null não é válido", usersGroup.removeUser(u));
         u = new RegisteredUser(new SystemUser(new Email("dinaMagalhaes@gmail.com"), new Name("Zindeira",
                 "da Bela"), new Password("ThisIsTheP455w0rd")));
-        assertFalse("Objeto não pertence à lista, logo não pode ser removido", gu.removeUser(u));
-        gu.addUser(u);
-        assertTrue("Objeto existente na lista, logo pode ser removido", gu.removeUser(u));
+        assertFalse("Objeto não pertence à lista, logo não pode ser removido", usersGroup.removeUser(u));
+        usersGroup.addUser(u);
+        assertTrue("Objeto existente na lista, logo pode ser removido", usersGroup.removeUser(u));
     }
 
     /**
@@ -101,7 +102,10 @@ public class UsersGroupTest {
         System.out.println("toString");
         UsersGroup oth = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"),
                 new Name("Quim", "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
-        assertEquals("Deveriam ser iguais", oth.toString(), gu.toString());
+        assertEquals("Deveriam ser iguais", oth.toString(), usersGroup.toString());
+
+        //Mutation test
+        assertNotEquals(null, oth.toString());
     }
 
     /**
@@ -112,7 +116,16 @@ public class UsersGroupTest {
         System.out.println("hashCode");
         UsersGroup oth = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
-        assertEquals("Deveriam ser iguais", oth.hashCode(), gu.hashCode());
+        assertEquals("Deveriam ser iguais", oth.hashCode(), usersGroup.hashCode());
+        RegisteredUser user = new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")));
+
+        //Mutation tests
+        assertNotEquals("".hashCode(), usersGroup.hashCode());
+        oth.addUser(user);
+        LinkedList<RegisteredUser> list = new LinkedList<>();
+        list.add(user);
+        int num = 47 * 7 + list.hashCode();
+        assertEquals(num, oth.hashCode());
     }
 
     /**
@@ -122,19 +135,19 @@ public class UsersGroupTest {
     public void testEquals() {
         System.out.println("equals");
         //test with same isntance
-        assertTrue(gu.equals(gu));
+        assertTrue(usersGroup.equals(usersGroup));
         //test with null parameter
-        assertFalse(gu.equals(null));
+        assertFalse(usersGroup.equals(null));
         //test with object of different class
-        assertFalse(gu.equals("String"));
+        assertFalse(usersGroup.equals("String"));
         //test with null instance
         UsersGroup uGroup = null;
-        assertFalse(gu.equals(uGroup));
+        assertFalse(usersGroup.equals(uGroup));
         //test with equal instances
-        assertTrue(gu.equals(new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        assertTrue(usersGroup.equals(new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))))));
         //test with different instances
-        assertTrue(gu.equals(new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros1@gmail.com"), new Name("Quim",
+        assertTrue(usersGroup.equals(new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros1@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V411"))))));
     }
 }

@@ -52,6 +52,11 @@ public class EANTest {
         EAN copy = new EAN("1700034560");
 
         assertEquals("Hash codes iguais", copy.hashCode(), ean.hashCode());
+
+        //Mutation tests
+        assertNotEquals("".hashCode(), ean.hashCode());
+        int num = 67 * 7 + ean.getClass().hashCode() + ean.code.hashCode();
+        assertEquals(num, ean.hashCode());
     }
 
     /**

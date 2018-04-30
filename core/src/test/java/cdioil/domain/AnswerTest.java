@@ -34,6 +34,7 @@ public class AnswerTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        assertNotEquals("".hashCode(),result);
     }
 
     /**

@@ -97,6 +97,10 @@ public class QuestionGroupTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+
+        //Mutation tests
+        assertNotEquals("".hashCode(), result);
+        assertEquals(new HashSet<>().hashCode() + "QuestionGroup".hashCode(), result);
     }
 
     /**

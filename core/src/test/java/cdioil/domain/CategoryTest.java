@@ -24,7 +24,7 @@ public class CategoryTest {
     /**
      * Instance of Category for test purposes.
      */
-    Category c;
+    Category cat;
 
     public CategoryTest() {
     }
@@ -39,7 +39,7 @@ public class CategoryTest {
 
     @Before
     public void setUp() {
-        c = new Category("CategoriaTeste", "10DC-10UN-100CAT");
+        cat = new Category("CategoriaTeste", "10DC-10UN-100CAT");
     }
 
     @After
@@ -53,7 +53,7 @@ public class CategoryTest {
     public void testCategoryName() {
         System.out.println("categoryName");
         assertEquals("The condition should succeed because the names are"
-                + "the same", c.categoryName(), "CategoriaTeste");
+                + "the same", cat.categoryName(), "CategoriaTeste");
     }
 
     /**
@@ -63,11 +63,11 @@ public class CategoryTest {
     public void testAddProduct() {
         System.out.println("addProduct");
         //test with null parameter
-        assertFalse(c.addProduct(null));
+        assertFalse(cat.addProduct(null));
         Product p = new Product("ProdutoTeste", new SKU("5434"), "1 L");
-        assertTrue("Produto pode ser adicionado", c.addProduct(p));
-        c.addProduct(p);
-        assertFalse("Produto já existente no Set", c.addProduct(p));
+        assertTrue("Produto pode ser adicionado", cat.addProduct(p));
+        cat.addProduct(p);
+        assertFalse("Produto já existente no Set", cat.addProduct(p));
     }
 
     /**
@@ -75,8 +75,8 @@ public class CategoryTest {
      */
     public void testRootIdentifierAndNameWork() {
         System.out.println("validate identifier regex and name - root");
-        c = new Category("CategoriaValida", "RAIZ");
-        assertNotNull(c);
+        cat = new Category("CategoriaValida", "RAIZ");
+        assertNotNull(cat);
     }
 
     /**
@@ -85,7 +85,7 @@ public class CategoryTest {
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyNameFails() {
         System.out.println("validate empty name fails");
-        c = new Category("    ", "10DC");
+        cat = new Category("    ", "10DC");
     }
 
     /**
@@ -94,7 +94,7 @@ public class CategoryTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNullNameFails() {
         System.out.println("validate null name fails");
-        c = new Category(null, "10DC");
+        cat = new Category(null, "10DC");
     }
 
     /**
@@ -103,7 +103,7 @@ public class CategoryTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNullPathFails() {
         System.out.println("validate null path fails");
-        c = new Category("CategoriaInvalida", null);
+        cat = new Category("CategoriaInvalida", null);
     }
 
     /**
@@ -112,7 +112,7 @@ public class CategoryTest {
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyPathFails() {
         System.out.println("validate empty path fails");
-        c = new Category("CategoriaInvalida", "  ");
+        cat = new Category("CategoriaInvalida", "  ");
     }
 
     /**
@@ -121,11 +121,11 @@ public class CategoryTest {
     @Test
     public void testGetProductSetIterator() {
         System.out.println("getProductSetIterator");
-        Iterator<Product> ip = c.getProductSetIterator();
+        Iterator<Product> ip = cat.getProductSetIterator();
         //collection is empty
         assertFalse(ip.hasNext());
-        c.addProduct(new Product("nome yey", new SKU("42376"), "1 L"));
-        ip = c.getProductSetIterator();
+        cat.addProduct(new Product("nome yey", new SKU("42376"), "1 L"));
+        ip = cat.getProductSetIterator();
         //collection has one item
         assertTrue(ip.hasNext());
     }
@@ -139,7 +139,10 @@ public class CategoryTest {
 
         Category oth = new Category("CategoriaTeste", "10DC-10UN-100CAT");
 
-        assertEquals("As descrições são iguais", oth.toString(), c.toString());
+        assertEquals("As descrições são iguais", oth.toString(), cat.toString());
+        
+        //Mutation test
+        assertNotEquals(null,cat.toString());
     }
 
     /**
@@ -151,7 +154,12 @@ public class CategoryTest {
 
         Category oth = new Category("CategoriaTeste", "10DC-10UN-100CAT");
 
-        assertEquals("Hash codes iguais", oth.hashCode(), c.hashCode());
+        assertEquals("Hash codes iguais", oth.hashCode(), cat.hashCode());
+        
+        //Mutation tests.
+        assertNotEquals("".hashCode(),cat.hashCode());
+        int num = 59 * 5 + cat.categoryPath().hashCode();
+        assertEquals(num,cat.hashCode());
     }
 
     /**
@@ -160,12 +168,12 @@ public class CategoryTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, c);
-        assertNotEquals("Instância de outra classe não é igual", new QRCode("12"), c);
-        assertNotEquals("Instância de Categoria diferente", new Category("OutraCategoria", "10DC-10UN-100CAT-102SCAT"), c);
-        assertEquals("Instância de Categoria igual", new Category("CategoriaTeste", "10DC-10UN-100CAT"), c);
+        assertNotEquals("Objeto null não é igual", null, cat);
+        assertNotEquals("Instância de outra classe não é igual", new QRCode("12"), cat);
+        assertNotEquals("Instância de Categoria diferente", new Category("OutraCategoria", "10DC-10UN-100CAT-102SCAT"), cat);
+        assertEquals("Instância de Categoria igual", new Category("CategoriaTeste", "10DC-10UN-100CAT"), cat);
         Category cNUll = null;
-        assertFalse(c.equals(cNUll));
+        assertFalse(cat.equals(cNUll));
     }
     
     @Test
@@ -175,6 +183,13 @@ public class CategoryTest {
             Category.Sufixes.SUFIX_CAT, Category.Sufixes.SUFIX_SCAT, Category.Sufixes.SUFIX_UB};
         
         assertArrayEquals(expected,Category.Sufixes.values());
+        
+        //Mutation tests
+        assertNotEquals(Category.Sufixes.SUFIX_DC.toString(),null);
+        assertNotEquals(Category.Sufixes.SUFIX_UN.toString(),null);
+        assertNotEquals(Category.Sufixes.SUFIX_CAT.toString(),null);
+        assertNotEquals(Category.Sufixes.SUFIX_SCAT.toString(),null);
+        assertNotEquals(Category.Sufixes.SUFIX_UB.toString(),null);
     }
     
     @Test
