@@ -1,9 +1,7 @@
 package cdioil.persistence.impl;
 
 import cdioil.domain.Review;
-import cdioil.domain.ReviewState;
 import cdioil.domain.Survey;
-import cdioil.domain.authz.Profile;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ReviewRepository;
@@ -25,13 +23,18 @@ public final class ReviewRepositoryImpl extends BaseJPARepository<Review,Long> i
     }
     /**
      * Method that gets all reviews made for a certain survey
+     * <br>Needs to be this way since the query parser fails with 
+     * abstract classes<br>
      * @param survey Survey with the survey being retrieved all reviews
      * @return List with all reviews made for a certain survey
      */
     @Override
     public List<Review> getReviewsBySurvey(Survey survey){
         if(survey==null)return null;
-        return (List<Review>)entityManager().createQuery("SELECT r FROM Review r "
-                + "WHERE r.survey= :survey").setParameter("survey",survey).getResultList();
+        long surveyID = (long)entityManager().createQuery("SELECT s.id FROM " 
+                + survey.getClass().getSimpleName()
+                + " s WHERE s= :survey").setParameter("survey",survey).getSingleResult();
+        return (List<Review>)entityManager().createNativeQuery("SELECT * FROM Review r "
+                + "WHERE r.survey_id = ?1",Review.class).setParameter(1,surveyID).getResultList();
     }
 }
