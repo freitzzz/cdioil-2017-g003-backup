@@ -51,6 +51,7 @@
     <class>cdioil.application.utils.EmailSenders</class>
     <class>cdioil.domain.SKU</class>
     <class>cdioil.application.domain.authz.UserSession</class>
+    <class>cdioil.application.utils.EdgeQuestion</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>

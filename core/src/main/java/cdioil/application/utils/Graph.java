@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -18,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyClass;
-import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 /**
@@ -65,7 +63,6 @@ public class Graph implements Serializable {
      * Map containing all of the inserted elements and the vertices containing
      * them.
      */
-    //@Transient
     @ManyToMany(cascade = CascadeType.ALL)
     @MapKeyClass(Question.class)
     private Map<Question, Vertex> vertices;
@@ -73,9 +70,9 @@ public class Graph implements Serializable {
     /**
      * Set used exclusively for persisting instances of Question.
      */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private Set<Question> questionSet;
-    
+
     /**
      * Creates a new instance of <code>Graph</code>.
      */
@@ -96,35 +93,14 @@ public class Graph implements Serializable {
         this();
         for (Vertex vertex : g.vertices.values()) {
             for (Edge edge : vertex.getAllOutgoingEdges()) {
-                Question originQuestion = Question.copyQuestion(edge.getOriginVertexElement());
-                Question destinationQuestion = Question.copyQuestion(edge.getDestinationVertexElement());
-                QuestionOption edgeQuestionOption = QuestionOption.copyQuestionOption(edge.getElement());
+                Question originQuestion = /*Question.copyQuestion*/(edge.getOriginVertexElement());
+                Question destinationQuestion = /*Question.copyQuestion*/(edge.getDestinationVertexElement());
+                QuestionOption edgeQuestionOption = /*QuestionOption.copyQuestionOption*/(edge.getElement());
                 double edgeWeight = edge.getWeight();
                 this.insertEdge(originQuestion, destinationQuestion, edgeQuestionOption, edgeWeight);
             }
         }
     }
-
-//    @PrePersist
-//    private void setupPersistence(){
-//        for(Map.Entry<Question, Vertex> entry : vertices.entrySet()){
-//            vertexList.add(entry.getValue());
-//        }
-//    }
-//    
-//    @PostLoad
-//    private void initialize(){
-//        Iterator<Vertex> vertexIterator = vertexList.iterator();
-//        
-//        vertices = new LinkedHashMap<>();   //a new map is created since it's null upon loading
-//        
-//        while(vertexIterator.hasNext()){
-//            Vertex vertex = vertexIterator.next();
-//            vertices.put(vertex.getElement(), vertex);
-//        }
-//        
-//        vertexList.clear();     //lists are cleared in order to save memory
-//    }
 
     /**
      * Checks if the vertex has already been inserted into the graph.
