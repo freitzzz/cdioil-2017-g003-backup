@@ -1,6 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.ValueObject;
+import encryptions.DigestUtils;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -53,13 +54,9 @@ public class Password implements Serializable, ValueObject {
             throw new IllegalArgumentException(WEAK_PASSWORD);
         }
 
-        try {
-            salt = generateSalt();
-            this.saltInString = byteToString(salt);
-            this.password = generateHash(password + this.saltInString);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        salt = generateSalt();
+        this.saltInString = byteToString(salt);
+        this.password = generateHash(password + this.saltInString);
 
     }
 
@@ -70,8 +67,8 @@ public class Password implements Serializable, ValueObject {
      * @return password hashed
      * @throws NoSuchAlgorithmException
      */
-    private static String generateHash(String password) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance(SHA256);
+    private static String generateHash(String password) {
+        MessageDigest messageDigest = DigestUtils.getMessageDigest(SHA256);
         byte[] hash = messageDigest.digest(password.getBytes(StandardCharsets.UTF_8));
         StringBuffer hexString = new StringBuffer();
 
@@ -144,15 +141,14 @@ public class Password implements Serializable, ValueObject {
      * @return returns true id a password is correct and false it's incorrect
      */
     public boolean verifyPassword(String password) {
-        String hash = " ";
-        try {
-            hash = generateHash(password + this.saltInString);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        String hash;
+        hash = generateHash(password + this.saltInString);
         return hash.equals(this.password);
     }
 
+    /**
+     * Empty constructor for JPA.
+     */
     protected Password() {
     }
 }

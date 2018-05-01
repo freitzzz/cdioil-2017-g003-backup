@@ -18,7 +18,7 @@ public class PrecoTest {
      * Constante com um array englobando os preços válidos usados nos testes
      */
     private static final String[] PRECOS_INVALIDOS={null,"","   ","sadads","5000"
-            ,"50.50.50 €","Pump"};
+            ,"50.50.50 €","Pump","5 D"};
     public PrecoTest(){}
     
     

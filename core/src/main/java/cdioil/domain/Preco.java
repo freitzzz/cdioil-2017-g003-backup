@@ -174,10 +174,7 @@ public class Preco implements Serializable,ValueObject {
             case US_SYMBOL:
                 return US_ISO;
             default:
-                if (unidade.length() == 1) {
-                    return null;
-                }
-                return Currency.getInstance(unidade.toUpperCase()).getCurrencyCode();
+                return unidade.length() == 1 ? null : Currency.getInstance(unidade.toUpperCase()).getCurrencyCode();
         }
     }
 
