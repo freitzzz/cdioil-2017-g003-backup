@@ -75,7 +75,8 @@ public class Review implements Serializable {
      * Map containing Questions IDs and their respective Answers.
      */
     //The review answers can be either persisted or updated
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    //Answers can also be removed if the user wishes to undo them
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
     private Map<Question, Answer> answers;
 
     /**
