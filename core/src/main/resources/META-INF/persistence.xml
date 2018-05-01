@@ -58,6 +58,10 @@
       <property name="javax.persistence.jdbc.password" value=""/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="eclipselink.logging.level" value="OFF"/>
+      <!--property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:33214/postgres"/>
+      <property name="javax.persistence.jdbc.user" value="CDIOIL-ALL"/>
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/-->
     </properties>
   </persistence-unit>
 </persistence>
