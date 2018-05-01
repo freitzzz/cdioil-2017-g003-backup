@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyClass;
 import javax.persistence.Version;
 
@@ -74,6 +75,15 @@ public class Graph implements Serializable {
     private Set<Question> questionSet;
 
     /**
+     * Graph's initial question.
+     */
+    /*NOTE: while the initial question will always be the first one being 
+    inserted in the map, while working in memory, it is not the case when it's loaded from the database. 
+    This is due to the persistence mechanism using hash tables for mapping collections of the type Map which can result in a different order.*/
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})  //this same question could be first question for many different graphs
+    private Question firstQuestion;
+
+    /**
      * Creates a new instance of <code>Graph</code>.
      */
     public Graph() {
@@ -93,12 +103,18 @@ public class Graph implements Serializable {
         this();
         for (Vertex vertex : g.vertices.values()) {
             for (Edge edge : vertex.getAllOutgoingEdges()) {
-                Question originQuestion = /*Question.copyQuestion*/(edge.getOriginVertexElement());
-                Question destinationQuestion = /*Question.copyQuestion*/(edge.getDestinationVertexElement());
-                QuestionOption edgeQuestionOption = /*QuestionOption.copyQuestionOption*/(edge.getElement());
+                Question originQuestion = /*Question.copyQuestion*/ (edge.getOriginVertexElement());
+                Question destinationQuestion = /*Question.copyQuestion*/ (edge.getDestinationVertexElement());
+                QuestionOption edgeQuestionOption = /*QuestionOption.copyQuestionOption*/ (edge.getElement());
                 double edgeWeight = edge.getWeight();
                 this.insertEdge(originQuestion, destinationQuestion, edgeQuestionOption, edgeWeight);
             }
+        }
+        //The first question will only be null if an empty graph is copied
+        if (g.firstQuestion == null) {
+            this.firstQuestion = null;
+        } else {
+            this.firstQuestion = g.firstQuestion;
         }
     }
 
@@ -285,6 +301,11 @@ public class Graph implements Serializable {
         Vertex vertex = new Vertex(element);
         vertices.put(element, vertex);
         questionSet.add(element);
+
+        if (numVertices == 0) {
+            firstQuestion = element;
+        }
+
         numVertices++;
 
         return true;
@@ -310,6 +331,11 @@ public class Graph implements Serializable {
         //Removing the vertex also removes all of its outgoing edges
         vertices.remove(element);
         questionSet.remove(element);
+        if (firstQuestion.equals(element) && numVertices > 1) {
+            firstQuestion = vertices.keySet().iterator().next();
+        } else {
+            firstQuestion = null;
+        }
         numVertices--;
         return true;
     }
@@ -412,7 +438,7 @@ public class Graph implements Serializable {
             return null;
         }
 
-        return vertices.keySet().iterator().next();
+        return firstQuestion;
     }
 
     @Override
