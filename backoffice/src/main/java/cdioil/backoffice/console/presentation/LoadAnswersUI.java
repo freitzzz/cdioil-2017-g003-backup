@@ -45,7 +45,7 @@ public class LoadAnswersUI {
         System.out.println("================================");
         System.out.println(String.format("Took %s ms", timeTook));
         System.out.println("Finished.");
-        System.out.println("100000 Reviews added");
+        System.out.println(numAnswers + " Reviews added");
         System.out.println("================================");
     }
 }
