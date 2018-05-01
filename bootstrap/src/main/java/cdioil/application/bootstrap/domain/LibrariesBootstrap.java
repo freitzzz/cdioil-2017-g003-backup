@@ -19,6 +19,7 @@ import cdioil.persistence.impl.CategoryTemplatesLibraryRepositoryImpl;
 import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.ProductQuestionsLibraryRepositoryImpl;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,6 +83,45 @@ public class LibrariesBootstrap {
         categoryQuestionsLibrary.addQuestion(q2, cat);
         categoryQuestionsLibrary.addQuestion(q3, cat);
         categoryQuestionsLibrary.addQuestion(q4, cat);
+
+        /*==================================
+        Bootstrap questions for Stress Test
+        ====================================*/
+        QuantitativeQuestionOption qo1 = new QuantitativeQuestionOption(new Double(1));
+        QuantitativeQuestionOption qo2 = new QuantitativeQuestionOption(new Double(2));
+        QuantitativeQuestionOption qo3 = new QuantitativeQuestionOption(new Double(3));
+        QuantitativeQuestionOption qo4 = new QuantitativeQuestionOption(new Double(4));
+
+        List<QuestionOption> questionOptions16 = Arrays.asList(qo1, qo2, qo3, qo4);
+
+        MultipleChoiceQuestionOption mo1 = new MultipleChoiceQuestionOption("Na, na, na");
+        MultipleChoiceQuestionOption mo2 = new MultipleChoiceQuestionOption("Ne, ne, ne");
+        MultipleChoiceQuestionOption mo3 = new MultipleChoiceQuestionOption("Ni, ni, ni");
+
+        List<QuestionOption> questionOptions34 = Arrays.asList(mo1, mo2, mo3);
+
+        // Create questions
+        BinaryQuestion q12
+                = new BinaryQuestion("Bla, bla?", "12");
+        BinaryQuestion q13
+                = new BinaryQuestion("Bla, bla, bla?", "13");
+        BinaryQuestion q15
+                = new BinaryQuestion("Blo, blo, blo?", "15");
+        QuantitativeQuestion q16
+                = new QuantitativeQuestion("Ble, ble", "16",
+                        questionOptions16);
+        MultipleChoiceQuestion q34
+                = new MultipleChoiceQuestion("Bli, bli, bli", "34",
+                        questionOptions34);
+
+        Category category = marketRepo.
+                findCategoriesByPathPattern("10DC-10UN-1002CAT-4SCAT-2UB").iterator().next();
+
+        categoryQuestionsLibrary.addQuestion(q12, category);
+        categoryQuestionsLibrary.addQuestion(q13, category);
+        categoryQuestionsLibrary.addQuestion(q15, category);
+        categoryQuestionsLibrary.addQuestion(q16, category);
+        categoryQuestionsLibrary.addQuestion(q34, category);
     }
 
     /**
