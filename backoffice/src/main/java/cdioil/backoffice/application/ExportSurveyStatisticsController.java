@@ -125,15 +125,15 @@ public class ExportSurveyStatisticsController {
 
     /**
      * Returns a map where the keys are the questions and the values are its answers.
-     * 
+     *
      * @param reviews All reviews of the survey
      * @return the map with all question-answers pairs
      */
     private Map<Question, List<Answer>> getAllAnswers(List<Review> reviews) {
         Map<Question, List<Answer>> answers = new TreeMap<>();
 
-        reviews.stream().map((Review r) -> r.getReviewQuestionAnswers()).forEachOrdered((answer) -> {
-            answer.keySet().forEach((Question q) -> {
+        reviews.stream().map((Review r) -> r.getReviewQuestionAnswers()).forEachOrdered(answer -> {
+            answer.keySet().forEach(q -> {
                 List<Answer> answerList = new ArrayList<>();
                 answerList.add(answer.get(q));
 
@@ -155,38 +155,47 @@ public class ExportSurveyStatisticsController {
         List<Review> reviews = getAllReviews();
         Map<Question, List<Answer>> answers = getAllAnswers(reviews);
 
-        if (answers != null) {
-            Map<Question, List<Answer>> binaryAnswers = new TreeMap<>(); //Will store all binary answers
-            Map<Question, List<Answer>> quantitativeAnswers = new TreeMap<>(); //Will store all quantitative answers
+        if (answers == null || answers.isEmpty()) {
+            return;
+        }
 
-            getAnswers(answers, binaryAnswers, quantitativeAnswers); //Fills the two maps with the questions its answers
+        Map<Question, List<Answer>> binaryAnswers = new TreeMap<>(); //Will store all binary answers
+        Map<Question, List<Answer>> quantitativeAnswers = new TreeMap<>(); //Will store all quantitative answers
 
-            if (!binaryAnswers.isEmpty() || !quantitativeAnswers.isEmpty()) {
-                for(Question q : binaryAnswers.keySet()){
-                    List<Double> values = new ArrayList<>();
-                    int total = 0;
-                   for(Answer a : binaryAnswers.get(q)){
-                       String answer = a.getContent();
-                        total++;
-                       if(answer.equalsIgnoreCase("Sim")) values.add((double) 1);
-                       else if(answer.equalsIgnoreCase("Não")) values.add((double) 0);
-                   }
-                   binaryTotal.put(q, total);
-                   binaryMean.put(q, MathUtils.calculateMean(values));
-                   binaryMeanDeviation.put(q, MathUtils.calculateMeanDeviation(values));
-                }
-                
-                for(Question q : quantitativeAnswers.keySet()){
-                    List<Double> values = new ArrayList<>();
-                    int total = 0;
-                    for(Answer a : quantitativeAnswers.get(q)){
-                        values.add(Double.parseDouble(a.getContent()));
-                        total++;
+        getAnswers(answers, binaryAnswers, quantitativeAnswers); //Fills the two maps with the questions its answers
+
+        if (!binaryAnswers.isEmpty()) {
+            for (Map.Entry<Question, List<Answer>> entry : binaryAnswers.entrySet()) {
+                Question q = entry.getKey();
+                List<Double> values = new ArrayList<>();
+                int total = 0;
+                for (Answer a : entry.getValue()) {
+                    String answer = a.getContent();
+                    total++;
+                    if (answer.equalsIgnoreCase("true")) {
+                        values.add((double) 1);
+                    } else if (answer.equalsIgnoreCase("false")) {
+                        values.add((double) 0);
                     }
-                    quantitativeTotal.put(q, total);
-                    quantitativeMean.put(q, MathUtils.calculateMean(values));
-                    quantitativeMeanDeviation.put(q, MathUtils.calculateMeanDeviation(values));
                 }
+                binaryTotal.put(q, total);
+                binaryMean.put(q, MathUtils.calculateMean(values));
+                binaryMeanDeviation.put(q, MathUtils.calculateMeanDeviation(values));
+            }
+        }
+
+        if (!quantitativeAnswers.isEmpty()) {
+            for (Map.Entry<Question, List<Answer>> entry : quantitativeAnswers.entrySet()) {
+                Question q = entry.getKey();
+                List<Double> values = new ArrayList<>();
+                int total = 0;
+                for (Answer a : entry.getValue()) {
+                    values.add(Double.parseDouble(a.getContent()));
+                    total++;
+                }
+                quantitativeTotal.put(q, total);
+                quantitativeMean.put(q, MathUtils.calculateMean(values));
+                quantitativeMeanDeviation.put(q, MathUtils.calculateMeanDeviation(values));
             }
         }
     }
@@ -217,6 +226,7 @@ public class ExportSurveyStatisticsController {
      * @return
      */
     public boolean exportStatsFromSurvey(String filePath) {
+        calculateStats();
         SurveyStatsWriter statsWriter = SurveyStatsWriterFactory.create(filePath, binaryTotal, quantitativeTotal,
                 binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         if (statsWriter == null) {
