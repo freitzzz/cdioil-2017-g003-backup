@@ -1,19 +1,23 @@
 package cdioil.backoffice.application;
 
+import cdioil.application.utils.AnswerProbabilityReader;
+import cdioil.application.utils.AnswerProbabilityReaderFactory;
 import cdioil.domain.BinaryQuestion;
-import cdioil.domain.BinaryQuestionOption;
-import cdioil.domain.Category;
+import cdioil.domain.CategoryQuestionsLibrary;
 import cdioil.domain.GlobalSurvey;
+import cdioil.domain.IndependentQuestionsLibrary;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.MultipleChoiceQuestionOption;
 import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
+import cdioil.domain.QuestionGroup;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyItem;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
+import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
@@ -23,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -39,118 +44,54 @@ public class LoadAnswersController {
     }
 
     /**
-     * Loads hundreds of generated survey reviews into the application in
-     * runtime
+     * Loads generated survey reviews into the application in runtime.
      *
+     * @param filename
+     * @param numAnswers
      * @return time (in ms) that took to load
      */
-    public long performStressTest() {
+    public long performStressTest(String filename, int numAnswers) {
+
+        AnswerProbabilityReader reader = AnswerProbabilityReaderFactory.create(filename);
+
+        Map<String, List<Double>> distributions = reader.readProbabilities();
+
+        SurveyRepositoryImpl surveyRepositoryImpl = new SurveyRepositoryImpl();
+
+        Survey survey = surveyRepositoryImpl.findAllActiveSurveys().get(1);
+
         final long startTime = System.currentTimeMillis();
 
-        QuantitativeQuestionOption qo1 = new QuantitativeQuestionOption(new Double(1));
-        QuantitativeQuestionOption qo2 = new QuantitativeQuestionOption(new Double(2));
-        QuantitativeQuestionOption qo3 = new QuantitativeQuestionOption(new Double(3));
-        QuantitativeQuestionOption qo4 = new QuantitativeQuestionOption(new Double(4));
-
-        List<QuestionOption> questionOptionsQuantitative = Arrays.asList(qo1, qo2, qo3, qo4);
-
-        MultipleChoiceQuestionOption mo1 = new MultipleChoiceQuestionOption("Na, na, na");
-        MultipleChoiceQuestionOption mo2 = new MultipleChoiceQuestionOption("Ne, ne, ne");
-        MultipleChoiceQuestionOption mo3 = new MultipleChoiceQuestionOption("Ni, ni, ni");
-
-        List<QuestionOption> questionOptionsMultiple = Arrays.asList(mo1, mo2, mo3);
-
-        // Criar Questoes
-        BinaryQuestion bq12
-                = new BinaryQuestion("Bla, bla?", "12");
-        BinaryQuestion bq13
-                = new BinaryQuestion("Bla, bla, bla?", "13");
-        BinaryQuestion bq15
-                = new BinaryQuestion("Bla, bla, bla?", "15");
-        QuantitativeQuestion q16
-                = new QuantitativeQuestion("Ble, ble", "16",
-                        questionOptionsQuantitative);
-        MultipleChoiceQuestion mc34
-                = new MultipleChoiceQuestion("Bli, bli, bli", "34",
-                        questionOptionsMultiple);
-
-        List<SurveyItem> items = new LinkedList<>();
-        //Dont change. The items of a survey need to exist previously, in this case
-        //the category identified by "10938DC" cannot be created from another state, 
-        //otherwise a unique violation will ocure
-        items.add(new MarketStructureRepositoryImpl().findCategoriesByIdentifierPattern("10938DC").get(0));
-        Survey survey = new GlobalSurvey(items,
-                new TimePeriod(LocalDateTime.now(),
-                        LocalDateTime.MAX));
-        survey=new SurveyRepositoryImpl().add(survey);
-        survey.addQuestion(mc34);
-        survey.addQuestion(bq12);
-        survey.addQuestion(bq13);
-        survey.addQuestion(bq15);
-        survey.addQuestion(q16);
-
-        survey.setNextQuestion(mc34, bq12, mo1, 0);
-        survey.setNextQuestion(mc34, bq13, mo2, 0);
-        survey.setNextQuestion(mc34, bq15, mo3, 0);
-        survey.setNextQuestion(bq12, q16, new BinaryQuestionOption(true), 0);
-        survey.setNextQuestion(bq12, q16, new BinaryQuestionOption(false), 0);
-
-        // Gerar Respostas
-        List<Review> allReviews = new LinkedList<>();
-
-        Random randomNumber = new Random(100);
+        /*Note: For the time being, the Questions stored within the Review are 
+        still referencing those that have already been persisted. Ideally these should be copies of the Questions.*/
+        Random randomNumber = new Random();
         Review currentReview;
-        int generatedNumber;
+        double generatedNumber;
         Question currentQuestion;
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < numAnswers; i++) {
             currentReview = new Review(survey);
             while (!currentReview.isFinished()) {
-                generatedNumber = randomNumber.nextInt();
+                generatedNumber = randomNumber.nextDouble();
                 currentQuestion = currentReview.getCurrentQuestion();
+                List<QuestionOption> currentQuestionOptions = currentQuestion.getOptionList();
 
-                if (currentQuestion.equals(mc34)) {
-                    if (generatedNumber <= 20) {
-                        currentReview.answerQuestion(mo3);
-                    } else if (generatedNumber > 20 && generatedNumber <= 50) {
-                        currentReview.answerQuestion(mo1);
-                    } else {
-                        currentReview.answerQuestion(mo2);
+                List<Double> probabilities = distributions.get(currentQuestion.getQuestionID());
+
+                double infLimit = 0;
+                for (int j = 0; j < currentQuestionOptions.size(); j++) {
+                    double supLimit = probabilities.get(j) + infLimit;
+
+                    if (generatedNumber > infLimit && generatedNumber <= supLimit) {
+                        QuestionOption option = currentQuestionOptions.get(j);
+                        currentReview.answerQuestion(option);
+                        break;
                     }
-                } else if (currentQuestion.equals(bq12)) {
-                    if (generatedNumber <= 70) {
-                        currentReview.answerQuestion(new BinaryQuestionOption(true));
-                    } else {
-                        currentReview.answerQuestion(new BinaryQuestionOption(false));
-                    }
-                } else if (currentQuestion.equals(bq13)) {
-                    if (generatedNumber <= 50) {
-                        currentReview.answerQuestion(new BinaryQuestionOption(true));
-                    } else {
-                        currentReview.answerQuestion(new BinaryQuestionOption(false));
-                    }
-                } else if (currentQuestion.equals(bq15)) {
-                    if (generatedNumber <= 20) {
-                        currentReview.answerQuestion(new BinaryQuestionOption(true));
-                    } else {
-                        currentReview.answerQuestion(new BinaryQuestionOption(false));
-                    }
-                } else if (currentQuestion.equals(q16)) {
-                    if (generatedNumber <= 20) {
-                        currentReview.answerQuestion(qo1);
-                    } else if (generatedNumber > 20 && generatedNumber <= 40) {
-                        currentReview.answerQuestion(qo2);
-                    } else if (generatedNumber > 40 && generatedNumber <= 70) {
-                        currentReview.answerQuestion(qo3);
-                    } else {
-                        currentReview.answerQuestion(qo4);
-                    }
+
+                    infLimit = supLimit;
                 }
             }
-
-            allReviews.add(currentReview);
-            reviewRepository.merge(currentReview);
+            reviewRepository.add(currentReview);
         }
-
         final long endTime = System.currentTimeMillis();
 
         return endTime - startTime;
