@@ -736,7 +736,8 @@ public class GraphTest {
     }
 
     @Test
-    public void ensureMultipleUsesOfGetFirstQuestionStillReturnsTheFirstQuestion() {
+    public void ensureGetFirstQuestionIsUpdatedIfFirstQuestionIsRemoved() {
+
         Graph g = new Graph();
 
         Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
@@ -748,8 +749,25 @@ public class GraphTest {
         g.insertVertex(q3);
 
         assertEquals(q1, g.getFirstQuestion());
+
+        g.removeVertex(q1); //remove the first question
+
+        assertEquals(q2, g.getFirstQuestion());
+    }
+
+    @Test
+    public void ensureGetFirstQuestionBecomesNullIfFirstQuestionIsRemovedFromSingleQuestionGraph() {
+        Graph g = new Graph();
+
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+
+        g.insertVertex(q1);
+
         assertEquals(q1, g.getFirstQuestion());
-        assertEquals(q1, g.getFirstQuestion());
+
+        g.removeVertex(q1); //remove the first question
+
+        assertNull(g.getFirstQuestion());
     }
 
     @Test
@@ -759,10 +777,10 @@ public class GraphTest {
         Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
         Question q2 = new BinaryQuestion("This is yet another yes/no question", "A123");
         Question q3 = new BinaryQuestion("A wild binary question appears!", "A423");
-        
+
         g.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.FALSE), 0);
         g.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.TRUE), 0);
-    
+
         assertNull(g.outgoingEdges(q1));
     }
 

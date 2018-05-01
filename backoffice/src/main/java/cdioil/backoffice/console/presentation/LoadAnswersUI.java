@@ -1,6 +1,7 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.LoadAnswersController;
+import cdioil.console.Console;
 
 /**
  * UI Class
@@ -31,7 +32,13 @@ public class LoadAnswersUI {
         System.out.println("Loading Application with Answers");
         System.out.println("================================");
 
-        final long timeTook = controller.performStressTest();
+        
+        String filename = Console.readLine("File:");
+        
+        int numAnswers = Console.readInteger("Number of answers:");
+        
+        
+        final long timeTook = controller.performStressTest(filename, numAnswers);
 
         // Number of elements that were loaded to the application
         System.out.println("Finished Loading Answers");

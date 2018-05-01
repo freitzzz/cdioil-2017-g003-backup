@@ -19,18 +19,18 @@ public class ProductTest {
     /**
      * Instance of Product for testing purposes.
      */
-    private Product p;
+    private Product product;
 
     public ProductTest() {
     }
 
     @Before
     public void setUp() {
-        this.p = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
+        this.product = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
     }
-    
+
     @Test
-    public void ensureEmptyConstructorCreatesInstance(){
+    public void ensureEmptyConstructorCreatesInstance() {
         Product p1 = new Product();
         assertNotNull(p1);
     }
@@ -69,7 +69,7 @@ public class ProductTest {
     public void testProductName() {
         System.out.println("productName");
         assertEquals("The condition should succeed because the names"
-                + "are equal.", p.productName(), "ProdutoTeste");
+                + "are equal.", product.productName(), "ProdutoTeste");
     }
 
     /**
@@ -78,11 +78,11 @@ public class ProductTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        System.out.println(p.toString());
 
         Product copia = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
 
-        assertEquals(p.toString(), copia.toString());
+        assertEquals(product.toString(), copia.toString());
+        assertNotEquals(product.toString(), null);
     }
 
     /**
@@ -94,7 +94,12 @@ public class ProductTest {
 
         Product copia = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
 
-        assertEquals(p.hashCode(), copia.hashCode());
+        assertEquals(product.hashCode(), copia.hashCode());
+
+        //Mutation tests
+        assertNotEquals("".hashCode(), product.hashCode());
+        int num = 67 * 7 + product.getID().hashCode();
+        assertEquals(num, product.hashCode());
 
     }
 
@@ -104,11 +109,11 @@ public class ProductTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, p);
-        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), p);
+        assertNotEquals("Objeto null não é igual", null, product);
+        assertNotEquals("Instância de outra classe não é igual", new Category("CategoriaTeste", "100DC"), product);
 
-        assertNotEquals("Instância de Produto diferente", new Product("ProdutoTeste", new SKU("33312118"), "1 L", new QRCode("552671")), p);
-        assertEquals("Instância com códigos iguais igual", new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")), p);
+        assertNotEquals("Instância de Produto diferente", new Product("ProdutoTeste", new SKU("33312118"), "1 L", new QRCode("552671")), product);
+        assertEquals("Instância com códigos iguais igual", new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")), product);
     }
 
     /**
@@ -118,28 +123,27 @@ public class ProductTest {
     public void testAlterarImagemProduto() {
         System.out.println("alterarImagemProduto");
         //test with same instance
-        assertTrue(p.equals(p));
+        assertTrue(product.equals(product));
         //test with null parameter
-        assertFalse(p.equals(null));
+        assertFalse(product.equals(null));
         //test with instances of different classes
-        assertFalse(p.equals(new QRCode()));
+        assertFalse(product.equals(new QRCode()));
         byte[] imagem = "Nova Imagem".getBytes();
-        p.changeProductImage(imagem);
-        boolean expResult = true;
-        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo", p.changeProductImage(imagem));
-        assertFalse("A condição acertar pois a Imagem do produto é invalida", p.changeProductImage(null));
+        product.changeProductImage(imagem);
+        assertTrue("A condição acertar pois a Imagem do produto foi alterada com successo", product.changeProductImage(imagem));
+        assertFalse("A condição acertar pois a Imagem do produto é invalida", product.changeProductImage(null));
     }
-    
+
     /**
      * Test of getID method, of class Product.
      */
     @Test
-    public void testGetID(){
+    public void testGetID() {
         System.out.println("getID");
-        
+
         Product p1 = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
         SKU expected = new SKU("544231234");
-     
+
         assertEquals(p1.getID(), expected);
     }
 }

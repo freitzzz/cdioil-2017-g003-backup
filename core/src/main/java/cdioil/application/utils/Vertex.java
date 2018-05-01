@@ -2,12 +2,7 @@ package cdioil.application.utils;
 
 import cdioil.domain.Question;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -15,17 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PostLoad;
-import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -47,22 +33,11 @@ public class Vertex implements Serializable {
     /**
      * Element being stored in this element.
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Question element;
 
-    /**
-     * Map with adjacent vertices and the edges connecting them.
-     */
-    //@Transient
-    @ManyToMany(cascade = CascadeType.ALL)
-    @MapKeyClass(Edge.class)
-    private Map<Edge, Question> outgoingEdges;
-
-    /**
-     * List used exclusively for persisting instances of Edge.
-     */
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<Edge> edgeSet;
+    private Set<EdgeQuestion> outgoingEdgeQuestions;
 
     /**
      * JPA Constructor.
@@ -81,30 +56,8 @@ public class Vertex implements Serializable {
      */
     Vertex(Question element) {
         this.element = element;
-        outgoingEdges = new LinkedHashMap<>();
-        edgeSet = new LinkedHashSet<>();
+        outgoingEdgeQuestions = new LinkedHashSet<>();
     }
-
-//    @PrePersist
-//    private void setupPersistence() {
-//        for (Map.Entry<Edge, Question> entry : outgoingEdges.entrySet()) {
-//            edgeSet.add(entry.getKey());
-//        }
-//    }
-//
-//    @PostLoad
-//    private void initialize() {
-//        Iterator<Edge> edgeIterator = edgeSet.iterator();
-//
-//        outgoingEdges = new LinkedHashMap<>();
-//
-//        while (edgeIterator.hasNext()) {
-//            Edge edge = edgeIterator.next();
-//            outgoingEdges.put(edge, edge.getDestinationVertexElement());
-//        }
-//        
-//        edgeSet.clear();
-//    }
 
     /**
      * Retrieves the element currently stored in this <code>Vertex</code>.
@@ -124,8 +77,29 @@ public class Vertex implements Serializable {
      * <code>Vertex</code>.
      */
     public void addAdjacentVertex(Edge edge, Question adjacentElement) {
-        outgoingEdges.put(edge, adjacentElement);
-        edgeSet.add(edge);
+
+        EdgeQuestion edgeQuestion = new EdgeQuestion(edge, adjacentElement);
+
+        /*
+        While a Set's add method removes an equal object from the Set, it also changes it's insertion order, adding it to the end.
+        A Map's put method, however, overlaps the existent entry, thus maintaining order.
+        In order to overcome this, a copy of the set must be made and the new element must be added in the desired order.
+         */
+        if (outgoingEdgeQuestions.contains(edgeQuestion)) {
+
+            Set<EdgeQuestion> copy = new LinkedHashSet<>(outgoingEdgeQuestions);
+            outgoingEdgeQuestions.clear();
+
+            for (EdgeQuestion existentEdgeQuestion : copy) {
+                if (existentEdgeQuestion.equals(edgeQuestion)) {
+                    outgoingEdgeQuestions.add(edgeQuestion);
+                } else {
+                    outgoingEdgeQuestions.add(existentEdgeQuestion);
+                }
+            }
+        } else {
+            outgoingEdgeQuestions.add(edgeQuestion);
+        }
     }
 
     /**
@@ -136,9 +110,10 @@ public class Vertex implements Serializable {
      * the given <code>Edge</code>.
      */
     public Question getAdjacentVertex(Edge edge) {
-        for (Edge e : outgoingEdges.keySet()) {
-            if (e.equals(edge)) {
-                return outgoingEdges.get(e);
+
+        for (EdgeQuestion edgeQuestion : outgoingEdgeQuestions) {
+            if (edgeQuestion.getEdge().equals(edge)) {
+                return edgeQuestion.getOutgoingQuestion();
             }
         }
         return null;
@@ -153,8 +128,12 @@ public class Vertex implements Serializable {
     public void removeAdjacentVertex(Question adjacentElement) {
 
         for (Edge edge : getEdges(adjacentElement)) {
-            outgoingEdges.remove(edge);
-            edgeSet.remove(edge);
+            for (EdgeQuestion edgeQuestion : outgoingEdgeQuestions) {
+                if (edgeQuestion.getEdge().equals(edge)) {
+                    outgoingEdgeQuestions.remove(edgeQuestion);
+                    break;
+                }
+            }
         }
     }
 
@@ -169,19 +148,19 @@ public class Vertex implements Serializable {
      */
     public Iterable<Edge> getEdges(Question adjacentElement) {
 
-        LinkedHashSet<Edge> edges = new LinkedHashSet<>();
+        LinkedHashSet<Edge> edgesQuestions = new LinkedHashSet<>();
 
-        for (Edge e : outgoingEdges.keySet()) {
-            if (adjacentElement.equals(outgoingEdges.get(e))) {
-                edges.add(e);
+        for (EdgeQuestion edgeQuestion : outgoingEdgeQuestions) {
+            if (edgeQuestion.getOutgoingQuestion().equals(adjacentElement)) {
+                edgesQuestions.add(edgeQuestion.getEdge());
             }
         }
 
-        if (edges.isEmpty()) {
+        if (edgesQuestions.isEmpty()) {
             return null;
         }
 
-        return edges;
+        return edgesQuestions;
     }
 
     /**
@@ -208,7 +187,8 @@ public class Vertex implements Serializable {
      * @return number of outgoing edges.
      */
     public int numOutgoingEdges() {
-        return outgoingEdges.size();
+        //return outgoingEdges.size();
+        return outgoingEdgeQuestions.size();
     }
 
     /**
@@ -222,8 +202,8 @@ public class Vertex implements Serializable {
 
         /*An auxiliary set is used since the map's values method can contain 
         duplicates*/
-        for (Question q : outgoingEdges.values()) {
-            adjacentVertices.add(q);
+        for (EdgeQuestion edgeQuestion : outgoingEdgeQuestions) {
+            adjacentVertices.add(edgeQuestion.getOutgoingQuestion());
         }
 
         return adjacentVertices;
@@ -235,14 +215,20 @@ public class Vertex implements Serializable {
      * @return Iterable Collection of outgoing Edges.
      */
     public Iterable<Edge> getAllOutgoingEdges() {
-        return outgoingEdges.keySet();
+        LinkedHashSet<Edge> edges = new LinkedHashSet<>();
+
+        for (EdgeQuestion edgeQuestion : outgoingEdgeQuestions) {
+            edges.add(edgeQuestion.getEdge());
+        }
+
+        return edges;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 53 * hash + Objects.hashCode(this.element);
-        hash = 53 * hash + Objects.hashCode(this.outgoingEdges);
+        hash = 53 * hash + Objects.hashCode(this.outgoingEdgeQuestions);
         return hash;
     }
 
@@ -272,14 +258,15 @@ public class Vertex implements Serializable {
         }
 
         //Check for content equality rather than order equality
-        for (Map.Entry<Edge, Question> thisEntry : this.outgoingEdges.entrySet()) {
+        for (EdgeQuestion thisEdgeQuestion : this.outgoingEdgeQuestions) {
             boolean exists = false;
-            for (Map.Entry<Edge, Question> otherEntry : other.outgoingEdges.entrySet()) {
-                Edge thisEdge = thisEntry.getKey();
-                Edge otherEdge = otherEntry.getKey();
+            for (EdgeQuestion otherEdgeQuestion : other.outgoingEdgeQuestions) {
 
-                Question thisQuestion = thisEntry.getValue();
-                Question otherQuestion = otherEntry.getValue();
+                Edge thisEdge = thisEdgeQuestion.getEdge();
+                Edge otherEdge = otherEdgeQuestion.getEdge();
+
+                Question thisQuestion = thisEdgeQuestion.getOutgoingQuestion();
+                Question otherQuestion = otherEdgeQuestion.getOutgoingQuestion();
 
                 if (thisEdge.equals(otherEdge) && thisQuestion.equals(otherQuestion)) {
                     exists = true;
@@ -290,6 +277,7 @@ public class Vertex implements Serializable {
                 return false;
             }
         }
+
         return true;
     }
 

@@ -60,6 +60,11 @@ public class LocationTest {
         Location locationY=createLocation("Porto");
         assertEquals("The condition should be successful since both locations hashcode "
                 + "are the same",locationX.hashCode(),locationY.hashCode());
+        
+        //Mutation tests
+        assertNotEquals("".hashCode(),locationX.hashCode());
+        int num = 53 * 7 + "Porto".hashCode();
+        assertEquals(num,locationX.hashCode());
     }
 
     /**

@@ -142,11 +142,8 @@ public abstract class Question implements Serializable, Comparable {
      */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.getClass());
-        hash = 29 * hash + Objects.hashCode(this.questionText);
-        hash = 29 * hash + Objects.hash(this.questionID);
-        return hash;
+        return this.getClass().hashCode() + this.questionID.hashCode()
+                + this.questionText.hashCode();
     }
 
     /**

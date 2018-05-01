@@ -102,9 +102,15 @@ public class TemplateGroupTest {
         QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
         questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
         Template t = new Template("template4", questionGroup);
+        HashSet<Template> set = new HashSet<>();
         instance.addTemplate(t);
         other.addTemplate(t);
-        assertTrue(instance.hashCode() == other.hashCode());
+        set.add(t);
+        assertEquals(instance.hashCode(), other.hashCode());
+
+        // Mutation tests
+        assertNotEquals("".hashCode(), instance.hashCode());
+        assertEquals(title.hashCode() + set.hashCode(), instance.hashCode());
     }
 
     /**

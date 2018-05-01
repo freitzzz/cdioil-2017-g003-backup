@@ -9,10 +9,10 @@ import static org.junit.Assert.*;
  * @author António Sousa [1161371]
  */
 public class WhitelistTest {
-    
+
     public WhitelistTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
@@ -23,19 +23,19 @@ public class WhitelistTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        
-        Whitelist domain = new  Whitelist("isep.ipp.pt");
-        
-        assertEquals("Objects with the same reference should be equal",domain, domain);
-        
+
+        Whitelist domain = new Whitelist("isep.ipp.pt");
+
+        assertEquals("Objects with the same reference should be equal", domain, domain);
+
         Object obj = null;
-        
+
         assertNotEquals("Null object is not equal", domain, obj);
-        
-        assertNotEquals("Objects from different classes should not be equal", domain,"isep.ipp.pt");
-        
+
+        assertNotEquals("Objects from different classes should not be equal", domain, "isep.ipp.pt");
+
         Whitelist sameDomain = new Whitelist("ISEP.IPP.PT");
-        
+
         assertEquals("Objects should be equal, since equality is case insensitive", domain, sameDomain);
     }
 
@@ -45,14 +45,19 @@ public class WhitelistTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-      
-        Whitelist domain = new  Whitelist("isep.ipp.pt");
-        
+
+        Whitelist domain = new Whitelist("isep.ipp.pt");
+
         assertNotEquals("Despite the domain's string being the same, hashcodes should be different", domain.hashCode(), "isep.ipp.pt".hashCode());
-        
+
         Whitelist sameDomain = new Whitelist("ISEP.IPP.PT");
-        
+
         assertEquals("Both domains' hash value should be the same since it's case insensitive", domain.hashCode(), sameDomain.hashCode());
+
+        //Mutation tests
+        assertNotEquals("".hashCode(), domain.hashCode());
+        int num = 29 * 7 + "isep.ipp.pt".hashCode();
+        assertEquals(num, domain.hashCode());
     }
 
     /**
@@ -61,31 +66,35 @@ public class WhitelistTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-     
-        Whitelist domain = new  Whitelist("isep.ipp.pt");
-        
+
+        Whitelist domain = new Whitelist("isep.ipp.pt");
+
         Whitelist sameDomain = new Whitelist("ISEP.IPP.PT");
-        
+
         assertEquals(domain.toString(), sameDomain.toString());
+
+        //Mutation test
+        assertNotEquals(null, domain.toString());
     }
+
     /**
      * Miscellaneous tests
      */
     @Test
-    public void testMisc(){
-        assertNotNull("Creation of the object shouldn't be null",new Whitelist());
+    public void testMisc() {
+        assertNotNull("Creation of the object shouldn't be null", new Whitelist());
     }
-    
+
     /**
      * Test of method getID, of class Whitelist.
      */
     @Test
-    public void testGetID(){
+    public void testGetID() {
         System.out.println("getID");
         String s = "isep.ipp.pt";
         Whitelist instance = new Whitelist(s);
         String expResult = s;
-        assertEquals(expResult,instance.getID());
+        assertEquals(expResult, instance.getID());
     }
-    
+
 }

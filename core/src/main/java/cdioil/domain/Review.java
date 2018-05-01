@@ -51,9 +51,10 @@ public class Review implements Serializable {
     /**
      * Copy of the survey's graph, defining the overall flow of the survey.
      */
-    //The graph of the review is a copy of the Survey Graph, and his never changed 
-    //since it defines the Survey flow, so it should only refresh, never update or persist
-    @OneToOne(cascade = {CascadeType.REFRESH})
+    /*The Graph stored in this instance of Review is a copy of the Survey's Graph, 
+    however, since it's a copy and not a direct reference to the Survey's Graph 
+    it is, therefore, a new object and must be persisted with the Review*/
+    @OneToOne(cascade = {CascadeType.ALL})
     private Graph answerGraph;
 
     /**
@@ -74,14 +75,15 @@ public class Review implements Serializable {
      * Map containing Questions IDs and their respective Answers.
      */
     //The review answers can be either persisted or updated
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REFRESH})
+    //Answers can also be removed if the user wishes to undo them
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
     private Map<Question, Answer> answers;
 
     /**
      * Question ID of the question currently being answered.
      */
-    //TO-DO: In discussion regarding anotation
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.MERGE})
+    //Question has to be persisted before the Review
+    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     private Question currentQuestion;
 
     /**
@@ -148,9 +150,7 @@ public class Review implements Serializable {
      * @return false if current question is the last one
      */
     public boolean answerQuestion(QuestionOption option) {
-        System.out.println("->>>>>> "+currentQuestion);
         Iterable<Edge> outgoingEdges = answerGraph.outgoingEdges(currentQuestion);
-        System.out.println("->>>>>> "+currentQuestion);
         // If there are no outgoing edges, maps the last answer and finishes
         if (!outgoingEdges.iterator().hasNext()) {
             answers.put(currentQuestion, new Answer(option));
@@ -203,6 +203,11 @@ public class Review implements Serializable {
         return new TreeMap<>(answers);
     }
 
+    /**
+     * Review's hash code
+     *
+     * @return hash code
+     */
     @Override
     public int hashCode() {
         int hash = 7;
