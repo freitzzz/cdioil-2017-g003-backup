@@ -157,12 +157,21 @@ public class AnswerSurveyController {
 
     /**
      * Answers a question of the survey
+     * @param index
+     * @return 
      */
     public boolean answerQuestion(int index) {
         return surveyReview.answerQuestion(
                 surveyReview.getCurrentQuestion().getOptionList().get(index));
     }
 
+    /**
+     * Reverts last answered question.
+     * @return true if answer can be undone <p>false - otherwise
+     */
+    public boolean undoAnswer(){
+        return surveyReview.undoAnswer();
+    }
     /**
      * Saves the review to the database
      *
@@ -174,12 +183,12 @@ public class AnswerSurveyController {
         if (firstTimeSaving) {
             loggedUser.getProfile().addReview(surveyReview);
             if(new ProfileRepositoryImpl().merge(loggedUser.getProfile())!=null){
-                updateRegisteredUserProfile();
                 return true;
             }
             return false;
         }
         surveyReview=new ReviewRepositoryImpl().merge(surveyReview);
+        updateRegisteredUserProfile();
         return surveyReview!= null;
     }
 

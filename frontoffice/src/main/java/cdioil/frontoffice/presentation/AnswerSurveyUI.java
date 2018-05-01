@@ -23,7 +23,6 @@ public class AnswerSurveyUI {
      */
     private AnswerSurveyController controller;
 
-
     /**
      * String with the text Yes.
      */
@@ -74,10 +73,10 @@ public class AnswerSurveyUI {
                     showPendingReviews();
                     break;
                 case 3:
-                    answerSurvey();
+                    answerSurvey(true);
                     break;
                 case 4:
-                    answerPendingReview();
+                    answerSurvey(false);
                     break;
                 default:
                     System.out.println("ERROR: Invalid option");
@@ -131,32 +130,44 @@ public class AnswerSurveyUI {
         }
     }
 
-    private void answerSurvey() {
-        int idx = Console.readInteger("Survey Number");
+    private void answerSurvey(boolean firstTimeSaving) {
+
+        int idx;
         String option;
-        try {
-            controller.selectSurvey(idx);
-        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-            System.out.println("Error: Can't find a survey with that number");
-            return;
+
+        if (firstTimeSaving) {
+            idx = Console.readInteger("Survey Number");
+            try {
+                controller.selectSurvey(idx);
+            } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+                System.out.println("Error: Can't find a survey with that number");
+                return;
+            }
+        } else {
+            idx = Console.readInteger("Review Number");
+            try {
+                controller.selectPendingReview(idx);
+            } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+                System.out.println("Error: Can't find a review with that number");
+                return;
+            }
         }
 
         while (true) {
-            System.out.println(controller.getQuestion());
-            List<String> options = controller.getCurrentQuestionOptions();
-            for (int i = 0; i < options.size(); i++) {
-                System.out.println(i + options.get(i));
-            }
-
             boolean isValidOption = false;
 
             while (!isValidOption) {
 
+                System.out.println(controller.getQuestion());
+                List<String> options = controller.getCurrentQuestionOptions();
+                for (int i = 0; i < options.size(); i++) {
+                    System.out.println(i + options.get(i));
+                }
                 System.out.println("Type EXIT to leave at any time\n");
-                option = Console.readLine("Select an option:\n");
+                option = Console.readLine("Select an option or UNDO previous answer:\n");
 
                 if (option.equalsIgnoreCase("EXIT")) {
-                    if (controller.saveReview(true)) {
+                    if (controller.saveReview(firstTimeSaving)) {
                         System.out.println("A sua avaliacao foi gravada com sucesso. "
                                 + "Podera continuar a responder ao inquerito em qualquer"
                                 + " altura");
@@ -167,7 +178,15 @@ public class AnswerSurveyUI {
                     if (idx < options.size()) {
                         isValidOption = true;
                     }
+                } else if (option.equalsIgnoreCase("UNDO")) {
+                    if (controller.undoAnswer()) {
+                        break;
+                    }
                 }
+            }
+
+            if (!isValidOption) {
+                continue;
             }
 
             boolean canContinue = controller.answerQuestion(idx);
@@ -187,75 +206,11 @@ public class AnswerSurveyUI {
                     }
                 }
 
-                if (controller.saveReview(true)) {
+                if (controller.saveReview(firstTimeSaving)) {
                     System.out.println("Avaliação submetida com sucesso!");
                 }
                 break;
             }
-        }
-    }
-
-    private void answerPendingReview() {
-        int idx = Console.readInteger("Review Number");
-        String option;
-        try {
-            controller.selectPendingReview(idx);
-        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-            System.out.println("Error: Can't find a review with that number");
-            return;
-        }
-
-        while (true) {
-            System.out.println(controller.getQuestion());
-            List<String> options = controller.getCurrentQuestionOptions();
-            for (int i = 0; i < options.size(); i++) {
-                System.out.println(i + options.get(i));
-            }
-
-            boolean isValidOption = false;
-
-            while (!isValidOption) {
-
-                System.out.println("Type EXIT to leave at any time\n");
-                option = Console.readLine("Select an option:\n");
-
-                if (option.equalsIgnoreCase("EXIT")) {
-                    if (controller.saveReview(false)) {
-                        System.out.println("A sua avaliacao foi gravada com sucesso. "
-                                + "Podera continuar a responder ao inquerito em qualquer"
-                                + " altura");
-                        return;
-                    }
-                } else if (option.matches(NUMERIC_REGEX)) {
-                    idx = Integer.parseInt(option);
-                    if (idx < options.size()) {
-                        isValidOption = true;
-                    }
-                }
-            }
-            boolean canContinue = controller.answerQuestion(idx);
-
-            if (!canContinue) {
-                if (Console.readLine("Would you like to leave a suggestion about the items?").equalsIgnoreCase(YES)) {
-                    boolean suggestionFlag = true;
-                    while (suggestionFlag) {
-                        try {
-                            if (controller.submitSuggestion(Console.readLine("Insert your suggestion:\n"))) {
-                                System.out.println("Your suggestion has been saved!\n");
-                                suggestionFlag = false;
-                            }
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("There was an error with your suggestion, please try again.\n");
-                        }
-                    }
-                }
-
-                if (controller.saveReview(false)) {
-                    System.out.println("Avaliação submetida com sucesso!");
-                }
-                break;
-            }
-
         }
     }
 }

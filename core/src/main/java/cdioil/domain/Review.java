@@ -4,6 +4,8 @@ import cdioil.application.utils.Edge;
 import cdioil.application.utils.Graph;
 import cdioil.domain.authz.Suggestion;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -110,7 +112,7 @@ public class Review implements Serializable {
         }
         this.survey = survey;
         this.answerGraph = survey.getGraphCopy();
-        this.answers = new TreeMap<>();
+        this.answers = new LinkedHashMap<>();
         this.currentQuestion = answerGraph.getFirstQuestion();
         this.reviewState = ReviewState.PENDING;
     }
@@ -171,13 +173,23 @@ public class Review implements Serializable {
     /**
      * Removes the answer to current question and updates current question to
      * the previous.
+     *
+     * @return true - if answer can be undone
+     * <p>
+     * false - otherwise
      */
-    public void undoAnswer() {
+    public boolean undoAnswer() {
         if (answers.isEmpty()) {
-            return;
+            return false;
         }
-        answers.remove(currentQuestion);
-        currentQuestion = (((TreeMap<Question, Answer>) answers).lastKey());
+        
+        LinkedList<Question> answeredQuestions = new LinkedList<>(answers.keySet());
+        Question previouslyAnsweredQuestion = answeredQuestions.removeLast();
+        answers.remove(previouslyAnsweredQuestion);
+        
+        currentQuestion = previouslyAnsweredQuestion;
+
+        return true;
     }
 
     /**
@@ -213,8 +225,6 @@ public class Review implements Serializable {
         int hash = 7;
         hash = 19 * hash + Objects.hashCode(this.answerGraph);
         hash = 19 * hash + Objects.hashCode(this.answers);
-        hash = 19 * hash + Objects.hashCode(this.currentQuestion);
-        hash = 19 * hash + Objects.hashCode(this.suggestion);
         return hash;
     }
 

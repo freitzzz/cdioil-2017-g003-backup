@@ -9,11 +9,9 @@ import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -140,11 +138,27 @@ public class ReviewTest {
     @Test
     public void testUndoAnswer() {
         System.out.println("undoAnswer");
-        instance.undoAnswer();
-        assertEquals("The condition should succeed because the answer to "
-                + "the first question was removed", instance.getReviewQuestionAnswers(), new TreeMap<>());
-        assertNotNull("The condition should succeed because no answer has been given"
-                + "yet", instance.getReviewQuestionAnswers());
+        TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
+                LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
+        List<SurveyItem> list = new LinkedList<>();
+        list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
+        Survey globalSurvey = new GlobalSurvey(list, timePeriod);
+        BinaryQuestion firstQuestion = new BinaryQuestion("Question 1", "567");
+        BinaryQuestion secondQuestion = new BinaryQuestion("Question 2", "456");
+        BinaryQuestion thirdQuestion = new BinaryQuestion("Question 3", "345");
+        globalSurvey.addQuestion(firstQuestion);
+        globalSurvey.setNextQuestion(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
+        globalSurvey.setNextQuestion(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
+        Review review = createReview(globalSurvey);
+        assertFalse("The condition should succeed because the current question"
+                + " is the first one", review.undoAnswer());
+        review.answerQuestion(new BinaryQuestionOption(Boolean.TRUE));
+        assertTrue("The condition should succeed because we can go back to"
+                + " the first question", review.undoAnswer());
+        assertTrue("The condition should succeed because the current question is the first "
+                + "question", review.getCurrentQuestion().equals(firstQuestion));
+        assertTrue("The condition should succeed because all of the questions have been undone",
+                review.getReviewQuestionAnswers().isEmpty());
     }
 
     /**
@@ -173,7 +187,7 @@ public class ReviewTest {
     public void testGetReviewQuestionAnswers() {
         System.out.println("getReviewQuestionAnswers");
         assertEquals("The condition shuold succeed because no question "
-                + "has been answered", instance.getReviewQuestionAnswers(), new TreeMap<>());
+                + "has been answered", instance.getReviewQuestionAnswers(), new LinkedHashMap<>());
         instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
         assertNotNull("The condition should succeed because a question "
                 + "has been answered", instance.getReviewQuestionAnswers());
@@ -203,21 +217,14 @@ public class ReviewTest {
         assertNotEquals("".hashCode(), instance.hashCode());
         other.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
         other.submitSuggestion("Suggestion");
-        int num = 19 * (19 * (19 * (19 * 7 + globalSurvey.getGraphCopy().hashCode())
-                + other.getReviewQuestionAnswers().hashCode())
-                + secondQuestion.hashCode()) + "Suggestion".hashCode();
+        int num = 19 * (19 * 7 + other.getSurvey().getGraphCopy().hashCode())
+                + other.getReviewQuestionAnswers().hashCode();
         assertEquals(num, other.hashCode());
     }
 
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("The condition should succeed because we are comparing "
-                + "a review with a null value", instance, null);
-        assertNotEquals("The condition should succeed because we are comparing "
-                + "instances of different classes", instance, "bananas");
-        assertEquals("The condition should succeed because we are comparing "
-                + "the same instance", instance, instance);
         TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         List<SurveyItem> list = new LinkedList<>();
@@ -229,24 +236,26 @@ public class ReviewTest {
         globalSurvey.addQuestion(firstQuestion);
         globalSurvey.setNextQuestion(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
         globalSurvey.setNextQuestion(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
+        Review another = createReview(globalSurvey);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "a review with a null value", instance, null);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "instances of different classes", instance, "bananas");
+        assertEquals("The condition should succeed because we are comparing "
+                + "the same instance", instance, instance);
         Review other = createReview(globalSurvey);
         assertEquals("The condition should succeed because the reviews are "
-                + "the same", instance, other);
+                + "the same", another, other);
         other.answerQuestion(new BinaryQuestionOption(Boolean.TRUE));
-        instance.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
+        another.answerQuestion(new BinaryQuestionOption(Boolean.FALSE));
         assertNotEquals("The condition should succeed because the reviews "
                 + "have different answers", instance, other);
-        instance.undoAnswer();
-        other.undoAnswer();
-        instance.submitSuggestion("Suggestion");
-        other.submitSuggestion("Other Suggestion");
-        assertNotEquals("The condition should succeed because the reviews "
-                + "have different suggestions", instance, other);
-        list.add(new Product("Other Product", new SKU("554231234"), "1 L", new QRCode("4524235")));
-        globalSurvey = new GlobalSurvey(list, timePeriod);
-        other = createReview(globalSurvey);
+        Survey anotherSurvey = new GlobalSurvey(list, timePeriod);
+        anotherSurvey.addQuestion(firstQuestion);
+        globalSurvey.setNextQuestion(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
+        Review anotherReview = createReview(anotherSurvey);
         assertNotEquals("The condition should succeed because the reviews are "
-                + "about a different list of items", instance, other);
+                + "associated to different surveys", anotherReview, other);
     }
 
     /**

@@ -137,4 +137,18 @@ public class QuestionTest {
         String result = instance.toString();
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Test of compareTo method, of class Question.
+     */
+    @Test
+    public void testCompareTo(){
+        System.out.println("compareTo");
+        BinaryQuestion other = new BinaryQuestion("Question","ID");
+        BinaryQuestion another = new BinaryQuestion("Question","ID");
+        assertTrue(other.compareTo(another) == 0);
+        another = new BinaryQuestion("Ze Question","LD1");
+        assertTrue(other.compareTo(another) == -1);
+        assertNotEquals(null,other.compareTo(another));
+    }
 }
