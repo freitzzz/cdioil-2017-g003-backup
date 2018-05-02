@@ -32,8 +32,10 @@ public final class SurveyStatsWriterFactory {
     public static SurveyStatsWriter create(String filename, Map<Question, Integer> totalBinary, Map<Question, Integer> totalQuantitative,
             Map<Question, Double> binaryMean, Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation,
             Map<Question, Double> quantitativeMeanDeviation) {
-        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) return new CSVSurveyStatsWriter(filename, totalBinary, 
-                totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) {
+            return new CSVSurveyStatsWriter(filename, totalBinary,
+                    totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+        }
         return null;
     }
 

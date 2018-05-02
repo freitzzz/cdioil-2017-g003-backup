@@ -31,7 +31,7 @@ public class ExportSurveyStatisticsUI {
     /**
      * Represents a message that indicates the user that there aren't any available surveys.
      */
-    private final String NO_SURVEYS = localizationHandler.getMessageValue("error_no_surveys_available");
+    private final String NO_SURVEYS_AVAILABLE = localizationHandler.getMessageValue("error_no_surveys_available");
 
     /**
      * Represents the exit code for the User Interface.
@@ -97,8 +97,8 @@ public class ExportSurveyStatisticsUI {
 
         //1. List all surveys
         List<Survey> surveys = ctrl.getAllSurveys();
-        if (listAllSurveys(surveys) == false) {
-            System.out.println(NO_SURVEYS);
+        if (!listAllSurveys(surveys)) {
+            System.out.println(NO_SURVEYS_AVAILABLE);
             System.out.println(SEPARATOR);
             return;
         }
