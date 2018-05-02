@@ -36,32 +36,32 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
     /**
      * Average value for answers of binary questions.
      */
-    private Map<Question, Double> binaryMean;
+    private final Map<Question, Double> binaryMean;
 
     /**
      * Average value for answers of quantitative questions.
      */
-    private Map<Question, Double> quantitativeMean;
+    private final Map<Question, Double> quantitativeMean;
 
     /**
      * Mean deviation for answers of binary questions.
      */
-    private Map<Question, Double> binaryMeanDeviation;
+    private final Map<Question, Double> binaryMeanDeviation;
 
     /**
      * Mean deviation for answers of quantitative questions.
      */
-    private Map<Question, Double> quantitativeMeanDeviation;
+    private final Map<Question, Double> quantitativeMeanDeviation;
 
     /**
      * Total of binary questions.
      */
-    private Map<Question, Integer> binaryTotal;
+    private final Map<Question, Integer> binaryTotal;
 
     /**
      * Total of quantitative questions.
      */
-    private Map<Question, Integer> quantitativeTotal;
+    private final Map<Question, Integer> quantitativeTotal;
 
     /**
      * Field that identifies the question by its ID.
@@ -92,19 +92,19 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
      * Creates a new CSVSurveyStatsWriter.
      *
      * @param filename Path of the file
-     * @param totalBinary Total of answers to binary questions
-     * @param totalQuantitative Total of answers to quantitative questions
+     * @param binaryTotal Total of answers to binary questions
+     * @param quantitativeTotal Total of answers to quantitative questions
      * @param binaryMean Average value for binary answers
      * @param quantitativeMean Average value for quantitative answers
      * @param binaryMeanDeviation Mean deviation for binary answers
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
      */
-    public CSVSurveyStatsWriter(String filename, Map<Question, Integer> totalBinary, Map<Question, Integer> totalQuantitative, Map<Question, Double> binaryMean,
+    public CSVSurveyStatsWriter(String filename, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
             Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
         this.file = new File(filename);
-        this.binaryTotal = totalBinary;
-        this.quantitativeTotal = totalQuantitative;
+        this.binaryTotal = binaryTotal;
+        this.quantitativeTotal = quantitativeTotal;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
         this.binaryMeanDeviation = binaryMeanDeviation;
         this.quantitativeMean = quantitativeMean;
@@ -128,20 +128,19 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
         }
         for (Map.Entry<Question, Double> entry : binaryAnswers) {
             Question q = entry.getKey();
-            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + entry.getValue() + SPLITTER + binaryMean.get(q) + SPLITTER + binaryMeanDeviation.get(q);
+            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + binaryTotal.get(q) + SPLITTER + binaryMean.get(q) + SPLITTER + binaryMeanDeviation.get(q);
             fileContent.add(info);
         }
+        
         Set<Entry<Question, Double>> quantitativeQuestions = quantitativeMean.entrySet();
-
         if (quantitativeQuestions.isEmpty()) {
             fileContent.add("Não há questões quantitativas");
         }
         for (Map.Entry<Question, Double> entry : quantitativeQuestions) {
             Question q = entry.getKey();
-            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + entry.getValue() + SPLITTER + quantitativeMean.get(q) + SPLITTER + quantitativeMeanDeviation.get(q);
+            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + quantitativeTotal.get(q) + SPLITTER + quantitativeMean.get(q) + SPLITTER + quantitativeMeanDeviation.get(q);
             fileContent.add(info);
         }
-
         return FileWriter.writeFile(file, fileContent);
     }
 }
