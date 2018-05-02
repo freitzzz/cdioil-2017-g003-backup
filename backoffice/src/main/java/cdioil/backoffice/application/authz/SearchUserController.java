@@ -15,6 +15,9 @@ import java.util.List;
  */
 public class SearchUserController {
 
+    /**
+     * Instance of the UserRepositoryImpl
+     */
     private UserRepositoryImpl userRepos;
     
      /**

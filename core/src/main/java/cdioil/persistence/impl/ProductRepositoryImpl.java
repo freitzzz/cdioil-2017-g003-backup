@@ -9,8 +9,6 @@ import cdioil.domain.Product;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ProductRepository;
-
-import java.util.List;
 import java.util.Map;
 
 /**
