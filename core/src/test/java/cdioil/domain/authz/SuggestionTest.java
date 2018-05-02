@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.domain.authz;
 
 import org.junit.Test;
@@ -42,6 +37,9 @@ public class SuggestionTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
+        
+        //Mutation test
+        assertNotEquals("".hashCode(),result);
     }
 
     /**
