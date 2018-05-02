@@ -7,6 +7,8 @@ package cdioil.application.utils;
 
 import cdioil.files.CommonFileExtensions;
 
+import java.io.File;
+
 /**
  * Factory of CategoriesReader.
  *
@@ -17,12 +19,12 @@ public final class CategoriesReaderFactory {
     /**
      * Creates an instance of CategoriesReader.
      *
-     * @param filename Name of the file to read
+     * @param file File to read
      * @return an instance of CategoriesReader
      */
-    public static CategoriesReader create(String filename) {
-        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) {
-            return new CSVCategoriesReader(filename);
+    public static CategoriesReader create(File file) {
+        if (file.getAbsolutePath().endsWith(CommonFileExtensions.CSV_EXTENSION)) {
+            return new CSVCategoriesReader(file);
         }
         return null;
     }

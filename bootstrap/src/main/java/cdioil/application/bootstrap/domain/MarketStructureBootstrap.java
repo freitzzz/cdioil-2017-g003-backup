@@ -9,6 +9,12 @@ import cdioil.domain.QRCode;
 import cdioil.domain.SKU;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Market Structure Bootstrap.
  *
@@ -41,12 +47,28 @@ public class MarketStructureBootstrap {
                 qr);
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {
-            CSVCategoriesReader reader = new CSVCategoriesReader(CAT_FILE);
+            File catFile = findCSVFile();
+            //Convert file to use a UTF-8 compliant path string
+            try {
+                catFile = new File(URLDecoder.decode(catFile.getAbsolutePath(), "UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(MarketStructureBootstrap.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            CSVCategoriesReader reader = new CSVCategoriesReader(catFile);
             marketStruct = reader.readCategories();
             cat.addProduct(prod);
             marketStruct.addCategory(cat);
             repo.add(marketStruct);
         }
+    }
+
+    /**
+     * Gets category file from resources
+     * @return category file from resources
+     */
+    private File findCSVFile() {
+        ClassLoader cl = getClass().getClassLoader();
+        return new File(cl.getResource(CAT_FILE).getFile());
     }
 
 }

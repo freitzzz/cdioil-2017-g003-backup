@@ -45,10 +45,10 @@ public class CSVCategoriesReader implements CategoriesReader {
     /**
      * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.
      *
-     * @param filename Name of the file to read
+     * @param file File to read
      */
-    public CSVCategoriesReader(String filename) {
-        this.file = new File(filename);
+    public CSVCategoriesReader(File file) {
+        this.file = file;
         lc = new LinkedList<>();
     }
 

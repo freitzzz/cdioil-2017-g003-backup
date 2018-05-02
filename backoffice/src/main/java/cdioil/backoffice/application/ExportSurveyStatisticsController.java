@@ -171,11 +171,12 @@ public class ExportSurveyStatisticsController {
                 int total = 0;
                 for (Answer a : entry.getValue()) {
                     String answer = a.getContent();
-                    total++;
                     if (answer.equalsIgnoreCase("true")) {
                         values.add((double) 1);
+                        total++;
                     } else if (answer.equalsIgnoreCase("false")) {
                         values.add((double) 0);
+                        total++;
                     }
                 }
                 binaryTotal.put(q, total);
