@@ -20,7 +20,7 @@ import java.util.Random;
  */
 public class LoadAnswersController {
 
-    private static final int THREAD_NUMBER = 4;
+    private static final int THREAD_NUMBER = 17;
     private ReviewRepositoryImpl reviewRepository;
 
     public LoadAnswersController() {
@@ -90,6 +90,7 @@ public class LoadAnswersController {
     private Runnable stressTestWithThreads(int threadNumber, Survey survey, int numAnswers,
             Map<String, List<Double>> distributions) {
         Runnable stressTestThreads = () -> {
+            ReviewRepositoryImpl repo=new ReviewRepositoryImpl();
             Random randomNumber = new Random();
             Review currentReview;
             double generatedNumber;
@@ -117,7 +118,7 @@ public class LoadAnswersController {
                         infLimit = supLimit;
                     }
                 }
-                reviewRepository.add(currentReview);
+                repo.add(currentReview);
             }
         };
         return stressTestThreads;
