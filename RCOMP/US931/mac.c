@@ -29,9 +29,3 @@ char* get_mac_address(){
         return NULL;
     }
 }
-
-int main()
-{
-    printf("%s\n",get_mac_address());
-  return 1;
-}

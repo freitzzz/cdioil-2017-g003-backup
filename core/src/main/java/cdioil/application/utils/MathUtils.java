@@ -8,53 +8,67 @@ package cdioil.application.utils;
 import java.util.List;
 
 /**
- * Class for mathematical calculations
+ * Class for mathematical calculations.
+ *
  * @author Ana Guerra (1161191)
  */
 public class MathUtils {
 
     /**
-     * Method that calculates the average of a set of evaluation
-     * @param resultsList List with the values of the evaluations
-     * @return the mean of the values provided
+     * Method that calculates the average of a list of values.
+     *
+     * @param resultList List with the values
+     * @return the mean of the values provided. -1 if the result list is invalid
      */
-    public static double calculateMean(List<Double> resultsList) {
+    public static double calculateMean(List<Double> resultList) {
+        if (!validateValues(resultList)) {
+            return -1;
+        }
 
-        validateValues(resultsList);
-        double mean = 0;
         double sum = 0;
-
-        for (Double value : resultsList) {
+        for (Double value : resultList) {
             sum += value;
         }
 
-        mean = sum / (double) resultsList.size();
-        return mean;
+        if (sum == 0) {
+            return 0;
+        }
+        
+        return sum / (double) resultList.size();
     }
 
     /**
-     * Method that calculates the mean deviation of a set of evaluation
-     * @param resultsList List with the values of the evaluations
-     * @return the mean deviation of the values provided
+     * Method that calculates the mean deviation of a list of values.
+     *
+     * @param resultList List with the values
+     * @return the mean deviation of the values provided. -1 if the result list is invalid or the mean is 0
      */
-    public static double calculateMeanDeviation(List<Double> resultsList) {
-
-        validateValues(resultsList);
-        double meanDeviation = 0;
-        double sum = 0;
-
-        double mean = calculateMean(resultsList);
-
-        for (Double value : resultsList) {
-            sum += Math.pow((value - mean),2);
+    public static double calculateMeanDeviation(List<Double> resultList) {
+        if (!validateValues(resultList)) {
+            return -1;
         }
-        meanDeviation = Math.sqrt((sum)/ ((double) resultsList.size()));
 
-        return meanDeviation;
+        double mean = calculateMean(resultList);
+        
+        if (mean == -1 || mean == 0) {
+            return mean;
+        }
+        
+        double sum = 0;
+        for (Double value : resultList) {
+            sum += Math.pow((value - mean), 2);
+        }
+        
+        return Math.sqrt((sum) / ((double) resultList.size()));
     }
 
-    public static boolean validateValues(List<Double> resultsList) {
-        return !(resultsList == null || resultsList.isEmpty());
+    /**
+     * Checks if the result list is valid.
+     *
+     * @param resultList List to check
+     * @return true, if the list isn't null or empty. Otherwise, returns false
+     */
+    public static boolean validateValues(List<Double> resultList) {
+        return resultList != null && !resultList.isEmpty();
     }
-
 }

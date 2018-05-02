@@ -11,6 +11,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Exports statistics of a survey to a .csv file.
@@ -34,75 +36,75 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
     /**
      * Average value for answers of binary questions.
      */
-    private Map<Question, Double> binaryMean;
+    private final Map<Question, Double> binaryMean;
 
     /**
      * Average value for answers of quantitative questions.
      */
-    private Map<Question, Double> quantitativeMean;
+    private final Map<Question, Double> quantitativeMean;
 
     /**
      * Mean deviation for answers of binary questions.
      */
-    private Map<Question, Double> binaryMeanDeviation;
+    private final Map<Question, Double> binaryMeanDeviation;
 
     /**
      * Mean deviation for answers of quantitative questions.
      */
-    private Map<Question, Double> quantitativeMeanDeviation;
+    private final Map<Question, Double> quantitativeMeanDeviation;
 
     /**
      * Total of binary questions.
      */
-    private Map<Question, Integer> binaryTotal;
+    private final Map<Question, Integer> binaryTotal;
 
     /**
      * Total of quantitative questions.
      */
-    private Map<Question, Integer> quantitativeTotal;
+    private final Map<Question, Integer> quantitativeTotal;
 
     /**
      * Field that identifies the question by its ID.
      */
-    private final static String QUESTION_ID = "Questão (ID)";
-    
+    private static final String QUESTION_ID = "Questão (ID)";
+
     /**
      * Field that identifies the type of the question.
      */
-    private final static String QUESTION_TYPE = "Tipo";
-    
+    private static final String QUESTION_TYPE = "Tipo";
+
     /**
      * Field that contains the number of answers to the question.
      */
-    private final static String TOTAL = "Total";
-    
+    private static final String TOTAL = "Total";
+
     /**
      * Field that contains the average of the answers to the question.
      */
-    private final static String AVG = "Média";
-    
+    private static final String AVG = "Média";
+
     /**
      * Field that contains the mean deviation of the answers to the question.
      */
-    private final static String MEAN_DEVIATION = "Desvio Padrão";
+    private static final String MEAN_DEVIATION = "Desvio Padrão";
 
     /**
      * Creates a new CSVSurveyStatsWriter.
      *
      * @param filename Path of the file
-     * @param totalBinary Total of answers to binary questions
-     * @param totalQuantitative Total of answers to quantitative questions
+     * @param binaryTotal Total of answers to binary questions
+     * @param quantitativeTotal Total of answers to quantitative questions
      * @param binaryMean Average value for binary answers
      * @param quantitativeMean Average value for quantitative answers
      * @param binaryMeanDeviation Mean deviation for binary answers
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
      */
-    public CSVSurveyStatsWriter(String filename, Map<Question, Integer> totalBinary, Map<Question, Integer> totalQuantitative, Map<Question, Double> binaryMean,
+    public CSVSurveyStatsWriter(String filename, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
             Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
         this.file = new File(filename);
-        this.binaryTotal = totalBinary;
-        this.quantitativeTotal = totalQuantitative;
+        this.binaryTotal = binaryTotal;
+        this.quantitativeTotal = quantitativeTotal;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
         this.binaryMeanDeviation = binaryMeanDeviation;
         this.quantitativeMean = quantitativeMean;
@@ -119,19 +121,26 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
         List<String> fileContent = new ArrayList<>();
         String header = QUESTION_ID + SPLITTER + QUESTION_TYPE + SPLITTER + TOTAL + SPLITTER + AVG + SPLITTER + MEAN_DEVIATION;
         fileContent.add(header);
-        
-        for(Question q : binaryMean.keySet()){
-            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + binaryTotal.get(q) + SPLITTER
-                    + binaryMean.get(q) + binaryMeanDeviation.get(q);
-            fileContent.add(info);
-        }       
-        
-        for(Question q : quantitativeMean.keySet()){
-            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + quantitativeTotal.get(q) + SPLITTER
-                    + quantitativeMean.get(q) + binaryMeanDeviation.get(q);
+
+        Set<Entry<Question, Double>> binaryAnswers = binaryMean.entrySet();
+        if (binaryAnswers.isEmpty()) {
+            fileContent.add("Não há questões binárias");
+        }
+        for (Map.Entry<Question, Double> entry : binaryAnswers) {
+            Question q = entry.getKey();
+            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + binaryTotal.get(q) + SPLITTER + binaryMean.get(q) + SPLITTER + binaryMeanDeviation.get(q);
             fileContent.add(info);
         }
-
+        
+        Set<Entry<Question, Double>> quantitativeQuestions = quantitativeMean.entrySet();
+        if (quantitativeQuestions.isEmpty()) {
+            fileContent.add("Não há questões quantitativas");
+        }
+        for (Map.Entry<Question, Double> entry : quantitativeQuestions) {
+            Question q = entry.getKey();
+            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + quantitativeTotal.get(q) + SPLITTER + quantitativeMean.get(q) + SPLITTER + quantitativeMeanDeviation.get(q);
+            fileContent.add(info);
+        }
         return FileWriter.writeFile(file, fileContent);
     }
 }
