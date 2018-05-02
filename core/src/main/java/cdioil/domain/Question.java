@@ -16,6 +16,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 /**
  * Abstract class that represents a Question.
@@ -23,6 +24,7 @@ import javax.persistence.OneToMany;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
+@SequenceGenerator(name = "questionSeq",initialValue = 1,allocationSize = 1)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "QUESTIONTYPE")
 public abstract class Question implements Serializable, Comparable {
@@ -36,7 +38,7 @@ public abstract class Question implements Serializable, Comparable {
      * Database id.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "questionSeq")
     private long databaseID;
 
     /**

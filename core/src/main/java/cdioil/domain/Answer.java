@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 /**
  * Represents an answer (option that a user chose)
@@ -13,6 +14,7 @@ import javax.persistence.Id;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
+@SequenceGenerator(name = "answerSeq",initialValue = 1,allocationSize = 1)
 public class Answer implements Serializable, ValueObject {
 
     /**
@@ -25,7 +27,7 @@ public class Answer implements Serializable, ValueObject {
      */
     private String content;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "answerSeq")
     private long id;
 
     public Answer(QuestionOption chosenOption) {

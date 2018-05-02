@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.SequenceGenerator;
 
 /**
  * Class that represents an option that a question has. (e.g. a binary question
@@ -19,12 +20,13 @@ import javax.persistence.InheritanceType;
  * binary option)
  */
 @Entity
+@SequenceGenerator(name = "questionOptionSeq",initialValue = 1,allocationSize = 1)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class QuestionOption<T> implements Serializable, ValueObject {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "questionOptionSeq")
     @Column(name = "QUESTIONOPTION_ID")
     private long id;
 

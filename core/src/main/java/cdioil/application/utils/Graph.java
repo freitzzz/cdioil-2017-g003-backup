@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyClass;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
 /**
@@ -33,6 +34,7 @@ import javax.persistence.Version;
  * @author António Sousa [1161371]
  */
 @Entity
+@SequenceGenerator(name = "graphSeq",initialValue = 1,allocationSize = 1)
 public class Graph implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,7 +43,7 @@ public class Graph implements Serializable {
      * Database identifier.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "graphSeq")
     private long id;
 
     /**

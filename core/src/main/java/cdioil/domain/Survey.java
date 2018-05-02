@@ -14,6 +14,7 @@ import javax.persistence.*;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@SequenceGenerator(name = "surveySeq",initialValue = 1,allocationSize = 1)
 public abstract class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,7 +23,7 @@ public abstract class Survey implements Serializable {
     private Long version;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "surveySeq")
     /**
      * Database id.
      */
