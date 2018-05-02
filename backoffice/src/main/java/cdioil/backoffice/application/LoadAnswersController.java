@@ -8,6 +8,7 @@ import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -34,7 +35,7 @@ public class LoadAnswersController {
      */
     public long performStressTest(String filename, int numAnswers) {
 
-        AnswerProbabilityReader reader = AnswerProbabilityReaderFactory.create(filename);
+        AnswerProbabilityReader reader = AnswerProbabilityReaderFactory.create(new File(filename));
 
         Map<String, List<Double>> distributions = reader.readProbabilities();
 

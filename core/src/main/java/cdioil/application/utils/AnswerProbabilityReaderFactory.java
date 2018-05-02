@@ -1,6 +1,7 @@
 package cdioil.application.utils;
 
 import cdioil.files.CommonFileExtensions;
+import java.io.File;
 
 /**
  * Class used for instantiating implementations of AnswerProbabilityReader.
@@ -13,12 +14,12 @@ public final class AnswerProbabilityReaderFactory {
      * Constructs a AnswerProbabilityReader instance based on the file's
      * extension.
      *
-     * @param filename file's absolute path
+     * @param file file to be read
      * @return implementation of AnswerProbabilityReader adequate to the file
      */
-    public static AnswerProbabilityReader create(String filename) {
-        if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) {
-            return new CSVAnswerProbabilityReader(filename);
+    public static AnswerProbabilityReader create(File file) {
+        if (file.getAbsolutePath().endsWith(CommonFileExtensions.CSV_EXTENSION)) {
+            return new CSVAnswerProbabilityReader(file);
         }
         return null;
     }

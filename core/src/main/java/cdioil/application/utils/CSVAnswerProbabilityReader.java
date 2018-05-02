@@ -82,10 +82,10 @@ public class CSVAnswerProbabilityReader implements AnswerProbabilityReader {
      * Creates a new instance of CSVAnswerProbabilityReader for a file with the
      * given absolute path.
      *
-     * @param filename absolute path of the file being read.
+     * @param file file being read.
      */
-    public CSVAnswerProbabilityReader(String filename) {
-        this.file = new File(filename);
+    public CSVAnswerProbabilityReader(File file) {
+        this.file = file;
     }
 
     @Override
