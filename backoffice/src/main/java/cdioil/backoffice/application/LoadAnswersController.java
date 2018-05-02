@@ -19,7 +19,8 @@ import java.util.Random;
  * Stress Tests the application by loading hundreds of survey reviews on runtime
  */
 public class LoadAnswersController {
-    private static final int THREAD_NUMBER=4;
+
+    private static final int THREAD_NUMBER = 4;
     private ReviewRepositoryImpl reviewRepository;
 
     public LoadAnswersController() {
@@ -51,37 +52,74 @@ public class LoadAnswersController {
         Review currentReview;
         double generatedNumber;
         Question currentQuestion;
-        int realNumberAnswers=numAnswers/THREAD_NUMBER;
-        for(int t=0;t<THREAD_NUMBER;t++){
-            Thread thread=new Thread();
+        int realNumberAnswers = numAnswers / THREAD_NUMBER;
+        for (int t = 0; t < THREAD_NUMBER; t++) {
+            Thread thread = new Thread(stressTestWithThreads(THREAD_NUMBER,survey,numAnswers,distributions));
             thread.start();
         }
-        for (int i = 0; i <realNumberAnswers; i++) {
-            currentReview = new Review(survey);
-            while (!currentReview.isFinished()) {
-                generatedNumber = randomNumber.nextDouble();
-                currentQuestion = currentReview.getCurrentQuestion();
-                List<QuestionOption> currentQuestionOptions = currentQuestion.getOptionList();
-
-                List<Double> probabilities = distributions.get(currentQuestion.getQuestionID());
-
-                double infLimit = 0;
-                for (int j = 0; j < currentQuestionOptions.size(); j++) {
-                    double supLimit = probabilities.get(j) + infLimit;
-
-                    if (generatedNumber > infLimit && generatedNumber <= supLimit) {
-                        QuestionOption option = currentQuestionOptions.get(j);
-                        currentReview.answerQuestion(option);
-                        break;
-                    }
-
-                    infLimit = supLimit;
-                }
-            }
-            reviewRepository.add(currentReview);
-        }
+//        for (int i = 0; i < realNumberAnswers; i++) {
+//            currentReview = new Review(survey);
+//            while (!currentReview.isFinished()) {
+//                generatedNumber = randomNumber.nextDouble();
+//                currentQuestion = currentReview.getCurrentQuestion();
+//                List<QuestionOption> currentQuestionOptions = currentQuestion.getOptionList();
+//
+//                List<Double> probabilities = distributions.get(currentQuestion.getQuestionID());
+//
+//                double infLimit = 0;
+//                for (int j = 0; j < currentQuestionOptions.size(); j++) {
+//                    double supLimit = probabilities.get(j) + infLimit;
+//
+//                    if (generatedNumber > infLimit && generatedNumber <= supLimit) {
+//                        QuestionOption option = currentQuestionOptions.get(j);
+//                        currentReview.answerQuestion(option);
+//                        break;
+//                    }
+//
+//                    infLimit = supLimit;
+//                }
+//            }
+//            reviewRepository.add(currentReview);
+        //}
+        
         final long endTime = System.currentTimeMillis();
 
         return endTime - startTime;
+    }
+
+    private Runnable stressTestWithThreads(int threadNumber, Survey survey, int numAnswers,
+            Map<String, List<Double>> distributions) {
+        Runnable stressTestThreads = () -> {
+            Random randomNumber = new Random();
+            Review currentReview;
+            double generatedNumber;
+            Question currentQuestion;
+            int realNumberAnswers = numAnswers / threadNumber;
+            for (int i = 0; i < realNumberAnswers; i++) {
+                currentReview = new Review(survey);
+                while (!currentReview.isFinished()) {
+                    generatedNumber = randomNumber.nextDouble();
+                    currentQuestion = currentReview.getCurrentQuestion();
+                    List<QuestionOption> currentQuestionOptions = currentQuestion.getOptionList();
+
+                    List<Double> probabilities = distributions.get(currentQuestion.getQuestionID());
+
+                    double infLimit = 0;
+                    for (int j = 0; j < currentQuestionOptions.size(); j++) {
+                        double supLimit = probabilities.get(j) + infLimit;
+
+                        if (generatedNumber > infLimit && generatedNumber <= supLimit) {
+                            QuestionOption option = currentQuestionOptions.get(j);
+                            currentReview.answerQuestion(option);
+                            break;
+                        }
+
+                        infLimit = supLimit;
+                    }
+                }
+                reviewRepository.add(currentReview);
+            }
+        };
+        return stressTestThreads;
     }
 }
