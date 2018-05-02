@@ -10,6 +10,10 @@ import cdioil.domain.SKU;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Market Structure Bootstrap.
@@ -44,6 +48,12 @@ public class MarketStructureBootstrap {
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {
             File catFile = findCSVFile();
+            //Convert file to use a UTF-8 compliant path string
+            try {
+                catFile = new File(URLDecoder.decode(catFile.getAbsolutePath(), "UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(MarketStructureBootstrap.class.getName()).log(Level.SEVERE, null, ex);
+            }
             CSVCategoriesReader reader = new CSVCategoriesReader(catFile);
             marketStruct = reader.readCategories();
             cat.addProduct(prod);
