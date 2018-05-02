@@ -9,6 +9,8 @@ import cdioil.domain.QRCode;
 import cdioil.domain.SKU;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 
+import java.io.File;
+
 /**
  * Market Structure Bootstrap.
  *
@@ -41,12 +43,22 @@ public class MarketStructureBootstrap {
                 qr);
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {
-            CSVCategoriesReader reader = new CSVCategoriesReader(CAT_FILE);
+            File catFile = findCSVFile();
+            CSVCategoriesReader reader = new CSVCategoriesReader(catFile);
             marketStruct = reader.readCategories();
             cat.addProduct(prod);
             marketStruct.addCategory(cat);
             repo.add(marketStruct);
         }
+    }
+
+    /**
+     * Gets category file from resources
+     * @return category file from resources
+     */
+    private File findCSVFile() {
+        ClassLoader cl = getClass().getClassLoader();
+        return new File(cl.getResource(CAT_FILE).getFile());
     }
 
 }

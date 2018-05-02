@@ -5,6 +5,7 @@
  */
 package cdioil.application.utils;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.After;
@@ -39,7 +40,7 @@ public class CSVCategoriesReaderTest {
 
     @Before
     public void setUp() {
-        c = new CSVCategoriesReader("Test.csv");
+        c = new CSVCategoriesReader(new File("Test.csv"));
     }
 
     @After
