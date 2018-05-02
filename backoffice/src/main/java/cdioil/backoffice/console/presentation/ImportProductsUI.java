@@ -8,11 +8,9 @@ package cdioil.backoffice.console.presentation;
 import cdioil.backoffice.application.ImportProductsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.console.Console;
-import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.files.InvalidFileFormattingException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,9 +63,13 @@ public class ImportProductsUI {
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
     private final String INFO_EXIT_INPUT = localizationHandler.getMessageValue("info_exit_input");
-
+    /**
+     * Represents a message that indicate the invalid file format.
+     */
     private final String ERROR_INVALID_FILE_FORMAT = localizationHandler.getMessageValue("error_invalid_file_format");
-
+    /**
+     * Represents a message that indicate that no imported products
+     */
     private final String ERROR_NO_IMPORTED_PRODUCTS = localizationHandler.getMessageValue("error_no_imported_products");
     /**
      * Instance of Controller that intermediates the interactions between the admin and the system.
@@ -102,7 +104,6 @@ public class ImportProductsUI {
         try {
             Integer numImportedProducts = controller.importProducts(fileRead, fileExport, existsProducts);
             if (!existsProducts.isEmpty()) {
-
                 Set<Map.Entry<String, List<Product>>> entries = existsProducts.entrySet();
                 for (Map.Entry<String, List<Product>> mapEntry : entries) {
                     String path = mapEntry.getKey();

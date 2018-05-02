@@ -33,8 +33,7 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final String SPLITTER = ";";
     /**
-     * Number of the line that contains the identifiers of the columns (the
-     * first one in this case).
+     * Number of the line that contains the identifiers of the columns (the first one in this case).
      */
     private static final int IDENTIFIERS_LINE = 0;
     /**
@@ -102,19 +101,16 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final String PATH_IDENTIFIER = "-";
     /**
-     * The number of cells skipped in order to reach the start of a new question
-     * in a file with questions relative to categories.
+     * The number of cells skipped in order to reach the start of a new question in a file with questions relative to categories.
      */
     private static final int CATEGORIES_FILE_OFFSET = 5;
     /**
-     * The number of cells skipped in order to reach the start of a new question
-     * in a file with independent questions.
+     * The number of cells skipped in order to reach the start of a new question in a file with independent questions.
      */
     private static final int INDEPENDENT_FILE_OFFSET = 0;
 
     /**
-     * Creates an instance of CSVQuestionsReader, receiving the name of the file
-     * to read.
+     * Creates an instance of CSVQuestionsReader, receiving the name of the file to read.
      *
      * @param filename Name of the file to read
      */
@@ -122,6 +118,11 @@ public class CSVQuestionsReader implements QuestionsReader {
         this.file = new File(filename);
     }
 
+    /**
+     * Reads a category questions from a CSV file.
+     *
+     * @return a map with the path of category and the list of the questions
+     */
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
 
@@ -272,19 +273,13 @@ public class CSVQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Reads a multiplle choice question from a CSV file.</br>This one is a bit
-     * different from the other ones, since it returns an updated value of the
-     * current line's index as well as the question itself, this is due to the
-     * fact that instances of <code>MultipleChoiceQuestion</code> have options
-     * and so some lines need to be skipped.
+     * Reads a multiplle choice question from a CSV file.</br>This one is a bit different from the other ones, since it returns an updated value of the current line's index as well as the question itself, this is due to the fact that instances of <code>MultipleChoiceQuestion</code> have options and so some lines need to be skipped.
      *
      * @param currentLine line currently being read
      * @param offset number of cells skipped to reach the start of the question
      * @param fileContent all of the file's lines
      * @param currentIdx index of the line currently being read
-     * @return an array of <code>Object</code> with two positions, where the
-     * first contains an updated value of the current line index, and the second
-     * contains an instance of <code>MultipleChoiceQuestion</code>.
+     * @return an array of <code>Object</code> with two positions, where the first contains an updated value of the current line index, and the second contains an instance of <code>MultipleChoiceQuestion</code>.
      */
     private Object[] readMultipleChoiceQuestion(String[] currentLine, int offset, List<String> fileContent, int currentIdx) {
 
@@ -312,8 +307,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Checks if the content of the file is valid - not null and has all the
-     * expected identifiers properly splitted.
+     * Checks if the content of the file is valid - not null and has all the expected identifiers properly splitted.
      *
      * @param fileContent All the lines of the file
      * @return true, if the content is valid. Otherwise, returns false
@@ -338,6 +332,11 @@ public class CSVQuestionsReader implements QuestionsReader {
                 && line[8].equalsIgnoreCase(PARAMETER_IDENTIFIER));
     }
 
+     /**
+     * Reads a independent questions from a CSV file.
+     *
+     * @return the list of the questions
+     */
     @Override
     public List<Question> readIndependentQuestions() {
 
@@ -388,8 +387,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Checks if the content of the file is valid - not null and has all the
-     * expected identifiers properly splitted.
+     * Checks if the content of the file is valid - not null and has all the expected identifiers properly splitted.
      *
      * @param fileContent All the lines of the file
      * @return true, if the content is valid. Otherwise, returns false

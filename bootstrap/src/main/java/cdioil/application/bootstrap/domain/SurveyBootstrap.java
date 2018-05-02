@@ -58,7 +58,7 @@ public class SurveyBootstrap {
 //        
 //        survey.changeState(SurveyState.ACTIVE);
         Survey survey = new GlobalSurvey(surveyItems, new TimePeriod(LocalDateTime.now(),
-                LocalDateTime.MAX));
+                LocalDateTime.of(2020,1,20,12,12)));
 
         BinaryQuestion question1 = new BinaryQuestion("Questao Binaria 1 Survey Bootstrap", "BQS1");
         BinaryQuestion question2 = new BinaryQuestion("Questao Binaria 2 Survey Bootstrap", "BQS2");
@@ -124,7 +124,7 @@ public class SurveyBootstrap {
         surveyItems.add(category);
         survey = new GlobalSurvey(surveyItems,
                 new TimePeriod(LocalDateTime.now(),
-                        LocalDateTime.MAX));
+                        LocalDateTime.of(2020,1,12,12,12)));
 
         Question fetchedQuestion12 = fetchedQuestions.get(0);
         Question fetchedQuestion13 = fetchedQuestions.get(1);

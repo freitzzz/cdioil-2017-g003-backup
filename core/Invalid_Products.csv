@@ -1,4 +1,4 @@
-﻿ClasseID;ProdutoID;Designacao;QuantidadeUnidade;
+﻿ClasseID;ProID;Designacao;Quantidade;Unidade;
 "101010010101;351067;Óleo alimentar Continente;	1l"
 "101010010101;351166;Óleo alimentar Continente;	3l"
 "101010010101;351265;Óleo alimentar Continente Seleção;1l"
