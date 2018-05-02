@@ -5,7 +5,6 @@
  */
 package cdioil.application.utils;
 
-import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.files.CommonFileExtensions;
 import java.util.List;

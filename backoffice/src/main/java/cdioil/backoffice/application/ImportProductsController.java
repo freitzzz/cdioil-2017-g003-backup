@@ -10,7 +10,6 @@ import cdioil.application.utils.ProductsReaderFactory;
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
 import cdioil.domain.Product;
-import cdioil.domain.SKU;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.HashSet;
@@ -68,6 +67,11 @@ public class ImportProductsController {
         return successfullyImportedProducts.size();
     }
 
+    /**
+     * Updates the product if the user prefixes
+     * @param updatedProducts Map with the path of the category and product
+     * @return 1 if the product has been updated or 0 if not
+     */
     public int updateProducts(Map<String, Product> updatedProducts) {
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         MarketStructure marketStructure = marketStructureRepository.findMarketStructure();

@@ -87,10 +87,6 @@ public class CSVProductsReader implements ProductsReader {
      * Unit Identifier.
      */
     private static final String UNIT_IDENTIFIER = "QuantidadeUnidade";
-//    /**
-//     * Quantity Identifier.
-//     */
-//    private static final String QUANTITY_IDENTIFIER = "Quantidade";
     /**
      * Path Identifier.
      */
@@ -175,7 +171,6 @@ public class CSVProductsReader implements ProductsReader {
                             }
                         }
                     } else {
-
                         if (!isPathProductValid(path)) {
                             invalidProducts.put(i, 1);
                         }
@@ -183,7 +178,6 @@ public class CSVProductsReader implements ProductsReader {
                             invalidProducts.put(i, 2);
                         }
                     }
-
                 } catch (IllegalArgumentException ex) {
                     System.out.println("O formato dos produtos é inválido na linha " + i + ".");
                 }
@@ -195,6 +189,11 @@ public class CSVProductsReader implements ProductsReader {
         return readProducts;
     }
 
+    /**
+     * Create the path of the product
+     * @param path String which will be converted into category path
+     * @return the path of the category
+     */
     private String createProductPath(String path) {
 
         StringBuilder sb = new StringBuilder();
