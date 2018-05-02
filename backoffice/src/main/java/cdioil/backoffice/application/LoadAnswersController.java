@@ -19,7 +19,7 @@ import java.util.Random;
  * Stress Tests the application by loading hundreds of survey reviews on runtime
  */
 public class LoadAnswersController {
-
+    private static final int THREAD_NUMBER=4;
     private ReviewRepositoryImpl reviewRepository;
 
     public LoadAnswersController() {
@@ -51,7 +51,12 @@ public class LoadAnswersController {
         Review currentReview;
         double generatedNumber;
         Question currentQuestion;
-        for (int i = 0; i < numAnswers; i++) {
+        int realNumberAnswers=numAnswers/THREAD_NUMBER;
+        for(int t=0;t<THREAD_NUMBER;t++){
+            Thread thread=new Thread();
+            thread.start();
+        }
+        for (int i = 0; i <realNumberAnswers; i++) {
             currentReview = new Review(survey);
             while (!currentReview.isFinished()) {
                 generatedNumber = randomNumber.nextDouble();
