@@ -17,6 +17,11 @@ int isAuthKeyAllowed(char** authenticationKeys,char* authenticationKey,int authe
     return 0;
 }
 
+/* US-931 Authentication between the server that is recieving the reviews and the devices that are 
+ * sending reviews
+ * <br>The Server uses a file with all devices authentication keys that is used to identify the devices that can send reviews
+ * <br>If the device authentication key is contained on the file, the server sends the device a success code (200), if not it sends a failure code (400)
+ */
 
 /*Runs the Server*/
 /*Recieves through parameter the name of the file with the machines authentication keys*/

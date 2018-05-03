@@ -1,1 +1,3 @@
+# This file is used to hold all devices authentication keys
+
 d6c67b926311591a3faa9bdeaaefad65c6d2e2c011fa00554b038f6c88d5934340307b73e761b68775d4a65ab800c2b0d3b17f48a4d63210c9d406cb01cbb619
