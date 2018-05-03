@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;
@@ -321,5 +322,62 @@ public class MarketStructureTest {
     @Test(expected = UnsupportedOperationException.class)
     public void ensureRemoveCategoryThrowsException(){
         new MarketStructure().removeCategory(new Category("Category", "10DC"));
+    }
+    
+    @Test
+    public void ensureUpdateProductUpdatesOldProduct(){
+        Category cat = new Category("Cat","10938DC");
+        
+        MarketStructure struct = new MarketStructure();
+        
+        Product oldProduct = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
+        Product newProduct = new Product("ProdutoTeste 2.0", new SKU("544261234"), "1 L", new QRCode("4324235"));
+        
+        cat.addProduct(oldProduct);
+        
+        struct.addCategory(cat);
+        
+        Iterator<Product> oldProductSet = cat.getProductSetIterator();
+        
+        struct.updateProduct(cat, newProduct);
+        
+        Iterator<Product> newProductSet = cat.getProductSetIterator();
+        
+        assertNotEquals(oldProductSet,newProductSet);
+    }
+    
+    @Test
+    public void ensureUpdateProductDoesNotUpdateSameProduct(){
+        Category cat = new Category("Cat","10938DC");
+        
+        MarketStructure struct = new MarketStructure();
+        
+        Product sameProduct = new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"));
+        
+        cat.addProduct(sameProduct);
+        
+        struct.addCategory(cat);
+        
+        Iterator<Product> oldProductSet = cat.getProductSetIterator();
+        
+        struct.updateProduct(cat, sameProduct);
+        
+        Iterator<Product> newProductSet = cat.getProductSetIterator();
+        
+        assertNotEquals(oldProductSet,newProductSet);
+    }
+    
+    @Test
+    public void ensureUpdateProductMutationsAreKilled(){
+        Category cat = new Category("Cat","10938DC");
+        
+        MarketStructure struct = new MarketStructure();
+        
+        struct.addCategory(cat);
+        
+        //Kill while negated conditional mutator
+        struct.updateProduct(cat, null);
+        
+        //How to kill if negated conditional mutator?
     }
 }
