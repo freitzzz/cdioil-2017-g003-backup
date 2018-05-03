@@ -43,6 +43,7 @@ public class PrecoTest {
         Preco precoX = new Preco("50 €");
         Preco precoY=new Preco("50 EUR");
         Preco precoZ=new Preco("50 $");
+        Preco precoK = new Preco("50 €");
         assertEquals("A condição deve acertar porque os Preco a comparar sao a mesma instância"
                 ,precoX,precoX);
         assertNotEquals("A condição deve falhar porque o Preco a comparar é null",precoX,null);
@@ -51,6 +52,8 @@ public class PrecoTest {
         assertEquals("A condição deve acertar porque os Preco a comparar sao iguais"
                 ,precoX,precoY);
         assertNotEquals("A condição deve falhar porque os Preco sao diferentes",precoX,precoZ);
+        assertEquals("A condição deve acertar porque os Precos a comparar sao "
+                + "iguais",precoX,precoK);
     }
 
     /**
