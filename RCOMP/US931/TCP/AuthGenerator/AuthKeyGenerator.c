@@ -1,5 +1,7 @@
 /*Generator Include Header*/
 #include "AuthKeyGenerator.h"
+#include "Mac.h"
+#include "MSN.h"
 
 /*Hash Buffer Size*/
 #define BUFFER_SIZE 100
@@ -12,7 +14,7 @@
  * <br>Uses SHA-512 for hash generation
  * <br>Inspired from https://stackoverflow.com/a/2458382
  */
-char* generate(){
+unsigned char* generate(){
     char macAndFakeMSN[BUFFER_SIZE];
     sprintf(macAndFakeMSN,MAC_MSN_FORMAT,get_mac_address(),getFakeMSN());
     SHA512_CTX sha512;
@@ -22,6 +24,6 @@ char* generate(){
     SHA512_Update(&sha512,macAndFakeMSN,strlen(macAndFakeMSN));
     SHA512_Final(hash,&sha512);
     int i;
-    for(i=0;i<SHA512_DIGEST_LENGTH;i++)sprintf(realHash+(i<<1),HASH_FORMAT,hash[i]);
+    for(i=0;i<SHA512_DIGEST_LENGTH;i++)sprintf((char*)realHash+(i<<1),HASH_FORMAT,hash[i]);
     return realHash;
 }

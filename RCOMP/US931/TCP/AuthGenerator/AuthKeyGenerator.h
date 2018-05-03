@@ -7,4 +7,4 @@
  * <br>Uses SHA-512 for hash generation
  * <br>Inspired from https://stackoverflow.com/a/2458382
  */
-char* generate();
+unsigned char* generate();
