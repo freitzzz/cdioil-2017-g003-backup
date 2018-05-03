@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -84,11 +85,11 @@ public class SurveyTest {
         Survey outro = new GlobalSurvey(list, timePeriod);
 
         assertEquals(testSurvey.hashCode(), outro.hashCode());
-        
+
         //Mutation tests
-        assertNotEquals("".hashCode(),testSurvey.hashCode());
-        assertEquals(testSurvey.getGraphCopy().hashCode() + list.hashCode()
-                ,testSurvey.hashCode());
+        assertNotEquals("".hashCode(), testSurvey.hashCode());
+        assertEquals(testSurvey.getGraphCopy().hashCode() + list.hashCode(),
+                testSurvey.hashCode());
     }
 
     /**
@@ -115,7 +116,7 @@ public class SurveyTest {
         Survey s = new GlobalSurvey(list, timePeriod);
         assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", testSurvey.toString(),
                 s.toString());
-        assertNotEquals(testSurvey.toString(),null);
+        assertNotEquals(testSurvey.toString(), null);
     }
 
     /**
@@ -193,5 +194,24 @@ public class SurveyTest {
         assertFalse("The condition should succeed because we are trying to insert "
                 + "the same edge twice", testSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
                         new BinaryQuestionOption(Boolean.TRUE), 0));
+    }
+
+    /**
+     * Test of getProductSurveys method, of class Survey
+     */
+    @Test
+    public void testGetProductSurveys() {
+        System.out.println("getProductSurveys");
+        //test method with both parameters null or an empty list
+        assertEquals(null, Survey.getProductSurveys(null, null));
+        assertEquals(null, Survey.getProductSurveys(new ArrayList<>(), null));
+        //test method with 1 paramater as null or empty list
+        assertEquals(null, Survey.getProductSurveys(null, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
+        assertEquals(null, Survey.getProductSurveys(new ArrayList<>(), new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
+        List<Survey> surveys = new ArrayList<>();
+        surveys.add(testSurvey);
+        assertEquals(null, Survey.getProductSurveys(surveys, null));
+        //test working method
+        assertEquals(surveys, Survey.getProductSurveys(surveys, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
     }
 }

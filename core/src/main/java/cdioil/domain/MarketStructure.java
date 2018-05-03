@@ -82,10 +82,10 @@ public class MarketStructure implements Serializable {
             Product removable = iterator.next();
             if (removable.equals(pro)) {
                 cat.removeProduct(removable);
+                cat.addProduct(pro);
                 break;
-            }          
+            }
         }
-        cat.addProduct(pro);
     }
 
     /**
