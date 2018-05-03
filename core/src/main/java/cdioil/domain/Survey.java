@@ -4,6 +4,7 @@ import cdioil.application.utils.Graph;
 import cdioil.time.TimePeriod;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -14,7 +15,7 @@ import javax.persistence.*;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@SequenceGenerator(name = "surveySeq",initialValue = 1,allocationSize = 1)
+@SequenceGenerator(name = "surveySeq", initialValue = 1, allocationSize = 1)
 public abstract class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +24,7 @@ public abstract class Survey implements Serializable {
     private Long version;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "surveySeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "surveySeq")
     /**
      * Database id.
      */
@@ -45,7 +46,7 @@ public abstract class Survey implements Serializable {
     /**
      * Question and Answer graph.
      */
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Graph graph;
 
     /**
@@ -67,7 +68,7 @@ public abstract class Survey implements Serializable {
             throw new IllegalArgumentException("O inquérito tem que ter pelo menos"
                     + " um produto ou uma categoria");
         }
-        if(surveyPeriod == null){
+        if (surveyPeriod == null) {
             throw new IllegalArgumentException("O inquérito ter que ter um período "
                     + "de tempo definido");
         }
@@ -196,14 +197,34 @@ public abstract class Survey implements Serializable {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("Inquérito:");
 
-        for (SurveyItem surveyItem :
-                itemList) {
+        for (SurveyItem surveyItem
+                : itemList) {
             stringBuilder.append("\n" + surveyItem.toString());
         }
 
         stringBuilder.append("\nData: " + surveyPeriod.toString());
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Filters a list of surveys using a product
+     *
+     * @param surveys list of surveys
+     * @param p product to filter by
+     * @return list of surveys about the product
+     */
+    public static List<Survey> getProductSurveys(List<Survey> surveys, Product p) {
+        if (surveys == null || surveys.isEmpty() || p == null) {
+            return null;
+        }
+        List<Survey> filteredSurveys = new ArrayList<>();
+        for (Survey survey : surveys) {
+            if (survey.itemList.contains(p)) {
+                filteredSurveys.add(survey);
+            }
+        }
+        return filteredSurveys;
     }
 
 }
