@@ -46,7 +46,6 @@ public class WhitelistManagementWindow extends Window {
         setResizable(false);
         center();
 
-
         prepareMainLayout();
 
         setContent(mainLayout);
@@ -118,7 +117,7 @@ public class WhitelistManagementWindow extends Window {
         editButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //TODO edit mode
+
             }
         });
 
