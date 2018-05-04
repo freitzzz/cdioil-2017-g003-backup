@@ -49,10 +49,20 @@ public class AddWhitelistController {
      * @param domain e-mail domain
      */
     public void addAuthorizedDomain(String domain) {
-
         Whitelist whitelist = new Whitelist(domain);
 
         repo.add(whitelist);
+    }
+
+    /**
+     * Removes an authorized domain from the repository
+     * @param domain entry/domain to be removed
+     * @return removed domain
+     */
+    public String removeAuthorizedDomain(String domain) {
+        Whitelist whitelist = repo.find(domain);
+
+        return repo.remove(whitelist).toString();
     }
 
 }
