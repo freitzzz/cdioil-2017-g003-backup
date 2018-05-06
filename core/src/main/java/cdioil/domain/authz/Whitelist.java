@@ -74,7 +74,7 @@ public class Whitelist implements Serializable, AggregateRoot<String> {
      */
     @Override
     public String toString() {
-        return "Domain: " + domain;
+        return domain;
     }
 
     /**

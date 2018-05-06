@@ -3,6 +3,7 @@ package cdioil.application.utils;
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import cdioil.files.FileReader;
@@ -39,7 +40,10 @@ public class CSVCategoriesReader implements CategoriesReader {
      * Number of identifiers (columns) in the CSV file.
      */
     private static final int NUMBER_OF_IDENTIFIERS = 10;
-    
+
+    /**
+     * Unrecognized file format Message content
+     */
     private static final String UNRECOGNIZED_FILE_FORMAT = "Unrecognized file formatting";
 
     /**
