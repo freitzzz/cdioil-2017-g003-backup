@@ -1,48 +1,48 @@
 ﻿ESC "Classifique relativamente A apreciacao global" MIN=1:"nao gostei", MAX=8:"gostei muito"
-      IF >= 4 AND <=5 
-EM "Qual o parametro que mais gostou?" N=3
-      AL "Sabor" 
-      AL "Textura" 
-      AL "Imagem "
-      ENDEM  
+      IF >= 4 AND <=5
+            EM "Qual o parametro que mais gostou?" N=3
+                  AL "Sabor" 
+                  AL "Textura" 
+                  AL "Imagem "
+            ENDEM  
       ELSE  
-EM "Qual o parametro que menos gostou?" N=3
-      AL  
-EM "Sabor" N=5
-      AL "Demasiado azedo"
-      AL "Demasiado doce"
-      AL "Sem sabor" 
-      AL "Demasiado forte" 
-      AL ELSE  
-TX "Qual?" 
-      ENDEM  
+            EM "Qual o parametro que menos gostou?" N=3
+            AL
+            EM "Sabor" N=5
+                  AL "Demasiado azedo"
+                  AL "Demasiado doce"
+                  AL "Sem sabor" 
+                  AL "Demasiado forte" 
+                  ALELSE  
+                        TX "Qual?" 
+            ENDEM
       IF <=4 
-SN "Caso nao tivesse esta caracteri­stica a sua satisfacao global subiria pelo menos  um ponto?"
+            SN "Caso nao tivesse esta caracteristica a sua satisfacao global subiria pelo menos um ponto?"
       ENDIF  
       AL  
-EM "Textura" N=7
-      AL "Demasiado mole"
-      AL "Demasiado rijo"
-      AL "Elevada agregacao de alimentos excessiva"
-      AL "Baixa agregacao de alimentos"
-      AL "Espessura elevada"
-      AL "Espessura reduzida"
-      ALELSE  
-TX "Qual?" 
-      ENDEM  
+            EM "Textura" N=7
+                  AL "Demasiado mole"
+                  AL "Demasiado rijo"
+                  AL "Elevada agregacao de alimentos excessiva"
+                  AL "Baixa agregacao de alimentos"
+                  AL "Espessura elevada"
+                  AL "Espessura reduzida"
+                  ALELSE  
+                        TX "Qual?" 
+            ENDEM  
       IF <=6 
-SN "Caso nao tivesse esta caracteristica a sua satisfacao global subiria pelo menos  um ponto?"
+            SN "Caso nao tivesse esta caracteristica a sua satisfacao global subiria pelo menos  um ponto?"
       ENDIF  
-      AL  
-EM "Imagem" N=4
-      AL "Embalagem pouco apelativa"
-      AL "Artigo muito pequeno"
-      AL "Aspeto basico"
-      ALELSE "Qual?"
-TX "Qual?"
-      ENDEM  
-      ENDEM  
+            AL  
+                  EM "Imagem" N=4
+                        AL "Embalagem pouco apelativa"
+                        AL "Artigo muito pequeno"
+                        AL "Aspeto basico"
+                        ALELSE
+                              TX "Qual?"
+                  ENDEM
       IF <=6 
-SN "Caso nao tivesse esta caractera­stica a sua satisfacao global subiria pelo menos  um ponto?"
-      ENDIF  
-      ENDIF  
+            SN "Caso nao tivesse esta caracteristica a sua satisfacao global subiria pelo menos  um ponto?"
+      ENDIF
+      ENDEM
+      ENDIF
