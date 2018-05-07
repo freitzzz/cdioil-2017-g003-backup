@@ -2,7 +2,6 @@ package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.AggregateRoot;
 import cdioil.framework.dto.DTOable;
-import cdioil.framework.dto.GenericDTO;
 import cdioil.framework.dto.SystemUserDTO;
 
 import java.io.Serializable;
@@ -124,10 +123,18 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
      */
     public SystemUser(Email email, Name name, Password password, PhoneNumber phoneNumber,
              Location location, BirthDate birthDate) {
-        if(email==null)throw new IllegalArgumentException("O email não pode ser null!");
-        if(password==null)throw new IllegalArgumentException("A password não pode ser null!");
-        if(name==null)throw new IllegalArgumentException("O nome não pode ser null!");
-        if(phoneNumber==null)throw new IllegalArgumentException("O número de telemóvel não pode ser null!");
+        if(email==null){
+            throw new IllegalArgumentException("O email não pode ser null!");
+        }
+        if(password==null){
+            throw new IllegalArgumentException("A password não pode ser null!");
+        }
+        if(name==null){
+            throw new IllegalArgumentException("O nome não pode ser null!");
+        }
+        if(phoneNumber==null){
+            throw new IllegalArgumentException("O número de telemóvel não pode ser null!");
+        }
         this.email = email;
         this.name = name;
         this.password = password;

@@ -33,8 +33,7 @@ public class CategoryQuestionsLibrary implements AggregateRoot<Map<Category, Que
     private Long id;
 
     /**
-     * Map that contains questions (values) related to categories (keys). TODO
-     * check JPA annotations
+     * Map that contains questions (values) related to categories (keys).
      */
     @ManyToMany(cascade = CascadeType.ALL)
     private Map<Category, QuestionGroup> library;

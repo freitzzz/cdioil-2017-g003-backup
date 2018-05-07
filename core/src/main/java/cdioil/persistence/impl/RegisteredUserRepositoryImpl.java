@@ -80,6 +80,40 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
 
         StringBuilder baseQueryStringBuilder = new StringBuilder("SELECT r FROM RegisteredUser r");
 
+        buildGetUsersByFiltersQueryString(domain, baseQueryStringBuilder, 
+                username, birthYear, location);
+
+        String queryString = baseQueryStringBuilder.toString();
+        Query q = entityManager().createQuery(queryString);
+
+        setGetUsersByFiltersQueryParameters(domain, q, username, birthYear, location);
+
+        List<RegisteredUser> registeredUsers = q.getResultList();
+        if (registeredUsers.isEmpty()) {
+            return null;
+        }
+
+        return registeredUsers;
+    }
+
+    private void setGetUsersByFiltersQueryParameters(String domain, Query q, String username, String birthYear, String location) {
+        if (domain != null && !domain.trim().isEmpty()) {
+            domain = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
+            q.setParameter("p_domain", domain);
+        }
+        if (username != null && !username.trim().isEmpty()) {
+            username = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt(username, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE)) + ".*";
+            q.setParameter("p_username", username);
+        }
+        if (birthYear != null && !birthYear.trim().isEmpty()) {
+            q.setParameter("p_birthyear", birthYear);
+        }
+        if (location != null && !location.trim().isEmpty()) {
+            q.setParameter("p_location", location);
+        }
+    }
+
+    private void buildGetUsersByFiltersQueryString(String domain, StringBuilder baseQueryStringBuilder, String username, String birthYear, String location) {
         if (domain != null && !domain.trim().isEmpty()) {
             baseQueryStringBuilder.append(" WHERE r.sysUser.email.email REGEXP :p_domain");
         }
@@ -95,31 +129,6 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
             baseQueryStringBuilder.append("r.sysUser.location.location = :p_location");
         }
-
-        String queryString = baseQueryStringBuilder.toString();
-        Query q = entityManager().createQuery(queryString);
-
-        if (domain != null && !domain.trim().isEmpty()) {
-            domain = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
-            q.setParameter("p_domain", domain);
-        }
-        if (username != null && !username.trim().isEmpty()) {
-            username = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt(username, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE)) + ".*";
-            q.setParameter("p_username", username);
-        }
-        if (birthYear != null && !birthYear.trim().isEmpty()) {
-            q.setParameter("p_birthyear", birthYear);
-        }
-        if (location != null && !location.trim().isEmpty()) {
-            q.setParameter("p_location", location);
-        }
-
-        List<RegisteredUser> registeredUsers = q.getResultList();
-        if (registeredUsers.isEmpty()) {
-            return null;
-        }
-
-        return registeredUsers;
     }
 
     private String getOperator(StringBuilder queryStringBuilder) {

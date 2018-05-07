@@ -189,7 +189,6 @@ public class Vertex implements Serializable {
      * @return number of outgoing edges.
      */
     public int numOutgoingEdges() {
-        //return outgoingEdges.size();
         return outgoingEdgeQuestions.size();
     }
 

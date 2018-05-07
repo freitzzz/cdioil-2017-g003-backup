@@ -56,12 +56,10 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      * @return List of Surveys
      */
     public List<Survey> findAllActiveSurveys() {
-        List<Survey> activeSurveys = (List<Survey>) entityManager()
+        return (List<Survey>) entityManager()
                 .createQuery("SELECT s FROM Survey s WHERE s.state = :surveyState")
                 .setParameter("surveyState", SurveyState.ACTIVE)
                 .getResultList();
-
-        return activeSurveys;
     }
 
     /**

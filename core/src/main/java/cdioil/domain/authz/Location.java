@@ -38,6 +38,10 @@ public class Location implements ValueObject,Serializable{
         this.location=location;
     }
     /**
+     * Protected constructor in order to allow JPA persistence
+     */
+    protected Location(){}
+    /**
      * Method that checks if a certain Location is equal to the current Location
      * @param obj Location with the location being compared with the current one
      * @return boolean true if both locations are equal, false if not
@@ -78,8 +82,4 @@ public class Location implements ValueObject,Serializable{
             throw new IllegalArgumentException(INVALID_LOCATION_MESSAGE);
         }
     }
-    /**
-     * Protected constructor in order to allow JPA persistence
-     */
-    protected Location(){}
 }

@@ -11,6 +11,13 @@ import java.io.File;
 public final class AnswerProbabilityReaderFactory {
 
     /**
+     * Private constructor for hiding the implicit public one.
+     */
+    private AnswerProbabilityReaderFactory() {
+
+    }
+
+    /**
      * Constructs a AnswerProbabilityReader instance based on the file's
      * extension.
      *
@@ -23,12 +30,4 @@ public final class AnswerProbabilityReaderFactory {
         }
         return null;
     }
-
-    /**
-     * Private constructor for hiding the implicit public one.
-     */
-    private AnswerProbabilityReaderFactory() {
-
-    }
-
 }

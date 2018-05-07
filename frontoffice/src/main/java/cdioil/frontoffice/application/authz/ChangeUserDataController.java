@@ -2,7 +2,6 @@ package cdioil.frontoffice.application.authz;
 
 import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.UserRepositoryImpl;
-import cdioil.persistence.BaseJPARepository;
 
 /**
  * Controller of US Change User's Data

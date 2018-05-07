@@ -7,7 +7,10 @@ import cdioil.files.CommonFileExtensions;
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public final class UsersReaderFactory {
-    
+    /**
+     * Hides default constructor
+     */
+    private UsersReaderFactory(){}
     /**
      * Builds a new UsersReader with a certain file path
      * @param file String with the file path
@@ -20,8 +23,4 @@ public final class UsersReaderFactory {
         }
         return null;
     }
-    /**
-     * Hides default constructor
-     */
-    private UsersReaderFactory(){}
 }

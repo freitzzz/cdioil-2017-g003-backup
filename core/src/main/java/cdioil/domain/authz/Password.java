@@ -80,6 +80,12 @@ public class Password implements Serializable, ValueObject {
         this.password = generateHash(password + this.saltInString);
 
     }
+    
+    /**
+     * Empty constructor for JPA.
+     */
+    protected Password() {
+    }
 
     /**
      * Creastes an hash function SHA-256 (Secure Hash Algorithm 256)
@@ -167,9 +173,4 @@ public class Password implements Serializable, ValueObject {
         return hash.equals(this.password);
     }
 
-    /**
-     * Empty constructor for JPA.
-     */
-    protected Password() {
-    }
 }

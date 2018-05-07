@@ -4,9 +4,12 @@ import cdioil.files.FileReader;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.SystemUser;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Utilitary class that reads and parsers users contained on a CSV file
@@ -79,7 +82,8 @@ public final class CSVUsersReader implements UsersReader{
                             ,new Name(nextCampos[nameIdentifier],nextCampos[subnameIdentifier])
                             ,null));
                 }catch(IllegalArgumentException e){
-                    //TO-DO IMPLEMENT LOGGER
+                    ExceptionLogger.logException(LoggerFileNames.CORE_LOGGER_FILE_NAME,
+                            Level.SEVERE, e.getMessage());
                 }
             }
         }

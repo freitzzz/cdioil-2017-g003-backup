@@ -182,10 +182,7 @@ public class AnswerSurveyController {
     public boolean saveReview(boolean firstTimeSaving) {
         if (firstTimeSaving) {
             loggedUser.getProfile().addReview(surveyReview);
-            if(new ProfileRepositoryImpl().merge(loggedUser.getProfile())!=null){
-                return true;
-            }
-            return false;
+            return new ProfileRepositoryImpl().merge(loggedUser.getProfile())!=null;
         }
         surveyReview=new ReviewRepositoryImpl().merge(surveyReview);
         updateRegisteredUserProfile();

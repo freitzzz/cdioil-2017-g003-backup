@@ -1,13 +1,13 @@
 package cdioil.logger;
 
 /**
- * Class that holds the file names for all logger files (one for each
+ * Interface that holds the file names for all logger files (one for each
  * module)
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @since Version 5.0 of FeedbackMonkey
  */
-public class LoggerFileNames {
+public interface LoggerFileNames {
     /**
      * File name for the backoffice module logger.
      */

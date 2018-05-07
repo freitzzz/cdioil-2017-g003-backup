@@ -17,6 +17,12 @@ import java.io.File;
 public final class CategoriesReaderFactory {
 
     /**
+     * Hides the default constructor.
+     */
+    private CategoriesReaderFactory() {
+    }
+
+    /**
      * Creates an instance of CategoriesReader.
      *
      * @param file File to read
@@ -29,9 +35,4 @@ public final class CategoriesReaderFactory {
         return null;
     }
 
-    /**
-     * Hides the default constructor.
-     */
-    private CategoriesReaderFactory() {
-    }
 }

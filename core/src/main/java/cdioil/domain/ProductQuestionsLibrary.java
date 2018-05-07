@@ -33,7 +33,7 @@ public class ProductQuestionsLibrary implements AggregateRoot<Map<Product, Quest
     private Long id;
     /**
      * Map that containsQuestion all questions (values) related to products
-     * (keys). TODO check JPA annotations
+     * (keys).
      */
     @ManyToMany(cascade = CascadeType.ALL)
     private Map<Product, QuestionGroup> library;

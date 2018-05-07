@@ -1,10 +1,8 @@
 package cdioil.domain.authz;
 
-import cdioil.application.utils.LocalDateAttributeConverter;
 import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 
 /**

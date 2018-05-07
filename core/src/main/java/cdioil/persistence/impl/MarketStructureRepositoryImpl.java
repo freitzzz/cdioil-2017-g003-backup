@@ -88,10 +88,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         EntityManager em = entityManager();
         String queryString = "SELECT * from PRODUCT p where p.nome regexp '" + product + "'";
         Query query = em.createNativeQuery(queryString, Product.class);
-        
-        if((List<Product>) query.getResultList() == null || 
-                ( (List<Product>) query.getResultList()).isEmpty()) return true;
-        
-        return false;
+        return (List<Product>) query.getResultList() != null || 
+                ((List<Product>) query.getResultList()).isEmpty();
     }
 }

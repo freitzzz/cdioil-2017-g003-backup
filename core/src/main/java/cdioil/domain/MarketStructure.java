@@ -329,10 +329,6 @@ public class MarketStructure implements Serializable {
      * @param node current node
      */
     private void getAllCategories(List<Category> lc, Node node) {
-
-//        if(node == null){
-//            return;
-//        }
         lc.add(node.getElement());
 
         for (Node child : node.getChildren()) {

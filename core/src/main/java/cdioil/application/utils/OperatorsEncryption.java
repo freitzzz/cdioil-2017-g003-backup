@@ -60,6 +60,10 @@ public final class OperatorsEncryption {
      */
     private static int operation;
     /**
+     * Hides default constructor
+     */
+    private OperatorsEncryption(){}
+    /**
      * Method that encrypts a certain String with the Operators Encryption
      * @param word String with the word being encrypted
      * @return String with the word encrypted with the Operators Encryption
@@ -189,8 +193,4 @@ public final class OperatorsEncryption {
         operation=0;
         randomValue=0;
     }
-    /**
-     * Hides default constructor
-     */
-    private OperatorsEncryption(){}
 }

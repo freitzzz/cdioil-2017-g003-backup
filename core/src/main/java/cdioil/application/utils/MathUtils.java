@@ -13,7 +13,7 @@ import java.util.List;
  * @author Ana Guerra (1161191)
  */
 public class MathUtils {
-
+    
     /**
      * Method that calculates the average of a list of values.
      *

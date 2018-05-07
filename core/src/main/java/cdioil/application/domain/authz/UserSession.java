@@ -44,6 +44,10 @@ public class UserSession implements Serializable{
         this.sessionStartDate=LocalDateTime.now();
     }
     /**
+     * Protected constructor in order to allow JPA persistence
+     */
+    protected UserSession(){}
+    /**
      * Logs the end of the user session
      */
     public void logSessionEnd(){
@@ -56,8 +60,4 @@ public class UserSession implements Serializable{
      * @return User with the current session user
      */
     public SystemUser getUser(){return sessionUser;}
-    /**
-     * Protected constructor in order to allow JPA persistence
-     */
-    protected UserSession(){}
 }

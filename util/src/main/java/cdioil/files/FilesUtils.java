@@ -8,14 +8,14 @@ import java.util.regex.Pattern;
  */
 public final class FilesUtils {
     /**
-     * Hides default constructor
-     */
-    private FilesUtils(){}
-    /**
      * Constant that represents the regular expression that matches a single invalid character 
      * contained on a file name
      */
     private static final String INVALID_FILE_NAME_REGEX=createInvalidFileNameRegex();
+    /**
+     * Hides default constructor
+     */
+    private FilesUtils(){}
     /**
      * Method that checks if a certain file name is valid or not
      * @param fileName String with the file name being validated

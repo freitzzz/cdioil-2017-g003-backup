@@ -21,7 +21,7 @@ public final class AuthenticationController implements Serializable {
     /**
      * Serialization number.
      */
-    private final static long serialVersionUID = 13L;
+    private static final long serialVersionUID = 13L;
     /**
      * UserSession with the current user session
      */

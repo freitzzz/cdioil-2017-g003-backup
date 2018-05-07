@@ -15,7 +15,6 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Preco implements Serializable,ValueObject {
-
     /**
      * Constante que representa a mensagem que caracteriza um preço inválido
      */
@@ -71,7 +70,6 @@ public class Preco implements Serializable,ValueObject {
      */
     @Column(name = "UNIDADE")
     private String unidadeISO;
-
     /**
      * Constrói uma nova instância de Preco com um determinado preço de um
      * produto
@@ -81,7 +79,10 @@ public class Preco implements Serializable,ValueObject {
     public Preco(String preco) {
         tratarPreco(preco);
     }
-
+    /**
+     * Construtor protegido de modo a permitir a persistencia com JPA
+     */
+    protected Preco() {}
     /**
      * Método que verifica se dois Precos são iguais
      *
@@ -99,7 +100,6 @@ public class Preco implements Serializable,ValueObject {
         return unidadeISO.equalsIgnoreCase(((Preco) obj).unidadeISO)
                 && Double.compare(valor, ((Preco) obj).valor) == 0;
     }
-
     /**
      * Hashcode do Preco
      *
@@ -112,7 +112,6 @@ public class Preco implements Serializable,ValueObject {
         hash = 71 * hash + Objects.hashCode(this.unidadeISO);
         return hash;
     }
-
     /**
      * Método que representa a informação textual de um Preco
      *
@@ -122,7 +121,6 @@ public class Preco implements Serializable,ValueObject {
     public String toString() {
         return valor + " " + unidadeISO;
     }
-
     /**
      * Método que valida se um Preco é valido ou não e trata da sua construção
      * <br>Como o método valida e trata da construção do objeto atual, caso o
@@ -146,7 +144,6 @@ public class Preco implements Serializable,ValueObject {
         this.unidadeISO = currency;
         this.valor = Float.parseFloat(valorX);
     }
-
     /**
      * Método que verifica ou converte se uma determinade unidade/simbolo é
      * valida
@@ -176,11 +173,5 @@ public class Preco implements Serializable,ValueObject {
             default:
                 return unidade.length() == 1 ? null : Currency.getInstance(unidade.toUpperCase()).getCurrencyCode();
         }
-    }
-
-    /**
-     * Construtor protegido de modo a permitir a persistencia com JPA
-     */
-    protected Preco() {
     }
 }

@@ -17,6 +17,12 @@ import java.util.Map;
 public final class SurveyStatsWriterFactory {
 
     /**
+     * Hides the default constructor.
+     */
+    private SurveyStatsWriterFactory() {
+    }
+
+    /**
      * Creates an instance of SurveyStatsWriter.
      *
      * @param filename Path of the file
@@ -27,7 +33,8 @@ public final class SurveyStatsWriterFactory {
      * @param binaryMeanDeviation Mean deviation for binary answers
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
-     * @return the created SurveyStatsWriter. If the file is not valid, returns null.
+     * @return the created SurveyStatsWriter. If the file is not valid, returns
+     * null.
      */
     public static SurveyStatsWriter create(String filename, Map<Question, Integer> totalBinary, Map<Question, Integer> totalQuantitative,
             Map<Question, Double> binaryMean, Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation,
@@ -39,9 +46,4 @@ public final class SurveyStatsWriterFactory {
         return null;
     }
 
-    /**
-     * Hides the default constructor.
-     */
-    private SurveyStatsWriterFactory() {
-    }
 }

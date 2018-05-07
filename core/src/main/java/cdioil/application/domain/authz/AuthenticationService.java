@@ -29,6 +29,10 @@ public final class AuthenticationService {
      */
     private static final String USER_ACCOUNT_NOT_ACTIVATED="A conta não está activada";
     /**
+     * Hides default constructor
+     */
+    private AuthenticationService(){}
+    /**
      * Creates a new AuthenticationService for the user to authenticate on the application
      * @return AuthenticationService with the authentication service for the user to 
      * authenticate on the application
@@ -137,8 +141,4 @@ public final class AuthenticationService {
     private RegisteredUser getRegisteredUser(long userID){
         return new RegisteredUserRepositoryImpl().findByUserID(userID);
     }
-    /**
-     * Hides default constructor
-     */
-    private AuthenticationService(){}
 }

@@ -23,7 +23,7 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
      */
     public QuantitativeQuestionOption(Double value) {
         if (value == null) {
-            throw new IllegalArgumentException("O valor da opção não pode ser "
+            throw new IllegalArgumentException("O valor da opcao não pode ser "
                     + "null");
         }
         if (value < 0) {
@@ -31,7 +31,7 @@ public class QuantitativeQuestionOption extends QuestionOption<Double> {
                     + "negativo");
         }
         if (value.isNaN() || value.isInfinite()) {
-            throw new IllegalArgumentException("O valor da opção não pode ser "
+            throw new IllegalArgumentException("O valor da opção nao pode ser "
                     + "infinito e tem que ser um valor numérico");
         }
         this.numericContent = value;
