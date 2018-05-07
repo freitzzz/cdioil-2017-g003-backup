@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
 
 /**
  * UserSession class that classifies the session of a User on the application
- * <br>TO-DO: Mark class as an entity in order to add logging on the database
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 4.0 of FeedbackMonkey
  */

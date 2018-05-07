@@ -97,7 +97,7 @@ public class Preco implements Serializable,ValueObject {
             return false;
         }
         return unidadeISO.equalsIgnoreCase(((Preco) obj).unidadeISO)
-                && valor == ((Preco) obj).valor;
+                && Double.compare(valor, ((Preco) obj).valor) == 0;
     }
 
     /**

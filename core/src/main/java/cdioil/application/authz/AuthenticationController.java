@@ -10,13 +10,18 @@ import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.UserSessionRepositoryImpl;
+import java.io.Serializable;
 
 /**
  * AuthenticationController that controls all user actions
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 4.0 of FeedbackMonkey
  */
-public final class AuthenticationController {
+public final class AuthenticationController implements Serializable {
+    /**
+     * Serialization number.
+     */
+    private final static long serialVersionUID = 13L;
     /**
      * UserSession with the current user session
      */

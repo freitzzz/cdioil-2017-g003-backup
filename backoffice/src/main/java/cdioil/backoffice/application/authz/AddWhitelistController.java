@@ -2,6 +2,7 @@ package cdioil.backoffice.application.authz;
 
 import cdioil.domain.authz.Whitelist;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,12 @@ import java.util.List;
  *
  * @author António Sousa [1161371]
  */
-public class AddWhitelistController {
+public class AddWhitelistController implements Serializable {
+    
+    /**
+     * Serialization number.
+     */
+    private final static long serialVersionUID = 19L;
 
     /**
      * Whitelist repository.
