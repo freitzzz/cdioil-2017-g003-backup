@@ -36,12 +36,19 @@ public class UserSession implements Serializable{
     @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.MERGE})
     private SystemUser sessionUser;
     /**
+     * String with the current user token
+     * <br>Currently it's a combination of the user ID + logged session timestamp
+     * <br>#TO-DO: Encrypt user token
+     */
+    private String userToken;
+    /**
      * Builds a new UserSession with the user that is being logged on the session
      * @param sessionUser SystemUser with the user that is being logged on the session
      */
     public UserSession(SystemUser sessionUser){
         this.sessionUser=sessionUser;
         this.sessionStartDate=LocalDateTime.now();
+        this.userToken=sessionUser.getID()+sessionStartDate.toString();
     }
     /**
      * Protected constructor in order to allow JPA persistence
@@ -60,4 +67,9 @@ public class UserSession implements Serializable{
      * @return User with the current session user
      */
     public SystemUser getUser(){return sessionUser;}
+    /**
+     * Method that returns the current user token
+     * @return String with the current user token
+     */
+    public String getUserToken(){return userToken;}
 }
