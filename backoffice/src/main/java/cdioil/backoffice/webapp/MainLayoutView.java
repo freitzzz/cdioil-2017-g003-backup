@@ -1,6 +1,7 @@
 package cdioil.backoffice.webapp;
 
 import cdioil.backoffice.webapp.utils.ImageUtils;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
@@ -18,7 +19,22 @@ public class MainLayoutView extends MainLayoutDesign implements View {
      */
     public MainLayoutView() {
         userAvatar.setSource(ImageUtils.imagePathAsResource("/WEB-INF/users/DEFAULT_USER_IMAGE.png"));
+        //TODO Temporary method
+        prepareLogoutButton();
     }
+
+    private void prepareLogoutButton() {
+        Button logoutBtn = new Button("Logout");
+        logoutBtn.setIcon(VaadinIcons.EXIT);
+        logoutBtn.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                //TODO Implement LOGOUT
+            }
+        });
+        addNewButtonToLeftPanel(logoutBtn);
+    }
+
     /**
      * Adds a button to the left panel
      * @param btn desired button

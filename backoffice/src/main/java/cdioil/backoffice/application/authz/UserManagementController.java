@@ -33,4 +33,8 @@ public class UserManagementController implements Serializable {
 
         return systemUserDTOList;
     }
+
+    public List<SystemUserDTO> findFilteredSystemUsersDTO() {
+        return null;
+    }
 }
