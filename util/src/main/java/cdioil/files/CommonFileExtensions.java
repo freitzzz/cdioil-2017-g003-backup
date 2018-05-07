@@ -4,7 +4,7 @@ package cdioil.files;
  * Interface that represents all common file extensions used on the reader/parsers/writers of the application
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public interface CommonFileExtensions {
+public class CommonFileExtensions {
     /**
      * Constant that represents a plain file extension
      */

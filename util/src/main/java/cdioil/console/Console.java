@@ -42,9 +42,7 @@ public class Console {
         do {
             try {
                 String strInt = readLine(prompt);
-                int valor = Integer.parseInt(strInt);
-
-                return valor;
+                return Integer.parseInt(strInt);
             } catch (NumberFormatException ex) {
                 Logger.getLogger(Console.class.getName()).log(Level.SEVERE,
                         null, ex);

@@ -14,7 +14,10 @@ import java.util.logging.Logger;
  * @since Version 5.0 of FeedbackMonkey
  */
 public class ExceptionLogger {
-
+    /**
+     * Private constructor to hide the implicit public one.
+     */
+    private ExceptionLogger() {}
     /**
      * Logs an exception to a file
      *
@@ -29,9 +32,7 @@ public class ExceptionLogger {
             LogRecord logRecord = new LogRecord(exceptionLevel, message);
             fileHandler.publish(logRecord);
             fileHandler.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ExceptionLogger.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
+        } catch (IOException | SecurityException ex) {
             Logger.getLogger(ExceptionLogger.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

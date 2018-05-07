@@ -76,9 +76,7 @@ public class LibrariesBootstrap {
         QuantitativeQuestion q4 = new QuantitativeQuestion("Questao Quantitativa Bootstrap 98",
                 "98", createQuantitativeOptionList());
         categoryQuestionsLibrary.addCategory(cat);
-        marketRepo.findMarketStructure().getAllCategories().forEach((databaseCat) -> {
-            categoryQuestionsLibrary.addCategory(databaseCat);
-        });
+        addAllCategories(categoryQuestionsLibrary);
         categoryQuestionsLibrary.addQuestion(q, cat);
         categoryQuestionsLibrary.addQuestion(q2, cat);
         categoryQuestionsLibrary.addQuestion(q3, cat);
@@ -87,10 +85,10 @@ public class LibrariesBootstrap {
         /*==================================
         Bootstrap questions for Stress Test
         ====================================*/
-        QuantitativeQuestionOption qo1 = new QuantitativeQuestionOption(new Double(1));
-        QuantitativeQuestionOption qo2 = new QuantitativeQuestionOption(new Double(2));
-        QuantitativeQuestionOption qo3 = new QuantitativeQuestionOption(new Double(3));
-        QuantitativeQuestionOption qo4 = new QuantitativeQuestionOption(new Double(4));
+        QuantitativeQuestionOption qo1 = new QuantitativeQuestionOption(1.0);
+        QuantitativeQuestionOption qo2 = new QuantitativeQuestionOption(2.0);
+        QuantitativeQuestionOption qo3 = new QuantitativeQuestionOption(3.0);
+        QuantitativeQuestionOption qo4 = new QuantitativeQuestionOption(4.0);
 
         List<QuestionOption> questionOptions16 = Arrays.asList(qo1, qo2, qo3, qo4);
 
@@ -122,6 +120,16 @@ public class LibrariesBootstrap {
         categoryQuestionsLibrary.addQuestion(q15, category);
         categoryQuestionsLibrary.addQuestion(q16, category);
         categoryQuestionsLibrary.addQuestion(q34, category);
+    }
+
+    /**
+     * Adds all categories to the library
+     * @param categoryQuestionsLibrary category questions library being built
+     */
+    private void addAllCategories(CategoryQuestionsLibrary categoryQuestionsLibrary) {
+        for(Category category : marketRepo.findMarketStructure().getAllCategories()){
+            categoryQuestionsLibrary.addCategory(category);
+        }
     }
 
     /**

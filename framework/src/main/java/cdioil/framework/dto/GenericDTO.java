@@ -85,9 +85,7 @@ public class GenericDTO implements DTO, Map<String, Object> {
      * @param out
      * @throws IllegalAccessException
      */
-    private static void buildDtoForIterable(String name, Iterable<Object> col, final GenericDTO out)
-            throws IllegalAccessException {
-
+    private static void buildDtoForIterable(String name, Iterable<Object> col, final GenericDTO out){
         final Iterable<GenericDTO> data = ofMany(col);
         out.put(name, data);
     }
@@ -98,8 +96,7 @@ public class GenericDTO implements DTO, Map<String, Object> {
      * @param out
      * @throws IllegalAccessException
      */
-    private static void buildDtoForArray(Class<?> type, String name, Object array, final GenericDTO out)
-            throws IllegalAccessException {
+    private static void buildDtoForArray(Class<?> type, String name, Object array, final GenericDTO out){
         final int length = Array.getLength(array);
         Object data = null;
         if (type == int.class) {
