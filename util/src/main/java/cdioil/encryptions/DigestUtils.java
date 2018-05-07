@@ -1,4 +1,4 @@
-package encryptions;
+package cdioil.encryptions;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

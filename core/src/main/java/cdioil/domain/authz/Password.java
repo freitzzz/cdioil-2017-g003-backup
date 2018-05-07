@@ -1,7 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.ValueObject;
-import encryptions.DigestUtils;
+import cdioil.encryptions.DigestUtils;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
