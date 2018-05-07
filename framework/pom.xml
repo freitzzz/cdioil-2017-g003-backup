@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cdioil-2017-g003</groupId>
     <artifactId>framework</artifactId>
-    <version>4.0-SNAPSHOT</version>
+    <version>5.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>framework</name>
@@ -115,5 +115,5 @@
             </plugin>
         </plugins>
     </build>
-
+    <description>Module that holds all framework and design classes used on the project</description>
 </project>
