@@ -13,12 +13,6 @@ public class FrontOfficeLogin {
 
     private static final String HEADLINE = "===========================\n";
     private static final String MAIN_MESSAGE = "FrontOffice\n";
-    private static final String EMAIL = "Email: ";
-    private static final String PASSWORD = "Password: ";
-    private static final String WRONG_CREDENTIALS = "Credenciais erradas."
-            + "Volte a tentar.\n";
-    private static final int CRIAR_CONTA_ID = 1;
-    private static final int LOGIN_ID = 2;
     
     /**
      * Message requesting the user for their email address.
@@ -27,7 +21,7 @@ public class FrontOfficeLogin {
     /**
      * Message requesting the user for their password.
      */
-    private final String REQUEST_PASSWORD = "Password:";
+    private final String REQUEST_WATCHWORD = "Password:";
     //private UserRepositoryImpl userRepo = new UserRepositoryImpl();
     /**
      * Constant that represents the message that ocures if the system asks the user for the activation code
@@ -93,7 +87,7 @@ public class FrontOfficeLogin {
         long id = -1;
         while (id != 1) {
             byte[] email = Console.readLine(REQUEST_EMAIL).getBytes();
-            byte[] password = Console.readLine(REQUEST_PASSWORD).getBytes();
+            byte[] password = Console.readLine(REQUEST_WATCHWORD).getBytes();
             try{
                 if(authenticationController.login(new String(email),new String(password))){
                     id=1;

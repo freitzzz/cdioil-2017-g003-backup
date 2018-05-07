@@ -1,7 +1,20 @@
 /*Includes and declarations*/
 %{
     #include <stdio.h>
+    #include "QuestionTypes.h"
+    #define BINARY "SN"
+    #define SCALE "ESC"
+    #define MULTIPLE "EM"
     #define YYSTYPE char*
+    int currentLine=1;
+    char* currentNumber;
+    //TO-DO: Stack Pointer with Integer values to know which one is next!!! MultipleChoice, when a new one is added add new Integer to stack, else remove from stack
+    int currentScaleMinValue=0;
+    int currentScaleMaxValue=0;
+    int leftScaleChoice=0;
+    int rightScaleChoice=0;
+    int maxAlternatives=0;
+    int currentAlternative=0;
 %}
 
 /*Grammar tokens*/
@@ -17,7 +30,6 @@
 /*Logical Operators Tokens*/
 %token AND //And Token
 %token OR //Or Token
-%token OP_LOGICO //"AND", "OR"
 
 /*Question Options Tokens*/
 %token S //Binary True Token
@@ -40,51 +52,50 @@
 %token MAX //"Max"
 
 
-%token LIXO //"Qualquer merda"
-
-//%token operador //Operator Token
-//%token op_logico_em_esc //Numeric Scale / Multiple Choice logical operator
-//%token op_logico_sn //Binary logical operator Token
-
-/*Conditional Tokens*/
-//%token condicao_em_esc //Numeric Scale / Multiple Choice Condition Token
-//%token condicao_sn //Binary Condition Token
-
-/*Misc Tokens*/
-//%token em_esc //Multiple Choice / Numeric Scale Token
-//%token opcao //Option Token
-//%token DIGITS //Number Token
-//%token tipo_questao //Question Type Token
-//%token alternativa //Alternative Token
-
 %start START //Start token
 
 %%
-START: TIPO_QUESTAO{printf("%s\n","xD");}
+START: TIPO_QUESTAO{printf("%s\n","Inquérito Válido");}|
 
-TIPO_QUESTAO : 						ESC TEXTO_ESC | EM TEXTO_EM{printf("%s\n","EM");}  | SN TEXTO_SN
+TIPO_QUESTAO : 						ESC TEXTO_ESC 
+                                    | EM TEXTO_EM
+                                    | SN TEXTO_SN
 
-TEXTO_ESC: 							TEXTO PARAMETROS_ESC INICIO_BLOCO_CONDICAO| TEXTO PARAMETROS_ESC
+TEXTO_ESC: 							TEXTO PARAMETROS_ESC INICIO_BLOCO_CONDICAO
+                                    | TEXTO PARAMETROS_ESC
 
-TEXTO_EM : 							TEXTO{printf("%s\n","EM1");} PARAMETROS_EM {printf("%s\n","EM2");} ALTERNATIVA  | TEXTO {printf("%s\n","EM3");}PARAMETROS_EM {printf("%s\n","EM4");}INICIO_BLOCO_CONDICAO{printf("%s\n","EM5");} ALTERNATIVA 
+TEXTO_EM : 							TEXTO PARAMETROS_EM ALTERNATIVA
 
-ALTERNATIVA:							AL TEXTO ALTERNATIVA  | AL  TIPO_QUESTAO ALTERNATIVA | AL ELSE TX TEXTO ENDEM  | ENDEM | AL ELSE TX TEXTO ENDEM INICIO_BLOCO_CONDICAO {printf("%s\n","ALFINAL");}
+ALTERNATIVA:							AL{validateMultipleChoiceAlternative();} TEXTO ALTERNATIVA 
+                                        | AL{validateMultipleChoiceAlternative();} TIPO_QUESTAO ALTERNATIVA
+                                        | ALELSE{validateMultipleChoiceAlternative();} TX TEXTO ENDEM{currentAlternative=0;} INICIO_BLOCO_CONDICAO
+                                        |  ALELSE{validateMultipleChoiceAlternative();} TX TEXTO ENDEM{currentAlternative=0;}
+                                        | ENDEM{currentAlternative=0;}
 
-TEXTO_SN : 							TEXTO | TEXTO INICIO_BLOCO_CONDICAO_BINARIO
+TEXTO_SN : 							 TEXTO 
+                                        | TEXTO INICIO_BLOCO_CONDICAO_BINARIO
 
-PARAMETROS_ESC : 						MIN OP_MAT NUMERO NUM_TEXTO TEXTO PONTUACAO MAX OP_MAT NUMERO NUM_TEXTO TEXTO
+PARAMETROS_ESC : 						MIN OP_MAT NUMERO{currentScaleMinValue=atoi(currentNumber);} NUM_TEXTO TEXTO PONTUACAO MAX OP_MAT NUMERO{currentScaleMaxValue=atoi(currentNumber);} NUM_TEXTO TEXTO{validateScaleQuestion();}
 
-PARAMETROS_EM :						N OP_MAT NUMERO
+PARAMETROS_EM :						N OP_MAT NUMERO{maxAlternatives=atoi(currentNumber);validateMultipleChoiceQuestion();}
 
-INICIO_BLOCO_CONDICAO_BINARIO:			IF CONDICAO_BINARIO | IF CONDICAO_BINARIO OR CONDICAO_BINARIO
+INICIO_BLOCO_CONDICAO_BINARIO:			IF CONDICAO_BINARIO 
+                                        | IF CONDICAO_BINARIO OR CONDICAO_BINARIO
 
-CONDICAO_BINARIO:						S TIPO_QUESTAO FIM_BLOCO_CONDICAO | N TIPO_QUESTAO FIM_BLOCO_CONDICAO
+CONDICAO_BINARIO:						S TIPO_QUESTAO FIM_BLOCO_CONDICAO 
+                                            | N TIPO_QUESTAO FIM_BLOCO_CONDICAO
 
 INICIO_BLOCO_CONDICAO :					IF CONDICAO
 
-CONDICAO : 						OP_MAT NUMERO AND  OP_MAT NUMERO {printf("%s\n","ESTOU");}TIPO_QUESTAO  FIM_BLOCO_CONDICAO 
+CONDICAO : 						OP_MAT NUMERO{leftScaleChoice=atoi(currentNumber);} LOGICO OP_MAT NUMERO{rightScaleChoice=atoi(currentNumber);validateScaleChoice();} TIPO_QUESTAO  FIM_BLOCO_CONDICAO 
+                                    | OP_MAT NUMERO{leftScaleChoice=atoi(currentNumber);validateScaleChoice();} TIPO_QUESTAO FIM_BLOCO_CONDICAO
 
-FIM_BLOCO_CONDICAO : 					ENDIF | ENDIF TIPO_QUESTAO | ELSE  TIPO_QUESTAO ENDIF 
+FIM_BLOCO_CONDICAO : 					ENDIF 
+                                            | ENDIF TIPO_QUESTAO 
+                                                | ELSE  TIPO_QUESTAO ENDIF 
+
+LOGICO: AND 
+            | OR;
 
 %%
 
@@ -95,5 +106,33 @@ int main(){
 }
 
 int yyerror(){
+    printf("%s\n","Inquérito Inválido");
     return 0;
+}
+void validateScaleQuestion(){
+    if(currentScaleMinValue<0 || currentScaleMaxValue<0 || currentScaleMinValue>=currentScaleMaxValue){
+        printf("Parametros inválidos respetivamente a uma questão de escolha multipla!\nLinha %d\n",currentLine);
+        exit(5);
+    }
+}
+void validateScaleChoice(){
+    if(leftScaleChoice<0 || rightScaleChoice<0 || leftScaleChoice<currentScaleMinValue 
+        || leftScaleChoice>currentScaleMaxValue || rightScaleChoice<currentScaleMinValue 
+        || rightScaleChoice>currentScaleMaxValue){
+            printf("Parametros inválidos relativamente à decisao da escolha multipla!\nLinha %d\n",currentLine);
+            exit(5);
+        }
+}
+void validateMultipleChoiceQuestion(){
+    if(maxAlternatives<=0){
+        printf("Parametros inválidos relativamente ao numero de alternativas na escolha multipla!\nLinha %d\n",currentLine);
+        exit(5);
+    }
+}
+void validateMultipleChoiceAlternative(){
+    currentAlternative++;
+    if(currentAlternative>maxAlternatives){
+        printf("O número de alternativas excedeu o limite!\nLinha %d\n",currentLine);
+        exit(5);
+    }
 }

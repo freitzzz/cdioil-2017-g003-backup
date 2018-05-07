@@ -52,12 +52,12 @@ public class RegisterPopupViewContent implements PopupView.Content {
      * Constant that represents the title of the popup notification that ocures when the user 
      * inserts two passwords which are not equal
      */
-    private static final String PASSWORDS_NOT_EQUAL_TITLE="Passwords inválidas";
+    private static final String WATCHWORDS_NOT_EQUAL_TITLE="Passwords inválidas";
     /**
      * Constant that represents the message of the popup notification that ocures when the user 
      * inserts two passwords which are not equal
      */
-    private static final String PASSWORDS_NOT_EQUAL_MESSAGE="As passwords não coincidem!";
+    private static final String WATCHWORDS_NOT_EQUAL_MESSAGE="As passwords não coincidem!";
     
     private VerticalLayout mainLayout;
     private TextField firstNameTextField;
@@ -130,7 +130,7 @@ public class RegisterPopupViewContent implements PopupView.Content {
             
             // Checks if passwords match
             if (!passwordField.getValue().equals(repeatPasswordField.getValue())){
-                PopupNotification.show(PASSWORDS_NOT_EQUAL_TITLE,PASSWORDS_NOT_EQUAL_MESSAGE
+                PopupNotification.show(WATCHWORDS_NOT_EQUAL_TITLE,WATCHWORDS_NOT_EQUAL_MESSAGE
                         ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
                 return;
             }
