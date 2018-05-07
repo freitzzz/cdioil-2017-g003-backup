@@ -78,7 +78,7 @@ public final class CSVUsersReader implements UsersReader{
                 try{
                     usersLidos.add(new SystemUser(new Email(nextCampos[emailIdentifier])
                             ,new Name(nextCampos[nameIdentifier],nextCampos[subnameIdentifier])
-                            ,new Password(Password.DEFAULT_PASSWORD)));
+                            ,null));
                 }catch(IllegalArgumentException e){
                     //TO-DO IMPLEMENT LOGGER
                 }

@@ -20,16 +20,37 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Password implements Serializable, ValueObject {
-
-    private static final long serialVersionUID = 10l;
-    private static final String WEAK_PASSWORD = "Fraca!!!";
-    private static final String AVERAGE_PASSWORD = "Média";
-    private static final String STRONG_PASSWORD = "Forte";
-    private static final String SHA256 = "SHA-256";
     /**
-     * Password default given to SystemUsers imported by Admin
+     * Constant that represents the current class serial version
      */
-    public static final String DEFAULT_PASSWORD = "Password123";
+    private static final long serialVersionUID = 10l;
+    /**
+     * Constant that represents the message that ocures whenever a password is 
+     * identified as <i>weak</i>
+     */
+    private static final String WEAK_PASSWORD_MESSAGE = "Fraca!!!";
+    /**
+     * Constant that represents the message that ocures whenever a password is 
+     * identified as <i>average</i>
+     */
+    private static final String AVERAGE_PASSWORD_MESSAGE = "Média";
+    /**
+     * Constant that represents the message that ocures whenever a password is 
+     * identified as <i>strong</i>
+     */
+    private static final String STRONG_PASSWORD_MESSAGE = "Forte";
+    /**
+     * Constant that represents the regular expression used to identify average passwords
+     */
+    private static final String AVERAGE_PASSWORD_REGEX="^(?=[a-z0-9]?[A-Z])(?=[A-Z0-9]*?[a-z])(?=[A-Za-z]*?[0-9]).{9,}$";
+    /**
+     * Constant that represents the regular expression used to identify strong passwords
+     */
+    private static final String STRONG_PASSWORD_REGEX="^(?=(([a-z0-9])|([^A-Za-z0-9\\s]))?[A-Z])(?=(([A-Z0-9])|([^A-Za-z0-9\\s]))*?[a-z])(?=(([A-Za-z])|([^A-Za-z0-9\\s]))*?[0-9])(?=[A-Za-z0-9]*?[^A-Za-z0-9\\s]).{9,}$";
+    /**
+     * Constant that represents the digest algorithm used to encrypt the password
+     */
+    private static final String DIGEST_SHA_256 = "SHA-256";
 
     /**
      * Variable that represents a random number of bytes with the purpose of
@@ -50,10 +71,10 @@ public class Password implements Serializable, ValueObject {
      * @param password password
      */
     public Password(String password) {
-        if (strength(password).equalsIgnoreCase(WEAK_PASSWORD)) {
-            throw new IllegalArgumentException(WEAK_PASSWORD);
+        if (strength(password).equalsIgnoreCase(WEAK_PASSWORD_MESSAGE)) {
+            throw new IllegalArgumentException(WEAK_PASSWORD_MESSAGE);
         }
-
+        
         salt = generateSalt();
         this.saltInString = byteToString(salt);
         this.password = generateHash(password + this.saltInString);
@@ -68,7 +89,7 @@ public class Password implements Serializable, ValueObject {
      * @throws NoSuchAlgorithmException
      */
     private static String generateHash(String password) {
-        MessageDigest messageDigest = DigestUtils.getMessageDigest(SHA256);
+        MessageDigest messageDigest = DigestUtils.getMessageDigest(DIGEST_SHA_256);
         byte[] hash = messageDigest.digest(password.getBytes(StandardCharsets.UTF_8));
         StringBuffer hexString = new StringBuffer();
 
@@ -92,9 +113,9 @@ public class Password implements Serializable, ValueObject {
      */
     private static byte[] generateSalt() {
         final Random random = new SecureRandom();
-        byte[] salt = new byte[10];
-        random.nextBytes(salt);
-        return salt;
+        byte[] generatedSalt = new byte[10];
+        random.nextBytes(generatedSalt);
+        return generatedSalt;
     }
 
     /**
@@ -104,19 +125,19 @@ public class Password implements Serializable, ValueObject {
      * @return strength of a password
      */
     private static String strength(String password) {
-        Pattern patternAverage = Pattern.compile("^(?=[a-z0-9]?[A-Z])(?=[A-Z0-9]*?[a-z])(?=[A-Za-z]*?[0-9]).{9,}$");
+        Pattern patternAverage = Pattern.compile(AVERAGE_PASSWORD_REGEX);
         Matcher matcherAverage = patternAverage.matcher(password);
 
-        Pattern patternStrong = Pattern.compile("^(?=(([a-z0-9])|([^A-Za-z0-9\\s]))?[A-Z])(?=(([A-Z0-9])|([^A-Za-z0-9\\s]))*?[a-z])(?=(([A-Za-z])|([^A-Za-z0-9\\s]))*?[0-9])(?=[A-Za-z0-9]*?[^A-Za-z0-9\\s]).{9,}$");
+        Pattern patternStrong = Pattern.compile(STRONG_PASSWORD_REGEX);
         Matcher matcherStrong = patternStrong.matcher(password);
 
         if (matcherAverage.matches()) {
-            return AVERAGE_PASSWORD;
+            return AVERAGE_PASSWORD_MESSAGE;
         } else if (matcherStrong.matches()) {
-            return STRONG_PASSWORD;
+            return STRONG_PASSWORD_MESSAGE;
         }
 
-        return WEAK_PASSWORD;
+        return WEAK_PASSWORD_MESSAGE;
     }
 
     /**
