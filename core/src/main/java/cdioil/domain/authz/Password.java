@@ -28,25 +28,25 @@ public class Password implements Serializable, ValueObject {
      * Constant that represents the message that ocures whenever a password is 
      * identified as <i>weak</i>
      */
-    private static final String WEAK_PASSWORD_MESSAGE = "Fraca!!!";
+    private static final String WEAK_MESSAGE = "Fraca!!!";
     /**
      * Constant that represents the message that ocures whenever a password is 
      * identified as <i>average</i>
      */
-    private static final String AVERAGE_PASSWORD_MESSAGE = "Média";
+    private static final String AVERAGE_MESSAGE = "Média";
     /**
      * Constant that represents the message that ocures whenever a password is 
      * identified as <i>strong</i>
      */
-    private static final String STRONG_PASSWORD_MESSAGE = "Forte";
+    private static final String STRONG_MESSAGE = "Forte";
     /**
      * Constant that represents the regular expression used to identify average passwords
      */
-    private static final String AVERAGE_PASSWORD_REGEX="^(?=[a-z0-9]?[A-Z])(?=[A-Z0-9]*?[a-z])(?=[A-Za-z]*?[0-9]).{9,}$";
+    private static final String AVERAGE_REGEX="^(?=[a-z0-9]?[A-Z])(?=[A-Z0-9]*?[a-z])(?=[A-Za-z]*?[0-9]).{9,}$";
     /**
      * Constant that represents the regular expression used to identify strong passwords
      */
-    private static final String STRONG_PASSWORD_REGEX="^(?=(([a-z0-9])|([^A-Za-z0-9\\s]))?[A-Z])(?=(([A-Z0-9])|([^A-Za-z0-9\\s]))*?[a-z])(?=(([A-Za-z])|([^A-Za-z0-9\\s]))*?[0-9])(?=[A-Za-z0-9]*?[^A-Za-z0-9\\s]).{9,}$";
+    private static final String STRONG_REGEX="^(?=(([a-z0-9])|([^A-Za-z0-9\\s]))?[A-Z])(?=(([A-Z0-9])|([^A-Za-z0-9\\s]))*?[a-z])(?=(([A-Za-z])|([^A-Za-z0-9\\s]))*?[0-9])(?=[A-Za-z0-9]*?[^A-Za-z0-9\\s]).{9,}$";
     /**
      * Constant that represents the digest algorithm used to encrypt the password
      */
@@ -71,8 +71,8 @@ public class Password implements Serializable, ValueObject {
      * @param password password
      */
     public Password(String password) {
-        if (strength(password).equalsIgnoreCase(WEAK_PASSWORD_MESSAGE)) {
-            throw new IllegalArgumentException(WEAK_PASSWORD_MESSAGE);
+        if (strength(password).equalsIgnoreCase(WEAK_MESSAGE)) {
+            throw new IllegalArgumentException(WEAK_MESSAGE);
         }
         
         salt = generateSalt();
@@ -125,19 +125,19 @@ public class Password implements Serializable, ValueObject {
      * @return strength of a password
      */
     private static String strength(String password) {
-        Pattern patternAverage = Pattern.compile(AVERAGE_PASSWORD_REGEX);
+        Pattern patternAverage = Pattern.compile(AVERAGE_REGEX);
         Matcher matcherAverage = patternAverage.matcher(password);
 
-        Pattern patternStrong = Pattern.compile(STRONG_PASSWORD_REGEX);
+        Pattern patternStrong = Pattern.compile(STRONG_REGEX);
         Matcher matcherStrong = patternStrong.matcher(password);
 
         if (matcherAverage.matches()) {
-            return AVERAGE_PASSWORD_MESSAGE;
+            return AVERAGE_MESSAGE;
         } else if (matcherStrong.matches()) {
-            return STRONG_PASSWORD_MESSAGE;
+            return STRONG_MESSAGE;
         }
 
-        return WEAK_PASSWORD_MESSAGE;
+        return WEAK_MESSAGE;
     }
 
     /**
