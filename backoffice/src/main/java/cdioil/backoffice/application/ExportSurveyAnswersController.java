@@ -5,13 +5,18 @@ import cdioil.application.utils.SurveyAnswersWriterFactory;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Controller for the <i>Exportar Respostas de um Inquerito</i> use case <b>(US-601)</b>
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public final class ExportSurveyAnswersController {
+public final class ExportSurveyAnswersController implements Serializable{
+    /**
+     * Serialization number.
+     */
+    private static final long serialVersionUID = 5L;
     /**
      * Constant that represents the message that occures when a Survey hasn't any reviews
      */

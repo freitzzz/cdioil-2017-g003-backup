@@ -1,5 +1,9 @@
 %{
-    #include "grammar.tab.h"    
+    #include "grammar.tab.h"
+    extern int currentLine;
+    extern char* currentNumber;
+    extern int currentScaleMinValue;
+    extern int currentScaleMaxValue;
 %}
 
 %%
@@ -12,7 +16,6 @@
 
 [ ]*[aA][nN][dD][ ]*  {strdup(yytext);return AND;}
 [ ]*[oO][rR][ ]*  {strdup(yytext);return OR;}
-[ ]*(([aA][nN][dD])|([oO][rR]))[ ]*  {strdup(yytext);return OP_LOGICO;}
    
 [ ]*[sS][ ]*  {strdup(yytext);return S;}
 [ ]*[nN][ ]*  {strdup(yytext);return N;}
@@ -24,11 +27,11 @@
 [ ]*[aA][lL][eE][lL][sS][eE][ ]*  {strdup(yytext);return ALELSE;}
 [ ]*([<]|[>]|[<][=]|[>][=]|[=]|[!=])[ ]*  {strdup(yytext);return OP_MAT;}
 
-[ ]*[0-9]+[ ]*  {strdup(yytext);return NUMERO;}
+[ ]*[-]?[0-9]+[ ]*  {currentNumber=strdup(yytext);return NUMERO;}
 [ ]*[mM][iI][nN][ ]*  {strdup(yytext);return MIN;}
 [ ]*[mM][aA][xX][ ]*  {strdup(yytext);return MAX;}
 [ ]*[:][ ]*  {strdup(yytext);return NUM_TEXTO;}
 [ ]*[;|,][ ]*  {strdup(yytext);return PONTUACAO;}
-[ ]*[;]+[ ]*  {strdup(yytext);return LIXO;}
+\n {currentLine++;}
 [ \t\n\r]*;
 %%

@@ -30,7 +30,7 @@ public class MathUtils {
             sum += value;
         }
 
-        if (sum == 0) {
+        if (Double.compare(sum, 0) == 0) {
             return 0;
         }
         

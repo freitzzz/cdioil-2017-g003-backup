@@ -1,6 +1,8 @@
 package cdioil.backoffice.webapp.admin;
 
 import cdioil.backoffice.application.ImportCategoriesController;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
@@ -11,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 public class ImportCategoriesWindow extends Window {
 
@@ -57,13 +60,15 @@ public class ImportCategoriesWindow extends Window {
                 try {
                     tempFile = File.createTempFile(filename, fileExtension);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                            Level.SEVERE, e.getMessage());
                 }
 
                 try {
                     return new FileOutputStream(tempFile);
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                            Level.SEVERE, e.getMessage());
                     return null;
                 }
             }

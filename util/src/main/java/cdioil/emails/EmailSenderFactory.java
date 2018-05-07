@@ -72,6 +72,10 @@ public final class EmailSenderFactory {
      */
     private static final String STANDARD_SMTP_PORT="587";
     /**
+     * Hides default consructor
+     */
+    private EmailSenderFactory(){}
+    /**
      * Method that creates a new EmailSender based on the email client
      * @param clientEmail String with the client email that is going to send the email
      * @param clientEmailPassword String with the client email password that is going to send 
@@ -133,8 +137,4 @@ public final class EmailSenderFactory {
         properties.put(EMAIL_SMTP_TLS_TRUST,YAHOO_SMTP_HOST);
         return Session.getDefaultInstance(properties,new SMTPAuthenticator(emailClient,emailPassword));
     }
-    /**
-     * Hides default consructor
-     */
-    private EmailSenderFactory(){}
 }

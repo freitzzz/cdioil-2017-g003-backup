@@ -1,15 +1,22 @@
 package cdioil.files;
 
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * FileWriter class that writes content to a file
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public final class FileWriter {
+    /**
+     * Hides default constructor
+     */
+    private FileWriter(){}
     /**
      * Method that writes content to a file
      * @param file File with the file that is going be written
@@ -22,6 +29,8 @@ public final class FileWriter {
             Files.write(file.toPath(),content.getBytes());
             return true;
         }catch(IOException e){
+            ExceptionLogger.logException(LoggerFileNames.UTIL_LOGGER_FILE_NAME,
+                    Level.SEVERE, e.getMessage());
             return false;
         }
     }
@@ -44,8 +53,4 @@ public final class FileWriter {
         for(int i=0;i<content.size();i++)builder.append(content.get(i)).append('\n');
         return writeFile(file,builder.toString());
     }
-    /**
-     * Hides default constructor
-     */
-    private FileWriter(){}
 }

@@ -1,10 +1,11 @@
 package cdioil.backoffice.webapp.admin;
 
 import cdioil.backoffice.application.authz.AddWhitelistController;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import com.vaadin.event.selection.MultiSelectionEvent;
 import com.vaadin.event.selection.MultiSelectionListener;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Page;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -20,6 +21,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class WhitelistManagementWindow extends Window {
 
@@ -145,12 +147,12 @@ public class WhitelistManagementWindow extends Window {
                             n.setDelayMsec(1000);
                             n.show(UI.getCurrent().getPage());
                         } catch (Exception e) {
-                            //TODO log exception
                             Notification n = new Notification("Error creating whitelist entry",
                                     Notification.Type.ERROR_MESSAGE);
                             n.setDelayMsec(1000);
                             n.show(UI.getCurrent().getPage());
-                            e.printStackTrace();
+                            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME
+                                    , Level.SEVERE, e.getMessage());
                         } finally {
                             addEntryWindow.close();
                         }
@@ -184,8 +186,8 @@ public class WhitelistManagementWindow extends Window {
                     n.setDelayMsec(1000);
                     n.show(UI.getCurrent().getPage());
                 } catch (Exception e) {
-                    //TODO Log exception
-                    e.printStackTrace();
+                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME
+                            , Level.SEVERE, e.getMessage());
                     Notification n = new Notification("Error deleting whitelist entry",
                             Notification.Type.ERROR_MESSAGE);
                     n.setDelayMsec(1000);
@@ -242,8 +244,8 @@ public class WhitelistManagementWindow extends Window {
                             n.setDelayMsec(1000);
                             n.show(UI.getCurrent().getPage());
                         } catch (Exception e) {
-                            //TODO Log exception
-                            e.printStackTrace();
+                            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                                    Level.SEVERE, e.getMessage());
                             Notification n = new Notification("Error modifying whitelist entry",
                                     Notification.Type.ERROR_MESSAGE);
                             n.setDelayMsec(1000);

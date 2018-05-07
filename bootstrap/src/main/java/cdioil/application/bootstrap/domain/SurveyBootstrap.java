@@ -12,10 +12,8 @@ import cdioil.domain.SurveyItem;
 import cdioil.domain.SurveyState;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
-import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
-import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -24,41 +22,39 @@ import java.util.List;
 import java.util.Set;
 
 public class SurveyBootstrap {
-
+    /**
+     * Survey repository.
+     */
     private SurveyRepositoryImpl surveyRepository;
+    /**
+     * Market Structure Repository.
+     */
     private MarketStructureRepositoryImpl marketStructureRepository;
+    /**
+     * CategoryQuestionsLibrary Repository.
+     */
     private CategoryQuestionsLibraryRepositoryImpl categoryQuestionsLibraryRepository;
-    private IndependentQuestionsLibraryRepositoryImpl independentQuestionsRepo;
-    private UserRepositoryImpl userRepository;
-    private ManagerRepositoryImpl managerRepository;
 
+    /**
+     * Survey bootstrap.
+     */
     public SurveyBootstrap() {
         surveyRepository = new SurveyRepositoryImpl();
         marketStructureRepository = new MarketStructureRepositoryImpl();
         categoryQuestionsLibraryRepository = new CategoryQuestionsLibraryRepositoryImpl();
-        independentQuestionsRepo = new IndependentQuestionsLibraryRepositoryImpl();
-        userRepository = new UserRepositoryImpl();
-        managerRepository = new ManagerRepositoryImpl();
         prepareSurveys();
     }
 
+    /**
+     * Creates bootstrap surveys.
+     */
     private void prepareSurveys() {
         List<SurveyItem> surveyItems = new LinkedList<>();
         surveyItems.add(marketStructureRepository
                 .findCategoriesByPathPattern("10938DC").get(0));
 
-//        SystemUser user = userRepository.findByEmail(new Email("tiago.almeida@sonae.pt"));
-//        
-//        Manager manager = managerRepository.findBySystemUser(user);
-//        
-//        UsersGroup group = new UsersGroup(manager);
-//        
-//        TargetedSurvey survey = new TargetedSurvey(surveyItems, new TimePeriod(LocalDateTime.now(),
-//                LocalDateTime.of(2018, Month.MAY, 25, 14, 0)), group);
-//        
-//        survey.changeState(SurveyState.ACTIVE);
         Survey survey = new GlobalSurvey(surveyItems, new TimePeriod(LocalDateTime.now(),
-                LocalDateTime.of(2020,1,20,12,12)));
+                LocalDateTime.of(2020, 1, 20, 12, 12)));
 
         BinaryQuestion question1 = new BinaryQuestion("Questao Binaria 1 Survey Bootstrap", "BQS1");
         BinaryQuestion question2 = new BinaryQuestion("Questao Binaria 2 Survey Bootstrap", "BQS2");
@@ -102,16 +98,28 @@ public class SurveyBootstrap {
         survey.changeState(SurveyState.ACTIVE);
         surveyRepository.add(survey);
 
+        survey = createStressTestSurvey();
+        surveyRepository.add(survey);
+
+    }
+
+    /**
+     * Creates the survey that is used for the stress test.
+     * @return stress test survey
+     */
+    private Survey createStressTestSurvey() {
+        List<String> questionIDList;
+        List<Question> fetchedQuestions;
+        List<SurveyItem> surveyItems;
+        Survey survey;
         /*==================================
         Bootstrap Survey for Stress Test
         ====================================*/
         Category category = marketStructureRepository.findCategoriesByIdentifierPattern("10DC-10UN-1002CAT-4SCAT-2UB").get(0);
         CategoryQuestionsLibrary categoryQuestionsLibrary = categoryQuestionsLibraryRepository.findLibrary();
         Set<Question> categoryQuestionsSet = categoryQuestionsLibrary.categoryQuestionSet(category);
-
         questionIDList = new LinkedList<>(Arrays.asList("12", "13", "16", "34", "15"));
         fetchedQuestions = new LinkedList<>();
-
         for (String questionID : questionIDList) {
             for (Question q : categoryQuestionsSet) {
                 if (questionID.equalsIgnoreCase(q.getQuestionID())) {
@@ -119,25 +127,21 @@ public class SurveyBootstrap {
                 }
             }
         }
-
         surveyItems = new LinkedList<>();
         surveyItems.add(category);
         survey = new GlobalSurvey(surveyItems,
                 new TimePeriod(LocalDateTime.now(),
-                        LocalDateTime.of(2020,1,12,12,12)));
-
+                        LocalDateTime.of(2020, 1, 12, 12, 12)));
         Question fetchedQuestion12 = fetchedQuestions.get(0);
         Question fetchedQuestion13 = fetchedQuestions.get(1);
         Question fetchedQuestion16 = fetchedQuestions.get(2);
         Question fetchedQuestion34 = fetchedQuestions.get(3);
         Question fetchedQuestion15 = fetchedQuestions.get(4);
-
         survey.addQuestion(fetchedQuestion12);
         survey.addQuestion(fetchedQuestion13);
         survey.addQuestion(fetchedQuestion16);
         survey.addQuestion(fetchedQuestion34);
         survey.addQuestion(fetchedQuestion15);
-
         //All options lead to the next question
         for (QuestionOption optionQ12 : fetchedQuestion12.getOptionList()) {
             survey.setNextQuestion(fetchedQuestion12, fetchedQuestion13, optionQ12, 0);
@@ -151,9 +155,7 @@ public class SurveyBootstrap {
         for (QuestionOption optionQ34 : fetchedQuestion34.getOptionList()) {
             survey.setNextQuestion(fetchedQuestion34, fetchedQuestion15, optionQ34, 0);
         }
-
         survey.changeState(SurveyState.ACTIVE);
-        surveyRepository.add(survey);
-
+        return survey;
     }
 }

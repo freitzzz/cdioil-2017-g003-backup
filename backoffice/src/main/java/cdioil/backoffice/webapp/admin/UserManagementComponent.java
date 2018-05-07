@@ -54,14 +54,14 @@ public class UserManagementComponent extends DefaultPanelView {
      */
     public UserManagementComponent() {
         super("User Management");
-        instantiateComponents();
+        instantiateViewComponents();
         prepareComponents();
     }
 
     /**
      * Instantiates all needed components
      */
-    private void instantiateComponents() {
+    private void instantiateViewComponents() {
         userManagementController = new UserManagementController();
         listUsersController = new ListUsersController();
         userGrid = new Grid<>();

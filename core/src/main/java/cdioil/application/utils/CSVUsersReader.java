@@ -3,7 +3,6 @@ package cdioil.application.utils;
 import cdioil.files.FileReader;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Name;
-import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import java.io.File;
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public final class CSVUsersReader implements UsersReader{
                 try{
                     usersLidos.add(new SystemUser(new Email(nextCampos[emailIdentifier])
                             ,new Name(nextCampos[nameIdentifier],nextCampos[subnameIdentifier])
-                            ,new Password(Password.DEFAULT_PASSWORD)));
+                            ,null));
                 }catch(IllegalArgumentException e){
                     //TO-DO IMPLEMENT LOGGER
                 }

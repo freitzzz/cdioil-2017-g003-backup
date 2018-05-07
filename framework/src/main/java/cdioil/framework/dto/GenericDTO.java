@@ -1,5 +1,7 @@
 package cdioil.framework.dto;
 
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * A generic DTO that implements the Map interface. This class can be used when
@@ -63,8 +66,8 @@ public class GenericDTO implements DTO, Map<String, Object> {
                 out.put(aField.getName(), of(aField.get(o)));
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            ExceptionLogger.logException(LoggerFileNames.FRAMEWORK_LOGGER_FILE_NAME,
+                    Level.SEVERE,e.getMessage());
         }
     }
 
@@ -82,9 +85,7 @@ public class GenericDTO implements DTO, Map<String, Object> {
      * @param out
      * @throws IllegalAccessException
      */
-    private static void buildDtoForIterable(String name, Iterable<Object> col, final GenericDTO out)
-            throws IllegalAccessException {
-
+    private static void buildDtoForIterable(String name, Iterable<Object> col, final GenericDTO out){
         final Iterable<GenericDTO> data = ofMany(col);
         out.put(name, data);
     }
@@ -95,8 +96,7 @@ public class GenericDTO implements DTO, Map<String, Object> {
      * @param out
      * @throws IllegalAccessException
      */
-    private static void buildDtoForArray(Class<?> type, String name, Object array, final GenericDTO out)
-            throws IllegalAccessException {
+    private static void buildDtoForArray(Class<?> type, String name, Object array, final GenericDTO out){
         final int length = Array.getLength(array);
         Object data = null;
         if (type == int.class) {

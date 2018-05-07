@@ -54,11 +54,11 @@ public class ChangeLanguageUI {
                     case 0:
                         break;
                     case 1:
-                        controller.changeLanguage(Language.pt_PT);
+                        controller.changeLanguage(Language.PT);
                         refreshLocalizedMessages();
                         break;
                     case 2:
-                        controller.changeLanguage(Language.en_US);
+                        controller.changeLanguage(Language.EN_US);
                         refreshLocalizedMessages();
                         break;
 

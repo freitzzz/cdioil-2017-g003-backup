@@ -8,6 +8,10 @@ import java.util.regex.Pattern;
  */
 public final class FilesUtils {
     /**
+     * Hides default constructor
+     */
+    private FilesUtils(){}
+    /**
      * Constant that represents the regular expression that matches a single invalid character 
      * contained on a file name
      */
@@ -37,8 +41,4 @@ public final class FilesUtils {
                 + "|([:]?[*]?[?]?[|]?[<]?[>]?[/]?[\\][\"]?)"
                 + "|([:]?[*]?[?]?[|]?[<]?[>]?[/]?[\\]?[\"])";
     }
-    /**
-     * Hides default constructor
-     */
-    private FilesUtils(){}
 }
