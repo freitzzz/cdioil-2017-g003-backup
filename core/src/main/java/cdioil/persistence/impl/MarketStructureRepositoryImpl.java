@@ -30,7 +30,8 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Category> findCategoriesByIdentifierPattern(String identifierPattern) {
         EntityManager em = entityManager();
-        Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + identifierPattern + "'", Category.class);
+        String queryString = "select * from CATEGORY c where c.path regexp '" + identifierPattern + "'";
+        Query queryRegexed = em.createNativeQuery(queryString, Category.class);
         return (List<Category>) queryRegexed.getResultList();
     }
 
@@ -43,7 +44,8 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Category> findCategoriesByPathPattern(String pathPattern) {
         EntityManager em = entityManager();
-        Query queryRegexed = em.createNativeQuery("select * from CATEGORY c where c.path regexp '" + pathPattern + "'", Category.class);
+        String queryString = "select * from CATEGORY c where c.path regexp '" + pathPattern + "'";
+        Query queryRegexed = em.createNativeQuery(queryString, Category.class);
         if ((List<Category>) queryRegexed.getResultList() == null) {
             return null;
         }
@@ -70,7 +72,8 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Product> findProductByName(String productName) {
         EntityManager em = entityManager();
-        Query query = em.createNativeQuery("SELECT * from PRODUCT p where p.nome regexp '" + productName + "'", Product.class);
+        String queryString = "SELECT * from PRODUCT p where p.nome regexp '" + productName + "'";
+        Query query = em.createNativeQuery(queryString, Product.class);
         return (List<Product>) query.getResultList() != null ? query.getResultList() : null;
     }
 
@@ -83,7 +86,8 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public boolean findIfProductExist(String product) {
         EntityManager em = entityManager();
-        Query query = em.createNativeQuery("SELECT * from PRODUCT p where p.nome regexp '" + product + "'", Product.class);
+        String queryString = "SELECT * from PRODUCT p where p.nome regexp '" + product + "'";
+        Query query = em.createNativeQuery(queryString, Product.class);
         
         if((List<Product>) query.getResultList() == null || 
                 ( (List<Product>) query.getResultList()).isEmpty()) return true;
