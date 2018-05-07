@@ -42,11 +42,6 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
      */
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
     private List<Review> reviews;
-
-    /**
-     * list of the user's badges
-     */
-    //private List<Badge> badges;
     
     /**
      * Builds a new Profile of a certain Registered User

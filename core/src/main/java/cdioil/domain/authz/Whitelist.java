@@ -17,14 +17,12 @@ public class Whitelist implements Serializable, AggregateRoot<String> {
      * Serializable ID
      */
     private static final long serialVersionUID = 5L;
-    
     /**
      * String that repesents the authorized
      */
     @Id
     @Column(name="WHITELISTED_DOMAIN")
     private String domain;
-
     /**
      * Builds a new instance of Whitelist with an authorized domain
      * @param domain String with the authorized domain
@@ -32,6 +30,10 @@ public class Whitelist implements Serializable, AggregateRoot<String> {
     public Whitelist(String domain){
         this.domain=domain.toLowerCase();
     }
+    /**
+     * Proctected constructor in order to persist with JPA
+     */
+    protected Whitelist() {}
     /**
      * Returns the entity's identity.
      * @return whitelisted domain
@@ -55,7 +57,6 @@ public class Whitelist implements Serializable, AggregateRoot<String> {
         }
         return domain.equals(((Whitelist) obj).domain);
     }
-
     /**
      * Whitelist hashcode
      * @return Integer with the current Whitelist hashcode
@@ -66,7 +67,6 @@ public class Whitelist implements Serializable, AggregateRoot<String> {
         hash = 29 * hash + Objects.hashCode(this.domain);
         return hash;
     }
-
     /**
      *Method that represents the textual representation of a Whitelist
      *
@@ -76,9 +76,4 @@ public class Whitelist implements Serializable, AggregateRoot<String> {
     public String toString() {
         return domain;
     }
-
-    /**
-     * Proctected constructor in order to persist with JPA
-     */
-    protected Whitelist() {}
 }

@@ -6,14 +6,14 @@ package cdioil.langs;
  */
 public enum Language {
     
-    pt_PT() {
+    PT() {
 
         @Override
         public String toString() {
             return "Português (Portugal)";
         }
     },
-    en_US() {
+    EN_US() {
         @Override
         public String toString() {
             return "English (USA)";

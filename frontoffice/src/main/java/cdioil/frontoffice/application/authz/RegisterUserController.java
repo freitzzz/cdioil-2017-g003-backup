@@ -4,13 +4,21 @@ import cdioil.application.authz.EmailSenderService;
 import cdioil.application.domain.authz.SystemUserBuilder;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.domain.authz.*;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
+import java.io.Serializable;
+import java.util.logging.Level;
 
 /**
  * Controller for the Register User use case (US-180)
  */
-public final class RegisterUserController {
+public final class RegisterUserController implements Serializable {
+    /**
+     * Serialization number
+     */
+    private static final long serialVersionUID = 4L;
     /**
      * Constant that represents the regular expression that represents blank spaces
      */

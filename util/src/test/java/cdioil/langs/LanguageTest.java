@@ -18,7 +18,7 @@ public class LanguageTest {
     @Test
     public void testValues() {
         System.out.println("values");
-        Language[] expResult = {Language.pt_PT, Language.en_US};
+        Language[] expResult = {Language.PT, Language.EN_US};
         Language[] result = Language.values();
         assertArrayEquals(expResult, result);
     }
@@ -29,8 +29,8 @@ public class LanguageTest {
     @Test
     public void testValueOf() {
         System.out.println("valueOf");
-        String name = "pt_PT";
-        Language expResult = Language.pt_PT;
+        String name = "PT";
+        Language expResult = Language.PT;
         Language result = Language.valueOf(name);
         assertEquals(expResult, result);
     }
@@ -39,15 +39,15 @@ public class LanguageTest {
     public void testToString(){
         System.out.println("toString");
         
-        String result = Language.pt_PT.toString();
+        String result = Language.PT.toString();
         String expResult = "Português (Portugal)";
         
         assertEquals(result, expResult);
         
-        assertNotEquals(result, Language.pt_PT.name());
+        assertNotEquals(result, Language.PT.name());
         
         
-        result = Language.en_US.toString();
+        result = Language.EN_US.toString();
         expResult = "English (USA)";
         
         assertEquals(result, expResult);

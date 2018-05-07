@@ -20,15 +20,21 @@ import javax.persistence.SequenceGenerator;
  * binary option)
  */
 @Entity
-@SequenceGenerator(name = "questionOptionSeq",initialValue = 1,allocationSize = 1)
+@SequenceGenerator(name = "questionOptionSeq", initialValue = 1, allocationSize = 1)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class QuestionOption<T> implements Serializable, ValueObject {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "questionOptionSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "questionOptionSeq")
     @Column(name = "QUESTIONOPTION_ID")
     private long id;
+
+    /**
+     * Empty constructor for JPA.
+     */
+    protected QuestionOption() {
+    }
 
     /**
      * Returns an exact copy of the given QuestionOption.
@@ -50,16 +56,9 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
     }
 
     /**
-     * Empty constructor for JPA.
-     */
-    protected QuestionOption() {
-    }
-
-    /**
      * Returns the content of the option
      *
      * @return content of type T
      */
     abstract T getContent();
-
 }

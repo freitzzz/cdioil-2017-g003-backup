@@ -31,7 +31,7 @@ public class TimePeriod implements Serializable {
      */
     public TimePeriod(LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate == null) {
-            throw new IllegalArgumentException("A data de início não pode ser "
+            throw new IllegalArgumentException("A data de inicio não pode ser "
                     + "null.");
         }
         if (endDate == null) {
@@ -39,7 +39,7 @@ public class TimePeriod implements Serializable {
                     + "null.");
         }
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("A data de início não pode ser "
+            throw new IllegalArgumentException("A data de início nao pode ser "
                     + "depois da data de fim.");
         }
         if (startDate.equals(endDate)) {

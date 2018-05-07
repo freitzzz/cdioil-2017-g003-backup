@@ -3,9 +3,12 @@ package cdioil.frontoffice.presentation;
 import cdioil.frontoffice.application.AnswerSurveyController;
 import cdioil.console.Console;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.util.LinkedList;
 
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * User interface for AnswerSurvey User Story
@@ -37,7 +40,8 @@ public class AnswerSurveyUI {
         try {
             controller = new AnswerSurveyController(loggedUser);
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            ExceptionLogger.logException(LoggerFileNames.FRONTOFFICE_LOGGER_FILE_NAME,
+                    Level.SEVERE, e.getMessage());
             System.out.println("ERROR: Error fetching Surveys.");
         }
 

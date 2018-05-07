@@ -126,7 +126,6 @@ public class CSVQuestionsReader implements QuestionsReader {
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
 
-        //int numberQuestionsNotImported = 0;
         List<String> fileContent = readFile(file);
 
         if (fileContent == null) {

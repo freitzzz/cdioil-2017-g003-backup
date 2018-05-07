@@ -13,7 +13,7 @@ import java.util.List;
  * @author Ana Guerra (1161191)
  */
 public class MathUtils {
-
+    
     /**
      * Method that calculates the average of a list of values.
      *
@@ -30,7 +30,7 @@ public class MathUtils {
             sum += value;
         }
 
-        if (sum == 0) {
+        if (Double.compare(sum, 0) == 0) {
             return 0;
         }
         

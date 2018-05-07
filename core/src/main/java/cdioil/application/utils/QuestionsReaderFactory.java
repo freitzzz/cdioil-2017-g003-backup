@@ -7,16 +7,22 @@ package cdioil.application.utils;
 
 import cdioil.files.CommonFileExtensions;
 
-
 /**
  * Factory de QuestionsReader.
- * 
+ *
  * @author Ana Guerra (1161191)
  */
 public final class QuestionsReaderFactory {
 
     /**
-     * Creates a QuestionsReader instance according to the format of the file being read.
+     * Hides default constructoro
+     */
+    private QuestionsReaderFactory() {
+    }
+
+    /**
+     * Creates a QuestionsReader instance according to the format of the file
+     * being read.
      *
      * @param filename file name
      * @return an instance of QuestionsReader
@@ -27,10 +33,5 @@ public final class QuestionsReaderFactory {
         }
         return null;
     }
-    /**
-     * Hides default constructoro
-     */
-    private QuestionsReaderFactory() {
-    }
-    
+
 }

@@ -17,12 +17,11 @@ public class FrontOfficeLogin {
     /**
      * Message requesting the user for their email address.
      */
-    private final String REQUEST_EMAIL = "Email:";
+    private final static String REQUEST_EMAIL = "Email:";
     /**
      * Message requesting the user for their password.
      */
-    private final String REQUEST_WATCHWORD = "Password:";
-    //private UserRepositoryImpl userRepo = new UserRepositoryImpl();
+    private final static String REQUEST_WATCHWORD = "Password:";
     /**
      * Constant that represents the message that ocures if the system asks the user for the activation code
      */

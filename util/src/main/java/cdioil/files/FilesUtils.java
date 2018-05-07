@@ -13,6 +13,10 @@ public final class FilesUtils {
      */
     private static final String INVALID_FILE_NAME_REGEX=createInvalidFileNameRegex();
     /**
+     * Hides default constructor
+     */
+    private FilesUtils(){}
+    /**
      * Method that checks if a certain file name is valid or not
      * @param fileName String with the file name being validated
      * @return boolean true if the file name is valid, false if not
@@ -37,8 +41,4 @@ public final class FilesUtils {
                 + "|([:]?[*]?[?]?[|]?[<]?[>]?[/]?[\\][\"]?)"
                 + "|([:]?[*]?[?]?[|]?[<]?[>]?[/]?[\\]?[\"])";
     }
-    /**
-     * Hides default constructor
-     */
-    private FilesUtils(){}
 }

@@ -39,7 +39,10 @@ public final class SystemUserBuilder {
      * Current SystemUser being built email
      */
     private BirthDate birthDate;
-    
+    /**
+     * Hides default constructor
+     */
+    private SystemUserBuilder(){}
     /**
      * Creates a new SystemUser builder
      * @return SystemUserBuilder with the new SystemUser builder
@@ -107,8 +110,4 @@ public final class SystemUserBuilder {
         this.birthDate=new BirthDate(LocalDate.parse(birthDate));
         return this;
     }
-    /**
-     * Hides default constructor
-     */
-    private SystemUserBuilder(){}
 }

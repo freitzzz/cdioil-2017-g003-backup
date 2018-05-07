@@ -103,6 +103,10 @@ public class Email implements Serializable,ValueObject {
         this.email=encryptEmail(email.toLowerCase());
     }
     /**
+     * Protected constructor in order to persist with JPA
+     */
+    protected Email(){}
+    /**
      * Method that verifies if two Emails are equal
      * @param obj Email with the email to be compared with the actual Email
      * @return boolean true if both emails are equal, false if not
@@ -179,8 +183,4 @@ public class Email implements Serializable,ValueObject {
     private String decryptEmail(){
         return OperatorsEncryption.decrypt(this.email);
     }
-    /**
-     * Protected constructor in order to persist with JPA
-     */
-    protected Email(){}
 }

@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
 
 /**
  * UserSession class that classifies the session of a User on the application
- * <br>TO-DO: Mark class as an entity in order to add logging on the database
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 4.0 of FeedbackMonkey
  */
@@ -45,6 +44,10 @@ public class UserSession implements Serializable{
         this.sessionStartDate=LocalDateTime.now();
     }
     /**
+     * Protected constructor in order to allow JPA persistence
+     */
+    protected UserSession(){}
+    /**
      * Logs the end of the user session
      */
     public void logSessionEnd(){
@@ -57,8 +60,4 @@ public class UserSession implements Serializable{
      * @return User with the current session user
      */
     public SystemUser getUser(){return sessionUser;}
-    /**
-     * Protected constructor in order to allow JPA persistence
-     */
-    protected UserSession(){}
 }

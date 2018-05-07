@@ -41,21 +41,21 @@ public final class UsersBootstrap {
     private void inicializarUtilizadoresRegitados(){
         RegisteredUserRepositoryImpl userRepo=new RegisteredUserRepositoryImpl();
         userRepo.add(new RegisteredUser(createSystemUser
-            ("joao@email.com",DEFAULT_COMINHOS,"Joao","Padaria","919555666","Porto","1997-01-01")));
+            ("joao@email.com",DEFAULT_COMINHOS,"Joao","Padaria","919555666","Porto","1937-01-01")));
         userRepo.add(new RegisteredUser(createSystemUser
             ("maria@email.com",DEFAULT_COMINHOS,"Maria","Albertina","919555667","Lisboa","1997-01-02")));
         userRepo.add(new RegisteredUser(createSystemUser
             ("antonio@email.com",DEFAULT_COMINHOS,"Antonio","Variações","919555668","Coimbra","1997-01-03")));
         userRepo.add(new RegisteredUser(createSystemUser
-            ("gisele@email.com",DEFAULT_COMINHOS,"Gisele","Gisele","919555669","Porto","1997-01-01")));
+            ("gisele@email.com",DEFAULT_COMINHOS,"Gisele","Gisele","919555669","Braga","1997-01-01")));
         userRepo.add(new RegisteredUser(createSystemUser
-            ("quetirofoiesse@email.com",DEFAULT_COMINHOS,"Maya","das Cartas","919555696","Porto","1997-01-01")));
+            ("quetirofoiesse@email.com",DEFAULT_COMINHOS,"Maya","das Cartas","919555696","Porto","1997-06-01")));
         userRepo.add(new RegisteredUser(createSystemUser
-            ("bombado70@email.com",DEFAULT_COMINHOS,"Agua","Fresca","919555676","Porto","1997-01-06")));
+            ("bombado70@email.com",DEFAULT_COMINHOS,"Agua","Fresca","919555676","Algarve","1997-08-06")));
         userRepo.add(new RegisteredUser(createSystemUser
-            ("lil.pump.x3@email.com",DEFAULT_COMINHOS,"Pump","Eskeiit","919420420","ESKEIT","1997-01-01")));
+            ("lil.pump.x3@email.com",DEFAULT_COMINHOS,"Pump","Eskeiit","919420420","ESKEIT","1997-07-01")));
         userRepo.add(new RegisteredUser(createSystemUser
-            ("dinamagalhaes@email.com",DEFAULT_COMINHOS,"Dina","Magalhaes","919553666","Porto","1997-01-07")));
+            ("dinamagalhaes@email.com",DEFAULT_COMINHOS,"Dina","Magalhaes","919553666","Matosinhos","1997-01-07")));
     }
     /**
      * Inicializa diversos Administradores (Admin)
@@ -63,11 +63,11 @@ public final class UsersBootstrap {
     private void inicializarAdministradores(){
         AdminRepositoryImpl adminRepo=new AdminRepositoryImpl();
         adminRepo.add(new Admin(createSystemUser
-            ("sonae.lover@sonae.pt",DEFAULT_COMINHOS,"Joao","Antonio","919525666","Porto","1997-01-01")));
+            ("sonae.lover@sonae.pt",DEFAULT_COMINHOS,"Joao","Miguel","919525666","Portugal","1997-12-01")));
         adminRepo.add(new Admin(createSystemUser
-            ("trabalhonasonae@sonae.pt",DEFAULT_COMINHOS,"Armando","Torres","919535666","Porto","1997-01-01")));
+            ("trabalhonasonae@sonae.pt",DEFAULT_COMINHOS,"Armando","Torres","919535666","Matosinhos","1997-08-01")));
         adminRepo.add(new Admin(createSystemUser
-            ("tiago.ferreira@bit.sonae.pt",DEFAULT_COMINHOS,"Tiago","Fereira","919558666","Porto","1997-01-01")));
+            ("tiago.ferreira@bit.sonae.pt",DEFAULT_COMINHOS,"Tiago","Fereira","919558666","Santarem","1999-01-01")));
     }
     /**
      * Inicializa diversos Gestores (Manager)
@@ -75,11 +75,11 @@ public final class UsersBootstrap {
     private void inicializarGestores(){
         ManagerRepositoryImpl gestorRepo=new ManagerRepositoryImpl();
         gestorRepo.add(new Manager(createSystemUser
-            ("bom.gestor@sonae.pt",DEFAULT_COMINHOS,"Mario","Lirio","919555655","Porto","1997-01-01")));
+            ("bom.gestor@sonae.pt",DEFAULT_COMINHOS,"Mario","Lirio","919555655","Barcelona","2997-01-01")));
         gestorRepo.add(new Manager(createSystemUser
-            ("gestor.do.mes@gestores.sonae.pt",DEFAULT_COMINHOS,"Antonio","Penacova","919545266","Porto","1997-01-01")));
+            ("gestor.do.mes@gestores.sonae.pt",DEFAULT_COMINHOS,"Luis","Penacova","919545266","Madrid","1957-01-01")));
         gestorRepo.add(new Manager(createSystemUser
-            ("tiago.almeida@sonae.pt",DEFAULT_COMINHOS,"Tiago","Almeida","919555666","Porto","1997-01-01")));
+            ("tiago.almeida@sonae.pt",DEFAULT_COMINHOS,"Tiago","Almeida","919555666","Figueira","1947-01-01")));
     }
     /**
      * Método que cria um SystemUser a ser atribuido a um RegisteredUser-Admin-Manager

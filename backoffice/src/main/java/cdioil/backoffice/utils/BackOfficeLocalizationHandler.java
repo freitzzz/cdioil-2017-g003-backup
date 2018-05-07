@@ -30,11 +30,11 @@ public class BackOfficeLocalizationHandler {
         
         //Instantiate Map and convert URLs to UTF-8
         try {
-            LANGUAGE_FILES_MAP.put(Language.pt_PT,
+            LANGUAGE_FILES_MAP.put(Language.PT,
                     new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
                             .getResource("localization/backoffice_pt_PT.xml").getFile(), "UTF-8")));
             
-            LANGUAGE_FILES_MAP.put(Language.en_US,
+            LANGUAGE_FILES_MAP.put(Language.EN_US,
                     new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
                             .getResource("localization/backoffice_en_US.xml").getFile(), "UTF-8")));
         } catch (UnsupportedEncodingException ex) {

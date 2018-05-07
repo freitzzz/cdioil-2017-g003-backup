@@ -118,8 +118,9 @@ public abstract class Survey implements Serializable {
      * @return true - if option doesn't already lead to another question<p>
      * false - otherwise
      */
-    public boolean setNextQuestion(Question origin, Question destination, QuestionOption option, double weight) {
-        return graph.insertEdge(origin, destination, option, 0);
+    public boolean setNextQuestion(Question origin, Question destination,
+            QuestionOption option, double weight) {
+        return graph.insertEdge(origin, destination, option, weight);
     }
 
     /**

@@ -1,7 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.ValueObject;
-import encryptions.DigestUtils;
+import cdioil.encryptions.DigestUtils;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -79,6 +79,12 @@ public class Password implements Serializable, ValueObject {
         this.saltInString = byteToString(salt);
         this.password = generateHash(password + this.saltInString);
 
+    }
+    
+    /**
+     * Empty constructor for JPA.
+     */
+    protected Password() {
     }
 
     /**
@@ -167,9 +173,4 @@ public class Password implements Serializable, ValueObject {
         return hash.equals(this.password);
     }
 
-    /**
-     * Empty constructor for JPA.
-     */
-    protected Password() {
-    }
 }

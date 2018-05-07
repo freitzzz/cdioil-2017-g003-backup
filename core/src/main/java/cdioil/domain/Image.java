@@ -31,6 +31,10 @@ public class Image implements Serializable,ValueObject {
      */
     public Image(byte[] image){validateImage(image);}
     /**
+     * Protected constructor in order to allow JPA persistence
+     */
+    protected Image(){}
+    /**
      * Method that verifies if a certain Image is equal to the current Image
      * @param obj Image with the image being compared with the actual one
      * @return boolean true if both images are equal, false if not
@@ -81,8 +85,4 @@ public class Image implements Serializable,ValueObject {
         this.image=new byte[image.length];
         for(int i=0;i<image.length;i++)this.image[i]=image[i];
     }
-    /**
-     * Protected constructor in order to allow JPA persistence
-     */
-    protected Image(){}
 }

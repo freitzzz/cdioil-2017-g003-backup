@@ -3,13 +3,16 @@ package cdioil.backoffice.application.authz;
 import cdioil.domain.authz.SystemUser;
 import cdioil.framework.dto.SystemUserDTO;
 import cdioil.persistence.impl.UserRepositoryImpl;
+import java.io.Serializable;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class UserManagementController {
+public class UserManagementController implements Serializable {
 
+    private final static long serialVersionUID = 10L;
+    
     private UserRepositoryImpl userRepository;
 
     public UserManagementController() {
@@ -29,5 +32,9 @@ public class UserManagementController {
         }
 
         return systemUserDTOList;
+    }
+
+    public List<SystemUserDTO> findFilteredSystemUsersDTO() {
+        return null;
     }
 }

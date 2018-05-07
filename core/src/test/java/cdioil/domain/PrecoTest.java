@@ -18,7 +18,7 @@ public class PrecoTest {
      * Constante com um array englobando os preços válidos usados nos testes
      */
     private static final String[] PRECOS_INVALIDOS={null,"","   ","sadads","5000"
-            ,"50.50.50 €","Pump","5 D"};
+            ,"50.50.50 €","Pump","5 D","50 €€€"};
     public PrecoTest(){}
     
     
@@ -43,7 +43,8 @@ public class PrecoTest {
         Preco precoX = new Preco("50 €");
         Preco precoY=new Preco("50 EUR");
         Preco precoZ=new Preco("50 $");
-        Preco precoK = new Preco("50 €");
+        Preco precoK = new Preco("20 €");
+        Preco precoM = new Preco("15 $");
         assertEquals("A condição deve acertar porque os Preco a comparar sao a mesma instância"
                 ,precoX,precoX);
         assertNotEquals("A condição deve falhar porque o Preco a comparar é null",precoX,null);
@@ -52,8 +53,10 @@ public class PrecoTest {
         assertEquals("A condição deve acertar porque os Preco a comparar sao iguais"
                 ,precoX,precoY);
         assertNotEquals("A condição deve falhar porque os Preco sao diferentes",precoX,precoZ);
-        assertEquals("A condição deve acertar porque os Precos a comparar sao "
-                + "iguais",precoX,precoK);
+        assertNotEquals("A condição deve falhar porque os Precos a comparar sao "
+                + "diferentes",precoX,precoK);
+        assertNotEquals("A condição deve falhar porques os Precos a comparar "
+                + "sao diferentes",precoX,precoM);
     }
 
     /**

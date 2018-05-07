@@ -54,14 +54,14 @@ public class UserManagementComponent extends DefaultPanelView {
      */
     public UserManagementComponent() {
         super("User Management");
-        instantiateComponents();
+        instantiateViewComponents();
         prepareComponents();
     }
 
     /**
      * Instantiates all needed components
      */
-    private void instantiateComponents() {
+    private void instantiateViewComponents() {
         userManagementController = new UserManagementController();
         listUsersController = new ListUsersController();
         userGrid = new Grid<>();
@@ -108,7 +108,9 @@ public class UserManagementComponent extends DefaultPanelView {
         searchTextField.addValueChangeListener(new HasValue.ValueChangeListener<String>() {
             @Override
             public void valueChange(HasValue.ValueChangeEvent<String> valueChangeEvent) {
-                //TODO Filters user table
+                // Get text field value
+
+                // s
             }
         });
 
@@ -133,28 +135,6 @@ public class UserManagementComponent extends DefaultPanelView {
     private Component createOptionsDropDown() {
         MenuBar settingsMenuBar = new MenuBar();
         MenuItem menuItem = settingsMenuBar.addItem("", null);
-
-        menuItem.addItem("Novo Gestor", VaadinIcons.PLUS,
-                new MenuBar.Command() {
-                    @Override
-                    public void menuSelected(MenuItem menuItem) {
-                        Window assignManagerWindow = new Window("Assign Manager");
-                        assignManagerWindow.center();
-                        assignManagerWindow.setResizable(false);
-
-                        VerticalLayout windowLayout = new VerticalLayout();
-                        windowLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-
-                        Label selectedUserLabel = new Label("No user selected");
-                        windowLayout.addComponent(selectedUserLabel);
-
-                        GridLayout categoryChooserLayout = new GridLayout(2, 2);
-
-                        windowLayout.addComponent(categoryChooserLayout);
-                        assignManagerWindow.setContent(windowLayout);
-                        UI.getCurrent().addWindow(assignManagerWindow);
-                    }
-                });
 
         menuItem.addItem("Gerir Whitelist",
                 VaadinIcons.BAN, new MenuBar.Command() {

@@ -8,5 +8,5 @@ public interface PersistenceUnitNameCore {
     /**
      * Persistence unit name of the current module (<b>core</b>)
      */
-    public final static String PERSISTENCE_UNIT_NAME="cdioil-2017-g003_Core_PU";
+    public static final String PERSISTENCE_UNIT_NAME="cdioil-2017-g003_Core_PU";
 }

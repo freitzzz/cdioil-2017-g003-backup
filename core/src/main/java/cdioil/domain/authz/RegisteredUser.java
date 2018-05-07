@@ -33,7 +33,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
     /**
      * The registered user's profile.
      */
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REFRESH})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Profile profile;
 
     /**
@@ -48,12 +48,19 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
         this.sysUser = sysUser;
         this.profile = new Profile(this);
     }
-    
+
+    /**
+     * Empty constructor for JPA.
+     */
+    protected RegisteredUser() {
+    }
+
     /**
      * Returns the user's profile.
+     *
      * @return Profile instance.
      */
-    public Profile getProfile(){
+    public Profile getProfile() {
         return profile;
     }
 
@@ -95,12 +102,6 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
     @Override
     public int hashCode() {
         return sysUser.hashCode();
-    }
-
-    /**
-     * Empty constructor for JPA.
-     */
-    protected RegisteredUser() {
     }
 
     /**
