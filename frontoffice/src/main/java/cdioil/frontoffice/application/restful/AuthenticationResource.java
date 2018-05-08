@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 /**
  * Resource class that represents the resource that holds all authentication services
@@ -17,14 +18,6 @@ import javax.ws.rs.core.Response;
  */
 @Path(value = "/authenticationresource")
 public final class AuthenticationResource {
-    /**
-     * Constant that represents the success code (200)
-     */
-    private static final short SUCCESS_CODE=200;
-    /**
-     * Constant that represents the failure code (400)
-     */
-    private static final short FAILURE_CODE=400;
     /**
      * Logins into frontoffice via a JSON POST Request
      * @param json String with a JSON form with the email and password of the email
@@ -38,10 +31,26 @@ public final class AuthenticationResource {
     public Response login(String json){
         UserService userService=new Gson().fromJson(json,UserService.class);
         try{
-            new AuthenticationController().login(userService.getEmail(),userService.getPassword());//Temporary
+            AuthenticationController authenticationController=new AuthenticationController();
+            String authenticationToken=null;
+            if(authenticationController.login(userService.getEmail(),userService.getPassword())){
+                authenticationToken=authenticationController.getUserToken();
+            }
+            return buildAuthenticationResponse(authenticationToken);
         }catch(AuthenticationException e){
-            return Response.status(FAILURE_CODE).build();
+            return Response.status(Status.UNAUTHORIZED).build();
         }
-        return Response.status(SUCCESS_CODE).build();
+    }
+    /**
+     * Method that builds a response regarding the user authentication 
+     * @param authenticationToken String with the user authentication token
+     * @return Response with the response regarding the user authentication, depending 
+     * on the authentication token
+     */
+    private Response buildAuthenticationResponse(String authenticationToken){
+        return authenticationToken!= null 
+                ? Response.status(Status.OK).entity(
+                    "{\n\t\"Code:\":\""+authenticationToken+"\"\n}").build()
+                : Response.status(Status.UNAUTHORIZED).build();
     }
 }
