@@ -16,17 +16,17 @@ public class AssignManagerController {
     /**
      * UserRepository Implementation
      */
-    private UserRepositoryImpl systemUserRepository;
+    private final UserRepositoryImpl systemUserRepository;
 
     /**
      * Manager Repository Implementation
      */
-    private ManagerRepositoryImpl managerRepository;
+    private final ManagerRepositoryImpl managerRepository;
 
     /**
      * Admin Repository Implementatation
      */
-    private AdminRepositoryImpl adminRepository;
+    private final AdminRepositoryImpl adminRepository;
 
     /**
      * Constructor
@@ -39,21 +39,14 @@ public class AssignManagerController {
 
     /**
      * Fetches a list of registered users
+     *
      * @return arraylist with emails from registered users
      */
     public ArrayList<String> registeredUsers() {
 
         // Lista de System user
-        List<SystemUser> systemUsers =
-                (List<SystemUser>) systemUserRepository.findAll();
-
-        // Lista de managers
-        List<Manager> managers =
-                (List<Manager>) managerRepository.findAll();
-
-        // Lista de admins
-        List<Admin> admins =
-                (List<Admin>) adminRepository.findAll();
+        List<SystemUser> systemUsers
+                = (List<SystemUser>) systemUserRepository.findAll();
 
         /*
         Contem todos os utilizadores que nao sao managers nem admins
@@ -61,7 +54,7 @@ public class AssignManagerController {
         ArrayList<String> validUsers = new ArrayList<>();
 
         for (SystemUser su : systemUsers) {
-            if (!managers.contains(su) && !admins.contains(su)) {
+            if (!checkIfIsManager(su) && !checkIfIsAdmin(su)) {
                 validUsers.add(su.toString());
             }
         }
@@ -69,9 +62,43 @@ public class AssignManagerController {
         return validUsers;
     }
 
+    /**
+     * Method that verifies if a SystemUser is a manager.
+     *
+     * @param su SystemUser to check
+     * @return true, if the SystemUser is a manager. Otherwise, returns false
+     */
+    public boolean checkIfIsManager(SystemUser su) {
+        // Lista de managers
+        List<Manager> managers
+                = (List<Manager>) managerRepository.findAll();
+        if (managers.stream().anyMatch((manager) -> (manager.getID().equals(su)))) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Method that verifies if a SystemUser is an admin.
+     *
+     * @param su SystemUser to check
+     * @return true, if the SystemUser is an admin. Otherwise, returns false
+     */
+    public boolean checkIfIsAdmin(SystemUser su) {
+        // Lista de admins
+        List<Admin> admins
+                = (List<Admin>) adminRepository.findAll();
+        for (Admin admin : admins) {
+            if (admin.getID().equals(su)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * From a given email, find a user and assigns it the role of manager
+     *
      * @param email given email
      */
     public void assignManager(String email) {
