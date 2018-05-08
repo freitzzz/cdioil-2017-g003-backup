@@ -6,10 +6,6 @@ import cdioil.logger.LoggerFileNames;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 /**
  * Main class for the application's backoffice.
@@ -17,6 +13,7 @@ import org.xml.sax.SAXException;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class BackOfficeMain {
+
     public static void main(String[] args) {
 
         if (args.length != 0) {

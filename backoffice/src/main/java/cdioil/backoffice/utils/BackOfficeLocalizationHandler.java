@@ -13,9 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /**
  * Singleton class that handles the BackOffice's localization.
@@ -27,15 +24,15 @@ public class BackOfficeLocalizationHandler {
     private static final Map<Language, File> LANGUAGE_FILES_MAP;
 
     static {
-        
+
         LANGUAGE_FILES_MAP = new HashMap<>();
-        
+
         //Instantiate Map and convert URLs to UTF-8
         try {
             LANGUAGE_FILES_MAP.put(Language.PT,
                     new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
                             .getResource("localization/backoffice_pt_PT.xml").getFile(), "UTF-8")));
-            
+
             LANGUAGE_FILES_MAP.put(Language.EN_US,
                     new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
                             .getResource("localization/backoffice_en_US.xml").getFile(), "UTF-8")));
@@ -76,8 +73,7 @@ public class BackOfficeLocalizationHandler {
     }
 
     /**
-     * Loads localized strings of the currently specified language in the
-     * properties file.
+     * Loads localized strings of the currently specified language in the properties file.
      *
      * @throws IOException
      */
