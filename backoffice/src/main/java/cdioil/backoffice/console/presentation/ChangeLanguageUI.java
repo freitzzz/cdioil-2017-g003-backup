@@ -67,7 +67,7 @@ public class ChangeLanguageUI {
                         break;
 
                 }
-            } catch (IOException | SAXException | ParserConfigurationException e) {
+            } catch (IOException e) {
                 Logger.getLogger(ChangeLanguageUI.class.getName()).log(Level.SEVERE, null, e);
             }
         }
