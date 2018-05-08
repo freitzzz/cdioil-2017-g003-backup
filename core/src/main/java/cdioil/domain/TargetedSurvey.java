@@ -5,6 +5,7 @@ import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -43,8 +44,36 @@ public class TargetedSurvey extends Survey implements Serializable {
         this.targetAudience = targetAudience;
     }
 
+    /**
+     * Empty constructor for JPA.
+     */
     protected TargetedSurvey() {
-        //For ORM.
+    }
+
+    /**
+     * Targeted Survey's hash code
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = super.hashCode() * hash;
+        hash = 11 * hash + Objects.hashCode(this.targetAudience);
+        return hash;
+    }
+
+    /**
+     * Checks if two targeted surveys are equal
+     *
+     * @param obj survey to be compared
+     * @return true if they're equal, false if otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        super.equals(obj);
+        final TargetedSurvey other = (TargetedSurvey) obj;
+        return Objects.equals(this.targetAudience, other.targetAudience);
     }
 
     /**

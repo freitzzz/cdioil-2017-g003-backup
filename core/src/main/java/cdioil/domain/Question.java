@@ -1,7 +1,6 @@
 package cdioil.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -85,6 +84,12 @@ public abstract class Question implements Serializable, Comparable {
         this.questionID = questionID;
         this.optionList = optionList;
     }
+    
+    /**
+     * Empty Constructor for JPA.
+     */
+    protected Question() {
+    }
 
     /**
      * Returns an exact copy of the given Question.
@@ -103,12 +108,6 @@ public abstract class Question implements Serializable, Comparable {
             return new QuantitativeQuestion(question);
         }
         return null;
-    }
-
-    /**
-     * Empty Constructor for JPA.
-     */
-    protected Question() {
     }
 
     public String getQuestionText() {
@@ -170,10 +169,7 @@ public abstract class Question implements Serializable, Comparable {
         if (!Objects.equals(this.questionText, other.questionText)) {
             return false;
         }
-        if (!Objects.equals(this.questionID, other.questionID)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.questionID, other.questionID);
 
     }
 
