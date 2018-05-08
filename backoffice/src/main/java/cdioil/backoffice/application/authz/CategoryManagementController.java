@@ -7,6 +7,7 @@ import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
+import java.util.Iterator;
 
 /**
  * Controller class used for US150 - Associar Categorias a um Gestor and US152 - Remover Categorias de um Gestor.
@@ -91,7 +92,7 @@ public class CategoryManagementController {
      */
     public boolean removeCategories() {
         if (manager.removeCategories(new MarketStructureRepositoryImpl().
-                findCategoriesByIdentifierPattern(REGEX_PREFIX + path.toUpperCase() + REGEX_SUFIX)) != false) {
+                findCategoriesByIdentifierPattern(REGEX_PREFIX + path.toUpperCase() + REGEX_SUFIX))) {
             Manager managerY = new ManagerRepositoryImpl().merge(manager);
             if (managerY != null) {
                 manager = managerY;
@@ -126,7 +127,8 @@ public class CategoryManagementController {
      */
     public int size(Iterable<Manager> managerList) {
         int size = 0;
-        for (Manager m : managerList) {
+        for (Iterator<Manager> it = managerList.iterator(); it.hasNext();) {
+            it.next();
             size++;
         }
         return size;

@@ -34,7 +34,7 @@ public class Category extends SurveyItem {
      * Path of the Category in the Market Structure.
      */
     @Column(updatable = true, nullable = false)
-    private String path;
+    private String categoryPath;
 
     /**
      * List of products of the Category.
@@ -48,10 +48,15 @@ public class Category extends SurveyItem {
     private static final String SPLITTER = "-";
 
     /**
+     * Scale of the values in the Market Structure.
+     */
+    private static final String SCALE = "[0-9]+";
+
+    /**
      * Regular expression to validate the path of the Category in the Market Structure.
      */
-    private final static String PATH_REGEX = "[0-9]+" + Sufixes.SUFIX_DC + "((-[0-9]+" + Sufixes.SUFIX_UN + "(-[0-9]+"
-            + Sufixes.SUFIX_CAT + "(-[0-9]+" + Sufixes.SUFIX_SCAT + "(-[0-9]+" + Sufixes.SUFIX_UB + ")?)?)?)?)";
+    private static final String PATH_REGEX = SCALE + Sufixes.SUFIX_DC + "((-" + SCALE + Sufixes.SUFIX_UN + "(-" + SCALE
+            + Sufixes.SUFIX_CAT + "(-" + SCALE + Sufixes.SUFIX_SCAT + "(-" + SCALE + Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**
      * Sufixes for the identifier of the Category (DC, UN, CAT, SCAT or UB).
@@ -104,7 +109,7 @@ public class Category extends SurveyItem {
     public Category(String name, String path) {
         if (isNameValid(name) && isPathValid(path)) {
             this.name = name;
-            this.path = path;
+            this.categoryPath = path;
 
             String pathIdentifiers[] = path.split(SPLITTER);
             //Identifier is always the path's last element
@@ -135,7 +140,7 @@ public class Category extends SurveyItem {
      */
     private boolean isPathValid(String path) {
         return path != null
-                && (path.matches(PATH_REGEX) || path.equals("RAIZ"));
+                && (path.matches(PATH_REGEX) || "RAIZ".equals(path));
     }
 
     /**
@@ -150,14 +155,15 @@ public class Category extends SurveyItem {
         }
         return products.add(p);
     }
+
     /**
      * Removes a product from the list of products of the Category.
      *
      * @param p product to remove
      * @return true if the product is successfully removed. Otherwise, returns false
      */
-    public boolean removeProduct(Product p){
-         return products.remove(p);
+    public boolean removeProduct(Product p) {
+        return products.remove(p);
     }
 
     /**
@@ -184,7 +190,7 @@ public class Category extends SurveyItem {
      * @return string with the path of the category
      */
     public String categoryPath() {
-        return path;
+        return categoryPath;
     }
 
     /**
@@ -202,7 +208,7 @@ public class Category extends SurveyItem {
      * @return
      */
     public List<String> categoryPathIdentifiers() {
-        return Arrays.asList(path.split(SPLITTER));
+        return Arrays.asList(categoryPath.split(SPLITTER));
     }
 
     /**
@@ -211,15 +217,15 @@ public class Category extends SurveyItem {
      * @return the path without the first two numbers in the CAT identifier
      */
     private String getActualIdentifier() {
-        if (path.toUpperCase().contains("CAT")) {
+        if (categoryPath.toUpperCase().contains("CAT")) {
             try {
-                String removableNumbers = path.substring(8, 9);
-                return path.replace(removableNumbers, "");
+                String removableNumbers = categoryPath.substring(8, 9);
+                return categoryPath.replace(removableNumbers, "");
             } catch (IndexOutOfBoundsException ex) {
-                return path;
+                return categoryPath;
             }
         }
-        return path;
+        return categoryPath;
     }
 
     /**
@@ -240,7 +246,7 @@ public class Category extends SurveyItem {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 59 * hash + Objects.hashCode(this.path);
+        hash = 59 * hash + Objects.hashCode(this.categoryPath);
         return hash;
     }
 
@@ -259,6 +265,6 @@ public class Category extends SurveyItem {
             return false;
         }
         Category other = (Category) obj;
-        return this.path.equals(other.path);
+        return this.categoryPath.equals(other.categoryPath);
     }
 }

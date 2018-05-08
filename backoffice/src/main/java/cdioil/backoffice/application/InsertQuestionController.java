@@ -28,13 +28,18 @@ public class InsertQuestionController {
     /**
      * Current manager.
      */
-    private Manager manager;
+    private final Manager manager;
+
+    /**
+     * Scale of the Category's path in the Market Structure.
+     */
+    private static final String SCALE = "[0-9]+";
 
     /**
      * Regular expression to validate the path of the Category in the Market Structure.
      */
-    private static final String PATH_REGEX = "[0-9]+" + Category.Sufixes.SUFIX_DC + "((-[0-9]+" + Category.Sufixes.SUFIX_UN + "(-[0-9]+"
-            + Category.Sufixes.SUFIX_CAT + "(-[0-9]+" + Category.Sufixes.SUFIX_SCAT + "(-[0-9]+" + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
+    private static final String PATH_REGEX = SCALE + Category.Sufixes.SUFIX_DC + "((-" + SCALE + Category.Sufixes.SUFIX_UN + "(-" + SCALE
+            + Category.Sufixes.SUFIX_CAT + "(-" + SCALE + Category.Sufixes.SUFIX_SCAT + "(-" + SCALE + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**
      * Sufix of the regular expression used to search categories by its identifier.
@@ -83,28 +88,63 @@ public class InsertQuestionController {
 
         switch (option) {
             case 1: //Binary question
-                try {
-                    question = new BinaryQuestion(questionText, questionID);
-                    return 1;
-                } catch (Exception ex) {
-                    return 0;
-                }
+                return createBinaryQuestion(questionText, questionID) ? 1 : 0;
             case 2: //Multiple choice question
-                try {
-                    question = new MultipleChoiceQuestion(questionText, questionID, optionList);
-                    return 1;
-                } catch (Exception ex) {
-                    return 0;
-                }
+                return createMultipleChoiceQuestion(questionText, questionID, optionList) ? 1 : 0;
             case 3: //Quantitative question
-                try {
-                    question = new QuantitativeQuestion(questionText, questionID, optionList);
-                    return 1;
-                } catch (Exception ex) {
-                    return 0;
-                }
+                return createQuantitativeQuestion(questionText, questionID, optionList) ? 1 : 0;
             default: //Invalid
                 return -1;
+        }
+    }
+
+    /**
+     * Creates a binary question.
+     *
+     * @param questionText Text of the question to create
+     * @param questionID ID of the question to create
+     * @return true if the question is successfully created. Otherwise, returns false
+     */
+    private boolean createBinaryQuestion(String questionText, String questionID) {
+        try {
+            this.question = new BinaryQuestion(questionText, questionID);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Creates a multiple choice question.
+     *
+     * @param questionTextText of the question to create
+     * @param questionID ID of the question to create
+     * @param optionList List with all options
+     * @return true if the question is successfully created. Otherwise, returns false
+     */
+    private boolean createMultipleChoiceQuestion(String questionText, String questionID, List<QuestionOption> optionList) {
+        try {
+            this.question = new MultipleChoiceQuestion(questionText, questionID, optionList);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Creates a quantitative choice question.
+     *
+     * @param questionTextText of the question to create
+     * @param questionID ID of the question to create
+     * @param optionList List with all options
+     * @return true if the question is successfully created. Otherwise, returns false
+     */
+    private boolean createQuantitativeQuestion(String questionText, String questionID, List<QuestionOption> optionList) {
+        try {
+            this.question = new QuantitativeQuestion(questionText, questionID, optionList);
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 
@@ -112,14 +152,14 @@ public class InsertQuestionController {
      * Finds a list of Categories in the Market Structure according to the path.
      *
      * @param catPath Path of the Category/Categories in the Market Structure
-     * @return the list with Categories, or null if there are no categories with that path or if none is associated with the manager
+     * @return the list with Categories, or an empty list if there are no categories with that path or if none is associated with the manager
      */
     public List<Category> findCategories(String catPath) {
         List<Category> categoryList = new MarketStructureRepositoryImpl().
                 findCategoriesByIdentifierPattern(REGEX_PREFIX + catPath.toUpperCase() + REGEX_SUFIX);
 
         if (categoryList == null || categoryList.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<Category> managerCategories = new LinkedList<>();
 
@@ -130,7 +170,7 @@ public class InsertQuestionController {
         }
 
         if (managerCategories.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         return managerCategories;
     }

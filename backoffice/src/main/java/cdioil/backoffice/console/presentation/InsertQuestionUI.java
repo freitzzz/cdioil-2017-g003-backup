@@ -177,7 +177,7 @@ public class InsertQuestionUI {
                 return;
             }
 
-            while (ctrl.findCategories(categoryPath) == null || !ctrl.checkPath(categoryPath)) {
+            while (ctrl.findCategories(categoryPath).isEmpty() || !ctrl.checkPath(categoryPath)) {
                 categoryPath = Console.readLine(invalidCategoryPath);
                 if (categoryPath.equalsIgnoreCase(exitCode)) {
                     return;
