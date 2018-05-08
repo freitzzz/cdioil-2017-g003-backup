@@ -88,9 +88,9 @@ public class ExportSurveyStatisticsController {
      */
     public List<Survey> getAllSurveys() {
         Iterable<Survey> iterableAllSurveys = new SurveyRepositoryImpl().findAll();
-        iterableAllSurveys.forEach(validSurvey -> {
-            surveys.add(validSurvey);
-        });
+        iterableAllSurveys.forEach(validSurvey -> 
+            surveys.add(validSurvey)
+        );
         return surveys;
     }
 

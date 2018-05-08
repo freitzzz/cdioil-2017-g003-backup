@@ -295,7 +295,8 @@ public class CSVQuestionsReader implements QuestionsReader {
         LinkedList<QuestionOption> options = new LinkedList<>();
 
         for (int a = 0; a < nrEM; a++) {
-            String[] modifiedLine = fileContent.get(currentIdx++).split(SPLITTER);
+            int nextIdx = currentIdx++;
+            String[] modifiedLine = fileContent.get(nextIdx).split(SPLITTER);
             options.add(new MultipleChoiceQuestionOption(modifiedLine[offset + 2]));
         }
 

@@ -202,20 +202,20 @@ public class CSVProductsReader implements ProductsReader {
 
         StringBuilder sb = new StringBuilder();
 
-        String dc = path.charAt(0) + "" + path.charAt(1);
+        String dc = Character.toString(path.charAt(0)) + "" + Character.toString(path.charAt(1));
         sb.append(dc).append(DC_IDENTIFIER);
 
-        String un = path.charAt(2) + "" + path.charAt(3);
+        String un = Character.toString(path.charAt(2)) + "" + Character.toString(path.charAt(3));
         sb.append(PATH_IDENTIFIER).append(un).append(UN_IDENTIFIER);
 
-        String cat = path.charAt(4) + "" + path.charAt(5) + "" + path.charAt(6) + "" + path.charAt(7);
+        String cat = Character.toString(path.charAt(4)) + "" + Character.toString(path.charAt(5)) + "" + Character.toString(path.charAt(6)) + "" + Character.toString(path.charAt(7));
         sb.append(PATH_IDENTIFIER).append(cat).append(CAT_IDENTIFIER);
 
-        String scat = path.charAt(8) + "" + path.charAt(9);
+        String scat = Character.toString(path.charAt(8)) + "" + Character.toString(path.charAt(9));
         int scat_val = Integer.parseInt(scat);
         sb.append(PATH_IDENTIFIER).append(scat_val).append(SCAT_IDENTIFIER);
 
-        String ub = path.charAt(10) + "" + path.charAt(11);
+        String ub = Character.toString(path.charAt(10)) + "" + Character.toString(path.charAt(11));
         int ub_val = Integer.parseInt(ub);
         sb.append(PATH_IDENTIFIER).append(ub_val).append(UB_IDENTIFIER);
 
