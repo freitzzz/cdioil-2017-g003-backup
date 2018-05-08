@@ -42,7 +42,7 @@ public class AssignManagerController {
      *
      * @return arraylist with emails from registered users
      */
-    public ArrayList<String> registeredUsers() {
+    public List<String> registeredUsers() {
 
         // Lista de System user
         List<SystemUser> systemUsers
@@ -72,7 +72,7 @@ public class AssignManagerController {
         // Lista de managers
         List<Manager> managers
                 = (List<Manager>) managerRepository.findAll();
-        return managers.stream().anyMatch((manager) -> (manager.getID().equals(su)));
+        return managers.stream().anyMatch(manager -> (manager.getID().equals(su)));
     }
 
     /**
@@ -85,7 +85,7 @@ public class AssignManagerController {
         // Lista de admins
         List<Admin> admins
                 = (List<Admin>) adminRepository.findAll();
-        return admins.stream().anyMatch((admin) -> (admin.getID().equals(su)));
+        return admins.stream().anyMatch(admin -> (admin.getID().equals(su)));
     }
 
     /**

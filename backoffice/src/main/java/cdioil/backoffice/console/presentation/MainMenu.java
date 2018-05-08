@@ -16,52 +16,52 @@ public class MainMenu {
         COMMON
        ==============
      */
-    private final String SEPARATOR = "=============================";
+    private final String separator = "=============================";
 
-    private String INFO_SHUTDOWN = localizationHandler.getMessageValue("info_shutdown");
+    private String infoShutdown = localizationHandler.getMessageValue("info_shutdown");
 
-    private String ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
-    private String ERROR_NOT_IMPLEMENTED = localizationHandler.getMessageValue("error_not_implemented");
+    private String errorInvalidOption = localizationHandler.getMessageValue("error_invalid_option");
+    private String errorNotImplemented = localizationHandler.getMessageValue("error_not_implemented");
 
-    private String REQUEST_SELECT_OPTION = localizationHandler.getMessageValue("request_select_option");
+    private String requestSelectOption = localizationHandler.getMessageValue("request_select_option");
 
-    private String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
-    private String OPTION_CHANGE_LANGUAGE = localizationHandler.getMessageValue("option_change_language");
+    private String optionExit = localizationHandler.getMessageValue("option_exit");
+    private String optionChangeLanguage = localizationHandler.getMessageValue("option_change_language");
 
     /* ==============
         MANAGER
        ==============
      */
-    private String INFO_MANAGER_HEADER = localizationHandler.getMessageValue("info_manager_header");
+    private String infoManagerHeader = localizationHandler.getMessageValue("info_manager_header");
 
-    private String OPTION_IMPORT_QUESTIONS_TEMPLATE = localizationHandler.getMessageValue("option_import_questions_template");
-    private String OPTION_IMPORT_QUESTIONS_CATEGORY = localizationHandler.getMessageValue("option_import_questions_category");
-    private String OPTION_EXPORT_SURVEY_ANSWERS = localizationHandler.getMessageValue("option_export_survey_answers");
-    private String OPTION_CREATE_SURVEY = localizationHandler.getMessageValue("option_create_survey");
-    private String OPTION_INSERT_QUESTION_CATEGORY = localizationHandler.getMessageValue("option_insert_question_category");
-    private String OPTION_EXPORT_STATISTICS_SURVEY = localizationHandler.getMessageValue("option_export_stats_survey");
-    private String OPTION_CREATE_TEMPLATE = localizationHandler.getMessageValue("option_create_template");
+    private String optionImportQuestionsTemplate = localizationHandler.getMessageValue("option_import_questions_template");
+    private String optionImportCategoryQuestions = localizationHandler.getMessageValue("option_import_questions_category");
+    private String optionExportSurveyAnswers = localizationHandler.getMessageValue("option_export_survey_answers");
+    private String optionCreateSurvey = localizationHandler.getMessageValue("option_create_survey");
+    private String optionInsertCategoryQuestion = localizationHandler.getMessageValue("option_insert_question_category");
+    private String optionExportSurveyStatistics = localizationHandler.getMessageValue("option_export_stats_survey");
+    private String optionCreateTemplate = localizationHandler.getMessageValue("option_create_template");
 
 
     /* ==============
         ADMIN
        ==============
      */
-    private String INFO_ADMIN_HEADER = localizationHandler.getMessageValue("info_admin_header");
+    private String infoAdminHeader = localizationHandler.getMessageValue("info_admin_header");
 
-    private String OPTION_ASSIGN_MANAGER = localizationHandler.getMessageValue("option_assign_manager");
-    private String OPTION_WHITELIST_DOMAIN = localizationHandler.getMessageValue("option_whitelist_domain");
-    private String OPTION_DISPLAY_USERS = localizationHandler.getMessageValue("option_display_users");
-    private String OPTION_IMPORT_USERS = localizationHandler.getMessageValue("option_import_users");
-    private String OPTION_REGISTER_USER = localizationHandler.getMessageValue("option_register_user");
-    private String OPTION_UPDATE_DATA = localizationHandler.getMessageValue("option_update_data");
-    private String OPTION_IMPORT_CATEGORIES = localizationHandler.getMessageValue("option_import_categories");
-    private String OPTION_USER_BY_EMAIL = localizationHandler.getMessageValue("option_search_user_by_email");
-    private String OPTION_REMOVE_CATEGORIES_FROM_MANAGER = localizationHandler.getMessageValue("option_remove_categories_from_manager");
-    private String OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = localizationHandler.getMessageValue("option_associate_categories_to_manager");
-    private String OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = localizationHandler.getMessageValue("option_list_categories_without_managers");
-    private String OPTION_ADD_USERS_QUESTIONNAIRE = localizationHandler.getMessageValue("option_add_users_questionnaire");
-    private String OPTION_IMPORT_PRODUCTS = localizationHandler.getMessageValue("option_import_products");
+    private String optionAssignManager = localizationHandler.getMessageValue("option_assign_manager");
+    private String optionWhitelistDomain = localizationHandler.getMessageValue("option_whitelist_domain");
+    private String optionDisplayUsers = localizationHandler.getMessageValue("option_display_users");
+    private String optionImportUsers = localizationHandler.getMessageValue("option_import_users");
+    private String optionRegisterUser = localizationHandler.getMessageValue("option_register_user");
+    private String optionUpdateData = localizationHandler.getMessageValue("option_update_data");
+    private String optionImportCategories = localizationHandler.getMessageValue("option_import_categories");
+    private String optionUsersByEmail = localizationHandler.getMessageValue("option_search_user_by_email");
+    private String optionRemoveCategoriesFromManager = localizationHandler.getMessageValue("option_remove_categories_from_manager");
+    private String optionAssociateCategoriesToManager = localizationHandler.getMessageValue("option_associate_categories_to_manager");
+    private String optionListCategoriesWithoutManager = localizationHandler.getMessageValue("option_list_categories_without_managers");
+    private String optionAddUsersTargetedSurvey = localizationHandler.getMessageValue("option_add_users_questionnaire");
+    private String optionImportProducts = localizationHandler.getMessageValue("option_import_products");
 
     public void mainLoopAdmin(AuthenticationController authenticationController) {
         int opcao = 0;
@@ -71,7 +71,7 @@ public class MainMenu {
             switch (opcao) {
                 case 0:
                     System.out.println(authenticationController.logout());
-                    Console.log(INFO_SHUTDOWN,Console.ConsoleColors.PURPLE);
+                    Console.log(infoShutdown,Console.ConsoleColors.PURPLE);
                     break;
                 case 1:
                     new AssignManagerUI();
@@ -115,7 +115,7 @@ public class MainMenu {
                     refreshLocalizedMessages();
                     break;
                 default:
-                    System.out.println(ERROR_INVALID_OPTION);
+                    System.out.println(errorInvalidOption);
                     break;
             }
         } while (opcao != 0);
@@ -129,7 +129,7 @@ public class MainMenu {
             switch (opcao) {
                 case 0:
                     authenticationController.logout();
-                    Console.log(INFO_SHUTDOWN,Console.ConsoleColors.PURPLE);
+                    Console.log(infoShutdown,Console.ConsoleColors.PURPLE);
                     break;
                 case 1:
                     new ImportQuestionsUI((Manager)authenticationController.getUser());
@@ -158,7 +158,7 @@ public class MainMenu {
                     new CreateTemplateUI((Manager)authenticationController.getUser());
                     break;
                 default:
-                    System.out.println(ERROR_INVALID_OPTION);
+                    System.out.println(errorInvalidOption);
                     break;
             }
         } while (opcao != 0);
@@ -166,45 +166,45 @@ public class MainMenu {
 
     private int managerMenu() {
         int option = -1;
-        System.out.println(SEPARATOR);
-        System.out.println(INFO_MANAGER_HEADER);
-        System.out.println(SEPARATOR);
-        System.out.println("1. " + OPTION_IMPORT_QUESTIONS_CATEGORY);
-        System.out.println("2. " + OPTION_CHANGE_LANGUAGE);
-        System.out.println("3. " + OPTION_EXPORT_SURVEY_ANSWERS);
-        System.out.println("4. " + OPTION_ADD_USERS_QUESTIONNAIRE);
-        System.out.println("5. " + OPTION_CREATE_SURVEY);
-        System.out.println("6. " + OPTION_INSERT_QUESTION_CATEGORY);
-        System.out.println("7. " + OPTION_EXPORT_STATISTICS_SURVEY);
-        System.out.println("8. " + OPTION_CREATE_TEMPLATE);
-        System.out.println(SEPARATOR);
-        System.out.println("0. " + OPTION_EXIT);
-        option = Console.readInteger(REQUEST_SELECT_OPTION);
+        System.out.println(separator);
+        System.out.println(infoManagerHeader);
+        System.out.println(separator);
+        System.out.println("1. " + optionImportCategoryQuestions);
+        System.out.println("2. " + optionChangeLanguage);
+        System.out.println("3. " + optionExportSurveyAnswers);
+        System.out.println("4. " + optionAddUsersTargetedSurvey);
+        System.out.println("5. " + optionCreateSurvey);
+        System.out.println("6. " + optionInsertCategoryQuestion);
+        System.out.println("7. " + optionExportSurveyStatistics);
+        System.out.println("8. " + optionCreateTemplate);
+        System.out.println(separator);
+        System.out.println("0. " + optionExit);
+        option = Console.readInteger(requestSelectOption);
         return option;
     }
 
     private int adminMenu() {
         int option = -1;
-        System.out.println(SEPARATOR);
-        System.out.println(INFO_ADMIN_HEADER);
-        System.out.println(SEPARATOR);
-        System.out.println("1. " + OPTION_ASSIGN_MANAGER);
-        System.out.println("2. " + OPTION_WHITELIST_DOMAIN);
-        System.out.println("3. " + OPTION_IMPORT_USERS);
-        System.out.println("4. " + OPTION_DISPLAY_USERS);
-        System.out.println("5. " + OPTION_REGISTER_USER);
-        System.out.println("6. " + OPTION_UPDATE_DATA);
-        System.out.println("7. " + OPTION_IMPORT_CATEGORIES);
-        System.out.println("8. " + OPTION_USER_BY_EMAIL);
-        System.out.println("9. " + OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER);
-        System.out.println("10. " + OPTION_REMOVE_CATEGORIES_FROM_MANAGER);
-        System.out.println("11. " + OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS);
-        System.out.println("12. " + OPTION_IMPORT_QUESTIONS_TEMPLATE);
-        System.out.println("13. " + OPTION_IMPORT_PRODUCTS);
-        System.out.println("14. " + OPTION_CHANGE_LANGUAGE);
-        System.out.println(SEPARATOR);
-        System.out.println("0. " + OPTION_EXIT);
-        option = Console.readInteger(REQUEST_SELECT_OPTION);
+        System.out.println(separator);
+        System.out.println(infoAdminHeader);
+        System.out.println(separator);
+        System.out.println("1. " + optionAssignManager);
+        System.out.println("2. " + optionWhitelistDomain);
+        System.out.println("3. " + optionImportUsers);
+        System.out.println("4. " + optionDisplayUsers);
+        System.out.println("5. " + optionRegisterUser);
+        System.out.println("6. " + optionUpdateData);
+        System.out.println("7. " + optionImportCategories);
+        System.out.println("8. " + optionUsersByEmail);
+        System.out.println("9. " + optionAssociateCategoriesToManager);
+        System.out.println("10. " + optionRemoveCategoriesFromManager);
+        System.out.println("11. " + optionListCategoriesWithoutManager);
+        System.out.println("12. " + optionImportQuestionsTemplate);
+        System.out.println("13. " + optionImportProducts);
+        System.out.println("14. " + optionChangeLanguage);
+        System.out.println(separator);
+        System.out.println("0. " + optionExit);
+        option = Console.readInteger(requestSelectOption);
         return option;
     }
 
@@ -213,40 +213,40 @@ public class MainMenu {
      */
     private void refreshLocalizedMessages() {
 
-        INFO_SHUTDOWN = localizationHandler.getMessageValue("info_shutdown");
+        infoShutdown = localizationHandler.getMessageValue("info_shutdown");
 
-        ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
-        ERROR_NOT_IMPLEMENTED = localizationHandler.getMessageValue("error_not_implemented");
+        errorInvalidOption = localizationHandler.getMessageValue("error_invalid_option");
+        errorNotImplemented = localizationHandler.getMessageValue("error_not_implemented");
 
-        REQUEST_SELECT_OPTION = localizationHandler.getMessageValue("request_select_option");
+        requestSelectOption = localizationHandler.getMessageValue("request_select_option");
 
-        OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
-        OPTION_CHANGE_LANGUAGE = localizationHandler.getMessageValue("option_change_language");
+        optionExit = localizationHandler.getMessageValue("option_exit");
+        optionChangeLanguage = localizationHandler.getMessageValue("option_change_language");
 
-        INFO_MANAGER_HEADER = localizationHandler.getMessageValue("info_manager_header");
+        infoManagerHeader = localizationHandler.getMessageValue("info_manager_header");
 
-        OPTION_IMPORT_QUESTIONS_TEMPLATE = localizationHandler.getMessageValue("option_import_questions_template");
-        OPTION_IMPORT_QUESTIONS_CATEGORY = localizationHandler.getMessageValue("option_import_questions_category");
-        OPTION_EXPORT_SURVEY_ANSWERS = localizationHandler.getMessageValue("option_export_survey_answers");
-        OPTION_CREATE_SURVEY = localizationHandler.getMessageValue("option_create_survey");
-        OPTION_INSERT_QUESTION_CATEGORY = localizationHandler.getMessageValue("option_insert_question_category");
+        optionImportQuestionsTemplate = localizationHandler.getMessageValue("option_import_questions_template");
+        optionImportCategoryQuestions = localizationHandler.getMessageValue("option_import_questions_category");
+        optionExportSurveyAnswers = localizationHandler.getMessageValue("option_export_survey_answers");
+        optionCreateSurvey = localizationHandler.getMessageValue("option_create_survey");
+        optionInsertCategoryQuestion = localizationHandler.getMessageValue("option_insert_question_category");
 
-        INFO_ADMIN_HEADER = localizationHandler.getMessageValue("info_admin_header");
+        infoAdminHeader = localizationHandler.getMessageValue("info_admin_header");
 
-        OPTION_ASSIGN_MANAGER = localizationHandler.getMessageValue("option_assign_manager");
-        OPTION_WHITELIST_DOMAIN = localizationHandler.getMessageValue("option_whitelist_domain");
-        OPTION_DISPLAY_USERS = localizationHandler.getMessageValue("option_display_users");
-        OPTION_IMPORT_USERS = localizationHandler.getMessageValue("option_import_users");
-        OPTION_REGISTER_USER = localizationHandler.getMessageValue("option_register_user");
-        OPTION_UPDATE_DATA = localizationHandler.getMessageValue("option_update_data");
-        OPTION_IMPORT_CATEGORIES = localizationHandler.getMessageValue("option_import_categories");
-        OPTION_USER_BY_EMAIL = localizationHandler.getMessageValue("option_search_user_by_email");
-        OPTION_REMOVE_CATEGORIES_FROM_MANAGER = localizationHandler.getMessageValue("option_remove_categories_from_manager");
-        OPTION_ASSOCIATE_CATEGORIES_TO_MANAGER = localizationHandler.getMessageValue("option_associate_categories_to_manager");
-        OPTION_LIST_CATEGORIES_WITHOUT_MANAGERS = localizationHandler.getMessageValue("option_list_categories_without_managers");
-        OPTION_ADD_USERS_QUESTIONNAIRE = localizationHandler.getMessageValue("option_add_users_questionnaire");
-        OPTION_EXPORT_STATISTICS_SURVEY = localizationHandler.getMessageValue("option_export_stats_survey");
-        OPTION_CREATE_TEMPLATE = localizationHandler.getMessageValue("option_create_template");
+        optionAssignManager = localizationHandler.getMessageValue("option_assign_manager");
+        optionWhitelistDomain = localizationHandler.getMessageValue("option_whitelist_domain");
+        optionDisplayUsers = localizationHandler.getMessageValue("option_display_users");
+        optionImportUsers = localizationHandler.getMessageValue("option_import_users");
+        optionRegisterUser = localizationHandler.getMessageValue("option_register_user");
+        optionUpdateData = localizationHandler.getMessageValue("option_update_data");
+        optionImportCategories = localizationHandler.getMessageValue("option_import_categories");
+        optionUsersByEmail = localizationHandler.getMessageValue("option_search_user_by_email");
+        optionRemoveCategoriesFromManager = localizationHandler.getMessageValue("option_remove_categories_from_manager");
+        optionAssociateCategoriesToManager = localizationHandler.getMessageValue("option_associate_categories_to_manager");
+        optionListCategoriesWithoutManager = localizationHandler.getMessageValue("option_list_categories_without_managers");
+        optionAddUsersTargetedSurvey = localizationHandler.getMessageValue("option_add_users_questionnaire");
+        optionExportSurveyStatistics = localizationHandler.getMessageValue("option_export_stats_survey");
+        optionCreateTemplate = localizationHandler.getMessageValue("option_create_template");
     }
 
 }

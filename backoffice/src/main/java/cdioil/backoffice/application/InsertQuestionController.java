@@ -203,12 +203,12 @@ public class InsertQuestionController {
      * @return 1, if the question is binary. 2 if it is a multiple choice question. 3 if the question is quantitative. -1 if the type is not valid.
      */
     public int extractOption(String questionType) {
-        questionType = questionType.toLowerCase();
-        if (questionType.equalsIgnoreCase(QuestionTypes.BINARY.toString()) || questionType.equals("1")) {
+        String type = questionType.toLowerCase();
+        if (type.equalsIgnoreCase(QuestionTypes.BINARY.toString()) || "1".equals(type)) {
             return 1; //Binary Question
-        } else if (questionType.equalsIgnoreCase(QuestionTypes.MULTIPLE_CHOICE.toString()) || questionType.equals("2")) {
+        } else if (type.equalsIgnoreCase(QuestionTypes.MULTIPLE_CHOICE.toString()) || "2".equals(type)) {
             return 2; //Multiple Choice Question
-        } else if (questionType.equalsIgnoreCase(QuestionTypes.QUANTITATIVE.toString()) || questionType.equals("3")) {
+        } else if (type.equalsIgnoreCase(QuestionTypes.QUANTITATIVE.toString()) || "3".equals(type)) {
             return 3; //Quantitative Question
         }
         return -1; //Invalid type
