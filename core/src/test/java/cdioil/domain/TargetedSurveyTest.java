@@ -91,9 +91,9 @@ public class TargetedSurveyTest {
         assertEquals("The condition should succeed because we are comparing the "
                 + "same instance", instance, instance);
         assertNotEquals("The condition should succeed because we are comparing the "
-                + "instance with a null value", null, instance);
+                + "instance with a null value", instance, null);
         assertNotEquals("The condition should succeed because we are comparing "
-                + "instances of different classes", "bananas", instance);
+                + "instances of different classes", instance, "bananas");
         assertEquals("The condition should succeed because we are comparing "
                 + "instances with the same properties", instance, other);
         UsersGroup otherGroup = new UsersGroup(new Manager(new SystemUser

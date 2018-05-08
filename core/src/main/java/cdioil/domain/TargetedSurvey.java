@@ -71,7 +71,15 @@ public class TargetedSurvey extends Survey implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        super.equals(obj);
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         final TargetedSurvey other = (TargetedSurvey) obj;
         return Objects.equals(this.targetAudience, other.targetAudience);
     }
