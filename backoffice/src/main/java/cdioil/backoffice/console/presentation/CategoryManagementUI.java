@@ -26,57 +26,57 @@ public class CategoryManagementUI {
     /**
      * Separator used for clarity.
      */
-    private final String SEPARATOR = localizationHandler.getMessageValue("separator");
+    private final String separator = localizationHandler.getMessageValue("separator");
 
     /**
      * Represents the exit code for the User Interface.
      */
-    private final String EXIT_CODE = localizationHandler.getMessageValue("option_exit");
+    private final String exitCode = localizationHandler.getMessageValue("option_exit");
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_message");
+    private final String exitMessage = localizationHandler.getMessageValue("info_exit_message");
 
     /**
      * Message to indicate the list of all managers being presented.
      */
-    private final String MANAGER_LIST = localizationHandler.getMessageValue("info_all_managers_list");
+    private final String managerList = localizationHandler.getMessageValue("info_all_managers_list");
 
     /**
      * Message to indicate that a manager must be picked.
      */
-    private final String PICK_MANAGER = localizationHandler.getMessageValue("request_manager_email");
+    private final String pickManager = localizationHandler.getMessageValue("request_manager_email");
 
     /**
      * Message to indicate that the admin must insert a category identifier.
      */
-    private final String CATEGORY_ID_MESSAGE = localizationHandler.getMessageValue("request_category_identifier_association");
+    private final String insertCategoryId = localizationHandler.getMessageValue("request_category_identifier_association");
 
     /**
      * Error message for emails that are written incorrectly or don't exist.
      */
-    private final String EMAIL_ERROR = localizationHandler.getMessageValue("error_invalid_email");
+    private final String emailError = localizationHandler.getMessageValue("error_invalid_email");
 
     /**
      * Error message for categories that don't exist or that the manager already is associated to it.
      */
-    private final String CATEGORY_ERROR = localizationHandler.getMessageValue("error_invalid_category");
+    private final String categoryError = localizationHandler.getMessageValue("error_invalid_category");
 
     /**
      * Success message indicating that the categories were successfully associated to the manager.
      */
-    private final String ADDED_SUCCESS_MESSAGE = localizationHandler.getMessageValue("info_categories_added");
+    private final String addedSuccessMessage = localizationHandler.getMessageValue("info_categories_added");
 
     /**
      * Success message indicating that the categories were successfully removed from the manager.
      */
-    private final String REMOVED_SUCCESS_MESSAGE = localizationHandler.getMessageValue("info_categories_removed");
+    private final String removedSuccessMessage = localizationHandler.getMessageValue("info_categories_removed");
 
     /**
      * Error message indicating that there aren't any managers.
      */
-    private final String NO_MANAGERS = localizationHandler.getMessageValue("error_no_managers");
+    private final String noManagers = localizationHandler.getMessageValue("error_no_managers");
 
     /**
      * Controller class responsible for handling the communication between the UI classes and the domain classes.
@@ -85,84 +85,104 @@ public class CategoryManagementUI {
 
     /**
      * Method that lists all managers in the UI for the user to choose one.
+     *
+     * @return true, if the user chooses a valid manager. False if the user decides to exit
      */
-    public final void pickManager() {
-        System.out.println(SEPARATOR);
+    public final boolean pickManager() {
+        System.out.println(separator);
 
-        Iterable<Manager> managerList = ctrl.listAllManagers();
+        Iterable<Manager> managers = ctrl.listAllManagers();
 
-        if (ctrl.size(managerList) == 0) {
-            System.out.println(NO_MANAGERS);
-            System.out.println(SEPARATOR);
-            return;
+        if (ctrl.size(managers) == 0) {
+            System.out.println(noManagers);
+            System.out.println(separator);
+            return false;
         }
 
-        System.out.println(EXIT_MESSAGE);
-
-        System.out.println(MANAGER_LIST);
-        managerList.forEach((t) -> {
-            System.out.println(t.toString());
+        System.out.println(managerList);
+        managers.forEach(manager -> {
+            System.out.println(manager.toString());
         });
 
-        System.out.println(SEPARATOR);
+        System.out.println(separator);
+
+        System.out.println(exitMessage);
+
+        System.out.println(separator);
+
         boolean emailFlag = false;
         while (!emailFlag) {
             try {
-                String email = Console.readLine(PICK_MANAGER);
-                if (email.equalsIgnoreCase(EXIT_CODE)) {
-                    return;
+                String email = Console.readLine(pickManager);
+                if (email.equalsIgnoreCase(exitCode)) {
+                    return false;
                 }
 
                 if (ctrl.setManager(email)) {
-                    System.out.println(SEPARATOR);
+                    System.out.println(separator);
                     emailFlag = true;
                 } else {
-                    System.out.println(EMAIL_ERROR);
+                    System.out.println(emailError);
                 }
             } catch (IllegalArgumentException ex) {
-                System.out.println(EMAIL_ERROR);
+                System.out.println(emailError);
             }
         }
+        return true;
     }
 
     /**
      * Method that allows the user to insert the path of the categories to manage.
+     *
+     * @return true, if the user chooses a valid category. False if the user decides to exit
      */
-    public final void pickCategory() {
+    public final boolean pickCategory() {
         boolean categoryFlag = false;
         while (!categoryFlag) {
-            String path = Console.readLine(CATEGORY_ID_MESSAGE);
-            if (path.equalsIgnoreCase(EXIT_CODE)) {
-                return;
+            String path = Console.readLine(insertCategoryId);
+            if (path.equalsIgnoreCase(exitCode)) {
+                return false;
             }
             if (ctrl.setPath(path)) {
                 categoryFlag = true;
             } else {
-                System.out.println(CATEGORY_ERROR);
+                System.out.println(categoryError);
             }
         }
+        return true;
     }
 
     /**
      * Method that allows the user to associate categories to a manager.
      */
-    public final void addCategories(){
-        pickManager();
-        pickCategory();
-        if(ctrl.addCategories()){
-            System.out.println(ADDED_SUCCESS_MESSAGE);
+    public final void addCategories() {
+        if (!pickManager()) {
+            return;
+        }
+
+        if (!pickCategory()) {
+            return;
+        }
+
+        if (ctrl.addCategories()) {
+            System.out.println(addedSuccessMessage);
         }
     }
-    
+
     /**
      * Method that allows the user to remove categories from a manager.
      */
-    public final void removeCategories(){
-        pickManager();
-        pickCategory();
-        if(ctrl.removeCategories()){
-            System.out.println(REMOVED_SUCCESS_MESSAGE);
+    public final void removeCategories() {
+        if (!pickManager()) {
+            return;
+        }
+
+        if (!pickCategory()) {
+            return;
+        }
+
+        if (ctrl.removeCategories()) {
+            System.out.println(removedSuccessMessage);
         }
     }
-    
 }

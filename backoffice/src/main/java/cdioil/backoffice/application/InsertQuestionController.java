@@ -33,7 +33,7 @@ public class InsertQuestionController {
     /**
      * Regular expression to validate the path of the Category in the Market Structure.
      */
-    private final static String PATH_REGEX = "[0-9]+" + Category.Sufixes.SUFIX_DC + "((-[0-9]+" + Category.Sufixes.SUFIX_UN + "(-[0-9]+"
+    private static final String PATH_REGEX = "[0-9]+" + Category.Sufixes.SUFIX_DC + "((-[0-9]+" + Category.Sufixes.SUFIX_UN + "(-[0-9]+"
             + Category.Sufixes.SUFIX_CAT + "(-[0-9]+" + Category.Sufixes.SUFIX_SCAT + "(-[0-9]+" + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**

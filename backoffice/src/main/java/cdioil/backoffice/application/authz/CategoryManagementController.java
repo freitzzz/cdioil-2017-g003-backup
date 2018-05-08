@@ -39,12 +39,12 @@ public class CategoryManagementController {
     /**
      * Scale of the Market Structure values.
      */
-    private final static String SCALE = "[0-9]+";
+    private static final String SCALE = "[0-9]+";
 
     /**
      * Regular expression to validate the path of the Category in the Market Structure.
      */
-    private final static String PATH_REGEX = SCALE + Category.Sufixes.SUFIX_DC + "((-" + SCALE + Category.Sufixes.SUFIX_UN + "(-" + SCALE
+    private static final String PATH_REGEX = SCALE + Category.Sufixes.SUFIX_DC + "((-" + SCALE + Category.Sufixes.SUFIX_UN + "(-" + SCALE
             + Category.Sufixes.SUFIX_CAT + "(-" + SCALE + Category.Sufixes.SUFIX_SCAT + "(-" + SCALE + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**

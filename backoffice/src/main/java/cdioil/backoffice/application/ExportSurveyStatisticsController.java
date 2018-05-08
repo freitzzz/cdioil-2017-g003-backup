@@ -30,7 +30,7 @@ public class ExportSurveyStatisticsController {
     /**
      * List with all surveys.
      */
-    private List<Survey> surveys;
+    private final List<Survey> surveys;
 
     /**
      * Chosen survey by the user.
@@ -40,32 +40,32 @@ public class ExportSurveyStatisticsController {
     /**
      * Average value for answers of binary questions.
      */
-    private Map<Question, Double> binaryMean;
+    private final Map<Question, Double> binaryMean;
 
     /**
      * Average value for answers of quantitative questions.
      */
-    private Map<Question, Double> quantitativeMean;
+    private final Map<Question, Double> quantitativeMean;
 
     /**
      * Mean deviation for answers of binary questions.
      */
-    private Map<Question, Double> binaryMeanDeviation;
+    private final Map<Question, Double> binaryMeanDeviation;
 
     /**
      * Mean deviation for answers of quantitative questions.
      */
-    private Map<Question, Double> quantitativeMeanDeviation;
+    private final Map<Question, Double> quantitativeMeanDeviation;
 
     /**
      * Total of binary questions.
      */
-    private Map<Question, Integer> binaryTotal;
+    private final Map<Question, Integer> binaryTotal;
 
     /**
      * Total of quantitative questions.
      */
-    private Map<Question, Integer> quantitativeTotal;
+    private final Map<Question, Integer> quantitativeTotal;
 
     /**
      * Builds an instance of ExportSurveyAnswersController.
@@ -88,8 +88,8 @@ public class ExportSurveyStatisticsController {
      */
     public List<Survey> getAllSurveys() {
         Iterable<Survey> iterableAllSurveys = new SurveyRepositoryImpl().findAll();
-        iterableAllSurveys.forEach((s) -> {
-            surveys.add(s);
+        iterableAllSurveys.forEach(validSurvey -> {
+            surveys.add(validSurvey);
         });
         return surveys;
     }
@@ -118,7 +118,7 @@ public class ExportSurveyStatisticsController {
     public List<Review> getAllReviews() {
         List<Review> reviews = new ReviewRepositoryImpl().getReviewsBySurvey(survey);
         if (reviews == null || reviews.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         return reviews;
     }
@@ -132,19 +132,20 @@ public class ExportSurveyStatisticsController {
     private Map<Question, List<Answer>> getAllAnswers(List<Review> reviews) {
         Map<Question, List<Answer>> answers = new TreeMap<>();
 
-        reviews.stream().map((Review r) -> r.getReviewQuestionAnswers()).forEachOrdered(answer -> {
-            answer.keySet().forEach(q -> {
-                List<Answer> answerList = new ArrayList<>();
-                answerList.add(answer.get(q));
+        reviews.stream().map(r -> r.getReviewQuestionAnswers()).
+                forEachOrdered(answer -> {
+                    answer.keySet().forEach(q -> {
+                        List<Answer> answerList = new ArrayList<>();
+                        answerList.add(answer.get(q));
 
-                if (answers.containsKey(q)) {
-                    answerList.addAll(answers.get(q));
-                    answers.put(q, answerList);
-                } else {
-                    answers.put(q, answerList);
-                }
-            });
-        });
+                        if (answers.containsKey(q)) {
+                            answerList.addAll(answers.get(q));
+                            answers.put(q, answerList);
+                        } else {
+                            answers.put(q, answerList);
+                        }
+                    });
+                });
         return answers;
     }
 
@@ -163,7 +164,16 @@ public class ExportSurveyStatisticsController {
         Map<Question, List<Answer>> quantitativeAnswers = new TreeMap<>(); //Will store all quantitative answers
 
         getAnswers(answers, binaryAnswers, quantitativeAnswers); //Fills the two maps with the questions its answers
+        getBinaryStats(binaryAnswers);
+        getQuantitativeStats(quantitativeAnswers);
+    }
 
+    /**
+     * Calculates the statistics related to the binary ansers.
+     *
+     * @param binaryAnswers Map with all binary answers
+     */
+    public void getBinaryStats(Map<Question, List<Answer>> binaryAnswers) {
         if (!binaryAnswers.isEmpty()) {
             for (Map.Entry<Question, List<Answer>> entry : binaryAnswers.entrySet()) {
                 Question q = entry.getKey();
@@ -171,10 +181,10 @@ public class ExportSurveyStatisticsController {
                 int total = 0;
                 for (Answer a : entry.getValue()) {
                     String answer = a.getContent();
-                    if (answer.equalsIgnoreCase("true")) {
+                    if ("true".equalsIgnoreCase(answer)) {
                         values.add((double) 1);
                         total++;
-                    } else if (answer.equalsIgnoreCase("false")) {
+                    } else if ("false".equalsIgnoreCase(answer)) {
                         values.add((double) 0);
                         total++;
                     }
@@ -184,7 +194,14 @@ public class ExportSurveyStatisticsController {
                 binaryMeanDeviation.put(q, MathUtils.calculateMeanDeviation(values));
             }
         }
+    }
 
+    /**
+     * Calculates the statistics related to the quantitative ansers.
+     *
+     * @param quantitativeAnswers Map with all quantitative answers
+     */
+    public void getQuantitativeStats(Map<Question, List<Answer>> quantitativeAnswers) {
         if (!quantitativeAnswers.isEmpty()) {
             for (Map.Entry<Question, List<Answer>> entry : quantitativeAnswers.entrySet()) {
                 Question q = entry.getKey();
@@ -209,7 +226,7 @@ public class ExportSurveyStatisticsController {
      * @param quantitativeAnswers List that will store all quantitative answers
      */
     private void getAnswers(Map<Question, List<Answer>> answers, Map<Question, List<Answer>> binaryAnswers, Map<Question, List<Answer>> quantitativeAnswers) {
-        answers.keySet().forEach((Question q) -> {
+        answers.keySet().forEach(q -> {
             QuestionTypes type = q.getType();
             if (type.equals(QuestionTypes.BINARY)) {
                 binaryAnswers.put(q, answers.get(q));

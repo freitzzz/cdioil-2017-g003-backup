@@ -72,10 +72,7 @@ public class AssignManagerController {
         // Lista de managers
         List<Manager> managers
                 = (List<Manager>) managerRepository.findAll();
-        if (managers.stream().anyMatch((manager) -> (manager.getID().equals(su)))) {
-            return true;
-        }
-        return false;
+        return managers.stream().anyMatch((manager) -> (manager.getID().equals(su)));
     }
 
     /**
@@ -88,12 +85,7 @@ public class AssignManagerController {
         // Lista de admins
         List<Admin> admins
                 = (List<Admin>) adminRepository.findAll();
-        for (Admin admin : admins) {
-            if (admin.getID().equals(su)) {
-                return true;
-            }
-        }
-        return false;
+        return admins.stream().anyMatch((admin) -> (admin.getID().equals(su)));
     }
 
     /**
