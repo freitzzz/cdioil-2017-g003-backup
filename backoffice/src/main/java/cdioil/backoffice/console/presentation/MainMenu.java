@@ -96,10 +96,10 @@ public class MainMenu {
                     new SearchUserUI();
                     break;
                 case 9:
-                    new AssociateCategoriesUI();
+                    new CategoryManagementUI().addCategories();
                     break;
                 case 10:
-                    new RemoveCategoriesUI().doShow();
+                    new CategoryManagementUI().removeCategories();
                     break;
                 case 11:
                     new ListCategoriesUI().listCategoriesWithoutManagers();

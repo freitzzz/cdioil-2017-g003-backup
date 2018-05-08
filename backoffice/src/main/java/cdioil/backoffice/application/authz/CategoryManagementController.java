@@ -17,9 +17,14 @@ import cdioil.persistence.impl.UserRepositoryImpl;
 public class CategoryManagementController {
 
     /**
-     * Manager chosen by an admin to have categories removed or added.
+     * Manager chosen by the admin to have categories removed or added.
      */
     private Manager manager;
+
+    /**
+     * Path of the category chosen by the admin.
+     */
+    private String path;
 
     /**
      * Sufix of the regular expression used to search categories by its identifier.
@@ -32,10 +37,15 @@ public class CategoryManagementController {
     private static final String REGEX_SUFIX = ".*";
 
     /**
+     * Scale of the Market Structure values.
+     */
+    private final static String SCALE = "[0-9]+";
+
+    /**
      * Regular expression to validate the path of the Category in the Market Structure.
      */
-    private final static String PATH_REGEX = "[0-9]+" + Category.Sufixes.SUFIX_DC + "((-[0-9]+" + Category.Sufixes.SUFIX_UN + "(-[0-9]+"
-            + Category.Sufixes.SUFIX_CAT + "(-[0-9]+" + Category.Sufixes.SUFIX_SCAT + "(-[0-9]+" + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
+    private final static String PATH_REGEX = SCALE + Category.Sufixes.SUFIX_DC + "((-" + SCALE + Category.Sufixes.SUFIX_UN + "(-" + SCALE
+            + Category.Sufixes.SUFIX_CAT + "(-" + SCALE + Category.Sufixes.SUFIX_SCAT + "(-" + SCALE + Category.Sufixes.SUFIX_UB + ")?)?)?)?)";
 
     /**
      * Finds all managers saved in the database.
@@ -47,7 +57,7 @@ public class CategoryManagementController {
     }
 
     /**
-     * Sets a manager chosen by an admin based on the email he inserted in the UI
+     * Sets the anager chosen by the admin based on the inserted email.
      *
      * @param email email written by the admin on the UI
      * @return true if the manager exists and was set, false if otherwise
@@ -61,14 +71,27 @@ public class CategoryManagementController {
     }
 
     /**
+     * Sets the path chosen by the admin if it is valid.
+     *
+     * @param path Path of the categories
+     * @return true, if the categories are valid. Otherwise, returns false
+     */
+    public boolean setPath(String path) {
+        if (path.toUpperCase().matches(PATH_REGEX)) {
+            this.path = path;
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Removes categories from a manager.
      *
-     * @param identifier identifier of the categories
      * @return true if they were removed with success, false if otherwise
      */
-    public boolean removeCategories(String identifier) {
+    public boolean removeCategories() {
         if (manager.removeCategories(new MarketStructureRepositoryImpl().
-                findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier.toUpperCase() + REGEX_SUFIX)) != false) {
+                findCategoriesByIdentifierPattern(REGEX_PREFIX + path.toUpperCase() + REGEX_SUFIX)) != false) {
             Manager managerY = new ManagerRepositoryImpl().merge(manager);
             if (managerY != null) {
                 manager = managerY;
@@ -81,12 +104,11 @@ public class CategoryManagementController {
     /**
      * Adds categories to a manager.
      *
-     * @param identifier identifier of the categories
      * @return true, if the categories are successfully added. Otherwise, returns false
      */
-    public boolean addCategories(String identifier) {
+    public boolean addCategories() {
         if (manager.addCategories(new MarketStructureRepositoryImpl().
-                findCategoriesByIdentifierPattern(REGEX_PREFIX + identifier.toUpperCase() + REGEX_SUFIX)) != false) {
+                findCategoriesByIdentifierPattern(REGEX_PREFIX + path.toUpperCase() + REGEX_SUFIX))) {
             Manager managerY = new ManagerRepositoryImpl().merge(manager);
             if (managerY != null) {
                 manager = managerY;
@@ -94,16 +116,6 @@ public class CategoryManagementController {
             }
         }
         return false;
-    }
-
-    /**
-     * Checks if the inserted path is valid.
-     *
-     * @param identifier identifier of the categories
-     * @return true, if the categories are valid. Otherwise, returns false
-     */
-    public boolean checkPath(String identifier) {
-        return identifier.toUpperCase().matches(PATH_REGEX);
     }
 
     /**
