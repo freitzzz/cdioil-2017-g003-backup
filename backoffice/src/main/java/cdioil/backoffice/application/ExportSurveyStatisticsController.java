@@ -174,25 +174,26 @@ public class ExportSurveyStatisticsController {
      * @param binaryAnswers Map with all binary answers
      */
     public void getBinaryStats(Map<Question, List<Answer>> binaryAnswers) {
-        if (!binaryAnswers.isEmpty()) {
-            for (Map.Entry<Question, List<Answer>> entry : binaryAnswers.entrySet()) {
-                Question q = entry.getKey();
-                List<Double> values = new ArrayList<>();
-                int total = 0;
-                for (Answer a : entry.getValue()) {
-                    String answer = a.getContent();
-                    if ("true".equalsIgnoreCase(answer)) {
-                        values.add((double) 1);
-                        total++;
-                    } else if ("false".equalsIgnoreCase(answer)) {
-                        values.add((double) 0);
-                        total++;
-                    }
+        if (binaryAnswers.isEmpty()) {
+            return;
+        }
+        for (Map.Entry<Question, List<Answer>> entry : binaryAnswers.entrySet()) {
+            Question q = entry.getKey();
+            List<Double> values = new ArrayList<>();
+            int total = 0;
+            for (Answer a : entry.getValue()) {
+                String answer = a.getContent();
+                if ("true".equalsIgnoreCase(answer)) {
+                    values.add((double) 1);
+                    total++;
+                } else if ("false".equalsIgnoreCase(answer)) {
+                    values.add((double) 0);
+                    total++;
                 }
-                binaryTotal.put(q, total);
-                binaryMean.put(q, MathUtils.calculateMean(values));
-                binaryMeanDeviation.put(q, MathUtils.calculateMeanDeviation(values));
             }
+            binaryTotal.put(q, total);
+            binaryMean.put(q, MathUtils.calculateMean(values));
+            binaryMeanDeviation.put(q, MathUtils.calculateMeanDeviation(values));
         }
     }
 

@@ -25,27 +25,27 @@ public class SearchUserUI {
     /**
      * Represents the exit code for the User Interface.
      */
-    private final String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
+    private final String optionExit = localizationHandler.getMessageValue("option_exit");
     /**
      * Represents a message that indicates the administrator to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_input");
+    private final String exitMessage = localizationHandler.getMessageValue("info_exit_input");
     /**
      * Represents a message that indicates the administrator to insert the email to search.
      */
-    private final String MESSAGE_EMAIL = localizationHandler.getMessageValue("request_user_email");
+    private final String emailMessage = localizationHandler.getMessageValue("request_user_email");
     /**
      * Represents a message that informs the administrator that no user found.
      */
-    private final String MENSAGEM_USER_NOT_FOUND = localizationHandler.getMessageValue("error_user_not_found");
+    private final String errorUsersNotFound = localizationHandler.getMessageValue("error_user_not_found");
     /**
      * Represents a message that delimitates the list of the users.
      */
-    private final String MENSAGEM_LIST_USER = localizationHandler.getMessageValue("info_users");
+    private final String infoListUsers = localizationHandler.getMessageValue("info_users");
     /**
      * Separator used for clarity.
      */
-    private final String SEPARATOR = localizationHandler.getMessageValue("separator");
+    private final String separator = localizationHandler.getMessageValue("separator");
 
     /**
      * Instance of Controller that intermediates the interactions between the administrator and the system.
@@ -64,23 +64,22 @@ public class SearchUserUI {
      * Method that intermediates the interactions with the administrator (creates the UI itself).
      */
     private void searchUsers() {
-
-        System.out.println(EXIT_MESSAGE);
+        System.out.println(exitMessage);
         boolean catched = false;
         while (!catched) {
-            String email = Console.readLine(MESSAGE_EMAIL);
-            if (email.equalsIgnoreCase(OPTION_EXIT)) {
+            String email = Console.readLine(emailMessage);
+            if (email.equalsIgnoreCase(optionExit)) {
                 return;
             }
             List<SystemUser> listaU = ctrl.usersByEmail(email);
             if (listaU.isEmpty()) {
-                System.out.println(MENSAGEM_USER_NOT_FOUND);
+                System.out.println(errorUsersNotFound);
             } else {
-                System.out.println(MENSAGEM_LIST_USER);
+                System.out.println(infoListUsers);
                 listaU.forEach((c) -> {
                     System.out.println(c.toString());
                 });
-                System.out.println(SEPARATOR);
+                System.out.println(separator);
                 catched = true;
             }
         }

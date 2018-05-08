@@ -17,7 +17,7 @@ public final class SurveyController {
     public List<Survey> getAllSurveys(){
         List<Survey> allSurveys=new ArrayList<>();
         Iterable<Survey> iterableAllSurveys=new SurveyRepositoryImpl().findAll();
-        iterableAllSurveys.forEach((nextSurvey)->{allSurveys.add(nextSurvey);});
+        iterableAllSurveys.forEach(nextSurvey->{allSurveys.add(nextSurvey);});
         return allSurveys;
     }
 }

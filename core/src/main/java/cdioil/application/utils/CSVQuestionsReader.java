@@ -148,37 +148,37 @@ public class CSVQuestionsReader implements QuestionsReader {
 
                 //TODO: remove this try/catch block and move it to the UI
                 try {
-                    String DC = currentLine[0].trim();
+                    String dc = currentLine[0].trim();
 
                     //Add category identifiers incrementally rather than checking all of the possibilities
                     //If DC empty, then skip reading this line and avoid doing all the other operations
-                    if (!DC.isEmpty()) {
+                    if (!dc.isEmpty()) {
 
-                        StringBuilder sb = new StringBuilder(DC);
+                        StringBuilder sb = new StringBuilder(dc);
                         sb.append(DC_IDENTIFIER);
-                        String UN = currentLine[1].trim();
+                        String un = currentLine[1].trim();
 
-                        if (!UN.isEmpty()) {
+                        if (!un.isEmpty()) {
 
-                            sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
+                            sb.append(PATH_IDENTIFIER).append(un).append(UN_IDENTIFIER);
 
-                            String CAT = currentLine[2].trim();
+                            String cat = currentLine[2].trim();
 
-                            if (!CAT.isEmpty()) {
+                            if (!cat.isEmpty()) {
 
-                                sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
+                                sb.append(PATH_IDENTIFIER).append(cat).append(CAT_IDENTIFIER);
 
-                                String SCAT = currentLine[3].trim();
+                                String scat = currentLine[3].trim();
 
-                                if (!SCAT.isEmpty()) {
+                                if (!scat.isEmpty()) {
 
-                                    sb.append(PATH_IDENTIFIER).append(SCAT).append(SCAT_IDENTIFIER);
+                                    sb.append(PATH_IDENTIFIER).append(scat).append(SCAT_IDENTIFIER);
 
-                                    String UB = currentLine[4].trim();
+                                    String ub = currentLine[4].trim();
 
-                                    if (!UB.trim().isEmpty()) {
+                                    if (!ub.trim().isEmpty()) {
 
-                                        sb.append(PATH_IDENTIFIER).append(UB).append(UB_IDENTIFIER);
+                                        sb.append(PATH_IDENTIFIER).append(ub).append(UB_IDENTIFIER);
                                     }
                                 }
                             }
@@ -265,7 +265,7 @@ public class CSVQuestionsReader implements QuestionsReader {
         List<QuestionOption> options = new ArrayList<>();
 
         for (int i = min; i <= max; i++) {
-            options.add(new QuantitativeQuestionOption(new Double(i)));
+            options.add(new QuantitativeQuestionOption((double) i));
         }
 
         return new QuantitativeQuestion(questionText, questionID, options);
@@ -295,8 +295,8 @@ public class CSVQuestionsReader implements QuestionsReader {
         LinkedList<QuestionOption> options = new LinkedList<>();
 
         for (int a = 0; a < nrEM; a++) {
-            currentLine = fileContent.get(currentIdx++).split(SPLITTER);
-            options.add(new MultipleChoiceQuestionOption(currentLine[offset + 2]));
+            String[] modifiedLine = fileContent.get(currentIdx++).split(SPLITTER);
+            options.add(new MultipleChoiceQuestionOption(modifiedLine[offset + 2]));
         }
 
         result[0] = currentIdx;
@@ -331,7 +331,7 @@ public class CSVQuestionsReader implements QuestionsReader {
                 && line[8].equalsIgnoreCase(PARAMETER_IDENTIFIER));
     }
 
-     /**
+    /**
      * Reads a independent questions from a CSV file.
      *
      * @return the list of the questions

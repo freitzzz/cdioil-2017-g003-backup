@@ -7,9 +7,6 @@ import cdioil.langs.Language;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
-
 /**
  * User Interface for changing the application's language.
  *

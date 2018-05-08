@@ -96,15 +96,18 @@ public class CSVProductsReader implements ProductsReader {
      */
     private static final int CATEGORIES_FILE_OFFSET = 1;
     /**
-     * The number of cells skipped in order to reach the start of a new question in a file with independent questions.
+     * Scale used in the paths of the MarketStructure.
      */
-    private static final int INDEPENDENT_FILE_OFFSET = 0;
-
+    private static final String SCALE = "[0-9]+";
+    /**
+     * Separator of the path.
+     */
+    private static final String SEPARATOR = "-";
     /**
      * Regular expression to validate the path of the Category in the Market Structure.
      */
-    private final static String PATH_REGEX = "[0-9]+" + DC_IDENTIFIER + "-[0-9]+" + UN_IDENTIFIER + "-[0-9]+"
-            + CAT_IDENTIFIER + "-[0-9]+" + SCAT_IDENTIFIER + "-[0-9]+" + UB_IDENTIFIER;
+    private static final String PATH_REGEX = SCALE + DC_IDENTIFIER + SEPARATOR + SCALE + UN_IDENTIFIER + SEPARATOR
+            + SCALE + CAT_IDENTIFIER + SEPARATOR + SCALE + SCAT_IDENTIFIER + SEPARATOR + SCALE + UB_IDENTIFIER;
 
     /**
      * Creates an instance of CSVProductsReader, receiving the name of the file to read.
@@ -191,6 +194,7 @@ public class CSVProductsReader implements ProductsReader {
 
     /**
      * Create the path of the product
+     *
      * @param path String which will be converted into category path
      * @return the path of the category
      */
@@ -198,22 +202,22 @@ public class CSVProductsReader implements ProductsReader {
 
         StringBuilder sb = new StringBuilder();
 
-        String DC = path.charAt(0) + "" + path.charAt(1);
-        sb.append(DC).append(DC_IDENTIFIER);
+        String dc = path.charAt(0) + "" + path.charAt(1);
+        sb.append(dc).append(DC_IDENTIFIER);
 
-        String UN = path.charAt(2) + "" + path.charAt(3);
-        sb.append(PATH_IDENTIFIER).append(UN).append(UN_IDENTIFIER);
+        String un = path.charAt(2) + "" + path.charAt(3);
+        sb.append(PATH_IDENTIFIER).append(un).append(UN_IDENTIFIER);
 
-        String CAT = path.charAt(4) + "" + path.charAt(5) + "" + path.charAt(6) + "" + path.charAt(7);
-        sb.append(PATH_IDENTIFIER).append(CAT).append(CAT_IDENTIFIER);
+        String cat = path.charAt(4) + "" + path.charAt(5) + "" + path.charAt(6) + "" + path.charAt(7);
+        sb.append(PATH_IDENTIFIER).append(cat).append(CAT_IDENTIFIER);
 
-        String SCAT = path.charAt(8) + "" + path.charAt(9);
-        int scat = Integer.parseInt(SCAT);
-        sb.append(PATH_IDENTIFIER).append(scat).append(SCAT_IDENTIFIER);
+        String scat = path.charAt(8) + "" + path.charAt(9);
+        int scat_val = Integer.parseInt(scat);
+        sb.append(PATH_IDENTIFIER).append(scat_val).append(SCAT_IDENTIFIER);
 
-        String UB = path.charAt(10) + "" + path.charAt(11);
-        int ub = Integer.parseInt(UB);
-        sb.append(PATH_IDENTIFIER).append(ub).append(UB_IDENTIFIER);
+        String ub = path.charAt(10) + "" + path.charAt(11);
+        int ub_val = Integer.parseInt(ub);
+        sb.append(PATH_IDENTIFIER).append(ub_val).append(UB_IDENTIFIER);
 
         return sb.toString();
     }
