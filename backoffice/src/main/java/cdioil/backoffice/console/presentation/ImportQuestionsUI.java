@@ -21,33 +21,33 @@ public class ImportQuestionsUI {
     /**
      * Represents the exit code for the User Interface.
      */
-    private final String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
+    private final String optionExit = localizationHandler.getMessageValue("option_exit");
     /**
      * Represents a message that indicates the user to insert the path of the file to import.
      */
-    private final String REQUEST_FILE_PATH = localizationHandler.getMessageValue("request_file_path");
+    private final String requestFilePath = localizationHandler.getMessageValue("request_file_path");
     /**
      * Represents a message that informs the user that the inserted filepath was not found.
      */
-    private final String ERROR_FILE_NOT_FOUND = localizationHandler.getMessageValue("error_file_not_found");
+    private final String errorFileNotFound = localizationHandler.getMessageValue("error_file_not_found");
     /**
      * Represents a message that delimitates the imported questions.
      */
-    private final String INFO_NUM_QUESTIONS_IMPORTED = localizationHandler.getMessageValue("info_num_questions_imported");
+    private final String infoNumQuestionsImported = localizationHandler.getMessageValue("info_num_questions_imported");
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String INFO_EXIT_INPUT = localizationHandler.getMessageValue("info_exit_input");
+    private final String infoExitInput = localizationHandler.getMessageValue("info_exit_input");
 
     /**
      * Represents a message that indicate the invalid file format.
      */
-    private final String ERROR_INVALID_FILE_FORMAT = localizationHandler.getMessageValue("error_invalid_file_format");
+    private final String errorInvalidFileFormat = localizationHandler.getMessageValue("error_invalid_file_format");
 
     /**
      * Represents a message that indicate that no imported questions
      */
-    private final String ERROR_NO_IMPORTED_QUESTIONS = localizationHandler.getMessageValue("error_no_imported_questions");
+    private final String errorNoImportedQuestions = localizationHandler.getMessageValue("error_no_imported_questions");
 
     /**
      * Option for import the category questions
@@ -88,9 +88,9 @@ public class ImportQuestionsUI {
 
         while (true) {
 
-            String fileName = Console.readLine(REQUEST_FILE_PATH + "\n" + INFO_EXIT_INPUT);
+            String fileName = Console.readLine(requestFilePath + "\n" + infoExitInput);
 
-            if (fileName.equalsIgnoreCase(OPTION_EXIT)) {
+            if (fileName.equalsIgnoreCase(optionExit)) {
                 break;
             }
             try {
@@ -104,14 +104,14 @@ public class ImportQuestionsUI {
                 }
 
                 if (numImportedQuestions == null) {
-                    System.out.println(ERROR_FILE_NOT_FOUND);
+                    System.out.println(errorFileNotFound);
                 } else if (numImportedQuestions == 0) {
-                    System.out.println(ERROR_NO_IMPORTED_QUESTIONS);
+                    System.out.println(errorNoImportedQuestions);
                 } else if (numImportedQuestions > 0) {
-                    System.out.println(INFO_NUM_QUESTIONS_IMPORTED + " " + numImportedQuestions);
+                    System.out.println(infoNumQuestionsImported + " " + numImportedQuestions);
                 }
             } catch (InvalidFileFormattingException e) {
-                System.out.println(ERROR_INVALID_FILE_FORMAT);
+                System.out.println(errorInvalidFileFormat);
             }
         }
 

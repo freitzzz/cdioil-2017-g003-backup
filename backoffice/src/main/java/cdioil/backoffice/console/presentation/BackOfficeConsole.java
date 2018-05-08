@@ -8,15 +8,15 @@ import cdioil.application.authz.AuthenticationController;
  */
 public class BackOfficeConsole {
     /**
-     * Hides default constructor
-     */
-    private BackOfficeConsole(){}
-    /**
      * Constant that represents the message that ocures if a user tries to access backoffice 
      * which doesn't have permissions for it
      */
     private static final String ILLEGAL_BACKOFFICE_ACCESS="O utilizador não têm permissões suficientes "
             + "para entrar no backoffice da aplicação";
+    /**
+     * Hides default constructor
+     */
+    private BackOfficeConsole(){}
     public static void enterBackoffice(AuthenticationController authenticationController){
         if(authenticationController.canAccessAdminBackoffice()){
             new MainMenu().mainLoopAdmin(authenticationController);

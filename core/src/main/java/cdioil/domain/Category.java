@@ -111,7 +111,7 @@ public class Category extends SurveyItem {
             this.name = name;
             this.categoryPath = path;
 
-            String pathIdentifiers[] = path.split(SPLITTER);
+            String[] pathIdentifiers = path.split(SPLITTER);
             //Identifier is always the path's last element
             this.identifier = pathIdentifiers[pathIdentifiers.length - 1];
 

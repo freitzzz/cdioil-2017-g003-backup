@@ -16,11 +16,11 @@ public class ChangeLanguageUI {
     
     private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
 
-    private String REQUEST_SELECT_LANGUAGE = localizationHandler.getMessageValue("request_select_language");
+    private String requestSelectLanguage = localizationHandler.getMessageValue("request_select_language");
 
-    private String OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
+    private String optionExit = localizationHandler.getMessageValue("option_exit");
 
-    private String ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
+    private String errorInvalidOption = localizationHandler.getMessageValue("error_invalid_option");
 
     private final ChangeLanguageController controller;
 
@@ -41,9 +41,9 @@ public class ChangeLanguageUI {
                 System.out.println(i + 1 + ". " + languages[i].toString());
             }
 
-            System.out.println(0 + ". " + OPTION_EXIT);
+            System.out.println(0 + ". " + optionExit);
 
-            option = Console.readInteger(REQUEST_SELECT_LANGUAGE);
+            option = Console.readInteger(requestSelectLanguage);
 
             try {
                 switch (option) {
@@ -60,7 +60,7 @@ public class ChangeLanguageUI {
                         break;
 
                     default:
-                        System.out.println(ERROR_INVALID_OPTION);
+                        System.out.println(errorInvalidOption);
                         break;
 
                 }
@@ -76,9 +76,9 @@ public class ChangeLanguageUI {
      */
     private void refreshLocalizedMessages() {
 
-        REQUEST_SELECT_LANGUAGE = localizationHandler.getMessageValue("request_select_language");
-        OPTION_EXIT = localizationHandler.getMessageValue("option_exit");
-        ERROR_INVALID_OPTION = localizationHandler.getMessageValue("error_invalid_option");
+        requestSelectLanguage = localizationHandler.getMessageValue("request_select_language");
+        optionExit = localizationHandler.getMessageValue("option_exit");
+        errorInvalidOption = localizationHandler.getMessageValue("error_invalid_option");
     }
 
 }
