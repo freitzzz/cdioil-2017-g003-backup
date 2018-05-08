@@ -100,6 +100,11 @@ public final class AuthenticationController implements Serializable {
         return currentUser;
     }
     /**
+     * Returns the current authenticated user token
+     * @return String with the authenticated user token
+     */
+    public String getUserToken(){return currentUserSession.getUserToken();}
+    /**
      * Method that returns the current session user
      * <br>Method to be deprecated very soon, only is here due to need on some 
      * backoffice classes
