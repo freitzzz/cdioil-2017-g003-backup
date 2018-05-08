@@ -2,6 +2,8 @@ package cdioil.backoffice.utils;
 
 import cdioil.langs.Language;
 import cdioil.langs.LocalizationParserXML;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,7 +40,8 @@ public class BackOfficeLocalizationHandler {
                     new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
                             .getResource("localization/backoffice_en_US.xml").getFile(), "UTF-8")));
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(BackOfficeLocalizationHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                    Level.SEVERE, ex.getMessage());
         }
     }
 
@@ -76,11 +79,9 @@ public class BackOfficeLocalizationHandler {
      * Loads localized strings of the currently specified language in the
      * properties file.
      *
-     * @throws ParserConfigurationException
-     * @throws SAXException
      * @throws IOException
      */
-    public void loadStrings() throws ParserConfigurationException, SAXException, IOException {
+    public void loadStrings() throws IOException {
 
         Properties properties = new Properties();
         try (FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIES_FILE_PATH)) {
