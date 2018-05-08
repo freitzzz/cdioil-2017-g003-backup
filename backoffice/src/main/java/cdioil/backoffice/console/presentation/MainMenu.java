@@ -16,7 +16,7 @@ public class MainMenu {
         COMMON
        ==============
      */
-    private static final String separator = "=============================";
+    private static final String SEPARATOR = "=============================";
 
     private String infoShutdown = localizationHandler.getMessageValue("info_shutdown");
 
@@ -166,9 +166,9 @@ public class MainMenu {
 
     private int managerMenu() {
         int option = -1;
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println(infoManagerHeader);
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println("1. " + optionImportCategoryQuestions);
         System.out.println("2. " + optionChangeLanguage);
         System.out.println("3. " + optionExportSurveyAnswers);
@@ -177,7 +177,7 @@ public class MainMenu {
         System.out.println("6. " + optionInsertCategoryQuestion);
         System.out.println("7. " + optionExportSurveyStatistics);
         System.out.println("8. " + optionCreateTemplate);
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println("0. " + optionExit);
         option = Console.readInteger(requestSelectOption);
         return option;
@@ -185,9 +185,9 @@ public class MainMenu {
 
     private int adminMenu() {
         int option = -1;
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println(infoAdminHeader);
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println("1. " + optionAssignManager);
         System.out.println("2. " + optionWhitelistDomain);
         System.out.println("3. " + optionImportUsers);
@@ -202,7 +202,7 @@ public class MainMenu {
         System.out.println("12. " + optionImportQuestionsTemplate);
         System.out.println("13. " + optionImportProducts);
         System.out.println("14. " + optionChangeLanguage);
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println("0. " + optionExit);
         option = Console.readInteger(requestSelectOption);
         return option;
