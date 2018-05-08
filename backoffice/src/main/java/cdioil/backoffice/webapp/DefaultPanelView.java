@@ -1,6 +1,5 @@
 package cdioil.backoffice.webapp;
 
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;

@@ -16,7 +16,7 @@ public class MainMenu {
         COMMON
        ==============
      */
-    private final String separator = "=============================";
+    private static final String separator = "=============================";
 
     private String infoShutdown = localizationHandler.getMessageValue("info_shutdown");
 

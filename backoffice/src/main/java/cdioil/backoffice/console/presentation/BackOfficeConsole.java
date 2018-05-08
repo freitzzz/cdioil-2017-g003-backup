@@ -8,6 +8,10 @@ import cdioil.application.authz.AuthenticationController;
  */
 public class BackOfficeConsole {
     /**
+     * Hides default constructor
+     */
+    private BackOfficeConsole(){}
+    /**
      * Constant that represents the message that ocures if a user tries to access backoffice 
      * which doesn't have permissions for it
      */
@@ -22,8 +26,4 @@ public class BackOfficeConsole {
             throw new IllegalStateException(ILLEGAL_BACKOFFICE_ACCESS);
         }
     }
-    /**
-     * Hides default constructor
-     */
-    private BackOfficeConsole(){}
 }

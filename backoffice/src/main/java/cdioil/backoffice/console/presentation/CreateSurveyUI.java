@@ -16,7 +16,6 @@ public class CreateSurveyUI {
     public CreateSurveyUI(Manager manager) {
         controller = new CreateSurveyController();
         loggedManager = manager;
-        System.out.println("->>>>>>>>>>>>>>>>>>"+loggedManager);
         menuLoop();
     }
 

@@ -10,6 +10,10 @@ import java.io.File;
  */
 public final class ImageUtils {
     /**
+     * Hides default constructor
+     */
+    private ImageUtils(){}
+    /**
      * Constant that represents the current base root path where Vaadin componments are placed
      * <br>Points to webapp folder
      */
@@ -23,9 +27,4 @@ public final class ImageUtils {
     public static FileResource imagePathAsResource(String imagePath){
         return new FileResource(new File(BASE_ROOT_PATH+imagePath));
     }
-
-    /**
-     * Hides default constructor
-     */
-    private ImageUtils(){}
 }
