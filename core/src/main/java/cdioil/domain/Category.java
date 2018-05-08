@@ -212,30 +212,13 @@ public class Category extends SurveyItem {
     }
 
     /**
-     * Removes the first two unecessary numbers in the CAT identifier of the path.
-     *
-     * @return the path without the first two numbers in the CAT identifier
-     */
-    private String getActualIdentifier() {
-        if (categoryPath.toUpperCase().contains("CAT")) {
-            try {
-                String removableNumbers = categoryPath.substring(8, 9);
-                return categoryPath.replace(removableNumbers, "");
-            } catch (IndexOutOfBoundsException ex) {
-                return categoryPath;
-            }
-        }
-        return categoryPath;
-    }
-
-    /**
      * Describes a Category through its name and identifier.
      *
      * @return description of the Category
      */
     @Override
     public String toString() {
-        return String.format("Nome: %s\nDescritivo: %s\n", name, getActualIdentifier());
+        return String.format("Nome: %s\nDescritivo: %s\n", name, identifier);
     }
 
     /**

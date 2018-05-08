@@ -16,7 +16,7 @@ public class AddWhitelistController implements Serializable {
     /**
      * Serialization number.
      */
-    private final static long serialVersionUID = 19L;
+    private static final long serialVersionUID = 19L;
 
     /**
      * Whitelist repository.

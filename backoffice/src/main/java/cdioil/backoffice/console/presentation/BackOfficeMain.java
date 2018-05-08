@@ -1,6 +1,8 @@
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -27,8 +29,9 @@ public class BackOfficeMain {
         //Load localize strings
         try {
             BackOfficeLocalizationHandler.getInstance().loadStrings();
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(BackOfficeMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                    Level.SEVERE, ex.getMessage());
         }
         new BackOfficeLogin().backofficeLogin();
     }
