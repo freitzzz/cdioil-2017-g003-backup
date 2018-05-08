@@ -100,9 +100,9 @@ public class CategoryManagementUI {
         }
 
         System.out.println(managerList);
-        managers.forEach(manager -> {
-            System.out.println(manager.toString());
-        });
+        managers.forEach(manager -> 
+            System.out.println(manager.toString())
+        );
 
         System.out.println(separator);
 

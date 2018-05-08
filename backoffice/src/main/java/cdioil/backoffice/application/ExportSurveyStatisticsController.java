@@ -133,19 +133,19 @@ public class ExportSurveyStatisticsController {
         Map<Question, List<Answer>> answers = new TreeMap<>();
 
         reviews.stream().map(r -> r.getReviewQuestionAnswers()).
-                forEachOrdered(answer -> {
-                    answer.keySet().forEach(q -> {
-                        List<Answer> answerList = new ArrayList<>();
-                        answerList.add(answer.get(q));
+                forEachOrdered(answer
+                        -> answer.keySet().forEach(q -> {
+                    List<Answer> answerList = new ArrayList<>();
+                    answerList.add(answer.get(q));
 
-                        if (answers.containsKey(q)) {
-                            answerList.addAll(answers.get(q));
-                            answers.put(q, answerList);
-                        } else {
-                            answers.put(q, answerList);
-                        }
-                    });
-                });
+                    if (answers.containsKey(q)) {
+                        answerList.addAll(answers.get(q));
+                        answers.put(q, answerList);
+                    } else {
+                        answers.put(q, answerList);
+                    }
+                })
+                );
         return answers;
     }
 
