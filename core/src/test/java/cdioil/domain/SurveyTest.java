@@ -51,6 +51,7 @@ public class SurveyTest {
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         list = new LinkedList<>();
         list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste 2",new SKU("566341098"),"1 Kg",new QRCode("4563218")));
         this.testGlobalSurvey = new GlobalSurvey(list, timePeriod);
         testTargetedSurvey = new TargetedSurvey(list, timePeriod, new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
