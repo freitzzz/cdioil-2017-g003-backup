@@ -170,7 +170,7 @@ public class AnswerSurveyUI {
                 System.out.println("Type EXIT to leave at any time\n");
                 option = Console.readLine("Select an option or UNDO previous answer:\n");
 
-                if (option.equalsIgnoreCase("EXIT")) {
+                if ("EXIT".equalsIgnoreCase(option)) {
                     if (controller.saveReview(firstTimeSaving)) {
                         System.out.println("A sua avaliacao foi gravada com sucesso. "
                                 + "Podera continuar a responder ao inquerito em qualquer"
@@ -182,7 +182,7 @@ public class AnswerSurveyUI {
                     if (idx < options.size()) {
                         isValidOption = true;
                     }
-                } else if (option.equalsIgnoreCase("UNDO")) {
+                } else if ("UNDO".equalsIgnoreCase(option)) {
                     if (controller.undoAnswer()) {
                         break;
                     }

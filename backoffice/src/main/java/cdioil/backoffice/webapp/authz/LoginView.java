@@ -183,9 +183,9 @@ public class LoginView extends LoginDesign implements View {
      */
     private void configureSignupButton() {
         buttonsLayout.addComponentsAndExpand(new PopupView(new RegisterPopupViewContent()));
-        btnSignUp.addClickListener((Button.ClickEvent clickEvent) -> {
-            registeredUserPopupView.setPopupVisible(true);
-        });
+        btnSignUp.addClickListener((Button.ClickEvent clickEvent) -> 
+            registeredUserPopupView.setPopupVisible(true)
+        );
     }
     /**
      * Method that tries to login into the webapp

@@ -13,6 +13,10 @@ public class BackOfficeConsole {
      */
     private static final String ILLEGAL_BACKOFFICE_ACCESS="O utilizador não têm permissões suficientes "
             + "para entrar no backoffice da aplicação";
+    /**
+     * Hides default constructor
+     */
+    private BackOfficeConsole(){}
     public static void enterBackoffice(AuthenticationController authenticationController){
         if(authenticationController.canAccessAdminBackoffice()){
             new MainMenu().mainLoopAdmin(authenticationController);
@@ -22,8 +26,4 @@ public class BackOfficeConsole {
             throw new IllegalStateException(ILLEGAL_BACKOFFICE_ACCESS);
         }
     }
-    /**
-     * Hides default constructor
-     */
-    private BackOfficeConsole(){}
 }

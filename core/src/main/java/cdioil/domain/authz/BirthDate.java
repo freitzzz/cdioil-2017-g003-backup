@@ -21,7 +21,7 @@ public class BirthDate implements ValueObject, Serializable {
     /**
      * User's birth date.
      */
-    private LocalDate birthDate;
+    private LocalDate dateOfBirth;
 
     /**
      * Builds a birth date instance using a LocalDate object
@@ -33,7 +33,7 @@ public class BirthDate implements ValueObject, Serializable {
             throw new IllegalArgumentException("A data de nascimento não pode "
                     + "ser null");
         }
-        this.birthDate = birthDate;
+        this.dateOfBirth = birthDate;
     }
 
     /**
@@ -49,7 +49,7 @@ public class BirthDate implements ValueObject, Serializable {
      */
     @Override
     public int hashCode() {
-        return birthDate.hashCode();
+        return dateOfBirth.hashCode();
     }
 
     /**
@@ -67,7 +67,7 @@ public class BirthDate implements ValueObject, Serializable {
             return false;
         }
         final BirthDate other = (BirthDate) obj;
-        return this.birthDate.equals(other.birthDate);
+        return this.dateOfBirth.equals(other.dateOfBirth);
     }
 
     /**
@@ -77,6 +77,6 @@ public class BirthDate implements ValueObject, Serializable {
      */
     @Override
     public String toString() {
-        return birthDate.toString();
+        return dateOfBirth.toString();
     }
 }

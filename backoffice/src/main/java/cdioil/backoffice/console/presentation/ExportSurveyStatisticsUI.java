@@ -26,57 +26,57 @@ public class ExportSurveyStatisticsUI {
     /**
      * Represents a message that indicates the user that the chosen survey doesn't have any reviews.
      */
-    private final String SURVEY_WITH_NO_REVIEWS_MESSAGE = localizationHandler.getMessageValue("error_survey_with_no_reviews");
-    
+    private final String errorNoReviews = localizationHandler.getMessageValue("error_survey_with_no_reviews");
+
     /**
      * Represents a message that indicates the user that there aren't any available surveys.
      */
-    private final String NO_SURVEYS_AVAILABLE = localizationHandler.getMessageValue("error_no_surveys_available");
+    private final String errorNoSurveys = localizationHandler.getMessageValue("error_no_surveys_available");
 
     /**
      * Represents the exit code for the User Interface.
      */
-    private final String EXIT_CODE = localizationHandler.getMessageValue("option_exit");
+    private final String exitCode = localizationHandler.getMessageValue("option_exit");
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_message");
+    private final String exitMessage = localizationHandler.getMessageValue("info_exit_message");
 
     /**
      * Represents a message that indicates the user that there was an error exporting the file.
      */
-    private final String EXPORTED_SURVEY_ANSWERS_FAILURE_MESSAGE = localizationHandler.getMessageValue("error_exporting_stats");
+    private final String errorExportationFailed = localizationHandler.getMessageValue("error_exporting_stats");
 
     /**
      * Represents a message that indicates the user that the stats were successfully exported.
      */
-    private final String EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE = localizationHandler.getMessageValue("info_success_exporting_stats");
+    private final String exportationSucceeded = localizationHandler.getMessageValue("info_success_exporting_stats");
 
     /**
      * Represents a message that indicates the user to select a survey.
      */
-    private final String SELECT_SURVEY_MESSAGE = localizationHandler.getMessageValue("request_select_survey");
+    private final String requestSelectSurvey = localizationHandler.getMessageValue("request_select_survey");
 
     /**
      * Represents a message used to list the surveys.
      */
-    private final String SURVEY_MESSAGE = localizationHandler.getMessageValue("info_survey_message");
+    private final String listAllSurveys = localizationHandler.getMessageValue("info_survey_message");
 
     /**
      * Represents a message that informs the user that the survey is not valid.
      */
-    private final String INVALID_SURVEY_MESSAGE = localizationHandler.getMessageValue("error_invalid_survey");
+    private final String errorInvalidSurvey = localizationHandler.getMessageValue("error_invalid_survey");
 
     /**
      * Represents a message that indicates the user to insert the path of the file.
      */
-    private final String INSERT_PATH_MESSAGE = localizationHandler.getMessageValue("request_file_path");
+    private final String requestInsertPath = localizationHandler.getMessageValue("request_file_path");
 
     /**
      * Separator used for clarity.
      */
-    private final String SEPARATOR = localizationHandler.getMessageValue("separator");
+    private final String separator = localizationHandler.getMessageValue("separator");
 
     /**
      * Instance of Controller that intermediates the interactions between the administrator and the domain classes.
@@ -92,45 +92,53 @@ public class ExportSurveyStatisticsUI {
     }
 
     private void doShow() {
-        System.out.println(SEPARATOR);
-        System.out.println(EXIT_MESSAGE);
+        System.out.println(separator);
+        System.out.println(exitMessage);
 
         //1. List all surveys
         List<Survey> surveys = ctrl.getAllSurveys();
         if (!listAllSurveys(surveys)) {
-            System.out.println(NO_SURVEYS_AVAILABLE);
-            System.out.println(SEPARATOR);
+            System.out.println(errorNoSurveys);
+            System.out.println(separator);
             return;
         }
-        System.out.println(SEPARATOR);
+        System.out.println(separator);
 
         //2. User chooses survey
         boolean isSurveyIDValid = false;
         Survey survey;
 
         while (!isSurveyIDValid) {
-            String surveyID = Console.readLine(SELECT_SURVEY_MESSAGE);
-            if (surveyID != null && surveyID.equalsIgnoreCase(EXIT_CODE)) return;
-            
+            String surveyID = Console.readLine(requestSelectSurvey);
+            if (surveyID != null && surveyID.equalsIgnoreCase(exitCode)) {
+                return;
+            }
+
             survey = ctrl.getChosenSurvey(surveyID);
-            if (survey == null) System.out.println(INVALID_SURVEY_MESSAGE);
-            else if(ctrl.getAllReviews() == null) System.out.println(SURVEY_WITH_NO_REVIEWS_MESSAGE + " " + EXIT_MESSAGE);
-            else isSurveyIDValid = true;
+            if (survey == null) {
+                System.out.println(errorInvalidSurvey);
+            } else if (ctrl.getAllReviews().isEmpty()) {
+                System.out.println(errorNoReviews + " " + exitMessage);
+            } else {
+                isSurveyIDValid = true;
+            }
         }
-            boolean isPathValid = false;
-            while (!isPathValid) {
-                //3. Inserts the path of the file
-                String filePath = Console.readLine(INSERT_PATH_MESSAGE);
-                if (filePath != null && filePath.equalsIgnoreCase(EXIT_CODE)) return;
-       
-                //3. Exports the file
-                if (ctrl.exportStatsFromSurvey(filePath)) {
-                    System.out.println(EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE);
-                    isPathValid = true;
-                } else {
-                    System.out.println(EXPORTED_SURVEY_ANSWERS_FAILURE_MESSAGE);
-                }
-            
+        boolean isPathValid = false;
+        while (!isPathValid) {
+            //3. Inserts the path of the file
+            String filePath = Console.readLine(requestInsertPath);
+            if (filePath != null && filePath.equalsIgnoreCase(exitCode)) {
+                return;
+            }
+
+            //3. Exports the file
+            if (ctrl.exportStatsFromSurvey(filePath)) {
+                System.out.println(exportationSucceeded);
+                isPathValid = true;
+            } else {
+                System.out.println(errorExportationFailed);
+            }
+
         }
     }
 
@@ -141,10 +149,12 @@ public class ExportSurveyStatisticsUI {
      * @return true, if there are surveys to list. Otherwise, returns false
      */
     private boolean listAllSurveys(List<Survey> surveys) {
-        if (surveys == null || surveys.isEmpty()) return false;
+        if (surveys == null || surveys.isEmpty()) {
+            return false;
+        }
         int cont = 1;
         for (Survey s : surveys) {
-            System.out.println("\n" + SURVEY_MESSAGE + " " + cont + ":\n");
+            System.out.println("\n" + listAllSurveys + " " + cont + ":\n");
             System.out.println(s.toString());
             cont++;
         }

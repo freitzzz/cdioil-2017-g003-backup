@@ -90,7 +90,7 @@ public class AssignManagerUI {
      */
     private void showListOfRegisteredUsers() {
         // Get lista users
-        ArrayList<String> userList = getRegisteredUsersLists();
+        List<String> userList = getRegisteredUsersLists();
         if (userList.isEmpty()) {
             System.out.println("ERRO: Não há utilizadores registados!");
             return;
@@ -143,7 +143,7 @@ public class AssignManagerUI {
      * Gets a list of registered users
      * @return ArrayList
      */
-    private ArrayList<String> getRegisteredUsersLists() {
+    private List<String> getRegisteredUsersLists() {
         return controller.registeredUsers();
     }
 

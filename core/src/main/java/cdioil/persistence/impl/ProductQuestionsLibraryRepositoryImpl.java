@@ -1,16 +1,11 @@
 package cdioil.persistence.impl;
 
-import cdioil.domain.Product;
 import cdioil.domain.ProductQuestionsLibrary;
-import cdioil.domain.Question;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ProductQuestionsLibraryRepository;
-
 import javax.persistence.Query;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 /**
  * ProductQuestionsLibrary Repository class

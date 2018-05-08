@@ -178,7 +178,10 @@ public abstract class Survey implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Survey)) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final Survey other = (Survey) obj;

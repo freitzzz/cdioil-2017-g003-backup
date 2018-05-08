@@ -24,9 +24,6 @@ public class LoadAnswersController {
      */
     private static final int THREAD_NUMBER = (Runtime.getRuntime().availableProcessors()*2)+1;
 
-    public LoadAnswersController() {
-    }
-
     /**
      * Loads generated survey reviews into the application in runtime.
      *

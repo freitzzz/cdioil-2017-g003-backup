@@ -10,6 +10,10 @@ import java.security.NoSuchAlgorithmException;
  */
 public final class DigestUtils {
     /**
+     * Private constructor to hide implicit public one.
+     */
+    private DigestUtils() {}
+    /**
      * Returns a MessageDigest instance based on a string that may or may not
      * contain an algorithm identifier (e.g. "SHA-512")
      *

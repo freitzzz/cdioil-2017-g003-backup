@@ -2,6 +2,8 @@ package cdioil.backoffice.utils;
 
 import cdioil.langs.Language;
 import cdioil.langs.LocalizationParserXML;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,9 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /**
  * Singleton class that handles the BackOffice's localization.
@@ -25,20 +24,21 @@ public class BackOfficeLocalizationHandler {
     private static final Map<Language, File> LANGUAGE_FILES_MAP;
 
     static {
-        
+
         LANGUAGE_FILES_MAP = new HashMap<>();
-        
+
         //Instantiate Map and convert URLs to UTF-8
         try {
             LANGUAGE_FILES_MAP.put(Language.PT,
                     new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
                             .getResource("localization/backoffice_pt_PT.xml").getFile(), "UTF-8")));
-            
+
             LANGUAGE_FILES_MAP.put(Language.EN_US,
                     new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
                             .getResource("localization/backoffice_en_US.xml").getFile(), "UTF-8")));
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(BackOfficeLocalizationHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                    Level.SEVERE, ex.getMessage());
         }
     }
 
@@ -73,14 +73,11 @@ public class BackOfficeLocalizationHandler {
     }
 
     /**
-     * Loads localized strings of the currently specified language in the
-     * properties file.
+     * Loads localized strings of the currently specified language in the properties file.
      *
-     * @throws ParserConfigurationException
-     * @throws SAXException
      * @throws IOException
      */
-    public void loadStrings() throws ParserConfigurationException, SAXException, IOException {
+    public void loadStrings() throws IOException {
 
         Properties properties = new Properties();
         try (FileInputStream inputStream = new FileInputStream(BackOfficeProperties.PROPERTIES_FILE_PATH)) {

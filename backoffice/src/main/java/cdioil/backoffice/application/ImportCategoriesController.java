@@ -17,7 +17,7 @@ public class ImportCategoriesController implements Serializable {
     /**
      * Serialization number.
      */
-    private final static long serialVersionUID = 8L;
+    private static final long serialVersionUID = 8L;
 
     /**
      * Instance of CategoriesReader to read the file.

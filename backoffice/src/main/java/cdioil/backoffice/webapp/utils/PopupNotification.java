@@ -12,6 +12,10 @@ import com.vaadin.ui.UI;
  */
 public final class PopupNotification {
     /**
+     * Hides default constructor
+     */
+    private PopupNotification(){}
+    /**
      * Creates a pops up a new PopupNotification on the current page that is calling the method
      * @param title String with the popup title
      * @param message String with the popup description
@@ -23,8 +27,4 @@ public final class PopupNotification {
         notification.setPosition(position);
         notification.show(UI.getCurrent().getPage());
     }
-    /**
-     * Hides default constructor
-     */
-    private PopupNotification(){}
 }

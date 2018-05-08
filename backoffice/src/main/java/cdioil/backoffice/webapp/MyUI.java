@@ -1,10 +1,6 @@
 package cdioil.backoffice.webapp;
 
-import cdioil.backoffice.webapp.admin.AdminPanelView;
 import cdioil.backoffice.webapp.authz.LoginView;
-import cdioil.backoffice.webapp.manager.ManagerExportView;
-import cdioil.backoffice.webapp.manager.ManagerImportView;
-import cdioil.backoffice.webapp.manager.ManagerPanelView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;

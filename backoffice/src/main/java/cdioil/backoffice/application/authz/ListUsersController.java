@@ -15,7 +15,7 @@ public class ListUsersController implements Serializable{
     /**
      * Serialization number.
      */
-    private final static long serialVersionUID = 13L;
+    private static final long serialVersionUID = 13L;
     
     /**
      * Fetches all SystemUsers from the database and returns an iterable of 
