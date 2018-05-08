@@ -17,7 +17,8 @@ public class MathUtils {
     /**
      * Private constructor to hide the implicit public one.
      */
-    public MathUtils() {
+    private MathUtils() {
+        //Hides the public constructor
     }
 
     /**
@@ -32,7 +33,7 @@ public class MathUtils {
         }
 
         double sum = 0;
-        sum = resultList.stream().map((value) -> value).reduce(sum, (accumulator, _item) -> accumulator + _item);
+        sum = resultList.stream().map(value -> value).reduce(sum, (accumulator, item) -> accumulator + item);
 
         if (Double.compare(sum, 0) == 0) {
             return 0;
@@ -59,7 +60,7 @@ public class MathUtils {
         }
 
         double sum = 0;
-        sum = resultList.stream().map((value) -> Math.pow((value - mean), 2)).reduce(sum, (accumulator, _item) -> accumulator + _item);
+        sum = resultList.stream().map(value -> Math.pow((value - mean), 2)).reduce(sum, (accumulator, item) -> accumulator + item);
 
         return Math.sqrt((sum) / ((double) resultList.size()));
     }
