@@ -49,11 +49,11 @@ public final class RegisterUserController implements Serializable {
     /**
      * Registered Users repository
      */
-    private transient final RegisteredUserRepositoryImpl registerUserRepository = new RegisteredUserRepositoryImpl();
+    private final transient RegisteredUserRepositoryImpl registerUserRepository = new RegisteredUserRepositoryImpl();
     /**
      * Current SystemUserBuilder
      */
-    private transient final SystemUserBuilder userBuilder=SystemUserBuilder.create();
+    private final transient SystemUserBuilder userBuilder=SystemUserBuilder.create();
     
     /**
      * Adds the email of the user to the current registration process
