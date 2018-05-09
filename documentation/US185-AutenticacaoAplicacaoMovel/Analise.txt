@@ -1,0 +1,38 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #5
+	
+	* Como Utilizador, pretendo autenticar-me na aplicação móvel.
+
+	______________________
+	
+	FORMATO BREVE
+	______________________
+
+	O utilizador inicia o processo de autenticação na mobile app.
+	O sistema pede ao utilizador para inserir as suas credenciais 
+	de acesso. O utilizador insere as suas credenciais de acesso.
+	Caso o utilizador ainda não tenha ativado a sua conta ou tenha
+	inserido credenciais inválidas, o sistema devolve uma mensagem 
+	de erro própria para cada um dos casos. Caso as credenciais 
+	estejam válidas e a conta esteja ativada, o sistema devolve 
+	uma mensagem de sucesso do processo de Autenticação.
+	
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------
