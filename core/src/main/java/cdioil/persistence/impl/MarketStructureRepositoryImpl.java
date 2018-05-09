@@ -30,8 +30,8 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Category> findCategoriesByIdentifierPattern(String identifierPattern) {
         EntityManager em = entityManager();
-        String queryString = "select c from Category c where c.categoryPath regexp '" + identifierPattern + "'";
-        Query queryRegexed = em.createQuery(queryString, Category.class);
+        Query queryRegexed = em.createQuery("select c from Category c where c.categoryPath regexp ?1");
+        queryRegexed.setParameter(1,identifierPattern);
         return (List<Category>) queryRegexed.getResultList();
     }
 
