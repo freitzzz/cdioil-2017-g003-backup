@@ -1,4 +1,4 @@
-	
+
 
 	TEST PLAN
 
@@ -9,7 +9,7 @@
 	1. Mostrar os dados a preencher
 	2. Preencher os dados
 	3. Verificar os dados
-	4. Enviar um email ao utilizador com o codigo de activacao de registo
+	4. Enviar um email ao utilizador com o código de activação de registo
 
 	_______________________________
 	CASO #2: Registar um utilizador previamente importado
@@ -20,4 +20,13 @@
 	3. Verificar os dados
 	4. Verificar se o utilizador foi importado
 	5. Alterar os dados do utilizador previamente importado
-	6. Enviar um email ao utilizador com o codigo de activacao de registo
+	6. Enviar um email ao utilizador com o código de activacao de registo
+
+	_______________________________
+	CASO #3: Registar um utilizador previamente registado
+	_______________________________
+
+	1. Mostrar os dados a preencher
+	2. Preencher os dados com um email previamente existente
+	3. Verificar os dados
+	4. Informar o utilizador que o email já se encontra registado

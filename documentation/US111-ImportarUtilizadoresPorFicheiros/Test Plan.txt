@@ -1,4 +1,4 @@
-	
+
 
 	TEST PLAN
 
@@ -8,4 +8,5 @@
 
 	1. Introduzir nome do ficheiro com os utilizadores
 	2. Mostrar os utilizadores importados
-	3. Escolhar a opção guardar os utilizadores na base de dados
+	3. Escolhar a opÃ§Ã£o guardar os utilizadores na base de dados
+	4. Verificar na base de dados que os utilizadores foram importados com sucesso
