@@ -206,7 +206,7 @@ public class LoginView extends LoginDesign implements View {
      * @param authenticationException AuthenticationException with the exception thrown if the authentication failed
      */
     private void treatAuthenticationFailure(AuthenticationException authenticationException){
-        if(authenticationException.getAuthenticatioExceptionCause()
+        if(authenticationException.getAuthenticationExceptionCause()
                 .equals(AuthenticationException.AuthenticationExceptionCause.INVALID_CREDENTIALS)){
             showInvalidLoginCredentialsNotification();
         }else{

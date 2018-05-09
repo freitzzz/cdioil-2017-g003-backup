@@ -97,7 +97,7 @@ public class FrontOfficeLogin {
                 Console.logError(e.getMessage());
             }catch(AuthenticationException f){
                 Console.logError(f.getMessage());
-                if(f.getAuthenticatioExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.NOT_ACTIVATED)){
+                if(f.getAuthenticationExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.NOT_ACTIVATED)){
                     if(askForActivationCode(email,password))id=0;
                 }
             }
