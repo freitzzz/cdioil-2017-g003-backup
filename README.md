@@ -22,3 +22,9 @@ To run the application backoffice you can either:
 
 - The application is built in **Java** and uses **Maven** as way to manage modules and dependencies
 - The WebApp uses [**Vaadin**](https://vaadin.com/) a free Web Framework for Java
+- The REST API is built with [**Jersey**](https://jersey.github.io/) a framework for Webservices that uses the [***JAX-RS API***](https://github.com/jax-rs)
+
+### FeedbackMonkey API
+
+- The **FeedbackMonkey API** can be communicated through a *RESTful API*. The documentation for it
+can be found [here](https://bitbucket.org/lei-isep/cdioil-2017-g003/wiki/EngenhariaRequisitos/RestAPI.md).
