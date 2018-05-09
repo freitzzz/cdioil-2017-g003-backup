@@ -1,22 +1,32 @@
 	___________
 
-	ANÁLISE 
+	ANï¿½LISE
 	____________
 
 	USER STORY DE SPRINT #1
-	
-	* Como Utilizador não Registado pretendo registar-me no sistema utilizando como identificador de autenticação um email.
+
+	* Como Utilizador nï¿½o Registado pretendo registar-me no sistema utilizando como identificador de autenticaï¿½ï¿½o um email.
 	* Os dominios/subdominios devem ser validados
 
 	USER STORY DE SPRINT #3
-	
-	* Deverá ser enviado um código de activação para o meu email
-	* Deverei fornecer informação extra como a Localidade e ano de nascimento
+
+	* Deverï¿½ ser enviado um cï¿½digo de activaï¿½ï¿½o para o meu email
+	* Deverei fornecer informaï¿½ï¿½o extra como a Localidade e ano de nascimento
 	* Posso utilizar um email previamente carregado
 
+	----------------------
+	Formato Breve
+
+	* O utilizador nÃ£o registado inicia o processo de registo na aplicaÃ§Ã£o. O sistema pede
+	* informaÃ§Ãµes necessÃ¡rias sobre o registo (email,password,nome e nÃºmero de telemÃ³vel).
+	* O utilizador nÃ£o registado fornece os dados necessÃ¡rios. O sistema pergunta ao utilizador
+	* se deseja preencher dados adicionais (localidade,ano de nascimento). O utilizador nÃ£o registado decide relativamente aos dados adicionais.
+	* O sistema regista o utilizador, enviando-lhe um email com o cÃ³digo de ativaÃ§Ã£o, informando o
+	* utilizador nÃ£o registado sobre o sucesso da operaÃ§Ã£o.
+	----------------------
 	______________________
 
-	REGRAS DE NEGÓCIO
+	REGRAS DE NEGï¿½CIO
 	_____________________
 
 
@@ -24,9 +34,6 @@
 
 
 	______________________
-		
-	TESTES UNITÁRIOS
+
+	TESTES UNITï¿½RIOS
 	_____________________
-
-
-	
