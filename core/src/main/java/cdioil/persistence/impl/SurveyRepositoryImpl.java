@@ -44,10 +44,10 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      */
     public List<Survey> getSurveysByLazyLoadingIndex(int lazyLoadIndex) {
         int nextLimit = lazyLoadIndex * LAZY_LOADING_LIMIT;
-        String queryString = "SELECT * FROM Survey s OFFSET " + nextLimit + 
-                " ROWS FETCH NEXT " + LAZY_LOADING_LIMIT + " ROWS ONLY";
-        return (List<Survey>) entityManager().createNativeQuery(queryString,
-                Survey.class).getResultList();
+        return (List<Survey>) entityManager().createQuery("SELECT S FROM Survey S")
+                .setFirstResult(nextLimit)
+                .setMaxResults(nextLimit+LAZY_LOADING_LIMIT)
+                .getResultList();
     }
 
     /**
