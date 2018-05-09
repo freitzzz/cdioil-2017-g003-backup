@@ -18,7 +18,7 @@ import javax.persistence.Query;
  * @param <T> Type of entity to be stored in the repository
  * @param <K> The entity's type of identifier
  */
-public abstract class BaseJPARepository<T, K extends Serializable> implements DataRepository<T, K>,Serializable {
+public abstract class BaseJPARepository<T, K extends Serializable> implements DataRepository<T, K> {
 
     //Depends on a persistence unit.
     @PersistenceUnit
