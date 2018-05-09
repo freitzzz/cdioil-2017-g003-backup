@@ -30,7 +30,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Category> findCategoriesByIdentifierPattern(String identifierPattern) {
         EntityManager em = entityManager();
-        Query queryRegexed = em.createQuery("select c from Category c where c.categoryPath regexp ?1");
+        Query queryRegexed = getCategoriesQueryByPathPattern(identifierPattern);
         queryRegexed.setParameter(1,identifierPattern);
         return (List<Category>) queryRegexed.getResultList();
     }
@@ -44,8 +44,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Category> findCategoriesByPathPattern(String pathPattern) {
         EntityManager em = entityManager();
-        String queryString = "select c from Category c where c.categoryPath regexp '" + pathPattern + "'";
-        Query queryRegexed = em.createQuery(queryString, Category.class);
+        Query queryRegexed = getCategoriesQueryByPathPattern(pathPattern);
         if ((List<Category>) queryRegexed.getResultList() == null) {
             return null;
         }
@@ -72,8 +71,8 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      */
     public List<Product> findProductByName(String productName) {
         EntityManager em = entityManager();
-        String queryString = "SELECT P from Product p where p.name regexp '" + productName + "'";
-        Query query = em.createQuery(queryString, Product.class);
+        Query query = em.createQuery("SELECT P from Product p where p.name regexp ?1");
+        query.setParameter(1,productName);
         return (List<Product>) query.getResultList() != null ? query.getResultList() : null;
     }
 
@@ -85,10 +84,16 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      * @return true is the product exists, or false if not
      */
     public boolean findIfProductExist(String product) {
-        EntityManager em = entityManager();
-        String queryString = "SELECT P from Product p where p.name regexp '" + product + "'";
-        Query query = em.createNativeQuery(queryString, Product.class);
-        return (List<Product>) query.getResultList() != null || 
-                ((List<Product>) query.getResultList()).isEmpty();
+        List<Product> products=findProductByName(product);
+        return products!=null && !products.isEmpty();
+    }
+    /**
+     * Method that creates a Query for finding all categories that have certain path
+     * @param pattern String with the categories path pattern
+     * @return Query with the query for finding all categories that have a certain path
+     */
+    private Query getCategoriesQueryByPathPattern(String pattern){
+        return entityManager().createQuery("SELECT C FROM Category C WHERE C.categoryPath regexp ?1")
+                .setParameter(1,pattern);
     }
 }
