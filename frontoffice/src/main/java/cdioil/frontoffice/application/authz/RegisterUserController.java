@@ -49,7 +49,7 @@ public final class RegisterUserController implements Serializable {
     /**
      * Registered Users repository
      */
-    private final RegisteredUserRepositoryImpl registerUserRepository = new RegisteredUserRepositoryImpl();
+    private transient final RegisteredUserRepositoryImpl registerUserRepository = new RegisteredUserRepositoryImpl();
     /**
      * Current SystemUserBuilder
      */
