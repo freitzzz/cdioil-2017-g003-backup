@@ -38,7 +38,14 @@ public final class AuthenticationResource {
             }
             return buildAuthenticationResponse(authenticationToken);
         }catch(AuthenticationException e){
-            return Response.status(Status.UNAUTHORIZED).build();
+            if(e.getAuthenticatioExceptionCause().equals(AuthenticationException.
+                    AuthenticationExceptionCause.NOT_ACTIVATED)){
+                return Response.status(Status.UNAUTHORIZED)
+                        .entity("{\n\t\"activationcode\":\"required\"\n}").build();
+            }else{
+                return Response.status(Status.UNAUTHORIZED)
+                        .entity("{\n\t\"invalidcredentials\":\"true\"\n}").build();
+            }
         }
     }
     /**
