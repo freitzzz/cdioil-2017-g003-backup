@@ -38,7 +38,7 @@ public final class AuthenticationResource {
             }
             return buildAuthenticationResponse(authenticationToken);
         }catch(AuthenticationException e){
-            if(e.getAuthenticatioExceptionCause().equals(AuthenticationException.
+            if(e.getAuthenticationExceptionCause().equals(AuthenticationException.
                     AuthenticationExceptionCause.NOT_ACTIVATED)){
                 return Response.status(Status.UNAUTHORIZED)
                         .entity("{\n\t\"activationcode\":\"required\"\n}").build();

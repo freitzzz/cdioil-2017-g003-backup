@@ -1,5 +1,4 @@
 package cdioil.application.domain.authz.exceptions;
-
 /**
  * AuthenticationException that identifies an exception for an authentication service
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
@@ -22,7 +21,7 @@ public final class AuthenticationException extends RuntimeException{
      * Builds a new AuthenticationException with the exception message
      * @param message String with the authentication message
      * @param cause AuthenticationExceptionCause with the authentication exception 
- cause
+     * cause
      */
     public AuthenticationException(String message,AuthenticationExceptionCause cause){
         super(message);
@@ -33,7 +32,7 @@ public final class AuthenticationException extends RuntimeException{
      * @return AuthenticationExceptionCause enum with the authentication exception 
      * cause
      */
-    public AuthenticationExceptionCause getAuthenticatioExceptionCause(){return cause;}
+    public AuthenticationExceptionCause getAuthenticationExceptionCause(){return cause;}
     /**
      * Enum that represents the different causes of the AuthenticationException
      */

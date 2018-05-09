@@ -18,14 +18,12 @@ public class TimePeriod implements Serializable {
      * Starting date.
      */
     //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
-    //NOSONAR
-    private LocalDateTime startDate;
+    private LocalDateTime startDate; //NOSONAR
     /**
      * Ending date.
      */
     //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
-    //NOSONAR
-    private LocalDateTime endDate;
+    private LocalDateTime endDate; //NOSONAR
 
     /**
      * Builds a TimePeriod with a starting date and an ending date.
