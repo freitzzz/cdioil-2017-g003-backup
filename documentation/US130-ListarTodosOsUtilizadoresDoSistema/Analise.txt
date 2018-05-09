@@ -8,14 +8,22 @@
 	* Como Administrador, pretendo listar todos os utilizadores do sistema
 
 	______________________
+	
+	FORMATO BREVE
+	______________________
+
+	O administrador inicia o processo de listagem de todos
+	os utilizadores do sistema após efetuar login.
+	O sistema apresenta uma lista de todos os utilizadores do sistema.
+	O caso de uso termina.
+	
+	______________________
 
 	REGRAS DE NEGÓCIO
 	_____________________
 
 
 	--------------------------------------------------------------
-
-
 
 	______________________
 		

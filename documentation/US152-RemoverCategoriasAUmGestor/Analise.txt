@@ -9,6 +9,21 @@
 	  Quero poder indicar as categorias e respetivos filhos usando expressões regulares.
 
 	______________________
+	
+	FORMATO BREVE
+	______________________
+
+	O administrador inicia o processo de remoção de categorias
+	a um gestor após efetuar login. O sistema apresenta uma lista 
+	de gestores e pede ao administrador para escolher um. 
+	O administrador escolhe um gestor. O sistema pede para indicar 
+	o(s) descritivo(s) das categoria(s) a remover ao gestor. 
+	O administrador insere o(s) descritivo(s) das categoria(s) 
+	a remover. O sistema remove as categorias inseridas pelo 
+	administrador e apresenta uma mensagem de sucesso da operação.
+
+
+	______________________
 
 	REGRAS DE NEGÓCIO
 	_____________________
