@@ -21,6 +21,8 @@ public class BirthDate implements ValueObject, Serializable {
     /**
      * User's birth date.
      */
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    //NOSONAR
     private LocalDate dateOfBirth;
 
     /**

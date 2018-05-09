@@ -43,7 +43,7 @@ public class UserManagementComponent extends DefaultPanelView {
     /**
      * Data for the the user grid
      */
-    private List<SystemUserDTO> userGridData;
+    private transient List<SystemUserDTO> userGridData;
 
     /**
      * Constructs an instance of the User Management view

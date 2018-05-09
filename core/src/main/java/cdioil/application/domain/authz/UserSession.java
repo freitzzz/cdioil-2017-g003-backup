@@ -24,11 +24,15 @@ public class UserSession implements Serializable{
     /**
      * LocalDateTime with the session start date
      */
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    //NOSONAR
     private LocalDateTime sessionStartDate;
     /**
      * LocalDateTime with the session end date
      */
     @Column(updatable = true,nullable = true)
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    //NOSONAR
     private LocalDateTime sessionEndDate;
     /**
      * User with the session user

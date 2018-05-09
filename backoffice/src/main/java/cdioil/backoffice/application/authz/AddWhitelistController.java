@@ -18,17 +18,7 @@ public class AddWhitelistController implements Serializable {
      */
     private static final long serialVersionUID = 19L;
 
-    /**
-     * Whitelist repository.
-     */
-    private WhitelistRepositoryImpl repo;
 
-    /**
-     * Instantiates the controller.
-     */
-    public AddWhitelistController() {
-        repo = new WhitelistRepositoryImpl();
-    }
 
     /**
      * Retrieves an Iterable Collection of String with domains that have already
@@ -40,7 +30,7 @@ public class AddWhitelistController implements Serializable {
 
         List<String> result = new LinkedList<>();
 
-        Iterable<Whitelist> whitelistedDomains = repo.findAll();
+        Iterable<Whitelist> whitelistedDomains = new WhitelistRepositoryImpl().findAll();
 
         for (Whitelist domain : whitelistedDomains) {
             result.add(domain.toString());
@@ -57,7 +47,7 @@ public class AddWhitelistController implements Serializable {
     public void addAuthorizedDomain(String domain) {
         Whitelist whitelist = new Whitelist(domain);
 
-        repo.add(whitelist);
+        new WhitelistRepositoryImpl().add(whitelist);
     }
 
     /**
@@ -66,9 +56,9 @@ public class AddWhitelistController implements Serializable {
      * @return removed domain
      */
     public String removeAuthorizedDomain(String domain) {
-        Whitelist whitelist = repo.find(domain);
-
-        return repo.remove(whitelist).toString();
+        WhitelistRepositoryImpl whiteListRepo=new WhitelistRepositoryImpl();
+        Whitelist whitelist = whiteListRepo.find(domain);
+        return whiteListRepo.remove(whitelist).toString();
     }
 
 }
