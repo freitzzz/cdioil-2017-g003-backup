@@ -120,21 +120,20 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     @Override
     public String toString() {
 
-        String result = String.format("Nome: %s\n", name);
+        StringBuilder result = new StringBuilder(128);
+        
+        result.append("Nome: ");
+        result.append(name);
+        result.append("\n");
+        result.append("SKU: ");
+        result.append(sku.toString());
+        result.append("\n");
+        result.append("Códigos:\n");
 
-        result += "SKU:\n";
-
-        result += sku.toString();
-
-        result += "Códigos:\n";
-
-        for (Code c : codes) {
-            StringBuilder sb = new StringBuilder(128);
-
-            result += sb.append(c.toString()).toString();
-        }
-
-        return result;
+        codes.forEach(c -> 
+            result.append(c.toString())
+        );
+        return result.toString();
     }
 
     /**

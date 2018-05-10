@@ -24,7 +24,9 @@ public final class FileWriter {
      * @return boolean true if the content was written to the file with success, false if an error occured
      */
     public static boolean writeFile(File file,String content){
-        if(file==null||content==null)return false;
+        if(file==null||content==null){
+            return false;
+        }
         try{
             Files.write(file.toPath(),content.getBytes());
             return true;
@@ -48,7 +50,9 @@ public final class FileWriter {
      * @return boolean true if the content was written to the file with success, false if an error occured 
      */
     public static boolean writeFile(File file,List<String> content){
-        if(file==null)return false;
+        if(file==null){
+            return false;
+        }
         StringBuilder builder=new StringBuilder();
         for(int i=0;i<content.size();i++)builder.append(content.get(i)).append('\n');
         return writeFile(file,builder.toString());

@@ -70,8 +70,10 @@ public final class AuthenticationService {
         if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
                 ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
         SystemUser user=userRepo.find(userID);
-        if(user.isUserActivated())throw new AuthenticationException(ACCOUNT_ALREADY_ACTIVATED_MESSAGE,
+        if(user.isUserActivated()){
+            throw new AuthenticationException(ACCOUNT_ALREADY_ACTIVATED_MESSAGE,
                 AuthenticationExceptionCause.ALREADY_ACTIVATED);
+        }
         if(user.activateAccount(activationCode)){
             userRepo.merge(user);
             return true;

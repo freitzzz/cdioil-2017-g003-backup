@@ -124,7 +124,7 @@ public class CSVQuestionsReader implements QuestionsReader {
      * @return a map with the path of category and the list of the questions
      */
     @Override
-    public Map<String, List<Question>> readCategoryQuestions() throws InvalidFileFormattingException { 
+    public Map<String, List<Question>> readCategoryQuestions() { 
 
         List<String> fileContent = readFile(file);
 
