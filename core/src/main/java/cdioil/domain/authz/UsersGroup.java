@@ -47,7 +47,7 @@ public class UsersGroup implements Serializable {
     /**
      * List with all the RegisteredUsers of the UsersGroup.
      */
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany()
     private List<RegisteredUser> users;
 
     /**
