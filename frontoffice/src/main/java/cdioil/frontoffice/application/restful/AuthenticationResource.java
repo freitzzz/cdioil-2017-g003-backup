@@ -118,7 +118,7 @@ public final class AuthenticationResource {
                     : Response.status(Status.UNAUTHORIZED).entity(JSON_ACCOUNT_ACTIVATED_FAILURE).build();
         }catch(AuthenticationException|IllegalArgumentException authenticationFailureException){
             return createInvalidAuthenticationResponse(authenticationFailureException);
-            //#TO-DO: Discuss UX in terms of "invalid JSON request formats" and the problem about activating the account multiple times
+            //#TO-DO: Discuss UX in terms of "invalid JSON request formats"
         }
     }
     /**
@@ -133,8 +133,11 @@ public final class AuthenticationResource {
                         AuthenticationExceptionCause.INVALID_CREDENTIALS)){
                 return Response.status(Status.UNAUTHORIZED)
                         .entity(JSON_INVALID_CREDENTIALS).build();
-            }else{
+            }else if(((AuthenticationException)exception).getAuthenticationExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.ALREADY_ACTIVATED)){
                 return Response.status(Status.UNAUTHORIZED)
+                        .entity(JSON_ACCOUNT_ALREADY_ACTIVATED).build();
+            }else{
+                return Response.status(Status.BAD_REQUEST)
                         .entity(JSON_ACTIVATION_CODE_REQUIRED).build();
             }
     }

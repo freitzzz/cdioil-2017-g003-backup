@@ -27,7 +27,12 @@ public final class AuthenticationService {
      * Constant that represents the message that ocures if the user trying to login 
      * has his account not activated
      */
-    private static final String USER_ACCOUNT_NOT_ACTIVATED="A conta não está activada";
+    private static final String USER_ACCOUNT_NOT_ACTIVATED_MESSAGE="A conta não está activada";
+    /**
+     * Constant that represents the message that ocures if the user trying to login 
+     * has his account not activated
+     */
+    private static final String ACCOUNT_ALREADY_ACTIVATED_MESSAGE="A conta não está activada";
     /**
      * Hides default constructor
      */
@@ -65,6 +70,8 @@ public final class AuthenticationService {
         if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
                 ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
         SystemUser user=userRepo.find(userID);
+        if(user.isUserActivated())throw new AuthenticationException(ACCOUNT_ALREADY_ACTIVATED_MESSAGE,
+                AuthenticationExceptionCause.ALREADY_ACTIVATED);
         if(user.activateAccount(activationCode)){
             userRepo.merge(user);
             return true;
@@ -112,7 +119,7 @@ public final class AuthenticationService {
         if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
                 ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
         if(!userRepo.find(userID).isUserActivated())
-            throw new AuthenticationException(USER_ACCOUNT_NOT_ACTIVATED
+            throw new AuthenticationException(USER_ACCOUNT_NOT_ACTIVATED_MESSAGE
                     ,AuthenticationExceptionCause.NOT_ACTIVATED);
         return userID;
     }
