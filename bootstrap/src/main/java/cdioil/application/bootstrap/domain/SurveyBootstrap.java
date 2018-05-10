@@ -10,9 +10,15 @@ import cdioil.domain.QuestionOption;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyItem;
 import cdioil.domain.SurveyState;
+import cdioil.domain.TargetedSurvey;
+import cdioil.domain.authz.Manager;
+import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.UsersGroup;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
+import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
+import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
@@ -22,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 public class SurveyBootstrap {
+
     /**
      * Survey repository.
      */
@@ -50,8 +57,9 @@ public class SurveyBootstrap {
      */
     private void prepareSurveys() {
         List<SurveyItem> surveyItems = new LinkedList<>();
-        surveyItems.add(marketStructureRepository
-                .findCategoriesByPathPattern("10938DC").get(0));
+        Category bootstrapCategory = marketStructureRepository
+                .findCategoriesByPathPattern("10938DC").get(0);
+        surveyItems.add(bootstrapCategory);
 
         Survey survey = new GlobalSurvey(surveyItems, new TimePeriod(LocalDateTime.now(),
                 LocalDateTime.of(2020, 1, 20, 12, 12)));
@@ -77,23 +85,25 @@ public class SurveyBootstrap {
         Set<Question> persistedQuestions = independentQuestionsLibrary.getID();
 
         for (String questionID : questionIDList) {
-            for (Question q : persistedQuestions) {
-                if (questionID.equalsIgnoreCase(q.getQuestionID())) {
-                    fetchedQuestions.add(q);
+            for (Question question : persistedQuestions) {
+                if (questionID.equalsIgnoreCase(question.getQuestionID())) {
+                    fetchedQuestions.add(question);
                 }
             }
         }
 
-        Question fetchedq1 = fetchedQuestions.get(0);
-        Question fetchedq2 = fetchedQuestions.get(1);
-        Question fetchedq3 = fetchedQuestions.get(2);
+        Question firstQuestion = fetchedQuestions.get(0);
+        Question secondQuestion = fetchedQuestions.get(1);
+        Question thirdQuestion = fetchedQuestions.get(2);
 
-        survey.addQuestion(fetchedq1);
-        survey.addQuestion(fetchedq2);
-        survey.addQuestion(fetchedq3);
+        survey.addQuestion(firstQuestion);
+        survey.addQuestion(secondQuestion);
+        survey.addQuestion(thirdQuestion);
 
-        survey.setNextQuestion(fetchedq1, fetchedq2, fetchedq1.getOptionList().get(0), 0); //true
-        survey.setNextQuestion(fetchedq1, fetchedq3, fetchedq1.getOptionList().get(1), 0); //false
+        survey.setNextQuestion(firstQuestion, secondQuestion,
+                firstQuestion.getOptionList().get(0), 0); //true
+        survey.setNextQuestion(firstQuestion, thirdQuestion,
+                firstQuestion.getOptionList().get(1), 0); //false
 
         survey.changeState(SurveyState.ACTIVE);
         surveyRepository.add(survey);
@@ -101,10 +111,28 @@ public class SurveyBootstrap {
         survey = createStressTestSurvey();
         surveyRepository.add(survey);
 
+        RegisteredUser registeredUser = new RegisteredUserRepositoryImpl()
+                .getUsersByDomain("email.com").get(0);
+        Manager manager = new ManagerRepositoryImpl().findByUserID(33);
+        UsersGroup usersGroup = new UsersGroup(manager);
+        usersGroup.addUser(registeredUser);
+        survey = new TargetedSurvey(surveyItems,
+                new TimePeriod(LocalDateTime.now(), LocalDateTime.MAX), usersGroup);
+        survey.changeState(SurveyState.ACTIVE);
+        survey.addQuestion(firstQuestion);
+        survey.addQuestion(secondQuestion);
+        survey.addQuestion(thirdQuestion);
+
+        survey.setNextQuestion(firstQuestion, secondQuestion,
+                firstQuestion.getOptionList().get(0), 0); //true
+        survey.setNextQuestion(firstQuestion, thirdQuestion,
+                firstQuestion.getOptionList().get(1), 0); //false
+        surveyRepository.add(survey);
     }
 
     /**
      * Creates the survey that is used for the stress test.
+     *
      * @return stress test survey
      */
     private Survey createStressTestSurvey() {
