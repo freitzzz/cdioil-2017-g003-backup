@@ -15,6 +15,10 @@ public final class UserService {
      */
     private String password;
     /**
+     * String with the user activation code
+     */
+    private String activationCode;
+    /**
      * Returns the user email
      * @return String with the user email
      */
@@ -24,4 +28,9 @@ public final class UserService {
      * @return String with the user password
      */
     public String getPassword(){return password;}
+    /**
+     * Returns the user activation code
+     * @return String with the user activation code
+     */
+    public String getActivationCode(){return activationCode;}
 }
