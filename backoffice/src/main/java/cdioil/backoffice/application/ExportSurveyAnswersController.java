@@ -31,6 +31,10 @@ public final class ExportSurveyAnswersController implements Serializable{
      */
     private List<Review> surveyReviews;
     /**
+     * Hides default constructor
+     */
+    private ExportSurveyAnswersController(){}
+    /**
      * Builds a new controller for the <i>Exportar Respostas de um Inquerito</i> use case <b>(US-601)</b> 
      * with the survey which answers are going to be exported
      * <br>Throws an IllegalArgumentExceptions if there are no reviews for the current survey
@@ -48,7 +52,9 @@ public final class ExportSurveyAnswersController implements Serializable{
      */
     public boolean exportAnswersFromSurvey(String filepath){
         SurveyAnswersWriter surveyWriter=SurveyAnswersWriterFactory.create(filepath,surveyReviews);
-        if(surveyWriter==null)return false;
+        if(surveyWriter==null){
+            return false;
+        }
         return surveyWriter.write();
     }
     /**
@@ -56,10 +62,8 @@ public final class ExportSurveyAnswersController implements Serializable{
      */
     private void getAllAnswersFromSurvey(){
         surveyReviews=new ReviewRepositoryImpl().getReviewsBySurvey(survey);
-        if(surveyReviews==null||surveyReviews.isEmpty())throw new IllegalArgumentException(INVALID_SURVEY_MESSAGE);
+        if(surveyReviews==null||surveyReviews.isEmpty()){
+            throw new IllegalArgumentException(INVALID_SURVEY_MESSAGE);
+        }
     }
-    /**
-     * Hides default constructor
-     */
-    private ExportSurveyAnswersController(){}
 }

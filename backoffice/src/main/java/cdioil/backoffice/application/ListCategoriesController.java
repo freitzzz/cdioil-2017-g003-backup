@@ -6,6 +6,7 @@ import cdioil.domain.authz.Manager;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class ListCategoriesController {
         BaseJPARepository repo = new ManagerRepositoryImpl();
         List<Manager> managers = (List<Manager>) repo.findAll();
         List<MarketStructure> lms = (List<MarketStructure>) new MarketStructureRepositoryImpl().findAll();
-        if(lms.size()<1){
-            return null;
+        if(lms.isEmpty()){
+            return new ArrayList<>();
         }
         MarketStructure marketStruct = lms.get(0);
         List<Category> lc = marketStruct.getAllCategories();

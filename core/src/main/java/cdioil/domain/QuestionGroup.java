@@ -64,7 +64,7 @@ public class QuestionGroup implements Serializable {
      *
      * @return set with all questions
      */
-    public HashSet<Question> getQuestions() {
+    public Set<Question> getQuestions() {
         return new HashSet<>(questions);
     }
 

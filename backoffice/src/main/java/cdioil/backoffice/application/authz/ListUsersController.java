@@ -24,8 +24,6 @@ public class ListUsersController implements Serializable{
      */
     public Iterable<SystemUser> listAllUsers(){
         UserRepositoryImpl repo = new UserRepositoryImpl();
-        Iterable<SystemUser> usersList = repo.findAll();
-        return usersList;
-    }
-    
+        return repo.findAll();
+    }    
 }

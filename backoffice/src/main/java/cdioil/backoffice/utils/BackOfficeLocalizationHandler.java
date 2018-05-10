@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -25,7 +26,7 @@ public class BackOfficeLocalizationHandler {
 
     static {
 
-        LANGUAGE_FILES_MAP = new HashMap<>();
+        LANGUAGE_FILES_MAP = new EnumMap<>(Language.class);
 
         //Instantiate Map and convert URLs to UTF-8
         try {

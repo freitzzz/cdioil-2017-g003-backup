@@ -17,7 +17,7 @@ public final class BackOfficeProperties {
     /**
      * BackOffice's Properties File.
      */
-    public final static String PROPERTIES_FILE_PATH = BackOfficeProperties.class.getClassLoader().getResource("backoffice.properties").getFile();
+    public static final String PROPERTIES_FILE_PATH = BackOfficeProperties.class.getClassLoader().getResource("backoffice.properties").getFile();
 
     /**
      * This block statically sets the file name to be UTF-8 compliant, however,

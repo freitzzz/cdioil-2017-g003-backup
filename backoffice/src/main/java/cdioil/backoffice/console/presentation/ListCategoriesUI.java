@@ -38,7 +38,7 @@ public class ListCategoriesUI {
      */
     public void listCategoriesWithoutManagers() {
         List<Category> lc = ctrl.listCategoriesWithoutManagers();
-        if (lc == null) {
+        if (lc == null || lc.isEmpty()) {
             System.out.println(MARKET_STRUCTURE_NULL_MSG);
         } else {
             System.out.println(INTRO_MESSAGE);

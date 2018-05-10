@@ -75,7 +75,7 @@ public class CreateSurveyController {
         MarketStructureRepositoryImpl marketStructure = new MarketStructureRepositoryImpl();
         List<Category> temporary = marketStructure.findCategoriesByPathPattern(path.toUpperCase());
 
-        if (temporary.size() > 0) {
+        if (!temporary.isEmpty()) {
             return temporary.get(0);
         }
 
@@ -109,7 +109,7 @@ public class CreateSurveyController {
      * @param surveyItems list of survey items
      * @param map
      */
-    public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateBeginning, LocalDateTime dateEnding, HashMap<SurveyItem, List<Question>> map, UsersGroup targetAudience) {
+    public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateBeginning, LocalDateTime dateEnding, Map<SurveyItem, List<Question>> map, UsersGroup targetAudience) {
         SurveyRepositoryImpl repo = new SurveyRepositoryImpl();
         Survey survey;
 
@@ -120,12 +120,13 @@ public class CreateSurveyController {
         } else {
             survey = new TargetedSurvey(surveyItems, timePeriod, targetAudience);
         }
-
-        for (SurveyItem surveyItem : map.keySet()) {
-            for (Question question : map.get(surveyItem)) {
+        
+        for(Map.Entry<SurveyItem, List<Question>> mapEntry : map.entrySet()){
+            for(Question question : map.get(mapEntry.getKey())){
                 survey.addQuestion(question);
             }
         }
+        
         return repo.merge(survey) != null;
     }
 }
