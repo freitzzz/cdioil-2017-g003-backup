@@ -6,6 +6,7 @@ import cdioil.application.bootstrap.authz.WhitelistBootstrap;
 import cdioil.application.bootstrap.domain.MarketStructureBootstrap;
 import cdioil.application.bootstrap.domain.LibrariesBootstrap;
 import cdioil.application.bootstrap.domain.SurveyBootstrap;
+import cdioil.application.bootstrap.domain.TargetedSurveyBootstrap;
 
 /**
  * Class that runs the bootstrap
@@ -30,5 +31,6 @@ public class BootstrapRunner {
         new LibrariesBootstrap();
         new SurveyBootstrap();
         new EmailSendersBootstrap();
+        new TargetedSurveyBootstrap();
     }
 }

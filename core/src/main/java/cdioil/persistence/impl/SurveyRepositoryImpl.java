@@ -3,6 +3,7 @@ package cdioil.persistence.impl;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyState;
 import cdioil.domain.TargetedSurvey;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.SurveyRepository;
@@ -71,6 +72,23 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
     public List<TargetedSurvey> getActiveTargetedSurveys() {
         Query q = entityManager().createQuery("SELECT t FROM TargetedSurvey t WHERE t.state = :surveyState")
                 .setParameter("surveyState", SurveyState.ACTIVE);
+        if (q.getResultList().isEmpty()) {
+            return null;
+        }
+        return q.getResultList();
+    }
+    
+    /**
+     * Returns all Targeted Surveys from a user.
+     * 
+     * @param user a long with id od the user
+     * @return list of targeted surveys
+     */
+    public List<Survey> getUserTergetedSurveys(RegisteredUser user){
+        Query q = entityManager().createQuery("SELECT t FROM TargetedSurvey t WHERE t.state = :surveyState "
+                + "AND :idUser MEMBER OF t.targetAudience.users")
+                .setParameter("surveyState", SurveyState.ACTIVE)
+                .setParameter("idUser",user);
         if (q.getResultList().isEmpty()) {
             return null;
         }
