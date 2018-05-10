@@ -1,7 +1,9 @@
-package cdioil.feedbackmonkey.cdioil.feedbackmonkey.authz;
+package cdioil.feedbackmonkey.authz;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import cdioil.feedbackmonkey.R;
 
 public class LoginActivity extends AppCompatActivity {
 
