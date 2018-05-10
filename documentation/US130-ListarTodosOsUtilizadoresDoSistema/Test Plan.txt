@@ -6,7 +6,8 @@
 	CASO #1: Listar Todos Os Utilizadores do Sistema
 	________________________________________________
 
-	1. Fazer login com o admin sonae.lover@sonae.pt e
+	1. Correr bootstrap.
+	2. Fazer login com o admin sonae.lover@sonae.pt e
 	   password Password123
 	2. Escolher a opção 4 "Listar Todos Os Utilizadores Do Sistema"
 	3. Verificar que os utilizadores apresentados são os mesmos
