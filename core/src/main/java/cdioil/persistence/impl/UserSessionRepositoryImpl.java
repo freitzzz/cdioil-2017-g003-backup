@@ -1,10 +1,12 @@
 package cdioil.persistence.impl;
 
 import cdioil.application.domain.authz.UserSession;
+import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserRepository;
 import cdioil.persistence.UserSessionRepository;
+import javax.persistence.Query;
 
 /**
  * Class that represents the UserSession repository implementation
@@ -20,5 +22,19 @@ public class UserSessionRepositoryImpl extends BaseJPARepository<UserSession,Lon
     @Override
     protected String persistenceUnitName(){
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
+    }
+    /**
+     * Method that returns the user which session has a certain authentication token
+     * @param authenticationToken String with the user session authentication token
+     * @return SystemUser with the user which session has a certain authentication token
+     */
+    @Override
+    public SystemUser getSystemUserByAuthenticationToken(String authenticationToken){
+        Query queryUserByAuthenticationToken=entityManager().createQuery("SELECT US.sessionUser FROM UserSession US "
+                + "WHERE US.userToken= :authenticationToken")
+                .setParameter("authenticationToken",authenticationToken);
+        return !queryUserByAuthenticationToken.getResultList().isEmpty() 
+                ? (SystemUser)queryUserByAuthenticationToken.getSingleResult() 
+                : null;
     }
 }
