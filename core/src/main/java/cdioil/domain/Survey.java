@@ -220,7 +220,7 @@ public abstract class Survey implements Serializable {
      */
     public static List<Survey> getProductSurveys(List<Survey> surveys, Product p) {
         if (surveys == null || surveys.isEmpty() || p == null) {
-            return null;
+            return new ArrayList<>();
         }
         List<Survey> filteredSurveys = new ArrayList<>();
         for (Survey survey : surveys) {

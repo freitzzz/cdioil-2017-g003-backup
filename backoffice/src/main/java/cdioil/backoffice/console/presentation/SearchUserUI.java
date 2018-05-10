@@ -76,9 +76,9 @@ public class SearchUserUI {
                 System.out.println(errorUsersNotFound);
             } else {
                 System.out.println(infoListUsers);
-                listaU.forEach((c) -> {
-                    System.out.println(c.toString());
-                });
+                listaU.forEach(c -> 
+                    System.out.println(c.toString())
+                );
                 System.out.println(separator);
                 catched = true;
             }

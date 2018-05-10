@@ -30,7 +30,9 @@ public class ImportUsersFromFilesController {
      */
     public List<SystemUser> readUsers(String file){
         UsersReader usersReader=UsersReaderFactory.create(file);
-        if(usersReader==null)return null;
+        if(usersReader==null){
+            return null;
+        }
         usersLidos=usersReader.read();
         removeUsersFromBlackList();
         return usersLidos;
@@ -47,7 +49,9 @@ public class ImportUsersFromFilesController {
      * Method that removes all previously imported users, which email domains are black listed
      */
     private void removeUsersFromBlackList(){
-        if(usersLidos==null||usersLidos.isEmpty())return;
+        if(usersLidos==null||usersLidos.isEmpty()){
+            return;
+        }
         List<String> currentWhiteList=new ArrayList<>(new WhitelistRepositoryImpl().allWhitelistInString());
         for(int i=0;i<usersLidos.size();i++){
             if(!currentWhiteList.contains(usersLidos.get(i).getID().toString()

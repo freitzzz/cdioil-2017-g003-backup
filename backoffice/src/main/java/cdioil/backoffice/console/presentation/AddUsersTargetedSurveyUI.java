@@ -127,7 +127,7 @@ public class AddUsersTargetedSurveyUI {
 
         List<String> surveyList = ctrl.getActiveTargetedSurveys();
 
-        if (surveyList == null) {
+        if (surveyList == null || surveyList.isEmpty()) {
             System.out.println(errorNoSurveysAvailable);
             menuIsActive = false;
         } else {

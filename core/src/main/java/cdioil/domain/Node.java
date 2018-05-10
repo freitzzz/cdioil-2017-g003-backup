@@ -155,10 +155,7 @@ public class Node implements Serializable {
             return false;
         }
         final Node other = (Node) obj;
-        if (!Objects.equals(this.element, other.element)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.element, other.element);
     }
 
     @Override

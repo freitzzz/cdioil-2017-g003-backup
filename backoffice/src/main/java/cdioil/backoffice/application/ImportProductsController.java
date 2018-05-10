@@ -10,7 +10,6 @@ import cdioil.application.utils.ProductsReaderFactory;
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
 import cdioil.domain.Product;
-import cdioil.files.InvalidFileFormattingException;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +32,7 @@ public class ImportProductsController {
      * @return number of succesfully imported products
      * @throws cdioil.files.InvalidFileFormattingException if the file's formatting is not consistent with the file guidelines
      */
-    public Integer importProducts(String fileName, String fileExp, Map<String, List<Product>> existsProducts) throws InvalidFileFormattingException {
+    public Integer importProducts(String fileName, String fileExp, Map<String, List<Product>> existsProducts) {
 
         ProductsReader productsReader = ProductsReaderFactory.create(fileName, fileExp, existsProducts);
         Set<Product> successfullyImportedProducts = new HashSet<>();
@@ -69,13 +68,15 @@ public class ImportProductsController {
 
     /**
      * Updates the product if the user prefixes
+     *
      * @param updatedProducts Map with the path of the category and product
      * @return 1 if the product has been updated or 0 if not
      */
     public int updateProducts(Map<String, Product> updatedProducts) {
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         MarketStructure marketStructure = marketStructureRepository.findMarketStructure();
-        for (String path : updatedProducts.keySet()) {
+        for (Map.Entry<String, Product> entry : updatedProducts.entrySet()) {
+            String path = entry.getKey();
             List<Category> categoryList = marketStructureRepository.findCategoriesByPathPattern(path);
             if (categoryList != null) {
                 for (Category cat : categoryList) {

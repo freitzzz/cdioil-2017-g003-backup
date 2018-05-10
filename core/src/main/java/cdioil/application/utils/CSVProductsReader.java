@@ -279,7 +279,8 @@ public class CSVProductsReader implements ProductsReader {
         List<String> fileContent = new ArrayList<>();
         String header = "Linha" + SPLITTER + "Razao";
         fileContent.add(header);
-        for (Integer line : invalidProducts.keySet()) {
+        for (Map.Entry<Integer, Integer> entry : invalidProducts.entrySet()) {
+            Integer line = entry.getKey();
             if (invalidProducts.get(line) == 1) {
                 fileContent.add(line + SPLITTER + "Caminho da categoria não válido!");
             }

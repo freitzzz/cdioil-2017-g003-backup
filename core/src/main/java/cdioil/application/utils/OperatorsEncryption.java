@@ -103,9 +103,13 @@ public final class OperatorsEncryption {
      * @return String with the encrypted word with the header removed
      */
     public static String removeEncryptionHeader(String encryptedWord){
-        if(encryptedWord==null)return encryptedWord;
+        if(encryptedWord==null){
+            return encryptedWord;
+        }
         String[] encryptedWordSplitted=encryptedWord.split(ENCRYPTION_ALPHABET);
-        if(encryptedWord.length()<=2)return "";
+        if(encryptedWord.length()<=2){
+            return "";
+        }
         StringBuilder builder=new StringBuilder();
         for(int i=2;i<encryptedWordSplitted.length-1;i++){
             builder.append(encryptedWordSplitted[i]).append(ENCRYPTION_ALPHABET);
@@ -119,9 +123,15 @@ public final class OperatorsEncryption {
      * @return String with the word encrypted with the Operators Encryption
      */
     private static String generateEncryptionOperation(String word){
-        if(word==null||word.isEmpty())return word;
-        if(operation==0)operation=OPERATORS_VALUES[new Random().nextInt(OPERATORS_VALUES.length)];
-        if(randomValue==0)randomValue=new Random().nextInt(operation)+1;
+        if(word==null||word.isEmpty()){
+            return word;
+        }
+        if(operation==0){
+            operation=OPERATORS_VALUES[new Random().nextInt(OPERATORS_VALUES.length)];
+        }
+        if(randomValue==0){
+            randomValue=new Random().nextInt(operation)+1;
+        }
         StringBuilder builder=new StringBuilder();
         builder.append(operation);
         builder.append(ENCRYPTION_ALPHABET.charAt(new Random().nextInt(ENCRYPTION_ALPHABET.length())));
@@ -140,7 +150,9 @@ public final class OperatorsEncryption {
      * @return String with the word decrypted
      */
     private static String generateDecryptionOperation(String encryptedWord){
-        if(encryptedWord==null||encryptedWord.isEmpty())return encryptedWord;
+        if(encryptedWord==null||encryptedWord.isEmpty()){
+            return encryptedWord;
+        }
         StringBuilder builder=new StringBuilder();
         String[] encryptedWordSplitted=encryptedWord.split(ENCRYPTION_REGEX);
         int operationX=Integer.parseInt(encryptedWordSplitted[0]);
@@ -161,11 +173,11 @@ public final class OperatorsEncryption {
         String encrypted="";
         switch(operation){
             case BITWISE_ENCRYPTION_CODE:
-                return encrypted+=character<<value;
+                return encrypted+=Integer.toString(character<<value);
             case ADDITION_ENCRYPTION_CODE:
-                return encrypted+=character+value;
+                return encrypted+=Long.toString(character+value);
             default:
-                return encrypted+=character*value;
+                return encrypted+=Long.toString(character*value);
         }
     }
     /**
