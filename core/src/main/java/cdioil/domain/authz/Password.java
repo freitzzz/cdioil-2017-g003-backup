@@ -20,41 +20,38 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Password implements Serializable, ValueObject {
+
     /**
      * Constant that represents the current class serial version
      */
     private static final long serialVersionUID = 10l;
     /**
-     * Constant that represents the message that ocures whenever a password is 
-     * identified as <i>weak</i>
+     * Constant that represents the message that ocures whenever a password is identified as <i>weak</i>
      */
     private static final String WEAK_MESSAGE = "Fraca!!!";
     /**
-     * Constant that represents the message that ocures whenever a password is 
-     * identified as <i>average</i>
+     * Constant that represents the message that ocures whenever a password is identified as <i>average</i>
      */
     private static final String AVERAGE_MESSAGE = "Média";
     /**
-     * Constant that represents the message that ocures whenever a password is 
-     * identified as <i>strong</i>
+     * Constant that represents the message that ocures whenever a password is identified as <i>strong</i>
      */
     private static final String STRONG_MESSAGE = "Forte";
     /**
      * Constant that represents the regular expression used to identify average passwords
      */
-    private static final String AVERAGE_REGEX="^(?=[a-z0-9]?[A-Z])(?=[A-Z0-9]*?[a-z])(?=[A-Za-z]*?[0-9]).{9,}$";
+    private static final String AVERAGE_REGEX = "^(?=[a-z0-9]?[A-Z])(?=[A-Z0-9]*?[a-z])(?=[A-Za-z]*?[0-9]).{9,}$";
     /**
      * Constant that represents the regular expression used to identify strong passwords
      */
-    private static final String STRONG_REGEX="^(?=(([a-z0-9])|([^A-Za-z0-9\\s]))?[A-Z])(?=(([A-Z0-9])|([^A-Za-z0-9\\s]))*?[a-z])(?=(([A-Za-z])|([^A-Za-z0-9\\s]))*?[0-9])(?=[A-Za-z0-9]*?[^A-Za-z0-9\\s]).{9,}$";
+    private static final String STRONG_REGEX = "^(?=(([a-z0-9])|([^A-Za-z0-9\\s]))?[A-Z])(?=(([A-Z0-9])|([^A-Za-z0-9\\s]))*?[a-z])(?=(([A-Za-z])|([^A-Za-z0-9\\s]))*?[0-9])(?=[A-Za-z0-9]*?[^A-Za-z0-9\\s]).{9,}$";
     /**
      * Constant that represents the digest algorithm used to encrypt the password
      */
     private static final String DIGEST_SHA_256 = "SHA-256";
 
     /**
-     * Variable that represents a random number of bytes with the purpose of
-     * protecting the password against attacks
+     * Variable that represents a random number of bytes with the purpose of protecting the password against attacks
      */
     private static byte[] salt;
     @Column(name = "Cominhos")
@@ -74,13 +71,13 @@ public class Password implements Serializable, ValueObject {
         if (strength(password).equalsIgnoreCase(WEAK_MESSAGE)) {
             throw new IllegalArgumentException(WEAK_MESSAGE);
         }
-        
+
         salt = generateSalt();
         this.saltInString = byteToString(salt);
         this.password = generateHash(password + this.saltInString);
 
     }
-    
+
     /**
      * Empty constructor for JPA.
      */
@@ -155,7 +152,7 @@ public class Password implements Serializable, ValueObject {
     private String byteToString(byte[] bytes) {
         String stringBytes = "";
         for (int i = 0; i < bytes.length; i++) {
-            stringBytes += bytes[i];
+            stringBytes += Byte.toString(bytes[i]);
         }
 
         return stringBytes;

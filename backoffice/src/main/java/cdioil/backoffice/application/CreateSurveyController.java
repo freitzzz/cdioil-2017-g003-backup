@@ -11,12 +11,6 @@ import java.util.*;
 
 public class CreateSurveyController {
 
-    private ProductQuestionsLibrary productQuestionsLibrary;
-    private CategoryTemplatesLibrary categoryTemplatesLibrary;
-    private CategoryQuestionsLibrary categoryQuestionsLibrary;
-    private IndependentQuestionsLibrary independentQuestionsLibrary;
-
-
     /**
      * Gets all the questions of a given Product
      *
@@ -25,7 +19,7 @@ public class CreateSurveyController {
      */
     public List<Question> questionForProducts(Product product) {
         ProductQuestionsLibraryRepositoryImpl repo = new ProductQuestionsLibraryRepositoryImpl();
-        productQuestionsLibrary = repo.findProductQuestionLibrary();
+        ProductQuestionsLibrary productQuestionsLibrary = repo.findProductQuestionLibrary();
         List<Question> list = new ArrayList<>();
         list.addAll(productQuestionsLibrary.productQuestionSet(product));
 
@@ -40,7 +34,7 @@ public class CreateSurveyController {
      */
     public List<Question> questionsForCategory(Category category) {
         CategoryQuestionsLibraryRepositoryImpl questionsRepo = new CategoryQuestionsLibraryRepositoryImpl();
-        categoryQuestionsLibrary = questionsRepo.findCategoryQuestionsLibrary();
+        CategoryQuestionsLibrary categoryQuestionsLibrary = questionsRepo.findCategoryQuestionsLibrary();
 
         return new ArrayList<>(categoryQuestionsLibrary.categoryQuestionSet(category));
     }
@@ -53,7 +47,7 @@ public class CreateSurveyController {
      */
     public List<Template> templatesForCategory(Category category) {
         CategoryTemplatesLibraryRepositoryImpl templatesRepo = new CategoryTemplatesLibraryRepositoryImpl();
-        categoryTemplatesLibrary = templatesRepo.findTemplatesForCategory();
+        CategoryTemplatesLibrary categoryTemplatesLibrary = templatesRepo.findTemplatesForCategory();
 
         return new ArrayList<>(categoryTemplatesLibrary.categoryTemplateSet(category));
     }
@@ -65,7 +59,7 @@ public class CreateSurveyController {
      */
     public List<Question> independantQuestions() {
         IndependentQuestionsLibraryRepositoryImpl independentRepo = new IndependentQuestionsLibraryRepositoryImpl();
-        independentQuestionsLibrary = independentRepo.findLibrary();
+        IndependentQuestionsLibrary independentQuestionsLibrary = independentRepo.findLibrary();
 
         return new ArrayList<>(independentQuestionsLibrary.getID());
 
@@ -129,7 +123,7 @@ public class CreateSurveyController {
 
         for (SurveyItem surveyItem : map.keySet()) {
             for (Question question : map.get(surveyItem)) {
-               survey.addQuestion(question);
+                survey.addQuestion(question);
             }
         }
         return repo.merge(survey) != null;

@@ -348,11 +348,12 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
      * @return String with the generated random code used to prove user authenticity
      */
     private String generateRandomCode() {
-        String randomCode = new String();
+        StringBuilder randomCode = new StringBuilder(40);
         for (int i = 0; i < ACTIVATION_CODE_DIGITS; i++) {
-            randomCode += ALL_DIGITS.charAt(new Random().nextInt(ALL_DIGITS.length()));
+            randomCode.append(Character.toString(ALL_DIGITS.charAt(new Random().nextInt(ALL_DIGITS.length()))));
         }
-        return randomCode;
+
+        return randomCode.toString();
     }
 
     /**

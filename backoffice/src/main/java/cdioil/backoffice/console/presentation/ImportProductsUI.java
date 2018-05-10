@@ -9,7 +9,6 @@ import cdioil.backoffice.application.ImportProductsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.console.Console;
 import cdioil.domain.Product;
-import cdioil.files.InvalidFileFormattingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,34 +95,34 @@ public class ImportProductsUI {
         Map<String, List<Product>> existsProducts = new HashMap<>();
         Map<String, Product> atualizationProducts = new HashMap<>();
 
-        try {
-            Integer numImportedProducts = controller.importProducts(fileRead, fileExport, existsProducts);
-            if (!existsProducts.isEmpty()) {
-                Set<Map.Entry<String, List<Product>>> entries = existsProducts.entrySet();
-                for (Map.Entry<String, List<Product>> mapEntry : entries) {
-                    String path = mapEntry.getKey();
-                    List<Product> productList = mapEntry.getValue();
-                    for (Product pro : productList) {
-                        String op = Console.readLine(infoUpdateProduct + "\n" + pro.toString());
-                        if (op.equalsIgnoreCase(optionYes)) {
-                            atualizationProducts.put(path, pro);
-                            numImportedProducts += controller.updateProducts(atualizationProducts);
+        // try {
+        Integer numImportedProducts = controller.importProducts(fileRead, fileExport, existsProducts);
+        if (!existsProducts.isEmpty()) {
+            Set<Map.Entry<String, List<Product>>> entries = existsProducts.entrySet();
+            for (Map.Entry<String, List<Product>> mapEntry : entries) {
+                String path = mapEntry.getKey();
+                List<Product> productList = mapEntry.getValue();
+                for (Product pro : productList) {
+                    String op = Console.readLine(infoUpdateProduct + "\n" + pro.toString());
+                    if (op.equalsIgnoreCase(optionYes)) {
+                        atualizationProducts.put(path, pro);
+                        numImportedProducts += controller.updateProducts(atualizationProducts);
 
-                        }
                     }
                 }
             }
-            if (numImportedProducts == null) {
-                System.out.println(errorFileNotFound);
-            } else if (numImportedProducts == 0) {
-                System.out.println(errorNoImportedProducts);
-            } else if (numImportedProducts > 0) {
-                System.out.println(infoNumProductsImported + " " + numImportedProducts);
-            }
-
-        } catch (InvalidFileFormattingException e) {
-            System.out.println(errorInvalidFileFormat);
         }
+        if (numImportedProducts == null) {
+            System.out.println(errorFileNotFound);
+        } else if (numImportedProducts == 0) {
+            System.out.println(errorNoImportedProducts);
+        } else if (numImportedProducts > 0) {
+            System.out.println(infoNumProductsImported + " " + numImportedProducts);
+        }
+
+//        } catch (InvalidFileFormattingException e) {
+//            System.out.println(errorInvalidFileFormat);
+//        }
     }
 
 }
