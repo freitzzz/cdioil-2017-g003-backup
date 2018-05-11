@@ -54,7 +54,9 @@ public final class FileWriter {
             return false;
         }
         StringBuilder builder=new StringBuilder();
-        for(int i=0;i<content.size();i++)builder.append(content.get(i)).append('\n');
+        for(int i=0;i<content.size();i++){
+            builder.append(content.get(i)).append('\n');
+        }
         return writeFile(file,builder.toString());
     }
 }

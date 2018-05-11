@@ -52,9 +52,13 @@ public final class AuthenticationService {
     public UserSession login(String email,String password){
         long userID=getSystemUser(email,password);
         UserSession registeredUserSession=createSessionForRegisteredUser(userID);
-        if(registeredUserSession!=null)return registeredUserSession;
+        if(registeredUserSession!=null){
+            return registeredUserSession;
+        }
         UserSession adminSession=createSessionForAdmin(userID);
-        if(adminSession!=null)return adminSession;
+        if(adminSession!=null){
+            return adminSession;
+        }
         return createSessionForManager(userID);
     }
     /**
@@ -67,8 +71,10 @@ public final class AuthenticationService {
     public boolean activate(String email,String password,String activationCode){
         UserRepositoryImpl userRepo=new UserRepositoryImpl();
         long userID=userRepo.login(new Email(email),password);
-        if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
-                ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
+        if(userID==-1){
+            throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE,
+                    AuthenticationExceptionCause.INVALID_CREDENTIALS);
+        }
         SystemUser user=userRepo.find(userID);
         if(user.isUserActivated()){
             throw new AuthenticationException(ACCOUNT_ALREADY_ACTIVATED_MESSAGE,
@@ -118,8 +124,10 @@ public final class AuthenticationService {
     private long getSystemUser(String email,String password){
         UserRepositoryImpl userRepo=new UserRepositoryImpl();
         long userID=userRepo.login(new Email(email),password);
-        if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
+        if(userID==-1){
+            throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
                 ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
+        }
         if(!userRepo.find(userID).isUserActivated())
             throw new AuthenticationException(USER_ACCOUNT_NOT_ACTIVATED_MESSAGE
                     ,AuthenticationExceptionCause.NOT_ACTIVATED);

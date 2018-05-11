@@ -68,11 +68,17 @@ public final class CSVUsersReader implements UsersReader{
     @Override
     public List<SystemUser> read(){
         List<String> fileContent=FileReader.readFile(file);
-        if(fileContent==null)return null;
+        if(fileContent==null){
+            return new ArrayList<>();
+        }
         List<SystemUser> usersLidos=new ArrayList<>();
-        if(fileContent.size()<=1)return usersLidos;
+        if(fileContent.size()<=1){
+            return usersLidos;
+        }
         String[] camposFicheiro=fileContent.get(INDENTIFIER_LINE).split(DELIMITER_IDENTIFIER);
-        if(camposFicheiro.length!=NUMBER_OF_IDENITIFIERS)return null;
+        if(camposFicheiro.length!=NUMBER_OF_IDENITIFIERS){
+            return new ArrayList<>();
+        }
         identifyFields(camposFicheiro);
         for(int i=1;i<fileContent.size();i++){
             String[] nextCampos=fileContent.get(i).split(DELIMITER_IDENTIFIER);
@@ -95,9 +101,15 @@ public final class CSVUsersReader implements UsersReader{
      */
     private void identifyFields(String[] fields){
         for(int i=0;i<fields.length;i++){
-            if(fields[i].equalsIgnoreCase(EMAIL_COLUMN_IDENTIFIER))this.emailIdentifier=i;
-            if(fields[i].equalsIgnoreCase(NAME_COLUMN_IDENTIFIER))this.nameIdentifier=i;
-            if(fields[i].equalsIgnoreCase(SUBNAME_COLUMN_IDENTIFIER))this.subnameIdentifier=i;
+            if(fields[i].equalsIgnoreCase(EMAIL_COLUMN_IDENTIFIER)){
+                this.emailIdentifier=i;
+            }
+            if(fields[i].equalsIgnoreCase(NAME_COLUMN_IDENTIFIER)){
+                this.nameIdentifier=i;
+            }
+            if(fields[i].equalsIgnoreCase(SUBNAME_COLUMN_IDENTIFIER)){
+                this.subnameIdentifier=i;
+            }
         }
     }
 }

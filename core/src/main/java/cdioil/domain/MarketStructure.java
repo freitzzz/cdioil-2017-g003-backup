@@ -102,12 +102,9 @@ public class MarketStructure implements Serializable {
 
         Node parentNode = searchParentNode(c);
 
-        if (parentNode != null) {
-
-            if (parentNode.addChild(new Node(c))) {
+        if (parentNode != null && parentNode.addChild(new Node(c))) {
                 marketSize++;
                 return true;
-            }
         }
         return false;
     }

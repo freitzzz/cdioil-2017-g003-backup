@@ -343,7 +343,7 @@ public class CSVQuestionsReader implements QuestionsReader {
         List<String> fileContent = readFile(file);
 
         if (fileContent == null) {
-            return null;
+            return new ArrayList<>();
         }
 
         if (!isIndependentQuestionsFileValid(fileContent)) {
