@@ -31,7 +31,7 @@ public class ImportUsersFromFilesController {
     public List<SystemUser> readUsers(String file){
         UsersReader usersReader=UsersReaderFactory.create(file);
         if(usersReader==null){
-            return null;
+            return new ArrayList<>();
         }
         usersLidos=usersReader.read();
         removeUsersFromBlackList();

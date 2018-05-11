@@ -35,6 +35,7 @@ public class AnswerSurveyUI {
 
     /**
      * Constructor
+     * @param loggedUser
      */
     public AnswerSurveyUI(RegisteredUser loggedUser) {
         try {
@@ -182,10 +183,8 @@ public class AnswerSurveyUI {
                     if (idx < options.size()) {
                         isValidOption = true;
                     }
-                } else if ("UNDO".equalsIgnoreCase(option)) {
-                    if (controller.undoAnswer()) {
+                } else if ("UNDO".equalsIgnoreCase(option) && controller.undoAnswer()) {
                         break;
-                    }
                 }
             }
 

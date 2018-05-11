@@ -124,7 +124,7 @@ public class ImportQuestionsController {
 
             List<Question> questions = questionsReader.readIndependentQuestions();
 
-            if (questions != null) {
+            if (questions != null && !questions.isEmpty()) {
 
                 for (Question q : questions) {
 

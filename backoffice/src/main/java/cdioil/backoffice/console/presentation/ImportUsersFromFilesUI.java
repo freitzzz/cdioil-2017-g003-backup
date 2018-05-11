@@ -84,7 +84,7 @@ public class ImportUsersFromFilesUI {
                 return;
             }
             List<SystemUser> usersImportados=iufCtrl.readUsers(pathFicheiro);
-            if(usersImportados==null){
+            if(usersImportados==null||usersImportados.isEmpty()){
                 String decisao=Console.readLine(FILE_PATH_NOT_FOUND_MESSAGE);
                 if(decisao.equalsIgnoreCase(EXIT_CODE)){
                     return;

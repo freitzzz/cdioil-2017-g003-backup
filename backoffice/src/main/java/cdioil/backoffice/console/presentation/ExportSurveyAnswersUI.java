@@ -96,7 +96,10 @@ public final class ExportSurveyAnswersUI {
     private void showAllSurveys(){
         getAllSurveys();
         System.out.println(EXIT_MESSAGE);
-        if(allSurveys.isEmpty()){System.out.println(NO_AVAILABLE_SURVEYS_MESSAGE);return;}
+        if(allSurveys.isEmpty()){
+            System.out.println(NO_AVAILABLE_SURVEYS_MESSAGE);
+            return;
+        }
         System.out.println(AVAILABLE_SURVEYS_MESSAGE[0]);
         for(int i=0;i<allSurveys.size();i++){
             System.out.println((i+1)+CHARACTER_SEPARATOR+allSurveys.get(i));
@@ -111,7 +114,9 @@ public final class ExportSurveyAnswersUI {
      */
     private void chooseSurvey(){
         String choosenSurveyInString=Console.readLine(CHOOSE_SURVEY_MESSAGE);
-        if(checkForExitCode(choosenSurveyInString))return;
+        if(checkForExitCode(choosenSurveyInString)){
+            return;
+        }
         if((this.currentChoosenSurvey=getChoosenSurvey(choosenSurveyInString))==null){
             System.out.println(INVALID_SELECTED_SURVEY);
             chooseSurvey();
@@ -130,7 +135,9 @@ public final class ExportSurveyAnswersUI {
      */
     private void chooseExportedFile(){
         String filePath=Console.readLine(CHOOSE_FILE_PATH_MESSAGE);
-        if(checkForExitCode(filePath))return;
+        if(checkForExitCode(filePath)){
+            return;
+        }
         if(exportSurveyAnswersController.exportAnswersFromSurvey(filePath)){
             System.out.println(EXPORTED_SURVEY_ANSWERS_SUCCESS_MESSAGE);
         }else{
