@@ -17,6 +17,14 @@ To run the application backoffice you can either:
 
 - Run it on the **web** as an WebApp by executing ``run-backoffice-webapp``
 
+## Frontoffice
+
+To run the application frontoffice you can either
+
+- Run it on **console** by executing ``run-frontoffice-console``
+- Run it on the mobile, by first executing ``run-frontoffice-server``, as this
+will launch the FeedbackMonkey API server
+
 
 ### Built with and Dependencies
 

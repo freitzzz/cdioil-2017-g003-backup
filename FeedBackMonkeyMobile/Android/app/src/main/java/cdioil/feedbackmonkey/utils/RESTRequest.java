@@ -2,6 +2,7 @@ package cdioil.feedbackmonkey.utils;
 
 import java.io.IOException;
 
+import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -10,6 +11,8 @@ import okhttp3.Response;
 
 /**
  * RESTRequest class that performs a RESTful request on a certain URL
+ * <br>The Request must be created on a inital Thread, else if run on an Activity thread it will
+ * crash the application due to the request being synchronous
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 5.0 of FeedbackMonkey
  */
@@ -73,6 +76,11 @@ public final class RESTRequest {
         return this;
     }
 
+    /**
+     * Method that sets the current request body as a certain request body
+     * @param requestBody String with the request body
+     * @return RESTRequest with the request setted with the body
+     */
     public RESTRequest withBody(String requestBody){
         this.currentRequestBody=requestBody;
         return this;
@@ -85,7 +93,8 @@ public final class RESTRequest {
      * @throws IOException IOException if an error occures while sending the request
      */
     private Response sendRequest() throws IOException {
-        return new OkHttpClient().newCall(currentRequestBuilder.build()).execute();
+        Call call=new OkHttpClient().newCall(currentRequestBuilder.build());
+        return call.execute();
     }
     /**
      * Method that initializes the REST request
