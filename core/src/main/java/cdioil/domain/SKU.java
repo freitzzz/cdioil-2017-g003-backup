@@ -9,7 +9,7 @@ import cdioil.framework.domain.ddd.ValueObject;
 import javax.persistence.Entity;
 
 /**
- * Rpresnets the code SKU (European Article Number)
+ * Rpresnets the productCode SKU (European Article Number)
  *
  * @author Ana Guerra (1161191)
  */
@@ -23,11 +23,11 @@ public class SKU extends Code<String> implements ValueObject {
 
     }
     /**
-     * Constructs a new instance with a given code.
+     * Constructs a new instance with a given productCode.
      *
-     * @param code code to be a attribute
+     * @param code productCode to be a attribute
      */
     public SKU(String code) {
-        this.code = code;
+        this.productCode = code;
     }
 }

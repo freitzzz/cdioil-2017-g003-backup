@@ -38,9 +38,9 @@ public class ListUsersUI {
 
         System.out.println(SEPARATOR);
         System.out.println(infoAllUsers);
-        allUsers.forEach(t -> {
-            System.out.println(t.toString());
-        });
+        allUsers.forEach(t -> 
+            System.out.println(t.toString())
+        );
         System.out.println(SEPARATOR);
     }
 }

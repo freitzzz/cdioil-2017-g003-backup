@@ -69,7 +69,9 @@ public class EmailSenders implements Serializable {
      */
     private String prepareEncryption(String senderPassword){
         String encryptedSenderPassword=senderPassword;
-        for(int i=0;i<ENCRYPTION_LOOP_TIMES;i++)encryptedSenderPassword=encryptSenderPassword(encryptedSenderPassword);
+        for(int i=0;i<ENCRYPTION_LOOP_TIMES;i++){
+            encryptedSenderPassword=encryptSenderPassword(encryptedSenderPassword);
+        }
         return encryptedSenderPassword;
     }
     /**
@@ -79,7 +81,9 @@ public class EmailSenders implements Serializable {
      */
     private String prepareDecryption(String encryptedSenderPassword){
         String decryptedSenderPassword=encryptedSenderPassword;
-        for(int i=0;i<ENCRYPTION_LOOP_TIMES;i++)decryptedSenderPassword=decryptSenderPassword(decryptedSenderPassword);
+        for(int i=0;i<ENCRYPTION_LOOP_TIMES;i++){
+            decryptedSenderPassword=decryptSenderPassword(decryptedSenderPassword);
+        }
         return decryptedSenderPassword;
     }
     /**

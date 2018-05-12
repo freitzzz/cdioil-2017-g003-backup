@@ -138,7 +138,7 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>, User {
         if (lc == null || lc.isEmpty()) {
             return false;
         }
-        lc.stream().filter(cat -> (!isAssociatedWithCategory(cat))).forEachOrdered((cat) -> 
+        lc.stream().filter(cat -> (!isAssociatedWithCategory(cat))).forEachOrdered(cat -> 
             categories.add(cat)
         );
         return true;

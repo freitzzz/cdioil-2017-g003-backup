@@ -60,6 +60,7 @@ public class WhitelistRepositoryImpl extends BaseJPARepository<Whitelist, String
      * @param whitelist whitelist entry
      * @return removed whitelist entry
      */
+    @Override
     public Whitelist remove(Whitelist whitelist) {
         if (whitelist != null) {
             return super.remove(whitelist);

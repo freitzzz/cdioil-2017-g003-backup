@@ -212,12 +212,12 @@ public class CSVProductsReader implements ProductsReader {
         sb.append(PATH_IDENTIFIER).append(cat).append(CAT_IDENTIFIER);
 
         String scat = Character.toString(path.charAt(8)) + "" + Character.toString(path.charAt(9));
-        int scat_val = Integer.parseInt(scat);
-        sb.append(PATH_IDENTIFIER).append(scat_val).append(SCAT_IDENTIFIER);
+        int scatVal = Integer.parseInt(scat);
+        sb.append(PATH_IDENTIFIER).append(scatVal).append(SCAT_IDENTIFIER);
 
         String ub = Character.toString(path.charAt(10)) + "" + Character.toString(path.charAt(11));
-        int ub_val = Integer.parseInt(ub);
-        sb.append(PATH_IDENTIFIER).append(ub_val).append(UB_IDENTIFIER);
+        int ubVal = Integer.parseInt(ub);
+        sb.append(PATH_IDENTIFIER).append(ubVal).append(UB_IDENTIFIER);
 
         return sb.toString();
     }
@@ -279,7 +279,8 @@ public class CSVProductsReader implements ProductsReader {
         List<String> fileContent = new ArrayList<>();
         String header = "Linha" + SPLITTER + "Razao";
         fileContent.add(header);
-        for (Integer line : invalidProducts.keySet()) {
+        for (Map.Entry<Integer, Integer> entry : invalidProducts.entrySet()) {
+            Integer line = entry.getKey();
             if (invalidProducts.get(line) == 1) {
                 fileContent.add(line + SPLITTER + "Caminho da categoria não válido!");
             }

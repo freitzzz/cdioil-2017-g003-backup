@@ -129,7 +129,9 @@ public class FrontOfficeLogin {
                 return true;
             }else{
                 Console.logError(ACCOUNT_ACTIVATED_FAILURE);
-                if(Console.readLine(EXIT_MESSAGE).equalsIgnoreCase(EXIT_CODE))return false;
+                if(Console.readLine(EXIT_MESSAGE).equalsIgnoreCase(EXIT_CODE)){
+                    return false;
+                }
             }
         }
         return catched;

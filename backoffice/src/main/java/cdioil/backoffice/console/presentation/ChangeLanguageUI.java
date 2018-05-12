@@ -35,7 +35,7 @@ public class ChangeLanguageUI {
 
         while (option != 0) {
 
-            Language languages[] = Language.values();
+            Language[] languages = Language.values();
 
             for (int i = 0; i < languages.length; i++) {
                 System.out.println(i + 1 + ". " + languages[i].toString());

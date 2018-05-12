@@ -38,7 +38,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private SKU sku;
-    
+
     /**
      * List of the Product's Codes.
      */
@@ -69,7 +69,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
      * @param codes 0 or more codes
      * @param quantity quantity
      */
-    public Product(String name, SKU sku, String quantity,Code... codes) {
+    public Product(String name, SKU sku, String quantity, Code... codes) {
 
         if (name == null || sku == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid parameters.");
@@ -80,7 +80,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
         this.sku = sku;
 
         this.codes.addAll(Arrays.asList(codes));
-        
+
         this.quantity = quantity;
 
         this.productImage = new Image(IMAGEM_PRODUTO_DEFAULT.getBytes());
@@ -120,20 +120,20 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     @Override
     public String toString() {
 
-        String result = String.format("Nome: %s\n", name);
-
-        result += "SKU:\n";
+        StringBuilder result = new StringBuilder(128);
         
-        result += sku.toString();
-        
-        result += "Códigos:\n";
+        result.append("Nome: ");
+        result.append(name);
+        result.append("\n");
+        result.append("SKU: ");
+        result.append(sku.toString());
+        result.append("\n");
+        result.append("Códigos:\n");
 
-        for (Code c : codes) {
-
-            result += c.toString();
-        }
-
-        return result;
+        codes.forEach(c -> 
+            result.append(c.toString())
+        );
+        return result.toString();
     }
 
     /**

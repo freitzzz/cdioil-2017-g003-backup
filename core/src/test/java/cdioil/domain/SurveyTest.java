@@ -217,14 +217,14 @@ public class SurveyTest {
     public void testGetProductSurveys() {
         System.out.println("getProductSurveys");
         //test method with both parameters null or an empty list
-        assertEquals(null, Survey.getProductSurveys(null, null));
-        assertEquals(null, Survey.getProductSurveys(new ArrayList<>(), null));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(null, null));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(new ArrayList<>(), null));
         //test method with 1 paramater as null or empty list
-        assertEquals(null, Survey.getProductSurveys(null, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
-        assertEquals(null, Survey.getProductSurveys(new ArrayList<>(), new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(null, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(new ArrayList<>(), new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
         List<Survey> surveys = new ArrayList<>();
         surveys.add(testGlobalSurvey);
-        assertEquals(null, Survey.getProductSurveys(surveys, null));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(surveys, null));
         //test working method
         assertEquals(surveys, Survey.getProductSurveys(surveys, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
     }

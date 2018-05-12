@@ -10,8 +10,8 @@ import java.util.*;
 
 public class CreateSurveyUI {
 
-    private CreateSurveyController controller;
-    private Manager loggedManager;
+    private final CreateSurveyController controller;
+    private final Manager loggedManager;
 
     public CreateSurveyUI(Manager manager) {
         controller = new CreateSurveyController();
@@ -21,228 +21,19 @@ public class CreateSurveyUI {
 
     private void menuLoop() {
         int option = 0;
-
         do {
             option = menuSurvey();
-            List<Category> allCategories = loggedManager.categoriesFromManager();
-
             switch (option) {
                 case 0:
                     break;
                 case 1:
-                    int categoryOption = -1;
-                    Category category;
-                    List<Question> allQuestions;
-                    List<Question> questions;
-                    HashMap<SurveyItem, List<Question>> map = new HashMap<>();
-                    List<SurveyItem> categories = new ArrayList<>();
-                    List<Template> templates = new ArrayList<>();
-                    List<Template> allTemplates;
-                    int templateOption;
-                    int categoryQuestionsOption;
-                    int independentQuestionOption;
-                    UsersGroup usersGroup = null;
-
-                    do {
-                        System.out.println("All categories: \n");
-                        for (int i = 0; i < allCategories.size(); i++) {
-                            System.out.println((i + 1) + ". " + allCategories.get(i) + "\n");
-                        }
-                        int cat = Console.readInteger("Please choose a category: \n") - 1;
-
-                        category = allCategories.get(cat);
-
-
-                        questions = new ArrayList<>();
-
-                        if (category != null) {
-                            categories.add(category);
-                            map.put(category, questions);
-                            // TEMPLATES
-                            System.out.println("Would you like to choose a template?");
-                            templateOption = menuYesNo();
-
-                            if (templateOption == 1) {
-                                allTemplates = controller.templatesForCategory(category);
-
-                                boolean flagTemplates;
-
-                                do {
-                                    flagTemplates = false;
-                                    for (int i = 0; i < allTemplates.size(); i++) {
-                                        System.out.println((i + 1) + ". " + allTemplates.get(i));
-                                    }
-                                    try {
-                                        String[] templatesChoice = Console.readLine("Please choose the template/s: (Separated by commas)\n").split(",");
-
-                                        for (String s : templatesChoice) {
-                                            templates.add(allTemplates.get(Integer.parseInt(s) - 1));
-                                        }
-                                    } catch (IllegalArgumentException e) {
-                                        flagTemplates = true;
-                                        System.out.println("ERROR");
-                                    }
-                                } while (flagTemplates);
-
-                            }
-                            //CATEGORY QUESTIONS
-
-                            System.out.println("Would you like to choose a question/s for the category? \n");
-                            categoryQuestionsOption = menuYesNo();
-
-                            if (categoryQuestionsOption == 1) {
-                                allQuestions = controller.questionsForCategory(category);
-
-                                boolean flag;
-
-                                do {
-                                    flag = false;
-                                    for (int i = 0; i < allQuestions.size(); i++) {
-                                        System.out.println((i + 1) + ". " + allQuestions.get(i) + "\n");
-                                    }
-                                    String[] chooseQuestions;
-                                    try {
-                                        chooseQuestions = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
-
-                                        for (String s : chooseQuestions) {
-                                            map.get(category).add(allQuestions.get(Integer.parseInt(s) - 1));
-                                        }
-
-                                    } catch (IllegalArgumentException e) {
-                                        flag = true;
-                                        System.out.println("ERROR");
-                                    }
-
-                                } while (flag);
-                            }
-
-                            //Independent Questions
-                            System.out.println("Would you like to choose a question?\n");
-                            independentQuestionOption = menuYesNo();
-                            if (independentQuestionOption == 1) {
-                                independentQuestions(category, map);
-                            }
-
-                            System.out.println("Do you want to continue add more categories?");
-                            categoryOption = menuYesNo();
-
-                        } else {
-                            System.out.println("ERROR : Incorrect path to category");
-                        }
-
-
-                    } while (categoryOption != 2);
-
-                    LocalDateTime startDate = null;
-                    LocalDateTime endDate = null;
-
-                    if (category != null) {
-                        System.out.println("Please choose the date of beginning of the survey");
-                        startDate = dateMenu(1);
-                        System.out.println("Want to insert the data of when the survey ends? \n");
-                        endDate = dateMenu(menuYesNo());
-                    }
-
-                    System.out.println("Would you like to add a target audience?\n");
-                    int targetAudienceOption = menuYesNo();
-                    usersGroup = targetAudience(targetAudienceOption);
-
-                    controller.createSurvey(categories, startDate, endDate, map, usersGroup);
-                    
-
+                    createCategorySurvey();
                     break;
                 case 2:
-                    List<Product> productsFound;
-                    List<SurveyItem> allProducts = new ArrayList<>();
-                    List<Question> questionsFound;
-                    HashMap<SurveyItem, List<Question>> productMap = new HashMap<>();
-                    Product product = null;
-                    int optionProduct = -1;
-                    int productQuestionsOption;
-                    int productIndependentQuestionsOption;
-                    UsersGroup productUsersGroup = null;
-
-                    do {
-                        String productName = Console.readLine("\nPlease insert the Product name: \n");
-                        productsFound = controller.findProducts(productName);
-
-                        allQuestions = new ArrayList<>();
-
-                        if (productsFound.size() > 1) {
-                            for (int i = 0; i < productsFound.size(); i++) {
-                                System.out.println((i + 1) + ". " + productsFound.get(i) + "\n");
-                            }
-
-                            product = productsFound.get(Console.readInteger("\nPlease choose a Product: \n") - 1);
-                            allProducts.add(product);
-                            productMap.put(product, allQuestions);
-
-                        } else if (productsFound.size() == 1) {
-                            product = productsFound.get(0);
-                            allProducts.add(product);
-                            productMap.put(product, allQuestions);
-                        } else {
-                            System.out.println("ERROR: Product not found");
-                        }
-
-                        boolean flagProducts;
-
-                        System.out.println("Would you like to choose a question/s for the Product? \n");
-                        productQuestionsOption = menuYesNo();
-
-                        if (productQuestionsOption == 1) {
-                            do {
-                                flagProducts = false;
-                                try {
-                                    if (product != null) {
-                                        questionsFound = controller.questionForProducts(product);
-
-                                        for (int i = 0; i < questionsFound.size(); i++) {
-                                            System.out.println((i + 1) + ". " + questionsFound.get(i));
-                                        }
-                                        String[] questionChosen = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
-
-                                        for (String s : questionChosen) {
-                                            productMap.get(product).add(questionsFound.get(Integer.parseInt(s) - 1));
-                                        }
-                                    }
-                                } catch (IllegalArgumentException e) {
-                                    flagProducts = true;
-                                    System.out.println("ERROR: Please try again");
-                                }
-                            } while (flagProducts);
-                        }
-
-                        System.out.println("Would you like to add independent question? \n");
-                        productIndependentQuestionsOption = menuYesNo();
-
-                        if (productIndependentQuestionsOption == 1) {
-                            independentQuestions(product, productMap);
-                        }
-
-                        if (product != null) {
-
-                            System.out.println("Do you want to continue add more products?");
-                            optionProduct = menuYesNo();
-                        }
-                    } while (optionProduct != 2);
-
-                    LocalDateTime beginingDate = null;
-                    LocalDateTime endingDate = null;
-
-                    if (product != null) {
-                        System.out.println("Please choose the date of beginning of the survey: \n");
-                        beginingDate = dateMenu(1);
-                        System.out.println("Want to insert the data of when the survey ends? \n");
-                        endingDate = dateMenu(menuYesNo());
-                    }
-
-                    System.out.println("Would you like to add a target audience?\n");
-                    int productTargetAudienceOption = menuYesNo();
-                    productUsersGroup = targetAudience(productTargetAudienceOption);
-
-                    controller.createSurvey(allProducts, beginingDate, endingDate, productMap, productUsersGroup);
-
+                    createProductSurvey();
+                    break;
+                default:
+                    System.out.println("ERROR");
                     break;
             }
 
@@ -278,7 +69,7 @@ public class CreateSurveyUI {
             }
 
             for (int i = 0; i < userList.size(); i++) {
-                System.out.println((i+1) + ". "+ userList.get(i) + "\n");
+                System.out.println((i + 1) + ". " + userList.get(i) + "\n");
             }
 
             try {
@@ -295,7 +86,6 @@ public class CreateSurveyUI {
         return usersGroup;
     }
 
-
     private LocalDateTime dateMenu(int number) {
         LocalDateTime date = LocalDateTime.MAX;
         if (number == 1) {
@@ -309,17 +99,235 @@ public class CreateSurveyUI {
         return date;
     }
 
-
     private int menuSurvey() {
-        System.out.println("1. Survey for Categories\n" +
-                "2. Survey for Products\n" +
-                "3. Exit\n");
+        System.out.println("1. Survey for Categories\n"
+                + "2. Survey for Products\n"
+                + "3. Exit\n");
 
         return Console.readInteger("Please insert the desired option: \n");
     }
 
     private int menuYesNo() {
-        return Console.readInteger("1. Yes\n" +
-                "2. No\n");
+        return Console.readInteger("1. Yes\n"
+                + "2. No\n");
+    }
+
+    /**
+     * UI for creating a survey about a category.
+     */
+    private void createCategorySurvey() {
+        List<Category> allCategories = loggedManager.categoriesFromManager();
+
+        int categoryOption = -1;
+        Category category;
+        List<Question> questions;
+        HashMap<SurveyItem, List<Question>> map = new HashMap<>();
+        List<SurveyItem> categories = new ArrayList<>();
+        List<Template> templates = new ArrayList<>();
+        List<Template> allTemplates;
+        int templateOption;
+        int categoryQuestionsOption;
+        int independentQuestionOption;
+        UsersGroup usersGroup;
+
+        do {
+            System.out.println("All categories: \n");
+            for (int i = 0; i < allCategories.size(); i++) {
+                System.out.println((i + 1) + ". " + allCategories.get(i) + "\n");
+            }
+            int cat = Console.readInteger("Please choose a category: \n") - 1;
+
+            category = allCategories.get(cat);
+
+            questions = new ArrayList<>();
+
+            if (category != null) {
+                categories.add(category);
+                map.put(category, questions);
+                // TEMPLATES
+                System.out.println("Would you like to choose a template?");
+                templateOption = menuYesNo();
+
+                if (templateOption == 1) {
+                    allTemplates = controller.templatesForCategory(category);
+
+                    boolean flagTemplates;
+
+                    do {
+                        flagTemplates = false;
+                        for (int i = 0; i < allTemplates.size(); i++) {
+                            System.out.println((i + 1) + ". " + allTemplates.get(i));
+                        }
+                        try {
+                            String[] templatesChoice = Console.readLine("Please choose the template/s: (Separated by commas)\n").split(",");
+
+                            for (String s : templatesChoice) {
+                                templates.add(allTemplates.get(Integer.parseInt(s) - 1));
+                            }
+                        } catch (IllegalArgumentException e) {
+                            flagTemplates = true;
+                            System.out.println("ERROR");
+                        }
+                    } while (flagTemplates);
+
+                }
+
+                //CATEGORY QUESTIONS
+                System.out.println("Would you like to choose a question/s for the category? \n");
+                categoryQuestionsOption = menuYesNo();
+
+                if (categoryQuestionsOption == 1) {
+                    List<Question> allQuestions = controller.questionsForCategory(category);
+
+                    boolean flag;
+
+                    do {
+                        flag = false;
+                        for (int i = 0; i < allQuestions.size(); i++) {
+                            System.out.println((i + 1) + ". " + allQuestions.get(i) + "\n");
+                        }
+                        String[] chooseQuestions;
+                        try {
+                            chooseQuestions = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
+
+                            for (String s : chooseQuestions) {
+                                map.get(category).add(allQuestions.get(Integer.parseInt(s) - 1));
+                            }
+
+                        } catch (IllegalArgumentException e) {
+                            flag = true;
+                            System.out.println("ERROR");
+                        }
+
+                    } while (flag);
+                }
+
+                //Independent Questions
+                System.out.println("Would you like to choose a question?\n");
+                independentQuestionOption = menuYesNo();
+                if (independentQuestionOption == 1) {
+                    independentQuestions(category, map);
+                }
+
+                System.out.println("Do you want to continue add more categories?");
+                categoryOption = menuYesNo();
+
+            } else {
+                System.out.println("ERROR : Incorrect path to category");
+            }
+
+        } while (categoryOption != 2);
+
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
+
+        if (category != null) {
+            System.out.println("Please choose the date of beginning of the survey");
+            startDate = dateMenu(1);
+            System.out.println("Want to insert the data of when the survey ends? \n");
+            endDate = dateMenu(menuYesNo());
+        }
+
+        System.out.println("Would you like to add a target audience?\n");
+        int targetAudienceOption = menuYesNo();
+        usersGroup = targetAudience(targetAudienceOption);
+
+        controller.createSurvey(categories, startDate, endDate, map, usersGroup);
+    }
+
+    /**
+     * UI for creating a survey about a product.
+     */
+    private void createProductSurvey() {
+        List<Product> productsFound;
+        List<SurveyItem> allProducts = new ArrayList<>();
+        List<Question> questionsFound;
+        HashMap<SurveyItem, List<Question>> productMap = new HashMap<>();
+        Product product = null;
+        int optionProduct = -1;
+        int productQuestionsOption;
+        int productIndependentQuestionsOption;
+        UsersGroup productUsersGroup = null;
+
+        do {
+            String productName = Console.readLine("\nPlease insert the Product name: \n");
+            productsFound = controller.findProducts(productName);
+
+            List<Question> allQuestions = new ArrayList<>();
+
+            if (productsFound.size() > 1) {
+                for (int i = 0; i < productsFound.size(); i++) {
+                    System.out.println((i + 1) + ". " + productsFound.get(i) + "\n");
+                }
+
+                product = productsFound.get(Console.readInteger("\nPlease choose a Product: \n") - 1);
+                allProducts.add(product);
+                productMap.put(product, allQuestions);
+
+            } else if (productsFound.size() == 1) {
+                product = productsFound.get(0);
+                allProducts.add(product);
+                productMap.put(product, allQuestions);
+            } else {
+                System.out.println("ERROR: Product not found");
+            }
+
+            boolean flagProducts;
+
+            System.out.println("Would you like to choose a question/s for the Product? \n");
+            productQuestionsOption = menuYesNo();
+
+            if (productQuestionsOption == 1) {
+                do {
+                    flagProducts = false;
+                    try {
+                        if (product != null) {
+                            questionsFound = controller.questionForProducts(product);
+
+                            for (int i = 0; i < questionsFound.size(); i++) {
+                                System.out.println((i + 1) + ". " + questionsFound.get(i));
+                            }
+                            String[] questionChosen = Console.readLine("Please insert the desired questions: (Separated by commas) \n").split(",");
+
+                            for (String s : questionChosen) {
+                                productMap.get(product).add(questionsFound.get(Integer.parseInt(s) - 1));
+                            }
+                        }
+                    } catch (IllegalArgumentException e) {
+                        flagProducts = true;
+                        System.out.println("ERROR: Please try again");
+                    }
+                } while (flagProducts);
+            }
+
+            System.out.println("Would you like to add independent question? \n");
+            productIndependentQuestionsOption = menuYesNo();
+
+            if (productIndependentQuestionsOption == 1) {
+                independentQuestions(product, productMap);
+            }
+
+            if (product != null) {
+
+                System.out.println("Do you want to continue add more products?");
+                optionProduct = menuYesNo();
+            }
+        } while (optionProduct != 2);
+
+        LocalDateTime beginingDate = null;
+        LocalDateTime endingDate = null;
+
+        if (product != null) {
+            System.out.println("Please choose the date of beginning of the survey: \n");
+            beginingDate = dateMenu(1);
+            System.out.println("Want to insert the data of when the survey ends? \n");
+            endingDate = dateMenu(menuYesNo());
+        }
+
+        System.out.println("Would you like to add a target audience?\n");
+        int productTargetAudienceOption = menuYesNo();
+        productUsersGroup = targetAudience(productTargetAudienceOption);
+
+        controller.createSurvey(allProducts, beginingDate, endingDate, productMap, productUsersGroup);
     }
 }

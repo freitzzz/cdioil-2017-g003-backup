@@ -49,7 +49,9 @@ public final class AuthenticationController implements Serializable {
      * @return boolean true if the user logged out successfully, false if not
      */
     public boolean logout(){
-        if(currentUserSession==null)return false;
+        if(currentUserSession==null){
+            return false;
+        }
         logSessionEnd();
         currentUserSession=null;
         return true;
@@ -144,10 +146,16 @@ public final class AuthenticationController implements Serializable {
      * @return boolean true if the user logged in successfully, false if not
      */
     private boolean tryToLogin(String email,String password){
-        if(currentUserSession!=null)return false;
+        if(currentUserSession!=null){
+            return false;
+        }
         this.currentUserSession=AuthenticationService.create().login(email,password);
-        if((currentUser=getRegisteredUser())!=null)return true;
-        if((currentUser=getAdmin())!=null)return true;
+        if((currentUser=getRegisteredUser())!=null){
+            return true;
+        }
+        if((currentUser=getAdmin())!=null){
+            return true;
+        }
         return (currentUser=getManager())!=null;
     }
     /**

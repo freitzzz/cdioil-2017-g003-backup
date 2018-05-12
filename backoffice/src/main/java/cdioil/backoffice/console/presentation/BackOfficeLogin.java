@@ -94,12 +94,12 @@ public class BackOfficeLogin {
                 Console.logError(e.getMessage());
             }catch(AuthenticationException f){
                 Console.logError(f.getMessage());
-                if(f.getAuthenticationExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.NOT_ACTIVATED)){
-                    if(askForActivationCode(email,password))id=0;
+                if(f.getAuthenticationExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.NOT_ACTIVATED) && askForActivationCode(email,password)){
+                    id=0;
                 }
             }
-        }
-    }
+        }   
+    } 
     /**
      * Clears the current authentication credentials from the memory
      * @param email Byte array with the user email
@@ -126,7 +126,9 @@ public class BackOfficeLogin {
                 return true;
             }else{
                 Console.logError(ACCOUNT_ACTIVATED_FAILURE);
-                if(Console.readLine(EXIT_MESSAGE).equalsIgnoreCase(EXIT_CODE))return false;
+                if(Console.readLine(EXIT_MESSAGE).equalsIgnoreCase(EXIT_CODE)){
+                    return false;
+                }
             }
         }
         return catched;

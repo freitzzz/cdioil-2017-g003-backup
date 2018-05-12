@@ -12,7 +12,7 @@ import cdioil.console.Console;
 public class AddWhitelistUI {
 
     private static final String SEPARATOR = "===========================\n";
-    
+
     private final String infoExiting = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_exiting");
     private final String infoExitInput = BackOfficeLocalizationHandler.getInstance().getMessageValue("info_exit_input");
 
@@ -26,7 +26,7 @@ public class AddWhitelistUI {
     /**
      * The use case's controller.
      */
-    private AddWhitelistController controller;
+    private final AddWhitelistController controller;
 
     /**
      * Instantiates the user interface.
@@ -55,29 +55,32 @@ public class AddWhitelistUI {
                     break;
 
                 case 1:
-                    
-                    Iterable<String> whitelistedDomains = controller.getExistingEntries();
-
-                    for (String domain : whitelistedDomains) {
-                        System.out.println(domain);
-                    }
-
-                    System.out.println(SEPARATOR);
-                    
-                    String newDomain = Console.readLine(requestNewDomain + "\n" + infoExitInput);
-                    if (newDomain.equalsIgnoreCase(optionExit)) {
-                        break;
-                    }
-                    controller.addAuthorizedDomain(newDomain);
+                    addNewDomain();
                     break;
 
                 default:
                     System.out.println(errorInvalidOption);
                     break;
-
             }
         }
-
     }
 
+    /**
+     * Adds a new domain to the whitelist.
+     */
+    private void addNewDomain() {
+        Iterable<String> whitelistedDomains = controller.getExistingEntries();
+
+        for (String domain : whitelistedDomains) {
+            System.out.println(domain);
+        }
+
+        System.out.println(SEPARATOR);
+
+        String newDomain = Console.readLine(requestNewDomain + "\n" + infoExitInput);
+        if (newDomain.equalsIgnoreCase(optionExit)) {
+            return;
+        }
+        controller.addAuthorizedDomain(newDomain);
+    }
 }

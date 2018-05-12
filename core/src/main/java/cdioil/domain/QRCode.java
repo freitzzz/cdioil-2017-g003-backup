@@ -19,11 +19,11 @@ public class QRCode extends Code<String> implements ValueObject{
     }
 
     /**
-     * Creates an instance of QRCode, receiving a String with its code (identifier).
+     * Creates an instance of QRCode, receiving a String with its productCode (identifier).
      *
      * @param code Identifer of the QRCode
      */
     public QRCode(String code) {
-        this.code = code;
+        this.productCode = code;
     }
 }

@@ -80,19 +80,23 @@ public class ImportUsersFromFilesUI {
         boolean catched=false;
         while(!catched){
             String pathFicheiro=Console.readLine(FILE_PATH_MESSAGE);
-            if(pathFicheiro.equalsIgnoreCase(EXIT_CODE))return;
+            if(pathFicheiro.equalsIgnoreCase(EXIT_CODE)){
+                return;
+            }
             List<SystemUser> usersImportados=iufCtrl.readUsers(pathFicheiro);
-            if(usersImportados==null){
+            if(usersImportados==null||usersImportados.isEmpty()){
                 String decisao=Console.readLine(FILE_PATH_NOT_FOUND_MESSAGE);
-                if(decisao.equalsIgnoreCase(EXIT_CODE))return;
+                if(decisao.equalsIgnoreCase(EXIT_CODE)){
+                    return;
+                }
             }else{
                 if(usersImportados.isEmpty()){
                     System.out.println(NO_USERS_IMPORTED_MESSAGE);
                 }else{
                     System.out.println(IMPORTED_USERS_MESSAGE[0]);
-                    usersImportados.forEach((t)->{
-                        System.out.println(t);
-                    });
+                    usersImportados.forEach(t->
+                        System.out.println(t)
+                    );
                     System.out.println(IMPORTED_USERS_MESSAGE[1]);
                     catched=true;
                 }
