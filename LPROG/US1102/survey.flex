@@ -10,13 +10,13 @@
 [ ]*[eE][mM][ ]*  {strdup(yytext);return EM;}
 [ ]*[eE][sS][cC][ ]* {strdup(yytext);return ESC;}
 [ ]*[sS][nN][ ]* {strdup(yytext);return SN;}
-[ ]*[tT][xX][ ]* {strdup(yytext);return TX;} 
+[ ]*[tT][xX][ ]* {strdup(yytext);return TX;}
 [ ]*\"[a-zA-Z ?]*\"[ ]*  {strdup(yytext);return TEXTO;}
 [ ]*[eE][nN][dD][eE][mM][ ]*  {strdup(yytext);return ENDEM;}
 
 [ ]*[aA][nN][dD][ ]*  {strdup(yytext);return AND;}
 [ ]*[oO][rR][ ]*  {strdup(yytext);return OR;}
-   
+
 [ ]*[sS][ ]*  {strdup(yytext);return S;}
 [ ]*[nN][ ]*  {strdup(yytext);return N;}
 

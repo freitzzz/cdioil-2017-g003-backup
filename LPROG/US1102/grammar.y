@@ -1,6 +1,7 @@
 /*Includes and declarations*/
 %{
     #include <stdio.h>
+    #include <stdlib.h>
     #include "QuestionTypes.h"
     #define BINARY "SN"
     #define SCALE "ESC"
@@ -8,7 +9,9 @@
     #define YYSTYPE char*
     int currentLine=1;
     char* currentNumber;
-    //TO-DO: Stack Pointer with Integer values to know which one is next!!! MultipleChoice, when a new one is added add new Integer to stack, else remove from stack
+    int currentMultipleChoiceStackSize=10;
+    int currentMultipleChoiceStackIndex=0;
+    int* multipleChoiceStack;
     int currentScaleMinValue=0;
     int currentScaleMaxValue=0;
     int leftScaleChoice=0;
@@ -57,7 +60,7 @@
 %%
 START: TIPO_QUESTAO{printf("%s\n","Inquérito Válido");}|
 
-TIPO_QUESTAO : 						ESC TEXTO_ESC 
+TIPO_QUESTAO : 						ESC TEXTO_ESC
                                     | EM TEXTO_EM
                                     | SN TEXTO_SN
 
@@ -66,41 +69,42 @@ TEXTO_ESC: 							TEXTO PARAMETROS_ESC INICIO_BLOCO_CONDICAO
 
 TEXTO_EM : 							TEXTO PARAMETROS_EM ALTERNATIVA
 
-ALTERNATIVA:							AL{validateMultipleChoiceAlternative();} TEXTO ALTERNATIVA 
+ALTERNATIVA:							AL{validateMultipleChoiceAlternative();} TEXTO ALTERNATIVA
                                         | AL{validateMultipleChoiceAlternative();} TIPO_QUESTAO ALTERNATIVA
-                                        | ALELSE{validateMultipleChoiceAlternative();} TX TEXTO ENDEM{currentAlternative=0;} INICIO_BLOCO_CONDICAO
-                                        |  ALELSE{validateMultipleChoiceAlternative();} TX TEXTO ENDEM{currentAlternative=0;}
-                                        | ENDEM{currentAlternative=0;}
+                                        | ALELSE{validateMultipleChoiceAlternative();} TX TEXTO ENDEM{currentAlternative=0;removeFromMultipleChoiceStack();} INICIO_BLOCO_CONDICAO
+                                        | ALELSE{validateMultipleChoiceAlternative();} TX TEXTO ENDEM{currentAlternative=0;removeFromMultipleChoiceStack();}
+                                        | ENDEM{currentAlternative=0;removeFromMultipleChoiceStack();}
 
-TEXTO_SN : 							 TEXTO 
+TEXTO_SN : 							 TEXTO
                                         | TEXTO INICIO_BLOCO_CONDICAO_BINARIO
 
 PARAMETROS_ESC : 						MIN OP_MAT NUMERO{currentScaleMinValue=atoi(currentNumber);} NUM_TEXTO TEXTO PONTUACAO MAX OP_MAT NUMERO{currentScaleMaxValue=atoi(currentNumber);} NUM_TEXTO TEXTO{validateScaleQuestion();}
 
-PARAMETROS_EM :						N OP_MAT NUMERO{maxAlternatives=atoi(currentNumber);validateMultipleChoiceQuestion();}
+PARAMETROS_EM :						N OP_MAT NUMERO{maxAlternatives=atoi(currentNumber);validateMultipleChoiceQuestion();addToMultipleChoiceStack(maxAlternatives);}
 
-INICIO_BLOCO_CONDICAO_BINARIO:			IF CONDICAO_BINARIO 
+INICIO_BLOCO_CONDICAO_BINARIO:			IF CONDICAO_BINARIO
                                         | IF CONDICAO_BINARIO OR CONDICAO_BINARIO
 
-CONDICAO_BINARIO:						S TIPO_QUESTAO FIM_BLOCO_CONDICAO 
+CONDICAO_BINARIO:						S TIPO_QUESTAO FIM_BLOCO_CONDICAO
                                             | N TIPO_QUESTAO FIM_BLOCO_CONDICAO
 
 INICIO_BLOCO_CONDICAO :					IF CONDICAO
 
-CONDICAO : 						OP_MAT NUMERO{leftScaleChoice=atoi(currentNumber);} LOGICO OP_MAT NUMERO{rightScaleChoice=atoi(currentNumber);validateScaleChoice();} TIPO_QUESTAO  FIM_BLOCO_CONDICAO 
+CONDICAO : 						OP_MAT NUMERO{leftScaleChoice=atoi(currentNumber);} LOGICO OP_MAT NUMERO{rightScaleChoice=atoi(currentNumber);validateScaleChoice();} TIPO_QUESTAO  FIM_BLOCO_CONDICAO
                                     | OP_MAT NUMERO{leftScaleChoice=atoi(currentNumber);validateScaleChoice();} TIPO_QUESTAO FIM_BLOCO_CONDICAO
 
-FIM_BLOCO_CONDICAO : 					ENDIF 
-                                            | ENDIF TIPO_QUESTAO 
-                                                | ELSE  TIPO_QUESTAO ENDIF 
+FIM_BLOCO_CONDICAO : 					ENDIF
+                                            | ENDIF TIPO_QUESTAO
+                                                | ELSE  TIPO_QUESTAO ENDIF
 
-LOGICO: AND 
+LOGICO: AND
             | OR;
 
 %%
 
 /*Main function*/
 int main(){
+  multipleChoiceStack=malloc(currentMultipleChoiceStackSize*sizeof(int));
     yyparse();
     return 0;
 }
@@ -116,8 +120,8 @@ void validateScaleQuestion(){
     }
 }
 void validateScaleChoice(){
-    if(leftScaleChoice<0 || rightScaleChoice<0 || leftScaleChoice<currentScaleMinValue 
-        || leftScaleChoice>currentScaleMaxValue || rightScaleChoice<currentScaleMinValue 
+    if(leftScaleChoice<0 || rightScaleChoice<0 || leftScaleChoice<currentScaleMinValue
+        || leftScaleChoice>currentScaleMaxValue || rightScaleChoice<currentScaleMinValue
         || rightScaleChoice>currentScaleMaxValue){
             printf("Parametros inválidos relativamente à decisao da escolha multipla!\nLinha %d\n",currentLine);
             exit(5);
@@ -131,8 +135,27 @@ void validateMultipleChoiceQuestion(){
 }
 void validateMultipleChoiceAlternative(){
     currentAlternative++;
+    (*multipleChoiceStack)--;
     if(currentAlternative>maxAlternatives){
         printf("O número de alternativas excedeu o limite!\nLinha %d\n",currentLine);
         exit(5);
     }
+}
+void addToMultipleChoiceStack(int currentNumber){
+  if(currentMultipleChoiceStackIndex==currentMultipleChoiceStackSize){
+    currentMultipleChoiceStackSize+=10;
+    multipleChoiceStack=realloc(multipleChoiceStack,currentMultipleChoiceStackSize*sizeof(int));
+  }
+  multipleChoiceStack++;
+  currentMultipleChoiceStackIndex++;
+  *(multipleChoiceStack)=currentNumber;
+}
+void removeFromMultipleChoiceStack(){
+  if(*multipleChoiceStack==0){
+    currentMultipleChoiceStackIndex--;
+    multipleChoiceStack--;
+  }else{
+    printf("Inquérito inválido! A escolha multipla não acabou as suas alternativas! \nLinha %d\n",currentLine);
+    exit(5);
+  }
 }
