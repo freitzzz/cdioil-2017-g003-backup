@@ -129,7 +129,7 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
         }
         if (birthYear != null && !birthYear.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            baseQueryStringBuilder.append("EXTRACT (YEAR FROM r.sysUser.birthDate.birthDate) = :p_birthyear");
+            baseQueryStringBuilder.append("EXTRACT (YEAR FROM r.sysUser.birthDate.dateOfBirth) = :p_birthyear");
         }
         if (location != null && !location.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
