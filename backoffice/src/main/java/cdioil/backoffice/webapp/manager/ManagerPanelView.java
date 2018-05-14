@@ -44,14 +44,6 @@ public class ManagerPanelView extends MainLayoutView implements View {
     private static final String EXPORT_BTN_CAPTION =
             "Exportar";
     
-    /**
-     * Current Navigator
-     */
-    private final Navigator navigator;
-    /**
-     * Current Authentication controller
-     */
-    private final AuthenticationController authenticationController;
 
     /**
      * Dashboard Button
@@ -74,8 +66,7 @@ public class ManagerPanelView extends MainLayoutView implements View {
      * authentication controller
      */
     public ManagerPanelView(AuthenticationController authenticationController){
-        navigator=UI.getCurrent().getNavigator();
-        this.authenticationController=authenticationController;
+        super(authenticationController);
         configuration();
         setRightPanelContents(new DashboardComponent());
     }

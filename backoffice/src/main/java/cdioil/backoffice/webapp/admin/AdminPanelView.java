@@ -37,15 +37,6 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private static final String MARKET_STRUCT_BTN_CAPTION =
             "Estrutura Mercadológica";
-    /**
-     * Current Navigator
-     */
-    private final Navigator navigator;
-    
-    /**
-     * Current Authentication controller
-     */
-    private final AuthenticationController authenticationController;
 
     /**
      * Dashboard Button
@@ -73,8 +64,7 @@ public class AdminPanelView extends MainLayoutView implements View {
      * authentication controller
      */
     public AdminPanelView(AuthenticationController authenticationController){
-        navigator= UI.getCurrent().getNavigator();
-        this.authenticationController=authenticationController;
+        super(authenticationController);
         configuration();
     }
 
