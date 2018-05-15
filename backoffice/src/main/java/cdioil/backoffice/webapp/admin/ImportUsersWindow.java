@@ -23,7 +23,7 @@ public class ImportUsersWindow extends Window {
     /**
      * Controller class
      */
-    private ImportUsersFromFilesController controller;
+    private transient ImportUsersFromFilesController controller;
 
     /**
      * Main Layout of the Window

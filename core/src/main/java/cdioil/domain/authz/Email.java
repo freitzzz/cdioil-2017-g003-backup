@@ -139,7 +139,8 @@ public class Email implements Serializable,ValueObject {
      * <br><b>An exception may be thrown if the email address is invalid</b>
      */
     private void validateEmail(String email){
-        if(email==null||email.isEmpty())throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
+        if(email==null||email.isEmpty())
+            throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
         String regexEmail=REGEX_GENERAL;
         if(checkDomain(email,REGEX_DOMAIN_GMAIL)){
             regexEmail=REGEX_GMAIL;
@@ -148,7 +149,8 @@ public class Email implements Serializable,ValueObject {
         }else if(checkDomain(email,REGEX_DOMAIN_YAHOO)){
             regexEmail=REGEX_YAHOO;
         }
-        if(!checkEmail(email,regexEmail))throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
+        if(!checkEmail(email,regexEmail))
+            throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
     }
     /**
      * Method that verifies if an email belongs to a certain domain
