@@ -2,8 +2,6 @@ package cdioil.backoffice.application;
 
 import cdioil.domain.*;
 import cdioil.domain.authz.RegisteredUser;
-import cdioil.domain.authz.SystemUser;
-import cdioil.domain.authz.User;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.persistence.impl.*;
 import cdioil.time.TimePeriod;
