@@ -48,7 +48,7 @@ public class LoadAnswersUI {
             System.out.println("Finished.");
             System.out.println(numAnswers + " Reviews added");
             System.out.println(SEPARATOR);
-        } catch (InvalidFileFormattingException|InterruptedException e) {
+        } catch (InvalidFileFormattingException e) {
             System.out.println("File does not exist or has invalid formatting.");
         }
     }
