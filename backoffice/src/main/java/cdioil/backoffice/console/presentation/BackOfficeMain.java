@@ -16,20 +16,21 @@ import org.xml.sax.SAXException;
  */
 public class BackOfficeMain {
     public static void main(String[] args) {
-
-        if (args.length != 0) {
-            if (args[0].equals("-load")) {
-                new LoadAnswersUI();
-                return;
-            }
-        }
-
-        //Load localize strings
-        try {
-            BackOfficeLocalizationHandler.getInstance().loadStrings();
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(BackOfficeMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        new BackOfficeLogin().backofficeLogin();
+        System.out.println(Runtime.getRuntime().availableProcessors());
+        new LoadAnswersUI();
+//        if (args.length != 0) {
+//            if (args[0].equals("-load")) {
+//                new LoadAnswersUI();
+//                return;
+//            }
+//        }
+//
+//        //Load localize strings
+//        try {
+//            BackOfficeLocalizationHandler.getInstance().loadStrings();
+//        } catch (ParserConfigurationException | SAXException | IOException ex) {
+//            Logger.getLogger(BackOfficeMain.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        new BackOfficeLogin().backofficeLogin();
     }
 }

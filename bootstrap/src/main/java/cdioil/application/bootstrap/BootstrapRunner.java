@@ -20,12 +20,12 @@ public class BootstrapRunner {
      * @param args Argumentos do bootstrap
      */
     public static void main(String[] args) {
-        new UsersBootstrap();
-        new WhitelistBootstrap();
+//        new UsersBootstrap();
+//        new WhitelistBootstrap();
         new MarketStructureBootstrap();
         new LibrariesBootstrap();
         new SurveyBootstrap();
-        new EmailSendersBootstrap();
+//        new EmailSendersBootstrap();
     }
 
     /**
