@@ -19,11 +19,11 @@ public class CSVCategoriesReader implements CategoriesReader {
      * File to read.
      */
     private final File file;
-    
+
     /**
      * List with the Categories that were read.
      */
-    private List<Category> lc;
+    private final List<Category> lc;
 
     /**
      * Splitter of the columns of the file.
@@ -39,7 +39,15 @@ public class CSVCategoriesReader implements CategoriesReader {
      * Number of identifiers (columns) in the CSV file.
      */
     private static final int NUMBER_OF_IDENTIFIERS = 10;
-    
+
+    /**
+     * Capacity of the StringBuilder that stores the path of the Category.
+     */
+    private static final int CAPACITY = 128;
+
+    /**
+     * Unrecognized file format Message content
+     */
     private static final String UNRECOGNIZED_FILE_FORMAT = "Unrecognized file formatting";
 
     /**
@@ -62,41 +70,52 @@ public class CSVCategoriesReader implements CategoriesReader {
         List<String> fileContent = FileReader.readFile(file);
 
         if (!isFileValid(fileContent)) {
-           throw new InvalidFileFormattingException(UNRECOGNIZED_FILE_FORMAT);
+            throw new InvalidFileFormattingException(UNRECOGNIZED_FILE_FORMAT);
         }
 
         MarketStructure em = new MarketStructure();
 
         for (int i = IDENTIFIERS_LINE + 1; i < fileContent.size(); i++) {
             String[] line = fileContent.get(i).split(SPLITTER);
+            StringBuilder path = new StringBuilder(CAPACITY);
+
             if (line.length != 0) { //Doesn't read empty lines
                 try {
-                    String path = line[0] + Category.Sufixes.SUFIX_DC;
-                    Category c = new Category(line[1], path);
-                    boolean added = em.addCategory(c);
-                    if(added) lc.add(c);
+                    path.append(line[0]).
+                            append(Category.Sufixes.SUFIX_DC);
+                    Category c = new Category(line[1], path.toString().trim());
+                    if (em.addCategory(c)) {
+                        lc.add(c);
+                    }
 
-                    path = path + "-" + line[2] + Category.Sufixes.SUFIX_UN;
-                    Category c1 = new Category(line[3], path);
-                    added = em.addCategory(c1);
-                    if(added) lc.add(c1);
+                    path.append("-").append(line[2]).
+                            append(Category.Sufixes.SUFIX_UN);
+                    Category c1 = new Category(line[3], path.toString().trim());
+                    if (em.addCategory(c1)) {
+                        lc.add(c1);
+                    }
 
-                    
-                    path = path + "-" + line[4] + Category.Sufixes.SUFIX_CAT;
-                    Category c2 = new Category(line[5], path);
-                    added = em.addCategory(c2);
-                    if(added) lc.add(c2);
-                    
-                    path = path + "-" + line[6] + Category.Sufixes.SUFIX_SCAT;
-                    Category c3 = new Category(line[7], path);
-                    added = em.addCategory(c3);
-                    if(added) lc.add(c3);
-                    
-                    path = path + "-" + line[8] + Category.Sufixes.SUFIX_UB;
-                    Category c4 = new Category(line[9], path);
-                    added = em.addCategory(c4);
-                    if(added) lc.add(c4);
-                    
+                    path.append("-").append(line[4]).
+                            append(Category.Sufixes.SUFIX_CAT);
+                    Category c2 = new Category(line[5], path.toString().trim());
+                    if (em.addCategory(c2)) {
+                        lc.add(c2);
+                    }
+
+                    path.append("-").append(line[6]).
+                            append(Category.Sufixes.SUFIX_SCAT);
+                    Category c3 = new Category(line[7], path.toString().trim());
+                    if (em.addCategory(c3)) {
+                        lc.add(c3);
+                    }
+
+                    path.append("-").append(line[8]).
+                            append(Category.Sufixes.SUFIX_UB);
+                    Category c4 = new Category(line[9], path.toString().trim());
+                    if (em.addCategory(c4)) {
+                        lc.add(c4);
+                    }
+
                 } catch (IllegalArgumentException ex) {
                     System.out.println("The category in the line " + i + " is not valid.");
                 }
@@ -107,14 +126,14 @@ public class CSVCategoriesReader implements CategoriesReader {
 
     /**
      * Returns the number of Categories in the list of Categories.
-     * 
+     *
      * @return the number of Categories that were read
      */
     @Override
-    public int getNumberOfCategoriesRead(){
+    public int getNumberOfCategoriesRead() {
         return lc.size();
     }
-    
+
     /**
      * Checks if the content of the file is valid - not null and has all the expected identifiers properly splitted.
      *

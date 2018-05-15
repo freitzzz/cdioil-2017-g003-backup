@@ -30,7 +30,9 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
 
     public boolean exists(RegisteredUser user) {
         SystemUser sysUser=new UserRepositoryImpl().findByEmail(user.getID().getID());
-        if(sysUser==null)return false;
+        if(sysUser==null){
+            return false;
+        }
         Query query=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.sysUser = :sysUser").setParameter("sysUser",sysUser);
         return !query.getResultList().isEmpty();
     }
@@ -44,7 +46,9 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
     public RegisteredUser findByUserID(long dataBaseId) {
         Query q = entityManager().createQuery("SELECT ru FROM RegisteredUser ru WHERE ru.sysUser.id = :databaseId");
         q.setParameter("databaseId", dataBaseId);
-        if (q.getResultList().isEmpty())return null;
+        if (q.getResultList().isEmpty()){
+            return null;
+        }
         return (RegisteredUser)q.getSingleResult();
     }
     
@@ -70,7 +74,9 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
      * @return RegisteredUser with the admin that has a certain SystemUser
      */
     public RegisteredUser findBySystemUser(SystemUser systemUser){
-        if(systemUser==null)return null;
+        if(systemUser==null){
+            return null;
+        }
         Query querySystemUser=entityManager().createQuery("SELECT RU FROM RegisteredUser RU WHERE RU.sysUser= :systemUser")
                 .setParameter("systemUser",systemUser);
         return !querySystemUser.getResultList().isEmpty() ? (RegisteredUser)querySystemUser.getSingleResult() : null;
@@ -80,6 +86,40 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
 
         StringBuilder baseQueryStringBuilder = new StringBuilder("SELECT r FROM RegisteredUser r");
 
+        buildGetUsersByFiltersQueryString(domain, baseQueryStringBuilder, 
+                username, birthYear, location);
+
+        String queryString = baseQueryStringBuilder.toString();
+        Query q = entityManager().createQuery(queryString);
+
+        setGetUsersByFiltersQueryParameters(domain, q, username, birthYear, location);
+
+        List<RegisteredUser> registeredUsers = q.getResultList();
+        if (registeredUsers.isEmpty()) {
+            return null;
+        }
+
+        return registeredUsers;
+    }
+
+    private void setGetUsersByFiltersQueryParameters(String domain, Query q, String username, String birthYear, String location) {
+        if (domain != null && !domain.trim().isEmpty()) {
+            String newDomain = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
+            q.setParameter("p_domain", newDomain);
+        }
+        if (username != null && !username.trim().isEmpty()) {
+            String newUsername = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt(username, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE)) + ".*";
+            q.setParameter("p_username", newUsername);
+        }
+        if (birthYear != null && !birthYear.trim().isEmpty()) {
+            q.setParameter("p_birthyear", birthYear);
+        }
+        if (location != null && !location.trim().isEmpty()) {
+            q.setParameter("p_location", location);
+        }
+    }
+
+    private void buildGetUsersByFiltersQueryString(String domain, StringBuilder baseQueryStringBuilder, String username, String birthYear, String location) {
         if (domain != null && !domain.trim().isEmpty()) {
             baseQueryStringBuilder.append(" WHERE r.sysUser.email.email REGEXP :p_domain");
         }
@@ -89,37 +129,12 @@ public class RegisteredUserRepositoryImpl extends BaseJPARepository<RegisteredUs
         }
         if (birthYear != null && !birthYear.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
-            baseQueryStringBuilder.append("EXTRACT (YEAR FROM r.sysUser.birthDate.birthDate) = :p_birthyear");
+            baseQueryStringBuilder.append("EXTRACT (YEAR FROM r.sysUser.birthDate.dateOfBirth) = :p_birthyear");
         }
         if (location != null && !location.trim().isEmpty()) {
             baseQueryStringBuilder.append(getOperator(baseQueryStringBuilder));
             baseQueryStringBuilder.append("r.sysUser.location.location = :p_location");
         }
-
-        String queryString = baseQueryStringBuilder.toString();
-        Query q = entityManager().createQuery(queryString);
-
-        if (domain != null && !domain.trim().isEmpty()) {
-            domain = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt("@" + domain, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE));
-            q.setParameter("p_domain", domain);
-        }
-        if (username != null && !username.trim().isEmpty()) {
-            username = ".*" + OperatorsEncryption.removeEncryptionHeader(OperatorsEncryption.encrypt(username, Email.ENCRYPTION_CODE, Email.ENCRYPTION_VALUE)) + ".*";
-            q.setParameter("p_username", username);
-        }
-        if (birthYear != null && !birthYear.trim().isEmpty()) {
-            q.setParameter("p_birthyear", birthYear);
-        }
-        if (location != null && !location.trim().isEmpty()) {
-            q.setParameter("p_location", location);
-        }
-
-        List<RegisteredUser> registeredUsers = q.getResultList();
-        if (registeredUsers.isEmpty()) {
-            return null;
-        }
-
-        return registeredUsers;
     }
 
     private String getOperator(StringBuilder queryStringBuilder) {

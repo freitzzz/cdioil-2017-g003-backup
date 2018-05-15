@@ -24,7 +24,7 @@ public class ListCategoriesUI {
     /**
      * Message displayed when MarketStructure is null
      */
-    private static final String MARKET__STRUCTURE_NULL_MSG = "Market Structure does not exist!";
+    private static final String MARKET_STRUCTURE_NULL_MSG = "Market Structure does not exist!";
 
     /**
      * Constructor of ListCategoriesUI class
@@ -38,8 +38,8 @@ public class ListCategoriesUI {
      */
     public void listCategoriesWithoutManagers() {
         List<Category> lc = ctrl.listCategoriesWithoutManagers();
-        if (lc == null) {
-            System.out.println(MARKET__STRUCTURE_NULL_MSG);
+        if (lc == null || lc.isEmpty()) {
+            System.out.println(MARKET_STRUCTURE_NULL_MSG);
         } else {
             System.out.println(INTRO_MESSAGE);
             for (Category c : lc) {

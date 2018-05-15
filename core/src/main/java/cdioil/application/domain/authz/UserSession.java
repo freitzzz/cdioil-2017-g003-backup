@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
 
 /**
  * UserSession class that classifies the session of a User on the application
- * <br>TO-DO: Mark class as an entity in order to add logging on the database
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 4.0 of FeedbackMonkey
  */
@@ -25,17 +24,25 @@ public class UserSession implements Serializable{
     /**
      * LocalDateTime with the session start date
      */
-    private LocalDateTime sessionStartDate;
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    private LocalDateTime sessionStartDate; //NOSONAR
     /**
      * LocalDateTime with the session end date
      */
     @Column(updatable = true,nullable = true)
-    private LocalDateTime sessionEndDate;
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    private LocalDateTime sessionEndDate; //NOSONAR
     /**
      * User with the session user
      */
     @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.MERGE})
     private SystemUser sessionUser;
+    /**
+     * String with the current user token
+     * <br>Currently it's a combination of the user ID + logged session timestamp
+     * <br>#TO-DO: Encrypt user token
+     */
+    private String userToken;
     /**
      * Builds a new UserSession with the user that is being logged on the session
      * @param sessionUser SystemUser with the user that is being logged on the session
@@ -43,7 +50,12 @@ public class UserSession implements Serializable{
     public UserSession(SystemUser sessionUser){
         this.sessionUser=sessionUser;
         this.sessionStartDate=LocalDateTime.now();
+        this.userToken=sessionUser.getID()+sessionStartDate.toString();
     }
+    /**
+     * Protected constructor in order to allow JPA persistence
+     */
+    protected UserSession(){}
     /**
      * Logs the end of the user session
      */
@@ -58,7 +70,8 @@ public class UserSession implements Serializable{
      */
     public SystemUser getUser(){return sessionUser;}
     /**
-     * Protected constructor in order to allow JPA persistence
+     * Method that returns the current user token
+     * @return String with the current user token
      */
-    protected UserSession(){}
+    public String getUserToken(){return userToken;}
 }

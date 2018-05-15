@@ -6,11 +6,16 @@ import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.domain.authz.*;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
+import java.io.Serializable;
 
 /**
  * Controller for the Register User use case (US-180)
  */
-public final class RegisterUserController {
+public final class RegisterUserController implements Serializable {
+    /**
+     * Serialization number
+     */
+    private static final long serialVersionUID = 4L;
     /**
      * Constant that represents the regular expression that represents blank spaces
      */
@@ -44,11 +49,11 @@ public final class RegisterUserController {
     /**
      * Registered Users repository
      */
-    private final RegisteredUserRepositoryImpl registerUserRepository = new RegisteredUserRepositoryImpl();
+    private final transient RegisteredUserRepositoryImpl registerUserRepository = new RegisteredUserRepositoryImpl();
     /**
      * Current SystemUserBuilder
      */
-    private final SystemUserBuilder userBuilder=SystemUserBuilder.create();
+    private final transient SystemUserBuilder userBuilder=SystemUserBuilder.create();
     
     /**
      * Adds the email of the user to the current registration process

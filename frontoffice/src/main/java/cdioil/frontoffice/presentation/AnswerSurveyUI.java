@@ -3,9 +3,12 @@ package cdioil.frontoffice.presentation;
 import cdioil.frontoffice.application.AnswerSurveyController;
 import cdioil.console.Console;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.util.LinkedList;
 
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * User interface for AnswerSurvey User Story
@@ -32,12 +35,14 @@ public class AnswerSurveyUI {
 
     /**
      * Constructor
+     * @param loggedUser
      */
     public AnswerSurveyUI(RegisteredUser loggedUser) {
         try {
             controller = new AnswerSurveyController(loggedUser);
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            ExceptionLogger.logException(LoggerFileNames.FRONTOFFICE_LOGGER_FILE_NAME,
+                    Level.SEVERE, e.getMessage());
             System.out.println("ERROR: Error fetching Surveys.");
         }
 
@@ -166,7 +171,7 @@ public class AnswerSurveyUI {
                 System.out.println("Type EXIT to leave at any time\n");
                 option = Console.readLine("Select an option or UNDO previous answer:\n");
 
-                if (option.equalsIgnoreCase("EXIT")) {
+                if ("EXIT".equalsIgnoreCase(option)) {
                     if (controller.saveReview(firstTimeSaving)) {
                         System.out.println("A sua avaliacao foi gravada com sucesso. "
                                 + "Podera continuar a responder ao inquerito em qualquer"
@@ -178,10 +183,8 @@ public class AnswerSurveyUI {
                     if (idx < options.size()) {
                         isValidOption = true;
                     }
-                } else if (option.equalsIgnoreCase("UNDO")) {
-                    if (controller.undoAnswer()) {
+                } else if ("UNDO".equalsIgnoreCase(option) && controller.undoAnswer()) {
                         break;
-                    }
                 }
             }
 

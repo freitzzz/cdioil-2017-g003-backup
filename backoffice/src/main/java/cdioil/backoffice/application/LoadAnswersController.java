@@ -22,9 +22,6 @@ public class LoadAnswersController {
 
     private static final int THREAD_NUMBER = 17;
 
-    public LoadAnswersController() {
-    }
-
     /**
      * Loads generated survey reviews into the application in runtime.
      *

@@ -1,0 +1,28 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Autenticação com Sucesso
+	________________________________________________
+
+	1. Fazer login com o email sonae.lover@sonae.pt e
+	   password Password123
+	2. Esperar pela mensagem de sucesso.
+	3. Entrar na aplicação.
+
+	________________________________________________
+	CASO #2: Autenticação com Credenciais Inválidas
+	________________________________________________
+
+	1. Fazer login com o email sonae.lover@sonae.pt e
+	   password Password12
+	2. Esperar pela mensagem de erro de credenciais inválidas.
+
+	________________________________________________
+	CASO #2: Autenticação com uma Conta Não Ativada
+	________________________________________________
+
+	1. Registar uma conta na aplicação sem ativá-la com o
+	   código enviado para o e-mail escolhido.
+	2. Esperar pela mensagem de erro de conta não ativada.

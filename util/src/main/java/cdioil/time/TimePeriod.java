@@ -17,11 +17,13 @@ public class TimePeriod implements Serializable {
     /**
      * Starting date.
      */
-    private LocalDateTime startDate;
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    private LocalDateTime startDate; //NOSONAR
     /**
      * Ending date.
      */
-    private LocalDateTime endDate;
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    private LocalDateTime endDate; //NOSONAR
 
     /**
      * Builds a TimePeriod with a starting date and an ending date.
@@ -31,7 +33,7 @@ public class TimePeriod implements Serializable {
      */
     public TimePeriod(LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate == null) {
-            throw new IllegalArgumentException("A data de início não pode ser "
+            throw new IllegalArgumentException("A data de inicio não pode ser "
                     + "null.");
         }
         if (endDate == null) {
@@ -39,7 +41,7 @@ public class TimePeriod implements Serializable {
                     + "null.");
         }
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("A data de início não pode ser "
+            throw new IllegalArgumentException("A data de início nao pode ser "
                     + "depois da data de fim.");
         }
         if (startDate.equals(endDate)) {

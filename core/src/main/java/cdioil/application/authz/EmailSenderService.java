@@ -43,7 +43,9 @@ public final class EmailSenderService {
      */
     public boolean sendActivationCode(){
         EmailSenders sender=new EmailSendersRepositoryImpl().getRandomEmailSender();
-        if(sender==null)return false;
+        if(sender==null){
+            return false;
+        }
         String toEmail=currentSystemUser.getID().toString();
         String content=String.format(FORMATED_EMAIL_ACTIVATION_CODE_CONTENT
                 ,currentSystemUser.getName().toString(),toEmail,currentSystemUser.getActivationCode());

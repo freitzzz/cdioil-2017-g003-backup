@@ -102,12 +102,9 @@ public class MarketStructure implements Serializable {
 
         Node parentNode = searchParentNode(c);
 
-        if (parentNode != null) {
-
-            if (parentNode.addChild(new Node(c))) {
+        if (parentNode != null && parentNode.addChild(new Node(c))) {
                 marketSize++;
                 return true;
-            }
         }
         return false;
     }
@@ -329,10 +326,6 @@ public class MarketStructure implements Serializable {
      * @param node current node
      */
     private void getAllCategories(List<Category> lc, Node node) {
-
-//        if(node == null){
-//            return;
-//        }
         lc.add(node.getElement());
 
         for (Node child : node.getChildren()) {

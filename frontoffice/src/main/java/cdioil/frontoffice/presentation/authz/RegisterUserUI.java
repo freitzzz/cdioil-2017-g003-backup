@@ -101,24 +101,25 @@ public class RegisterUserUI {
                 }catch(IllegalArgumentException|IndexOutOfBoundsException e){
                     Console.logError(e.getMessage());
                     i--;
-                    if(verifyExitUI())return;
+                    if(verifyExitUI()){
+                        return;
+                    }
                 }
             }
             if(verifiyOptionalFields()){
                 for(int i=0;i<OPTIONAL_REGISTRATION_FIELDS.length;i++){
                     try{
-                        switch(i){
-                            case LOCATION_FIELD_INDEX:
-                                registerUserController.addLocation(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
-                                break;
-                            case BIRTH_DATE_FIELD_INDEX:
-                                registerUserController.addBirthDate(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
-                                break;
+                        if(i==LOCATION_FIELD_INDEX){
+                            registerUserController.addLocation(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
+                        }else if(i==BIRTH_DATE_FIELD_INDEX){
+                            registerUserController.addBirthDate(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));    
                         }
                     }catch(IllegalArgumentException|DateTimeParseException e){
                         Console.logError(e.getMessage());
                         i--;
-                        if(verifyExitUI())return;
+                        if(verifyExitUI()){
+                            return;
+                        }
                     }
                 }
             }
@@ -140,8 +141,12 @@ public class RegisterUserUI {
         boolean catched=false;
         while(!catched){
             String decision=Console.readLine(OPTIONAL_FIELDS_MESSAGE);
-            if(decision.equalsIgnoreCase(YES))return true;
-            if(decision.equalsIgnoreCase(NO))return false;
+            if(decision.equalsIgnoreCase(YES)){
+                return true;
+            }
+            if(decision.equalsIgnoreCase(NO)){
+                return false;
+            }
         }
         return catched;
     }

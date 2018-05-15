@@ -31,17 +31,9 @@ public final class EmailSendersRepositoryImpl extends BaseJPARepository<EmailSen
     public EmailSenders getRandomEmailSender(){
         Query randomEmailSenderQuery=entityManager().createQuery("SELECT ES FROM Mood ES");
         List<EmailSenders> emailSenders=(List<EmailSenders>)randomEmailSenderQuery.getResultList();
-        if(emailSenders.isEmpty())return null;
+        if(emailSenders.isEmpty()){
+            return null;
+        }
         return emailSenders.get(new Random().nextInt(emailSenders.size()));
-    }
-    /**
-     * Method that gets all number of email senders currently existing on the database
-     * @return Integer with the number of all email senders currently existing on the database
-     */
-    private int getNumberOfEmailSenders(){
-        Query queryNumberOfEmailSenders=entityManager().createQuery("SELECT COUNT(ES) FROM Mood ES");
-        if(queryNumberOfEmailSenders.getResultList().isEmpty())return 0;
-        long numberOfEmailSenders=(Long)queryNumberOfEmailSenders.getSingleResult();
-        return (int)numberOfEmailSenders;
     }
 }

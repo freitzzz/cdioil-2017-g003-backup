@@ -55,7 +55,7 @@ public class EANTest {
 
         //Mutation tests
         assertNotEquals("".hashCode(), ean.hashCode());
-        int num = 67 * 7 + ean.getClass().hashCode() + ean.code.hashCode();
+        int num = 67 * 7 + ean.getClass().hashCode() + ean.productCode.hashCode();
         assertEquals(num, ean.hashCode());
     }
 

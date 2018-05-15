@@ -55,11 +55,11 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
         List<String> csvContent=new ArrayList<>();
         String header=QUESTION_LABEL+CSV_DELIMITER+ANSWER_LABEL;
         csvContent.add(header);
-        mapQuestionAnswers.forEach((question,answers)->{
-            answers.forEach((answer)->{
-                csvContent.add(question.toString()+CSV_DELIMITER+answer.toString());
-            });
-        });
+        mapQuestionAnswers.forEach((question,answers)->
+            answers.forEach(answer->
+                csvContent.add(question.toString()+CSV_DELIMITER+answer.toString())
+            )
+        );
         return FileWriter.writeFile(file,csvContent);
     }
     /**
@@ -68,7 +68,7 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
      */
     private Map<Question,List<Answer>> allQuestionsPerAnswers(){
         Map<Question,List<Answer>> mapQuestionAnswers=new HashMap<>();
-        surveyReviews.forEach((t)->{
+        surveyReviews.forEach(t->{
             Map<Question,Answer> surveyAnswers=t.getReviewQuestionAnswers();
             surveyAnswers.forEach((question,answer)->{
                 List<Answer> questionAnswers=mapQuestionAnswers.get(question);

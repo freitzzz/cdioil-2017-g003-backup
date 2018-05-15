@@ -1,5 +1,4 @@
 package cdioil.application.domain.authz.exceptions;
-
 /**
  * AuthenticationException that identifies an exception for an authentication service
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
@@ -15,6 +14,10 @@ public final class AuthenticationException extends RuntimeException{
      */
     private static final String ACCOUNT_NOT_ACTIVATED_MESSAGE="Conta não activada";
     /**
+     * Constant that represents the account already activated cause message
+     */
+    private static final String ACCOUNT_ALREADY_ACTIVATED_MESSAGE="Conta já está activada!";
+    /**
      * AuthenticationExceptionCause with the authentication exception cause
      */
     private final AuthenticationExceptionCause cause;
@@ -22,7 +25,7 @@ public final class AuthenticationException extends RuntimeException{
      * Builds a new AuthenticationException with the exception message
      * @param message String with the authentication message
      * @param cause AuthenticationExceptionCause with the authentication exception 
- cause
+     * cause
      */
     public AuthenticationException(String message,AuthenticationExceptionCause cause){
         super(message);
@@ -33,12 +36,13 @@ public final class AuthenticationException extends RuntimeException{
      * @return AuthenticationExceptionCause enum with the authentication exception 
      * cause
      */
-    public AuthenticationExceptionCause getAuthenticatioExceptionCause(){return cause;}
+    public AuthenticationExceptionCause getAuthenticationExceptionCause(){return cause;}
     /**
      * Enum that represents the different causes of the AuthenticationException
      */
     public enum AuthenticationExceptionCause{
         INVALID_CREDENTIALS{@Override public String toString(){return INVALID_CREDENTIALS_MESSAGE;}},
-        NOT_ACTIVATED{@Override public String toString(){return ACCOUNT_NOT_ACTIVATED_MESSAGE;}}
+        NOT_ACTIVATED{@Override public String toString(){return ACCOUNT_NOT_ACTIVATED_MESSAGE;}},
+        ALREADY_ACTIVATED{@Override public String toString(){return ACCOUNT_ALREADY_ACTIVATED_MESSAGE;}}
     }
 }

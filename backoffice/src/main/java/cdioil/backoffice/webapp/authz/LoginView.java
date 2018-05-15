@@ -183,9 +183,9 @@ public class LoginView extends LoginDesign implements View {
      */
     private void configureSignupButton() {
         buttonsLayout.addComponentsAndExpand(new PopupView(new RegisterPopupViewContent()));
-        btnSignUp.addClickListener((Button.ClickEvent clickEvent) -> {
-            registeredUserPopupView.setPopupVisible(true);
-        });
+        btnSignUp.addClickListener((Button.ClickEvent clickEvent) -> 
+            registeredUserPopupView.setPopupVisible(true)
+        );
     }
     /**
      * Method that tries to login into the webapp
@@ -206,7 +206,7 @@ public class LoginView extends LoginDesign implements View {
      * @param authenticationException AuthenticationException with the exception thrown if the authentication failed
      */
     private void treatAuthenticationFailure(AuthenticationException authenticationException){
-        if(authenticationException.getAuthenticatioExceptionCause()
+        if(authenticationException.getAuthenticationExceptionCause()
                 .equals(AuthenticationException.AuthenticationExceptionCause.INVALID_CREDENTIALS)){
             showInvalidLoginCredentialsNotification();
         }else{

@@ -12,14 +12,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 /**
- * Abstract class for a Product's code.
+ * Abstract class for a Product's productCode.
  *
  * @author António Sousa [1161371]
- * @param <T> type of code
+ * @param <T> type of productCode
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Code<T> implements Serializable, ValueObject {
+public abstract class Code<T extends Serializable> implements Serializable, ValueObject {
 
     /**
      * Serialization identifier.
@@ -34,10 +34,10 @@ public abstract class Code<T> implements Serializable, ValueObject {
     private int id;
 
     /**
-     * The code's value.
+     * The productCode's value.
      */
     @Column(unique = true)
-    protected T code;
+    protected T productCode;
     
     /**
      * Empty constructor for JPA.
@@ -52,13 +52,13 @@ public abstract class Code<T> implements Serializable, ValueObject {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.code) + Objects.hashCode(this.getClass());
+        hash = 67 * hash + Objects.hashCode(this.productCode) + Objects.hashCode(this.getClass());
         /*Uma vez que isto será usado por todas as subclasses, o tipo de classe deverá contribuir para um hash diferente*/
         return hash;
     }
 
     /**
-     * Checks for true equality with another object based on the code's value.
+     * Checks for true equality with another object based on the productCode's value.
      * @param obj object to compare to
      * @return true if the objects are truly equal, false otherwise
      */
@@ -74,20 +74,18 @@ public abstract class Code<T> implements Serializable, ValueObject {
             return false;
         }
         final Code other = (Code) obj;
-        if (!Objects.equals(this.code, other.code)) {
-            return false;
-        }
-        return true;
+        
+        return Objects.equals(this.productCode, other.productCode);
     }
 
     /**
-     * Describes the instance based on its code.
+     * Describes the instance based on its productCode.
      *
      * @return a textual representation of this instance.
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ": " + code.toString() + "\n";
+        return getClass().getSimpleName() + ": " + productCode.toString() + "\n";
     }
 
 }

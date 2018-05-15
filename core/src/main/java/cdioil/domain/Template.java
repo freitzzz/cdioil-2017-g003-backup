@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -65,9 +64,9 @@ public class Template implements Serializable {
      * @return QuestionGroup
      */
     public QuestionGroup getQuestionGroup() {
-        String title = questionGroup.toString();
+        String questionGroupTitle = questionGroup.toString();
         Set<Question> setCopy = questionGroup.getQuestions();
-        QuestionGroup questionGroupCopy = new QuestionGroup(title);
+        QuestionGroup questionGroupCopy = new QuestionGroup(questionGroupTitle);
         questionGroupCopy.getQuestions().addAll(setCopy);
         return questionGroupCopy;
     }

@@ -3,7 +3,6 @@ package cdioil.application.utils;
 import cdioil.files.FileReader;
 import cdioil.files.InvalidFileFormattingException;
 import java.io.File;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;

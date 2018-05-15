@@ -31,12 +31,12 @@ public class SystemUserBuilderTest {
     public void testValidBuild() {
         System.out.println("Valid Build");
         SystemUserBuilder instance = SystemUserBuilder.create();
-        instance.withEmail("lilpump@blip.pt");
-        instance.withPassword("Password123");
-        instance.withName("Gazzy","Garcia");
-        instance.withPhoneNumber("919555555");
+        assertNotEquals(null,instance.withEmail("lilpump@blip.pt"));
+        assertNotEquals(null,instance.withPassword("Password123"));
+        assertNotEquals(null,instance.withName("Gazzy","Garcia"));
+        assertNotEquals(null,instance.withPhoneNumber("919555555"));
         System.out.println("The build should be successful since it is valid");
-        instance.build();
+        assertNotEquals(null,instance.build());
     }
     
     /**
@@ -149,7 +149,7 @@ public class SystemUserBuilderTest {
         System.out.println("Valid Location");
         SystemUserBuilder instance = SystemUserBuilder.create();
         System.out.println("The condition should be successful since the location being built in is valid");
-        instance.withLocation("Codeine City");
+        assertNotEquals(null,instance.withLocation("Codeine City"));
     }
 
     /**
@@ -171,7 +171,7 @@ public class SystemUserBuilderTest {
         System.out.println("Valid Birth Date");
         SystemUserBuilder instance = SystemUserBuilder.create();
         System.out.println("The condition should be successful since the birth date being built in is valid");
-        instance.withBirthDate("1900-01-01");
+        assertNotEquals(null,instance.withBirthDate("1900-01-01"));
     }
 
     /**

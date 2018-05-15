@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
-@Entity(name="BinaryQuestion")
+@Entity(name = "BinaryQuestion")
 public class BinaryQuestion extends Question {
 
     /**
@@ -22,10 +22,21 @@ public class BinaryQuestion extends Question {
         super(question, questionID, optionList());
         super.type = QuestionTypes.BINARY;
     }
-    
-    public BinaryQuestion(Question question){
-        super(question.getQuestionText(),question.getQuestionID(),question.getOptionList());
+
+    /**
+     * Builds a copy of another binary question
+     *
+     * @param question question we want a copy of
+     */
+    public BinaryQuestion(Question question) {
+        super(question.getQuestionText(), question.getQuestionID(), question.getOptionList());
         super.type = QuestionTypes.BINARY;
+    }
+
+    /**
+     * Empty Constructor for JPA.
+     */
+    protected BinaryQuestion() {
     }
 
     /**
@@ -38,11 +49,5 @@ public class BinaryQuestion extends Question {
         list.add(new BinaryQuestionOption(true));
         list.add(new BinaryQuestionOption(false));
         return list;
-    }
-
-    /**
-     * Empty Constructor for JPA.
-     */
-    protected BinaryQuestion() {
     }
 }

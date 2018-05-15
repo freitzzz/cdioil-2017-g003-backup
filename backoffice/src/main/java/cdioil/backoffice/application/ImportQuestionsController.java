@@ -51,7 +51,7 @@ public class ImportQuestionsController {
      * @throws cdioil.files.InvalidFileFormattingException if the file's
      * formatting is not consistent with the file guidelines
      */
-    public int importCategoryQuestions(String filename) throws InvalidFileFormattingException {
+    public int importCategoryQuestions(String filename) {
 
         Set<Question> successfullyImportedQuestions = new HashSet<>();
 
@@ -110,7 +110,7 @@ public class ImportQuestionsController {
      * @param filename Name of the file
      * @return number of successfully imported questions
      */
-    public Integer importIndependentQuestions(String filename) throws InvalidFileFormattingException {
+    public Integer importIndependentQuestions(String filename) {
 
         Integer numImportedQuestions = 0;
 
@@ -124,7 +124,7 @@ public class ImportQuestionsController {
 
             List<Question> questions = questionsReader.readIndependentQuestions();
 
-            if (questions != null) {
+            if (questions != null && !questions.isEmpty()) {
 
                 for (Question q : questions) {
 

@@ -5,13 +5,18 @@ import cdioil.application.utils.SurveyAnswersWriterFactory;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Controller for the <i>Exportar Respostas de um Inquerito</i> use case <b>(US-601)</b>
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
-public final class ExportSurveyAnswersController {
+public final class ExportSurveyAnswersController implements Serializable{
+    /**
+     * Serialization number.
+     */
+    private static final long serialVersionUID = 5L;
     /**
      * Constant that represents the message that occures when a Survey hasn't any reviews
      */
@@ -25,6 +30,10 @@ public final class ExportSurveyAnswersController {
      * List with all reviews from a certain survey
      */
     private List<Review> surveyReviews;
+    /**
+     * Hides default constructor
+     */
+    private ExportSurveyAnswersController(){}
     /**
      * Builds a new controller for the <i>Exportar Respostas de um Inquerito</i> use case <b>(US-601)</b> 
      * with the survey which answers are going to be exported
@@ -43,7 +52,9 @@ public final class ExportSurveyAnswersController {
      */
     public boolean exportAnswersFromSurvey(String filepath){
         SurveyAnswersWriter surveyWriter=SurveyAnswersWriterFactory.create(filepath,surveyReviews);
-        if(surveyWriter==null)return false;
+        if(surveyWriter==null){
+            return false;
+        }
         return surveyWriter.write();
     }
     /**
@@ -51,10 +62,8 @@ public final class ExportSurveyAnswersController {
      */
     private void getAllAnswersFromSurvey(){
         surveyReviews=new ReviewRepositoryImpl().getReviewsBySurvey(survey);
-        if(surveyReviews==null||surveyReviews.isEmpty())throw new IllegalArgumentException(INVALID_SURVEY_MESSAGE);
+        if(surveyReviews==null||surveyReviews.isEmpty()){
+            throw new IllegalArgumentException(INVALID_SURVEY_MESSAGE);
+        }
     }
-    /**
-     * Hides default constructor
-     */
-    private ExportSurveyAnswersController(){}
 }

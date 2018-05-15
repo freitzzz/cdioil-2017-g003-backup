@@ -1,0 +1,48 @@
+﻿ESC "C"lassifique relativamente A  apreciacao global" MIN=1:nao gostei, MAX=8:gostei muito
+      IF >=4 AND <=5 
+10 10 3 1  A34 EM Qual o parametro que mais gostou? N=3
+      AL Sabor 
+      AL Textura 
+      AL Imagem 
+      ENDEM  
+      ELSE  
+10 10 3 1  A22 EM Qual o parametro que menos gostou? N=3
+      AL  
+10 10 3 1  A35 EM Sabor N=5
+      AL Demasiado azedo 
+      AL Demasiado doce 
+      AL Sem sabor 
+      AL Demasiado forte 
+      ALELSE  
+10 10 3 1  B01 TX Qual? 
+      ENDEM  
+      IF <=4 
+10 10 3 1  A123 SN Caso nao tivesse esta caracteri­stica a sua satisfacao global subiria pelo menos  um ponto? 
+      ENDIF  
+      AL  
+10 10 3 1  A38 EM Textura N=7
+      AL Demasiado mole 
+      AL Demasiado rijo 
+      AL Elevada agregacao de alimentos excessiva 
+      AL Baixa agregacao de alimentos 
+      AL Espessura elevada 
+      AL Espessura reduzida 
+      ALELSE  
+10 10 3 1  B01 TX Qual? 
+      ENDEM  
+      IF <=6 
+10 10 3 1  A123 SN Caso nao tivesse esta caracteristica a sua satisfacao global subiria pelo menos  um ponto? 
+      ENDIF  
+      AL  
+10 10 3 1  A43 EM Imagem N=4
+      AL Embalagem pouco apelativa 
+      AL Artigo muito pequeno 
+      AL Aspeto basico 
+      ALELSE Qual? 
+10 10 3 1  B01 TX Qual? 
+      ENDEM  
+      ENDEM  
+      IF <=6 
+10 10 3 1  A123 SN Caso nao tivesse esta caractera­stica a sua satisfacao global subiria pelo menos  um ponto? 
+      ENDIF  
+      ENDIF  

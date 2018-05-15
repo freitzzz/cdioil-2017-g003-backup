@@ -25,38 +25,37 @@ public class ImportCategoriesUI {
     /**
      * Represents the exit code for the User Interface.
      */
-    private final String EXIT_CODE = localizationHandler.getMessageValue("option_exit");
+    private final String exitCode = localizationHandler.getMessageValue("option_exit");
 
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
-    private final String EXIT_MESSAGE = localizationHandler.getMessageValue("info_exit_message");
+    private final String exitMessage = localizationHandler.getMessageValue("info_exit_message");
 
     /**
      * Represents a message that indicates the user to insert the path of the file to import.
      */
-    private final String FILEPATH_MESSAGE = localizationHandler.getMessageValue("request_file_path");
+    private final String filePathMessage = localizationHandler.getMessageValue("request_file_path");
 
     /**
      * Represents a message that informs the user that the inserted filepath was not found.
      */
-    private final String FILEPATH_NOT_FOUND_MESSAGE = localizationHandler.getMessageValue
-        ("error_importing_categories") + EXIT_MESSAGE;
-    
-   /**
-    * Represents a message that informs the user about how many categories were imported.
-    */
-    private final String NUMBER_CATEGORIES_IMPORTED = localizationHandler.getMessageValue("info_number_categories_imported");
-            
+    private final String errorFilePathNotFound = localizationHandler.getMessageValue("error_importing_categories") + exitMessage;
+
+    /**
+     * Represents a message that informs the user about how many categories were imported.
+     */
+    private final String infoNumberCategoriesImported = localizationHandler.getMessageValue("info_number_categories_imported");
+
     /**
      * Represents a message that informs the user that no category was imported.
      */
-    private final String INVALID_CATEGORIES_MESSAGE = localizationHandler.getMessageValue("error_no_imported_categories");
+    private final String errorInvalidCategories = localizationHandler.getMessageValue("error_no_imported_categories");
 
     /**
      * Separator used for clarity.
      */
-    private final String SEPARATOR = localizationHandler.getMessageValue("separator");
+    private final String separator = localizationHandler.getMessageValue("separator");
 
     /**
      * Instance of Controller that intermediates the interactions between the administrator and the system.
@@ -75,21 +74,26 @@ public class ImportCategoriesUI {
      * Method that intermediates the interactions with the administrator (creates the UI itself).
      */
     private void importCategories() {
-        System.out.println(SEPARATOR);
-        System.out.println(EXIT_MESSAGE);
+        System.out.println(separator);
+        System.out.println(exitMessage);
         boolean catched = false;
         while (!catched) {
-            String filePath = Console.readLine(FILEPATH_MESSAGE);
-            if (filePath.equalsIgnoreCase(EXIT_CODE)) return;
+            String filePath = Console.readLine(filePathMessage);
+            if (filePath.equalsIgnoreCase(exitCode)) {
+                return;
+            }
             MarketStructure em = ctrl.readCategories(filePath);
-            
+
             if (em == null) {
-                String option = Console.readLine(FILEPATH_NOT_FOUND_MESSAGE);
-                if (option.equalsIgnoreCase(EXIT_CODE)) return;
+                String option = Console.readLine(errorFilePathNotFound);
+                if (option.equalsIgnoreCase(exitCode)) {
+                    return;
+                }
             } else {
-                if (ctrl.getNumberOfCategoriesRead() == 0) System.out.println(INVALID_CATEGORIES_MESSAGE);
-                else {
-                    System.out.println(NUMBER_CATEGORIES_IMPORTED + " " + ctrl.getNumberOfCategoriesRead());
+                if (ctrl.getNumberOfCategoriesRead() == 0) {
+                    System.out.println(errorInvalidCategories);
+                } else {
+                    System.out.println(infoNumberCategoriesImported + " " + ctrl.getNumberOfCategoriesRead());
                     catched = true;
                 }
             }

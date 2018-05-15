@@ -20,28 +20,44 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 
-
 /**
  * The User Management View of the AdminPanel
  */
 public class UserManagementComponent extends DefaultPanelView {
 
+    /**
+     * User Management Controller
+     */
     private UserManagementController userManagementController;
 
+    /**
+     * List Users controller
+     */
     private ListUsersController listUsersController;
 
+    /**
+     * User list/grid
+     */
     private Grid<SystemUserDTO> userGrid;
+
+    /**
+     * Data for the the user grid
+     */
+    private transient List<SystemUserDTO> userGridData;
 
     /**
      * Constructs an instance of the User Management view
      */
     public UserManagementComponent() {
         super("User Management");
-        instantiateComponents();
+        instantiateViewComponents();
         prepareComponents();
     }
 
-    private void instantiateComponents() {
+    /**
+     * Instantiates all needed components
+     */
+    private void instantiateViewComponents() {
         userManagementController = new UserManagementController();
         listUsersController = new ListUsersController();
         userGrid = new Grid<>();
@@ -54,12 +70,13 @@ public class UserManagementComponent extends DefaultPanelView {
         prepareHeader();
         prepareUserTable();
 
-
-
         setExpandRatio(headerLayout, 0.10f);
         setExpandRatio(userGrid, 0.90f);
     }
 
+    /**
+     * Prepare Header
+     */
     private void prepareHeader() {
         Responsive.makeResponsive(headerLayout);
 
@@ -72,9 +89,12 @@ public class UserManagementComponent extends DefaultPanelView {
 
         headerLayout.addComponent(toolsLayout);
         headerLayout.setComponentAlignment(toolsLayout, Alignment.MIDDLE_RIGHT);
-
     }
 
+    /**
+     * Prepare Search Field
+     * @return search field component
+     */
     private Component createSearchField() {
         TextField searchTextField = new TextField();
         searchTextField.setPlaceholder("Search");
@@ -84,13 +104,19 @@ public class UserManagementComponent extends DefaultPanelView {
         searchTextField.addValueChangeListener(new HasValue.ValueChangeListener<String>() {
             @Override
             public void valueChange(HasValue.ValueChangeEvent<String> valueChangeEvent) {
-                //TODO Filters user table
+                // Get text field value
+
+                // s
             }
         });
 
         return searchTextField;
     }
 
+    /**
+     * Create Filter button
+     * @return
+     */
     private Component createFilterButton() {
         Button filterButton = new Button("Filters");
         filterButton.setSizeUndefined();
@@ -98,6 +124,10 @@ public class UserManagementComponent extends DefaultPanelView {
         return filterButton;
     }
 
+    /**
+     * Create Options DropDown Menu
+     * @return
+     */
     private Component createOptionsDropDown() {
         MenuBar settingsMenuBar = new MenuBar();
         MenuItem menuItem = settingsMenuBar.addItem("", null);
@@ -120,11 +150,13 @@ public class UserManagementComponent extends DefaultPanelView {
         return settingsMenuBar;
     }
 
-
+    /**
+     * Prepare User Grid/Table
+     */
     private void prepareUserTable() {
-        List<SystemUserDTO> allUsers = userManagementController.findAllSystemUsersDTO();
+        userGridData = userManagementController.findAllSystemUsersDTO();
 
-        userGrid.setItems(allUsers);
+        userGrid.setItems(userGridData);
         userGrid.addColumn(SystemUserDTO::getFirstName).setCaption("First Name").setResizable(false);
         userGrid.addColumn(SystemUserDTO::getLastName).setCaption("Last Name").setResizable(false);
         userGrid.addColumn(SystemUserDTO::getEmail).setCaption("Email").setResizable(false);

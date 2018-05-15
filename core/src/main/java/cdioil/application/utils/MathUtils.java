@@ -15,6 +15,13 @@ import java.util.List;
 public class MathUtils {
 
     /**
+     * Private constructor to hide the implicit public one.
+     */
+    private MathUtils() {
+        //Hides the public constructor
+    }
+
+    /**
      * Method that calculates the average of a list of values.
      *
      * @param resultList List with the values
@@ -26,14 +33,12 @@ public class MathUtils {
         }
 
         double sum = 0;
-        for (Double value : resultList) {
-            sum += value;
-        }
+        sum = resultList.stream().map(value -> value).reduce(sum, (accumulator, item) -> accumulator + item);
 
-        if (sum == 0) {
+        if (Double.compare(sum, 0) == 0) {
             return 0;
         }
-        
+
         return sum / (double) resultList.size();
     }
 
@@ -49,16 +54,14 @@ public class MathUtils {
         }
 
         double mean = calculateMean(resultList);
-        
-        if (mean == -1 || mean == 0) {
+
+        if (Double.compare(mean, -1) == 0 || Double.compare(mean, 0) == 0) {
             return mean;
         }
-        
+
         double sum = 0;
-        for (Double value : resultList) {
-            sum += Math.pow((value - mean), 2);
-        }
-        
+        sum = resultList.stream().map(value -> Math.pow((value - mean), 2)).reduce(sum, (accumulator, item) -> accumulator + item);
+
         return Math.sqrt((sum) / ((double) resultList.size()));
     }
 

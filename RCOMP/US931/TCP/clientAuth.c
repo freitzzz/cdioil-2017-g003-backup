@@ -1,6 +1,10 @@
 #include "Sockets.h"
 #include "AuthGenerator/AuthKeyGenerator.h"
 
+/*Constant that represents the failure code that the server sends if the device is not allowed to send reviews */
+#define FAILURE_CODE 400
+
+
 /*Runs the Machine*/
 /*The Server IP needs to be passed as argument*/
 int main(int argc,char *argv[]){
@@ -35,7 +39,10 @@ int main(int argc,char *argv[]){
     write(sock,authenticationKey,strlen(authenticationKey)); //Writes to Socket Stream the Authentication Key
     int statusCode=0;
     read(sock,&statusCode,sizeof(statusCode)); //Reads from Sockect Stream the Authentication Key recieved from the server
-    printf("%d\n",statusCode);
+    if(statusCode==FAILURE_CODE){
+        printf("The device is not allowed to send reviews\n");
+        return 0;
+    }
     close(sock); //Fecha a ligação com o socket    
     return 0;
 }

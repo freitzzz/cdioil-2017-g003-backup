@@ -118,8 +118,9 @@ public abstract class Survey implements Serializable {
      * @return true - if option doesn't already lead to another question<p>
      * false - otherwise
      */
-    public boolean setNextQuestion(Question origin, Question destination, QuestionOption option, double weight) {
-        return graph.insertEdge(origin, destination, option, 0);
+    public boolean setNextQuestion(Question origin, Question destination,
+            QuestionOption option, double weight) {
+        return graph.insertEdge(origin, destination, option, weight);
     }
 
     /**
@@ -177,7 +178,10 @@ public abstract class Survey implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Survey)) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final Survey other = (Survey) obj;
@@ -216,7 +220,7 @@ public abstract class Survey implements Serializable {
      */
     public static List<Survey> getProductSurveys(List<Survey> surveys, Product p) {
         if (surveys == null || surveys.isEmpty() || p == null) {
-            return null;
+            return new ArrayList<>();
         }
         List<Survey> filteredSurveys = new ArrayList<>();
         for (Survey survey : surveys) {

@@ -1,5 +1,11 @@
 package cdioil.domain;
 
+import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Manager;
+import cdioil.domain.authz.Name;
+import cdioil.domain.authz.Password;
+import cdioil.domain.authz.SystemUser;
+import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -23,7 +29,8 @@ public class SurveyTest {
     /**
      * Data for testing
      */
-    private Survey testSurvey;
+    private Survey testGlobalSurvey;
+    private Survey testTargetedSurvey;
     private TimePeriod timePeriod;
     private LinkedList<SurveyItem> list;
 
@@ -44,7 +51,10 @@ public class SurveyTest {
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         list = new LinkedList<>();
         list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
-        this.testSurvey = new GlobalSurvey(list, timePeriod);
+        list.add(new Product("ProdutoTeste 2",new SKU("566341098"),"1 Kg",new QRCode("4563218")));
+        this.testGlobalSurvey = new GlobalSurvey(list, timePeriod);
+        testTargetedSurvey = new TargetedSurvey(list, timePeriod, new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+                "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
     }
 
     @After
@@ -84,12 +94,12 @@ public class SurveyTest {
         System.out.println("hashCode");
         Survey outro = new GlobalSurvey(list, timePeriod);
 
-        assertEquals(testSurvey.hashCode(), outro.hashCode());
+        assertEquals(testGlobalSurvey.hashCode(), outro.hashCode());
 
         //Mutation tests
-        assertNotEquals("".hashCode(), testSurvey.hashCode());
-        assertEquals(testSurvey.getGraphCopy().hashCode() + list.hashCode(),
-                testSurvey.hashCode());
+        assertNotEquals("".hashCode(), testGlobalSurvey.hashCode());
+        assertEquals(testGlobalSurvey.getGraphCopy().hashCode() + list.hashCode(),
+                testGlobalSurvey.hashCode());
     }
 
     /**
@@ -98,13 +108,17 @@ public class SurveyTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        assertNotEquals("Objeto null não é igual", null, testSurvey);
+        assertNotEquals("Objeto null não é igual", null, testGlobalSurvey);
         ArrayList<SurveyItem> otherList = new ArrayList<>();
         otherList.add(new Product("Other Product", new SKU("4444444444"), "1 L", new QRCode("235245246")));
-        assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(otherList, timePeriod), testSurvey);
-        assertEquals("Instância de Inquerito igual", new GlobalSurvey(list, timePeriod), testSurvey);
-        assertEquals("Compare same instance", testSurvey, testSurvey);
-        assertNotEquals("Instances of different classes", testSurvey, "bananas");
+        assertNotEquals("Instância de Inquerito diferente", new GlobalSurvey(otherList, timePeriod), testGlobalSurvey);
+        assertEquals("Instância de Inquerito igual", new GlobalSurvey(list, timePeriod), testGlobalSurvey);
+        assertEquals("Compare same instance", testGlobalSurvey, testGlobalSurvey);
+        assertNotEquals("Instances of different classes", testGlobalSurvey, "bananas");
+        assertNotEquals("Different type of surveys", testGlobalSurvey, testTargetedSurvey);
+        
+        //Kill mutations
+        assertNotEquals(testGlobalSurvey,null);
     }
 
     /**
@@ -114,9 +128,9 @@ public class SurveyTest {
     public void testToString() {
         System.out.println("toString");
         Survey s = new GlobalSurvey(list, timePeriod);
-        assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", testSurvey.toString(),
+        assertEquals("A condição deve acertar pois o conteudo das Strings são iguais", testGlobalSurvey.toString(),
                 s.toString());
-        assertNotEquals(testSurvey.toString(), null);
+        assertNotEquals(testGlobalSurvey.toString(), null);
     }
 
     /**
@@ -127,10 +141,10 @@ public class SurveyTest {
         System.out.println("addQuestion");
         String id = "4P";
         Question q = new BinaryQuestion("QuestaoTeste", id);
-        assertTrue("Deveria ser possível adicionar", testSurvey.addQuestion(q));
-        testSurvey.addQuestion(q);
-        assertFalse("Questão null", testSurvey.addQuestion(null));
-        assertFalse("Questão já existente", testSurvey.addQuestion(q));
+        assertTrue("Deveria ser possível adicionar", testGlobalSurvey.addQuestion(q));
+        testGlobalSurvey.addQuestion(q);
+        assertFalse("Questão null", testGlobalSurvey.addQuestion(null));
+        assertFalse("Questão já existente", testGlobalSurvey.addQuestion(q));
     }
 
     /**
@@ -141,11 +155,11 @@ public class SurveyTest {
         System.out.println("removeQuestion");
         String id = "5Q";
         Question q = new BinaryQuestion("QuestaoTeste", id);
-        testSurvey.addQuestion(q);
-        assertTrue("Deveria ser possível remover", testSurvey.removeQuestion(q));
-        testSurvey.removeQuestion(q);
-        assertFalse("Questão null", testSurvey.removeQuestion(null));
-        assertFalse("Questão não existente", testSurvey.removeQuestion(q));
+        testGlobalSurvey.addQuestion(q);
+        assertTrue("Deveria ser possível remover", testGlobalSurvey.removeQuestion(q));
+        testGlobalSurvey.removeQuestion(q);
+        assertFalse("Questão null", testGlobalSurvey.removeQuestion(null));
+        assertFalse("Questão não existente", testGlobalSurvey.removeQuestion(q));
     }
 
     /**
@@ -156,11 +170,11 @@ public class SurveyTest {
         System.out.println("isValidQuestion");
         String id = "E8";
         Question q = new BinaryQuestion("QuestaoTeste", id);
-        testSurvey.addQuestion(q);
-        assertTrue("Deveria ser válida", testSurvey.isValidQuestion(q));
-        testSurvey.removeQuestion(q);
-        assertFalse("Questão null", testSurvey.isValidQuestion(null));
-        assertFalse("Questão não existente", testSurvey.isValidQuestion(q));
+        testGlobalSurvey.addQuestion(q);
+        assertTrue("Deveria ser válida", testGlobalSurvey.isValidQuestion(q));
+        testGlobalSurvey.removeQuestion(q);
+        assertFalse("Questão null", testGlobalSurvey.isValidQuestion(null));
+        assertFalse("Questão não existente", testGlobalSurvey.isValidQuestion(q));
     }
 
     /**
@@ -171,12 +185,12 @@ public class SurveyTest {
         System.out.println("changeState");
         SurveyState state = SurveyState.DRAFT;
         assertFalse("The condition should succeed because the new state "
-                + "of the survey is equal to the past one", testSurvey.changeState(state));
+                + "of the survey is equal to the past one", testGlobalSurvey.changeState(state));
         state = SurveyState.ACTIVE;
         assertTrue("The condition should succeed because the new state "
-                + "of the survey is different from the past one", testSurvey.changeState(state));
+                + "of the survey is different from the past one", testGlobalSurvey.changeState(state));
         assertFalse("The condition should succeed because the new state is null",
-                testSurvey.changeState(null));
+                testGlobalSurvey.changeState(null));
     }
 
     /**
@@ -186,13 +200,13 @@ public class SurveyTest {
     public void testSetNextQuestion() {
         System.out.println("setNextQuestion");
         assertFalse("The condition should succeed because the origin vertex is "
-                + "equal to the destination vertex", testSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"),
+                + "equal to the destination vertex", testGlobalSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"),
                         new BinaryQuestion("Question", "QuestionID"), new BinaryQuestionOption(Boolean.FALSE), 0));
         assertTrue("The condition should succeed because the arguments are all valid",
-                testSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
+                testGlobalSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
                         new BinaryQuestionOption(Boolean.TRUE), 0));
         assertFalse("The condition should succeed because we are trying to insert "
-                + "the same edge twice", testSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
+                + "the same edge twice", testGlobalSurvey.setNextQuestion(new BinaryQuestion("Question", "QuestionID"), new BinaryQuestion("Other Question", "QuestionID"),
                         new BinaryQuestionOption(Boolean.TRUE), 0));
     }
 
@@ -203,14 +217,14 @@ public class SurveyTest {
     public void testGetProductSurveys() {
         System.out.println("getProductSurveys");
         //test method with both parameters null or an empty list
-        assertEquals(null, Survey.getProductSurveys(null, null));
-        assertEquals(null, Survey.getProductSurveys(new ArrayList<>(), null));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(null, null));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(new ArrayList<>(), null));
         //test method with 1 paramater as null or empty list
-        assertEquals(null, Survey.getProductSurveys(null, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
-        assertEquals(null, Survey.getProductSurveys(new ArrayList<>(), new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(null, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(new ArrayList<>(), new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
         List<Survey> surveys = new ArrayList<>();
-        surveys.add(testSurvey);
-        assertEquals(null, Survey.getProductSurveys(surveys, null));
+        surveys.add(testGlobalSurvey);
+        assertEquals(new ArrayList<>(), Survey.getProductSurveys(surveys, null));
         //test working method
         assertEquals(surveys, Survey.getProductSurveys(surveys, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
     }

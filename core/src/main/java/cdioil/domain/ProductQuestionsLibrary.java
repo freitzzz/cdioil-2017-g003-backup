@@ -3,8 +3,8 @@ package cdioil.domain;
 import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +33,7 @@ public class ProductQuestionsLibrary implements AggregateRoot<Map<Product, Quest
     private Long id;
     /**
      * Map that containsQuestion all questions (values) related to products
-     * (keys). TODO check JPA annotations
+     * (keys).
      */
     @ManyToMany(cascade = CascadeType.ALL)
     private Map<Product, QuestionGroup> library;
@@ -53,7 +53,7 @@ public class ProductQuestionsLibrary implements AggregateRoot<Map<Product, Quest
      * @return null if the product doesn't exist, the set of questions related
      * to the product if it does exist.
      */
-    public HashSet<Question> productQuestionSet(Product product) {
+    public Set<Question> productQuestionSet(Product product) {
         return doesProductExist(product) ? library.get(product).getQuestions() : null;
     }
 

@@ -74,10 +74,7 @@ public class BinaryQuestionOption extends QuestionOption<Boolean> {
             return false;
         }
         final BinaryQuestionOption other = (BinaryQuestionOption) obj;
-        if (this.booleanContent != other.booleanContent) {
-            return false;
-        }
-        return true;
+        return this.booleanContent == other.booleanContent;
     }
 
     /**

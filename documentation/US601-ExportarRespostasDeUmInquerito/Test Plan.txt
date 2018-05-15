@@ -1,14 +1,15 @@
-	
+
 
 	TEST PLAN
 
 	_______________________________
-	CASO #1: Exportar Respostas de um Inquérito para um ficheiro do formato CSV
+	CASO #1: Exportar Respostas de um Inquï¿½rito para um ficheiro do formato CSV
 	_______________________________
 
-	1. Mostrar os inquéritos disponiveis
-	2. Escolher um inquérito
-	3. Encontrar todas as respostas do inquérito
-	4. Pedir informação do nome do ficheiro CSV
+	1. Mostrar os inquï¿½ritos disponiveis
+	2. Escolher um inquï¿½rito
+	3. Encontrar todas as respostas do inquï¿½rito
+	4. Pedir informaï¿½ï¿½o do nome do ficheiro CSV
 	5. Exportar as respostas para o ficheiro CSV
-	6. Informar o sucesso da operação
+	6. Informar o sucesso da operaï¿½ï¿½o
+	7. Verificar se o ficheiro CSV exportado contÃ©m as respostas do inquÃ©rito

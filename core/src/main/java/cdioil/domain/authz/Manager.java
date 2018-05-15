@@ -27,7 +27,7 @@ import javax.persistence.Version;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER"}))
-public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
+public class Manager implements Serializable, AggregateRoot<SystemUser>, User {
 
     private static final long serialVersionUID = 1L;
 
@@ -75,6 +75,10 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
         this.sysUser = su;
     }
 
+    protected Manager() {
+        //For ORM
+    }
+
     /**
      * Returns a description of a manager
      *
@@ -115,10 +119,10 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
         return sysUser.hashCode();
     }
 
-    protected Manager() {
-        //For ORM
-    }
-
+    /**
+     * Returns the manager's identity
+     * @return SystemUser associated to the manager
+     */
     @Override
     public SystemUser getID() {
         return sysUser;
@@ -134,9 +138,9 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>,User{
         if (lc == null || lc.isEmpty()) {
             return false;
         }
-        lc.stream().filter((cat) -> (!isAssociatedWithCategory(cat))).forEachOrdered((cat) -> {
-            categories.add(cat);
-        });
+        lc.stream().filter(cat -> (!isAssociatedWithCategory(cat))).forEachOrdered(cat -> 
+            categories.add(cat)
+        );
         return true;
     }
 

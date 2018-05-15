@@ -1,10 +1,8 @@
 package cdioil.domain.authz;
 
-import cdioil.application.utils.LocalDateAttributeConverter;
 import cdioil.framework.domain.ddd.ValueObject;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 
 /**
@@ -23,7 +21,8 @@ public class BirthDate implements ValueObject, Serializable {
     /**
      * User's birth date.
      */
-    private LocalDate birthDate;
+    //The NOSONAR comment below is due to LocalDateTime not being serializable in JPA 2.1
+    private LocalDate dateOfBirth; //NOSONAR
 
     /**
      * Builds a birth date instance using a LocalDate object
@@ -35,7 +34,7 @@ public class BirthDate implements ValueObject, Serializable {
             throw new IllegalArgumentException("A data de nascimento não pode "
                     + "ser null");
         }
-        this.birthDate = birthDate;
+        this.dateOfBirth = birthDate;
     }
 
     /**
@@ -51,7 +50,7 @@ public class BirthDate implements ValueObject, Serializable {
      */
     @Override
     public int hashCode() {
-        return birthDate.hashCode();
+        return dateOfBirth.hashCode();
     }
 
     /**
@@ -69,7 +68,7 @@ public class BirthDate implements ValueObject, Serializable {
             return false;
         }
         final BirthDate other = (BirthDate) obj;
-        return this.birthDate.equals(other.birthDate);
+        return this.dateOfBirth.equals(other.dateOfBirth);
     }
 
     /**
@@ -79,6 +78,6 @@ public class BirthDate implements ValueObject, Serializable {
      */
     @Override
     public String toString() {
-        return birthDate.toString();
+        return dateOfBirth.toString();
     }
 }

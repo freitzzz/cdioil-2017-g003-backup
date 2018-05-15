@@ -37,15 +37,6 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private static final String MARKET_STRUCT_BTN_CAPTION =
             "Estrutura Mercadológica";
-    /**
-     * Current Navigator
-     */
-    private final Navigator navigator;
-    
-    /**
-     * Current Authentication controller
-     */
-    private final AuthenticationController authenticationController;
 
     /**
      * Dashboard Button
@@ -73,8 +64,7 @@ public class AdminPanelView extends MainLayoutView implements View {
      * authentication controller
      */
     public AdminPanelView(AuthenticationController authenticationController){
-        navigator= UI.getCurrent().getNavigator();
-        this.authenticationController=authenticationController;
+        super(authenticationController);
         configuration();
     }
 
@@ -97,9 +87,9 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureDashboardButton() {
         dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
-        dashboardBtn.addClickListener((Button.ClickEvent clickEvent) -> {
-            setRightPanelContents(new DashboardComponent());
-        });
+        dashboardBtn.addClickListener((Button.ClickEvent clickEvent) -> 
+            setRightPanelContents(new DashboardComponent())
+        );
     }
 
     /**
@@ -107,9 +97,9 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureUsersBtn() {
         usersBtn = new Button(USERS_BTN_CAPTION, VaadinIcons.USERS);
-        usersBtn.addClickListener((Button.ClickEvent clickEvent) -> {
-            setRightPanelContents(new UserManagementComponent());
-        });
+        usersBtn.addClickListener((Button.ClickEvent clickEvent) -> 
+            setRightPanelContents(new UserManagementComponent())
+        );
     }
 
     /**
@@ -117,9 +107,9 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureManagersBtn() {
         managersBtn = new Button(MANAGERS_BTN_CAPTION, VaadinIcons.USER_STAR);
-        managersBtn.addClickListener((Button.ClickEvent clickEvent) -> {
-            setRightPanelContents(new ManagerManagementComponent());
-        });
+        managersBtn.addClickListener((Button.ClickEvent clickEvent) -> 
+            setRightPanelContents(new ManagerManagementComponent())
+        );
     }
 
     /**
@@ -127,9 +117,9 @@ public class AdminPanelView extends MainLayoutView implements View {
      */
     private void configureMarketStructBtn() {
         marketStructBtn = new Button(MARKET_STRUCT_BTN_CAPTION, VaadinIcons.TREE_TABLE);
-        marketStructBtn.addClickListener((Button.ClickEvent clickEvent) -> {
-            setRightPanelContents(new MarketStructureComponent());
-        });
+        marketStructBtn.addClickListener((Button.ClickEvent clickEvent) -> 
+            setRightPanelContents(new MarketStructureComponent())
+        );
     }
 
     /**

@@ -1,8 +1,6 @@
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
-import static cdioil.domain.Event_.description;
-import static cdioil.domain.TemplateGroup_.title;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
@@ -29,7 +27,7 @@ public class TargetedSurveyTest {
 
     private List<SurveyItem> list;
     private TimePeriod timePeriod;
-    private UsersGroup gu;
+    private UsersGroup userGroup;
     private Graph graph;
 
     @Before
@@ -39,28 +37,73 @@ public class TargetedSurveyTest {
         LocalDateTime surveyDate = LocalDateTime.of(1, Month.MARCH, 2, 0, 0);
         LocalDateTime endingDate = LocalDateTime.of(2, Month.MARCH, 23, 10, 10);
         timePeriod = new TimePeriod(surveyDate, endingDate);
-        gu = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
+        userGroup = new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41"))));
         graph = new Graph();
     }
 
     /**
-     * Test of the constructor of the class Constest.
+     * Test of the constructor of the class TargetedSurvey.
      */
     @Test
     public void constructorTest() {
         System.out.println("Testes Construtor");
         assertNull("The condition should succeed because the item list is "
-                + "null", createTargetedSurvey(null, timePeriod, gu));
+                + "null", createTargetedSurvey(null, timePeriod, userGroup));
         assertNull("The condition should succeed because the item list is "
-                + "empty", createTargetedSurvey(new ArrayList<>(), timePeriod, gu));
+                + "empty", createTargetedSurvey(new ArrayList<>(), timePeriod, userGroup));
         assertNull("The condition should succeed because the time period is "
-                + "null", createTargetedSurvey(list, null, gu));
+                + "null", createTargetedSurvey(list, null, userGroup));
         assertNull("The condition should succeed because the target audience is "
                 + "null", createTargetedSurvey(list, timePeriod, null));
         assertNotNull("The condition should succeed because the arguments are "
-                + "valid", createTargetedSurvey(list, timePeriod, gu));
+                + "valid", createTargetedSurvey(list, timePeriod, userGroup));
         assertNotNull("Empty constructor test", new TargetedSurvey());
+    }
+
+    /**
+     * Test of hashCode method, of class TargetedSurvey.
+     */
+    @Test
+    public void testHashCode() {
+        System.out.println("hashCode");
+        TargetedSurvey instance = createTargetedSurvey(list, timePeriod, userGroup);
+        TargetedSurvey other = createTargetedSurvey(list, timePeriod, userGroup);
+
+        assertEquals(instance.hashCode(), other.hashCode());
+
+        //Kill mutations
+        assertNotEquals("".hashCode(), instance.hashCode());
+        int number = 7 * (list.hashCode() + graph.hashCode());
+        number = number * 11 + userGroup.hashCode();
+        assertEquals(number, instance.hashCode());
+    }
+
+    /**
+     * Test of equals method, of class TargetedSurvey
+     */
+    @Test
+    public void testEquals() {
+        System.out.println("equals");
+        TargetedSurvey instance = createTargetedSurvey(list, timePeriod, userGroup);
+        TargetedSurvey other = createTargetedSurvey(list, timePeriod, userGroup);
+
+        assertEquals("The condition should succeed because we are comparing the "
+                + "same instance", instance, instance);
+        assertNotEquals("The condition should succeed because we are comparing the "
+                + "instance with a null value", instance, null);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "instances of different classes", instance, "bananas");
+        assertEquals("The condition should succeed because we are comparing "
+                + "instances with the same properties", instance, other);
+        UsersGroup otherGroup = new UsersGroup(new Manager(new SystemUser
+        (new Email("quimDasRemisturas@gmail.com"), new Name("Quim","Barreiros"),
+                new Password("M3n1n4_C0M0_e_Qu3_V41"))));
+        otherGroup.addUser(new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"),
+                new Name("Gollum", "Smeagol"), new Password("Precious3"))));
+        other = createTargetedSurvey(list, timePeriod, otherGroup);
+        assertNotEquals("The condition should succeed because we are comparing "
+                + "instances that have different user groups", instance, other);
     }
 
     /**
@@ -69,7 +112,7 @@ public class TargetedSurveyTest {
     @Test
     public void testAddUsersToGroup() {
         System.out.println("addUsersToGroup");
-        TargetedSurvey tSurvey = createTargetedSurvey(list, timePeriod, gu);
+        TargetedSurvey tSurvey = createTargetedSurvey(list, timePeriod, userGroup);
         assertFalse(tSurvey.addUsersToGroup(null));
         List<RegisteredUser> lru = new LinkedList<>();
         lru.add(new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"))));

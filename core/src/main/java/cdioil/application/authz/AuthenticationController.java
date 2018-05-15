@@ -10,13 +10,18 @@ import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.UserSessionRepositoryImpl;
+import java.io.Serializable;
 
 /**
  * AuthenticationController that controls all user actions
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 4.0 of FeedbackMonkey
  */
-public final class AuthenticationController {
+public final class AuthenticationController implements Serializable {
+    /**
+     * Serialization number.
+     */
+    private static final long serialVersionUID = 13L;
     /**
      * UserSession with the current user session
      */
@@ -44,7 +49,9 @@ public final class AuthenticationController {
      * @return boolean true if the user logged out successfully, false if not
      */
     public boolean logout(){
-        if(currentUserSession==null)return false;
+        if(currentUserSession==null){
+            return false;
+        }
         logSessionEnd();
         currentUserSession=null;
         return true;
@@ -95,6 +102,11 @@ public final class AuthenticationController {
         return currentUser;
     }
     /**
+     * Returns the current authenticated user token
+     * @return String with the authenticated user token
+     */
+    public String getUserToken(){return currentUserSession.getUserToken();}
+    /**
      * Method that returns the current session user
      * <br>Method to be deprecated very soon, only is here due to need on some 
      * backoffice classes
@@ -134,10 +146,16 @@ public final class AuthenticationController {
      * @return boolean true if the user logged in successfully, false if not
      */
     private boolean tryToLogin(String email,String password){
-        if(currentUserSession!=null)return false;
+        if(currentUserSession!=null){
+            return false;
+        }
         this.currentUserSession=AuthenticationService.create().login(email,password);
-        if((currentUser=getRegisteredUser())!=null)return true;
-        if((currentUser=getAdmin())!=null)return true;
+        if((currentUser=getRegisteredUser())!=null){
+            return true;
+        }
+        if((currentUser=getAdmin())!=null){
+            return true;
+        }
         return (currentUser=getManager())!=null;
     }
     /**

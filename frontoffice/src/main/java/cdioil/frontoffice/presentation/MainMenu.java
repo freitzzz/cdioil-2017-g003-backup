@@ -74,8 +74,12 @@ public class MainMenu {
      */
     private SystemUser getSystemUser(){
         User user=authenticationController.getUser();
-        if(user instanceof RegisteredUser)return ((RegisteredUser)user).getID();
-        if(user instanceof Admin)return ((Admin) user).getID();
+        if(user instanceof RegisteredUser){
+            return ((RegisteredUser)user).getID();
+        }
+        if(user instanceof Admin){
+            return ((Admin) user).getID();
+        }
         return ((Manager)user).getID();
     }
     

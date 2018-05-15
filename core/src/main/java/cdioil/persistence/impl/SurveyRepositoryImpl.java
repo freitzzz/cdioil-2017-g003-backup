@@ -3,6 +3,7 @@ package cdioil.persistence.impl;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyState;
 import cdioil.domain.TargetedSurvey;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.SurveyRepository;
@@ -44,8 +45,10 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      */
     public List<Survey> getSurveysByLazyLoadingIndex(int lazyLoadIndex) {
         int nextLimit = lazyLoadIndex * LAZY_LOADING_LIMIT;
-        return (List<Survey>) entityManager().createNativeQuery("SELECT * FROM Survey s OFFSET " + nextLimit + " ROWS FETCH NEXT " + LAZY_LOADING_LIMIT + " ROWS ONLY",
-                Survey.class).getResultList();
+        return (List<Survey>) entityManager().createQuery("SELECT S FROM Survey S")
+                .setFirstResult(nextLimit)
+                .setMaxResults(nextLimit+LAZY_LOADING_LIMIT)
+                .getResultList();
     }
 
     /**
@@ -54,12 +57,10 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      * @return List of Surveys
      */
     public List<Survey> findAllActiveSurveys() {
-        List<Survey> activeSurveys = (List<Survey>) entityManager()
+        return (List<Survey>) entityManager()
                 .createQuery("SELECT s FROM Survey s WHERE s.state = :surveyState")
                 .setParameter("surveyState", SurveyState.ACTIVE)
                 .getResultList();
-
-        return activeSurveys;
     }
 
     /**
@@ -71,6 +72,23 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
     public List<TargetedSurvey> getActiveTargetedSurveys() {
         Query q = entityManager().createQuery("SELECT t FROM TargetedSurvey t WHERE t.state = :surveyState")
                 .setParameter("surveyState", SurveyState.ACTIVE);
+        if (q.getResultList().isEmpty()) {
+            return null;
+        }
+        return q.getResultList();
+    }
+    
+    /**
+     * Returns all Targeted Surveys from a user.
+     * 
+     * @param user a long with id od the user
+     * @return list of targeted surveys
+     */
+    public List<Survey> getUserTergetedSurveys(RegisteredUser user){
+        Query q = entityManager().createQuery("SELECT t FROM TargetedSurvey t WHERE t.state = :surveyState "
+                + "AND :idUser MEMBER OF t.targetAudience.users")
+                .setParameter("surveyState", SurveyState.ACTIVE)
+                .setParameter("idUser",user);
         if (q.getResultList().isEmpty()) {
             return null;
         }

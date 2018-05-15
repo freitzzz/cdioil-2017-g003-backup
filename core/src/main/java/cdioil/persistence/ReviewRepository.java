@@ -2,8 +2,6 @@ package cdioil.persistence;
 
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
-import cdioil.domain.authz.Profile;
-import cdioil.domain.authz.RegisteredUser;
 import java.util.List;
 
 /**

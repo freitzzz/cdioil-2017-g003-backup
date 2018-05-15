@@ -2,6 +2,7 @@ package cdioil.application.utils;
 
 import cdioil.domain.Question;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -176,7 +177,8 @@ public class Vertex implements Serializable {
         /*The set is used rather than using the map's size, since multiple edges
         can be used to connect two vertices and that would not return the true 
         number of adjacent vertices*/
-        for (Question q : getAllAdjacentVertexElements()) {
+        for (Iterator<Question> it = getAllAdjacentVertexElements().iterator(); it.hasNext();) {
+            it.next();
             result++;
         }
 
@@ -189,7 +191,6 @@ public class Vertex implements Serializable {
      * @return number of outgoing edges.
      */
     public int numOutgoingEdges() {
-        //return outgoingEdges.size();
         return outgoingEdgeQuestions.size();
     }
 

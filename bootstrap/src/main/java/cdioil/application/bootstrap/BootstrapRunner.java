@@ -8,16 +8,20 @@ import cdioil.application.bootstrap.domain.LibrariesBootstrap;
 import cdioil.application.bootstrap.domain.SurveyBootstrap;
 
 /**
- * Classe que corre o bootstrap
+ * Class that runs the bootstrap
  *
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public class BootstrapRunner {
-
     /**
-     * Corre o bootstrap
+     * Hides public constructor.
+     */
+    private BootstrapRunner() {
+    }
+    /**
+     * Runs the bootstrap
      *
-     * @param args Argumentos do bootstrap
+     * @param args argument list of main method
      */
     public static void main(String[] args) {
 //        new UsersBootstrap();
@@ -26,11 +30,5 @@ public class BootstrapRunner {
         new LibrariesBootstrap();
         new SurveyBootstrap();
 //        new EmailSendersBootstrap();
-    }
-
-    /**
-     * Esconde o construtor privado
-     */
-    private BootstrapRunner() {
     }
 }

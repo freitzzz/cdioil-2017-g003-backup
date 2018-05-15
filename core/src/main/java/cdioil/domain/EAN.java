@@ -4,7 +4,7 @@ import cdioil.framework.domain.ddd.ValueObject;
 import javax.persistence.Entity;
 
 /**
- * Rpresnets the code EAN (European Article Number)
+ * Rpresnets the productCode EAN (European Article Number)
  *
  * @author Ana Guerra (1161191)
  */
@@ -18,12 +18,12 @@ public class EAN extends Code<String> implements ValueObject {
 
     }
     /**
-     * Constructs a new instance with a given code.
+     * Constructs a new instance with a given productCode.
      *
-     * @param code code to be a attribute
+     * @param code productCode to be a attribute
      */
     public EAN(String code) {
-        this.code = code;
+        this.productCode = code;
     }
 
 }

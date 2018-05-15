@@ -3,11 +3,13 @@ package cdioil.application.utils;
 import cdioil.files.FileReader;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Name;
-import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Utilitary class that reads and parsers users contained on a CSV file
@@ -66,11 +68,17 @@ public final class CSVUsersReader implements UsersReader{
     @Override
     public List<SystemUser> read(){
         List<String> fileContent=FileReader.readFile(file);
-        if(fileContent==null)return null;
+        if(fileContent==null){
+            return new ArrayList<>();
+        }
         List<SystemUser> usersLidos=new ArrayList<>();
-        if(fileContent.size()<=1)return usersLidos;
+        if(fileContent.size()<=1){
+            return usersLidos;
+        }
         String[] camposFicheiro=fileContent.get(INDENTIFIER_LINE).split(DELIMITER_IDENTIFIER);
-        if(camposFicheiro.length!=NUMBER_OF_IDENITIFIERS)return null;
+        if(camposFicheiro.length!=NUMBER_OF_IDENITIFIERS){
+            return new ArrayList<>();
+        }
         identifyFields(camposFicheiro);
         for(int i=1;i<fileContent.size();i++){
             String[] nextCampos=fileContent.get(i).split(DELIMITER_IDENTIFIER);
@@ -78,9 +86,10 @@ public final class CSVUsersReader implements UsersReader{
                 try{
                     usersLidos.add(new SystemUser(new Email(nextCampos[emailIdentifier])
                             ,new Name(nextCampos[nameIdentifier],nextCampos[subnameIdentifier])
-                            ,new Password(Password.DEFAULT_PASSWORD)));
+                            ,null));
                 }catch(IllegalArgumentException e){
-                    //TO-DO IMPLEMENT LOGGER
+                    ExceptionLogger.logException(LoggerFileNames.CORE_LOGGER_FILE_NAME,
+                            Level.SEVERE, e.getMessage());
                 }
             }
         }
@@ -92,9 +101,15 @@ public final class CSVUsersReader implements UsersReader{
      */
     private void identifyFields(String[] fields){
         for(int i=0;i<fields.length;i++){
-            if(fields[i].equalsIgnoreCase(EMAIL_COLUMN_IDENTIFIER))this.emailIdentifier=i;
-            if(fields[i].equalsIgnoreCase(NAME_COLUMN_IDENTIFIER))this.nameIdentifier=i;
-            if(fields[i].equalsIgnoreCase(SUBNAME_COLUMN_IDENTIFIER))this.subnameIdentifier=i;
+            if(fields[i].equalsIgnoreCase(EMAIL_COLUMN_IDENTIFIER)){
+                this.emailIdentifier=i;
+            }
+            if(fields[i].equalsIgnoreCase(NAME_COLUMN_IDENTIFIER)){
+                this.nameIdentifier=i;
+            }
+            if(fields[i].equalsIgnoreCase(SUBNAME_COLUMN_IDENTIFIER)){
+                this.subnameIdentifier=i;
+            }
         }
     }
 }

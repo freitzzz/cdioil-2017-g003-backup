@@ -1,6 +1,9 @@
 package cdioil.emails;
 
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -59,6 +62,8 @@ public final class EmailSender {
             Transport.send(messageToSent);
             return true;
         }catch(MessagingException|UnsupportedEncodingException e){
+            ExceptionLogger.logException(LoggerFileNames.UTIL_LOGGER_FILE_NAME,
+                    Level.SEVERE, e.getMessage());
             return false;
         }
     }

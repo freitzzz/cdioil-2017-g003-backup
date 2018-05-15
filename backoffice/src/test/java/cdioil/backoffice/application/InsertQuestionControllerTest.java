@@ -233,6 +233,7 @@ public class InsertQuestionControllerTest {
      */
     @Test
     public void testCreateNewMultipleChoiceOption() {
+        System.out.println("createNewMultipleChoiceOption");
         String content = "ESKETIT";
         MultipleChoiceQuestionOption option = new MultipleChoiceQuestionOption(content);
         assertEquals(option, ctrl.createNewMultipleChoiceOption(content));
@@ -243,8 +244,18 @@ public class InsertQuestionControllerTest {
      */
     @Test
     public void testCreateNewQuantitativeOption() {
+        System.out.println("createNewQuantitativeOption");
         double content = 4.20;
         QuantitativeQuestionOption option = new QuantitativeQuestionOption(content);
         assertEquals(option, ctrl.createNewQuantitativeQuestionOption(content));
+    }
+    
+    /**
+     * Test of checkPath method, of class InsertQuestionController.
+     */
+    @Test
+    public void testCheckPath(){
+        System.out.println("checkPath");   
+        assertTrue(ctrl.checkPath("10dc"));
     }
 }

@@ -3,24 +3,21 @@ package cdioil.backoffice.application.authz;
 import cdioil.domain.authz.SystemUser;
 import cdioil.framework.dto.SystemUserDTO;
 import cdioil.persistence.impl.UserRepositoryImpl;
-
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class UserManagementController {
+public class UserManagementController implements Serializable {
 
-    private UserRepositoryImpl userRepository;
-
-    public UserManagementController() {
-        userRepository = new UserRepositoryImpl();
-    }
+    private static final long serialVersionUID = 10L;
+    
 
     public List<SystemUserDTO> findAllSystemUsersDTO() {
         List<SystemUserDTO> systemUserDTOList = new LinkedList<>();
 
         // Fetch all System Users from DB
-        Iterator<SystemUser> allSystemUsers = userRepository.findAll().iterator();
+        Iterator<SystemUser> allSystemUsers = new UserRepositoryImpl().findAll().iterator();
 
         while (allSystemUsers.hasNext()) {
             SystemUser systemUser = allSystemUsers.next();
@@ -29,5 +26,9 @@ public class UserManagementController {
         }
 
         return systemUserDTOList;
+    }
+
+    public List<SystemUserDTO> findFilteredSystemUsersDTO() {
+        return new LinkedList<>();
     }
 }

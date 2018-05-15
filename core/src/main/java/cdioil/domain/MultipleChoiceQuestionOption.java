@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import java.util.Objects;
 import javax.persistence.Entity;
 
 /**

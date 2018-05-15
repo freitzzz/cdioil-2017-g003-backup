@@ -81,7 +81,7 @@ public class AddUsersTargetedSurveyController {
         activeTargetedSurveys = surveyRepository.getActiveTargetedSurveys();
 
         if (activeTargetedSurveys == null) {
-            return null;
+            return new ArrayList<>();
         }
 
         for (TargetedSurvey targetedSurvey : activeTargetedSurveys) {

@@ -4,7 +4,6 @@ import cdioil.backoffice.application.authz.AssignManagerController;
 import cdioil.console.Console;
 
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,13 +14,13 @@ public class AssignManagerUI {
     /**
      * Controller
      */
-    private AssignManagerController controller;
+    private final AssignManagerController controller;
 
     /**
      * Console line separator
      */
-    private static final String LINE_SEPARATOR =
-            "==========================================";
+    private static final String LINE_SEPARATOR
+            = "==========================================";
 
     /**
      * Max users per page
@@ -61,15 +60,7 @@ public class AssignManagerUI {
                     showListOfRegisteredUsers();
                     break;
                 case 2:
-                    try {
-                        assignManager();
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(LINE_SEPARATOR);
-                        System.out.println("ERRO: Email inválido!");
-                    } catch (NoResultException e) {
-                        System.out.println(LINE_SEPARATOR);
-                        System.out.println("ERRO: Email não existe");
-                    }
+                    assignManager();
                     break;
                 case 3:
                     // Do nothing
@@ -80,17 +71,14 @@ public class AssignManagerUI {
                     break;
             }
         }
-
     }
 
     /**
-     * Prints a list of registered users
-     * Only SystemUsers are shown. If a user is an admin or a manager, it's email
-     * is not printed.
+     * Prints a list of registered users Only SystemUsers are shown. If a user is an admin or a manager, it's email is not printed.
      */
     private void showListOfRegisteredUsers() {
         // Get lista users
-        ArrayList<String> userList = getRegisteredUsersLists();
+        List<String> userList = getRegisteredUsersLists();
         if (userList.isEmpty()) {
             System.out.println("ERRO: Não há utilizadores registados!");
             return;
@@ -130,7 +118,6 @@ public class AssignManagerUI {
                 return;
             } else if (option >= 1 && option <= nPages) {
                 currentPage = option;
-                continue;
             } else {
                 System.out.println("ERRO: Introduza uma página valida.");
                 return;
@@ -141,14 +128,16 @@ public class AssignManagerUI {
 
     /**
      * Gets a list of registered users
+     *
      * @return ArrayList
      */
-    private ArrayList<String> getRegisteredUsersLists() {
+    private List<String> getRegisteredUsersLists() {
         return controller.registeredUsers();
     }
 
     /**
      * Number of pages needed to show all users
+     *
      * @param nUsers total number of users
      * @return number of pages needed
      */
@@ -160,8 +149,15 @@ public class AssignManagerUI {
      * Assigns a manager role to a SystemUser
      */
     private void assignManager() {
-        String email = Console.readLine("Introduza o email desejado");
-
-        controller.assignManager(email);
+        try {
+            String email = Console.readLine("Introduza o email desejado");
+            controller.assignManager(email);
+        } catch (IllegalArgumentException e) {
+            System.out.println(LINE_SEPARATOR);
+            System.out.println("ERRO: Email inválido!");
+        } catch (NoResultException e) {
+            System.out.println(LINE_SEPARATOR);
+            System.out.println("ERRO: Email não existe");
+        }
     }
 }

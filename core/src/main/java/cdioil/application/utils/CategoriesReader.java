@@ -6,13 +6,14 @@
 package cdioil.application.utils;
 
 import cdioil.domain.MarketStructure;
+import java.io.Serializable;
 
 /**
  * Interface for reading categories from a file.
  *
  * @author Rita Gonçalves (1160912)
  */
-public interface CategoriesReader {
+public interface CategoriesReader extends Serializable{
 
     /**
      * Imports Categories from a file of any format.

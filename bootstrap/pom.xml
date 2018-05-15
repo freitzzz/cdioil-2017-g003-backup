@@ -4,7 +4,7 @@
 
     <groupId>cdioil-2017-g003</groupId>
     <artifactId>bootstrap</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>5.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>bootstrap</name>
@@ -109,5 +109,5 @@
             </plugin>
         </plugins>
     </build>
-
+    <description>Module that holds all bootstrapers</description>
 </project>

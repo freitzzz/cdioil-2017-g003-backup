@@ -27,7 +27,16 @@ public final class AuthenticationService {
      * Constant that represents the message that ocures if the user trying to login 
      * has his account not activated
      */
-    private static final String USER_ACCOUNT_NOT_ACTIVATED="A conta não está activada";
+    private static final String USER_ACCOUNT_NOT_ACTIVATED_MESSAGE="A conta não está activada";
+    /**
+     * Constant that represents the message that ocures if the user trying to login 
+     * has his account not activated
+     */
+    private static final String ACCOUNT_ALREADY_ACTIVATED_MESSAGE="A conta não está activada";
+    /**
+     * Hides default constructor
+     */
+    private AuthenticationService(){}
     /**
      * Creates a new AuthenticationService for the user to authenticate on the application
      * @return AuthenticationService with the authentication service for the user to 
@@ -43,9 +52,13 @@ public final class AuthenticationService {
     public UserSession login(String email,String password){
         long userID=getSystemUser(email,password);
         UserSession registeredUserSession=createSessionForRegisteredUser(userID);
-        if(registeredUserSession!=null)return registeredUserSession;
+        if(registeredUserSession!=null){
+            return registeredUserSession;
+        }
         UserSession adminSession=createSessionForAdmin(userID);
-        if(adminSession!=null)return adminSession;
+        if(adminSession!=null){
+            return adminSession;
+        }
         return createSessionForManager(userID);
     }
     /**
@@ -58,9 +71,15 @@ public final class AuthenticationService {
     public boolean activate(String email,String password,String activationCode){
         UserRepositoryImpl userRepo=new UserRepositoryImpl();
         long userID=userRepo.login(new Email(email),password);
-        if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
-                ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
+        if(userID==-1){
+            throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE,
+                    AuthenticationExceptionCause.INVALID_CREDENTIALS);
+        }
         SystemUser user=userRepo.find(userID);
+        if(user.isUserActivated()){
+            throw new AuthenticationException(ACCOUNT_ALREADY_ACTIVATED_MESSAGE,
+                AuthenticationExceptionCause.ALREADY_ACTIVATED);
+        }
         if(user.activateAccount(activationCode)){
             userRepo.merge(user);
             return true;
@@ -105,10 +124,12 @@ public final class AuthenticationService {
     private long getSystemUser(String email,String password){
         UserRepositoryImpl userRepo=new UserRepositoryImpl();
         long userID=userRepo.login(new Email(email),password);
-        if(userID==-1)throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
+        if(userID==-1){
+            throw new AuthenticationException(INVALID_CREDENTIALS_MESSAGE
                 ,AuthenticationExceptionCause.INVALID_CREDENTIALS);
+        }
         if(!userRepo.find(userID).isUserActivated())
-            throw new AuthenticationException(USER_ACCOUNT_NOT_ACTIVATED
+            throw new AuthenticationException(USER_ACCOUNT_NOT_ACTIVATED_MESSAGE
                     ,AuthenticationExceptionCause.NOT_ACTIVATED);
         return userID;
     }
@@ -137,8 +158,4 @@ public final class AuthenticationService {
     private RegisteredUser getRegisteredUser(long userID){
         return new RegisteredUserRepositoryImpl().findByUserID(userID);
     }
-    /**
-     * Hides default constructor
-     */
-    private AuthenticationService(){}
 }

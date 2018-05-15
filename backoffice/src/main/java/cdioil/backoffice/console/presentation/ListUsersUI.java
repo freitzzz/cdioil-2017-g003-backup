@@ -23,7 +23,7 @@ public class ListUsersUI {
      * Message that identifies that this is US130 - Listar Todos Os Utilizadores
      * Do Sistema.
      */
-    private final String ALL_USERS = localizationHandler.getMessageValue("info_all_users_list");
+    private final String infoAllUsers = localizationHandler.getMessageValue("info_all_users_list");
     /**
      * Controller responsible for the communication between the UI classes and
      * the domain classes.
@@ -37,10 +37,10 @@ public class ListUsersUI {
         Iterable<SystemUser> allUsers = controller.listAllUsers();
 
         System.out.println(SEPARATOR);
-        System.out.println(ALL_USERS);
-        allUsers.forEach((t) -> {
-            System.out.println(t.toString());
-        });
+        System.out.println(infoAllUsers);
+        allUsers.forEach(t -> 
+            System.out.println(t.toString())
+        );
         System.out.println(SEPARATOR);
     }
 }

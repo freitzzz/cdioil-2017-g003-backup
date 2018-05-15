@@ -8,7 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
-import java.util.Iterator;
 
 /**
  * Abstract class used for implementing repositories. Based on the Class
@@ -111,6 +110,25 @@ public abstract class BaseJPARepository<T, K extends Serializable> implements Da
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.merge(entity);
+        transaction.commit();
+        em.close();
+        return entity;
+    }
+
+    /**
+     * Removes an entity from it's repository
+     * @param entity entity to be removed
+     * @return entity
+     */
+    public T remove(T entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        EntityManager em = entityManager;
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.remove(entity);
         transaction.commit();
         em.close();
         return entity;

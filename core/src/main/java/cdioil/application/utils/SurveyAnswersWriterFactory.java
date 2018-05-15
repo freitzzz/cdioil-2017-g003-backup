@@ -11,6 +11,10 @@ import java.util.List;
  */
 public final class SurveyAnswersWriterFactory {
     /**
+     * Hides default constructor
+     */
+    private SurveyAnswersWriterFactory(){}
+    /**
      * Creates a new SurveyAnswersWriter with the filename that is going to 
      * be written all survey answers
      * @param filename String with the file name that is going to be written all survey answers
@@ -24,8 +28,4 @@ public final class SurveyAnswersWriterFactory {
         }
         return null;
     }
-    /**
-     * Hides default constructor
-     */
-    private SurveyAnswersWriterFactory(){}
 }

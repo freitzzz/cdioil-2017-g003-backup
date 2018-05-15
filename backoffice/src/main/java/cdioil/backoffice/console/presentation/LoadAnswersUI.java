@@ -10,7 +10,10 @@ import cdioil.files.InvalidFileFormattingException;
  * Stress Tests the application by loading hundreds of Survey Reviews on runtime
  */
 public class LoadAnswersUI {
-
+    /**
+     * Separator used for clarity
+     */
+    private static final String SEPARATOR = "================================";
     /**
      * Controller field
      */
@@ -28,9 +31,9 @@ public class LoadAnswersUI {
      * Starts the stress test
      */
     private void start() {
-        System.out.println("================================");
+        System.out.println(SEPARATOR);
         System.out.println("Loading Application with Answers");
-        System.out.println("================================");
+        System.out.println(SEPARATOR);
 
         String filename = Console.readLine("File:");
 
@@ -40,12 +43,12 @@ public class LoadAnswersUI {
             long timeTook = controller.performStressTest(filename, numAnswers);
             // Number of elements that were loaded to the application
             System.out.println("Finished Loading Answers");
-            System.out.println("================================");
+            System.out.println(SEPARATOR);
             System.out.println(String.format("Took %s ms", timeTook));
             System.out.println("Finished.");
             System.out.println(numAnswers + " Reviews added");
-            System.out.println("================================");
-        } catch (InvalidFileFormattingException e) {
+            System.out.println(SEPARATOR);
+        } catch (InvalidFileFormattingException|InterruptedException e) {
             System.out.println("File does not exist or has invalid formatting.");
         }
     }

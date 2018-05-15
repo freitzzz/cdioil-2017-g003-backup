@@ -8,6 +8,24 @@
 	* Como Utilizador, quero poder interromper 
 	  a resposta a um inquérito e retomar no mesmo ponto mais tarde.
 
+
+	______________________
+
+	FORMATO BREVE
+	______________________
+
+	O utilizador registado inicia o processo de retomar a resposta 
+	a um inquérito mais tarde. O sistema guarda a avaliação e 
+	informa o utilizador registado da operação. O utilizador 
+	registado pede para apresentar as avaliações pendentes. 
+	O sistema apresenta todas as avaliações pendentes do 
+	utilizador registado. O utilizador registado escolhe
+	uma avaliação para continuar a responder. O sistema 
+	apresenta as restantes questões ao utilizador registado. 
+	O utilizador registado responde às restantes questões e 
+	submete a avaliação. O sistema guarda a avaliação e informa
+	o utilizador registado do sucesso da operação.
+
 	______________________
 
 	REGRAS DE NEGÓCIO

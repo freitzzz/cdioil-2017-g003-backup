@@ -3,8 +3,8 @@ package cdioil.domain;
 import cdioil.framework.domain.ddd.AggregateRoot;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,8 +33,7 @@ public class CategoryQuestionsLibrary implements AggregateRoot<Map<Category, Que
     private Long id;
 
     /**
-     * Map that contains questions (values) related to categories (keys). TODO
-     * check JPA annotations
+     * Map that contains questions (values) related to categories (keys).
      */
     @ManyToMany(cascade = CascadeType.ALL)
     private Map<Category, QuestionGroup> library;
@@ -54,7 +53,7 @@ public class CategoryQuestionsLibrary implements AggregateRoot<Map<Category, Que
      * @return set of questions related to addQuestion category if the category
      * exists, or null if the category doesn't exist in the library.
      */
-    public HashSet<Question> categoryQuestionSet(Category category) {
+    public Set<Question> categoryQuestionSet(Category category) {
         return doesCategoryExist(category) ? library.get(category).getQuestions() : null;
     }
 

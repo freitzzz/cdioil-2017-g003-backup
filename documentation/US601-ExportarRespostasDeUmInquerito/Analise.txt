@@ -1,26 +1,27 @@
 	___________
 
-	ANÁLISE 
+	ANï¿½LISE
 	____________
 
 	USER STORY DE SPRINT #2
-	
-	* Como Gestor pretendo exportar todas as respostas de um determinado inquérito para um ficheiro
-	* Os ficheiros a serem exportados deverão ser do formato CSV
+
+	* Como Gestor pretendo exportar todas as respostas de um determinado inquï¿½rito para um ficheiro
+	* Os ficheiros a serem exportados deverï¿½o ser do formato CSV
+
+	----------------------
+	Formato Breve
+	* O gestor inicia o processo de exportaÃ§Ã£o das respostas de um inquÃ©rito.
+	* O sistema lista todos os inquÃ©ritos cujo no momento o gestor pode exportar as respostas.
+	* O gestor escolhe um inquÃ©rito. O sistema pede o nome do ficheiro cujo vai conter as respostas do inquÃ©rito. O gestor insere o nome do ficheiro.
+	* O sistema gera as respostas no ficheiro e informa o utilizador do sucesso da operaÃ§Ã£o.
+	----------------------
 
 	______________________
 
-	REGRAS DE NEGÓCIO
+	REGRAS DE NEGï¿½CIO
 	_____________________
-
-
-
-
 
 	______________________
-		
-	TESTES UNITÁRIOS
+
+	TESTES UNITï¿½RIOS
 	_____________________
-
-
-	

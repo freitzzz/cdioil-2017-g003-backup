@@ -28,15 +28,19 @@ public class Location implements ValueObject,Serializable{
     /**
      * String that represents the location of a certain SystemUser
      */
-    private String location;
+    private String locale;
     /**
      * Builds a new Location that represents the location of a SystemUser
      * @param location String with the SystemUser location
      */
     public Location(String location){
         checkLocation(location);
-        this.location=location;
+        this.locale=location;
     }
+    /**
+     * Protected constructor in order to allow JPA persistence
+     */
+    protected Location(){}
     /**
      * Method that checks if a certain Location is equal to the current Location
      * @param obj Location with the location being compared with the current one
@@ -44,9 +48,13 @@ public class Location implements ValueObject,Serializable{
      */
     @Override
     public boolean equals(Object obj){
-        if(obj==this)return true;
-        if(obj==null||obj.getClass()!=this.getClass())return false;
-        return location.equalsIgnoreCase(((Location)obj).location);
+        if(obj==this){
+            return true;
+        }
+        if(obj==null||obj.getClass()!=this.getClass()){
+            return false;
+        }
+        return locale.equalsIgnoreCase(((Location)obj).locale);
     }
     /**
      * Location Hashcode
@@ -55,7 +63,7 @@ public class Location implements ValueObject,Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.location);
+        hash = 53 * hash + Objects.hashCode(this.locale);
         return hash;
     }
     /**
@@ -64,7 +72,7 @@ public class Location implements ValueObject,Serializable{
      */
     @Override
     public String toString(){
-        return location;
+        return locale;
     }
     /**
      * Method that checks if a certain location is valid or not
@@ -78,8 +86,4 @@ public class Location implements ValueObject,Serializable{
             throw new IllegalArgumentException(INVALID_LOCATION_MESSAGE);
         }
     }
-    /**
-     * Protected constructor in order to allow JPA persistence
-     */
-    protected Location(){}
 }

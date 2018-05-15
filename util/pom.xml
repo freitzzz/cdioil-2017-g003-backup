@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cdioil-2017-g003</groupId>
     <artifactId>util</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>5.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>util</name>
     <properties>
@@ -103,4 +103,5 @@
             </plugin>
         </plugins>
     </build>
+    <description>Module that holds all utilitaries used on the whole project</description>
 </project>
