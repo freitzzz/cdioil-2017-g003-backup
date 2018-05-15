@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ManagerManagementComponent extends DefaultPanelView {
 
-    private ManagerManagementController controller;
+    private transient ManagerManagementController controller;
 
     /**
      * User list/grid
@@ -38,11 +38,11 @@ public class ManagerManagementComponent extends DefaultPanelView {
      */
     public ManagerManagementComponent() {
         super("Gestores");
-        instantiateComponents();
+        createComponents();
         prepareComponents();
     }
 
-    private void instantiateComponents() {
+    private void createComponents() {
         controller = new ManagerManagementController();
         managerGrid = new Grid<>();
     }
