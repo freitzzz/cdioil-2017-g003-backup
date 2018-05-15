@@ -1,4 +1,5 @@
 #include "Sockets.h"
+
 int main(void)
 {
     struct sockaddr_storage from;
@@ -39,10 +40,10 @@ int main(void)
     adl = sizeof(from);
     while (1)
     {
-        newSock = accept(sock, (struct sockaddr *)&from, &adl); //Aceita conexoes TCP
-        if (!fork()) //Cria um processo filho para tratar do conhecimento do conteudo do socket
+        newSock = accept(sock, (struct sockaddr *)&from, &adl); //Accepts TCP connections
+        if (!fork()) //Creates a child process to handle the socket
         {
-            close(sock); //Fecha o socket recebido
+            close(sock); //Closes the received socket
             getnameinfo((struct sockaddr *)&from, adl, cliIPtext, BUF_SIZE,
                         cliPortText, BUF_SIZE, NI_NUMERICHOST | NI_NUMERICSERV);
             printf("New connection from %s, port number %s\n", cliIPtext, cliPortText);

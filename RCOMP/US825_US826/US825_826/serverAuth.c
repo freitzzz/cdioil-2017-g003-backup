@@ -3,16 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <semaphore.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include <time.h>
 #include "Sockets.h"
 #include "Utils/FileReader.h"
 #include "Utils/StringUtils.h"
 #include "AuthGenerator/AuthKeyGenerator.h"
 #include "review.h"
 #include "sharedmemory.h"
-#include <semaphore.h>
-#include <sys/wait.h>
-#include <signal.h>
-#include <time.h>
 #include "Cominhos.h"
 
 /*Constant that represents the valid key code sent to machines that are not allowed to send reviews*/
@@ -74,9 +74,9 @@ int main(int argc,char *argv[]){
     char clientIP[BUF_SIZE];
     char clientPort[BUF_SIZE];
     Cominhos receivedCode;
-    bzero((char *)&req, sizeof(req)); //Limpa o lixo da estrutura
-    req.ai_family = AF_UNSPEC; //Define a familia da ligação
-    req.ai_socktype = SOCK_STREAM; //Define o tipo de sockets a ser usado
+    bzero((char *)&req, sizeof(req)); //Clears the structure
+    req.ai_family = AF_UNSPEC; //Defines the family of the connection
+    req.ai_socktype = SOCK_STREAM; //Defines the type of socket to use
     req.ai_flags = AI_PASSIVE; // local address
 	
 	
