@@ -1,6 +1,5 @@
 package cdioil.backoffice.webapp.admin;
 
-import cdioil.backoffice.application.authz.ListUsersController;
 import cdioil.backoffice.application.authz.UserManagementController;
 import cdioil.backoffice.webapp.DefaultPanelView;
 import cdioil.framework.dto.SystemUserDTO;
@@ -8,7 +7,6 @@ import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -29,11 +27,6 @@ public class UserManagementComponent extends DefaultPanelView {
      * User Management Controller
      */
     private UserManagementController userManagementController;
-
-    /**
-     * List Users controller
-     */
-    private ListUsersController listUsersController;
 
     /**
      * User list/grid
@@ -59,7 +52,6 @@ public class UserManagementComponent extends DefaultPanelView {
      */
     private void instantiateViewComponents() {
         userManagementController = new UserManagementController();
-        listUsersController = new ListUsersController();
         userGrid = new Grid<>();
     }
 
@@ -84,8 +76,7 @@ public class UserManagementComponent extends DefaultPanelView {
         toolsLayout.addStyleName("toolbar");
 
         // Create search/filter
-        toolsLayout.addComponents(createSearchField(), createFilterButton(),
-                createOptionsDropDown());
+        toolsLayout.addComponents(createSearchField(), createOptionsDropDown());
 
         headerLayout.addComponent(toolsLayout);
         headerLayout.setComponentAlignment(toolsLayout, Alignment.MIDDLE_RIGHT);
@@ -104,24 +95,18 @@ public class UserManagementComponent extends DefaultPanelView {
         searchTextField.addValueChangeListener(new HasValue.ValueChangeListener<String>() {
             @Override
             public void valueChange(HasValue.ValueChangeEvent<String> valueChangeEvent) {
-                // Get text field value
+                final String input = searchTextField.getValue().toLowerCase();
 
-                // s
+                List<SystemUserDTO> filteredUsers =
+                        userManagementController.findFilteredSystemUsersDTO(input);
+
+                userGridData.clear();
+                userGridData.addAll(filteredUsers);
+                userGrid.getDataProvider().refreshAll();
             }
         });
 
         return searchTextField;
-    }
-
-    /**
-     * Create Filter button
-     * @return
-     */
-    private Component createFilterButton() {
-        Button filterButton = new Button("Filters");
-        filterButton.setSizeUndefined();
-
-        return filterButton;
     }
 
     /**
