@@ -24,7 +24,7 @@ public class EmailSenders implements Serializable {
      * Constant that represents the encryption loop times (number of times that the 
      * password is encrypted over & over)
      */
-    private static final short ENCRYPTION_LOOP_TIMES=1;
+    private static final short ENCRYPTION_LOOP_TIMES=2;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
