@@ -1,17 +1,16 @@
-#include "Sockets.h"
-#include "AuthGenerator/AuthKeyGenerator.h"
-#include "review.h"
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "Sockets.h"
+#include "AuthGenerator/AuthKeyGenerator.h"
+#include "review.h"
 #include "Cominhos.h"
+
 /*Constant that represents the failure code*/
 #define FAILURE_CODE 400
 
-/*
- * Matrix with all products
- */
+/* Matrix with all products */
 char produtos[][20] = {
 	"Iogurte Continente",
 	"Vinho Verde",
@@ -33,23 +32,23 @@ int main(int argc,char *argv[]){
     }
     
     struct addrinfo req, *list;
-    bzero((char *)&req, sizeof(req)); //Limpa o lixo da estrutura
-    req.ai_family = AF_UNSPEC; //Define a familia da ligação
-    req.ai_socktype = SOCK_STREAM; //Define o tipo de sockets a ser usado
+    bzero((char *)&req, sizeof(req)); //Clears the structure
+    req.ai_family = AF_UNSPEC; //Defines the family of the connection
+    req.ai_socktype = SOCK_STREAM; //Defines the type of the socket
     
-    int failure=getaddrinfo(argv[1], SERVER_PORT, &req, &list); //Preence a estrutura com a informação necessar
+    int failure=getaddrinfo(argv[1], SERVER_PORT, &req, &list); //Fills the structure with the needed information
     if(failure){
         printf("An error ocured while retrieving server info\n");
         return 0;
     }
 
-    int sock = socket(list->ai_family, list->ai_socktype, list->ai_protocol);// Cria um socket respectivo a ser usado na ligacao
+    int sock = socket(list->ai_family, list->ai_socktype, list->ai_protocol); //Creates a socket to use in the TCP connection
     if(sock==-1){
         printf("An error ocured while creating the TCP Connection Socket\n");
         return 0;
     }
 
-    int connectionStatus=connect(sock, (struct sockaddr *)list->ai_addr, list->ai_addrlen); //Cria uma ligação TCP a ser lido num certo IP previamento definido
+    int connectionStatus=connect(sock, (struct sockaddr *)list->ai_addr, list->ai_addrlen); //Creates the TCP connection
     if(connectionStatus==-1){
         printf("An error ocured while connecting to the TCP Connection\n");
         return 0;

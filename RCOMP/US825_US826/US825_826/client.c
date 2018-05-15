@@ -1,4 +1,5 @@
 #include "Sockets.h"
+
 // read a string from stdin protecting buffer overflow
 #define GETS(B, S){fgets(B, S - 2, stdin); B[strlen(B) - 1] = 0;}
 
@@ -76,12 +77,12 @@ int main(int argc, char **argv)
 
 void connect_tcp(char* tcpConnectionIP){
     struct addrinfo req, *list;
-    bzero((char *)&req, sizeof(req)); //Limpa o lixo da estrutura
-    req.ai_family = AF_UNSPEC; //Define a familia da ligação
-    req.ai_socktype = SOCK_STREAM; //Define o tipo de sockets a ser usado
-    int success=getaddrinfo(tcpConnectionIP, SERVER_PORT, &req, &list); //Preence a estrutura com a informação necessar
-    int sock = socket(list->ai_family, list->ai_socktype, list->ai_protocol);// Cria um socket respectivo a ser usado na ligacao
-    int connectionStatus=connect(sock, (struct sockaddr *)list->ai_addr, list->ai_addrlen); //Cria uma ligação TCP a ser lido num certo IP previamento definido
+    bzero((char *)&req, sizeof(req)); //Clears the structure
+    req.ai_family = AF_UNSPEC; //Defines the family of the connection
+    req.ai_socktype = SOCK_STREAM; //Defines the type of socket to use
+    int success=getaddrinfo(tcpConnectionIP, SERVER_PORT, &req, &list); //Fills the structure with the information
+    int sock = socket(list->ai_family, list->ai_socktype, list->ai_protocol);// Creates a socket to use in the TCP connection
+    int connectionStatus=connect(sock, (struct sockaddr *)list->ai_addr, list->ai_addrlen); //Creates the TCP connection
     close(sock); //Fecha a ligação com o socket    
 }
 
