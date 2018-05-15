@@ -128,7 +128,7 @@ public class UserManagementComponent extends DefaultPanelView {
         menuItem.addItem("Importar Utilizadores", VaadinIcons.USERS, new MenuBar.Command() {
             @Override
             public void menuSelected(MenuItem menuItem) {
-                //TODO Importar Utilizadores
+                UI.getCurrent().addWindow(new ImportUsersWindow());
             }
         });
 
