@@ -53,16 +53,21 @@
     <class>cdioil.application.domain.authz.UserSession</class>
     <class>cdioil.application.utils.EdgeQuestion</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
+      <!-->H2 Properties<-->
+      <!--property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
       <property name="javax.persistence.jdbc.user" value=""/>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
-      <property name="eclipselink.logging.level" value="OFF"/>
+      <property name="javax.persistence.jdbc.password" value=""/-->
       <!--property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:33214/postgres"/>
       <property name="javax.persistence.jdbc.user" value="CDIOIL-ALL"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="javax.persistence.jdbc.password" value=""/-->
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="eclipselink.loggding.level" value="FINE"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
+      <property name="javax.persistence.jdbc.user" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
     </properties>
   </persistence-unit>
 </persistence>
