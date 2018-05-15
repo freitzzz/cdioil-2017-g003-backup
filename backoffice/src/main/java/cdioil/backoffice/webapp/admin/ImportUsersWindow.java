@@ -15,10 +15,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 
+/**
+ * Window implementation of the ImportUsers US
+ */
 public class ImportUsersWindow extends Window {
 
+    /**
+     * Controller class
+     */
     private ImportUsersFromFilesController controller;
 
+    /**
+     * Main Layout of the Window
+     */
     private VerticalLayout mainLayout;
 
     /**
@@ -26,16 +35,25 @@ public class ImportUsersWindow extends Window {
      */
     private File tempFile;
 
+    /**
+     * Creates an instance of the popup window
+     */
     public ImportUsersWindow() {
         instantiateComponents();
         prepareComponents();
     }
 
+    /**
+     * Instantiates needed components
+     */
     private void instantiateComponents() {
         controller = new ImportUsersFromFilesController();
         mainLayout = new VerticalLayout();
     }
 
+    /**
+     * Prepares all Window Components
+     */
     private void prepareComponents() {
         setCaption("Import Users");
         setDraggable(true);
@@ -48,6 +66,9 @@ public class ImportUsersWindow extends Window {
         setContent(mainLayout);
     }
 
+    /**
+     * Prepares Main Layout
+     */
     private void prepareMainLayout() {
         mainLayout.setSpacing(true);
 
