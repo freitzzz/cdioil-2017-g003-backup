@@ -199,4 +199,11 @@ public class GenericDTO implements DTO, Map<String, Object> {
     public Collection<Object> values() {
         return this.data.values();
     }
+    @Override
+    public boolean equals(Object obj){
+        if(obj==this)return true;
+        if(obj==null||this.getClass()!=obj.getClass())return false;
+        GenericDTO dto=(GenericDTO)obj;
+        return type.equals(dto.type) ? data.equals(dto.data) : false;
+    }
 }

@@ -3,23 +3,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <semaphore.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include <time.h>
 #include "Sockets.h"
 #include "Utils/FileReader.h"
 #include "Utils/StringUtils.h"
 #include "AuthGenerator/AuthKeyGenerator.h"
 #include "review.h"
 #include "sharedmemory.h"
-#include <semaphore.h>
-#include <sys/wait.h>
-#include <signal.h>
+#include "Cominhos.h"
 
 /*Constant that represents the valid key code sent to machines that are not allowed to send reviews*/
 #define VALID_KEY_CODE 200
 /*Constant that represents the invalid key code sent to machines that are not allowed to send reviews*/
 #define INVALID_KEY_CODE 400
+/*Constant that represents the expiration time for a device's key*/
+#define EXPIRATION_TIME 2
 
 /*Function that checks if a certain authentication key is valid*/
-/*Returns 1 if authentication key is valid, false if not*/
+/*Returns 1 (true) if the authentication key is valid, 0 (false) if not*/
 int isAuthKeyAllowed(char** authenticationKeys,char* authenticationKey,int authenticationKeysTotal){
     int i;
     for(i=0;i<authenticationKeysTotal;i++)
@@ -27,12 +31,25 @@ int isAuthKeyAllowed(char** authenticationKeys,char* authenticationKey,int authe
     return 0;
 }
 
+/* Function that checks if a certain timestamp is valid (hasn't expired) */
+/* Returns 1 (true) if the timestamp is valid. Otherwise, returns 0 (false) */
+int checkTimeStamp(time_t timestamp){
+	time_t actual_time;
+	time(&actual_time);
+
+	double difference = difftime(actual_time, timestamp);
+	
+	return difference < EXPIRATION_TIME;
+}
+
+/* Structure that represents a counter */
 typedef struct{
 	int counter;
 	int increment;
 	int size;
-}Counter;
+} Counter;
 
+/* Unlinks the shared memory zones and the semaphore */
 void sighandler(){
 	shm_unlink("/sprint4counter");
 	shm_unlink("/sprint4reviews");
@@ -56,10 +73,10 @@ int main(int argc,char *argv[]){
     struct sockaddr_storage from;
     char clientIP[BUF_SIZE];
     char clientPort[BUF_SIZE];
-    char receivedCode[BUF_SIZE];
-    bzero((char *)&req, sizeof(req)); //Limpa o lixo da estrutura
-    req.ai_family = AF_UNSPEC; //Define a familia da ligação
-    req.ai_socktype = SOCK_STREAM; //Define o tipo de sockets a ser usado
+    Cominhos receivedCode;
+    bzero((char *)&req, sizeof(req)); //Clears the structure
+    req.ai_family = AF_UNSPEC; //Defines the family of the connection
+    req.ai_socktype = SOCK_STREAM; //Defines the type of socket to use
     req.ai_flags = AI_PASSIVE; // local address
 	
 	
@@ -102,8 +119,12 @@ int main(int argc,char *argv[]){
             close(sock); 
             getnameinfo((struct sockaddr *)&from, adl, clientIP, BUF_SIZE,
                             clientPort, BUF_SIZE, NI_NUMERICHOST | NI_NUMERICSERV);
-            read(newSock,receivedCode,BUF_SIZE);
-            int code= isAuthKeyAllowed(authenticationKeys,receivedCode,authenticationKeysTotal) ? VALID_KEY_CODE : INVALID_KEY_CODE;
+            read(newSock,&receivedCode,BUF_SIZE);
+
+			int timestamp_flag = checkTimeStamp(receivedCode.timestamp);
+			if(timestamp_flag){
+            int code= isAuthKeyAllowed(authenticationKeys,receivedCode.key,authenticationKeysTotal) ? VALID_KEY_CODE : INVALID_KEY_CODE;
+
             write(newSock,&code,sizeof(code));
 			
 			Review client_review;
@@ -145,6 +166,10 @@ int main(int argc,char *argv[]){
 			
 			close(newSock);
             exit(5);
+			} else {
+				int invalid_value = INVALID_KEY_CODE;
+				write(newSock, &invalid_value,sizeof(invalid_value));
+			}
         }
 		
         close(newSock);

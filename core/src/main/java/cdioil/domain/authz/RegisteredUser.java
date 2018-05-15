@@ -1,6 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.AggregateRoot;
+import cdioil.framework.dto.SystemUserDTO;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -112,5 +113,13 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
     @Override
     public SystemUser getID() {
         return sysUser;
+    }
+    /**
+     * Method that returns a DTO of the current RegisteredUser
+     * @return SystemUserDTO with the DTO of the current registered user
+     */
+    @Override
+    public SystemUserDTO toDTO() {
+        return sysUser.toDTO();
     }
 }
