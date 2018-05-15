@@ -4,11 +4,13 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include "Cominhos.h"
 /*Constant that represents the failure code*/
 #define FAILURE_CODE 400
 
 /*
- * Matriz de produtos.
+ * Matrix with all products
  */
 char produtos[][20] = {
 	"Iogurte Continente",
@@ -53,9 +55,13 @@ int main(int argc,char *argv[]){
         return 0;
     }
 	
+    Cominhos c;
 	
-    char* authenticationKey=(char*)generate();
-    write(sock,authenticationKey,strlen(authenticationKey)); //Writes to Socket Stream the Authentication Key
+    c.key=(char*)generate();
+    time(&c.timestamp);
+
+    write(sock,&c,sizeof(c)); //Writes to Socket Stream the Authentication Key and the Timestamp
+
     int statusCode=0;
     read(sock,&statusCode,sizeof(statusCode));	//Reads from Sockect Stream the Authentication Key recieved from the server
 	

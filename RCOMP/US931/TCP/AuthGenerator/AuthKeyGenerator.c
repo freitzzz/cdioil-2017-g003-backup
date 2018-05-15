@@ -2,6 +2,8 @@
 #include "AuthKeyGenerator.h"
 #include "Mac.h"
 #include "MSN.h"
+#include "StringUtils.h"
+#include <time.h>
 
 /*Hash Buffer Size*/
 #define BUFFER_SIZE 100
@@ -24,6 +26,7 @@ unsigned char* generate(){
     SHA512_Update(&sha512,macAndFakeMSN,strlen(macAndFakeMSN));
     SHA512_Final(hash,&sha512);
     int i;
+    char *timestamp =  utoa((unsigned)time(NULL)); 
     for(i=0;i<SHA512_DIGEST_LENGTH;i++)sprintf((char*)realHash+(i<<1),HASH_FORMAT,hash[i]);
     return realHash;
 }
