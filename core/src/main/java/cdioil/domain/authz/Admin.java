@@ -1,6 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.framework.domain.ddd.AggregateRoot;
+import cdioil.framework.dto.SystemUserDTO;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -87,6 +88,14 @@ public class Admin implements Serializable,AggregateRoot<SystemUser>,User{
     @Override
     public SystemUser getID(){
         return sysUser;
+    }
+    /**
+     * Method that returns a DTO of the current Admin
+     * @return SystemUserDTO with the DTO of the current admin
+     */
+    @Override
+    public SystemUserDTO toDTO() {
+        return sysUser.toDTO();
     }
 
 }

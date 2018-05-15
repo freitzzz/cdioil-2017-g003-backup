@@ -2,6 +2,7 @@ package cdioil.domain.authz;
 
 import cdioil.domain.Category;
 import cdioil.framework.domain.ddd.AggregateRoot;
+import cdioil.framework.dto.SystemUserDTO;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,6 +172,14 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>, User {
      */
     public List<Category> categoriesFromManager() {
         return categories;
+    }
+    /**
+     * Method that returns a DTO of the current Manager
+     * @return SystemUserDTO with the DTO of the current manager
+     */
+    @Override
+    public SystemUserDTO toDTO() {
+        return sysUser.toDTO();
     }
 
 }
