@@ -29,8 +29,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      * @return List with all categories found, or null if an error occured
      */
     public List<Category> findCategoriesByIdentifierPattern(String identifierPattern) {
-        EntityManager em = entityManager();
-        Query queryRegexed = em.createQuery("select c from Category c where c.path regexp '" + identifierPattern + "'", Category.class);
+        Query queryRegexed = getCategoriesQueryByPathPattern(identifierPattern);
         queryRegexed.setParameter(1,identifierPattern);
         return (List<Category>) queryRegexed.getResultList();
     }
@@ -43,8 +42,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      * @return List with all categories found, or null if an error occured
      */
     public List<Category> findCategoriesByPathPattern(String pathPattern) {
-        EntityManager em = entityManager();
-        Query queryRegexed = em.createQuery("select c from Category c where c.path regexp '" + pathPattern + "'", Category.class);
+        Query queryRegexed = getCategoriesQueryByPathPattern(pathPattern);
         if ((List<Category>) queryRegexed.getResultList() == null) {
             return null;
         }
