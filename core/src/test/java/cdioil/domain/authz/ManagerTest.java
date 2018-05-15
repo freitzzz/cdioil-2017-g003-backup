@@ -1,6 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.domain.Category;
+import cdioil.framework.dto.SystemUserDTO;
 import java.util.LinkedList;
 import java.util.List;
 import static org.junit.Assert.*;
@@ -189,5 +190,16 @@ public class ManagerTest {
         lc.add(c1);
         instance.addCategories(lc);
         assertTrue(instance.isAssociatedWithCategory(c1));
+    }
+    /**
+     * Test of toDTO method, of class Manager.
+     */
+    @Test
+    public void testToDTO() {
+        System.out.println("toDTO");
+        Manager instance = new Manager(sysUser);
+        SystemUserDTO expResult = sysUser.toDTO();
+        SystemUserDTO result = instance.toDTO();
+        assertEquals("Condition should be successful since both DTO's are the same",expResult, result);
     }
 }

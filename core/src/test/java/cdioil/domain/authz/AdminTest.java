@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.framework.dto.SystemUserDTO;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -109,6 +110,19 @@ public class AdminTest {
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+
+    /**
+     * Test of toDTO method, of class Admin.
+     */
+    @Test
+    public void testToDTO() {
+        System.out.println("toDTO");
+        Admin instance = createAdmin(sysUser);
+        SystemUserDTO expResult = sysUser.toDTO();
+        SystemUserDTO result = instance.toDTO();
+        assertEquals("Condition should be successful since both DTO's are the same",expResult, result);
     }
 
 }
