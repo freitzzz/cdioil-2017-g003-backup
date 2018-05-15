@@ -1,6 +1,6 @@
 package cdioil.backoffice.webapp.admin;
 
-import cdioil.backoffice.application.ImportCategoriesController;
+import cdioil.backoffice.application.ImportUsersFromFilesController;
 import cdioil.logger.ExceptionLogger;
 import cdioil.logger.LoggerFileNames;
 import com.vaadin.ui.Notification;
@@ -15,10 +15,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 
-public class ImportCategoriesWindow extends Window {
+/**
+ * Window implementation of the ImportUsers US
+ */
+public class ImportUsersWindow extends Window {
 
-    private ImportCategoriesController controller;
+    /**
+     * Controller class
+     */
+    private ImportUsersFromFilesController controller;
 
+    /**
+     * Main Layout of the Window
+     */
     private VerticalLayout mainLayout;
 
     /**
@@ -26,18 +35,27 @@ public class ImportCategoriesWindow extends Window {
      */
     private File tempFile;
 
-    public ImportCategoriesWindow() {
-        //instantiateComponents();
-        //prepareComponents();
+    /**
+     * Creates an instance of the popup window
+     */
+    public ImportUsersWindow() {
+        instantiateComponents();
+        prepareComponents();
     }
 
+    /**
+     * Instantiates needed components
+     */
     private void instantiateComponents() {
-        controller = new ImportCategoriesController();
+        controller = new ImportUsersFromFilesController();
         mainLayout = new VerticalLayout();
     }
 
+    /**
+     * Prepares all Window Components
+     */
     private void prepareComponents() {
-        setCaption("Import Categories");
+        setCaption("Import Users");
         setDraggable(true);
         setModal(false);
         setResizable(false);
@@ -48,6 +66,9 @@ public class ImportCategoriesWindow extends Window {
         setContent(mainLayout);
     }
 
+    /**
+     * Prepares Main Layout
+     */
     private void prepareMainLayout() {
         mainLayout.setSpacing(true);
 
@@ -56,7 +77,6 @@ public class ImportCategoriesWindow extends Window {
             public OutputStream receiveUpload(String s, String s1) {
                 final String filename = s.substring(0, s.indexOf("."));
                 final String fileExtension = s.substring(s.indexOf("."));
-
                 try {
                     tempFile = File.createTempFile(filename, fileExtension);
                 } catch (IOException e) {
@@ -73,16 +93,20 @@ public class ImportCategoriesWindow extends Window {
                 }
             }
         });
+
         uploadBtn.addFailedListener(new Upload.FailedListener() {
             @Override
             public void uploadFailed(Upload.FailedEvent failedEvent) {
                 Notification.show("Could not upload file", Notification.Type.ERROR_MESSAGE);
             }
         });
+
         uploadBtn.addSucceededListener(new Upload.SucceededListener() {
             @Override
             public void uploadSucceeded(Upload.SucceededEvent succeededEvent) {
-                Notification.show("Success", Notification.Type.HUMANIZED_MESSAGE);
+                controller.readUsers(tempFile.getAbsolutePath());
+
+                Notification.show("Success", Notification.Type.TRAY_NOTIFICATION);
             }
         });
 

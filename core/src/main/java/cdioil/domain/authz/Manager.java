@@ -2,6 +2,8 @@ package cdioil.domain.authz;
 
 import cdioil.domain.Category;
 import cdioil.framework.domain.ddd.AggregateRoot;
+import cdioil.framework.dto.DTOable;
+import cdioil.framework.dto.ManagerDTO;
 import cdioil.framework.dto.SystemUserDTO;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -28,7 +30,7 @@ import javax.persistence.Version;
  */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SYSTEMUSER"}))
-public class Manager implements Serializable, AggregateRoot<SystemUser>, User {
+public class Manager implements DTOable, Serializable, AggregateRoot<SystemUser>, User {
 
     private static final long serialVersionUID = 1L;
 
@@ -181,5 +183,15 @@ public class Manager implements Serializable, AggregateRoot<SystemUser>, User {
     public SystemUserDTO toDTO() {
         return sysUser.toDTO();
     }
-
+//Dont delete, still in discusion
+//    @Override
+//    public ManagerDTO toDTO() {
+//        SystemUserDTO systemUserDTO = sysUser.toDTO();
+//
+//        final String firstName = systemUserDTO.getFirstName();
+//        final String lastName = systemUserDTO.getLastName();
+//        final String email = systemUserDTO.getEmail();
+//
+//        return new ManagerDTO("manager", firstName, lastName, email);
+//    }
 }

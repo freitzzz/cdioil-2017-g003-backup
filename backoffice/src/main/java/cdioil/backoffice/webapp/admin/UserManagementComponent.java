@@ -42,7 +42,7 @@ public class UserManagementComponent extends DefaultPanelView {
      * Constructs an instance of the User Management view
      */
     public UserManagementComponent() {
-        super("User Management");
+        super("Utilizadores");
         instantiateViewComponents();
         prepareComponents();
     }
@@ -72,14 +72,14 @@ public class UserManagementComponent extends DefaultPanelView {
     private void prepareHeader() {
         Responsive.makeResponsive(headerLayout);
 
-        HorizontalLayout toolsLayout = new HorizontalLayout();
-        toolsLayout.addStyleName("toolbar");
+        HorizontalLayout topBarLayout = new HorizontalLayout();
+        topBarLayout.addStyleName("toolbar");
 
         // Create search/filter
-        toolsLayout.addComponents(createSearchField(), createOptionsDropDown());
+        topBarLayout.addComponents(createSearchField(), createOptionsDropDown());
 
-        headerLayout.addComponent(toolsLayout);
-        headerLayout.setComponentAlignment(toolsLayout, Alignment.MIDDLE_RIGHT);
+        headerLayout.addComponent(topBarLayout);
+        headerLayout.setComponentAlignment(topBarLayout, Alignment.MIDDLE_RIGHT);
     }
 
     /**
@@ -88,7 +88,7 @@ public class UserManagementComponent extends DefaultPanelView {
      */
     private Component createSearchField() {
         TextField searchTextField = new TextField();
-        searchTextField.setPlaceholder("Search");
+        searchTextField.setPlaceholder("Pesquisar");
         searchTextField.setIcon(VaadinIcons.SEARCH);
         searchTextField.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
@@ -128,7 +128,7 @@ public class UserManagementComponent extends DefaultPanelView {
         menuItem.addItem("Importar Utilizadores", VaadinIcons.USERS, new MenuBar.Command() {
             @Override
             public void menuSelected(MenuItem menuItem) {
-                //TODO Importar Utilizadores
+                UI.getCurrent().addWindow(new ImportUsersWindow());
             }
         });
 
@@ -142,8 +142,8 @@ public class UserManagementComponent extends DefaultPanelView {
         userGridData = userManagementController.findAllSystemUsersDTO();
 
         userGrid.setItems(userGridData);
-        userGrid.addColumn(SystemUserDTO::getFirstName).setCaption("First Name").setResizable(false);
-        userGrid.addColumn(SystemUserDTO::getLastName).setCaption("Last Name").setResizable(false);
+        userGrid.addColumn(SystemUserDTO::getFirstName).setCaption("Nome").setResizable(false);
+        userGrid.addColumn(SystemUserDTO::getLastName).setCaption("Sobrenome").setResizable(false);
         userGrid.addColumn(SystemUserDTO::getEmail).setCaption("Email").setResizable(false);
 
         userGrid.setSizeFull();
