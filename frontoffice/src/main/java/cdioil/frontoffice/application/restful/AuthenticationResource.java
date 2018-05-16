@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response.Status;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @since Version 5.0 of FeedbackMonkey
  */
-@Path(value = "/authenticationresource")
+@Path(value = "/authentication")
 public final class AuthenticationResource implements AuthenticationAPI{
     /**
      * Constant that represents the JSON used on the response message for warning the user 
@@ -118,7 +118,7 @@ public final class AuthenticationResource implements AuthenticationAPI{
         AuthenticationController authenticationController=new AuthenticationController();
         try{
             return authenticationController.activateAccount(email,password,activationCode)
-                    ? Response.status(Status.ACCEPTED).entity(JSON_ACCOUNT_ACTIVATED_SUCCESS).build()
+                    ? Response.status(Status.OK).entity(JSON_ACCOUNT_ACTIVATED_SUCCESS).build()
                     : Response.status(Status.UNAUTHORIZED).entity(JSON_ACCOUNT_ACTIVATED_FAILURE).build();
         }catch(AuthenticationException|IllegalArgumentException authenticationFailureException){
             return createInvalidAuthenticationResponse(authenticationFailureException);

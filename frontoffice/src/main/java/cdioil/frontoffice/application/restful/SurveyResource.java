@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response.Status;
  * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
  * @since Version 5.0 of FeedbackMonkey
  */
-@Path("/surveyresource")
+@Path("/surveys")
 public final class SurveyResource implements SurveyAPI{
     /**
      * Constant that represents the JSON used on the response message for warning the user 
@@ -62,7 +62,7 @@ public final class SurveyResource implements SurveyAPI{
      * token is invalid
      */
     private Response createInvalidAuthTokenResponse(){
-        return Response.status(Status.NOT_ACCEPTABLE)
+        return Response.status(Status.UNAUTHORIZED)
                 .entity(JSON_INVALID_AUTHENTICATION_TOKEN)
                 .build();
     }

@@ -1,5 +1,7 @@
 package cdioil.frontoffice.application.restful;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * JSON Service that represents the serialization/deserialization of an user
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
@@ -10,14 +12,17 @@ public final class UserJSONService {
     /**
      * String with the user trying to login email
      */
+    @SerializedName(value = "email",alternate = {"Email","EMAIL"})
     private String email;
     /**
      * String with the user trying to login password
      */
+    @SerializedName(value="password",alternate={"Password","PASSWORD"})
     private String password;
     /**
      * String with the user activation code
      */
+    @SerializedName(value="activationCode",alternate = {"ActivationCode","activationcode","ACTIVATIONCODE"})
     private String activationCode;
     /**
      * Returns the user email
