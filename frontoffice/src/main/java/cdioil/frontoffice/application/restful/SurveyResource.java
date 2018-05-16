@@ -6,8 +6,8 @@ import cdioil.frontoffice.application.api.SurveyAPI;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import cdioil.persistence.impl.UserSessionRepositoryImpl;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -34,7 +34,7 @@ public final class SurveyResource implements SurveyAPI{
      * Constant that represents the JSON used on the response message for warning the user 
      * that there are currently no available surveys for him to answer
      */
-    private static final String JSON_NO_AVAILABLE_SURVEYS="{\n\t\"\"noavailablesurveys:\"true\"}";
+    private static final String JSON_NO_AVAILABLE_SURVEYS="{\n\t\"noavailablesurveys\":\"true\"}";
     /**
      * List the Surveys via a JSON POST Request
      * @param authenticationToken String the authentication token
@@ -77,13 +77,17 @@ public final class SurveyResource implements SurveyAPI{
                 .entity(JSON_NO_AVAILABLE_SURVEYS)
                 .build();
     }
+    /**
+     * Method that serializes a list of surveys into a JSON
+     * @param surveys List with all the surveys being serialized
+     * @return String with a JSON String with all the surveys serialized
+     */
     private String getSurveysAsJSON(List<Survey> surveys){
-        JsonArray jsonArray=new JsonArray(surveys.size());
+        Gson asd=new Gson();
+        List<SurveyJSONService> surveysAsJSON=new ArrayList<>();
         for(int i=0;i<surveys.size();i++){
-            JsonObject jsonObject=new JsonObject();
-            jsonObject.addProperty("surveyID",surveys.get(i).toString());
-            jsonArray.add(jsonObject);
+            surveysAsJSON.add(new SurveyJSONService(surveys.get(i)));
         }
-        return jsonArray.toString();
+        return asd.toJson(surveysAsJSON);
     }
 }

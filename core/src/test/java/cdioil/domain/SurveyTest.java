@@ -228,4 +228,10 @@ public class SurveyTest {
         //test working method
         assertEquals(surveys, Survey.getProductSurveys(surveys, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
     }
+    @Test
+    public void testGetName(){
+        System.out.println("getName");
+        assertEquals("The condition should be successful since the both survey names are the same"
+                ,testGlobalSurvey.getName(),new GlobalSurvey(list,timePeriod).getName());
+    }
 }

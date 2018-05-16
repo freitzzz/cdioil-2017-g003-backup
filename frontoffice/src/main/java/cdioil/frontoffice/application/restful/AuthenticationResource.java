@@ -63,7 +63,7 @@ public final class AuthenticationResource implements AuthenticationAPI{
     @Path("/login")
     @Override
     public Response login(String json){
-        UserService userService=new Gson().fromJson(json,UserService.class);
+        UserJSONService userService=new Gson().fromJson(json,UserJSONService.class);
         return createLoginResponse(userService.getEmail(),userService.getPassword());
     }
     /**
@@ -85,7 +85,7 @@ public final class AuthenticationResource implements AuthenticationAPI{
     @Path("/activate")
     @Override
     public Response activateAccount(String jsonActivationCode){
-        UserService userService=new Gson().fromJson(jsonActivationCode,UserService.class);
+        UserJSONService userService=new Gson().fromJson(jsonActivationCode,UserJSONService.class);
         return createActivateAccountResponse(userService.getEmail(),userService.getPassword(),userService.getActivationCode());
     }
     /**
