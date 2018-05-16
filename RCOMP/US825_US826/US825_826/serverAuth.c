@@ -164,12 +164,12 @@ int main(int argc,char *argv[]){
 			printf("\nCounter %d", review_counter_ptr->counter);
 			printf("\n %p", shared_review);
 			
-			close(newSock);
-            exit(5);
 			} else {
 				int invalid_value = INVALID_KEY_CODE;
 				write(newSock, &invalid_value,sizeof(invalid_value));
 			}
+			close(newSock);
+            exit(5);
         }
 		
         close(newSock);
