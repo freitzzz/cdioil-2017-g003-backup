@@ -1,5 +1,6 @@
 package cdioil.frontoffice.application.restful;
 
+import cdioil.frontoffice.application.api.AuthenticationAPI;
 import cdioil.application.authz.AuthenticationController;
 import cdioil.application.domain.authz.exceptions.AuthenticationException;
 import com.google.gson.Gson;
@@ -14,10 +15,11 @@ import javax.ws.rs.core.Response.Status;
 /**
  * Resource class that represents the resource that holds all authentication services
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
+ * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @since Version 5.0 of FeedbackMonkey
  */
 @Path(value = "/authenticationresource")
-public final class AuthenticationResource {
+public final class AuthenticationResource implements AuthenticationAPI{
     /**
      * Constant that represents the JSON used on the response message for warning the user 
      * that his account needs to be activated
@@ -59,8 +61,9 @@ public final class AuthenticationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/login")
+    @Override
     public Response login(String json){
-        UserService userService=new Gson().fromJson(json,UserService.class);
+        UserJSONService userService=new Gson().fromJson(json,UserJSONService.class);
         return createLoginResponse(userService.getEmail(),userService.getPassword());
     }
     /**
@@ -80,8 +83,9 @@ public final class AuthenticationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/activate")
+    @Override
     public Response activateAccount(String jsonActivationCode){
-        UserService userService=new Gson().fromJson(jsonActivationCode,UserService.class);
+        UserJSONService userService=new Gson().fromJson(jsonActivationCode,UserJSONService.class);
         return createActivateAccountResponse(userService.getEmail(),userService.getPassword(),userService.getActivationCode());
     }
     /**

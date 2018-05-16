@@ -1,0 +1,18 @@
+package cdioil.frontoffice.application.api;
+
+import javax.ws.rs.core.Response;
+
+/**
+ * Interface that represents the FeedbackMonkey Survey API
+ * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
+ * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
+ * @since Version 5.0 of FeedbackMonkey
+ */
+public interface SurveyAPI {
+    /**
+     * Gets all surveys that an user can answer
+     * @param authenticationToken String with the user authentication token
+     * @return Response with the all the surveys that an user can answer
+     */
+    public Response getSurveys(String authenticationToken);
+}

@@ -7,6 +7,17 @@
 	
 	* Como Administrador, pretendo adicionar domínios/subdomínios de email autorizados.
 
+	
+	______________________
+	
+	FORMATO BREVE
+	______________________
+	
+	O Administrador seleciona a opção "Adicionar Domínio Autorizado" para dar início ao caso de uso. 
+	É-lhe apresentado um sub-menu em que lhe será possível adicionar um novo domínio de email autorizado ou retroceder. 
+	O Administrador seleciona a opção de adicionar um domínio e são apresentados os domínios já autorizados e é solicitado o novo domínio. 
+	O Administrador introduz o novo domínio e este é adicionado à lista de domínios autorizados, informando o Administrador de sucesso.
+	
 	______________________
 
 	REGRAS DE NEGÓCIO

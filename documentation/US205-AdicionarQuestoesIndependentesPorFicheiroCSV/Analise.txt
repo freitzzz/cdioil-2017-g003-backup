@@ -9,6 +9,17 @@
 	formato CSV.
 
 	* Os formato dos ficheiros é CSV.
+	
+	______________________
+	
+	FORMATO BREVE
+	______________________
+	
+	O Administrador seleciona o caso de uso para "Importar Questões Independentes". 
+	O sistema solicita que o Administrador introduza o ficheiro pretendido. 
+	O Administrador especifica qual o ficheiro que contém as questões independentes a serem importadas. 
+	O sistema importa as questões e informa o utilizador do número de questões lidas.
+	
 	______________________
 
 	REGRAS DE NEGÓCIO
