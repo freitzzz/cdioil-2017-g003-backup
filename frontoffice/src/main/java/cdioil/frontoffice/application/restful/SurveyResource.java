@@ -49,7 +49,7 @@ public final class SurveyResource implements SurveyAPI{
         if(user==null)return createInvalidAuthTokenResponse();
         SurveyRepositoryImpl surveyRepoImpl = new SurveyRepositoryImpl();
         List<Survey> listTargetedSurvey = surveyRepoImpl
-                .getUserTergetedSurveys(new RegisteredUserRepositoryImpl().findBySystemUser(user));
+                .getUserTargetedSurveys(new RegisteredUserRepositoryImpl().findBySystemUser(user));
         if(listTargetedSurvey==null || listTargetedSurvey.isEmpty()){
             return createNoAvailableSurveysResponse();
         }
