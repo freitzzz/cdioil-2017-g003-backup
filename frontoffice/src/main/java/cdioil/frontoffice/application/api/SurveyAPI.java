@@ -12,7 +12,8 @@ public interface SurveyAPI {
     /**
      * Gets all surveys that an user can answer
      * @param authenticationToken String with the user authentication token
+     * @param paginationID String with the survey pagination ID
      * @return Response with the all the surveys that an user can answer
      */
-    public Response getSurveys(String authenticationToken);
+    public Response getSurveys(String authenticationToken,String paginationID);
 }

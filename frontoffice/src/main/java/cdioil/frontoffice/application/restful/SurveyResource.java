@@ -1,6 +1,7 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.domain.Survey;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.application.api.SurveyAPI;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
@@ -13,6 +14,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -29,31 +31,48 @@ public final class SurveyResource implements SurveyAPI{
      * Constant that represents the JSON used on the response message for warning the user 
      * that his account is not currently authenticated
      */
-    private static final String JSON_INVALID_AUTHENTICATION_TOKEN="{\n\t\"invalidauthenticationtoken\":\"true\"}";
+    private static final String JSON_INVALID_AUTHENTICATION_TOKEN="{\n\t\"invalidauthenticationtoken\":\"true\"\n}";
     /**
      * Constant that represents the JSON used on the response message for warning the user 
      * that there are currently no available surveys for him to answer
      */
-    private static final String JSON_NO_AVAILABLE_SURVEYS="{\n\t\"noavailablesurveys\":\"true\"}";
+    private static final String JSON_NO_AVAILABLE_SURVEYS="{\n\t\"noavailablesurveys\":\"true\"\n}";
+    /**
+     * Constant that represents the JSON used on the response message for warning the user 
+     * that he is not authorized to access reviews
+     */
+    private static final String JSON_INVALID_USER="{\n\t\"invaliduser\":\"true\"\n}";
+    /**
+     * Constant that represents the JSON used on the resonse message for warning the user that 
+     * the pagination ID is invalid
+     */
+    private static final String JSON_INVALID_PAGINATION_ID="{\n\t\"invalidPaginationID\":\"true\"\n}";
     /**
      * List the Surveys via a JSON POST Request
      * @param authenticationToken String the authentication token
+     * @param paginationID String with the survey pagination ID
      * @return Response with the JSON response with the list of the surveys
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/allsurveys/{authenticationToken}/")
     @Override
-    public Response getSurveys(@PathParam("authenticationToken") String authenticationToken){    
+    public Response getSurveys(@PathParam("authenticationToken") String authenticationToken
+            ,@QueryParam("paginationID") String paginationID){
         SystemUser user = new UserSessionRepositoryImpl().getSystemUserByAuthenticationToken(authenticationToken);
         if(user==null)return createInvalidAuthTokenResponse();
-        SurveyRepositoryImpl surveyRepoImpl = new SurveyRepositoryImpl();
-        List<Survey> listTargetedSurvey = surveyRepoImpl
-                .getUserTargetedSurveys(new RegisteredUserRepositoryImpl().findBySystemUser(user));
-        if(listTargetedSurvey==null || listTargetedSurvey.isEmpty()){
-            return createNoAvailableSurveysResponse();
+        RegisteredUser registeredUser=new RegisteredUserRepositoryImpl().findBySystemUser(user);
+        if(registeredUser==null)createInvalidUserResponse();
+        try{
+            List<Survey> listTargetedSurvey = new SurveyRepositoryImpl()
+                    .getAllUserSurveys(registeredUser,Integer.parseInt(paginationID));
+            if(listTargetedSurvey==null || listTargetedSurvey.isEmpty()){
+                return createNoAvailableSurveysResponse();
+            }
+            return Response.status(Status.OK).entity(getSurveysAsJSON(listTargetedSurvey)).build();
+        }catch(NumberFormatException formatException){
+            return createInvalidPaginationIDResponse();
         }
-        return Response.status(Status.OK).entity(getSurveysAsJSON(listTargetedSurvey)).build();
     }
     
     /**
@@ -64,6 +83,15 @@ public final class SurveyResource implements SurveyAPI{
     private Response createInvalidAuthTokenResponse(){
         return Response.status(Status.UNAUTHORIZED)
                 .entity(JSON_INVALID_AUTHENTICATION_TOKEN)
+                .build();
+    }
+    /**
+     * Creates a Response for warning the user that he is not authorized to access surveys
+     * @return Response with the response warning the user that he is not allowed to access surveys
+     */
+    private Response createInvalidUserResponse(){
+        return Response.status(Status.BAD_REQUEST)
+                .entity(JSON_INVALID_USER)
                 .build();
     }
     /**
@@ -78,16 +106,26 @@ public final class SurveyResource implements SurveyAPI{
                 .build();
     }
     /**
+     * Creates a Response for warning the user that the pagination ID is invalid
+     * @return Response with the response for warning the user that the pagination ID 
+     * is invalid
+     */
+    private Response createInvalidPaginationIDResponse(){
+        return Response.status(Status.BAD_REQUEST)
+                .entity(JSON_INVALID_PAGINATION_ID)
+                .build();
+    }
+    /**
      * Method that serializes a list of surveys into a JSON
      * @param surveys List with all the surveys being serialized
      * @return String with a JSON String with all the surveys serialized
      */
     private String getSurveysAsJSON(List<Survey> surveys){
-        Gson asd=new Gson();
+        Gson gson=new Gson();
         List<SurveyJSONService> surveysAsJSON=new ArrayList<>();
         for(int i=0;i<surveys.size();i++){
             surveysAsJSON.add(new SurveyJSONService(surveys.get(i)));
         }
-        return asd.toJson(surveysAsJSON);
+        return gson.toJson(surveysAsJSON);
     }
 }
