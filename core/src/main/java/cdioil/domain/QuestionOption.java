@@ -62,7 +62,7 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
      */
     public static QuestionOption getQuestionOption(String type, String content) {
         try {
-            QuestionTypes questionType = QuestionTypes.valueOf(type);
+            QuestionTypes questionType = QuestionTypes.valueOf(type.toUpperCase());
 
             switch (questionType) {
                 case BINARY:
