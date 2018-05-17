@@ -124,46 +124,48 @@ int main(int argc,char *argv[]){
 			int timestamp_flag = checkTimeStamp(receivedCode.timestamp);
 			if(timestamp_flag){
             int code= isAuthKeyAllowed(authenticationKeys,receivedCode.key,authenticationKeysTotal) ? VALID_KEY_CODE : INVALID_KEY_CODE;
-
+			
             write(newSock,&code,sizeof(code));
-			
-			Review client_review;
-			read(newSock, &client_review, sizeof(Review));
-			
-			//mutex semaphore for incrementing variable
-			sem_wait(mutex_semaphore);		
-			
-			/*This memory mapping instruction is contained within the critical execution area, 
-			since it might no longer be valid if another process changes the mapping*/
-			shared_review = (Review *) mmap(NULL, shm_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd_review, 0);
-			
-			if(review_counter_ptr->counter == review_counter_ptr->size){
-				int old_size = review_counter_ptr->size * sizeof(Review);
-				review_counter_ptr->size += review_counter_ptr->increment;
-				int new_size = review_counter_ptr->size * sizeof(Review);
-				ftruncate(fd_review, new_size);
-				shared_review = (Review *) mremap(shared_review, old_size, new_size, MREMAP_MAYMOVE);
-				printf("\n \t \t MEMORY REALLOCATED\n");
-			}
-			
-			int counter = review_counter_ptr->counter;
-			
-			shared_review += counter;		
-			
-			strcpy(shared_review->product_name, client_review.product_name);
-			shared_review->valor = client_review.valor;
-			shared_review->id = client_review.id;
-			
-			review_counter_ptr->counter++;
+            
+            if(code != INVALID_KEY_CODE){
+				
+				Review client_review;
+				read(newSock, &client_review, sizeof(Review));
+				
+				//mutex semaphore for incrementing variable
+				sem_wait(mutex_semaphore);		
+				
+				/*This memory mapping instruction is contained within the critical execution area, 
+				since it might no longer be valid if another process changes the mapping*/
+				shared_review = (Review *) mmap(NULL, shm_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd_review, 0);
+				
+				if(review_counter_ptr->counter == review_counter_ptr->size){
+					int old_size = review_counter_ptr->size * sizeof(Review);
+					review_counter_ptr->size += review_counter_ptr->increment;
+					int new_size = review_counter_ptr->size * sizeof(Review);
+					ftruncate(fd_review, new_size);
+					shared_review = (Review *) mremap(shared_review, old_size, new_size, MREMAP_MAYMOVE);
+					printf("\n \t \t MEMORY REALLOCATED\n");
+				}
+				
+				int counter = review_counter_ptr->counter;
+				
+				shared_review += counter;		
+				
+				strcpy(shared_review->product_name, client_review.product_name);
+				shared_review->valor = client_review.valor;
+				shared_review->id = client_review.id;
+				
+				review_counter_ptr->counter++;
 
-			sem_post(mutex_semaphore);	
-			
-			printf("\nProduct %s", shared_review->product_name);
-			printf("\nPID %d", shared_review->id);
-			printf("\nValue %d", shared_review->valor);
-			printf("\nCounter %d", review_counter_ptr->counter);
-			printf("\n %p", shared_review);
-			
+				sem_post(mutex_semaphore);	
+				
+				printf("\nProduct %s", shared_review->product_name);
+				printf("\nPID %d", shared_review->id);
+				printf("\nValue %d", shared_review->valor);
+				printf("\nCounter %d", review_counter_ptr->counter);
+				printf("\n %p", shared_review);
+			}
 			} else {
 				int invalid_value = INVALID_KEY_CODE;
 				write(newSock, &invalid_value,sizeof(invalid_value));
