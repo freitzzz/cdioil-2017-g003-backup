@@ -79,7 +79,7 @@ public class AssignManagerUI {
     private void showListOfRegisteredUsers() {
         // Get lista users
         List<String> userList = getRegisteredUsersLists();
-        if (userList.isEmpty()) {
+        if (userList == null || userList.isEmpty()) {
             System.out.println("ERRO: Não há utilizadores registados!");
             return;
         }

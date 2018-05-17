@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.frontoffice.application.restful;
 
-import cdioil.domain.BinaryQuestionOption;
-import cdioil.domain.MultipleChoiceQuestionOption;
-import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
-import cdioil.domain.QuestionTypes;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
@@ -55,6 +46,7 @@ public class ReviewResource {
     /**
      * Allows the user to answer a question via JSON PUT Request.
      *
+     * @param authenticationToken Authentication token of the user
      * @param option Chosen option
      * @param questionType Type of question
      * @param reviewID ID of th review
@@ -62,8 +54,8 @@ public class ReviewResource {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/answerQuestion/{authenticationToken}/")
-    public Response answerQuestion(@PathParam("option") String option, @PathParam("questionType") String questionType, @PathParam("reviewID") String reviewID) {
+    @Path("/answerQuestion/{authenticationToken}/{option}/{questionType}/{reviewID}")
+    public Response answerQuestion(@PathParam("authenticationToken") String authenticationToken, @PathParam("option") String option, @PathParam("questionType") String questionType, @PathParam("reviewID") String reviewID) {
         Review review = getReviewByID(reviewID);
 
         QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);

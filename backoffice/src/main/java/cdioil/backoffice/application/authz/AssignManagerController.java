@@ -1,7 +1,6 @@
 package cdioil.backoffice.application.authz;
 
 import cdioil.domain.Category;
-import cdioil.domain.MarketStructure;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
@@ -11,7 +10,6 @@ import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 
-import javax.management.Notification;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -41,14 +41,14 @@ public class ManagerManagementComponent extends DefaultPanelView {
      */
     public ManagerManagementComponent() {
         super("Gestores");
-        instantiateComponents();
+        createComponents();
         prepareComponents();
     }
 
     /**
      * Instantiates needed components
      */
-    private void instantiateComponents() {
+    private void createComponents() {
         controller = new ManagerManagementController();
         managerGrid = new Grid<>();
     }
