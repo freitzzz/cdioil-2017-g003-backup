@@ -11,9 +11,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
@@ -66,6 +64,9 @@ public class ManagerManagementComponent extends DefaultPanelView {
         setExpandRatio(managerGrid, 0.90f);
     }
 
+    /**
+     * Creates Window Header
+     */
     private void prepareHeader() {
         Responsive.makeResponsive(headerLayout);
 
@@ -82,6 +83,10 @@ public class ManagerManagementComponent extends DefaultPanelView {
         headerLayout.setComponentAlignment(toolsLayout, Alignment.MIDDLE_RIGHT);
     }
 
+    /**
+     * Creates search field
+     * @return component
+     */
     private Component createSearchField() {
         TextField searchTextField = new TextField();
         searchTextField.setPlaceholder("Search");
@@ -106,6 +111,10 @@ public class ManagerManagementComponent extends DefaultPanelView {
 
     }
 
+    /**
+     * Creates drop down menu
+     * @return options drop down
+     */
     private Component createOptionsDropDown() {
         MenuBar settingsMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem = settingsMenuBar.addItem("", null);
@@ -135,6 +144,9 @@ public class ManagerManagementComponent extends DefaultPanelView {
         return settingsMenuBar;
     }
 
+    /**
+     * Creates Manager Grid
+     */
     private void prepareGrid() {
         managerGridData = controller.findAllSystemUserDTO();
 
