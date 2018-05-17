@@ -4,12 +4,10 @@ import cdioil.application.authz.AuthenticationController;
 import cdioil.backoffice.webapp.MainLayoutView;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.Navigator;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 
 /**
  * @author <a href="https://github.com/freitzzz">freitzzz</a>
