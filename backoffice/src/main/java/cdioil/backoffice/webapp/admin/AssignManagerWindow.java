@@ -25,7 +25,7 @@ public class AssignManagerWindow extends Window {
     /**
      * Controller Class
      */
-    private AssignManagerController controller;
+    private transient AssignManagerController controller;
 
     /**
      * Window's Main Layout
