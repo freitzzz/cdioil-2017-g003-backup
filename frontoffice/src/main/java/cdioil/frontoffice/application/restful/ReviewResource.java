@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.frontoffice.application.restful;
 
-import cdioil.domain.BinaryQuestionOption;
-import cdioil.domain.MultipleChoiceQuestionOption;
-import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
-import cdioil.domain.QuestionTypes;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.persistence.impl.ReviewRepositoryImpl;

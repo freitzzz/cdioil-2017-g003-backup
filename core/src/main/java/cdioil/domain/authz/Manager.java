@@ -3,7 +3,6 @@ package cdioil.domain.authz;
 import cdioil.domain.Category;
 import cdioil.framework.domain.ddd.AggregateRoot;
 import cdioil.framework.dto.DTOable;
-import cdioil.framework.dto.ManagerDTO;
 import cdioil.framework.dto.SystemUserDTO;
 import java.io.Serializable;
 import java.util.LinkedList;
