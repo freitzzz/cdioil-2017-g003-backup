@@ -155,7 +155,9 @@ public abstract class Survey implements Serializable {
     public Graph getGraphCopy() {
         return new Graph(graph);
     }
-
+    public String getName(){
+        return "Inquérito: ";
+    }
     /**
      * Survey's hash code.
      *
@@ -165,7 +167,6 @@ public abstract class Survey implements Serializable {
     public int hashCode() {
         return itemList.hashCode() + graph.hashCode();
     }
-
     /**
      * Checks if two Survey instances are the same by comparing their product
      * and question list.

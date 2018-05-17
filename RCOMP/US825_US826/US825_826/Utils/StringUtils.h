@@ -19,6 +19,3 @@ int startsWith(char* stringToCompare,char* from);
 /*Gets the value that a certain identifier holds*/
 /*Returns Pointed Integer with the value of the identifier, NULL if no value was found*/
 int* getIdentifierValue(char *line,char* indentifier);
-
-/*Converts an unsigned int to a string*/
-char * utoa(unsigned int n);

@@ -56,7 +56,11 @@ int main(int argc,char *argv[]){
 	
     Cominhos c;
 	
-    c.key=(char*)generate();
+	char temp[256];
+	
+	strncpy(temp, (char*) generate(), sizeof(temp));
+	strncpy(c.key, temp, sizeof(temp));
+	
     time(&c.timestamp);
 
     write(sock,&c,sizeof(c)); //Writes to Socket Stream the Authentication Key and the Timestamp

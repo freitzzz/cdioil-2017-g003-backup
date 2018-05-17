@@ -7,6 +7,7 @@ import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.SurveyRepository;
+import java.util.ArrayList;
 
 import javax.persistence.Query;
 import java.util.List;
@@ -23,6 +24,10 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      * Constant that represents the lii
      */
     private static final int LAZY_LOADING_LIMIT = 100;
+    /**
+     * Constant that represents the limit of surveys that can be sent
+     */
+    private static final int SURVEYS_FETCH_LIMIT=25;
 
     /**
      * Method that returns the persistence unit name that the repository uses
@@ -62,7 +67,7 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
                 .setParameter("surveyState", SurveyState.ACTIVE)
                 .getResultList();
     }
-
+    
     /**
      * Returns all Targeted Surveys
      *
@@ -84,7 +89,7 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      * @param user a long with id od the user
      * @return list of targeted surveys
      */
-    public List<Survey> getUserTergetedSurveys(RegisteredUser user){
+    public List<Survey> getUserTargetedSurveys(RegisteredUser user){
         Query q = entityManager().createQuery("SELECT t FROM TargetedSurvey t WHERE t.state = :surveyState "
                 + "AND :idUser MEMBER OF t.targetAudience.users")
                 .setParameter("surveyState", SurveyState.ACTIVE)
@@ -93,5 +98,36 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
             return null;
         }
         return q.getResultList();
+    }
+    /**
+     * Method that gets all user surveys that he can currently answer
+     * @param registeredUser RegisteredUser with the user getting the surveys he can answer
+     * @param paginationIndex Integer with the next pagination page
+     * @return List with all the surveys that a certain user can currently answer
+     */
+    public List<Survey> getAllUserSurveys(RegisteredUser registeredUser,int paginationIndex){
+        List<Survey> allUserSurveys=new ArrayList(SURVEYS_FETCH_LIMIT);
+        List<Survey> userTargetedSurveys=getUserTargetedSurveys(registeredUser);
+        if(userTargetedSurveys!=null)allUserSurveys.addAll(allUserSurveys);
+        int surveysRemaining=SURVEYS_FETCH_LIMIT-allUserSurveys.size();
+        if(surveysRemaining==0)return allUserSurveys;
+        List<Survey> activeGlobalSurveys=getActiveGlobalSurveysByIndexLimit(paginationIndex,surveysRemaining);
+        if(activeGlobalSurveys!=null)allUserSurveys.addAll(activeGlobalSurveys);
+        return allUserSurveys;
+    }
+    /**
+     * Method that gets active global surveys based on a certain index for pagination
+     * @param paginationIndex Integer with the next pagination page
+     * @param leftFetchedSurveys Integer with the remaining surveys to fill the limit to fetch
+     * @return List with all the global surveys based on certain index for pagination
+     */
+    private List<Survey> getActiveGlobalSurveysByIndexLimit(int paginationIndex,int leftFetchedSurveys){
+        int nextLimit=paginationIndex*SURVEYS_FETCH_LIMIT;
+        Query query=entityManager().createQuery("SELECT GB FROM GlobalSurvey GB "
+                + "WHERE GB.state=:activeState")
+                .setParameter("activeState",SurveyState.ACTIVE)
+                .setFirstResult(nextLimit)
+                .setMaxResults((nextLimit+SURVEYS_FETCH_LIMIT)-leftFetchedSurveys);
+        return !query.getResultList().isEmpty() ? query.getResultList() : null;
     }
 }

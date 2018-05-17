@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.framework.dto.SystemUserDTO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -58,5 +59,17 @@ public class RegisteredUserTest {
         SystemUser systemUserX=new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"));
         RegisteredUser ur = new RegisteredUser(systemUserX);
         assertEquals(systemUserX, ur.getID());
+    }
+    /**
+     * Test of toDTO method, of class Admin.
+     */
+    @Test
+    public void testToDTO() {
+        System.out.println("toDTO");
+        SystemUser sysUser=new SystemUser(new Email("11111111@email.com"),new Name("AAAA","BBBB"),new Password("Password123"));
+        RegisteredUser instance = new RegisteredUser(sysUser);
+        SystemUserDTO expResult = sysUser.toDTO();
+        SystemUserDTO result = instance.toDTO();
+        assertEquals("Condition should be successful since both DTO's are the same",expResult, result);
     }
 }

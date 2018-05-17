@@ -8,8 +8,23 @@
 	* Como Gestor, quero poder adicionar lista de utilizadores a um inquérito. Pretendo usar expressões regulares
 	para adicionar utilizadores ou domínios/subdomínios. Deve permitir filtrar por diversos dados do utilizador,
 	nomeadamente a localidade e ano de nascimento.
+	
+	______________________
 
-
+	FORMATO BREVE
+	______________________
+	
+		O gestor seleciona a opção "Adicionar Utilizadores a Inquérito" para iniciar o caso de uso. 
+		
+		Após a seleção desta opção, é pedido ao gestor a seleção de um dos inquéritos ativos. 
+		
+		Este escolhe um inquérito e é-lhe apresentado um menu com diversas opções, 
+	entre as quais a filtragem de utilizadores por username, por ano de nascimento, localidade e domínio de email.
+	
+		Assim que o gestor se sentir satisfeito com as suas opções de filtragem, poderá confirmar as suas escolhas e 
+	os utilizadores que se enquandrem nos fitros serão adicionados ao inquérito previamente selecionado.
+	
+	
 	______________________
 
 	REGRAS DE NEGÓCIO

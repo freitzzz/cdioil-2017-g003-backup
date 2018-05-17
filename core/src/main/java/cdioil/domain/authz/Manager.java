@@ -3,10 +3,8 @@ package cdioil.domain.authz;
 import cdioil.domain.Category;
 import cdioil.framework.domain.ddd.AggregateRoot;
 import cdioil.framework.dto.DTOable;
-import cdioil.framework.dto.GenericDTO;
 import cdioil.framework.dto.ManagerDTO;
 import cdioil.framework.dto.SystemUserDTO;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -177,15 +175,23 @@ public class Manager implements DTOable, Serializable, AggregateRoot<SystemUser>
     public List<Category> categoriesFromManager() {
         return categories;
     }
-
+    /**
+     * Method that returns a DTO of the current Manager
+     * @return SystemUserDTO with the DTO of the current manager
+     */
     @Override
-    public ManagerDTO toDTO() {
-        SystemUserDTO systemUserDTO = sysUser.toDTO();
-
-        final String firstName = systemUserDTO.getFirstName();
-        final String lastName = systemUserDTO.getLastName();
-        final String email = systemUserDTO.getEmail();
-
-        return new ManagerDTO("manager", firstName, lastName, email);
+    public SystemUserDTO toDTO() {
+        return sysUser.toDTO();
     }
+//Dont delete, still in discusion
+//    @Override
+//    public ManagerDTO toDTO() {
+//        SystemUserDTO systemUserDTO = sysUser.toDTO();
+//
+//        final String firstName = systemUserDTO.getFirstName();
+//        final String lastName = systemUserDTO.getLastName();
+//        final String email = systemUserDTO.getEmail();
+//
+//        return new ManagerDTO("manager", firstName, lastName, email);
+//    }
 }

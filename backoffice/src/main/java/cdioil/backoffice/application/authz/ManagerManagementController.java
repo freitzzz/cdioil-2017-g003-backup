@@ -1,7 +1,7 @@
 package cdioil.backoffice.application.authz;
 
 import cdioil.domain.authz.Manager;
-import cdioil.framework.dto.ManagerDTO;
+import cdioil.framework.dto.SystemUserDTO;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 
 import java.util.Iterator;
@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ManagerManagementController {
 
-    public List<ManagerDTO> findAllManagerDTO() {
-        List<ManagerDTO> allManagersDTO = new LinkedList<>();
+    public List<SystemUserDTO> findAllSystemUserDTO() {
+        List<SystemUserDTO> allManagersDTO = new LinkedList<>();
 
         Iterator<Manager> allManagers = new ManagerRepositoryImpl().findAll().iterator();
 
@@ -24,8 +24,8 @@ public class ManagerManagementController {
         return allManagersDTO;
     }
 
-    public List<ManagerDTO> findFilteredManagerDTO(String searchTerm) {
-        List<ManagerDTO> filteredManagerDTOList = new LinkedList<>();
+    public List<SystemUserDTO> findFilteredSystemUserDTO(String searchTerm) {
+        List<SystemUserDTO> filteredSystemUserDTOList = new LinkedList<>();
 
         Iterator<Manager> allManagers = new ManagerRepositoryImpl().findAll().iterator();
 
@@ -33,10 +33,10 @@ public class ManagerManagementController {
             Manager manager = allManagers.next();
 
             if (manager.toString().toLowerCase().contains(searchTerm.trim().toLowerCase())) {
-                filteredManagerDTOList.add(manager.toDTO());
+                filteredSystemUserDTOList.add(manager.toDTO());
             }
         }
 
-        return filteredManagerDTOList;
+        return filteredSystemUserDTOList;
     }
 }

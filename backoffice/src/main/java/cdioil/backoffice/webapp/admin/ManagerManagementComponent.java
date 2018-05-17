@@ -2,7 +2,7 @@ package cdioil.backoffice.webapp.admin;
 
 import cdioil.backoffice.application.authz.ManagerManagementController;
 import cdioil.backoffice.webapp.DefaultPanelView;
-import cdioil.framework.dto.ManagerDTO;
+import cdioil.framework.dto.SystemUserDTO;
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Responsive;
@@ -26,17 +26,17 @@ public class ManagerManagementComponent extends DefaultPanelView {
     /**
      * Controller class
      */
-    private ManagerManagementController controller;
+    private transient ManagerManagementController controller;
 
     /**
      * User list/grid
      */
-    private Grid<ManagerDTO> managerGrid;
+    private Grid<SystemUserDTO> managerGrid;
 
     /**
      * Data for the the user grid
      */
-    private transient List<ManagerDTO> managerGridData;
+    private transient List<SystemUserDTO> managerGridData;
 
     /**
      * Constructs an instance of the Manager Management view
@@ -93,8 +93,8 @@ public class ManagerManagementComponent extends DefaultPanelView {
             public void valueChange(HasValue.ValueChangeEvent<String> valueChangeEvent) {
                 final String input = searchTextField.getValue().toLowerCase();
 
-                List<ManagerDTO> filteredUsers =
-                        controller.findFilteredManagerDTO(input);
+                List<SystemUserDTO> filteredUsers =
+                        controller.findFilteredSystemUserDTO(input);
 
                 managerGridData.clear();
                 managerGridData.addAll(filteredUsers);
@@ -136,12 +136,12 @@ public class ManagerManagementComponent extends DefaultPanelView {
     }
 
     private void prepareGrid() {
-        managerGridData = controller.findAllManagerDTO();
+        managerGridData = controller.findAllSystemUserDTO();
 
         managerGrid.setItems(managerGridData);
-        managerGrid.addColumn(ManagerDTO::getFirstName).setCaption("Nome").setResizable(false);
-        managerGrid.addColumn(ManagerDTO::getLastName).setCaption("Sobrenome").setResizable(false);
-        managerGrid.addColumn(ManagerDTO::getEmail).setCaption("Email").setResizable(false);
+        managerGrid.addColumn(SystemUserDTO::getFirstName).setCaption("Nome").setResizable(false);
+        managerGrid.addColumn(SystemUserDTO::getLastName).setCaption("Sobrenome").setResizable(false);
+        managerGrid.addColumn(SystemUserDTO::getEmail).setCaption("Email").setResizable(false);
 
         managerGrid.setSizeFull();
         addComponent(managerGrid);
