@@ -132,7 +132,8 @@ public class AssignManagerUI {
      * @return ArrayList
      */
     private List<String> getRegisteredUsersLists() {
-        return controller.registeredUsers();
+        //return controller.registeredUsers();
+        return null;
     }
 
     /**
@@ -151,7 +152,7 @@ public class AssignManagerUI {
     private void assignManager() {
         try {
             String email = Console.readLine("Introduza o email desejado");
-            controller.assignManager(email);
+            //controller.assignManager(email);
         } catch (IllegalArgumentException e) {
             System.out.println(LINE_SEPARATOR);
             System.out.println("ERRO: Email inválido!");

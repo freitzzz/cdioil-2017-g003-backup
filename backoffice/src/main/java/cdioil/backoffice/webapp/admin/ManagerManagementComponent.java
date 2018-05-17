@@ -11,7 +11,9 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
@@ -21,6 +23,9 @@ import java.util.List;
  */
 public class ManagerManagementComponent extends DefaultPanelView {
 
+    /**
+     * Controller class
+     */
     private ManagerManagementController controller;
 
     /**
@@ -42,6 +47,9 @@ public class ManagerManagementComponent extends DefaultPanelView {
         prepareComponents();
     }
 
+    /**
+     * Instantiates needed components
+     */
     private void instantiateComponents() {
         controller = new ManagerManagementController();
         managerGrid = new Grid<>();
@@ -102,13 +110,6 @@ public class ManagerManagementComponent extends DefaultPanelView {
         MenuBar settingsMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem = settingsMenuBar.addItem("", null);
 
-        menuItem.addItem("Novo Gestor",
-                VaadinIcons.PLUS, new MenuBar.Command() {
-                    @Override
-                    public void menuSelected(MenuBar.MenuItem menuItem) {
-                        //TODO Novo gestor
-                    }
-                });
         menuItem.addItem("Associar Categorias",
                 VaadinIcons.PLUS_CIRCLE, new MenuBar.Command() {
                     @Override
@@ -145,5 +146,4 @@ public class ManagerManagementComponent extends DefaultPanelView {
         managerGrid.setSizeFull();
         addComponent(managerGrid);
     }
-
 }

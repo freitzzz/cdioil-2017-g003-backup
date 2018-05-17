@@ -12,6 +12,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
@@ -84,6 +85,7 @@ public class UserManagementComponent extends DefaultPanelView {
 
     /**
      * Prepare Search Field
+     *
      * @return search field component
      */
     private Component createSearchField() {
@@ -111,14 +113,28 @@ public class UserManagementComponent extends DefaultPanelView {
 
     /**
      * Create Options DropDown Menu
+     *
      * @return
      */
     private Component createOptionsDropDown() {
         MenuBar settingsMenuBar = new MenuBar();
         MenuItem menuItem = settingsMenuBar.addItem("", null);
 
-        menuItem.addItem("Gerir Whitelist",
-                VaadinIcons.BAN, new MenuBar.Command() {
+        menuItem.addItem("Novo Gestor", VaadinIcons.PLUS, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem menuItem) {
+                final String selectedUser = getSelectedUserEmail();
+                if (selectedUser == null) {
+                    Notification.show("Por favor selecione um utilizador",
+                            Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
+
+                UI.getCurrent().addWindow(new AssignManagerWindow(getSelectedUserEmail()));
+            }
+        });
+
+        menuItem.addItem("Gerir Whitelist", VaadinIcons.BAN, new MenuBar.Command() {
             @Override
             public void menuSelected(MenuItem menuItem) {
                 UI.getCurrent().addWindow(new WhitelistManagementWindow());
@@ -148,5 +164,19 @@ public class UserManagementComponent extends DefaultPanelView {
 
         userGrid.setSizeFull();
         addComponent(userGrid);
+    }
+
+    /**
+     * Returns the first selected SystemUser's email from the userGrid
+     * Even if multiple SystemUsers are selected, only the first is returned
+     *
+     * @return selected SystemUser's email
+     */
+    private String getSelectedUserEmail() {
+        if (userGrid.getSelectedItems().isEmpty()) {
+            return null;
+        }
+
+        return userGrid.getSelectedItems().iterator().next().getEmail();
     }
 }
