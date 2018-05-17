@@ -15,4 +15,12 @@ public interface ReviewRepository {
      * @return List with all reviews made for a certain survey
      */
     public abstract List<Review> getReviewsBySurvey(Survey survey);
+    
+    /**
+     * Method that returns the ID of a given review.
+     * 
+     * @param review Review in question
+     * @return the ID of the review
+     */
+    public abstract Long getReviewID(Review review);
 }
