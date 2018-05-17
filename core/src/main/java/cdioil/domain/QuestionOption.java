@@ -12,12 +12,10 @@ import javax.persistence.InheritanceType;
 import javax.persistence.SequenceGenerator;
 
 /**
- * Class that represents an option that a question has. (e.g. a binary question
- * has 2 options (Yes/No) )
+ * Class that represents an option that a question has. (e.g. a binary question has 2 options (Yes/No) )
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
- * @param <T> defines the type of content of the option (e.g. boolean value on a
- * binary option)
+ * @param <T> defines the type of content of the option (e.g. boolean value on a binary option)
  */
 @Entity
 @SequenceGenerator(name = "questionOptionSeq", initialValue = 1, allocationSize = 1)
@@ -53,6 +51,32 @@ public abstract class QuestionOption<T> implements Serializable, ValueObject {
             return new QuantitativeQuestionOption(option);
         }
         return null;
+    }
+
+    /**
+     * Returns the QuestionType according to the received type.
+     *
+     * @param type Type of the Question
+     * @param content Content of the QuestionOption
+     * @return the QuestionOption
+     */
+    public static QuestionOption getQuestionOption(String type, String content) {
+        try {
+            QuestionTypes questionType = QuestionTypes.valueOf(type);
+
+            switch (questionType) {
+                case BINARY:
+                    return new BinaryQuestionOption(Boolean.parseBoolean(content));
+                case MULTIPLE_CHOICE:
+                    return new MultipleChoiceQuestionOption(content);
+                case QUANTITATIVE:
+                    return new QuantitativeQuestionOption(Double.parseDouble(content));
+                default:
+                    return null;
+            }
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
     }
 
     /**

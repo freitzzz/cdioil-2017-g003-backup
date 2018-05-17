@@ -108,7 +108,7 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
     public List<Survey> getAllUserSurveys(RegisteredUser registeredUser,int paginationIndex){
         List<Survey> allUserSurveys=new ArrayList(SURVEYS_FETCH_LIMIT);
         List<Survey> userTargetedSurveys=getUserTargetedSurveys(registeredUser);
-        if(userTargetedSurveys!=null)allUserSurveys.addAll(allUserSurveys);
+        if(userTargetedSurveys!=null)allUserSurveys.addAll(userTargetedSurveys);
         int surveysRemaining=SURVEYS_FETCH_LIMIT-allUserSurveys.size();
         if(surveysRemaining==0)return allUserSurveys;
         List<Survey> activeGlobalSurveys=getActiveGlobalSurveysByIndexLimit(paginationIndex,surveysRemaining);

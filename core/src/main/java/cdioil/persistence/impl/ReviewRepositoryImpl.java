@@ -30,11 +30,30 @@ public final class ReviewRepositoryImpl extends BaseJPARepository<Review,Long> i
      */
     @Override
     public List<Review> getReviewsBySurvey(Survey survey){
-        if(survey==null)return null;
+        if(survey==null){
+            return null;
+        }
         long surveyID = (long)entityManager().createQuery("SELECT s.id FROM " 
                 + survey.getClass().getSimpleName()
                 + " s WHERE s= :survey").setParameter("survey",survey).getSingleResult();
         return (List<Review>)entityManager().createNativeQuery("SELECT * FROM Review r "
                 + "WHERE r.survey_id = ?1",Review.class).setParameter(1,surveyID).getResultList();
     }
+
+     /**
+     * Method that returns the ID of a given review.
+     * 
+     * @param review Review in question
+     * @return the ID of the review
+     */
+    @Override
+    public Long getReviewID(Review review) {
+        if(review == null){
+           return null;
+        }
+        return (Long) entityManager().createQuery("SELECT r.id FROM Review r WHERE r := review")
+                .setParameter("review", review).getSingleResult();
+    }
+    
+    
 }
