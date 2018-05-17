@@ -32,23 +32,3 @@ int* getIdentifierValue(char *line,char* indentifier){
     }
     return catched!=0 ? pointedValue : NULL;
 }
-
-/*Converts an unsigned int to a string*/
-char * utoa(unsigned int n)
-{
-  char * res, buf[30]; // long enough for largest number
-  unsigned int i, counter = 0;
-
-  if (n == 0)
-    buf[counter++] = '0';
-
-  for ( ; n; n /= 10)
-    buf[counter++] = "0123456789"[n%10];
-
-  res = malloc(counter);
-
-  for (i = 0; i < counter; ++i)
-    res[i] = buf[counter - i - 1];
-
-  return res;
-}
