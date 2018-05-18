@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
  * Represents a category from the market structure.
  */
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "path"))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "categoryPath"))
 public class Category extends SurveyItem {
 
     /**
