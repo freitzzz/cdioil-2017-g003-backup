@@ -40,14 +40,13 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     /**
      * list of the user's reviews
      */
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Review> reviews;
-    
+
     /**
      * Builds a new Profile of a certain Registered User
      *
-     * @param registeredUser RegisteredUser with the registered user that owns
-     * this profile
+     * @param registeredUser RegisteredUser with the registered user that owns this profile
      */
     public Profile(RegisteredUser registeredUser) {
         this.registeredUser = registeredUser;
@@ -61,14 +60,32 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     }
 
     /**
+     * Access method to the list of reviews
+     *
+     * @return review list
+     */
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    /**
      * Adds a review to the list of reviews
      *
      * @param r review to add
-     * @return true if the review was added successfully, false if it was not
-     * added
+     * @return true if the review was added successfully, false if it was not added
      */
     public boolean addReview(Review r) {
         return r != null ? reviews.add(r) : false;
+    }
+
+    /**
+     * Removes a review to the list of reviews
+     *
+     * @param r review to remove
+     * @return true if the review was removed successfully, false if it was not removed
+     */    
+    public boolean removeReview(Review r){
+        return r != null ? reviews.remove(r) : false;
     }
 
     /**

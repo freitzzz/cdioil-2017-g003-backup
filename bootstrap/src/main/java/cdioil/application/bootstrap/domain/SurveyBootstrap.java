@@ -1,12 +1,14 @@
 package cdioil.application.bootstrap.domain;
 
 import cdioil.domain.BinaryQuestion;
+import cdioil.domain.BinaryQuestionOption;
 import cdioil.domain.Category;
 import cdioil.domain.CategoryQuestionsLibrary;
 import cdioil.domain.GlobalSurvey;
 import cdioil.domain.IndependentQuestionsLibrary;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
+import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyItem;
 import cdioil.domain.SurveyState;
@@ -19,6 +21,7 @@ import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
+import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
@@ -128,6 +131,12 @@ public class SurveyBootstrap {
         survey.setNextQuestion(firstQuestion, thirdQuestion,
                 firstQuestion.getOptionList().get(1), 0); //false
         surveyRepository.add(survey);
+        
+        
+        Review r = new Review(survey);
+        r.answerQuestion(new BinaryQuestionOption(Boolean.TRUE));
+        
+        new ReviewRepositoryImpl().merge(r);
     }
 
     /**

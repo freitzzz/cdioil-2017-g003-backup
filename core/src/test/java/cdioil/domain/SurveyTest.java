@@ -51,7 +51,7 @@ public class SurveyTest {
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
         list = new LinkedList<>();
         list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
-        list.add(new Product("ProdutoTeste 2",new SKU("566341098"),"1 Kg",new QRCode("4563218")));
+        list.add(new Product("ProdutoTeste 2", new SKU("566341098"), "1 Kg", new QRCode("4563218")));
         this.testGlobalSurvey = new GlobalSurvey(list, timePeriod);
         testTargetedSurvey = new TargetedSurvey(list, timePeriod, new UsersGroup(new Manager(new SystemUser(new Email("quimBarreiros@gmail.com"), new Name("Quim",
                 "Barreiros"), new Password("M3n1n4_C0M0_e_Qu3_V41")))));
@@ -116,9 +116,9 @@ public class SurveyTest {
         assertEquals("Compare same instance", testGlobalSurvey, testGlobalSurvey);
         assertNotEquals("Instances of different classes", testGlobalSurvey, "bananas");
         assertNotEquals("Different type of surveys", testGlobalSurvey, testTargetedSurvey);
-        
+
         //Kill mutations
-        assertNotEquals(testGlobalSurvey,null);
+        assertNotEquals(testGlobalSurvey, null);
     }
 
     /**
@@ -211,7 +211,7 @@ public class SurveyTest {
     }
 
     /**
-     * Test of getProductSurveys method, of class Survey
+     * Test of getProductSurveys method, of class Survey.
      */
     @Test
     public void testGetProductSurveys() {
@@ -228,10 +228,26 @@ public class SurveyTest {
         //test working method
         assertEquals(surveys, Survey.getProductSurveys(surveys, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
     }
+
+    /**
+     * Test of method getName, of class Survey.
+     */
     @Test
-    public void testGetName(){
+    public void testGetName() {
         System.out.println("getName");
-        assertEquals("The condition should be successful since the both survey names are the same"
-                ,testGlobalSurvey.getName(),new GlobalSurvey(list,timePeriod).getName());
+        assertEquals("The condition should be successful since the both survey names are the same",
+                testGlobalSurvey.getName(), new GlobalSurvey(list, timePeriod).getName());
+    }
+
+    /**
+     * Test of method getItemList, of class Survey.
+     */
+    public void testGetItemList() {
+        System.out.println("getItemList");
+        list = new LinkedList<>();
+        list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
+        list.add(new Product("ProdutoTeste 2", new SKU("566341098"), "1 Kg", new QRCode("4563218")));
+        testGlobalSurvey = new GlobalSurvey(list, timePeriod);
+        assertEquals("Should be the same", list, testGlobalSurvey.getItemList());
     }
 }
