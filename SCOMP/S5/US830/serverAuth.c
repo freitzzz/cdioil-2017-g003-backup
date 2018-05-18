@@ -14,6 +14,7 @@
 #include "review.h"
 #include "sharedmemory.h"
 #include "Cominhos.h"
+#include <pthread.h>
 
 /* Structure that represents a counter */
 typedef struct {
@@ -27,7 +28,9 @@ Counter;
 typedef struct {
   struct sockaddr_storage from;
   Cominhos receivedCode;
+  pthread_mutex_t threadMutex;
   Counter* review_counter_ptr;
+  Review* shared_review;
   unsigned int adl;
   int authenticationKeysTotal;
   int newSock;
@@ -67,9 +70,6 @@ int checkTimeStamp(time_t timestamp) {
 
 /* Unlinks the shared memory zones and the semaphore */
 void sighandler() {
-  shm_unlink("/sprint4counter");
-  shm_unlink("/sprint4reviews");
-  sem_unlink("/sprint4semaphore");
   exit(0);
 }
 
@@ -91,47 +91,45 @@ void * handle_connection(void * arg) {
       read(parameters->newSock,&client_review, sizeof(Review));
 
       //mutex semaphore for incrementing variable
-      sem_wait(mutex_semaphore);
+      //sem_wait(mutex_semaphore);
 
-      /*This memory mapping instruction is contained within the critical execution area,
-      since it might no longer be valid if another process changes the mapping*/
-      shared_review = (Review *) mmap(NULL, shm_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd_review, 0);
-
+      pthread_mutex_lock(&parameters->threadMutex);
       if (parameters->review_counter_ptr->counter == parameters->review_counter_ptr->size) {
-        int old_size = parameters->review_counter_ptr->size * sizeof(Review);
+        //int old_size = parameters->review_counter_ptr->size * sizeof(Review);
         parameters->review_counter_ptr->size+=parameters->review_counter_ptr->increment;
         int new_size = parameters->review_counter_ptr->size * sizeof(Review);
-        ftruncate(fd_review, new_size);
-        shared_review = (Review * ) mremap(shared_review, old_size, new_size, MREMAP_MAYMOVE);
+        Review* reallocatedReview=(Review*)realloc(parameters->shared_review,new_size);
+        printf("->>>>>>>>>> %p\n",reallocatedReview);
+        if(reallocatedReview==NULL){
+          printf("There is no more memory on the Heap to store surveys!!!\n");
+          pthread_mutex_unlock(&parameters->threadMutex);
+          return NULL;
+        }
+        if(reallocatedReview!=parameters->shared_review)parameters->shared_review=&reallocatedReview;
         printf("\n \t \t MEMORY REALLOCATED\n");
       }
 
-      int counter = parameters->review_counter_ptr->counter;
+      //int counter = parameters->review_counter_ptr->counter;
 
-      shared_review += counter;
-
-      strcpy(shared_review->product_name, client_review.product_name);
-      shared_review->valor = client_review.valor;
-      shared_review->id = client_review.id;
-
+      strcpy(parameters->shared_review->product_name, client_review.product_name);
+      parameters->shared_review->valor = client_review.valor;
+      parameters->shared_review->id = client_review.id;
       parameters->review_counter_ptr->counter++;
-
-      sem_post(mutex_semaphore);
-
-      printf("\nProduct %s", shared_review->product_name);
-      printf("\nPID %d", shared_review->id);
-      printf("\nValue %d", shared_review->valor);
+      pthread_mutex_unlock(&parameters->threadMutex);
+      //sem_post(mutex_semaphore);
+      printf("\nProduct %s", parameters->shared_review->product_name);
+      printf("\nPID %d", parameters->shared_review->id);
+      printf("\nValue %d", parameters->shared_review->valor);
       printf("\nCounter %d", parameters->review_counter_ptr->counter);
-      printf("\n %p", shared_review);
+      printf("\n %p", parameters->shared_review);
+
     }
   } else {
     int invalid_value = INVALID_KEY_CODE;
     write(parameters->newSock,&invalid_value, sizeof(invalid_value));
   }
   close(parameters->newSock);
-  exit(5);
   return NULL;
-
 }
 
 
@@ -149,8 +147,6 @@ int main(int argc, char* argv[]) {
   char** authenticationKeys = readAllLines(argv[1],&authenticationKeysTotal);
   struct addrinfo req, * list;
   struct sockaddr_storage from;
-  char clientIP[BUF_SIZE];
-  char clientPort[BUF_SIZE];
   Cominhos receivedCode;
   bzero((char* )&req, sizeof(req)); //Clears the structure
   req.ai_family = AF_UNSPEC; //Defines the family of the connection
@@ -177,70 +173,25 @@ int main(int argc, char* argv[]) {
 
   unsigned int adl = sizeof(from);
   short catched = 0;
-
+  Parameters parameters;
+  parameters.receivedCode=receivedCode;
+  parameters.review_counter_ptr=review_counter_ptr;
+  parameters.authenticationKeysTotal=authenticationKeysTotal;
+  parameters.authenticationKeys=(char*)authenticationKeys;
+  parameters.shared_review=shared_review;
+  //strcpy(parameters.clientIP,clientIP);
+  //strcpy(parameters.clientPort,clientPort);
+  pthread_mutex_t mutex;
+  pthread_mutex_init(&mutex,NULL);
+  parameters.threadMutex=mutex;
+  //Aqui é preciso uma thread condicional de modo a ativar a espera passiva e imprimir o conteudo do inquerito
   while (!catched) {
     int newSock = accept(sock, (struct sockaddr * )&from,&adl);
-    if (!fork()) {
-      close(sock);
-      getnameinfo((struct sockaddr * )&from, adl, clientIP, BUF_SIZE,
-        clientPort, BUF_SIZE, NI_NUMERICHOST | NI_NUMERICSERV);
-      read(newSock,&receivedCode, BUF_SIZE);
-
-      int timestamp_flag = checkTimeStamp(receivedCode.timestamp);
-      if (timestamp_flag) {
-        int code = isAuthKeyAllowed(authenticationKeys, receivedCode.key, authenticationKeysTotal) ? VALID_KEY_CODE : INVALID_KEY_CODE;
-
-        write(newSock,&code, sizeof(code));
-
-        if (code != INVALID_KEY_CODE) {
-
-          Review client_review;
-          read(newSock,&client_review, sizeof(Review));
-
-          //mutex semaphore for incrementing variable
-          sem_wait(mutex_semaphore);
-
-          /*This memory mapping instruction is contained within the critical execution area,
-          since it might no longer be valid if another process changes the mapping*/
-          shared_review = (Review * ) mmap(NULL, shm_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd_review, 0);
-
-          if (review_counter_ptr->counter == review_counter_ptr->size) {
-            int old_size = review_counter_ptr->size * sizeof(Review);
-            review_counter_ptr->size += review_counter_ptr->increment;
-            int new_size = review_counter_ptr->size * sizeof(Review);
-            ftruncate(fd_review, new_size);
-            shared_review = (Review * ) mremap(shared_review, old_size, new_size, MREMAP_MAYMOVE);
-            printf("\n \t \t MEMORY REALLOCATED\n");
-          }
-
-          int counter = review_counter_ptr->counter;
-
-          shared_review += counter;
-
-          strcpy(shared_review->product_name, client_review.product_name);
-          shared_review->valor = client_review.valor;
-          shared_review->id = client_review.id;
-
-          review_counter_ptr->counter++;
-
-          sem_post(mutex_semaphore);
-
-          printf("\nProduct %s", shared_review->product_name);
-          printf("\nPID %d", shared_review->id);
-          printf("\nValue %d", shared_review->valor);
-          printf("\nCounter %d", review_counter_ptr->counter);
-          printf("\n %p", shared_review);
-        }
-      } else {
-        int invalid_value = INVALID_KEY_CODE;
-        write(newSock,&invalid_value, sizeof(invalid_value));
-      }
-      close(newSock);
-      exit(5);
-    }
-
-    close(newSock);
+    parameters.adl=adl;
+    parameters.from=from;
+    parameters.newSock=newSock;
+    pthread_t threadID;
+    pthread_create(&threadID,NULL,handle_connection,&parameters);
   }
-
   return 0;
 }
