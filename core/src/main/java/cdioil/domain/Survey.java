@@ -59,8 +59,7 @@ public abstract class Survey implements Serializable {
     /**
      * Builds an instance of survey with a product and a date.
      *
-     * @param itemList list of products or categories the survey is associated
-     * to
+     * @param itemList list of products or categories the survey is associated to
      * @param surveyPeriod survey's time period (can be timed or timeless)
      */
     public Survey(List<SurveyItem> itemList, TimePeriod surveyPeriod) {
@@ -80,6 +79,15 @@ public abstract class Survey implements Serializable {
 
     protected Survey() {
         //For ORM
+    }
+
+    /**
+     * Access method to the item list of survey.
+     *
+     * @return the list with all items regarding the survey
+     */
+    public List<SurveyItem> getItemList() {
+        return itemList;
     }
 
     /**
@@ -155,9 +163,11 @@ public abstract class Survey implements Serializable {
     public Graph getGraphCopy() {
         return new Graph(graph);
     }
-    public String getName(){
+
+    public String getName() {
         return "Inquérito: ";
     }
+
     /**
      * Survey's hash code.
      *
@@ -167,9 +177,9 @@ public abstract class Survey implements Serializable {
     public int hashCode() {
         return itemList.hashCode() + graph.hashCode();
     }
+
     /**
-     * Checks if two Survey instances are the same by comparing their product
-     * and question list.
+     * Checks if two Survey instances are the same by comparing their product and question list.
      *
      * @param obj object to be compared
      * @return true if the instances are the same, false if otherwise
@@ -193,8 +203,7 @@ public abstract class Survey implements Serializable {
     }
 
     /**
-     * Returns a description of the survey (product or category description and
-     * date)
+     * Returns a description of the survey (product or category description and date)
      *
      * @return survey's description
      */

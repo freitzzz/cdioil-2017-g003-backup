@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JSON Service that represents a user that is reviewing a product.
+ * JSON Service that represents a user that is reviewing a product (answering a survey).
  *
  * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  * @author <a href="1161380@isep.ipp.pt">Joana Pinheiro</a>
