@@ -18,7 +18,7 @@ public class FrontofficeEntryPoint {
      */
     private static final String RESTFUL_SERVICES_PACKAGE="cdioil.frontoffice.application.restful";
     // Base URI the Grizzly HTTP server will listen on
-    private static final String BASE_URI = "http://localhost:8080/frontoffice/";
+    private static final String BASE_URI = "http://localhost:8080/feedbackmonkeyapi/";
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.

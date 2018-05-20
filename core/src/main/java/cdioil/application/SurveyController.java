@@ -1,6 +1,7 @@
 package cdioil.application;
 
 import cdioil.domain.Survey;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,5 +20,16 @@ public final class SurveyController {
         Iterable<Survey> iterableAllSurveys=new SurveyRepositoryImpl().findAll();
         iterableAllSurveys.forEach(nextSurvey->allSurveys.add(nextSurvey));
         return allSurveys;
+    }
+    /**
+     * Method that gets the surveys that a certain user can answer, based on a 
+     * certain pagination ID
+     * @param user RegisteredUser with the registered user getting his surveys that 
+     * he can answer
+     * @param paginationID Short with the pagination ID
+     * @return List with the surveys that a certain user can answer based on a certain pagination ID
+     */
+    public List<Survey> getUserSurveys(RegisteredUser user,short paginationID){
+        return new SurveyRepositoryImpl().getAllUserSurveys(user,paginationID);
     }
 }

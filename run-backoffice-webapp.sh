@@ -1,3 +1,3 @@
 cd backoffice
-call mvn jetty:run
-call cd ..
+mvn jetty:run
+cd ..
