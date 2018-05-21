@@ -28,27 +28,8 @@ import javax.ws.rs.core.Response.Status;
  * @since Version 5.0 of FeedbackMonkey
  */
 @Path("/surveys")
-public final class SurveyResource implements SurveyAPI{
-    /**
-     * Constant that represents the JSON used on the response message for warning the user 
-     * that his account is not currently authenticated
-     */
-    private static final String JSON_INVALID_AUTHENTICATION_TOKEN="{\n\t\"invalidauthenticationtoken\":\"true\"\n}";
-    /**
-     * Constant that represents the JSON used on the response message for warning the user 
-     * that there are currently no available surveys for him to answer
-     */
-    private static final String JSON_NO_AVAILABLE_SURVEYS="{\n\t\"noavailablesurveys\":\"true\"\n}";
-    /**
-     * Constant that represents the JSON used on the response message for warning the user 
-     * that he is not authorized to access reviews
-     */
-    private static final String JSON_INVALID_USER="{\n\t\"invaliduser\":\"true\"\n}";
-    /**
-     * Constant that represents the JSON used on the resonse message for warning the user that 
-     * the pagination ID is invalid
-     */
-    private static final String JSON_INVALID_PAGINATION_ID="{\n\t\"invalidPaginationID\":\"true\"\n}";
+public final class SurveyResource implements SurveyAPI, ResponseMessages{
+
     /**
      * List the Surveys via a JSON POST Request
      * @param authenticationToken String the authentication token
