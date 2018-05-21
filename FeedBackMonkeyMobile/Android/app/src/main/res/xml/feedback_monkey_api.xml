@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feedbackmonkeyapi entrypoint="/feedbackmonkeyapi">
+    <resources>
+        <resource name="Authentication" path="/authentication">
+            <subresource name="Login" path="/login">
+                <method>POST</method>
+                <datatype>JSON</datatype>
+            </subresource>
+            <subresource name="Activate Account" path="/activate">
+                <method>POST</method>
+                <datatype>JSON</datatype>
+            </subresource>
+        </resource>
+        <resource name="Surveys" path="/surveys">
+            <subresource name="Available User Surveys" path="/availableusersurveys">
+                <method>GET</method>
+                <datatype>JSON</datatype>
+                <!-- TO-DO Path params as elements? Builder that uses the XML ! ! ! -->
+            </subresource>
+        </resource>
+    </resources>
+</feedbackmonkeyapi>

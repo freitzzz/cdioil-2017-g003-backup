@@ -5,6 +5,7 @@ import cdioil.application.domain.authz.UserSession;
 import cdioil.domain.authz.Admin;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.User;
 import cdioil.persistence.impl.AdminRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
@@ -106,6 +107,24 @@ public final class AuthenticationController implements Serializable {
      * @return String with the authenticated user token
      */
     public String getUserToken(){return currentUserSession.getUserToken();}
+    /**
+     * Method that returns the user that holds a certain authentication token
+     * @param authenticationToken String with the user authentication token
+     * @return SystemUser with the user that holds a certain authentication token, 
+     * null if the authentication token was not found
+     */
+    public SystemUser getUserByAuthenticationToken(String authenticationToken){
+        return new UserSessionRepositoryImpl().getSystemUserByAuthenticationToken(authenticationToken);
+    }
+    /**
+     * Method that returns a RegisteredUser based on a certain SystemUser
+     * @param user SystemUser with the RegisteredUser being returned
+     * @return RegisteredUser with the RegisteredUser that holds a certain SystemUser, 
+     * null if not found
+     */
+    public RegisteredUser getUserAsRegisteredUser(SystemUser user){
+        return new RegisteredUserRepositoryImpl().findBySystemUser(user);
+    }
     /**
      * Method that returns the current session user
      * <br>Method to be deprecated very soon, only is here due to need on some 

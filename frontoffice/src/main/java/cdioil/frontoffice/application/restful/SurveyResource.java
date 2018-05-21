@@ -1,5 +1,7 @@
 package cdioil.frontoffice.application.restful;
 
+import cdioil.application.SurveyController;
+import cdioil.application.authz.AuthenticationController;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
@@ -50,29 +52,26 @@ public final class SurveyResource implements SurveyAPI{
     /**
      * List the Surveys via a JSON POST Request
      * @param authenticationToken String the authentication token
-     * @param paginationID String with the survey pagination ID
+     * @param paginationID Short with the surveys pagination ID
      * @return Response with the JSON response with the list of the surveys
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/allsurveys/{authenticationToken}/")
+    @Path("/useravailablesurveys/{authenticationToken}/")
     @Override
     public Response getSurveys(@PathParam("authenticationToken") String authenticationToken
-            ,@QueryParam("paginationID") String paginationID){
-        SystemUser user = new UserSessionRepositoryImpl().getSystemUserByAuthenticationToken(authenticationToken);
+            ,@QueryParam("paginationID") short paginationID){
+        if(paginationID<0)return createInvalidPaginationIDResponse();
+        SystemUser user = new AuthenticationController().getUserByAuthenticationToken(authenticationToken);
         if(user==null)return createInvalidAuthTokenResponse();
-        RegisteredUser registeredUser=new RegisteredUserRepositoryImpl().findBySystemUser(user);
+        RegisteredUser registeredUser=new AuthenticationController().getUserAsRegisteredUser(user);
         if(registeredUser==null)createInvalidUserResponse();
-        try{
-            List<Survey> listTargetedSurvey = new SurveyRepositoryImpl()
-                    .getAllUserSurveys(registeredUser,Integer.parseInt(paginationID));
-            if(listTargetedSurvey==null || listTargetedSurvey.isEmpty()){
-                return createNoAvailableSurveysResponse();
-            }
-            return Response.status(Status.OK).entity(getSurveysAsJSON(listTargetedSurvey)).build();
-        }catch(NumberFormatException formatException){
-            return createInvalidPaginationIDResponse();
+        List<Survey> listTargetedSurvey = new SurveyController()
+                .getUserSurveys(registeredUser,paginationID);
+        if(listTargetedSurvey==null || listTargetedSurvey.isEmpty()){
+            return createNoAvailableSurveysResponse();
         }
+        return Response.status(Status.OK).entity(getSurveysAsJSON(listTargetedSurvey)).build();
     }
     
     /**
