@@ -107,13 +107,35 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      */
     public List<Survey> getAllUserSurveys(RegisteredUser registeredUser,int paginationIndex){
         List<Survey> allUserSurveys=new ArrayList(SURVEYS_FETCH_LIMIT);
-        List<Survey> userTargetedSurveys=getUserTargetedSurveys(registeredUser);
+        List<Survey> userTargetedSurveys=getUserTargetedSurveys(registeredUser,paginationIndex);
         if(userTargetedSurveys!=null)allUserSurveys.addAll(userTargetedSurveys);
         int surveysRemaining=SURVEYS_FETCH_LIMIT-allUserSurveys.size();
         if(surveysRemaining==0)return allUserSurveys;
         List<Survey> activeGlobalSurveys=getActiveGlobalSurveysByIndexLimit(paginationIndex,surveysRemaining);
         if(activeGlobalSurveys!=null)allUserSurveys.addAll(activeGlobalSurveys);
         return allUserSurveys;
+    }
+    /**
+     * Method that gets the current active targeted surveys of a current user by 
+     * a certain pagination id
+     * @param user RegisteredUser with the user being fetch'd the targeted surveys
+     * @param paginationID Integer with the next pagination page
+     * @return List with the current active targeted surveys that a certain user can answer 
+     * by a certain pagination id
+     */
+    private List<Survey> getUserTargetedSurveys(RegisteredUser user,int paginationID){
+        int nextLimit=paginationID*SURVEYS_FETCH_LIMIT;
+        Query queryTargetedPagination = entityManager()
+                .createQuery("SELECT t FROM TargetedSurvey t WHERE t.state = :surveyState "
+                + "AND :idUser MEMBER OF t.targetAudience.users")
+                .setParameter("surveyState", SurveyState.ACTIVE)
+                .setParameter("idUser",user)
+                .setFirstResult(paginationID)
+                .setMaxResults(nextLimit+SURVEYS_FETCH_LIMIT);
+        if (queryTargetedPagination.getResultList().isEmpty()) {
+            return null;
+        }
+        return queryTargetedPagination.getResultList();
     }
     /**
      * Method that gets active global surveys based on a certain index for pagination
