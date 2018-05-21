@@ -1,6 +1,8 @@
 package cdioil.feedbackmonkey.authz;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -34,10 +36,6 @@ public class LoginActivity extends AppCompatActivity {
      * JSON Body String for account that hasn't been activated.
      */
     private static final String JSON_BODY_ACTIVATION_REQUIRED = "{\n\t\"activationcode\":\"required\"\n}";
-    /**
-     * User's authentication token
-     */
-    private String authenticationToken;
     /**
      * Login button.
      */
@@ -77,8 +75,9 @@ public class LoginActivity extends AppCompatActivity {
         return new Runnable(){
             @Override
             public void run(){
+                //TODO replace server url with resources from feedback_monkey_api.xml
                     Response restResponse =
-                RESTRequest.create("http://ndest.ddns.net:35066/frontoffice/authentication/login")
+                RESTRequest.create("http://ndest.ddns.net:35066/feedbackmonkeyapi/authentication/login")
                         .withMediaType(RESTRequest.RequestMediaType.JSON)
                         .withBody("{\n\t\"email\":"+emailText.getText().toString()+",\"password\":"+
             passwordText.getText().toString()+"\n}").POST();
@@ -90,22 +89,60 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 //Temporary System.outs to see if rest responses are working correctly
                 if(restResponse.code() == SUCCESSFUL_LOGIN_CODE){
-                        System.out.println(restResponseBodyContent);
-                        System.out.println(restResponse.code());
+                        String authToken = getAuthenticationToken(restResponseBodyContent);
                         //TODO go to app's main activity
                     }else if(restResponse.code() == FAILED_LOGIN_CODE){
                        if(restResponseBodyContent.equals(JSON_BODY_INVALID_CREDENTIALS)){
-                           System.out.println(restResponseBodyContent);
-                           System.out.println(restResponse.code());
-                            //TODO show error message in activity
+                           showLoginErrorMessage("Login Inválido",
+                                   "\nCredenciais inválidas, tente novamente!\n");
                        }
                        if(restResponseBodyContent.equals(JSON_BODY_ACTIVATION_REQUIRED)){
-                           System.out.println(restResponseBodyContent);
-                           System.out.println(restResponse.code());
-                           //TODO show error message in activity
+                           showLoginErrorMessage("Login Inválido",
+                                   "A sua conta não está ativada!");
                        }
                     }
             }
         };
+    }
+
+    /**
+     * Returns the user's authentication token from the JSON rest response body
+     * @param jsonBody body of the rest response sent in JSON format
+     * @return String witht he user's authentication token
+     */
+    private String getAuthenticationToken(String jsonBody){
+        String authToken;
+        String[] temp = jsonBody.split("\":\"");
+        authToken = temp[1].replaceAll("\"","");
+        return authToken;
+    }
+
+    /**
+     * Creates a new thread to display a login error message using an AlertBuilder
+     * @param messageTitle title of the message
+     * @param messageContent content of the message
+     */
+    private void showLoginErrorMessage(String messageTitle, String messageContent) {
+        new Thread() {
+            public void run() {
+                LoginActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog invalidCredentialsAlert =
+                                new AlertDialog.Builder(LoginActivity.this).create();
+                        invalidCredentialsAlert.setTitle(messageTitle);
+                        invalidCredentialsAlert.setMessage(messageContent);
+                        invalidCredentialsAlert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                invalidCredentialsAlert.dismiss();
+                            }
+                        });
+                        invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
+                        invalidCredentialsAlert.show();
+                    }
+                });
+            }
+        }.start();
     }
 }
