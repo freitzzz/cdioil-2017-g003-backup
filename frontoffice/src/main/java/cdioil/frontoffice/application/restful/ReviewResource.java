@@ -7,6 +7,7 @@ import cdioil.domain.Survey;
 import cdioil.domain.authz.Profile;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
+import cdioil.frontoffice.application.api.ReviewAPI;
 import cdioil.persistence.impl.ProfileRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
@@ -31,32 +32,7 @@ import javax.ws.rs.core.Response;
  * @since Version 5.0 of FeedbackMonkey
  */
 @Path("/question")
-public class ReviewResource {
-
-    /**
-     * JSON used on the response message for warning the user that its account is not currently authenticated.
-     */
-    private static final String JSON_INVALID_AUTHENTICATION_TOKEN = "{\n\t\"invalidauthenticationtoken\":\"true\"\n}";
-
-    /**
-     * JSON used on the response message for warning the user that the survey can only be answered by RegisteredUsers.
-     */
-    private static final String JSON_INVALID_USER = "{\n\t\"invaliduser\":\"true\"\n}";
-
-    /**
-     * JSON used on the response message for warning the user that the chosen option is not valid.
-     */
-    private static final String JSON_INVALID_OPTION = "{\n\t\"invalidoption\":\"true\"\n}";
-
-    /**
-     * JSON used on the response message for warning the user that the chosen survey is not valid.
-     */
-    private static final String JSON_INVALID_SURVEY = "{\n\t\"invalidsurvey\":\"true\"\n}";
-
-    /**
-     * JSON used on the response message for warning the user that the review is not valid.
-     */
-    private static final String JSON_INVALID_REVIEW = "{\n\t\"invalidreview\":\"true\"\n}";
+public class ReviewResource implements ReviewAPI, ResponseMessages {
 
     /**
      * Shows the question via JSON GET Request.

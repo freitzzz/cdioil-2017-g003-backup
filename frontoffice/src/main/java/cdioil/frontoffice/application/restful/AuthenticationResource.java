@@ -19,32 +19,8 @@ import javax.ws.rs.core.Response.Status;
  * @since Version 5.0 of FeedbackMonkey
  */
 @Path(value = "/authentication")
-public final class AuthenticationResource implements AuthenticationAPI{
-    /**
-     * Constant that represents the JSON used on the response message for warning the user 
-     * that his account needs to be activated
-     */
-    private static final String JSON_ACTIVATION_CODE_REQUIRED="{\n\t\"activationcode\":\"required\"\n}";
-    /**
-     * Constant that represents the JSON used on the response message for warning the user that 
-     * the credentials that were given are invalid
-     */
-    private static final String JSON_INVALID_CREDENTIALS="{\n\t\"invalidcredentials\":\"true\"\n}";
-    /**
-     * Constant that represents the JSON used on the response message for warning the user that 
-     * the account was activated with success
-     */
-    private static final String JSON_ACCOUNT_ACTIVATED_SUCCESS="{\n\t\"accountactivated\":\"true\"\n}";
-    /**
-     * Constant that represents the JSON used on the response message for warning the user that 
-     * the account was not activated with success
-     */
-    private static final String JSON_ACCOUNT_ACTIVATED_FAILURE="{\n\t\"accountactivated\":\"false\"\n}";
-    /**
-     * Constant that represents the JSON used on the response message for warning the user that 
-     * the account has already been activated
-     */
-    private static final String JSON_ACCOUNT_ALREADY_ACTIVATED="{\n\t\"accountalreadyactivated\":\"true\"\n}";
+public final class AuthenticationResource implements AuthenticationAPI, ResponseMessages{
+
     /**
      * Logins into frontoffice via a JSON POST Request
      * <br>Resource URI: <code><b>/login</b></code>

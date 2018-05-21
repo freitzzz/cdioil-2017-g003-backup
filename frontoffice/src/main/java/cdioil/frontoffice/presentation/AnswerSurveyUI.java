@@ -60,10 +60,10 @@ public class AnswerSurveyUI {
 
         while (true) {
             System.out.println(LINE_SEPARATOR);
-            System.out.println("1 - Show available surveys");
-            System.out.println("2 - Show pending reviews");
-            System.out.println("3 - Answer Survey");
-            System.out.println("4 - Continue a Review");
+            System.out.println("1 - Show surveys");
+//            System.out.println("2 - Show pending reviews");
+//            System.out.println("3 - Answer Survey");
+//            System.out.println("4 - Continue a Review");
             System.out.println("0 - Exit");
 
             option = Console.readInteger("Option: ");
@@ -74,15 +74,15 @@ public class AnswerSurveyUI {
                 case 1:
                     showSurveys();
                     break;
-                case 2:
-                    showPendingReviews();
-                    break;
-                case 3:
-                    answerSurvey(true);
-                    break;
-                case 4:
-                    answerSurvey(false);
-                    break;
+//                case 2:
+//                    showPendingReviews();
+//                    break;
+//                case 3:
+//                    answerSurvey(true);
+//                    break;
+//                case 4:
+//                    answerSurvey(false);
+//                    break;
                 default:
                     System.out.println("ERROR: Invalid option");
                     continue;
@@ -94,7 +94,10 @@ public class AnswerSurveyUI {
      * Shows a list of all survey IDs
      */
     private void showSurveys() {
-        List<String> surveys = controller.getActiveSurveyIDs();
+        //Refresh surveys and their review status
+        controller.findActiveSurveys();
+        
+        List<String> surveys = controller.getSurveyDescriptions();
 
         if (surveys.isEmpty()) {
             System.out.println("There are no available surveys!");
@@ -104,60 +107,23 @@ public class AnswerSurveyUI {
         System.out.println(LINE_SEPARATOR);
         System.out.println("     Surveys");
         for (int i = 0; i < surveys.size(); i++) {
-            String surveyID = surveys.get(i);
             System.out.println(LINE_SEPARATOR);
             System.out.println("Survey #" + i);
-            System.out.println(surveyID);
+            System.out.println(surveys.get(i));
         }
+        
+        answerSurvey();
     }
 
-    /**
-     * Shows a list of the user's pending reviews
-     */
-    private void showPendingReviews() {
-        List<String> pendingReviews = new LinkedList<>();
-        try {
-            pendingReviews = controller.getPendingReviewIDs();
-            if (pendingReviews.isEmpty()) {
-                System.out.println("You dont have any pending reviews!");
-                return;
-            }
-            System.out.println(LINE_SEPARATOR);
-            System.out.println("     Pending Reviews");
-            for (int i = 0; i < pendingReviews.size(); i++) {
-                String reviewID = pendingReviews.get(i);
-                System.out.println(LINE_SEPARATOR);
-                System.out.println("Review #" + i);
-                System.out.println(reviewID);
-            }
-        } catch (NullPointerException e) {
-            System.out.println("You dont have any pending reviews");
-        }
-    }
-
-    private void answerSurvey(boolean firstTimeSaving) {
+    private void answerSurvey() {
 
         int idx;
         String option;
 
-        if (firstTimeSaving) {
-            idx = Console.readInteger("Survey Number");
-            try {
-                controller.selectSurvey(idx);
-            } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-                System.out.println("Error: Can't find a survey with that number");
-                return;
-            }
-        } else {
-            idx = Console.readInteger("Review Number");
-            try {
-                controller.selectPendingReview(idx);
-            } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-                System.out.println("Error: Can't find a review with that number");
-                return;
-            }
-        }
+        idx = Console.readInteger("Select a survey: ");
 
+        controller.selectSurvey(idx);
+        
         while (true) {
             boolean isValidOption = false;
 
@@ -172,7 +138,7 @@ public class AnswerSurveyUI {
                 option = Console.readLine("Select an option or UNDO previous answer:\n");
 
                 if ("EXIT".equalsIgnoreCase(option)) {
-                    if (controller.saveReview(firstTimeSaving)) {
+                    if (controller.saveReview()) {
                         System.out.println("A sua avaliacao foi gravada com sucesso. "
                                 + "Podera continuar a responder ao inquerito em qualquer"
                                 + " altura");
@@ -209,7 +175,7 @@ public class AnswerSurveyUI {
                     }
                 }
 
-                if (controller.saveReview(firstTimeSaving)) {
+                if (controller.saveReview()) {
                     System.out.println("Avaliação submetida com sucesso!");
                 }
                 break;
