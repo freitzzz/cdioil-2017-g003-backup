@@ -14,7 +14,7 @@
         <resource name="Surveys" path="/surveys">
             <subresource name="Available User Surveys" path="/availableusersurveys">
                 <method>GET</method>
-                <datatype>JSON</method>
+                <datatype>JSON</datatype>
                 <!-- TO-DO Path params as elements? Builder that uses the XML ! ! ! -->
             </subresource>
         </resource>
