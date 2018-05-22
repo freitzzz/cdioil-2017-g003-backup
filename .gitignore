@@ -1,3 +1,5 @@
+target/
+nbproject/
 
 # Created by https://www.gitignore.io/api/vaadin,android,netbeans,intellij,intellij+iml,intellij+all,androidstudio
 
@@ -301,6 +303,7 @@ dist/
 nbdist/
 .nb-gradle/
 nbactions.xml
+nb-configuration.xml
 
 ### Vaadin ###
 .vaadin-designer 
