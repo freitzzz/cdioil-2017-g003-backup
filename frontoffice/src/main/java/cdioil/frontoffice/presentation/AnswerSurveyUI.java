@@ -158,7 +158,7 @@ public class AnswerSurveyUI {
                 continue;
             }
 
-            boolean canContinue = controller.answerQuestion(idx);
+            boolean canContinue = controller.answerQuestionByIndex(idx);
 
             if (!canContinue) {
                 if (Console.readLine("Would you like to leave a suggestion about the items?").equalsIgnoreCase(YES)) {
