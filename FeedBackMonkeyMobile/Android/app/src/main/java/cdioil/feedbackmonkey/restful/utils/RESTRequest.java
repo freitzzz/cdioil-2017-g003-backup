@@ -1,4 +1,4 @@
-package cdioil.feedbackmonkey.utils;
+package cdioil.feedbackmonkey.restful.utils;
 
 import java.io.IOException;
 
