@@ -40,7 +40,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             @PathParam("surveyID") String surveyID, @PathParam("reviewID") String reviewID) {
 
         return Response.status(Response.Status.OK).
-                entity(getQuestionAsJSON(new AnswerSurveyController(authenticationToken).
+                entity(getQuestionAsJSON(new AnswerSurveyController(authenticationToken, surveyID).
                         getReviewByID(reviewID).getCurrentQuestion())).build();
     }
 
@@ -60,7 +60,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     public Response answerQuestion(@PathParam("authenticationToken") String authenticationToken,
             @PathParam("option") String option, @PathParam("questionType") String questionType,
             @PathParam("surveyID") String surveyID, @PathParam("reviewID") String reviewID) {
-        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken);
+        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken, surveyID);
         SystemUser user = ctrl.getUserByAuthenticationToken(authenticationToken);
         if (user == null) {
             return createInvalidAuthTokenResponse();
@@ -70,9 +70,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (registeredUser == null) {
             return createInvalidUserResponse();
         }
-
-        ctrl.findSurveyByID(surveyID);
-        ctrl.findActiveSurveys();
+        
         Review review = ctrl.getReviewByID(reviewID);
         QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
         
@@ -100,7 +98,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     @Override
     public Response createReview(@PathParam("authenticationToken") String authenticationToken,
             @PathParam("surveyID") String surveyID) {
-        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken);
+        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken, surveyID);
 
         Survey survey = ctrl.findSurveyByID(surveyID);
 
