@@ -12,6 +12,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
@@ -119,11 +120,12 @@ public class ManagerManagementComponent extends DefaultPanelView {
         MenuBar settingsMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem = settingsMenuBar.addItem("", null);
 
-        menuItem.addItem("Associar Categorias",
+        menuItem.addItem("Associar Categorias a Gestor",
                 VaadinIcons.PLUS_CIRCLE, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
-                        //TODO Associar Categorias
+                        final String selectedManagerEmail = getSelectedManagerEmail();
+                        UI.getCurrent().addWindow(new AddCategoriesWindow(selectedManagerEmail));
                     }
                 });
         menuItem.addItem("Remover Categoria de Gestor",
@@ -133,6 +135,7 @@ public class ManagerManagementComponent extends DefaultPanelView {
                         //TODO Remover Categoria de Gestor
                     }
                 });
+
         menuItem.addItem("Categorias Sem Gestor",
                 VaadinIcons.INFO_CIRCLE, new MenuBar.Command() {
                     @Override
@@ -157,5 +160,19 @@ public class ManagerManagementComponent extends DefaultPanelView {
 
         managerGrid.setSizeFull();
         addComponent(managerGrid);
+    }
+
+    /**
+     * Returns the first selected Manager's email from the managerGrid
+     * Even if multiple Managers are selected, only the first is returned
+     *
+     * @return selected Manager's email
+     */
+    private String getSelectedManagerEmail() {
+        if (managerGrid.getSelectedItems().isEmpty()) {
+            return null;
+        }
+
+        return managerGrid.getSelectedItems().iterator().next().getEmail();
     }
 }
