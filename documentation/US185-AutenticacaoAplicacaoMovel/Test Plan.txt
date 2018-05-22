@@ -26,3 +26,7 @@
 	1. Registar uma conta na aplicação sem ativá-la com o
 	   código enviado para o e-mail escolhido.
 	2. Esperar pela mensagem de erro de conta não ativada.
+
+
+	Nota: Ver ficheiro US185_Testes_Postman.js onde se encontram
+	      os testes à API Rest.

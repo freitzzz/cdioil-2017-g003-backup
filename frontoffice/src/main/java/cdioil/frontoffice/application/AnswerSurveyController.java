@@ -3,11 +3,14 @@ package cdioil.frontoffice.application;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
+import cdioil.domain.authz.Profile;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.ProfileRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -15,20 +18,30 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO Update getting surveys and pending reviews with fetch lazy Controller
- * class for Answer Survey User Story
+ * Controller class for answering a survey.
+ *
+ * TODO Update getting surveys and pending reviews with fetch lazy Controller class for Answer Survey User Story
+ *
+ * @author <a href="1150782@isep.ipp.pt">Pedro Portela</a>
+ * @author <a href="1161371@isep.ipp.pt">António Sousa</a>
+ * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+ * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
+ * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  */
 public class AnswerSurveyController {
 
+    /**
+     * Map with the surveys and its reviews.
+     */
     private Map<Survey, Review> surveyReviewMap;
 
     /**
-     * The Survey that was chosen by the user
+     * The Survey that was chosen by the user.
      */
     private Survey selectedSurvey;
 
     /**
-     * Review associated to the chosen survey
+     * Review associated to the chosen survey.
      */
     private Review currentReview;
 
@@ -40,39 +53,27 @@ public class AnswerSurveyController {
     /**
      * Constructs a new instance of AnswerSurveyController
      *
-     * @param loggedUser
+     * @param authenticationToken Authentication token of the user
+     */
+    public AnswerSurveyController(String authenticationToken) {
+        this.loggedUser = getUserAsRegisteredUser(getUserByAuthenticationToken(authenticationToken));
+    }
+
+    /**
+     * Constructs a new instance of AnswerSurveyController
+     *
+     * @param loggedUser Logged User
      */
     public AnswerSurveyController(RegisteredUser loggedUser) {
         this.loggedUser = loggedUser;
     }
 
     /**
-     * Retrieves all the currently available surveys and the user's pending
-     * reviews.
-     */
-    public void findActiveSurveys() {
-
-        surveyReviewMap = new LinkedHashMap<>();
-
-        List<Review> pendingReviews = new ProfileRepositoryImpl().findUserPendingReviews(loggedUser.getProfile());
-        List<Survey> activeSurveys = new SurveyRepositoryImpl().findAllActiveSurveys();
-
-        for (Survey s : activeSurveys) {
-            surveyReviewMap.put(s, null);
-        }
-        for (Review r : pendingReviews) {
-            surveyReviewMap.put(r.getSurvey(), r);
-        }
-    }
-
-    /**
-     * Retrieves a text representation of the currently available surveys and
-     * whether or not they have pending reviews.
+     * Retrieves a text representation of the currently available surveys and whether or not they have pending reviews.
      *
-     * @return text representation of the currently available surveys.
+     * @return text representation of the currently available surveys
      */
     public List<String> getSurveyDescriptions() {
-
         List<String> result = new LinkedList<>();
 
         for (Map.Entry<Survey, Review> entry : surveyReviewMap.entrySet()) {
@@ -83,32 +84,7 @@ public class AnswerSurveyController {
             }
             result.add(surveyReviewStatus);
         }
-
         return result;
-    }
-
-    /**
-     * Selects a survey with a given index.
-     *
-     * @param index the survey's index
-     */
-    public void selectSurvey(int index) {
-
-        int i = 0;
-        //since maps don't retrieve items by index, the collection must be iterated over until the indices match
-        for (Map.Entry<Survey, Review> entry : surveyReviewMap.entrySet()) {
-            if (i == index) {
-                selectedSurvey = entry.getKey();
-                currentReview = entry.getValue();
-                //add a new review to the profile in case there wasn't one already
-                if (currentReview == null) {
-                    currentReview = new Review(selectedSurvey);
-                    loggedUser.getProfile().addReview(currentReview);
-                }
-                break;
-            }
-            i++;
-        }
     }
 
     /**
@@ -129,22 +105,63 @@ public class AnswerSurveyController {
         List<QuestionOption> currentQuestionOptions = currentReview.getCurrentQuestion().getOptionList();
         List<String> result = new ArrayList<>();
 
-        for (QuestionOption option : currentQuestionOptions) {
-            result.add(option.toString());
-        }
+        currentQuestionOptions.forEach(option
+                -> result.add(option.toString())
+        );
 
         return result;
     }
 
     /**
-     * Answers a question of the survey
+     * Selects a survey with a given index.
      *
-     * @param index
-     * @return
+     * @param index Index of the survey
      */
-    public boolean answerQuestion(int index) {
+    public void selectSurvey(int index) {
+        int i = 0;
+
+        //since maps don't retrieve items by index, the collection must be iterated over until the indices match
+        for (Map.Entry<Survey, Review> entry : surveyReviewMap.entrySet()) {
+            if (i == index) {
+                selectedSurvey = entry.getKey();
+                currentReview = entry.getValue();
+                //add a new review to the profile in case there wasn't one already
+                if (currentReview == null) {
+                    currentReview = new Review(selectedSurvey);
+                    loggedUser.getProfile().addReview(currentReview);
+                }
+                break;
+            }
+            i++;
+        }
+    }
+
+    /**
+     * Answers a question of the survey with a given index.
+     *
+     * @param index Index of the option in the option list of the question
+     * @return true, if the question is successfully answered.
+     * <p>
+     * Otherwise, returns false
+     */
+    public boolean answerQuestionByIndex(int index) {
         return currentReview.answerQuestion(
                 currentReview.getCurrentQuestion().getOptionList().get(index));
+    }
+
+    /**
+     * Answers a question of the survey with a QuestionOption.
+     *
+     * @param option Chosen question option
+     * @return true, if the question is successfully answered.
+     * <P>
+     * Otherwise, returns false
+     */
+    public boolean answerQuestion(QuestionOption option) {
+        if (option == null) {
+            return false;
+        }
+        return currentReview.answerQuestion(option);
     }
 
     /**
@@ -159,22 +176,6 @@ public class AnswerSurveyController {
     }
 
     /**
-     * Saves the review to the database
-     *
-     * @return true if the review was saved, false if otherwise
-     */
-    public boolean saveReview() {
-        //if the value is null then the review is being saved for the first time
-        if (surveyReviewMap.get(selectedSurvey) == null) {
-            loggedUser.getProfile().addReview(currentReview);
-            return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
-        }
-        currentReview = new ReviewRepositoryImpl().merge(currentReview);
-        updateRegisteredUserProfile();
-        return currentReview != null;
-    }
-
-    /**
      * Adds a suggestion the the review
      *
      * @param text text of the suggestion
@@ -184,13 +185,106 @@ public class AnswerSurveyController {
         return currentReview.submitSuggestion(text);
     }
 
+    /* DATABASE METHODS */
     /**
      * Updates the current registerd user profile due to changes on reviews
-     * <br>Introduced due to bug on duplication reviews (since review uses a
-     * sequence, the id of the object is only generated after posted to the
-     * database)
+     * <br>Introduced due to bug on duplication reviews (since review uses a sequence, the id of the object is only generated after posted to the database)
      */
     private void updateRegisteredUserProfile() {
         loggedUser = new RegisteredUserRepositoryImpl().findBySystemUser(loggedUser.getID());
+    }
+
+    /**
+     * Access method to a Review via its ID.
+     *
+     * @param reviewID ID of the review
+     * @return the Review
+     */
+    public Review getReviewByID(String reviewID) {
+        currentReview = new ReviewRepositoryImpl().find(Long.parseLong(reviewID));
+        return currentReview;
+    }
+
+    /**
+     * Method that returns the user that holds a certain authentication token.
+     *
+     * @param authenticationToken String with the user authentication token
+     * @return SystemUser with the user that holds a certain authentication token, null if the authentication token was not found
+     */
+    public SystemUser getUserByAuthenticationToken(String authenticationToken) {
+        return new UserSessionRepositoryImpl().getSystemUserByAuthenticationToken(authenticationToken);
+    }
+
+    /**
+     * Method that returns a RegisteredUser based on a certain SystemUser
+     *
+     * @param user SystemUser with the RegisteredUser being returned
+     * @return RegisteredUser with the RegisteredUser that holds a certain SystemUser, null if not found
+     */
+    public RegisteredUser getUserAsRegisteredUser(SystemUser user) {
+        return new RegisteredUserRepositoryImpl().findBySystemUser(user);
+    }
+
+    /**
+     * Retrieves all the currently available surveys and the user's pending reviews.
+     */
+    public void findActiveSurveys() {
+        surveyReviewMap = new LinkedHashMap<>();
+
+        List<Review> pendingReviews = new ProfileRepositoryImpl().findUserPendingReviews(loggedUser.getProfile());
+        List<Survey> activeSurveys = new SurveyRepositoryImpl().findAllActiveSurveys();
+
+        pendingReviews.forEach(r
+                -> surveyReviewMap.put(r.getSurvey(), r)
+        );
+
+        activeSurveys.forEach(s
+                -> surveyReviewMap.put(s, null)
+        );
+
+    }
+
+    /**
+     * Finds a survey in the database by its database ID.
+     *
+     * @param surveyID ID of the Survey in the database
+     * @return the Survey that was found
+     */
+    public Survey findSurveyByID(String surveyID) {
+        selectedSurvey = new SurveyRepositoryImpl().find(Long.parseLong(surveyID));
+        return selectedSurvey;
+    }
+
+    /**
+     * Creates a new review about a survey.
+     *
+     * @param survey Survey in question
+     * @return the database ID of the created Review
+     */
+    public String createNewReview(Survey survey) {
+        Review review = new Review(survey);
+        ReviewRepositoryImpl reviewRepository = new ReviewRepositoryImpl();
+
+        reviewRepository.merge(review);
+        return Long.toString(reviewRepository.getReviewID(review));
+    }
+
+    /**
+     * Saves the review to the database
+     *
+     * @return true if the review was saved, false if otherwise
+     */
+    public boolean saveReview() {
+        //if the value is null then the review is being saved for the first time
+        if (surveyReviewMap.get(selectedSurvey) == null) {
+            Profile profile = loggedUser.getProfile();
+
+            loggedUser.getProfile().addReview(currentReview);
+            return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
+        }
+
+        currentReview = new ReviewRepositoryImpl().merge(currentReview);
+        updateRegisteredUserProfile();
+        return currentReview != null;
     }
 }

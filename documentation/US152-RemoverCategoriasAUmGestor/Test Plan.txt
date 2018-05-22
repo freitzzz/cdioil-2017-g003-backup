@@ -6,11 +6,37 @@
 	CASO #1: Remover Categorias a um Gestor
 	________________________________________________
 
-	1. Fazer login com o admin sonae.lover@sonae.pt e
-	   password Password123
-	2. Escolher a opção 10 "Remover Categorias a um Gestor"
-	3. Inserir um dos e-mails associados aos gestores
-	   apresentados na consola.
-	4. Inserir um descritivo de uma categoria que esteja
-	   associada ao gestor.
-	5. Obter mensagem de sucesso.
+	 1. Fazer login com o email sonae.lover@sonae.pt e 
+	    password Password123
+	 2. Escolher a opção "Associar Categorias a um Gestor"
+	 3. Associar a um gestor a categoria com o descritivo "10938DC"
+	 4. Escolher a opção "Remover Categorias a um Gestor"
+	 5. Inserir o descritivo "10938DC" para a categoria 
+	    ser removida.
+	 6. Obter mensagem de sucesso.
+	 7. Verificar na base de dados que a categoria removida 
+	    foi de facto removida da lista de categorias do gestor.
+
+	_________________________________________________
+	CASO #2: Remover categorias a um gestor que não 
+		 tem essa categoria associada
+	_________________________________________________
+
+	 1. Fazer login com o email sonae.lover@sonae.pt 
+	    e password Password123.
+	 2. Escolher a opção "Remover Categorias a um Gestor".
+	 3. Inserir o descritivo de uma categoria que 
+	    não esteja associada ao gestor.
+	 4. Obter mensagem de erro, pois o gestor não tem essa 
+	    categoria associada.
+
+	______________________________________________________
+	CASO #3: Remover categorias não existentes a um gestor
+	______________________________________________________
+
+	 1. Fazer login com o email sonae.lover@sonae.pt e 
+	    password Password123.
+	 2. Escolher a opção "Remover Categorias a um Gestor".
+	 3. Inserir o descritivo de uma categoria inválida.
+	 4. Obter mensagem de erro, pois a categoria é inválida.
+
