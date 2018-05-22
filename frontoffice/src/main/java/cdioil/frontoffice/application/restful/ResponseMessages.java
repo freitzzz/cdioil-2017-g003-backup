@@ -17,7 +17,7 @@ public interface ResponseMessages {
 
     /**
      * Constant that represents the JSON used on the response message for warning the user that
-     * the survey can only be answered by RegisteredUsers.
+     * they are not authorized to perform a certain task.
      */
     public static final String JSON_INVALID_USER = "{\n\t\"invaliduser\":\"true\"\n}";
 
