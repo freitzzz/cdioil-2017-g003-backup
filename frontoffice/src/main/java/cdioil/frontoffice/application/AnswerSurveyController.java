@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Controller class for answering a survey. 
- * 
+ * Controller class for answering a survey.
+ *
  * TODO Update getting surveys and pending reviews with fetch lazy Controller class for Answer Survey User Story
  *
  * @author <a href="1150782@isep.ipp.pt">Pedro Portela</a>
@@ -151,19 +151,19 @@ public class AnswerSurveyController {
 
     /**
      * Answers a question of the survey with a QuestionOption.
-     * 
+     *
      * @param option Chosen question option
      * @return true, if the question is successfully answered.
      * <P>
      * Otherwise, returns false
      */
-    public boolean answerQuestion(QuestionOption option){
-        if(option == null){
+    public boolean answerQuestion(QuestionOption option) {
+        if (option == null) {
             return false;
         }
         return currentReview.answerQuestion(option);
     }
-    
+
     /**
      * Reverts last answered question.
      *
@@ -186,7 +186,6 @@ public class AnswerSurveyController {
     }
 
     /* DATABASE METHODS */
-    
     /**
      * Updates the current registerd user profile due to changes on reviews
      * <br>Introduced due to bug on duplication reviews (since review uses a sequence, the id of the object is only generated after posted to the database)
@@ -202,7 +201,8 @@ public class AnswerSurveyController {
      * @return the Review
      */
     public Review getReviewByID(String reviewID) {
-        return new ReviewRepositoryImpl().find(Long.parseLong(reviewID));
+        currentReview = new ReviewRepositoryImpl().find(Long.parseLong(reviewID));
+        return currentReview;
     }
 
     /**
@@ -234,13 +234,14 @@ public class AnswerSurveyController {
         List<Review> pendingReviews = new ProfileRepositoryImpl().findUserPendingReviews(loggedUser.getProfile());
         List<Survey> activeSurveys = new SurveyRepositoryImpl().findAllActiveSurveys();
 
+        pendingReviews.forEach(r
+                -> surveyReviewMap.put(r.getSurvey(), r)
+        );
+
         activeSurveys.forEach(s
                 -> surveyReviewMap.put(s, null)
         );
 
-        pendingReviews.forEach(r
-                -> surveyReviewMap.put(r.getSurvey(), r)
-        );
     }
 
     /**
@@ -250,7 +251,8 @@ public class AnswerSurveyController {
      * @return the Survey that was found
      */
     public Survey findSurveyByID(String surveyID) {
-        return new SurveyRepositoryImpl().find(Long.parseLong(surveyID));
+        selectedSurvey = new SurveyRepositoryImpl().find(Long.parseLong(surveyID));
+        return selectedSurvey;
     }
 
     /**
@@ -280,6 +282,7 @@ public class AnswerSurveyController {
             loggedUser.getProfile().addReview(currentReview);
             return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
         }
+
         currentReview = new ReviewRepositoryImpl().merge(currentReview);
         updateRegisteredUserProfile();
         return currentReview != null;

@@ -31,10 +31,11 @@ public interface ReviewAPI {
      * @param authenticationToken Authentication token of the user
      * @param option Chosen option
      * @param questionType Type of question
-     * @param reviewID ID of th review
+     * @param surveyID ID of the survey
+     * @param reviewID ID of the review
      * @return JSON response with the next question
      */
-    public Response answerQuestion(String authenticationToken, String option, String questionType, String reviewID);
+    public Response answerQuestion(String authenticationToken, String option, String questionType, String surveyID, String reviewID);
 
     /**
      * Creates a review via JSON POST Request.
