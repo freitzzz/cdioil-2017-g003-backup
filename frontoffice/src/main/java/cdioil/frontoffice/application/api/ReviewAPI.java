@@ -50,9 +50,10 @@ public interface ReviewAPI {
      * Submits a suggestion via a JSON PUT Request
      *
      * @param suggestion suggestion to submit
+     * @param surveyID ID of the survey
      * @param reviewID id of the review
      * @param authenticationToken Authentication token of the user
      * @return JSON response
      */
-    public Response submitSuggestion(String suggestion, String reviewID, String authenticationToken);
+    public Response submitSuggestion(String suggestion, String surveyID, String reviewID, String authenticationToken);
 }
