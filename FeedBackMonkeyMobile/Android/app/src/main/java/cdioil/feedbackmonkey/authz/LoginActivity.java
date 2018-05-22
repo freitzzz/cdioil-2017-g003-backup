@@ -10,6 +10,8 @@ import android.widget.EditText;
 
 import java.io.IOException;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.utils.RESTRequest;
 import okhttp3.Response;
@@ -20,14 +22,6 @@ import okhttp3.Response;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class LoginActivity extends AppCompatActivity {
-    /**
-     * Code that represents a successful login
-     */
-    private static final int SUCCESSFUL_LOGIN_CODE = 200;
-    /**
-     * Code that represents a failed login
-     */
-    private static final int FAILED_LOGIN_CODE = 401;
     /**
      * JSON Body String for invalid credentials.
      */
@@ -88,19 +82,16 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 //Temporary System.outs to see if rest responses are working correctly
-                if(restResponse.code() == SUCCESSFUL_LOGIN_CODE){
+                if(restResponse.code() == HttpsURLConnection.HTTP_OK){
                         String authToken = getAuthenticationToken(restResponseBodyContent);
-                        //TODO go to app's main activity
-                    }else if(restResponse.code() == FAILED_LOGIN_CODE){
-                       if(restResponseBodyContent.equals(JSON_BODY_INVALID_CREDENTIALS)){
+                        //TODO go to app's main activity, pass authToken
+                    }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
                            showLoginErrorMessage("Login Inválido",
                                    "\nCredenciais inválidas, tente novamente!\n");
-                       }
-                       if(restResponseBodyContent.equals(JSON_BODY_ACTIVATION_REQUIRED)){
-                           showLoginErrorMessage("Login Inválido",
-                                   "A sua conta não está ativada!");
-                       }
-                    }
+                    }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
+                            showLoginErrorMessage("Login Inválido",
+                            "A sua conta não está ativada!");
+                }
             }
         };
     }
@@ -108,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Returns the user's authentication token from the JSON rest response body
      * @param jsonBody body of the rest response sent in JSON format
-     * @return String witht he user's authentication token
+     * @return String with the user's authentication token
      */
     private String getAuthenticationToken(String jsonBody){
         String authToken;
