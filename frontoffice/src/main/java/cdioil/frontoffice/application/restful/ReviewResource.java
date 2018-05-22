@@ -118,15 +118,16 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * Submits a suggestion via a JSON PUT Request
      *
      * @param suggestion suggestion to submit
+     * @param surveyID ID of the survey
      * @param reviewID id of the review
      * @param authenticationToken Authentication token of the user
      * @return JSON response
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/submitSuggestion/{authenticationToken}/{reviewID}")
-    public Response submitSuggestion(String suggestion, @PathParam("reviewID") String reviewID, @PathParam("authenticationToken") String authenticationToken) {
-        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken);
+    @Path("/submitSuggestion/{authenticationToken}/{surveyID}/{reviewID}")
+    public Response submitSuggestion(String suggestion, @PathParam("surveyID") String surveyID, @PathParam("reviewID") String reviewID, @PathParam("authenticationToken") String authenticationToken) {
+        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken, surveyID);
         SystemUser user = new UserSessionRepositoryImpl().getSystemUserByAuthenticationToken(authenticationToken);
         if (user == null) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(JSON_INVALID_AUTHENTICATION_TOKEN).build();
