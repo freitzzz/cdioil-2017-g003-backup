@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
  *
  * @since Version 5.0 of FeedbackMonkey
  */
-@Path("/question")
+@Path("/review")
 public class ReviewResource implements ReviewAPI, ResponseMessages {
 
     /**
@@ -55,13 +55,12 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/answerQuestion/{authenticationToken}/{option}/{questionType}/{reviewID}")
+    @Path("/answerQuestion/{authenticationToken}/{option}/{questionType}/{surveyID}/{reviewID}")
     @Override
     public Response answerQuestion(@PathParam("authenticationToken") String authenticationToken,
             @PathParam("option") String option, @PathParam("questionType") String questionType,
-            @PathParam("reviewID") String reviewID) {
+            @PathParam("surveyID") String surveyID, @PathParam("reviewID") String reviewID) {
         AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken);
-
         SystemUser user = ctrl.getUserByAuthenticationToken(authenticationToken);
         if (user == null) {
             return createInvalidAuthTokenResponse();
@@ -72,18 +71,19 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             return createInvalidUserResponse();
         }
 
+        ctrl.findSurveyByID(surveyID);
+        ctrl.findActiveSurveys();
         Review review = ctrl.getReviewByID(reviewID);
-
         QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
-
-        if (questionOption == null || !ctrl.answerQuestion(questionOption)) {
+        
+        if (!ctrl.answerQuestion(questionOption)) { 
             return createInvalidOptionResponse();
         }
-
+        
         if (!ctrl.saveReview()) {
             return createInvalidReviewResponse();
         }
-
+        
         return createValidReviewResponse(review.getCurrentQuestion());
     }
 
