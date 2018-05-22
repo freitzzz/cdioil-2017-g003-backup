@@ -5,12 +5,10 @@ import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.Profile;
 import cdioil.domain.authz.RegisteredUser;
-import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.ProfileRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
-import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -49,18 +47,6 @@ public class AnswerSurveyController {
      * User that is currently reviewing a survey.
      */
     private RegisteredUser loggedUser;
-
-    /**
-     * Constructs a new instance of AnswerSurveyController
-     *
-     * @param authenticationToken Authentication token of the user
-     * @param surveyID ID of the survey in question
-     */
-    public AnswerSurveyController(String authenticationToken, String surveyID) {
-        this.loggedUser = getUserAsRegisteredUser(getUserByAuthenticationToken(authenticationToken));
-        this.selectedSurvey = findSurveyByID(surveyID);
-        findActiveSurveys();
-    }
 
     /**
      * Constructs a new instance of AnswerSurveyController
@@ -206,26 +192,6 @@ public class AnswerSurveyController {
     public Review getReviewByID(String reviewID) {
         currentReview = new ReviewRepositoryImpl().find(Long.parseLong(reviewID));
         return currentReview;
-    }
-
-    /**
-     * Method that returns the user that holds a certain authentication token.
-     *
-     * @param authenticationToken String with the user authentication token
-     * @return SystemUser with the user that holds a certain authentication token, null if the authentication token was not found
-     */
-    public SystemUser getUserByAuthenticationToken(String authenticationToken) {
-        return new UserSessionRepositoryImpl().getSystemUserByAuthenticationToken(authenticationToken);
-    }
-
-    /**
-     * Method that returns a RegisteredUser based on a certain SystemUser
-     *
-     * @param user SystemUser with the RegisteredUser being returned
-     * @return RegisteredUser with the RegisteredUser that holds a certain SystemUser, null if not found
-     */
-    public RegisteredUser getUserAsRegisteredUser(SystemUser user) {
-        return new RegisteredUserRepositoryImpl().findBySystemUser(user);
     }
 
     /**
