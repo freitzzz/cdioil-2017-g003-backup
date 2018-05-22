@@ -54,9 +54,12 @@ public class AnswerSurveyController {
      * Constructs a new instance of AnswerSurveyController
      *
      * @param authenticationToken Authentication token of the user
+     * @param surveyID ID of the survey in question
      */
-    public AnswerSurveyController(String authenticationToken) {
+    public AnswerSurveyController(String authenticationToken, String surveyID) {
         this.loggedUser = getUserAsRegisteredUser(getUserByAuthenticationToken(authenticationToken));
+        this.selectedSurvey = findSurveyByID(surveyID);
+        findActiveSurveys();
     }
 
     /**
