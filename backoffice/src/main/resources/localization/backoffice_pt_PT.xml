@@ -53,9 +53,9 @@
         <Message messageId = "request_question_id" value = "Por favor insira o ID da questão:"/>
         <Message messageId = "request_question_txt" value = "Por favor insira a questão:"/> 
         <Message messageId = "request_insert_options" value = "Por favor insira as opções:"/>                       
-        <Message messageId="request_insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
-        <Message messageId="request_insert_max" value = "Insira o valor máximo:"/>
-        <Message messageId="request_insert_min" value = "Insira o valor mínimo:"/>
+        <Message messageId = "request_insert_extremes" value = "Insira os valores mínimo e máximo para a escala:"/>
+        <Message messageId = "request_insert_max" value = "Insira o valor máximo:"/>
+        <Message messageId = "request_insert_min" value = "Insira o valor mínimo:"/>
         <Message messageId = "request_survey" value = "Por favor, selecione um inquérito"/>
         <Message messageId = "request_domain" value = "Por favor, selecione um domínio"/>
         <Message messageId = "request_username" value = "Por favor, insira um nome de utilizador"/>
@@ -93,12 +93,13 @@
     </ErrorMessages>
 	
     <MenuOptions>
-        <Message messageId = "option_exit" value = "Sair"/>
-        <Message messageId = "option_confirm" value = "Confirmar"/>
-        <Message messageId = "option_change_language" value = "Alterar Idioma"/>
-        <Message messageId = "option_yes" value = "Sim"/>
-        <Message messageId = "option_no" value = "Nao"/>
-		
+		<GlobalOptions>
+			<Message messageId = "option_exit" value = "Sair"/>
+			<Message messageId = "option_confirm" value = "Confirmar"/>
+			<Message messageId = "option_change_language" value = "Alterar Idioma"/>
+			<Message messageId = "option_yes" value = "Sim"/>
+			<Message messageId = "option_no" value = "Nao"/>
+		</GlobalOptions>
         <AdminMenuOptions>
             <Message messageId = "option_assign_manager" value = "Atribuir Perfil de Gestor"/>
             <Message messageId = "option_whitelist_domain" value = "Adicionar Domínios de Email Autorizados"/>
@@ -117,12 +118,12 @@
         <ManagerMenuOptions>
             <Message messageId = "option_import_questions_category" value = "Importar Questões sobre Categorias"/>
             <Message messageId = "option_import_questions_template" value = "Importar Questões para um novo Template"/>
-            <Message messageId="option_export_survey_answers" value = "Exportar Respostas de Um Inquérito"/>
+            <Message messageId = "option_export_survey_answers" value = "Exportar Respostas de Um Inquérito"/>
             <Message messageId = "option_create_survey" value = "Criar Inquérito"/>
             <Message messageId = "option_add_users_questionnaire" value = "Adicionar Utilizadores a Inquérito"/>
             <Message messageId = "option_insert_question_category" value = "Inserir Questão Sobre Categoria(s)"/>
             <Message messageId = "option_export_stats_survey" value = "Exportar Estatísticas sobre Inquérito"/>
-            <Message messageId="option_create_template" value="Criar Template"/>
+            <Message messageId = "option_create_template" value="Criar Template"/>
             <Message messageId = "option_filter_domain" value = "Filtrar por domínio"/>
             <Message messageId = "option_filter_username" value = "Filtrar por nome de utilizador"/>
             <Message messageId = "option_filter_year" value = "Filtrar por ano de nascimento"/>

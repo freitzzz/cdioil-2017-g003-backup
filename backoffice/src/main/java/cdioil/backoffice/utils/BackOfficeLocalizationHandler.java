@@ -1,19 +1,17 @@
 package cdioil.backoffice.utils;
 
+import cdioil.files.FilesUtils;
 import cdioil.langs.Language;
 import cdioil.langs.LocalizationParserXML;
-import cdioil.logger.ExceptionLogger;
-import cdioil.logger.LoggerFileNames;
+import cdioil.langs.LocalizationSchemaFiles;
+import cdioil.langs.LocalizationValidatorXML;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
 
 /**
  * Singleton class that handles the BackOffice's localization.
@@ -22,25 +20,29 @@ import java.util.logging.Level;
  */
 public class BackOfficeLocalizationHandler {
 
+    /**
+     * Schema file (XSD) used for validating XML localization files.
+     */
+    private static final File SCHEMA_FILE = new File(LocalizationSchemaFiles.LOCALIZATION_SCHEMA_PATH);
+    /**
+     * Map associating Languages to XML localization files.
+     */
     private static final Map<Language, File> LANGUAGE_FILES_MAP;
 
     static {
 
         LANGUAGE_FILES_MAP = new EnumMap<>(Language.class);
 
-        //Instantiate Map and convert URLs to UTF-8
-        try {
-            LANGUAGE_FILES_MAP.put(Language.PT,
-                    new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
-                            .getResource("localization/backoffice_pt_PT.xml").getFile(), "UTF-8")));
+        //Instantiate Map and Schema file and convert URLs to UTF-8F
+        LANGUAGE_FILES_MAP.put(Language.PT,
+                new File(FilesUtils.convertStringToUTF8(
+                        BackOfficeLocalizationHandler.class.getClassLoader().
+                                getResource("localization/backoffice_pt_PT.xml").getFile())));
 
-            LANGUAGE_FILES_MAP.put(Language.EN_US,
-                    new File(URLDecoder.decode(BackOfficeLocalizationHandler.class.getClassLoader()
-                            .getResource("localization/backoffice_en_US.xml").getFile(), "UTF-8")));
-        } catch (UnsupportedEncodingException ex) {
-            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
-                    Level.SEVERE, ex.getMessage());
-        }
+        LANGUAGE_FILES_MAP.put(Language.EN_US,
+                new File(FilesUtils.convertStringToUTF8(
+                        BackOfficeLocalizationHandler.class.getClassLoader().
+                                getResource("localization/backoffice_en_US.xml").getFile())));
     }
 
     /**
@@ -74,7 +76,8 @@ public class BackOfficeLocalizationHandler {
     }
 
     /**
-     * Loads localized strings of the currently specified language in the properties file.
+     * Loads localized strings of the currently specified language in the
+     * properties file.
      *
      * @throws IOException
      */
@@ -89,11 +92,16 @@ public class BackOfficeLocalizationHandler {
 
         if (definedLanguage != null) {
 
-            File file = LANGUAGE_FILES_MAP.get(definedLanguage);
+            File xmlFile = LANGUAGE_FILES_MAP.get(definedLanguage);
 
-            if (file != null) {
+            if (xmlFile != null) {
 
-                messagesMap = LocalizationParserXML.parseFile(file);
+                boolean isValid = LocalizationValidatorXML.validateFile(SCHEMA_FILE, xmlFile);
+
+                if (isValid) {
+
+                    messagesMap = LocalizationParserXML.parseFile(xmlFile);
+                }
             }
         }
     }
