@@ -1,9 +1,16 @@
 package cdioil.feedbackmonkey.restful.utils;
 
+
+import android.content.Context;
+
+import com.fasterxml.jackson.xml.XmlMapper;
 import com.fasterxml.jackson.xml.annotate.JacksonXmlProperty;
 import com.fasterxml.jackson.xml.annotate.JacksonXmlRootElement;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import cdioil.feedbackmonkey.R;
 
 /**
  * Class that holds the FeedbackMonkey API in a whole container
@@ -12,9 +19,53 @@ import java.util.List;
  */
 public final class FeedbackMonkeyAPI {
     /**
-     * Creates the FeedbackMonkey API
+     * API with the current API read from the FeedbackMonkeyAPI XML configuration file
      */
-    public static void create(){}
+    private static API api;
+    /**
+     * Creates the FeedbackMonkey API
+     * @throws IllegalStateException Throws IllegalStateException on the creation of the app, if the file is not found,
+     * in order to stop the launch of the application since if not there wouldn't be no values to be used
+     * of the API
+     */
+    public static void create(Context context){
+        if(api!=null)return;
+        XmlMapper apiMapper=new XmlMapper();
+        try{
+            InputStream is=context.getResources().openRawResource(R.raw.feedback_monkey_api);
+            api=apiMapper.readValue(is
+                    ,API.class);
+        }catch(IOException ioException){
+            throw new IllegalStateException("FeedbackMonkey API file was not found");
+        }
+    }
+
+    /**
+     * Returns the FeedbackMonkey API entrypoint
+     * @return String with the feedback monkey api entrypoint
+     */
+    public static String getAPIEntryPoint(){return api.getEntryPoint();}
+
+    public static String getResourcePath(String resouceName){
+        for(int i=0;i<api.getResources().size();i++){
+            if(api.getResources().get(i).getName().equalsIgnoreCase(resouceName)){
+                return api.getResources().get(i).getPath();
+            }
+        }
+        return null;
+    }
+
+    public static String getSubResourcePath(String resourceName,String subResourceName){
+        for(int i=0;i<api.getResources().size();i++){
+            List<Subresource> subresources=api.getResources().get(i).getSubResources();
+            for(int j=0;j<subresources.size();j++){
+                if(subresources.get(j).getName().equalsIgnoreCase(subResourceName)){
+                    return subresources.get(j).getPath();
+                }
+            }
+        }
+        return null;
+    }
     /**
      * Hides private constructor
      */
