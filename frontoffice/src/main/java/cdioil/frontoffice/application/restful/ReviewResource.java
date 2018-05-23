@@ -170,13 +170,16 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
 
         Review review = ctrl.getReviewByID(reviewID);
+        if(review == null){
+            return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+        }
         if (review.isFinished()) {
             review.submitSuggestion(suggestion);
         } else {
             return Response.status(Response.Status.PRECONDITION_FAILED).entity(JSON_INCOMPLETE_REVIEW).build();
         }
         ctrl.saveReview();
-        return null;
+        return Response.status(Response.Status.OK).build();
     }
 
     /**
