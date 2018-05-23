@@ -86,6 +86,7 @@ public class ManagerManagementComponent extends DefaultPanelView {
 
     /**
      * Creates search field
+     *
      * @return component
      */
     private Component createSearchField() {
@@ -114,25 +115,30 @@ public class ManagerManagementComponent extends DefaultPanelView {
 
     /**
      * Creates drop down menu
+     *
      * @return options drop down
      */
     private Component createOptionsDropDown() {
         MenuBar settingsMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem = settingsMenuBar.addItem("", null);
 
-        menuItem.addItem("Associar Categorias a Gestor",
+        menuItem.addItem("Adicionar Categorias a Gestor",
                 VaadinIcons.PLUS_CIRCLE, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
                         final String selectedManagerEmail = getSelectedManagerEmail();
-                        UI.getCurrent().addWindow(new AddCategoriesWindow(selectedManagerEmail));
+                        UI.getCurrent().addWindow(
+                                new RemoveCategoryManagerWindow(selectedManagerEmail));
                     }
                 });
-        menuItem.addItem("Remover Categoria de Gestor",
+
+        menuItem.addItem("Remover Categorias a Gestor",
                 VaadinIcons.MINUS_CIRCLE, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
-                        //TODO Remover Categoria de Gestor
+                        final String selectedManagerEmail = getSelectedManagerEmail();
+                        UI.getCurrent().addWindow(
+                                new RemoveCategoryManagerWindow(selectedManagerEmail));
                     }
                 });
 

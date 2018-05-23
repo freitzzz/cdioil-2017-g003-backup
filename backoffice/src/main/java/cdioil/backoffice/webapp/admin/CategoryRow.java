@@ -37,6 +37,8 @@ public class CategoryRow extends HorizontalLayout {
         prepareLayout();
     }
 
+
+
     /**
      * Prepares CategoryRow Layout
      */
