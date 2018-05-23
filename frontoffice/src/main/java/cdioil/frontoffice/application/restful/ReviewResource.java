@@ -54,9 +54,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             return createInvalidUserResponse();
         }
 
-        return Response.status(Response.Status.OK).
-                entity(getQuestionAsJSON(new AnswerSurveyController(registeredUser, surveyID).
-                        getReviewByID(reviewID).getCurrentQuestion())).build();
+        return createShowQuestionResponse(new AnswerSurveyController(registeredUser, surveyID).getReviewByID(reviewID).getCurrentQuestion());
     }
 
     /**
@@ -119,7 +117,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             @PathParam("surveyID") String surveyID) {
 
         AuthenticationController authenticationCtrl = new AuthenticationController();
-        
+
         SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
         if (user == null) {
             return createInvalidAuthTokenResponse();
@@ -129,15 +127,15 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (registeredUser == null) {
             return createInvalidUserResponse();
         }
-                    
+
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
         Survey survey = ctrl.findSurveyByID(surveyID);
-        
+
         if (survey == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
+            return createSurveyNotFoundResponse();
         }
 
-        return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + ctrl.createNewReview(survey) + "\n}").build();
+        return createSuccessfullyCreatedReviewResponse(ctrl.createNewReview(survey));
     }
 
     /**
@@ -170,7 +168,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
 
         Review review = ctrl.getReviewByID(reviewID);
-        if(review == null){
+        if (review == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
         }
         if (review.isFinished()) {
@@ -250,5 +248,33 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         return Response.status(Response.Status.BAD_REQUEST).
                 entity(JSON_INVALID_REVIEW).
                 build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the review was successfully created.
+     *
+     * @param id ID of the created Review
+     * @return Response with the response warning the user that the review was created
+     */
+    private Response createSuccessfullyCreatedReviewResponse(String id) {
+        return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + id + "\n}").build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the survey was not found.
+     *
+     * @return Response with the response warning the user that the survey wasn't found
+     */
+    private Response createSurveyNotFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
+    }
+
+    /**
+     * Creates a Response for warning the user.
+     * @param question
+     * @return 
+     */
+    private Response createShowQuestionResponse(Question question) {
+        return Response.status(Response.Status.OK).entity(getQuestionAsJSON(question)).build();
     }
 }
