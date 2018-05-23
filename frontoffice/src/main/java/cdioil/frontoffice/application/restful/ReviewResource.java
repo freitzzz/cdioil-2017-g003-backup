@@ -17,7 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Resource class that holds all services related to reviewing a product (answering a survey).
+ * Resource class that holds all services related to reviewing a product
+ * (answering a survey).
  *
  * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  * @author <a href="1161380@isep.ipp.pt">Joana Pinheiro</a>
@@ -119,7 +120,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             @PathParam("surveyID") String surveyID) {
 
         AuthenticationController authenticationCtrl = new AuthenticationController();
-        
+
         SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
         if (user == null) {
             return createInvalidAuthTokenResponse();
@@ -129,10 +130,10 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (registeredUser == null) {
             return createInvalidUserResponse();
         }
-                    
+
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
         Survey survey = ctrl.findSurveyByID(surveyID);
-        
+
         if (survey == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
         }
@@ -170,7 +171,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
 
         Review review = ctrl.getReviewByID(reviewID);
-        if(review == null){
+        if (review == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
         }
         if (review.isFinished()) {
@@ -178,8 +179,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         } else {
             return Response.status(Response.Status.PRECONDITION_FAILED).entity(JSON_INCOMPLETE_REVIEW).build();
         }
-        ctrl.saveReview();
-        return Response.status(Response.Status.OK).build();
+
+        return ctrl.saveReview() ? Response.status(Response.Status.OK).build() : Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
     }
 
     /**
@@ -196,9 +197,11 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
     /* Response methods */
     /**
-     * Creates a Response for warning the user that its account is not currently authenticated.
+     * Creates a Response for warning the user that its account is not currently
+     * authenticated.
      *
-     * @return Response with the response for warning the user that the invalid authentication token is invalid
+     * @return Response with the response for warning the user that the invalid
+     * authentication token is invalid
      */
     private Response createInvalidAuthTokenResponse() {
         return Response.status(Response.Status.UNAUTHORIZED)
@@ -207,9 +210,11 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that they aren't authorized to answer the survey.
+     * Creates a Response for warning the user that they aren't authorized to
+     * answer the survey.
      *
-     * @return Response with the response warning the user that they aren't authorized to answer the survey
+     * @return Response with the response warning the user that they aren't
+     * authorized to answer the survey
      */
     private Response createInvalidUserResponse() {
         return Response.status(Response.Status.BAD_REQUEST)
@@ -218,9 +223,11 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that the chosen option is invalid.
+     * Creates a Response for warning the user that the chosen option is
+     * invalid.
      *
-     * @return Response with the response warning the user that the chosen option is invalid
+     * @return Response with the response warning the user that the chosen
+     * option is invalid
      */
     private Response createInvalidOptionResponse() {
         return Response.status(Response.Status.UNAUTHORIZED).
@@ -232,7 +239,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * Creates a Response for warning the user that the review is valid.
      *
      * @param question Current question of the Review
-     * @return Response with the response warning the user that the review is valid
+     * @return Response with the response warning the user that the review is
+     * valid
      */
     private Response createValidReviewResponse(Question question) {
         return Response.status(Response.Status.OK).
@@ -244,7 +252,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * Creates a Response for warning the user that the review is invalid.
      *
      * @param question Current question of the Review
-     * @return Response with the response warning the user that the review is invalid
+     * @return Response with the response warning the user that the review is
+     * invalid
      */
     private Response createInvalidReviewResponse() {
         return Response.status(Response.Status.BAD_REQUEST).
