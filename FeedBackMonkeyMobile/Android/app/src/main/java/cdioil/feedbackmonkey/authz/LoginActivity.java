@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.ListSurveyActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
@@ -61,11 +62,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Runs the rest request to perform the login of the app
+     * @return Runnable with the thread the performs the rest request to confirm the login of a user
+     */
     private Runnable login(){
         return () -> {
-            //TODO replace server url with resources from feedback_monkey_api.xml
                 Response restResponse =
-            RESTRequest.create("http://ndest.ddns.net:35066/feedbackmonkeyapi/authentication/login")
+            RESTRequest.create(BuildConfig.SERVER_URL.concat("/authentication/login"))
                     .withMediaType(RESTRequest.RequestMediaType.JSON)
                     .withBody("{\n\t\"email\":"+emailText.getText().toString()+",\"password\":"+
         passwordText.getText().toString()+"\n}").POST();

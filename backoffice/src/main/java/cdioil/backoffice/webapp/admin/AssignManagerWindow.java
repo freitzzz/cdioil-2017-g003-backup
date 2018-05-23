@@ -24,7 +24,7 @@ public class AssignManagerWindow extends CategoryManagementWindow {
         super(selectedUserEmail);
         setCaption("Registar Gestor");
 
-        instantiateComponents();
+        instantiateWindowComponents();
 
         try {
             checkIfUserIsNotAdminOrManager();
@@ -36,7 +36,7 @@ public class AssignManagerWindow extends CategoryManagementWindow {
     /**
      * Instantiates all needed components
      */
-    private void instantiateComponents() {
+    private void instantiateWindowComponents() {
         controller = new AssignManagerController();
     }
 
@@ -56,7 +56,13 @@ public class AssignManagerWindow extends CategoryManagementWindow {
      */
     @Override
     protected void doConfirmAction(List<String> categoriesPathList) {
-        controller.assignManager(getSelectedUserEmail(), categoriesPathList);
+        try {
+            controller.assignManager(getSelectedUserEmail(), categoriesPathList);
+            Notification.show("Gestor registado com sucesso",
+                    Notification.Type.TRAY_NOTIFICATION);
+        } catch (IllegalArgumentException e) {
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+        }
     }
 }
 

@@ -112,8 +112,7 @@ public abstract class CategoryManagementWindow extends Window {
 
         // Create 1st row
         CategoryRow firstRow = new CategoryRow(selectedCategoriesList.size());
-        categoriesLayout.addComponent(firstRow);
-        selectedCategoriesList.add(firstRow);
+        addCategoryRow(firstRow);
 
         return new Panel(categoriesLayout);
     }
@@ -135,15 +134,16 @@ public abstract class CategoryManagementWindow extends Window {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 final int idx = selectedCategoriesList.size();
                 CategoryRow newRow = new CategoryRow(idx);
-                categoriesLayout.addComponentsAndExpand(newRow);
-                selectedCategoriesList.add(newRow);
+                addCategoryRow(newRow);
                 delBtn.setEnabled(true);
             }
         });
 
         delBtn = new Button(VaadinIcons.MINUS);
         delBtn.setDescription("Remove ultima categoria");
-        delBtn.setEnabled(false);
+        if (selectedCategoriesList.size() <= 1) {
+            delBtn.setEnabled(false);
+        }
         delBtn.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
@@ -182,9 +182,6 @@ public abstract class CategoryManagementWindow extends Window {
                     Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
                     e.printStackTrace();
                 }
-
-                Notification.show("Gestor registado com sucesso",
-                        Notification.Type.TRAY_NOTIFICATION);
             }
         });
 
@@ -194,4 +191,9 @@ public abstract class CategoryManagementWindow extends Window {
     }
 
     protected abstract void doConfirmAction(List<String> categoriesPathList);
+
+    protected void addCategoryRow(CategoryRow row) {
+        categoriesLayout.addComponent(row);
+        selectedCategoriesList.add(row);
+    }
 }
