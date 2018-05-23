@@ -1,6 +1,7 @@
 package cdioil.feedbackmonkey.authz;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import java.io.IOException;
 import javax.net.ssl.HttpsURLConnection;
 
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.application.ListSurveyActivity;
+import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import okhttp3.Response;
 
@@ -41,11 +44,16 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.setProperty("javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
         setContentView(R.layout.activity_login);
+        FeedbackMonkeyAPI.create(getApplicationContext());
         loginButton = findViewById(R.id.loginButton);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
-
+        emailText.setText("joao@email.com");
+        passwordText.setText("Password123");
         loginButton.setOnClickListener(view -> {
             //rest request
             Thread loginThread = new Thread(login());
@@ -71,6 +79,11 @@ public class LoginActivity extends AppCompatActivity {
             if(restResponse.code() == HttpsURLConnection.HTTP_OK){
                     String authToken = getAuthenticationToken(restResponseBodyContent);
                     //TODO go to app's main activity, pass authToken
+                Intent listSurveyIntent=new Intent(LoginActivity.this, ListSurveyActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("authenticationToken",authToken);
+                listSurveyIntent.putExtras(bundle);
+                startActivity(listSurveyIntent);
                 }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
                        showLoginErrorMessage("Login Inválido",
                                "\nCredenciais inválidas, tente novamente!\n");
