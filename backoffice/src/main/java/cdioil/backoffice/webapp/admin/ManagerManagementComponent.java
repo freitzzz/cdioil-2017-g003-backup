@@ -128,7 +128,7 @@ public class ManagerManagementComponent extends DefaultPanelView {
                     public void menuSelected(MenuBar.MenuItem menuItem) {
                         final String selectedManagerEmail = getSelectedManagerEmail();
                         UI.getCurrent().addWindow(
-                                new RemoveCategoryManagerWindow(selectedManagerEmail));
+                                new AddCategoriesManagerWindow(selectedManagerEmail));
                     }
                 });
 

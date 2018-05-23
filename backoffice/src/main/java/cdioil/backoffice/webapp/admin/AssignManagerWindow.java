@@ -56,7 +56,13 @@ public class AssignManagerWindow extends CategoryManagementWindow {
      */
     @Override
     protected void doConfirmAction(List<String> categoriesPathList) {
-        controller.assignManager(getSelectedUserEmail(), categoriesPathList);
+        try {
+            controller.assignManager(getSelectedUserEmail(), categoriesPathList);
+            Notification.show("Gestor registado com sucesso",
+                    Notification.Type.TRAY_NOTIFICATION);
+        } catch (IllegalArgumentException e) {
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+        }
     }
 }
 
