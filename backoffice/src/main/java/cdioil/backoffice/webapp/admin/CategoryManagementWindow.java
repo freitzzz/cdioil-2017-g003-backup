@@ -182,9 +182,6 @@ public abstract class CategoryManagementWindow extends Window {
                     Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
                     e.printStackTrace();
                 }
-
-                Notification.show("Gestor registado com sucesso",
-                        Notification.Type.TRAY_NOTIFICATION);
             }
         });
 
