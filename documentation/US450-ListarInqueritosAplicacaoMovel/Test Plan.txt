@@ -1,0 +1,15 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Autenticação com Sucesso
+	________________________________________________
+
+	1. Autenticar me no sistema.
+	2. Selecionar a opção de listagem de inquérios.
+	3. Obter lista de inquéritos a que posso responder.
+
+
+	Nota: Ver ficheiro US450_Testes_Postman.js onde se encontram
+	      os testes à API Rest.

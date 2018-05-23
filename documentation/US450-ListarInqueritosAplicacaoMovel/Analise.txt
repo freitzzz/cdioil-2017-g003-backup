@@ -1,0 +1,31 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #5
+	
+	* Como Utilizador, quero poder ter acesso à lista de inquéritos a que posso responder.
+
+	______________________
+	
+	FORMATO BREVE
+	______________________
+
+	O utilizaodr inicia o processo de listagem de inquéritos.
+	O sistema lista os inquéritos a que o utilizador pode responder.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------

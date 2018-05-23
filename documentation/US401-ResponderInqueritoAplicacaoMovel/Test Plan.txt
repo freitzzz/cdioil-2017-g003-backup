@@ -1,0 +1,16 @@
+    ______________________
+	
+    	  TEST PLAN
+    ______________________
+
+- CASO #1: Responder a inquérito
+
+1. Correr bootstrap para ter informação na base de dados local.
+2. Correr o projeto frontoffice.
+3. Correr o servidor REST.
+4. Enviar um pedido para realizar o login.
+5. Fazer login com o email joao@email.com e password Password123.
+6. Enviar um pedido para responder a um inquérito.
+7. Escolher um inquérito.
+8. Responder ao inquérito.
+9. Verificar na base de dados que a avaliação foi adicionada ao perfil do utilizador.

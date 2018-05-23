@@ -3,7 +3,6 @@ package cdioil.frontoffice.application;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
-import cdioil.domain.authz.Profile;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.impl.ProfileRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;

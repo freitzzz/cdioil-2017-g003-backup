@@ -1,6 +1,5 @@
 package cdioil.backoffice.application;
 
-import cdioil.files.InvalidFileFormattingException;
 import cdioil.application.utils.QuestionsReaderFactory;
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;

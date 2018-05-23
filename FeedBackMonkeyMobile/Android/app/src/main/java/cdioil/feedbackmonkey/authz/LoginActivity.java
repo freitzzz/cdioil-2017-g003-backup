@@ -45,21 +45,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.setProperty("javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
-        System.setProperty("javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
-        System.setProperty("javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
         setContentView(R.layout.activity_login);
-        FeedbackMonkeyAPI.create(getApplicationContext());
         loginButton = findViewById(R.id.loginButton);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
-        emailText.setText("joao@email.com");
-        passwordText.setText("Password123");
         loginButton.setOnClickListener(view -> {
             //rest request
             Thread loginThread = new Thread(login());
             loginThread.start();
         });
+    }
+
+    /**
+     * Initializes the application.
+     */
+    private void initializeApplication(){
+        System.setProperty("javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
+        FeedbackMonkeyAPI.create(getApplicationContext());
     }
 
     /**
@@ -69,23 +73,25 @@ public class LoginActivity extends AppCompatActivity {
     private Runnable login(){
         return () -> {
                 Response restResponse =
-            RESTRequest.create(BuildConfig.SERVER_URL.concat("/authentication/login"))
+            RESTRequest.create(BuildConfig.SERVER_URL
+                    .concat(FeedbackMonkeyAPI
+                    .getAPIEntryPoint()
+                    .concat(FeedbackMonkeyAPI.getResourcePath("authentication")
+                    .concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","login")))))
                     .withMediaType(RESTRequest.RequestMediaType.JSON)
                     .withBody("{\n\t\"email\":"+emailText.getText().toString()+",\"password\":"+
-        passwordText.getText().toString()+"\n}").POST();
+                    passwordText.getText().toString()+"\n}").POST();
                 String restResponseBodyContent = "";
             try {
                 restResponseBodyContent = restResponse.body().string();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //Temporary System.outs to see if rest responses are working correctly
             if(restResponse.code() == HttpsURLConnection.HTTP_OK){
-                    String authToken = getAuthenticationToken(restResponseBodyContent);
                     //TODO go to app's main activity, pass authToken
                 Intent listSurveyIntent=new Intent(LoginActivity.this, ListSurveyActivity.class);
                 Bundle bundle=new Bundle();
-                bundle.putString("authenticationToken",authToken);
+                bundle.putString("authenticationToken",getAuthenticationToken(restResponseBodyContent));
                 listSurveyIntent.putExtras(bundle);
                 startActivity(listSurveyIntent);
                 }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
