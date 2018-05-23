@@ -7,8 +7,7 @@
         <Message messageId = "info_welcome" value = "Welcome to the BackOffice&#10;"/>
         <Message messageId = "info_shutdown" value = "The program will shutdown"/>
         <Message messageId = "info_exiting" value = "Exiting..."/>
-        
-         <Message messageId = "info_atualization_products" value= "Insert the option Yes if atualization the exists product: "/>
+        <Message messageId = "info_atualization_products" value= "Insert the option Yes if atualization the exists product: "/>
         <Message messageId = "info_manager_header" value = "&#x9;Manager's Back Office"/>
         <Message messageId = "info_admin_header" value = "&#x9;Admin's Back Office"/>
         <Message messageId = "info_exit_input" value = "Type in 'exit' if you wish to cancel."/>
@@ -29,10 +28,8 @@
         <Message messageId = "info_option_message" value= "Option"/>
         <Message messageId = "info_no_more_options" value = "To finish inserting options type"/>
         <Message messageId = "info_changed_extreme_values" value = "The extreme values were exchanged, because the minimum was higher than the maximum."/>
-        <!--US-280/282 infos-->
         <Message messageId = "info_active_surveys" value = "Currently active surveys"/>
         <Message messageId = "info_num_users_added_survey" value = "User(s) added to the survey"/>
-        <!--END OF US-280/282 infos-->
     </InfoMessages>
 
 	
@@ -59,14 +56,12 @@
         <Message messageId = "request_insert_extremes" value = "Insert the maximum and minimum values:"/>
         <Message messageId = "request_insert_max" value = "Insert the maximum value:"/>
         <Message messageId = "request_insert_min" value = "Insert the minimum value:"/>
-        <!--US-280/282 requests-->
         <Message messageId = "request_survey" value = "Please, select a survey"/>
         <Message messageId = "request_domain" value = "Please, select a domain"/>
         <Message messageId = "request_username" value = "Please, type in a username"/>
         <Message messageId = "request_birth_year" value = "Please, type in the birth year"/>
         <Message messageId = "request_location" value = "Please, type in a location"/>
         <Message messageId = "request_continue" value = "Do you wish to continue? (YES/NO)"/>
-        <!--END OF US-280/282 requests-->
     </RequestMessages>
 
 	
@@ -98,12 +93,13 @@
     </ErrorMessages>
 
     <MenuOptions>
-        <Message messageId = "option_exit" value = "Exit"/>
-		<Message messageId = "option_confirm" value = "Confirm"/>
-        <Message messageId = "option_change_language" value = "Change Language"/>
-		<Message messageId = "option_yes" value = "Yes"/>
-        <Message messageId = "option_no" value = "No"/>
-		
+		<GlobalOptions>
+			<Message messageId = "option_exit" value = "Exit"/>
+			<Message messageId = "option_confirm" value = "Confirm"/>
+			<Message messageId = "option_change_language" value = "Change Language"/>
+			<Message messageId = "option_yes" value = "Yes"/>
+			<Message messageId = "option_no" value = "No"/>
+		</GlobalOptions>
         <AdminMenuOptions>
             <Message messageId = "option_assign_manager" value = "Assign Manager Role"/>
             <Message messageId = "option_whitelist_domain" value = "Whitelist Domains"/>
@@ -122,18 +118,16 @@
         <ManagerMenuOptions>
             <Message messageId = "option_import_questions_category" value = "Import Questions about a Category"/>
             <Message messageId = "option_import_questions_template" value = "Import Questions for New Template"/>
-            <Message messageId="option_export_survey_answers" value = "Export Survey Answers"/>
-            <Message messageId="option_add_users_questionnaire" value="Add Users to Survey"/>
-            <Message messageId="option_create_survey" value = "Create Survey"/>
-            <Message messageId="option_insert_question_category" value = "Insert Question about one or more Categories"/>
+            <Message messageId = "option_export_survey_answers" value = "Export Survey Answers"/>
+            <Message messageId = "option_add_users_questionnaire" value="Add Users to Survey"/>
+            <Message messageId = "option_create_survey" value = "Create Survey"/>
+            <Message messageId = "option_insert_question_category" value = "Insert Question about one or more Categories"/>
             <Message messageId = "option_export_stats_survey" value = "Export Statistics about a Survey"/>
-            <Message messageId="option_create_template" value = "Create Template"/>
-            <!--US-280/282 options-->
+            <Message messageId = "option_create_template" value = "Create Template"/>
             <Message messageId = "option_filter_domain" value = "Filter by domain"/>
             <Message messageId = "option_filter_username" value = "Filter by username"/>
             <Message messageId = "option_filter_year" value = "Filter by birth year"/>
             <Message messageId = "option_filter_location" value = "Filter by location"/>
-            <!--END OF US-280/282 options-->
         </ManagerMenuOptions>
 
     </MenuOptions>
