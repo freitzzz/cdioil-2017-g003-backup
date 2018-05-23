@@ -16,7 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "SERVER_URL", '"http://ndest.ddns.net:35066"'
-
+        }
+        debug{
+            buildConfigField "String", "SERVER_URL", '"http://ndest.ddns.net:35066"'
         }
     }
     compileOptions {
@@ -37,9 +39,17 @@ android {
 /*Dependencies go here*/
 /*implementation is the <dependency></dependency> for Android*/
 dependencies {
+    //HTP API User for REST Requests
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
     // https://mvnrepository.com/artifact/com.fasterxml/jackson-xml-databind
+    //XML API used for serialization & deserialization
+
     compile group: 'com.fasterxml', name: 'jackson-xml-databind', version: '0.6.2'
+
+    //JSON API used for serialization & deserialization
+    implementation 'com.google.code.gson:gson:2.8.4'
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
