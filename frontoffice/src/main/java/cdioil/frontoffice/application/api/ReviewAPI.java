@@ -31,12 +31,13 @@ public interface ReviewAPI {
      * @param authenticationToken Authentication token of the user
      * @param option Chosen option
      * @param questionType Type of question
-     * @param reviewID ID of th review
+     * @param surveyID ID of the survey
+     * @param reviewID ID of the review
      * @return JSON response with the next question
      */
-    public Response answerQuestion(String authenticationToken, String option, String questionType, String reviewID);
-    
-     /**
+    public Response answerQuestion(String authenticationToken, String option, String questionType, String surveyID, String reviewID);
+
+    /**
      * Creates a review via JSON POST Request.
      *
      * @param authenticationToken Authentication token of the user
@@ -44,4 +45,15 @@ public interface ReviewAPI {
      * @return JSON response with the database ID of the review
      */
     public Response createReview(String authenticationToken, String surveyID);
+
+    /**
+     * Submits a suggestion via a JSON PUT Request
+     *
+     * @param suggestion suggestion to submit
+     * @param surveyID ID of the survey
+     * @param reviewID id of the review
+     * @param authenticationToken Authentication token of the user
+     * @return JSON response
+     */
+    public Response submitSuggestion(String suggestion, String surveyID, String reviewID, String authenticationToken);
 }

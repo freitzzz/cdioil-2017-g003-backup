@@ -24,7 +24,7 @@ public class AssignManagerWindow extends CategoryManagementWindow {
         super(selectedUserEmail);
         setCaption("Registar Gestor");
 
-        instantiateComponents();
+        instantiateWindowComponents();
 
         try {
             checkIfUserIsNotAdminOrManager();
@@ -36,7 +36,7 @@ public class AssignManagerWindow extends CategoryManagementWindow {
     /**
      * Instantiates all needed components
      */
-    private void instantiateComponents() {
+    private void instantiateWindowComponents() {
         controller = new AssignManagerController();
     }
 

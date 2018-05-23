@@ -13,6 +13,7 @@ import cdioil.domain.Survey;
 import cdioil.domain.SurveyItem;
 import cdioil.domain.SurveyState;
 import cdioil.domain.TargetedSurvey;
+import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.UsersGroup;
@@ -23,6 +24,7 @@ import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -116,7 +118,8 @@ public class SurveyBootstrap {
 
         RegisteredUser registeredUser = new RegisteredUserRepositoryImpl()
                 .getUsersByDomain("email.com").get(0);
-        Manager manager = new ManagerRepositoryImpl().findByUserID(33);
+        Manager manager = new ManagerRepositoryImpl().findBySystemUser
+        (new UserRepositoryImpl().findByEmail(new Email("bom.gestor@sonae.pt")));
         UsersGroup usersGroup = new UsersGroup(manager);
         usersGroup.addUser(registeredUser);
         survey = new TargetedSurvey(surveyItems,
@@ -133,9 +136,7 @@ public class SurveyBootstrap {
         surveyRepository.add(survey);
         
         
-        Review r = new Review(survey);
-        r.answerQuestion(new BinaryQuestionOption(Boolean.TRUE));
-        
+        Review r = new Review(survey);         
         new ReviewRepositoryImpl().merge(r);
     }
 
