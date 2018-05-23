@@ -18,7 +18,7 @@ public interface ResponseMessages {
 
     /**
      * Constant that represents the JSON used on the response message for
-     * warning the user that they are not authorized to perform a certain task.
+     * warning the user that they are not authorised to perform a certain task.
      */
     public static final String JSON_INVALID_USER = "{\n\t\"invaliduser\":\"true\"\n}";
 
@@ -48,14 +48,20 @@ public interface ResponseMessages {
 
     /**
      * Constant that represents the JSON used on the response message for
+     * warning the user when the review was not found
+     */
+    public static final String JSON_REVIEW_NOT_FOUND = "{\n\t\"reviewnotfound\":\"true\"\n}";
+
+    /**
+     * Constant that represents the JSON used on the response message for
      * warning the user that there are currently no available surveys for him to
      * answer.
      */
     public static final String JSON_NO_AVAILABLE_SURVEYS = "{\n\t\"noavailablesurveys\":\"true\"\n}";
 
     /**
-     * Constant that represents the JSON used on the resonse message for warning
-     * the user that the pagination ID is invalid.
+     * Constant that represents the JSON used on the response message for
+     * warning the user that the pagination ID is invalid.
      */
     public static final String JSON_INVALID_PAGINATION_ID = "{\n\t\"invalidPaginationID\":\"true\"\n}";
 

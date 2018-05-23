@@ -11,8 +11,6 @@ import cdioil.frontoffice.application.AnswerSurveyController;
 import cdioil.frontoffice.application.api.ReviewAPI;
 import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_AUTHENTICATION_TOKEN;
 import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_USER;
-import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
-import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import com.google.gson.Gson;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -174,13 +172,16 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser);
 
         Review review = ctrl.getReviewByID(reviewID);
+        if(review == null){
+            return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+        }
         if (review.isFinished()) {
             review.submitSuggestion(suggestion);
         } else {
             return Response.status(Response.Status.PRECONDITION_FAILED).entity(JSON_INCOMPLETE_REVIEW).build();
         }
         ctrl.saveReview();
-        return null;
+        return Response.status(Response.Status.OK).build();
     }
 
     /**
