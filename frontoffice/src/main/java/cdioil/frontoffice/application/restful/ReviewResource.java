@@ -11,8 +11,6 @@ import cdioil.frontoffice.application.AnswerSurveyController;
 import cdioil.frontoffice.application.api.ReviewAPI;
 import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_AUTHENTICATION_TOKEN;
 import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_USER;
-import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
-import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import com.google.gson.Gson;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -57,7 +55,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         }
 
         return Response.status(Response.Status.OK).
-                entity(getQuestionAsJSON(new AnswerSurveyController(registeredUser).
+                entity(getQuestionAsJSON(new AnswerSurveyController(registeredUser, surveyID).
                         getReviewByID(reviewID).getCurrentQuestion())).build();
     }
 
@@ -90,9 +88,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             return createInvalidUserResponse();
         }
 
-        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser);
-        ctrl.findSurveyByID(surveyID);
-        ctrl.findActiveSurveys();
+        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
 
         Review review = ctrl.getReviewByID(reviewID);
         QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
@@ -123,7 +119,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             @PathParam("surveyID") String surveyID) {
 
         AuthenticationController authenticationCtrl = new AuthenticationController();
-
+        
         SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
         if (user == null) {
             return createInvalidAuthTokenResponse();
@@ -133,10 +129,10 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (registeredUser == null) {
             return createInvalidUserResponse();
         }
-
-        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser);
+                    
+        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
         Survey survey = ctrl.findSurveyByID(surveyID);
-
+        
         if (survey == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
         }
@@ -171,7 +167,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             return createInvalidUserResponse();
         }
 
-        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser);
+        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
 
         Review review = ctrl.getReviewByID(reviewID);
         if (review.isFinished()) {

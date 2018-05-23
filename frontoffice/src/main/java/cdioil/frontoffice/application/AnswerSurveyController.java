@@ -58,6 +58,18 @@ public class AnswerSurveyController {
     }
 
     /**
+     * Constructs a new instance of AnswerSurveyController
+     *
+     * @param loggedUser Logged User
+     * @param surveyID ID of the Survey to answer
+     */
+    public AnswerSurveyController(RegisteredUser loggedUser, String surveyID) {
+        this.loggedUser = loggedUser;
+        findSurveyByID(surveyID);
+        findActiveSurveys();
+    }
+
+    /**
      * Retrieves a text representation of the currently available surveys and whether or not they have pending reviews.
      *
      * @return text representation of the currently available surveys
@@ -233,9 +245,9 @@ public class AnswerSurveyController {
     public String createNewReview(Survey survey) {
         Review review = new Review(survey);
         ReviewRepositoryImpl reviewRepository = new ReviewRepositoryImpl();
-
-        reviewRepository.merge(review);
-        return Long.toString(reviewRepository.getReviewID(review));
+        reviewRepository.add(review);
+        Long id = reviewRepository.getReviewID(review);
+        return Long.toString(id);
     }
 
     /**
@@ -246,8 +258,6 @@ public class AnswerSurveyController {
     public boolean saveReview() {
         //if the value is null then the review is being saved for the first time
         if (surveyReviewMap.get(selectedSurvey) == null) {
-            Profile profile = loggedUser.getProfile();
-
             loggedUser.getProfile().addReview(currentReview);
             return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
         }
