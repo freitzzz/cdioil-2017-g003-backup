@@ -28,9 +28,7 @@ Counter;
 typedef struct {
   struct sockaddr_storage from;
   Cominhos receivedCode;
-  pthread_mutex_t threadMutex;
   Counter* review_counter_ptr;
-  Review* shared_review;
   unsigned int adl;
   int authenticationKeysTotal;
   int newSock;
@@ -38,6 +36,11 @@ typedef struct {
   char clientIP[BUF_SIZE];
   char clientPort[BUF_SIZE];
 }Parameters;
+
+Review* shared_review;
+pthread_mutex_t mutex;
+pthread_cond_t cond;
+int currentReviewIndex=0, currentReviewSize=0;
 
 
 /*Constant that represents the valid key code sent to machines that are not allowed to send reviews*/
@@ -73,6 +76,23 @@ void sighandler() {
   exit(0);
 }
 
+void* print_incoming_reviews(void* arg){
+    while(1){
+      pthread_mutex_lock(&mutex);
+      pthread_cond_wait(&cond,&mutex);
+      int i;
+      for(i = currentReviewIndex; i < currentReviewSize; i++){
+        printf("\nProduct %s",shared_review[i].product_name);
+        printf("\nPID %d", shared_review[i].id);
+        printf("\nValue %d",shared_review[i].valor);
+      }
+      currentReviewIndex = i;
+      pthread_mutex_unlock(&mutex);
+    }
+    return NULL;
+}
+
+
 void * handle_connection(void * arg) {
   Parameters* parameters=(Parameters*)arg;
   getnameinfo((struct sockaddr * )&parameters->from, parameters->adl, parameters->clientIP, BUF_SIZE,
@@ -93,36 +113,35 @@ void * handle_connection(void * arg) {
       //mutex semaphore for incrementing variable
       //sem_wait(mutex_semaphore);
 
-      pthread_mutex_lock(&parameters->threadMutex);
+      pthread_mutex_lock(&mutex);
       if (parameters->review_counter_ptr->counter == parameters->review_counter_ptr->size) {
         //int old_size = parameters->review_counter_ptr->size * sizeof(Review);
+        printf("\nOld ->>>>>>> %d\n",parameters->review_counter_ptr->size);
+        printf("Increment is %d\n",parameters->review_counter_ptr->increment);
         parameters->review_counter_ptr->size+=parameters->review_counter_ptr->increment;
         int new_size = parameters->review_counter_ptr->size * sizeof(Review);
-        Review* reallocatedReview=(Review*)realloc(parameters->shared_review,new_size);
+        printf("New ->>>>>>> %d\n",parameters->review_counter_ptr->size);
+        Review* reallocatedReview=(Review*)realloc(shared_review,new_size);
         printf("->>>>>>>>>> %p\n",reallocatedReview);
         if(reallocatedReview==NULL){
           printf("There is no more memory on the Heap to store surveys!!!\n");
-          pthread_mutex_unlock(&parameters->threadMutex);
+          pthread_mutex_unlock(&mutex);
           return NULL;
         }
-        if(reallocatedReview!=parameters->shared_review)parameters->shared_review=&reallocatedReview;
+        if(reallocatedReview!=shared_review)shared_review=&reallocatedReview;
         printf("\n \t \t MEMORY REALLOCATED\n");
       }
 
       //int counter = parameters->review_counter_ptr->counter;
 
-      strcpy(parameters->shared_review->product_name, client_review.product_name);
-      parameters->shared_review->valor = client_review.valor;
-      parameters->shared_review->id = client_review.id;
+      strcpy(shared_review->product_name, client_review.product_name);
+      shared_review->valor = client_review.valor;
+      shared_review->id = client_review.id;
       parameters->review_counter_ptr->counter++;
-      pthread_mutex_unlock(&parameters->threadMutex);
+      currentReviewSize++;
+      pthread_cond_broadcast(&cond);
+      pthread_mutex_unlock(&mutex);
       //sem_post(mutex_semaphore);
-      printf("\nProduct %s", parameters->shared_review->product_name);
-      printf("\nPID %d", parameters->shared_review->id);
-      printf("\nValue %d", parameters->shared_review->valor);
-      printf("\nCounter %d", parameters->review_counter_ptr->counter);
-      printf("\n %p", parameters->shared_review);
-
     }
   } else {
     int invalid_value = INVALID_KEY_CODE;
@@ -131,6 +150,7 @@ void * handle_connection(void * arg) {
   close(parameters->newSock);
   return NULL;
 }
+
 
 
 /*Runs the Server*/
@@ -153,12 +173,6 @@ int main(int argc, char* argv[]) {
   req.ai_socktype = SOCK_STREAM; //Defines the type of socket to use
   req.ai_flags = AI_PASSIVE; // local address
 
-  Counter* review_counter_ptr=(Counter*)malloc(sizeof(Counter));
-  review_counter_ptr->counter = 0; //number of currently loaded reviews
-  review_counter_ptr->increment = 10; //value defined for icrementing shared memory area
-  review_counter_ptr->size = 5; //shared memory's initial size
-  Review* shared_review=(Review*)malloc(review_counter_ptr->size*sizeof(Review));
-
   int failure = getaddrinfo(NULL, SERVER_PORT,&req,&list); //Fills struct with necessary info
   if (failure) return 0;
 
@@ -171,22 +185,29 @@ int main(int argc, char* argv[]) {
   freeaddrinfo(list);
   listen(sock, SOMAXCONN);
 
+  Counter* review_counter_ptr=(Counter*)malloc(sizeof(Counter));
+  review_counter_ptr->counter = 0; //number of currently loaded reviews
+  review_counter_ptr->increment = 10; //value defined for icrementing shared memory area
+  review_counter_ptr->size = 5; //shared memory's initial size
+  shared_review=(Review*)malloc(review_counter_ptr->size*sizeof(Review));
+
   unsigned int adl = sizeof(from);
   short catched = 0;
-  Parameters parameters;
-  parameters.receivedCode=receivedCode;
-  parameters.review_counter_ptr=review_counter_ptr;
-  parameters.authenticationKeysTotal=authenticationKeysTotal;
-  parameters.authenticationKeys=(char*)authenticationKeys;
-  parameters.shared_review=shared_review;
-  //strcpy(parameters.clientIP,clientIP);
-  //strcpy(parameters.clientPort,clientPort);
-  pthread_mutex_t mutex;
+
   pthread_mutex_init(&mutex,NULL);
-  parameters.threadMutex=mutex;
+
+  pthread_cond_init(&cond, NULL);
   //Aqui é preciso uma thread condicional de modo a ativar a espera passiva e imprimir o conteudo do inquerito
+  pthread_t thread_id;
+  pthread_create(&thread_id, NULL,print_incoming_reviews,NULL);
+  
   while (!catched) {
     int newSock = accept(sock, (struct sockaddr * )&from,&adl);
+    Parameters parameters;
+    parameters.receivedCode=receivedCode;
+    parameters.review_counter_ptr=review_counter_ptr;
+    parameters.authenticationKeysTotal=authenticationKeysTotal;
+    parameters.authenticationKeys=(char*)authenticationKeys;
     parameters.adl=adl;
     parameters.from=from;
     parameters.newSock=newSock;
