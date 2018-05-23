@@ -5,8 +5,14 @@ import com.vaadin.ui.Notification;
 
 import java.util.List;
 
+/**
+ * Add Categories to Manager Window class
+ */
 public class AddCategoriesManagerWindow extends CategoryManagementWindow {
 
+    /**
+     * Window caption
+     */
     private static final String WINDOW_CAPTION =
             "Adicionar Categorias a Gestor";
 
@@ -16,21 +22,38 @@ public class AddCategoriesManagerWindow extends CategoryManagementWindow {
     private static final String MANAGER_NOT_SET_ERROR =
             "O gestor não existe";
 
+    /**
+     * No categories were added error message
+     */
     private static final String NO_CATS_ADDED =
             "0 caminhos adicionados.";
 
+    /**
+     * Added and not added categories message
+     */
     private static final String ADDED_NOTADDED_MESSAGE =
             "%d categorias adicionadas." +
                     " Categorias não adicionadas: %d\n%s";
 
+    /**
+     * Controller class
+     */
     private CategoryManagementController controller;
 
+    /**
+     * Creates window with a manager email
+     * @param selectedEmail selected manager email
+     */
     public AddCategoriesManagerWindow(String selectedEmail) {
         super(selectedEmail);
         instantiateComponents(selectedEmail);
         setCaption(WINDOW_CAPTION);
     }
 
+    /**
+     * Instantiates needed components
+     * @param selectedEmail selected manager email
+     */
     private void instantiateComponents(String selectedEmail) {
         controller = new CategoryManagementController();
         if (!controller.setManager(selectedEmail)) {
@@ -39,6 +62,10 @@ public class AddCategoriesManagerWindow extends CategoryManagementWindow {
         }
     }
 
+    /**
+     * Button confirm
+     * @param categoriesPathList 
+     */
     @Override
     protected void doConfirmAction(List<String> categoriesPathList) {
         int successCounter = 0;
