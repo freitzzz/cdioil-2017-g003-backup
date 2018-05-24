@@ -91,15 +91,12 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
         Review review = ctrl.getReviewByID(reviewID);
         QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
-
-        if (!ctrl.answerQuestion(questionOption)) {
-            return createInvalidOptionResponse();
-        }
+        ctrl.answerQuestion(questionOption);
 
         if (!ctrl.saveReview()) {
             return createInvalidReviewResponse();
         }
-
+        System.out.println("is review finished after answering question: " + review.isFinished());
         return createValidReviewResponse(review.getCurrentQuestion());
     }
 
@@ -177,8 +174,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         } else {
             return Response.status(Response.Status.PRECONDITION_FAILED).entity(JSON_INCOMPLETE_REVIEW).build();
         }
-
-        return ctrl.saveReview() ? Response.status(Response.Status.OK).build() : Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+        return ctrl.saveUnfinishedReview() ? Response.status(Response.Status.OK).build() : Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
     }
 
     /**
@@ -260,10 +256,12 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that the review was successfully created.
+     * Creates a Response for warning the user that the review was successfully
+     * created.
      *
      * @param id ID of the created Review
-     * @return Response with the response warning the user that the review was created
+     * @return Response with the response warning the user that the review was
+     * created
      */
     private Response createSuccessfullyCreatedReviewResponse(String id) {
         return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + id + "\n}").build();
@@ -272,7 +270,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     /**
      * Creates a Response for warning the user that the survey was not found.
      *
-     * @return Response with the response warning the user that the survey wasn't found
+     * @return Response with the response warning the user that the survey
+     * wasn't found
      */
     private Response createSurveyNotFoundResponse() {
         return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
@@ -280,8 +279,9 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
     /**
      * Creates a Response for warning the user.
+     *
      * @param question
-     * @return 
+     * @return
      */
     private Response createShowQuestionResponse(Question question) {
         return Response.status(Response.Status.OK).entity(getQuestionAsJSON(question)).build();
