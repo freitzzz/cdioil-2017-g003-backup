@@ -1,3 +1,7 @@
+#C Object Files
+*.o
+
+
 target/
 nbproject/
 
