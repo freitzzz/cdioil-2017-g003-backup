@@ -44,7 +44,7 @@ public interface ResponseMessages {
      * Constant that represents the JSON used on the response message for
      * warning the user that the review is incomplete
      */
-    public static final String JSON_INCOMPLETE_REVIEW = "{\n\t\"incompletereview\":\"true\"\n}";
+    public static final String JSON_INCOMPLETE_REVIEW = "{\n\t\"reviewdoesnotmeetconditions\":\"true\"\n}";
 
     /**
      * Constant that represents the JSON used on the response message for

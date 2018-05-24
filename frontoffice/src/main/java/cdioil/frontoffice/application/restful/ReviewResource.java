@@ -167,14 +167,14 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
         Review review = ctrl.getReviewByID(reviewID);
         if (review == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+            return createReviewNotFoundResponse();
         }
-        if (review.isFinished()) {
+        if (review.isFinished() && !review.hasSuggestion()) {
             review.submitSuggestion(suggestion);
         } else {
             return Response.status(Response.Status.PRECONDITION_FAILED).entity(JSON_INCOMPLETE_REVIEW).build();
         }
-        return ctrl.saveUnfinishedReview() ? Response.status(Response.Status.OK).build() : Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+        return ctrl.saveUnfinishedReview() ? Response.status(Response.Status.OK).build() : createReviewNotFoundResponse();
     }
 
     /**
@@ -285,5 +285,15 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      */
     private Response createShowQuestionResponse(Question question) {
         return Response.status(Response.Status.OK).entity(getQuestionAsJSON(question)).build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the review was not found
+     *
+     * @return Response with the response warning the user that the review
+     * wasn't found
+     */
+    private static Response createReviewNotFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
     }
 }
