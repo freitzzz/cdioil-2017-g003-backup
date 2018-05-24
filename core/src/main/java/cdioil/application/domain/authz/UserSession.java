@@ -1,6 +1,7 @@
 package cdioil.application.domain.authz;
 
 import cdioil.domain.authz.SystemUser;
+import cdioil.encryptions.DigestUtils;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
@@ -18,6 +19,10 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class UserSession implements Serializable{
+    /**
+     * Constant that represents the hashing being used for the user's authentication token
+     */
+    private static final String SHA_384="SHA-384";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -40,7 +45,7 @@ public class UserSession implements Serializable{
     /**
      * String with the current user token
      * <br>Currently it's a combination of the user ID + logged session timestamp
-     * <br>#TO-DO: Encrypt user token
+     * <br>The authentication token is being hashed with SHA-384
      */
     private String userToken;
     /**
@@ -50,7 +55,7 @@ public class UserSession implements Serializable{
     public UserSession(SystemUser sessionUser){
         this.sessionUser=sessionUser;
         this.sessionStartDate=LocalDateTime.now();
-        this.userToken=sessionUser.getID()+sessionStartDate.toString();
+        this.userToken=DigestUtils.hashify(sessionUser.getID()+sessionStartDate.toString(),SHA_384);
     }
     /**
      * Protected constructor in order to allow JPA persistence
