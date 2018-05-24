@@ -275,4 +275,22 @@ public class AnswerSurveyController {
         updateRegisteredUserProfile();
         return currentReview != null;
     }
+
+    /**
+     * Checks if current review is finished
+     *
+     * @return true if its finished, false if not
+     */
+    public boolean reviewIsFinished() {
+        return currentReview.isFinished();
+    }
+
+    /**
+     * Checks if current review has a suggestion
+     *
+     * @return true if it has a suggestion, false if not
+     */
+    public boolean reviewHasSuggestion() {
+        return currentReview.hasSuggestion();
+    }
 }
