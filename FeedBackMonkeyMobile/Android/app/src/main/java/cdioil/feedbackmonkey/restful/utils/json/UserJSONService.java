@@ -1,4 +1,4 @@
-﻿package cdioil.feedbackmonkey.restful.utils.json;
+package cdioil.feedbackmonkey.restful.utils.json;
 
 import com.google.gson.annotations.SerializedName;
 

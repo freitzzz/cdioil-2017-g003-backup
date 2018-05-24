@@ -53,8 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
-        emailText.setText("joao@email.com");
-        passwordText.setText("Password123");
         loginButton.setOnClickListener(view -> {
             //rest request
             Thread loginThread = new Thread(login());
@@ -116,7 +114,6 @@ public class LoginActivity extends AppCompatActivity {
      * @return String with the user's authentication token
      */
     private String getAuthenticationToken(String jsonBody){
-        System.out.println(jsonBody);
         return new Gson().fromJson(jsonBody, UserJSONService.class).getAuthenticationToken();
     }
 
@@ -128,22 +125,19 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginErrorMessage(String messageTitle, String messageContent) {
         new Thread() {
             public void run() {
-                LoginActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AlertDialog invalidCredentialsAlert =
-                                new AlertDialog.Builder(LoginActivity.this).create();
-                        invalidCredentialsAlert.setTitle(messageTitle);
-                        invalidCredentialsAlert.setMessage(messageContent);
-                        invalidCredentialsAlert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                invalidCredentialsAlert.dismiss();
-                            }
-                        });
-                        invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
-                        invalidCredentialsAlert.show();
-                    }
+                LoginActivity.this.runOnUiThread(() -> {
+                    AlertDialog invalidCredentialsAlert =
+                            new AlertDialog.Builder(LoginActivity.this).create();
+                    invalidCredentialsAlert.setTitle(messageTitle);
+                    invalidCredentialsAlert.setMessage(messageContent);
+                    invalidCredentialsAlert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            invalidCredentialsAlert.dismiss();
+                        }
+                    });
+                    invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
+                    invalidCredentialsAlert.show();
                 });
             }
         }.start();

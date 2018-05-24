@@ -71,7 +71,8 @@ public class ListSurveyActivity extends AppCompatActivity {
      */
     private void configure(){
         listSurveysListView =findViewById(R.id.listViewListSurveys);
-        listSurveysListView.setAdapter(new SurveyItemListViewAdapter(this));
+        currentAdapter=new SurveyItemListViewAdapter(this);
+        listSurveysListView.setAdapter(currentAdapter);
         fetchSurveys();
     }
 
@@ -92,9 +93,8 @@ public class ListSurveyActivity extends AppCompatActivity {
         return () -> {
             try {
                 List<String> nextSurveys = getNextSurveys();
-                System.out.println(nextSurveys);
                 if(nextSurveys!=null){
-                    currentAdapter.addAll(nextSurveys);
+                    ListSurveyActivity.this.runOnUiThread(addSurveys(nextSurveys));
                 }
             }catch(IOException ioException){
                 System.out.println("-------------------- >"+ioException.getMessage());
@@ -109,14 +109,12 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @throws IOException Throws IOException if an error ocured while sending the REST Request
      */
     private List<String> getNextSurveys() throws IOException {
-        System.out.println(authenticationToken);
         String ok=BuildConfig.SERVER_URL
                 .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
                 .concat(SURVEYS_RESOURCE_PATH)
                 .concat(USER_AVAILABLE_RESOURCE_PATH)
                 .concat(authenticationToken)
                 .concat("?paginationID="+(currentPaginationID++));
-        System.out.println(">>>>>>>>>>>>>>>>>>>>> "+ok);
         Response requestResponse=RESTRequest.create(ok)
                 .GET();
 
@@ -140,6 +138,13 @@ public class ListSurveyActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * Adds to the current adapter a list of surveys
+     * @param surveys List with the new list of surveys being added to the adapter
+     */
+    private Runnable addSurveys(List<String> surveys){
+        return () -> currentAdapter.addAll(surveys);
+    }
     /**
      * SurveyItemListViewAdapter that represents a custom adapter used for the ListView that holds the
      * surveys that an user can currently answer
