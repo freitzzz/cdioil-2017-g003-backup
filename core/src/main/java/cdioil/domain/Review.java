@@ -182,11 +182,11 @@ public class Review implements Serializable {
         if (answers.isEmpty()) {
             return false;
         }
-        
+
         LinkedList<Question> answeredQuestions = new LinkedList<>(answers.keySet());
         Question previouslyAnsweredQuestion = answeredQuestions.removeLast();
         answers.remove(previouslyAnsweredQuestion);
-        
+
         currentQuestion = previouslyAnsweredQuestion;
 
         return true;
@@ -213,6 +213,15 @@ public class Review implements Serializable {
      */
     public Map<Question, Answer> getReviewQuestionAnswers() {
         return new TreeMap<>(answers);
+    }
+
+    /**
+     * Checks if review already has a suggestion
+     *
+     * @return true if a suggestion exists, false if not
+     */
+    public boolean hasSuggestion() {
+        return suggestion != null;
     }
 
     /**

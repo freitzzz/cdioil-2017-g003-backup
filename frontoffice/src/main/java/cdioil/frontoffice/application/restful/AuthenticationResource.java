@@ -130,7 +130,7 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
     private Response buildAuthenticationResponse(String authenticationToken){
         return authenticationToken!= null 
                 ? Response.status(Status.OK).entity(
-                    "{\n\t\"Code:\":\""+authenticationToken+"\"\n}").build()
+                    "{\n\t\"Code\":\""+authenticationToken+"\"\n}").build()
                 : Response.status(Status.UNAUTHORIZED).build();
     }
 }

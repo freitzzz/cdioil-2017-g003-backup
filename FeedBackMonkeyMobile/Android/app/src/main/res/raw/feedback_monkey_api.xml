@@ -15,7 +15,7 @@
         </resource>
         <resource name="Surveys" path="/surveys">
             <subresources>
-                <subresource name="Available User Surveys" path="/availableusersurveys">
+                <subresource name="Available User Surveys" path="/useravailablesurveys/">
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>

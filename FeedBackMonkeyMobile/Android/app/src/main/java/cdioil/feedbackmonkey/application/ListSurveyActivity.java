@@ -1,4 +1,4 @@
-﻿package cdioil.feedbackmonkey.application;
+package cdioil.feedbackmonkey.application;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
 import okhttp3.Response;
@@ -34,11 +35,12 @@ import okhttp3.Response;
  * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
  */
 public class ListSurveyActivity extends AppCompatActivity {
-
+    private static final String SURVEYS_RESOURCE_PATH=FeedbackMonkeyAPI.getResourcePath("Surveys");
+    private static final String USER_AVAILABLE_RESOURCE_PATH=FeedbackMonkeyAPI.getSubResourcePath("Surveys","Available User Surveys");
     /**
-     * Recycler View that is hold by the scroll view
+     * ListView that is hold by the scroll view
      */
-    private ListView listSurveysRecyclerView;
+    private ListView listSurveysListView;
     /**
      * SurveyItemListViewAdapter with the current view adapter
      */
@@ -59,6 +61,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        authenticationToken=getIntent().getExtras().getString("authenticationToken");
         setContentView(R.layout.activity_list_survey_activity);
         configure();
     }
@@ -67,8 +70,9 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Configures the current view
      */
     private void configure(){
-        listSurveysRecyclerView=findViewById(R.id.listViewListSurveys);
-        listSurveysRecyclerView.setAdapter(new SurveyItemListViewAdapter(this));
+        listSurveysListView =findViewById(R.id.listViewListSurveys);
+        currentAdapter=new SurveyItemListViewAdapter(this);
+        listSurveysListView.setAdapter(currentAdapter);
         fetchSurveys();
     }
 
@@ -90,10 +94,10 @@ public class ListSurveyActivity extends AppCompatActivity {
             try {
                 List<String> nextSurveys = getNextSurveys();
                 if(nextSurveys!=null){
-                    currentAdapter.addAll(nextSurveys);
+                    ListSurveyActivity.this.runOnUiThread(addSurveys(nextSurveys));
                 }
             }catch(IOException ioException){
-                System.out.println(ioException.getMessage());
+                System.out.println("-------------------- >"+ioException.getMessage());
             }
         };
     }
@@ -105,10 +109,13 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @throws IOException Throws IOException if an error ocured while sending the REST Request
      */
     private List<String> getNextSurveys() throws IOException {
-        Response requestResponse=RESTRequest.create(BuildConfig.SERVER_URL
-                .concat("/surveys/availableusersurveys/surveys/")
+        String ok=BuildConfig.SERVER_URL
+                .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
+                .concat(SURVEYS_RESOURCE_PATH)
+                .concat(USER_AVAILABLE_RESOURCE_PATH)
                 .concat(authenticationToken)
-                .concat("?paginationID="+(currentPaginationID++)))
+                .concat("?paginationID="+(currentPaginationID++));
+        Response requestResponse=RESTRequest.create(ok)
                 .GET();
 
         String responseBody=requestResponse.body().string();
@@ -132,11 +139,15 @@ public class ListSurveyActivity extends AppCompatActivity {
     }
 
     /**
+     * Adds to the current adapter a list of surveys
+     * @param surveys List with the new list of surveys being added to the adapter
+     */
+    private Runnable addSurveys(List<String> surveys){
+        return () -> currentAdapter.addAll(surveys);
+    }
+    /**
      * SurveyItemListViewAdapter that represents a custom adapter used for the ListView that holds the
      * surveys that an user can currently answer
-     * <br>A much appreciated thanks to <a href="https://stackoverflow.com/a/11282200">@Sajmon</a>
-     * and <a href="https://stackoverflow.com/a/11282176">@Vipul Shah</a> over at StackOverflow for showing a simple and 
-     * flexible way to convert the TextView of a ListAdapter into a new View 	
      * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
      * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
      */

@@ -1,0 +1,45 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Submeter Sugestão
+	________________________________________________
+
+	1. Correr bootstrap para ter informação na base de dados local.
+	2. Correr o projeto frontoffice.
+	3. Correr o servidor REST.
+	4. Enviar um pedido para realizar o login.
+	5. Fazer login com o email joao@email.com e password Password123.
+	6. Enviar um pedido para responder a um inquérito.
+	7. Escolher um inquérito.
+	8. Responder ao inquérito.
+	9. Deixar uma sugestão
+	10. Verificar na base de dados que a sugestão foi adicionada ao Perfil
+
+	________________________________________________
+	CASO #2: Submeter Sugestão para uma Review incompleta
+	________________________________________________
+
+	1. Correr bootstrap para ter informação na base de dados local.
+	2. Correr o projeto frontoffice.
+	3. Correr o servidor REST.
+	4. Enviar um pedido para realizar o login.
+	5. Fazer login com o email joao@email.com e password Password123.
+	6. Escolher uma review incompleta.
+	7. Deixar uma sugestão.
+	8. Obter mensagem de erro.
+
+	________________________________________________
+	CASO #3: Submeter Sugestão para uma Review que já tem uma sugestão
+	________________________________________________
+
+	1. Correr bootstrap para ter informação na base de dados local.
+	2. Correr o projeto frontoffice.
+	3. Correr o servidor REST.
+	4. Enviar um pedido para realizar o login.
+	5. Fazer login com o email joao@email.com e password Password123.
+	6. Escolher uma review com sugestão.
+	7. Deixar uma sugestão.
+	8. Obter mensagem de erro.
+

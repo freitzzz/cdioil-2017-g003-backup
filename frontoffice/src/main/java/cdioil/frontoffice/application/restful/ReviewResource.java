@@ -55,9 +55,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             return createInvalidUserResponse();
         }
 
-        return Response.status(Response.Status.OK).
-                entity(getQuestionAsJSON(new AnswerSurveyController(registeredUser, surveyID).
-                        getReviewByID(reviewID).getCurrentQuestion())).build();
+        return createShowQuestionResponse(new AnswerSurveyController(registeredUser, surveyID).getReviewByID(reviewID).getCurrentQuestion());
     }
 
     /**
@@ -92,16 +90,18 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
 
         Review review = ctrl.getReviewByID(reviewID);
+
+        if (review.isFinished()) {
+            return createFinishedReviewResponse();
+        }
         QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
 
-        if (!ctrl.answerQuestion(questionOption)) {
-            return createInvalidOptionResponse();
-        }
+        ctrl.answerQuestion(questionOption);
 
         if (!ctrl.saveReview()) {
             return createInvalidReviewResponse();
         }
-
+        System.out.println("is review finished after answering question: " + review.isFinished());
         return createValidReviewResponse(review.getCurrentQuestion());
     }
 
@@ -135,10 +135,10 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         Survey survey = ctrl.findSurveyByID(surveyID);
 
         if (survey == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
+            return createSurveyNotFoundResponse();
         }
 
-        return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + ctrl.createNewReview(survey) + "\n}").build();
+        return createSuccessfullyCreatedReviewResponse(ctrl.createNewReview(survey));
     }
 
     /**
@@ -172,15 +172,14 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
         Review review = ctrl.getReviewByID(reviewID);
         if (review == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+            return createReviewNotFoundResponse();
         }
-        if (review.isFinished()) {
-            review.submitSuggestion(suggestion);
+        if (ctrl.reviewIsFinished() && !ctrl.reviewHasSuggestion()) {
+            ctrl.submitSuggestion(suggestion);
         } else {
             return Response.status(Response.Status.PRECONDITION_FAILED).entity(JSON_INCOMPLETE_REVIEW).build();
         }
-
-        return ctrl.saveReview() ? Response.status(Response.Status.OK).build() : Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+        return ctrl.saveUnfinishedReview() ? Response.status(Response.Status.OK).build() : createReviewNotFoundResponse();
     }
 
     /**
@@ -223,15 +222,15 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that the chosen option is
-     * invalid.
+     * Creates a Response for warning the user that the chosen review is
+     * invalid, because it has already been answered.
      *
      * @return Response with the response warning the user that the chosen
-     * option is invalid
+     * review is already finished
      */
-    private Response createInvalidOptionResponse() {
+    private Response createFinishedReviewResponse() {
         return Response.status(Response.Status.UNAUTHORIZED).
-                entity(JSON_INVALID_OPTION).
+                entity(JSON_FINISHED_REVIEW).
                 build();
     }
 
@@ -259,5 +258,47 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         return Response.status(Response.Status.BAD_REQUEST).
                 entity(JSON_INVALID_REVIEW).
                 build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the review was successfully
+     * created.
+     *
+     * @param id ID of the created Review
+     * @return Response with the response warning the user that the review was
+     * created
+     */
+    private Response createSuccessfullyCreatedReviewResponse(String id) {
+        return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + id + "\n}").build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the survey was not found.
+     *
+     * @return Response with the response warning the user that the survey
+     * wasn't found
+     */
+    private Response createSurveyNotFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
+    }
+
+    /**
+     * Creates a Response for warning the user.
+     *
+     * @param question
+     * @return
+     */
+    private Response createShowQuestionResponse(Question question) {
+        return Response.status(Response.Status.OK).entity(getQuestionAsJSON(question)).build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the review was not found
+     *
+     * @return Response with the response warning the user that the review
+     * wasn't found
+     */
+    private static Response createReviewNotFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
     }
 }
