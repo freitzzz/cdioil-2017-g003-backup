@@ -1,0 +1,51 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #3
+	
+	* Como Utilizador, no final de responder a um inquérito
+	(não impactando a concretização da avaliação, i.e. depois
+	de já ter sido como "finalizada" a avaliação do elemento)
+	quero poder enviar uma sugestão de melhoria relativamente
+	ao item avaliado.
+
+
+	______________________
+
+	FORMATO BREVE
+	______________________
+
+	O utilizador registado inicia o processo de submeter sugestão
+	após responder a um inquérito. O sistema pergunta ao 
+	utilizador registado se deseja submeter uma sugestão 
+	de melhoria aos itens avaliados do inquérito. 
+	O utilizador registado responde.
+
+	Caso responda não, o sistema guarda a avaliação e informa 
+	o utilizador registado do sucesso da operação. 
+	O caso de uso termina.
+
+	Caso responda sim, o sistema pede ao utilizador registado
+	para inserir uma sugestão. O utilizador registado insere a 
+	sua sugestão e submete-a. O sistema guarda a avaliação 
+	com a sugestão e informa o utilizador registado do sucesso 
+	da operação. O caso de uso termina.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------
