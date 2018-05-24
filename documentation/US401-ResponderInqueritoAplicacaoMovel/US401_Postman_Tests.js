@@ -100,11 +100,11 @@ pm.test("Response should be okay to process", function(){
     pm.response.to.have.jsonBody;
 });
 
-/* If the option is invalid, for example, with the following request URL:
+/* If the review is already finished (all questions have been answered), for example, with the following request URL:
 
-    http://localhost:8080/feedbackmonkeyapi/review/answerQuestion/authenticationToken/invalid/binary/surveyDatabaseID/reviewID
+    http://localhost:8080/feedbackmonkeyapi/review/answerQuestion/authenticationToken/false/binary/surveyDatabaseID/finishedReviewID
 
-    since "invalid" isn't a valid option for a binary question (only "true" ou "false" are acceptable options).
+    since "finishedReviewID" isn't a valid review, because it has already been answered.
  */
 
 pm.test("Status code is 401", function () {
