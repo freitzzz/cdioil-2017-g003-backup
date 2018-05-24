@@ -17,8 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Resource class that holds all services related to reviewing a product
- * (answering a survey).
+ * Resource class that holds all services related to reviewing a product (answering a survey).
  *
  * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  * @author <a href="1161380@isep.ipp.pt">Joana Pinheiro</a>
@@ -90,7 +89,12 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
 
         Review review = ctrl.getReviewByID(reviewID);
+
+        if (review.isFinished()) {
+            return createFinishedReviewResponse();
+        }
         QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
+
         ctrl.answerQuestion(questionOption);
 
         if (!ctrl.saveReview()) {
@@ -191,11 +195,9 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
     /* Response methods */
     /**
-     * Creates a Response for warning the user that its account is not currently
-     * authenticated.
+     * Creates a Response for warning the user that its account is not currently authenticated.
      *
-     * @return Response with the response for warning the user that the invalid
-     * authentication token is invalid
+     * @return Response with the response for warning the user that the invalid authentication token is invalid
      */
     private Response createInvalidAuthTokenResponse() {
         return Response.status(Response.Status.UNAUTHORIZED)
@@ -204,11 +206,9 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that they aren't authorized to
-     * answer the survey.
+     * Creates a Response for warning the user that they aren't authorized to answer the survey.
      *
-     * @return Response with the response warning the user that they aren't
-     * authorized to answer the survey
+     * @return Response with the response warning the user that they aren't authorized to answer the survey
      */
     private Response createInvalidUserResponse() {
         return Response.status(Response.Status.BAD_REQUEST)
@@ -217,15 +217,13 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that the chosen option is
-     * invalid.
+     * Creates a Response for warning the user that the chosen review is invalid, because it has already been answered.
      *
-     * @return Response with the response warning the user that the chosen
-     * option is invalid
+     * @return Response with the response warning the user that the chosen review is already finished
      */
-    private Response createInvalidOptionResponse() {
+    private Response createFinishedReviewResponse() {
         return Response.status(Response.Status.UNAUTHORIZED).
-                entity(JSON_INVALID_OPTION).
+                entity(JSON_FINISHED_REVIEW).
                 build();
     }
 
@@ -233,8 +231,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * Creates a Response for warning the user that the review is valid.
      *
      * @param question Current question of the Review
-     * @return Response with the response warning the user that the review is
-     * valid
+     * @return Response with the response warning the user that the review is valid
      */
     private Response createValidReviewResponse(Question question) {
         return Response.status(Response.Status.OK).
@@ -246,8 +243,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * Creates a Response for warning the user that the review is invalid.
      *
      * @param question Current question of the Review
-     * @return Response with the response warning the user that the review is
-     * invalid
+     * @return Response with the response warning the user that the review is invalid
      */
     private Response createInvalidReviewResponse() {
         return Response.status(Response.Status.BAD_REQUEST).
@@ -256,12 +252,10 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that the review was successfully
-     * created.
+     * Creates a Response for warning the user that the review was successfully created.
      *
      * @param id ID of the created Review
-     * @return Response with the response warning the user that the review was
-     * created
+     * @return Response with the response warning the user that the review was created
      */
     private Response createSuccessfullyCreatedReviewResponse(String id) {
         return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + id + "\n}").build();
@@ -270,8 +264,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     /**
      * Creates a Response for warning the user that the survey was not found.
      *
-     * @return Response with the response warning the user that the survey
-     * wasn't found
+     * @return Response with the response warning the user that the survey wasn't found
      */
     private Response createSurveyNotFoundResponse() {
         return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();

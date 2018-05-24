@@ -24,9 +24,9 @@ public interface ResponseMessages {
 
     /**
      * Constant that represents the JSON used on the response message for
-     * warning the user that the chosen option is not valid.
+     * warning the user that the chosen review has already been answered.
      */
-    public static final String JSON_INVALID_OPTION = "{\n\t\"invalidoption\":\"true\"\n}";
+    public static final String JSON_FINISHED_REVIEW = "{\n\t\"finishedreview\":\"true\"\n}";
 
     /**
      * Constant that represents the JSON used on the response message for
