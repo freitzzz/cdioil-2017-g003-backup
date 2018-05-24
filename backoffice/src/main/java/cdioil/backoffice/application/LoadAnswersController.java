@@ -47,11 +47,12 @@ public class LoadAnswersController {
 
         /*Note: For the time being, the Questions stored within the Review are 
         still referencing those that have already been persisted. Ideally these should be copies of the Questions.*/
+        Thread[] threads=new Thread[THREAD_NUMBER];
         for (int t = 0; t < THREAD_NUMBER; t++) {
-            Thread thread = new Thread(stressTestWithThreads(THREAD_NUMBER,survey,numAnswers,distributions));
-            thread.start();
-            thread.join();
+            threads[t]= new Thread(stressTestWithThreads(THREAD_NUMBER,survey,numAnswers,distributions));
+            threads[t].start();
         }
+        for(int t=0;t<THREAD_NUMBER;t++)threads[t].join();
         final long endTime = System.currentTimeMillis();
 
         return endTime - startTime;
