@@ -1,5 +1,6 @@
 package cdioil.frontoffice.application.restful;
 
+import cdioil.application.authz.AuthenticationController;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
@@ -8,13 +9,16 @@ import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.application.AnswerSurveyController;
 import cdioil.frontoffice.application.api.ReviewAPI;
+import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_AUTHENTICATION_TOKEN;
+import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_USER;
 import com.google.gson.Gson;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Resource class that holds all services related to reviewing a product (answering a survey).
+ * Resource class that holds all services related to reviewing a product
+ * (answering a survey).
  *
  * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  * @author <a href="1161380@isep.ipp.pt">Joana Pinheiro</a>
@@ -39,9 +43,19 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     public Response showQuestion(@PathParam("authenticationToken") String authenticationToken,
             @PathParam("surveyID") String surveyID, @PathParam("reviewID") String reviewID) {
 
-        return Response.status(Response.Status.OK).
-                entity(getQuestionAsJSON(new AnswerSurveyController(authenticationToken).
-                        getReviewByID(reviewID).getCurrentQuestion())).build();
+        AuthenticationController authenticationCtrl = new AuthenticationController();
+
+        SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
+        if (user == null) {
+            return createInvalidAuthTokenResponse();
+        }
+
+        RegisteredUser registeredUser = authenticationCtrl.getUserAsRegisteredUser(user);
+        if (registeredUser == null) {
+            return createInvalidUserResponse();
+        }
+
+        return createShowQuestionResponse(new AnswerSurveyController(registeredUser, surveyID).getReviewByID(reviewID).getCurrentQuestion());
     }
 
     /**
@@ -60,30 +74,34 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     public Response answerQuestion(@PathParam("authenticationToken") String authenticationToken,
             @PathParam("option") String option, @PathParam("questionType") String questionType,
             @PathParam("surveyID") String surveyID, @PathParam("reviewID") String reviewID) {
-        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken);
-        SystemUser user = ctrl.getUserByAuthenticationToken(authenticationToken);
+
+        AuthenticationController authenticationCtrl = new AuthenticationController();
+
+        SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
         if (user == null) {
             return createInvalidAuthTokenResponse();
         }
-        
-        RegisteredUser registeredUser = ctrl.getUserAsRegisteredUser(user);
+
+        RegisteredUser registeredUser = authenticationCtrl.getUserAsRegisteredUser(user);
         if (registeredUser == null) {
             return createInvalidUserResponse();
         }
 
-        ctrl.findSurveyByID(surveyID);
-        ctrl.findActiveSurveys();
+        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
+
         Review review = ctrl.getReviewByID(reviewID);
-        QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
-        
-        if (!ctrl.answerQuestion(questionOption)) { 
-            return createInvalidOptionResponse();
+
+        if (review.isFinished()) {
+            return createFinishedReviewResponse();
         }
-        
+        QuestionOption questionOption = QuestionOption.getQuestionOption(questionType, option);
+
+        ctrl.answerQuestion(questionOption);
+
         if (!ctrl.saveReview()) {
             return createInvalidReviewResponse();
         }
-        
+        System.out.println("is review finished after answering question: " + review.isFinished());
         return createValidReviewResponse(review.getCurrentQuestion());
     }
 
@@ -100,15 +118,68 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     @Override
     public Response createReview(@PathParam("authenticationToken") String authenticationToken,
             @PathParam("surveyID") String surveyID) {
-        AnswerSurveyController ctrl = new AnswerSurveyController(authenticationToken);
 
+        AuthenticationController authenticationCtrl = new AuthenticationController();
+
+        SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
+        if (user == null) {
+            return createInvalidAuthTokenResponse();
+        }
+
+        RegisteredUser registeredUser = authenticationCtrl.getUserAsRegisteredUser(user);
+        if (registeredUser == null) {
+            return createInvalidUserResponse();
+        }
+
+        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
         Survey survey = ctrl.findSurveyByID(surveyID);
 
         if (survey == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
+            return createSurveyNotFoundResponse();
         }
 
-        return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + ctrl.createNewReview(survey) + "\n}").build();
+        return createSuccessfullyCreatedReviewResponse(ctrl.createNewReview(survey));
+    }
+
+    /**
+     * Submits a suggestion via a JSON PUT Request
+     *
+     * @param suggestion suggestion to submit
+     * @param surveyID ID of the survey
+     * @param reviewID id of the review
+     * @param authenticationToken Authentication token of the user
+     * @return JSON response
+     */
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/submitSuggestion/{authenticationToken}/{surveyID}/{reviewID}")
+    @Override
+    public Response submitSuggestion(String suggestion, @PathParam("surveyID") String surveyID, @PathParam("reviewID") String reviewID, @PathParam("authenticationToken") String authenticationToken) {
+
+        AuthenticationController authenticationCtrl = new AuthenticationController();
+
+        SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
+        if (user == null) {
+            return createInvalidAuthTokenResponse();
+        }
+
+        RegisteredUser registeredUser = authenticationCtrl.getUserAsRegisteredUser(user);
+        if (registeredUser == null) {
+            return createInvalidUserResponse();
+        }
+
+        AnswerSurveyController ctrl = new AnswerSurveyController(registeredUser, surveyID);
+
+        Review review = ctrl.getReviewByID(reviewID);
+        if (review == null) {
+            return createReviewNotFoundResponse();
+        }
+        if (ctrl.reviewIsFinished() && !ctrl.reviewHasSuggestion()) {
+            ctrl.submitSuggestion(suggestion);
+        } else {
+            return Response.status(Response.Status.PRECONDITION_FAILED).entity(JSON_INCOMPLETE_REVIEW).build();
+        }
+        return ctrl.saveUnfinishedReview() ? Response.status(Response.Status.OK).build() : createReviewNotFoundResponse();
     }
 
     /**
@@ -122,13 +193,14 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         String x = gSon.toJson(new ReviewJSONService(question));
         return x;
     }
-    
-    /* Response methods */
 
+    /* Response methods */
     /**
-     * Creates a Response for warning the user that its account is not currently authenticated.
+     * Creates a Response for warning the user that its account is not currently
+     * authenticated.
      *
-     * @return Response with the response for warning the user that the invalid authentication token is invalid
+     * @return Response with the response for warning the user that the invalid
+     * authentication token is invalid
      */
     private Response createInvalidAuthTokenResponse() {
         return Response.status(Response.Status.UNAUTHORIZED)
@@ -137,9 +209,11 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that they aren't authorized to answer the survey.
+     * Creates a Response for warning the user that they aren't authorized to
+     * answer the survey.
      *
-     * @return Response with the response warning the user that they aren't authorized to answer the survey
+     * @return Response with the response warning the user that they aren't
+     * authorized to answer the survey
      */
     private Response createInvalidUserResponse() {
         return Response.status(Response.Status.BAD_REQUEST)
@@ -148,13 +222,15 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     }
 
     /**
-     * Creates a Response for warning the user that the chosen option is invalid.
+     * Creates a Response for warning the user that the chosen review is
+     * invalid, because it has already been answered.
      *
-     * @return Response with the response warning the user that the chosen option is invalid
+     * @return Response with the response warning the user that the chosen
+     * review is already finished
      */
-    private Response createInvalidOptionResponse() {
+    private Response createFinishedReviewResponse() {
         return Response.status(Response.Status.UNAUTHORIZED).
-                entity(JSON_INVALID_OPTION).
+                entity(JSON_FINISHED_REVIEW).
                 build();
     }
 
@@ -162,7 +238,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * Creates a Response for warning the user that the review is valid.
      *
      * @param question Current question of the Review
-     * @return Response with the response warning the user that the review is valid
+     * @return Response with the response warning the user that the review is
+     * valid
      */
     private Response createValidReviewResponse(Question question) {
         return Response.status(Response.Status.OK).
@@ -174,7 +251,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * Creates a Response for warning the user that the review is invalid.
      *
      * @param question Current question of the Review
-     * @return Response with the response warning the user that the review is invalid
+     * @return Response with the response warning the user that the review is
+     * invalid
      */
     private Response createInvalidReviewResponse() {
         return Response.status(Response.Status.BAD_REQUEST).
@@ -182,4 +260,45 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
                 build();
     }
 
+    /**
+     * Creates a Response for warning the user that the review was successfully
+     * created.
+     *
+     * @param id ID of the created Review
+     * @return Response with the response warning the user that the review was
+     * created
+     */
+    private Response createSuccessfullyCreatedReviewResponse(String id) {
+        return Response.status(Response.Status.CREATED).entity("{\n\t\"reviewID\":" + id + "\n}").build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the survey was not found.
+     *
+     * @return Response with the response warning the user that the survey
+     * wasn't found
+     */
+    private Response createSurveyNotFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
+    }
+
+    /**
+     * Creates a Response for warning the user.
+     *
+     * @param question
+     * @return
+     */
+    private Response createShowQuestionResponse(Question question) {
+        return Response.status(Response.Status.OK).entity(getQuestionAsJSON(question)).build();
+    }
+
+    /**
+     * Creates a Response for warning the user that the review was not found
+     *
+     * @return Response with the response warning the user that the review
+     * wasn't found
+     */
+    private static Response createReviewNotFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND).entity(JSON_REVIEW_NOT_FOUND).build();
+    }
 }

@@ -3,14 +3,11 @@ package cdioil.frontoffice.application;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
-import cdioil.domain.authz.Profile;
 import cdioil.domain.authz.RegisteredUser;
-import cdioil.domain.authz.SystemUser;
 import cdioil.persistence.impl.ProfileRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
-import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -20,7 +17,8 @@ import java.util.Map;
 /**
  * Controller class for answering a survey.
  *
- * TODO Update getting surveys and pending reviews with fetch lazy Controller class for Answer Survey User Story
+ * TODO Update getting surveys and pending reviews with fetch lazy Controller
+ * class for Answer Survey User Story
  *
  * @author <a href="1150782@isep.ipp.pt">Pedro Portela</a>
  * @author <a href="1161371@isep.ipp.pt">António Sousa</a>
@@ -53,15 +51,6 @@ public class AnswerSurveyController {
     /**
      * Constructs a new instance of AnswerSurveyController
      *
-     * @param authenticationToken Authentication token of the user
-     */
-    public AnswerSurveyController(String authenticationToken) {
-        this.loggedUser = getUserAsRegisteredUser(getUserByAuthenticationToken(authenticationToken));
-    }
-
-    /**
-     * Constructs a new instance of AnswerSurveyController
-     *
      * @param loggedUser Logged User
      */
     public AnswerSurveyController(RegisteredUser loggedUser) {
@@ -69,7 +58,20 @@ public class AnswerSurveyController {
     }
 
     /**
-     * Retrieves a text representation of the currently available surveys and whether or not they have pending reviews.
+     * Constructs a new instance of AnswerSurveyController
+     *
+     * @param loggedUser Logged User
+     * @param surveyID ID of the Survey to answer
+     */
+    public AnswerSurveyController(RegisteredUser loggedUser, String surveyID) {
+        this.loggedUser = loggedUser;
+        findSurveyByID(surveyID);
+        findActiveSurveys();
+    }
+
+    /**
+     * Retrieves a text representation of the currently available surveys and
+     * whether or not they have pending reviews.
      *
      * @return text representation of the currently available surveys
      */
@@ -188,7 +190,9 @@ public class AnswerSurveyController {
     /* DATABASE METHODS */
     /**
      * Updates the current registerd user profile due to changes on reviews
-     * <br>Introduced due to bug on duplication reviews (since review uses a sequence, the id of the object is only generated after posted to the database)
+     * <br>Introduced due to bug on duplication reviews (since review uses a
+     * sequence, the id of the object is only generated after posted to the
+     * database)
      */
     private void updateRegisteredUserProfile() {
         loggedUser = new RegisteredUserRepositoryImpl().findBySystemUser(loggedUser.getID());
@@ -206,42 +210,20 @@ public class AnswerSurveyController {
     }
 
     /**
-     * Method that returns the user that holds a certain authentication token.
-     *
-     * @param authenticationToken String with the user authentication token
-     * @return SystemUser with the user that holds a certain authentication token, null if the authentication token was not found
-     */
-    public SystemUser getUserByAuthenticationToken(String authenticationToken) {
-        return new UserSessionRepositoryImpl().getSystemUserByAuthenticationToken(authenticationToken);
-    }
-
-    /**
-     * Method that returns a RegisteredUser based on a certain SystemUser
-     *
-     * @param user SystemUser with the RegisteredUser being returned
-     * @return RegisteredUser with the RegisteredUser that holds a certain SystemUser, null if not found
-     */
-    public RegisteredUser getUserAsRegisteredUser(SystemUser user) {
-        return new RegisteredUserRepositoryImpl().findBySystemUser(user);
-    }
-
-    /**
-     * Retrieves all the currently available surveys and the user's pending reviews.
+     * Retrieves all the currently available surveys and the user's pending
+     * reviews.
      */
     public void findActiveSurveys() {
         surveyReviewMap = new LinkedHashMap<>();
 
         List<Review> pendingReviews = new ProfileRepositoryImpl().findUserPendingReviews(loggedUser.getProfile());
         List<Survey> activeSurveys = new SurveyRepositoryImpl().findAllActiveSurveys();
-
-        pendingReviews.forEach(r
-                -> surveyReviewMap.put(r.getSurvey(), r)
-        );
-
         activeSurveys.forEach(s
                 -> surveyReviewMap.put(s, null)
         );
-
+        pendingReviews.forEach(r
+                -> surveyReviewMap.put(r.getSurvey(), r)
+        );
     }
 
     /**
@@ -264,9 +246,9 @@ public class AnswerSurveyController {
     public String createNewReview(Survey survey) {
         Review review = new Review(survey);
         ReviewRepositoryImpl reviewRepository = new ReviewRepositoryImpl();
-
-        reviewRepository.merge(review);
-        return Long.toString(reviewRepository.getReviewID(review));
+        reviewRepository.add(review);
+        Long id = reviewRepository.getReviewID(review);
+        return Long.toString(id);
     }
 
     /**
@@ -277,14 +259,38 @@ public class AnswerSurveyController {
     public boolean saveReview() {
         //if the value is null then the review is being saved for the first time
         if (surveyReviewMap.get(selectedSurvey) == null) {
-            Profile profile = loggedUser.getProfile();
-
             loggedUser.getProfile().addReview(currentReview);
             return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
         }
+        return saveUnfinishedReview();
+    }
 
+    /**
+     * Saves a review after its finished
+     *
+     * @return true if the review was saved, false if otherwise
+     */
+    public boolean saveUnfinishedReview() {
         currentReview = new ReviewRepositoryImpl().merge(currentReview);
         updateRegisteredUserProfile();
         return currentReview != null;
+    }
+
+    /**
+     * Checks if current review is finished
+     *
+     * @return true if its finished, false if not
+     */
+    public boolean reviewIsFinished() {
+        return currentReview.isFinished();
+    }
+
+    /**
+     * Checks if current review has a suggestion
+     *
+     * @return true if it has a suggestion, false if not
+     */
+    public boolean reviewHasSuggestion() {
+        return currentReview.hasSuggestion();
     }
 }

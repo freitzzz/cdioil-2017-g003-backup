@@ -25,6 +25,11 @@ public final class UserJSONService {
     @SerializedName(value="activationCode",alternate = {"ActivationCode","activationcode","ACTIVATIONCODE"})
     private String activationCode;
     /**
+     * String with the user authentication token
+     */
+    @SerializedName(value="Code",alternate = {"code","CODE"})
+    private String code;
+    /**
      * Returns the user email
      * @return String with the user email
      */
@@ -39,4 +44,9 @@ public final class UserJSONService {
      * @return String with the user activation code
      */
     public String getActivationCode(){return activationCode;}
+    /**
+     * Returns the user authentication token
+     * @return String with the user authentication token
+     */
+    public String getAuthenticationToken(){return code;}
 }

@@ -1,19 +1,25 @@
 package cdioil.feedbackmonkey.authz;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.utils.RESTRequest;
+import cdioil.feedbackmonkey.application.ListSurveyActivity;
+import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
+import cdioil.feedbackmonkey.restful.utils.RESTRequest;
+import cdioil.feedbackmonkey.restful.utils.json.UserJSONService;
 import okhttp3.Response;
 
 /**
@@ -22,14 +28,6 @@ import okhttp3.Response;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class LoginActivity extends AppCompatActivity {
-    /**
-     * JSON Body String for invalid credentials.
-     */
-    private static final String JSON_BODY_INVALID_CREDENTIALS =  "{\n\t\"invalidcredentials\":\"true\"\n}";
-    /**
-     * JSON Body String for account that hasn't been activated.
-     */
-    private static final String JSON_BODY_ACTIVATION_REQUIRED = "{\n\t\"activationcode\":\"required\"\n}";
     /**
      * Login button.
      */
@@ -51,47 +49,61 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initializeApplication();
         loginButton = findViewById(R.id.loginButton);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //rest request
-                Thread loginThread = new Thread(login());
-                loginThread.start();
-            }
+        loginButton.setOnClickListener(view -> {
+            //rest request
+            Thread loginThread = new Thread(login());
+            loginThread.start();
         });
     }
 
+    /**
+     * Initializes the application.
+     */
+    private void initializeApplication(){
+        System.setProperty("javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
+        FeedbackMonkeyAPI.create(getApplicationContext());
+    }
+
+    /**
+     * Runs the rest request to perform the login of the app
+     * @return Runnable with the thread the performs the rest request to confirm the login of a user
+     */
     private Runnable login(){
-        return new Runnable(){
-            @Override
-            public void run(){
-                //TODO replace server url with resources from feedback_monkey_api.xml
-                    Response restResponse =
-                RESTRequest.create("http://ndest.ddns.net:35066/feedbackmonkeyapi/authentication/login")
-                        .withMediaType(RESTRequest.RequestMediaType.JSON)
-                        .withBody("{\n\t\"email\":"+emailText.getText().toString()+",\"password\":"+
-            passwordText.getText().toString()+"\n}").POST();
-                    String restResponseBodyContent = "";
-                try {
-                    restResponseBodyContent = restResponse.body().string();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //Temporary System.outs to see if rest responses are working correctly
-                if(restResponse.code() == HttpsURLConnection.HTTP_OK){
-                        String authToken = getAuthenticationToken(restResponseBodyContent);
-                        //TODO go to app's main activity, pass authToken
-                    }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
-                           showLoginErrorMessage("Login Inválido",
-                                   "\nCredenciais inválidas, tente novamente!\n");
-                    }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
-                            showLoginErrorMessage("Login Inválido",
-                            "A sua conta não está ativada!");
-                }
+        return () -> {
+                Response restResponse =
+            RESTRequest.create(BuildConfig.SERVER_URL
+                    .concat(FeedbackMonkeyAPI
+                    .getAPIEntryPoint()
+                    .concat(FeedbackMonkeyAPI.getResourcePath("authentication")
+                    .concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","login")))))
+                    .withMediaType(RESTRequest.RequestMediaType.JSON)
+                    .withBody("{\n\t\"email\":"+emailText.getText().toString()+",\"password\":"+
+                    passwordText.getText().toString()+"\n}").POST();
+                String restResponseBodyContent = "";
+            try {
+                restResponseBodyContent = restResponse.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(restResponse.code() == HttpsURLConnection.HTTP_OK){
+                    //TODO go to app's main activity, pass authToken
+                Intent listSurveyIntent=new Intent(LoginActivity.this, ListSurveyActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("authenticationToken",getAuthenticationToken(restResponseBodyContent));
+                listSurveyIntent.putExtras(bundle);
+                startActivity(listSurveyIntent);
+                }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
+                       showLoginErrorMessage("Login Inválido",
+                               "\nCredenciais inválidas, tente novamente!\n");
+                }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
+                        showLoginErrorMessage("Login Inválido",
+                        "A sua conta não está ativada!");
             }
         };
     }
@@ -102,10 +114,7 @@ public class LoginActivity extends AppCompatActivity {
      * @return String with the user's authentication token
      */
     private String getAuthenticationToken(String jsonBody){
-        String authToken;
-        String[] temp = jsonBody.split("\":\"");
-        authToken = temp[1].replaceAll("\"","");
-        return authToken;
+        return new Gson().fromJson(jsonBody, UserJSONService.class).getAuthenticationToken();
     }
 
     /**
@@ -116,22 +125,19 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginErrorMessage(String messageTitle, String messageContent) {
         new Thread() {
             public void run() {
-                LoginActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AlertDialog invalidCredentialsAlert =
-                                new AlertDialog.Builder(LoginActivity.this).create();
-                        invalidCredentialsAlert.setTitle(messageTitle);
-                        invalidCredentialsAlert.setMessage(messageContent);
-                        invalidCredentialsAlert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                invalidCredentialsAlert.dismiss();
-                            }
-                        });
-                        invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
-                        invalidCredentialsAlert.show();
-                    }
+                LoginActivity.this.runOnUiThread(() -> {
+                    AlertDialog invalidCredentialsAlert =
+                            new AlertDialog.Builder(LoginActivity.this).create();
+                    invalidCredentialsAlert.setTitle(messageTitle);
+                    invalidCredentialsAlert.setMessage(messageContent);
+                    invalidCredentialsAlert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            invalidCredentialsAlert.dismiss();
+                        }
+                    });
+                    invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
+                    invalidCredentialsAlert.show();
                 });
             }
         }.start();

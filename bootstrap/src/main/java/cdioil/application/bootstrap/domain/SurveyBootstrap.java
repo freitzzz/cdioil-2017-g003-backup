@@ -136,9 +136,7 @@ public class SurveyBootstrap {
         surveyRepository.add(survey);
         
         
-        Review r = new Review(survey);
-        r.answerQuestion(new BinaryQuestionOption(Boolean.TRUE));
-        
+        Review r = new Review(survey);         
         new ReviewRepositoryImpl().merge(r);
     }
 

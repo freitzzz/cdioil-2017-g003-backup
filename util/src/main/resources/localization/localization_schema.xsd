@@ -1,0 +1,101 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Messages">
+		<xs:complexType>
+		  <xs:sequence>
+			<xs:element name = "InfoMessages" type = "tInfoMessageGroup"/>
+			<xs:element name = "RequestMessages" type = "tRequestMessageGroup"/>
+			<xs:element name = "ErrorMessages" type = "tErrorMessageGroup"/>
+			<xs:element name = "MenuOptions" type = "tMenuOptionGroup"/>
+		  </xs:sequence>
+		</xs:complexType>
+  </xs:element>
+	
+	<xs:complexType name = "tErrorMessageGroup">
+		<xs:sequence maxOccurs = "unbounded">
+			<xs:element name = "Message" type = "tErrorMessage"/>
+        </xs:sequence>
+    </xs:complexType>
+	
+	<xs:complexType name = "tInfoMessageGroup">
+		<xs:sequence maxOccurs = "unbounded">
+			<xs:element name = "Message" type = "tInfoMessage"/>
+        </xs:sequence>
+    </xs:complexType>	
+	
+	<xs:complexType name = "tRequestMessageGroup">
+		<xs:sequence maxOccurs = "unbounded">
+			<xs:element name = "Message" type = "tRequestMessage"/>
+        </xs:sequence>
+    </xs:complexType>
+	
+	<xs:complexType name = "tMenuOptionGroup">
+		<xs:sequence>
+			<xs:element name="GlobalOptions">
+				<xs:complexType>
+					<xs:sequence maxOccurs = "unbounded">
+						<xs:element name = "Message" type = "tMenuOption"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AdminMenuOptions">
+				<xs:complexType>
+					<xs:sequence maxOccurs = "unbounded">
+						<xs:element name = "Message" type = "tMenuOption"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ManagerMenuOptions">
+				<xs:complexType>
+					<xs:sequence maxOccurs = "unbounded">
+						<xs:element name = "Message" type = "tMenuOption"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name = "tInfoMessage">
+		<xs:attribute name="messageId" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value = "info_[a-z_]+|separator"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>	
+	
+	<xs:complexType name = "tErrorMessage">
+		<xs:attribute name="messageId" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value = "error_[a-z_]+"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>
+	
+	<xs:complexType name = "tRequestMessage">
+		<xs:attribute name="messageId" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value = "request_[a-z_]+"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>
+	
+	<xs:complexType name = "tMenuOption">
+		<xs:attribute name="messageId" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value = "option_[a-z_]+"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>	
+</xs:schema>

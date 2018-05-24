@@ -25,4 +25,9 @@
         <activity android:name=".authz.MultipleQuestion"></activity>
     </application>
 
+        <activity android:name=".application.ListSurveyActivity">
+
+        </activity>
+    </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

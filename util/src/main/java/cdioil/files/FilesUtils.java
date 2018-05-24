@@ -1,5 +1,11 @@
 package cdioil.files;
 
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -12,6 +18,9 @@ public final class FilesUtils {
      * contained on a file name
      */
     private static final String INVALID_FILE_NAME_REGEX=createInvalidFileNameRegex();
+    
+    private static final String UTF8_ENCODER = "UTF-8";
+    
     /**
      * Hides default constructor
      */
@@ -40,5 +49,25 @@ public final class FilesUtils {
                 + "|([:]?[*]?[?]?[|]?[<]?[>]?[/][\\]?[\"]?)"
                 + "|([:]?[*]?[?]?[|]?[<]?[>]?[/]?[\\][\"]?)"
                 + "|([:]?[*]?[?]?[|]?[<]?[>]?[/]?[\\]?[\"])";
+    }
+
+    /**
+     * Converts a class resource path String to an UTF-8 compliant String.
+     *
+     * @param resourceFilePath relative resource file path
+     * @return UTF-8 compliant Class resource path String.
+     */
+    public static String convertStringToUTF8(String resourceFilePath) {
+
+        String result = null;
+
+        try {
+            result = URLDecoder.decode(resourceFilePath, UTF8_ENCODER);
+        } catch (UnsupportedEncodingException ex) {
+            ExceptionLogger.logException(LoggerFileNames.UTIL_LOGGER_FILE_NAME, Level.SEVERE, ex.getMessage());
+            Logger.getLogger(FilesUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 }

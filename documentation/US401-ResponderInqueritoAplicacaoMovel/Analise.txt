@@ -1,0 +1,33 @@
+	______________________
+
+	       ANÁLISE 
+	______________________
+
+	USER STORY DE SPRINT #5
+	
+	* Como Utilizador na aplicação móvel, quero poder responder a um inquérito.
+
+	______________________
+	
+	     FORMATO BREVE
+	______________________
+
+    O utilizador registado inicia o processo de responder a um inquérito.
+    Caso o utilizador esteja autenticado e tenha permissões para tal, o
+    sistema mostra uma questão do inquérito selecionado. O utilizador responde
+    à questão. Caso a resposta seja válida, o sistema armazena a resposta ao
+    inquérito (avaliação) no perfil do utilizador.
+	
+	______________________
+
+	  REGRAS DE NEGÓCIO
+    ______________________
+
+	--------------------------------------------------------------
+
+	______________________
+		
+   	  TESTES UNITÁRIOS
+	______________________
+
+	---------------------------------------------------------------

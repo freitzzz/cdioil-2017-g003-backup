@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feedbackmonkeyapi entrypoint="/feedbackmonkeyapi">
+    <resources>
+        <resource name="Authentication" path="/authentication">
+            <subresources>
+                <subresource name="Login" path="/login">
+                    <method>POST</method>
+                    <datatype>JSON</datatype>
+                </subresource>
+                <subresource name="Activate Account" path="/activate">
+                    <method>POST</method>
+                    <datatype>JSON</datatype>
+                </subresource>
+            </subresources>
+        </resource>
+        <resource name="Surveys" path="/surveys">
+            <subresources>
+                <subresource name="Available User Surveys" path="/useravailablesurveys/">
+                    <method>GET</method>
+                    <datatype>JSON</datatype>
+                </subresource>
+            </subresources>
+        </resource>
+    </resources>
+</feedbackmonkeyapi>

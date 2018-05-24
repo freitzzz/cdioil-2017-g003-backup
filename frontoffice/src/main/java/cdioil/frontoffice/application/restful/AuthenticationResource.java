@@ -31,7 +31,7 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
      * <br>"password":"yourreallysecretpasswordhere"<br>}
      * @param json String with a JSON form with the email and password of the email
      * @return Response with the JSON response with the confirmation if the 
-     * user successfuly logged in or not
+     * user successfully logged in or not
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -65,7 +65,7 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
         return createActivateAccountResponse(userService.getEmail(),userService.getPassword(),userService.getActivationCode());
     }
     /**
-     * Creates a Reponse for the Login Request
+     * Creates a Response for the Login Request
      * <br>Check JSON messages for the content that is going to be sent on the response
      * @param email String with the user email
      * @param password String with the user password
@@ -130,7 +130,7 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
     private Response buildAuthenticationResponse(String authenticationToken){
         return authenticationToken!= null 
                 ? Response.status(Status.OK).entity(
-                    "{\n\t\"Code:\":\""+authenticationToken+"\"\n}").build()
+                    "{\n\t\"Code\":\""+authenticationToken+"\"\n}").build()
                 : Response.status(Status.UNAUTHORIZED).build();
     }
 }

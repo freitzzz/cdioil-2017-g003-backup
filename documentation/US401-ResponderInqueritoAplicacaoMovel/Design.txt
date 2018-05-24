@@ -1,0 +1,8 @@
+	______________________
+
+	       DESIGN
+	______________________
+
+   	Classes do domínio: RegisteredUser, SystemUser, Question, QuestionOption, Survey, Review
+   	Controller: AnswerSurveyController, AuthenticationController
+   	Repository: ProfileRepository, UserRepository, RegisteredUserRepository, SurveyRepository, ReviewRepository
