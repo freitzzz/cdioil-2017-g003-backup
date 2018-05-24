@@ -1,4 +1,4 @@
-package cdioil.frontoffice.application.restful;
+﻿package cdioil.feedbackmonkey.restful.utils.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -44,6 +44,7 @@ public final class UserJSONService {
      * @return String with the user activation code
      */
     public String getActivationCode(){return activationCode;}
+
     /**
      * Returns the user authentication token
      * @return String with the user authentication token

@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -17,6 +19,7 @@ import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.ListSurveyActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
+import cdioil.feedbackmonkey.restful.utils.json.UserJSONService;
 import okhttp3.Response;
 
 /**
@@ -46,9 +49,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initializeApplication();
         loginButton = findViewById(R.id.loginButton);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
+        emailText.setText("joao@email.com");
+        passwordText.setText("Password123");
         loginButton.setOnClickListener(view -> {
             //rest request
             Thread loginThread = new Thread(login());
@@ -110,10 +116,8 @@ public class LoginActivity extends AppCompatActivity {
      * @return String with the user's authentication token
      */
     private String getAuthenticationToken(String jsonBody){
-        String authToken;
-        String[] temp = jsonBody.split("\":\"");
-        authToken = temp[1].replaceAll("\"","");
-        return authToken;
+        System.out.println(jsonBody);
+        return new Gson().fromJson(jsonBody, UserJSONService.class).getAuthenticationToken();
     }
 
     /**
