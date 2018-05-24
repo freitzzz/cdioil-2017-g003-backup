@@ -36,6 +36,7 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:27.1.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    compile 'com.github.Triggertrap:SeekArc:v1.1'
 }
 /*Force resolution due to problem on test dependencies*/
 /*see answer @ https://stackoverflow.com/a/29937159*/
