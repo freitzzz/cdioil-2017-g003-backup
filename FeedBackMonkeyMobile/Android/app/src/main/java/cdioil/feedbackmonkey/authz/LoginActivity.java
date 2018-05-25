@@ -17,6 +17,7 @@ import javax.net.ssl.HttpsURLConnection;
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.ListSurveyActivity;
+import cdioil.feedbackmonkey.application.MainMenuActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.UserJSONService;
@@ -93,11 +94,11 @@ public class LoginActivity extends AppCompatActivity {
             }
             if(restResponse.code() == HttpsURLConnection.HTTP_OK){
                     //TODO go to app's main activity, pass authToken
-                Intent listSurveyIntent=new Intent(LoginActivity.this, ListSurveyActivity.class);
+                Intent mainMenuIntent=new Intent(LoginActivity.this, MainMenuActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("authenticationToken",getAuthenticationToken(restResponseBodyContent));
-                listSurveyIntent.putExtras(bundle);
-                startActivity(listSurveyIntent);
+                mainMenuIntent.putExtras(bundle);
+                startActivity(mainMenuIntent);
                 }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
                        showLoginErrorMessage("Login Inválido",
                                "\nCredenciais inválidas, tente novamente!\n");
