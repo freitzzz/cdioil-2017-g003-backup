@@ -88,26 +88,31 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
         if (registeredUser == null) {
             return createInvalidUserResponse();
         }
-        //Product product2 = new MarketStructureRepositoryImpl().getProductByCode(code);
-        //System.out.println(product2);
-        Iterable<Product> products = new ProductRepositoryImpl().findAll();
-        Product product = null;
+
+        List<Product> products = new ProductRepositoryImpl().getProductsByCode(code);
+        
+        if (products == null) {
+            return createProductNotFoundResponse();
+        }
+        
+        List<Survey> surveyList = new ArrayList<>();
+        SurveyRepositoryImpl surveyRepo = new SurveyRepositoryImpl();
+        
         for(Product p : products){
-            if(p.containsCode(code)){
-                product = p;
+            List<Survey> productSurveys = surveyRepo.getActiveSurveysByProductAndRegisteredUser(p, registeredUser);
+            if(productSurveys != null){
+                for(Survey s : productSurveys){
+                    if(!surveyList.contains(s)){
+                        surveyList.add(s);
+                    }
+                }
             }
         }
-        if (product == null) {
-            Response.status(Response.Status.NOT_FOUND).entity(JSON_PRODUCT_NOT_FOUND).build();
+        
+        if (surveyList.isEmpty()) {
+            return createNoAvailableSurveysResponse();
         }
-        List<Survey> listS = new SurveyRepositoryImpl().getActiveSurveysByProductAndRegisteredUser(product,registeredUser);
-        //controller should call this
-        //List<Survey> listS = Survey.getProductSurveys(new SurveyRepositoryImpl().getAllUserSurveys(registeredUser, 0), product);
-        System.out.println("list="+listS);
-        if (listS.isEmpty()) {
-            Response.status(Response.Status.NOT_FOUND).entity(JSON_SURVEY_NOT_FOUND).build();
-        }
-        return Response.status(Status.OK).entity(getSurveysAsJSON(listS)).build();
+        return Response.status(Status.OK).entity(getSurveysAsJSON(surveyList)).build();
     }
 
     /**
@@ -158,6 +163,17 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
     private Response createInvalidPaginationIDResponse() {
         return Response.status(Status.BAD_REQUEST)
                 .entity(JSON_INVALID_PAGINATION_ID)
+                .build();
+    }
+    
+    /**
+     * Creates a Response for warning the user that product does not exist.
+     *
+     * @return Response warning the user that the product does not exist
+     */
+    private Response createProductNotFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(JSON_PRODUCT_NOT_FOUND)
                 .build();
     }
 

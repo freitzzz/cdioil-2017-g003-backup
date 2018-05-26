@@ -16,11 +16,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.application.ListSurveyActivity;
 import cdioil.feedbackmonkey.application.MainMenuActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.UserJSONService;
+import cdioil.feedbackmonkey.utils.ToastNotification;
 import okhttp3.Response;
 
 /**
@@ -29,6 +29,11 @@ import okhttp3.Response;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class LoginActivity extends AppCompatActivity {
+    /**
+     * Constant that represents the message that ocures if the user tries to login when he has no
+     * internet connection
+     */
+    private static final String NO_INTERNET_CONNECTION="Não existe conexão à Internet!";
     /**
      * Login button.
      */
@@ -77,34 +82,37 @@ public class LoginActivity extends AppCompatActivity {
      */
     private Runnable login(){
         return () -> {
-                Response restResponse =
-            RESTRequest.create(BuildConfig.SERVER_URL
-                    .concat(FeedbackMonkeyAPI
-                    .getAPIEntryPoint()
-                    .concat(FeedbackMonkeyAPI.getResourcePath("authentication")
-                    .concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","login")))))
-                    .withMediaType(RESTRequest.RequestMediaType.JSON)
-                    .withBody("{\n\t\"email\":"+emailText.getText().toString()+",\"password\":"+
-                    passwordText.getText().toString()+"\n}").POST();
-                String restResponseBodyContent = "";
             try {
-                restResponseBodyContent = restResponse.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if(restResponse.code() == HttpsURLConnection.HTTP_OK){
+                Response restResponse = RESTRequest.create(BuildConfig.SERVER_URL
+                        .concat(FeedbackMonkeyAPI
+                                .getAPIEntryPoint()
+                                .concat(FeedbackMonkeyAPI.getResourcePath("authentication")
+                                        .concat(FeedbackMonkeyAPI.getSubResourcePath("authentication", "login")))))
+                        .withMediaType(RESTRequest.RequestMediaType.JSON)
+                        .withBody("{\n\t\"email\":" + emailText.getText().toString() + ",\"password\":" +
+                                passwordText.getText().toString() + "\n}").POST();
+                String restResponseBodyContent = "";
+                try {
+                    restResponseBodyContent = restResponse.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (restResponse.code() == HttpsURLConnection.HTTP_OK) {
                     //TODO go to app's main activity, pass authToken
-                Intent mainMenuIntent=new Intent(LoginActivity.this, MainMenuActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("authenticationToken",getAuthenticationToken(restResponseBodyContent));
-                mainMenuIntent.putExtras(bundle);
-                startActivity(mainMenuIntent);
-                }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
-                       showLoginErrorMessage("Login Inválido",
-                               "\nCredenciais inválidas, tente novamente!\n");
-                }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
-                        showLoginErrorMessage("Login Inválido",
-                        "A sua conta não está ativada!");
+                    Intent mainMenuIntent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("authenticationToken", getAuthenticationToken(restResponseBodyContent));
+                    mainMenuIntent.putExtras(bundle);
+                    startActivity(mainMenuIntent);
+                } else if (restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                    showLoginErrorMessage("Login Inválido",
+                            "\nCredenciais inválidas, tente novamente!\n");
+                } else if (restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                    showLoginErrorMessage("Login Inválido",
+                            "A sua conta não está ativada!");
+                }
+            }catch(IOException ioException){
+                ToastNotification.show(this,NO_INTERNET_CONNECTION);
             }
         };
     }

@@ -35,7 +35,13 @@ import okhttp3.Response;
  * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
  */
 public class ListSurveyActivity extends AppCompatActivity {
+    /**
+     * Constant that represents the Surveys resource path
+     */
     private static final String SURVEYS_RESOURCE_PATH=FeedbackMonkeyAPI.getResourcePath("Surveys");
+    /**
+     * Constant that represents the user available surveys resource path under survey resource
+     */
     private static final String USER_AVAILABLE_RESOURCE_PATH=FeedbackMonkeyAPI.getSubResourcePath("Surveys","Available User Surveys");
     /**
      * ListView that is hold by the scroll view
@@ -109,15 +115,14 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @throws IOException Throws IOException if an error ocured while sending the REST Request
      */
     private List<String> getNextSurveys() throws IOException {
-        String ok=BuildConfig.SERVER_URL
+        String userAvailableSurveysURL=BuildConfig.SERVER_URL
                 .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
                 .concat(SURVEYS_RESOURCE_PATH)
                 .concat(USER_AVAILABLE_RESOURCE_PATH)
                 .concat(authenticationToken)
                 .concat("?paginationID="+(currentPaginationID++));
-        Response requestResponse=RESTRequest.create(ok)
+        Response requestResponse=RESTRequest.create(userAvailableSurveysURL)
                 .GET();
-
         String responseBody=requestResponse.body().string();
         switch(requestResponse.code()){
             case 200:
