@@ -171,4 +171,13 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     public SKU getID() {
         return sku;
     }
+    
+    public boolean containsCode(String code){
+        for(Code c: codes){
+            if(c.getCodeAsString().equals(code)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

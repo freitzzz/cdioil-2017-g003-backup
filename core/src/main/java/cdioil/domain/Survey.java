@@ -163,11 +163,13 @@ public abstract class Survey implements Serializable {
     public Graph getGraphCopy() {
         return new Graph(graph);
     }
-
+    /**
+     * Returns the Survey name
+     * @return String with the survey name
+     */
     public String getName() {
-        return "Inquérito: ";
+        return "Inquérito: "+id;
     }
-
     /**
      * Survey's hash code.
      *

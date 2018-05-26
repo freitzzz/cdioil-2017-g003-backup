@@ -4,20 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/j_shine"
+    android:background="#FFFFFF"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
     tools:context="cdioil.feedbackmonkey.authz.LoginActivity">
 
     <Button
         android:id="@+id/loginButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="287dp"
+        android:layout_height="49dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/login_button_shape"
+        android:fontFamily="@font/roboto_mono_medium"
+        android:shadowDx="0"
+        android:shadowDy="0"
         android:text="@string/login"
+        android:textColor="#3D3D3D"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,8 +43,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.167"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/feedback_monkey_logo" />
 
     <EditText
         android:id="@+id/emailText"
@@ -51,6 +58,7 @@
         android:drawablePadding="5dp"
         android:drawableStart="@drawable/ic_email_black_18dp"
         android:ems="10"
+        android:fontFamily="@font/roboto_thin"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,6 +80,7 @@
         android:drawablePadding="5dp"
         android:drawableStart="@drawable/ic_vpn_key_black_18dp"
         android:ems="10"
+        android:fontFamily="@font/roboto_thin"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"

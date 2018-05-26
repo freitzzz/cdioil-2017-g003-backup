@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:seekarc="http://jitpack.io"
+    tools:context=".authz.QuantitativeQuestion">
+
+    <com.triggertrap.seekarc.SeekArc
+        android:id="@+id/seekArc"
+        android:layout_width="252dp"
+        android:layout_height="403dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="30dp"
+        app:clockwise="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.774"
+        app:progress="90"
+        app:progressWidth="6dp"
+        app:progressColor="#759997"
+        seekarc:max="5"
+        seekarc:rotation="180"
+        seekarc:startAngle="30"
+        seekarc:sweepAngle="300"
+        seekarc:touchInside="true"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="294dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text=""
+        android:textColor="#000000"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.172"
+        tools:text="Como classificaria o produto?" />
+
+
+</android.support.constraint.ConstraintLayout>

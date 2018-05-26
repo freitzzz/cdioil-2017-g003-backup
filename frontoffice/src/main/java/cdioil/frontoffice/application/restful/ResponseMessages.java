@@ -94,4 +94,21 @@ public interface ResponseMessages {
      * warning the user that the account has already been activated.
      */
     public static final String JSON_ACCOUNT_ALREADY_ACTIVATED = "{\n\t\"accountalreadyactivated\":\"true\"\n}";
+    /**
+     * Constant that represents the JSON used on the response message for warning 
+     * the user that his account was created with success
+     */
+    public static final String JSON_ACCOUNT_CREATED_WITH_SUCCESS="{\n\n\"accountcreationsuccessful\":\"true\"\n}";
+    
+    /**
+     * Constant that represents the JSON used on the response message for
+     * warning the user when the product was not found
+     */
+    public static final String JSON_PRODUCT_NOT_FOUND = "{\n\t\"productnotfound\":\"true\"\n}";
+    
+    /**
+     * Constant that represents the JSON used on the response message for
+     * warning the user when no surveys are found
+     */
+    public static final String JSON_SURVEY_NOT_FOUND = "{\n\t\"surveynotfound\":\"true\"\n}";
 }

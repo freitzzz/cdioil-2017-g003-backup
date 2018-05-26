@@ -5,7 +5,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--Enable hardware acceleration, since ZXing uses TextureView-->
     <application
+        android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,12 +24,8 @@
         </activity>
         <activity android:name=".authz.BinaryQuestion" />
         <activity android:name=".authz.QuantitativeQuestion" />
-        <activity android:name=".authz.MultipleQuestion"></activity>
+        <activity android:name=".authz.MultipleQuestion"/>
+        <activity android:name=".application.ListSurveyActivity" />
+        <activity android:name=".application.MainMenuActivity" />
     </application>
-
-        <activity android:name=".application.ListSurveyActivity">
-
-        </activity>
-    </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
