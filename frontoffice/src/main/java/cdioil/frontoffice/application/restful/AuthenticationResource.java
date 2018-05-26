@@ -3,6 +3,7 @@ package cdioil.frontoffice.application.restful;
 import cdioil.frontoffice.application.api.AuthenticationAPI;
 import cdioil.application.authz.AuthenticationController;
 import cdioil.application.domain.authz.exceptions.AuthenticationException;
+import cdioil.frontoffice.application.authz.RegisterUserController;
 import com.google.gson.Gson;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -65,6 +66,22 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
         return createActivateAccountResponse(userService.getEmail(),userService.getPassword(),userService.getActivationCode());
     }
     /**
+     * Registers an account using the FeedbackMonkey API
+     * @param jsonRegistration String with the register request body
+     * @return Response with the response regarding the account registration
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/register")
+    @Override
+    public Response registerAccount(String jsonRegistration){
+        RegistrationJSONService registrationService=new Gson().fromJson(jsonRegistration,RegistrationJSONService.class);
+        return createRegisterAccountResponse(registrationService.getEmail(),registrationService.getPassword()
+                ,registrationService.getName(),registrationService.getPhoneNumber(),registrationService.getLocation()
+                ,registrationService.getBirthDate());
+    }
+    /**
      * Creates a Response for the Login Request
      * <br>Check JSON messages for the content that is going to be sent on the response
      * @param email String with the user email
@@ -100,6 +117,19 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
             return createInvalidAuthenticationResponse(authenticationFailureException);
             //#TO-DO: Discuss UX in terms of "invalid JSON request formats"
         }
+    }
+    /**
+     * Creates a Response for the Register Account request
+     * @param registerForms Array of Strings with the registration form
+     * @return Response with the response for the register account request
+     */
+    private Response createRegisterAccountResponse(String... registerForms){
+        try{
+            new RegisterUserController(registerForms).registerUser();
+        }catch(IllegalArgumentException|IllegalStateException|IndexOutOfBoundsException registerException){
+           return Response.status(Status.BAD_REQUEST).entity(registerException.getMessage()).build();
+        }
+        return Response.status(Status.OK).entity(JSON_ACCOUNT_CREATED_WITH_SUCCESS).build();
     }
     /**
      * Creates an Response message with a response message for when the user authentication fails

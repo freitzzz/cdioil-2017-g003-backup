@@ -94,4 +94,9 @@ public interface ResponseMessages {
      * warning the user that the account has already been activated.
      */
     public static final String JSON_ACCOUNT_ALREADY_ACTIVATED = "{\n\t\"accountalreadyactivated\":\"true\"\n}";
+    /**
+     * Constant that represents the JSON used on the response message for warning 
+     * the user that his account was created with success
+     */
+    public static final String JSON_ACCOUNT_CREATED_WITH_SUCCESS="{\n\n\"accountcreationsuccessful\":\"true\"\n}";
 }

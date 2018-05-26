@@ -26,5 +26,6 @@
         <activity android:name=".authz.QuantitativeQuestion" />
         <activity android:name=".authz.MultipleQuestion"/>
         <activity android:name=".application.ListSurveyActivity" />
+        <activity android:name=".application.MainMenuActivity" />
     </application>
 </manifest>
