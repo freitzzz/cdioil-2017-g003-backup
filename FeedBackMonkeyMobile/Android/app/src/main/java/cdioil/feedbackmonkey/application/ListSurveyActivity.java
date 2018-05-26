@@ -37,6 +37,7 @@ import okhttp3.Response;
 public class ListSurveyActivity extends AppCompatActivity {
     private static final String SURVEYS_RESOURCE_PATH=FeedbackMonkeyAPI.getResourcePath("Surveys");
     private static final String USER_AVAILABLE_RESOURCE_PATH=FeedbackMonkeyAPI.getSubResourcePath("Surveys","Available User Surveys");
+    private static final String PRODUCT_CODE_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available Surveys By Product Code");
     /**
      * ListView that is hold by the scroll view
      */
@@ -55,6 +56,11 @@ public class ListSurveyActivity extends AppCompatActivity {
     private String authenticationToken;
 
     /**
+     * String with the scanned item code.
+     */
+    private String itemCode;
+
+    /**
      * Creates the current view
      * @param savedInstanceState Bundle with the previous state
      */
@@ -62,6 +68,9 @@ public class ListSurveyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authenticationToken=getIntent().getExtras().getString("authenticationToken");
+        if(getIntent().getExtras().containsKey("itemCode")){
+            itemCode = getIntent().getExtras().getString("itemCode");
+        }
         setContentView(R.layout.activity_list_survey_activity);
         configure();
     }
@@ -109,12 +118,22 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @throws IOException Throws IOException if an error ocured while sending the REST Request
      */
     private List<String> getNextSurveys() throws IOException {
-        String ok=BuildConfig.SERVER_URL
-                .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
-                .concat(SURVEYS_RESOURCE_PATH)
-                .concat(USER_AVAILABLE_RESOURCE_PATH)
-                .concat(authenticationToken)
-                .concat("?paginationID="+(currentPaginationID++));
+        String ok;
+
+        if(itemCode == null){
+            ok=BuildConfig.SERVER_URL
+                    .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
+                    .concat(SURVEYS_RESOURCE_PATH).concat(USER_AVAILABLE_RESOURCE_PATH)
+                    .concat(authenticationToken)
+                    .concat("?paginationID="+(currentPaginationID++));
+        }else{
+            ok=BuildConfig.SERVER_URL
+                    .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
+                    .concat(SURVEYS_RESOURCE_PATH).concat(PRODUCT_CODE_AVAILABLE_RESOURCE_PATH)
+                    .concat(authenticationToken)
+                    .concat("/")
+                    .concat(itemCode);
+        }
         Response requestResponse=RESTRequest.create(ok)
                 .GET();
 
@@ -134,6 +153,10 @@ public class ListSurveyActivity extends AppCompatActivity {
                 return null;
             case 401:
                 System.out.println("401 ->>>\n"+responseBody);
+            case 404:
+                //happens when no products are found
+                break;
+
         }
         return null;
     }

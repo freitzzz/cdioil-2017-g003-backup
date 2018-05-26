@@ -180,6 +180,7 @@ public class MainMenuActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
+    //Used by code scanner
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -190,13 +191,13 @@ public class MainMenuActivity extends AppCompatActivity {
             } else {
                 Log.d("MainActivity", "Scanned");
 
-                String productCode = result.getContents();
+                String itemCode = result.getContents();
 
-                if(!productCode.trim().isEmpty()) {
-                    Toast.makeText(this, "Código Lido: " + productCode, Toast.LENGTH_LONG).show();
+                if(!itemCode.trim().isEmpty()) {
+                    Toast.makeText(this, "Código Lido: " + itemCode, Toast.LENGTH_LONG).show();
 
                     Map<String, String> bundleExtras = new HashMap<>();
-                    bundleExtras.put("productCode", productCode);
+                    bundleExtras.put("itemCode", itemCode);
                     startListSurveyActivity(bundleExtras);
                 }
                 else{
