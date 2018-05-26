@@ -118,12 +118,17 @@ public class SignUpActivity extends AppCompatActivity {
         String password = passwordTextView.getText().toString();
         String phoneNumber = phoneNumberTextView.getText().toString();
 
-        Response restResponse = RESTRequest.
-                create(BuildConfig.SERVER_URL.
-                        concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
-                        concat(FeedbackMonkeyAPI.getResourcePath("regiserwhatever")).
-                        concat(FeedbackMonkeyAPI.getSubResourcePath("regiserwhatever","aougha")))
-                .POST();
+        Response restResponse = null;
+        try {
+            restResponse = RESTRequest.
+                    create(BuildConfig.SERVER_URL.
+                            concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
+                            concat(FeedbackMonkeyAPI.getResourcePath("regiserwhatever")).
+                            concat(FeedbackMonkeyAPI.getSubResourcePath("regiserwhatever","aougha")))
+                    .POST();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String restResponseBodyContent = "";
         try {
             restResponseBodyContent = restResponse.body().string();

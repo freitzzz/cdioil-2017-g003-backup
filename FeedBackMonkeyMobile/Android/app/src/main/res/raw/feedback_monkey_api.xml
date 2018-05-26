@@ -11,11 +11,19 @@
                     <method>POST</method>
                     <datatype>JSON</datatype>
                 </subresource>
+                <subresouce name="Register Account" path="/register">
+                    <method>POST</method>
+                    <datatype>JSON</datatype>
+                </subresouce>
             </subresources>
         </resource>
         <resource name="Surveys" path="/surveys">
             <subresources>
                 <subresource name="Available User Surveys" path="/useravailablesurveys/">
+                    <method>GET</method>
+                    <datatype>JSON</datatype>
+                </subresource>
+				<subresource name="Available Surveys By Product Code" path="/getSurveysByProductCode/">
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>

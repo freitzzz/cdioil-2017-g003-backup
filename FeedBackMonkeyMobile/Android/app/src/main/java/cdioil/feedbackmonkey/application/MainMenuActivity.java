@@ -2,19 +2,16 @@ package cdioil.feedbackmonkey.application;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -23,11 +20,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.authz.LoginActivity;
 
 public class MainMenuActivity extends AppCompatActivity {
     private static final int CURRENT_WINDOW_HEIGHT = Resources.getSystem().getDisplayMetrics().heightPixels;
@@ -52,15 +52,11 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             switch(i){
                                 case 0:
-                                    String authenticationToken = getIntent().getExtras().getString("authenticationToken");
-                                    Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("authenticationToken",authenticationToken);
-                                    listSurveyActivityIntent.putExtras(bundle);
-                                    startActivity(listSurveyActivityIntent);
+                                    startListSurveyActivity();
                                     break;
                                 case 1:
                                     //Create intent to qr scan
+                                    scanItemCode();
                                     break;
                                 case 2:
                                     //Create intent to profile
@@ -137,5 +133,80 @@ public class MainMenuActivity extends AppCompatActivity {
             return convertView;
         }
 
+    }
+
+    /**
+     * Starts the ListSurveyActivity activity with extra information being stored within the bundle, besides the authentication token.
+     * @param bundleExtras extra information being stored in the bundle
+     */
+    private void startListSurveyActivity(Map<String, String> bundleExtras){
+        String authenticationToken = getIntent().getExtras().getString("authenticationToken");
+        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("authenticationToken",authenticationToken);
+        for(Map.Entry<String, String> entry : bundleExtras.entrySet()){
+            bundle.putString(entry.getKey(), entry.getValue());
+        }
+        listSurveyActivityIntent.putExtras(bundle);
+        startActivity(listSurveyActivityIntent);
+    }
+
+    /**
+     * Starts the ListSurveyActivity activity with authentication token as the single content within the bundle.
+     */
+    private void startListSurveyActivity(){
+        String authenticationToken = getIntent().getExtras().getString("authenticationToken");
+        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("authenticationToken",authenticationToken);
+        listSurveyActivityIntent.putExtras(bundle);
+        startActivity(listSurveyActivityIntent);
+    }
+
+
+    /**
+     * Scans a SurveyItem's code.
+     */
+    private void scanItemCode() {
+
+        IntentIntegrator integrator = new IntentIntegrator(this);
+
+        //Set integrator settings here
+        //Define which codes can be read
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setOrientationLocked(false);     //orientation is set within the manifest
+        integrator.setPrompt("Por favor aponte a sua câmera para um código válido");
+
+        integrator.initiateScan();
+    }
+
+    //Used by code scanner
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Log.d("MainActivity", "Cancelled scan");
+                Toast.makeText(this, "Leitura Cancelada", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.d("MainActivity", "Scanned");
+
+                String itemCode = result.getContents();
+
+                if(!itemCode.trim().isEmpty()) {
+                    Toast.makeText(this, "Código Lido: " + itemCode, Toast.LENGTH_LONG).show();
+
+                    Map<String, String> bundleExtras = new HashMap<>();
+                    bundleExtras.put("itemCode", itemCode);
+                    startListSurveyActivity(bundleExtras);
+                }
+                else{
+                    Toast.makeText(this, "Por favor leia um código válido", Toast.LENGTH_LONG).show();
+                }
+            }
+        } else {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

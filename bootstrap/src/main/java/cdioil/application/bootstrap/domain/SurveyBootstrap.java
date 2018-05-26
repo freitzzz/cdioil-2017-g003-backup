@@ -1,7 +1,6 @@
 package cdioil.application.bootstrap.domain;
 
 import cdioil.domain.BinaryQuestion;
-import cdioil.domain.BinaryQuestionOption;
 import cdioil.domain.Category;
 import cdioil.domain.CategoryQuestionsLibrary;
 import cdioil.domain.GlobalSurvey;
@@ -27,6 +26,8 @@ import cdioil.persistence.impl.SurveyRepositoryImpl;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,8 +136,9 @@ public class SurveyBootstrap {
         survey.setNextQuestion(firstQuestion, thirdQuestion,
                 firstQuestion.getOptionList().get(1), 0); //false
         surveyRepository.add(survey);
-        
-        
+        for(int i=0;i<50;i++){
+            surveyRepository.add(createDummyTargetSurvey(registeredUser,manager));
+        }
         Review r = new Review(survey);         
         new ReviewRepositoryImpl().merge(r);
     }
@@ -196,5 +198,20 @@ public class SurveyBootstrap {
         }
         survey.changeState(SurveyState.ACTIVE);
         return survey;
+    }
+    /**
+     * Creates a dummy target survey for a certain registered user made by a certain manager
+     * @param registeredUser RegisteredUser with the user which the survey is targeted for
+     * @param manager Manager with the manager that created the survey
+     * @return Survey with the dummy target survey for a certain registered user made by a certain manager
+     */
+    private Survey createDummyTargetSurvey(RegisteredUser registeredUser,Manager manager){
+        List<SurveyItem> surveyItems=new ArrayList<>();
+        surveyItems.add(new MarketStructureRepositoryImpl().findCategoriesByPathPattern("10938DC").get(0));
+        UsersGroup usersGroup=new UsersGroup(manager);
+        usersGroup.addUser(registeredUser);
+        Survey dummyTargetSurvey=new TargetedSurvey(surveyItems,new TimePeriod(LocalDateTime.now(),LocalDateTime.of(2020,Month.MARCH,22,22,22)),usersGroup);
+        dummyTargetSurvey.changeState(SurveyState.ACTIVE);
+        return dummyTargetSurvey;
     }
 }

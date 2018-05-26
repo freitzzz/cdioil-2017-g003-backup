@@ -43,6 +43,11 @@ public final class RegisterUserController implements Serializable {
      */
     private static final String INVALID_NAME_MESSAGE="O nome do utilizador deve conter apenas o primeiro e segundo nome!";
     /**
+     * Constant that represents the message that ocures if the controller is initialized with an invalid 
+     * register form
+     */
+    private static final String INVALID_REGISTER_FORM="O form de registo é inválido";
+    /**
      * Constant that represents the Email identifier (<b>@</b>)
      */
     private static final String EMAIL_IDENTIFIER = "@";
@@ -54,7 +59,19 @@ public final class RegisterUserController implements Serializable {
      * Current SystemUserBuilder
      */
     private final transient SystemUserBuilder userBuilder=SystemUserBuilder.create();
-    
+    /**
+     * Builds a new RegisterUserController with a pre-defined registration form
+     * @param registerForm Array of Strings with the registration form
+     */
+    public RegisterUserController(String[] registerForm){
+        if(registerForm==null||registerForm.length==0)
+            throw new IllegalArgumentException(INVALID_REGISTER_FORM);
+        initializeRegisterForms(registerForm);
+    }
+    /**
+     * Empty constructor for console UI
+     */
+    public RegisterUserController(){}
     /**
      * Adds the email of the user to the current registration process
      * @param email String with the user email
@@ -155,5 +172,37 @@ public final class RegisterUserController implements Serializable {
      */
     private boolean sendRegisterCode(SystemUser user){
         return new EmailSenderService(user).sendActivationCode();
+    }
+    /**
+     * Initializes the controller with the registration form
+     * @param registerForms 
+     */
+    private void initializeRegisterForms(String[] registerForms){
+        for(int i=0;i<registerForms.length;i++){
+            switch(i){
+                case 0:
+                    addEmail(registerForms[i]);
+                    break;
+                case 1:
+                    addPassword(registerForms[i]);
+                    break;
+                case 2:
+                    addName(registerForms[i]);
+                    break;
+                case 3:
+                    addPhoneNumber(registerForms[i]);
+                    break;
+                case 4:
+                    if(registerForms[i]!=null)
+                        addLocation(registerForms[i]);
+                    break;
+                case 5:
+                    if(registerForms[i]!=null)
+                        addBirthDate(registerForms[i]);
+                    break;
+                default:
+                    throw new IllegalArgumentException(INVALID_REGISTER_FORM);
+            }
+        }
     }
 }
