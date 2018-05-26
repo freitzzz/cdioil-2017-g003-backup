@@ -1,5 +1,7 @@
 package cdioil.backoffice.webapp.admin;
 
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -13,6 +15,7 @@ import com.vaadin.ui.Window;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * The default UI for adding/removing categories
@@ -180,7 +183,8 @@ public abstract class CategoryManagementWindow extends Window {
                     doConfirmAction(categoriesPathList);
                 } catch (IllegalArgumentException e) {
                     Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
-                    e.printStackTrace();
+                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                            Level.SEVERE, e.getMessage());
                 }
             }
         });

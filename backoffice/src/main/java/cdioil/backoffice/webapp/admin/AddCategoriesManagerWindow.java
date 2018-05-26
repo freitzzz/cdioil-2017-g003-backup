@@ -38,7 +38,7 @@ public class AddCategoriesManagerWindow extends CategoryManagementWindow {
     /**
      * Controller class
      */
-    private CategoryManagementController controller;
+    private transient CategoryManagementController controller;
 
     /**
      * Creates window with a manager email
