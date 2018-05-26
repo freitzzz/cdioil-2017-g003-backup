@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -21,6 +24,7 @@ import cdioil.feedbackmonkey.application.MainMenuActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.UserJSONService;
+import cdioil.feedbackmonkey.utils.ToastNotification;
 import okhttp3.Response;
 
 /**
@@ -89,20 +93,21 @@ public class LoginActivity extends AppCompatActivity {
                 String restResponseBodyContent = "";
             try {
                 restResponseBodyContent = restResponse.body().string();
-            } catch (IOException e) {
+            } catch (IOException|NullPointerException e) {
+                showNoConnectionToast();
                 e.printStackTrace();
             }
-            if(restResponse.code() == HttpsURLConnection.HTTP_OK){
+            if(restResponse!=null&&restResponse.code() == HttpsURLConnection.HTTP_OK){
                     //TODO go to app's main activity, pass authToken
                 Intent mainMenuIntent=new Intent(LoginActivity.this, MainMenuActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("authenticationToken",getAuthenticationToken(restResponseBodyContent));
                 mainMenuIntent.putExtras(bundle);
                 startActivity(mainMenuIntent);
-                }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
+                }else if(restResponse!=null&&restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
                        showLoginErrorMessage("Login Inválido",
                                "\nCredenciais inválidas, tente novamente!\n");
-                }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
+                }else if(restResponse!=null&&restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
                         showLoginErrorMessage("Login Inválido",
                         "A sua conta não está ativada!");
             }
@@ -142,5 +147,8 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         }.start();
+    }
+    private void showNoConnectionToast(){
+        ToastNotification.show(this,"Não existe conexão há Internet!");
     }
 }

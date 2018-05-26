@@ -15,17 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".authz.LoginActivity">
+        <activity android:name=".authz.LoginActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".authz.BinaryQuestion" />
-        <activity android:name=".authz.QuantitativeQuestion" />
-        <activity android:name=".authz.MultipleQuestion"/>
-        <activity android:name=".application.ListSurveyActivity" />
-        <activity android:name=".application.MainMenuActivity" />
+        <activity android:name=".authz.BinaryQuestion"  />
+        <activity android:name=".authz.QuantitativeQuestion"/>
+        <activity android:name=".authz.MultipleQuestion" />
+        <activity android:name=".application.ListSurveyActivity"/>
+        <activity android:name=".application.MainMenuActivity"/>
     </application>
 </manifest>
