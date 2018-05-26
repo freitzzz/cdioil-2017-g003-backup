@@ -35,8 +35,17 @@ import okhttp3.Response;
  * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
  */
 public class ListSurveyActivity extends AppCompatActivity {
+    /**
+     * Constant that represents the Surveys resource path
+     */
     private static final String SURVEYS_RESOURCE_PATH=FeedbackMonkeyAPI.getResourcePath("Surveys");
+    /**
+     * Constant that represents the user available surveys resource path under survey resource
+     */
     private static final String USER_AVAILABLE_RESOURCE_PATH=FeedbackMonkeyAPI.getSubResourcePath("Surveys","Available User Surveys");
+    /**
+     * Constant that represents the surveys available to the user with a given code resource path under survey resource.
+     */
     private static final String PRODUCT_CODE_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available Surveys By Product Code");
     /**
      * ListView that is hold by the scroll view
@@ -118,25 +127,26 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @throws IOException Throws IOException if an error ocured while sending the REST Request
      */
     private List<String> getNextSurveys() throws IOException {
-        String ok;
+        String userAvailableSurveysURL;
 
         if(itemCode == null){
-            ok=BuildConfig.SERVER_URL
+            userAvailableSurveysURL=BuildConfig.SERVER_URL
                     .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
-                    .concat(SURVEYS_RESOURCE_PATH).concat(USER_AVAILABLE_RESOURCE_PATH)
+                    .concat(SURVEYS_RESOURCE_PATH)
+                    .concat(USER_AVAILABLE_RESOURCE_PATH)
                     .concat(authenticationToken)
                     .concat("?paginationID="+(currentPaginationID++));
         }else{
-            ok=BuildConfig.SERVER_URL
+            userAvailableSurveysURL = BuildConfig.SERVER_URL
                     .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
-                    .concat(SURVEYS_RESOURCE_PATH).concat(PRODUCT_CODE_AVAILABLE_RESOURCE_PATH)
+                    .concat(SURVEYS_RESOURCE_PATH)
+                    .concat(PRODUCT_CODE_AVAILABLE_RESOURCE_PATH)
                     .concat(authenticationToken)
                     .concat("/")
                     .concat(itemCode);
         }
-        Response requestResponse=RESTRequest.create(ok)
+        Response requestResponse=RESTRequest.create(userAvailableSurveysURL)
                 .GET();
-
         String responseBody=requestResponse.body().string();
         switch(requestResponse.code()){
             case 200:

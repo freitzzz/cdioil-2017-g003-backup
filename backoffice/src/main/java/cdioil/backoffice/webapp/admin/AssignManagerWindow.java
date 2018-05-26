@@ -30,6 +30,8 @@ public class AssignManagerWindow extends CategoryManagementWindow {
             checkIfUserIsNotAdminOrManager();
         } catch (IllegalArgumentException e) {
             Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+            close();
+            return;
         }
     }
 
