@@ -64,6 +64,7 @@ public class SurveyBootstrap {
         List<SurveyItem> surveyItems = new LinkedList<>();
         Category bootstrapCategory = marketStructureRepository
                 .findCategoriesByPathPattern("10938DC").get(0);
+        surveyItems.add(bootstrapCategory.getProductSetIterator().next());
         surveyItems.add(bootstrapCategory);
 
         Survey survey = new GlobalSurvey(surveyItems, new TimePeriod(LocalDateTime.now(),
