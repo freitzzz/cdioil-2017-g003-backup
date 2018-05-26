@@ -23,6 +23,10 @@
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>
+				<subresource name="Available Surveys By Product Code" path="/getSurveysByProductCode/">
+                    <method>GET</method>
+                    <datatype>JSON</datatype>
+                </subresource>
             </subresources>
         </resource>
     </resources>

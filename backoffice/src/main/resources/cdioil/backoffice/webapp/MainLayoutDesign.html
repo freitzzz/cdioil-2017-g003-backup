@@ -8,10 +8,10 @@
  <body>
   <vaadin-css-layout responsive size-full>
    <vaadin-horizontal-layout spacing="false" responsive size-full _id="leftAndRightLayout">
-    <vaadin-panel primary-style-name="valo-menu" size-full _id="leftPanel" :expand="0.2">
+    <vaadin-panel primary-style-name="valo-menu" responsive size-full _id="leftPanel" :expand="0.22">
      <vaadin-grid-layout size-full margin>
       <row>
-       <column expand="1">
+       <column>
         <vaadin-vertical-layout :center>
          <vaadin-image width="90px" height="90px" _id="userAvatar" :center></vaadin-image>
          <vaadin-label height-full plain-text _id="usernameLabel" :center :expand>
@@ -22,7 +22,7 @@
       </row>
       <row expand="1">
        <column>
-        <vaadin-css-layout width-full _id="btnPanel"></vaadin-css-layout>
+        <vaadin-vertical-layout responsive size-auto _id="btnPanel"></vaadin-vertical-layout>
        </column>
       </row>
       <row expand="1"></row>
@@ -30,7 +30,7 @@
       <row></row>
      </vaadin-grid-layout>
     </vaadin-panel>
-    <vaadin-panel responsive size-full _id="rightPanel" :middle :center :expand="0.8"></vaadin-panel>
+    <vaadin-panel responsive size-full _id="rightPanel" :expand="0.78"></vaadin-panel>
    </vaadin-horizontal-layout>
   </vaadin-css-layout>
  </body>
