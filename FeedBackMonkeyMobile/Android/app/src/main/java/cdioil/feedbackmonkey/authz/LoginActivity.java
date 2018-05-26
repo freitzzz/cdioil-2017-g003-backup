@@ -5,10 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -16,7 +22,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.application.ListSurveyActivity;
 import cdioil.feedbackmonkey.application.MainMenuActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
@@ -33,6 +38,14 @@ public class LoginActivity extends AppCompatActivity {
      * Login button.
      */
     private Button loginButton;
+    /**
+    * Sign up button.
+    */
+    private Button signupButton;
+    /**
+     * Activate account button.
+     */
+    private Button activateAccountButton;
     /**
      * Text field for email address.
      */
@@ -54,10 +67,64 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
+        signupButton = findViewById(R.id.signupButton);
+        activateAccountButton = findViewById(R.id.activateAccountButton);
+        startLogin();
+        startActivateAccount();
+        startSignUp();
+    }
+
+    /**
+     * Sets on click listener to begin the login process.
+     */
+    private void startLogin(){
         loginButton.setOnClickListener(view -> {
-            //rest request
             Thread loginThread = new Thread(login());
             loginThread.start();
+        });
+    }
+
+    /**
+     * Sets on click listener to begin the activating account process.
+     */
+    private void startActivateAccount(){
+        activateAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog activateAccountAlert =
+                                new AlertDialog.Builder(LoginActivity.this).create();
+                        activateAccountAlert.setTitle("Ativação de Conta");
+                        activateAccountAlert.setMessage("Insira o seu código de ativação");
+                        activateAccountAlert.setIcon(R.drawable.ic_info_black_18dp);
+                        final EditText activationCodeInput = new EditText(LoginActivity.this);
+                        activationCodeInput.setHint("Código de Ativação Aqui");
+                        activationCodeInput.setGravity(Gravity.CENTER);
+                        activateAccountAlert.setView(activationCodeInput);
+                        activateAccountAlert.setButton(DialogInterface.BUTTON_NEUTRAL,"Ativar Conta",
+                                new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //REST request to activate account
+                                //show toast or other component with success message
+                            }
+                        });
+                        activateAccountAlert.show();
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Sets on click listener to begin the sign up process.
+     */
+    private void startSignUp(){
+        signupButton.setOnClickListener(view -> {
+            Intent signupIntent = new Intent(LoginActivity.this,SignUpActivity.class);
+            startActivity(signupIntent);
         });
     }
 
@@ -93,11 +160,12 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             if(restResponse.code() == HttpsURLConnection.HTTP_OK){
-                    //TODO go to app's main activity, pass authToken
                 Intent mainMenuIntent=new Intent(LoginActivity.this, MainMenuActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("authenticationToken",getAuthenticationToken(restResponseBodyContent));
                 mainMenuIntent.putExtras(bundle);
+                emailText.getText().clear();
+                passwordText.getText().clear();
                 startActivity(mainMenuIntent);
                 }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
                        showLoginErrorMessage("Login Inválido",
@@ -139,6 +207,8 @@ public class LoginActivity extends AppCompatActivity {
                     });
                     invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
                     invalidCredentialsAlert.show();
+                    emailText.getText().clear();
+                    passwordText.getText().clear();
                 });
             }
         }.start();

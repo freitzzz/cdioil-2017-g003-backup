@@ -3,4 +3,16 @@
     <string name="login">L O G I N</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="signup">Não tem uma conta? Registe-se no FeedbackMonkey!</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="signup_continue">Adicionar Informação Opcional</string>
+    <string name="first_name">Primeiro Nome</string>
+    <string name="last_name">Último Nome</string>
+    <string name="phone_number">Telemóvel</string>
+    <string name="birth_date">Data de Nascimento (aaaa/mm/dd)</string>
+    <string name="location">Localidade</string>
+    <string name="submit">Submeter</string>
+    <string name="additional_data">Dados Adicionais</string>
+    <string name="create_account">Efetuar Registo</string>
+    <string name="activate_account">Ative a sua conta aqui!</string>
 </resources>
