@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -379,5 +380,30 @@ public class MarketStructureTest {
         struct.updateProduct(cat, null);
         
         //How to kill if negated conditional mutator?
+    }
+
+    @Test
+    public void ensureReturnsDirectChildrenCategories() {
+        MarketStructure mk = new MarketStructure();
+        Category cat1 = new Category("Cat1", "10DC");
+        Category cat2 = new Category("Cat2", "10DC-10UN");
+        Category cat3 = new Category("Cat3", "10DC-11UN");
+        Category cat4 = new Category("Cat4", "10DC-12UN");
+        Category cat5 = new Category("Cat5", "10DC-12UN-100CAT");
+
+        mk.addCategory(cat1);
+        mk.addCategory(cat2);
+        mk.addCategory(cat3);
+        mk.addCategory(cat4);
+        mk.addCategory(cat5);
+
+        List<Category> cat1DirectChildren = Arrays.asList(cat2, cat3, cat4);
+        assertEquals(mk.getDirectChildren(cat1), cat1DirectChildren);
+
+        List<Category> cat4DirectChildren = Arrays.asList(cat5);
+        assertEquals(mk.getDirectChildren(cat4), cat4DirectChildren);
+
+        Category nonExistantCat = new Category("null cat", "12DC");
+        assertTrue(mk.getDirectChildren(nonExistantCat) == null);
     }
 }

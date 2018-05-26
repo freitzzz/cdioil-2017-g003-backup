@@ -1,6 +1,7 @@
 package cdioil.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -103,8 +104,8 @@ public class MarketStructure implements Serializable {
         Node parentNode = searchParentNode(c);
 
         if (parentNode != null && parentNode.addChild(new Node(c))) {
-                marketSize++;
-                return true;
+            marketSize++;
+            return true;
         }
         return false;
     }
@@ -200,7 +201,6 @@ public class MarketStructure implements Serializable {
     /**
      * Returns a collection of all the leaf Categories in the Market Structure.
      *
-     *
      * @return an iterable containing all the Categories on the bottom of the Market Structure
      */
     public Iterable<Category> getLeaves() {
@@ -216,7 +216,7 @@ public class MarketStructure implements Serializable {
      * Recursively searches for all the nodes in the the Market Structure and adds their elements to the list.
      *
      * @param leaves list of leaf Categories
-     * @param node the current node
+     * @param node   the current node
      */
     private void searchLeaves(List<Category> leaves, Node node) {
 
@@ -234,6 +234,7 @@ public class MarketStructure implements Serializable {
     }
 
     //TODO: what happens to the products added to a node that was previously a leaf, but no longer is?
+
     /**
      * Adds the given Product to the given Category, if that Category is a Market Structure leaf.
      *
@@ -322,7 +323,7 @@ public class MarketStructure implements Serializable {
     /**
      * Recursive getAllCategories, adds Category in node to the list
      *
-     * @param lc list of categories to fill
+     * @param lc   list of categories to fill
      * @param node current node
      */
     private void getAllCategories(List<Category> lc, Node node) {
@@ -331,5 +332,28 @@ public class MarketStructure implements Serializable {
         for (Node child : node.getChildren()) {
             getAllCategories(lc, child);
         }
+    }
+
+    /**
+     * Finds all directly connected nodes of a given category
+     * @param cat given category
+     * @return list of directly connected children
+     */
+    public List<Category> getDirectChildren(Category cat) {
+        List<Category> directChildren = new ArrayList<>();
+
+        Node foundNode = searchNode(cat);
+
+        if (foundNode == null) {
+            return null;
+        }
+
+        Iterator<Node> children = foundNode.getChildren().iterator();
+
+        while (children.hasNext()) {
+            directChildren.add(children.next().getElement());
+        }
+
+        return directChildren;
     }
 }
