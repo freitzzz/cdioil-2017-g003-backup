@@ -1,4 +1,4 @@
-package cdioil.frontoffice.application.restful;
+package cdioil.frontoffice.application.restful.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -41,6 +41,27 @@ public final class RegistrationJSONService {
     @SerializedName(value="birthDate",alternate = {"BirthDate","BIRTHDATE"})
     private String birthDate;
     /**
+     * String with the message that informs the client about the registration success details
+     */
+    @SerializedName(value="message",alternate = {"Message","MESSAGE"})
+    private String message;
+    /**
+     * String with the field which the registration has failed on
+     */
+    @SerializedName(value="field",alternate = {"Field","FIELD"})
+    private String field;
+    /**
+     * Builds a new RegistrationJSONService with the message & field which the 
+     * registration has failed on
+     * @param message String with the message containing the details about the registration 
+     * failure
+     * @param field String with the field which the registration has failed on
+     */
+    public RegistrationJSONService(String message,String field){
+        this.message=message;
+        this.field=field;
+    }
+    /**
      * Returns the user email
      * @return String with the user email
      */
@@ -70,4 +91,14 @@ public final class RegistrationJSONService {
      * @return String with the user birth date
      */
     public String getBirthDate(){return birthDate;}
+    /**
+     * Returns the message containing details about the registration success
+     * @return String with the message that contains details about the registration success
+     */
+    public String getMessage(){return message;}
+    /**
+     * Returns the field which the registration has failed on
+     * @return String with the field which the registration has failed on
+     */
+    public String getField(){return field;}
 }

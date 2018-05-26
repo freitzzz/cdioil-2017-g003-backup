@@ -211,6 +211,7 @@ public class SurveyBootstrap {
         UsersGroup usersGroup=new UsersGroup(manager);
         usersGroup.addUser(registeredUser);
         Survey dummyTargetSurvey=new TargetedSurvey(surveyItems,new TimePeriod(LocalDateTime.now(),LocalDateTime.of(2020,Month.MARCH,22,22,22)),usersGroup);
+        dummyTargetSurvey.changeState(SurveyState.ACTIVE);
         return dummyTargetSurvey;
     }
 }

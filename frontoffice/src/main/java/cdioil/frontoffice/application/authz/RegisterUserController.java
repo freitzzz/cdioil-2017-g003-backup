@@ -178,29 +178,31 @@ public final class RegisterUserController implements Serializable {
      * @param registerForms 
      */
     private void initializeRegisterForms(String[] registerForms){
-        int i;
-        switch(i=registerForms.length){
-            case 0:
-                addEmail(registerForms[i]);
-                break;
-            case 1:
-                addPassword(registerForms[i]);
-                break;
-            case 2:
-                addName(registerForms[i]);
-                break;
-            case 3:
-                addPhoneNumber(registerForms[i]);
-                break;
-            case 4:
-                if(registerForms[i]!=null)
-                    addLocation(registerForms[i]);
-                break;
-            case 5:
-                if(registerForms[i]!=null)
-                    addBirthDate(registerForms[i]);
-            default:
-                throw new IllegalArgumentException(INVALID_REGISTER_FORM);
+        for(int i=0;i<registerForms.length;i++){
+            switch(i){
+                case 0:
+                    addEmail(registerForms[i]);
+                    break;
+                case 1:
+                    addPassword(registerForms[i]);
+                    break;
+                case 2:
+                    addName(registerForms[i]);
+                    break;
+                case 3:
+                    addPhoneNumber(registerForms[i]);
+                    break;
+                case 4:
+                    if(registerForms[i]!=null)
+                        addLocation(registerForms[i]);
+                    break;
+                case 5:
+                    if(registerForms[i]!=null)
+                        addBirthDate(registerForms[i]);
+                    break;
+                default:
+                    throw new IllegalArgumentException(INVALID_REGISTER_FORM);
+            }
         }
     }
 }

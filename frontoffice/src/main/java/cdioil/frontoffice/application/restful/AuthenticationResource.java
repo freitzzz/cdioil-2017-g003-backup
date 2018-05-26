@@ -1,5 +1,7 @@
 package cdioil.frontoffice.application.restful;
 
+import cdioil.frontoffice.application.restful.json.RegistrationJSONService;
+import cdioil.frontoffice.application.restful.json.UserJSONService;
 import cdioil.frontoffice.application.api.AuthenticationAPI;
 import cdioil.application.authz.AuthenticationController;
 import cdioil.application.domain.authz.exceptions.AuthenticationException;
@@ -15,6 +17,8 @@ import javax.ws.rs.core.Response.Status;
 
 /**
  * Resource class that represents the resource that holds all authentication services
+ * <br>See <a href="https://bitbucket.org/lei-isep/cdioil-2017-g003/wiki
+ * /EngenhariaRequisitos/RestAPI.md">for more info about the request</a>
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  * @since Version 5.0 of FeedbackMonkey
@@ -67,6 +71,11 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
     }
     /**
      * Registers an account using the FeedbackMonkey API
+     * <br>Resource URI: <code><b>/register</b></code>
+     * <br>Method Type: <code><b>POST</b></code>
+     * <br>Method Data Type: <code><b>JSON</b></code>
+     * <br><b>POST</b> Request data should have a pair-value for each registration 
+     * field
      * @param jsonRegistration String with the register request body
      * @return Response with the response regarding the account registration
      */
@@ -126,8 +135,11 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
     private Response createRegisterAccountResponse(String... registerForms){
         try{
             new RegisterUserController(registerForms).registerUser();
-        }catch(IllegalArgumentException|IllegalStateException|IndexOutOfBoundsException registerException){
-           return Response.status(Status.BAD_REQUEST).entity(registerException.getMessage()).build();
+        }catch(IllegalArgumentException|IllegalStateException registerException){
+           return Response.status(Status.BAD_REQUEST)
+                    .entity(new Gson()
+                            .toJson(new RegistrationJSONService(registerException.getMessage(),"#TO-DO")))
+                   .build();
         }
         return Response.status(Status.OK).entity(JSON_ACCOUNT_CREATED_WITH_SUCCESS).build();
     }
