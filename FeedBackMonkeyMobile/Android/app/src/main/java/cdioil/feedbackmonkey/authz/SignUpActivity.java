@@ -1,18 +1,28 @@
 package cdioil.feedbackmonkey.authz;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
+import cdioil.feedbackmonkey.restful.utils.json.RegistrationJSONService;
+import cdioil.feedbackmonkey.utils.ToastNotification;
+import okhttp3.MediaType;
 import okhttp3.Response;
 
 /**
@@ -21,6 +31,10 @@ import okhttp3.Response;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class SignUpActivity extends AppCompatActivity {
+    /**
+     * Message indicating the user doesn't have an internet connection.
+     */
+    private static final String NO_INTERNET_CONNECTION="Não existe conexão à Internet!";
     /**
      * Text view for the user's first name.
      */
@@ -84,7 +98,38 @@ public class SignUpActivity extends AppCompatActivity {
     private Runnable createAccount(){
         return () ->{
             if(validateCredentials()){
-                //Warn user they'll be sent an activation code, go back to LoginActivity
+                String firstName = firstNameTextView.getText().toString();
+                String lastName = lastNameTextView.getText().toString();
+                String email = emailTextView.getText().toString();
+                String password = passwordTextView.getText().toString();
+                String phoneNumber = phoneNumberTextView.getText().toString();
+                String restRequestBody = new Gson().toJson(new RegistrationJSONService(email,password,
+                        firstName + " " + lastName
+                        ,phoneNumber,null,null));
+                String restResponseBodyContent = "";
+                Response restResponse = null;
+                try {
+                    restResponse = RESTRequest.
+                            create(BuildConfig.SERVER_URL.
+                                    concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
+                                    concat(FeedbackMonkeyAPI.getResourcePath("authentication")).
+                                    concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register"))).
+                            withMediaType(RESTRequest.RequestMediaType.JSON).
+                            withBody(restRequestBody).
+                            POST();
+                    if(restResponse.code() == HttpsURLConnection.HTTP_OK){
+                        //warn user they'll receive an activation code in their email
+                        //go back to login activity
+                    }else if(restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED){
+                        //warn user they're not authorized(????) to register
+                        // go back to login activity
+                    }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
+                        //warn user about something
+                        // go back to login activity
+                    }
+                } catch (IOException e) {
+                    ToastNotification.show(this,NO_INTERNET_CONNECTION);
+                }
             }
         };
     }
@@ -96,10 +141,37 @@ public class SignUpActivity extends AppCompatActivity {
      */
     private Runnable continueSignup(){
         return () ->{
-            /*if(validateCredentials()){
-                //Intent popupIntent = new Intent(SignUpActivity.this,SignUpPopUpActivity.class);
-                //startActivity(popupIntent);
-            }*/
+            if(validateCredentials()){
+                SignUpActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder activateAccountAlert =
+                                new AlertDialog.Builder(SignUpActivity.this);
+                        activateAccountAlert.setIcon(R.drawable.ic_info_black_18dp);
+                        LayoutInflater layoutInflater = LayoutInflater.from(SignUpActivity.this);
+                        View promptView = layoutInflater.inflate(R.layout.signup_optional_info_view, null);
+                        activateAccountAlert.setView(promptView);
+                        Button sendRegisterRequestButton = promptView.findViewById(R.id.signupRequestButton);
+                        EditText locationText = promptView.findViewById(R.id.signupLocationText);
+                        EditText birthDateText = promptView.findViewById(R.id.signupBirthDateText);
+                        sendRegisterRequestButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String firstName = firstNameTextView.getText().toString();
+                                String lastName = lastNameTextView.getText().toString();
+                                String email = emailTextView.getText().toString();
+                                String password = passwordTextView.getText().toString();
+                                String phoneNumber = phoneNumberTextView.getText().toString();
+                                String location = locationText.getText().toString();
+                                String birthDate = birthDateText.getText().toString();
+                                //rest request to register account
+                                //show toast with success/failure message and go back to login screen
+                            }
+                        });
+                        activateAccountAlert.show();
+                    }
+                });
+            }
         };
 
     }
@@ -117,41 +189,26 @@ public class SignUpActivity extends AppCompatActivity {
         String email = emailTextView.getText().toString();
         String password = passwordTextView.getText().toString();
         String phoneNumber = phoneNumberTextView.getText().toString();
-
+        String restRequestBody = new Gson().toJson(new RegistrationJSONService(email,password,
+                firstName + " " + lastName
+                ,phoneNumber,null,null));
+        String restResponseBodyContent = "";
         Response restResponse = null;
         try {
-            restResponse = RESTRequest.
+             restResponse = RESTRequest.
                     create(BuildConfig.SERVER_URL.
                             concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
-                            concat(FeedbackMonkeyAPI.getResourcePath("")).
-                            concat(FeedbackMonkeyAPI.getSubResourcePath("regiserwhatever","aougha")))
-                    .POST();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String restResponseBodyContent = "";
-        try {
+                            concat(FeedbackMonkeyAPI.getResourcePath("authentication")).
+                            concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register")).
+                            concat("?validate=true")).
+                    withMediaType(RESTRequest.RequestMediaType.JSON).
+                    withBody(restRequestBody).
+                    POST();
             restResponseBodyContent = restResponse.body().string();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(restResponseBodyContent.equals("invalidFirstName:true")){
-            //txtView.setAlert
-            firstNameTextView.setError("mano tens o 1º nome errado lmao xDDDDDDDDD");
-            return false;
-        }else if(restResponseBodyContent.equals("invalidLastName:true")){
-            //TxtView.setAlert
-            return false;
-        }else if(restResponseBodyContent.equals("invalidEmail:true")){
-            //TxtView.setAlert
-            return false;
-        }else if(restResponseBodyContent.equals("invalidPassword:true")){
-            //TxtView.setAlert
-            return false;
-        }else if(restResponseBodyContent.equals("invalidPhoneNumber:true")){
-            //TxtView.setAlert
-            return false;
+            ToastNotification.show(this,NO_INTERNET_CONNECTION);
         }
         return true;
     }
+
 }
