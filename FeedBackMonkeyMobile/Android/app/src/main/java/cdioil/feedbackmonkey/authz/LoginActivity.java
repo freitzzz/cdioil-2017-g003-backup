@@ -207,8 +207,7 @@ public class LoginActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putString("authenticationToken", getAuthenticationToken(restResponseBodyContent));
                     mainMenuIntent.putExtras(bundle);
-                    emailText.getText().clear();
-                    passwordText.getText().clear();
+                    runOnUiThread(this::clearActivityComponents);
                     startActivity(mainMenuIntent);
                 } else if (restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     showLoginErrorMessage("Login Inválido",
@@ -305,5 +304,13 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void showToastMessage(String toastMessage) {
         LoginActivity.this.runOnUiThread(() -> ToastNotification.show(LoginActivity.this, toastMessage));
+    }
+
+    /**
+     * Clears the current activity components
+     */
+    private void clearActivityComponents(){
+        emailText.getText().clear();
+        passwordText.getText().clear();
     }
 }
