@@ -141,7 +141,8 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
         }catch(IllegalArgumentException|IllegalStateException registerException){
            return Response.status(Status.BAD_REQUEST)
                     .entity(new Gson()
-                            .toJson(new RegistrationJSONService(registerException.getMessage(),"#TO-DO")))
+                            .toJson(new RegistrationJSONService(registerException.getMessage()
+                                    ,registerException.getCause().getMessage())))
                    .build();
         }
         return Response.status(Status.OK).entity(JSON_ACCOUNT_CREATED_WITH_SUCCESS).build();

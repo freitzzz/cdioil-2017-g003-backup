@@ -83,7 +83,8 @@ public class Location implements ValueObject,Serializable{
      */
     private void checkLocation(String location){
         if(location==null||location.replaceAll(REGEX_ALL_SPACES,EMPTY_STRING).isEmpty()){
-            throw new IllegalArgumentException(INVALID_LOCATION_MESSAGE);
+            throw new IllegalArgumentException(INVALID_LOCATION_MESSAGE
+                    ,new Throwable(this.getClass().getSimpleName()));
         }
     }
 }

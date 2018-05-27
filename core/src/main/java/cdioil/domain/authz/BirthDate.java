@@ -32,7 +32,7 @@ public class BirthDate implements ValueObject, Serializable {
     public BirthDate(LocalDate birthDate) {
         if (birthDate == null) {
             throw new IllegalArgumentException("A data de nascimento não pode "
-                    + "ser null");
+                    + "ser null",new Throwable(this.getClass().getSimpleName()));
         }
         this.dateOfBirth = birthDate;
     }

@@ -140,7 +140,8 @@ public class Email implements Serializable,ValueObject {
      */
     private void validateEmail(String email){
         if(email==null||email.isEmpty())
-            throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
+            throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE
+                    ,new Throwable(this.getClass().getSimpleName()));
         String regexEmail=REGEX_GENERAL;
         if(checkDomain(email,REGEX_DOMAIN_GMAIL)){
             regexEmail=REGEX_GMAIL;
@@ -150,7 +151,8 @@ public class Email implements Serializable,ValueObject {
             regexEmail=REGEX_YAHOO;
         }
         if(!checkEmail(email,regexEmail))
-            throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
+            throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE
+                    ,new Throwable(this.getClass().getSimpleName()));
     }
     /**
      * Method that verifies if an email belongs to a certain domain

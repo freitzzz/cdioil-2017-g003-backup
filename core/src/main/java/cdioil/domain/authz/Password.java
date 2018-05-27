@@ -69,7 +69,8 @@ public class Password implements Serializable, ValueObject {
      */
     public Password(String password) {
         if (strength(password).equalsIgnoreCase(WEAK_MESSAGE)) {
-            throw new IllegalArgumentException(WEAK_MESSAGE);
+            throw new IllegalArgumentException(WEAK_MESSAGE
+                    ,new Throwable(this.getClass().getSimpleName()));
         }
 
         salt = generateSalt();
