@@ -111,4 +111,9 @@ public interface ResponseMessages {
      * warning the user when no surveys are found
      */
     public static final String JSON_SURVEY_NOT_FOUND = "{\n\t\"surveynotfound\":\"true\"\n}";
+    /**
+     * Constant that represents the JSON used on the response message for
+     * warning the user the registration form is valid
+     */
+    public static final String JSON_VALID_REGISTRATION_FORM = "{\n\t\"registrationformvalid\":\"true\"\n}";
 }

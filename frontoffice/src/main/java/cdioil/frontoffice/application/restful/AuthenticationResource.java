@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -84,9 +85,9 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/register")
     @Override
-    public Response registerAccount(String jsonRegistration){
+    public Response registerAccount(String jsonRegistration,@QueryParam(value = "validate")boolean validate){
         RegistrationJSONService registrationService=new Gson().fromJson(jsonRegistration,RegistrationJSONService.class);
-        return createRegisterAccountResponse(registrationService.getEmail(),registrationService.getPassword()
+        return createRegisterAccountResponse(validate,registrationService.getEmail(),registrationService.getPassword()
                 ,registrationService.getName(),registrationService.getPhoneNumber(),registrationService.getLocation()
                 ,registrationService.getBirthDate());
     }
@@ -132,9 +133,11 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
      * @param registerForms Array of Strings with the registration form
      * @return Response with the response for the register account request
      */
-    private Response createRegisterAccountResponse(String... registerForms){
+    private Response createRegisterAccountResponse(boolean validate,String... registerForms){
         try{
-            new RegisterUserController(registerForms).registerUser();
+           RegisterUserController controller=new RegisterUserController(registerForms);
+           if(validate)return Response.status(Status.OK).entity(JSON_VALID_REGISTRATION_FORM).build();
+           controller.registerUser();
         }catch(IllegalArgumentException|IllegalStateException registerException){
            return Response.status(Status.BAD_REQUEST)
                     .entity(new Gson()
