@@ -9,7 +9,7 @@
     <string name="first_name">Primeiro Nome</string>
     <string name="last_name">Último Nome</string>
     <string name="phone_number">Telemóvel</string>
-    <string name="birth_date">Data de Nascimento (aaaa/mm/dd)</string>
+    <string name="birth_date">Data de Nascimento (aaaa-mm-dd)</string>
     <string name="location">Localidade</string>
     <string name="submit">Submeter</string>
     <string name="additional_data">Dados Adicionais</string>

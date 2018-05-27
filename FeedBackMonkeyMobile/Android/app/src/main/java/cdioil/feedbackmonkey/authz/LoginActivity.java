@@ -39,7 +39,7 @@ import okhttp3.Response;
  */
 public class LoginActivity extends AppCompatActivity {
     /**
-     * Constant that represents the message that ocures if the user tries to login when he has no
+     * Constant that represents the message that occurs if the user tries to login when he has no
      * internet connection
      */
     private static final String NO_INTERNET_CONNECTION="Não existe conexão à Internet!";
@@ -112,12 +112,17 @@ public class LoginActivity extends AppCompatActivity {
                         View promptView = layoutInflater.inflate(R.layout.activate_account_view, null);
                         activateAccountAlert.setView(promptView);
                         Button sendActivationRequestButton = promptView.findViewById(R.id.sendActivationRequestButton);
+                        EditText activateAccountEmail = promptView.findViewById(R.id.activateAccountEmail);
+                        EditText activateAccountPassword = promptView.findViewById(R.id.activateAccountPassword);
+                        EditText activateAccountCode = promptView.findViewById(R.id.activateAccountCode);
                         sendActivationRequestButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                String email = activateAccountEmail.getText().toString();
+                                String password = activateAccountPassword.getText().toString();
+                                String code = activateAccountCode.getText().toString();
                                 //rest request to activate account
                                 //show toast with success/failure message and go back to login screen
-                                Toast.makeText(getApplicationContext(),"Tá a funcionar",Toast.LENGTH_LONG);
                             }
                         });
                         activateAccountAlert.show();

@@ -29,7 +29,6 @@
         <activity android:name=".application.ListSurveyActivity" />
         <activity android:name=".application.MainMenuActivity" />
         <activity android:name=".authz.SignUpActivity" />
-        <activity android:name=".authz.SignUpPopUpActivity"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
