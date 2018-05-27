@@ -29,6 +29,18 @@ public final class UserJSONService {
      */
     @SerializedName(value="Code",alternate = {"code","CODE"})
     private String code;
+
+    /**
+     * Builds a new UserJSONService with user activation code
+     * @param email String with the user email
+     * @param password String with the user password
+     * @param activationCode String with the user activation code
+     */
+    public UserJSONService(String email,String password,String activationCode){
+        this.email=email;
+        this.password=password;
+        this.activationCode=activationCode;
+    }
     /**
      * Returns the user email
      * @return String with the user email

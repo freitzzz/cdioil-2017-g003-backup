@@ -31,6 +31,7 @@ import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.UserJSONService;
 import cdioil.feedbackmonkey.utils.ToastNotification;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * LoginActivity class for the mobile app's login system.
@@ -42,14 +43,26 @@ public class LoginActivity extends AppCompatActivity {
      * Constant that represents the message that occurs if the user tries to login when he has no
      * internet connection
      */
-    private static final String NO_INTERNET_CONNECTION="Não existe conexão à Internet!";
+    private static final String NO_INTERNET_CONNECTION = "Não existe conexão à Internet!";
+    /**
+     * Constant that represents the message that occurs if the user activates his account with success
+     */
+    private static final String ACCOUNT_ACTIVATED_WITH_SUCCESS="Conta activada com successo!";
+    /**
+     * Constant that represents the message that occurs if the user activates his account with success
+     */
+    private static final String ACCOUNT_NOT_ACTIVATED_WITH_SUCCESS="Ocorreu um erro ao ativar a conta!";
+    /**
+     * Constant that represents the message that occurs if the user activates his account with success
+     */
+    private static final String ACCOUNT_ALREADY_ACTIVATED="A conta já se encontra activada!";
     /**
      * Login button.
      */
     private Button loginButton;
     /**
-    * Sign up button.
-    */
+     * Sign up button.
+     */
     private Button signupButton;
     /**
      * Activate account button.
@@ -63,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
      * Text field for password.
      */
     private EditText passwordText;
+
     /**
      * Method that runs the mobile app's login.
      *
@@ -86,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Sets on click listener to begin the login process.
      */
-    private void startLogin(){
+    private void startLogin() {
         loginButton.setOnClickListener(view -> {
             Thread loginThread = new Thread(login());
             loginThread.start();
@@ -96,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Sets on click listener to begin the activating account process.
      */
-    private void startActivateAccount(){
+    private void startActivateAccount() {
         activateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,6 +135,9 @@ public class LoginActivity extends AppCompatActivity {
                                 String email = activateAccountEmail.getText().toString();
                                 String password = activateAccountPassword.getText().toString();
                                 String code = activateAccountCode.getText().toString();
+                                Thread thread = new Thread(() -> sendActivationCode(email, password, code));
+                                thread.setDaemon(true);
+                                thread.start();
                                 //rest request to activate account
                                 //show toast with success/failure message and go back to login screen
                             }
@@ -135,9 +152,9 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Sets on click listener to begin the sign up process.
      */
-    private void startSignUp(){
+    private void startSignUp() {
         signupButton.setOnClickListener(view -> {
-            Intent signupIntent = new Intent(LoginActivity.this,SignUpActivity.class);
+            Intent signupIntent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(signupIntent);
         });
     }
@@ -145,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Initializes the application.
      */
-    private void initializeApplication(){
+    private void initializeApplication() {
         System.setProperty("javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
         System.setProperty("javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
         System.setProperty("javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
@@ -154,9 +171,10 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Runs the rest request to perform the login of the app
+     *
      * @return Runnable with the thread the performs the rest request to confirm the login of a user
      */
-    private Runnable login(){
+    private Runnable login() {
         return () -> {
             try {
                 Response restResponse = RESTRequest.create(BuildConfig.SERVER_URL
@@ -188,24 +206,26 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginErrorMessage("Login Inválido",
                             "A sua conta não está ativada!");
                 }
-            }catch(IOException ioException){
-                ToastNotification.show(this,NO_INTERNET_CONNECTION);
+            } catch (IOException ioException) {
+                ToastNotification.show(this, NO_INTERNET_CONNECTION);
             }
         };
     }
 
     /**
      * Returns the user's authentication token from the JSON rest response body
+     *
      * @param jsonBody body of the rest response sent in JSON format
      * @return String with the user's authentication token
      */
-    private String getAuthenticationToken(String jsonBody){
+    private String getAuthenticationToken(String jsonBody) {
         return new Gson().fromJson(jsonBody, UserJSONService.class).getAuthenticationToken();
     }
 
     /**
      * Creates a new thread to display a login error message using an AlertBuilder
-     * @param messageTitle title of the message
+     *
+     * @param messageTitle   title of the message
      * @param messageContent content of the message
      */
     private void showLoginErrorMessage(String messageTitle, String messageContent) {
@@ -217,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
                     invalidCredentialsAlert.setTitle(messageTitle);
                     invalidCredentialsAlert.setMessage(messageContent);
                     invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
-                    invalidCredentialsAlert.setPositiveButton("OK",null);
+                    invalidCredentialsAlert.setPositiveButton("OK", null);
                     final AlertDialog alertDialog = invalidCredentialsAlert.create();
                     alertDialog.show();
                     Button closeAlertWindowButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -234,5 +254,45 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         }.start();
+    }
+
+    /**
+     * Sends the user activation code
+     *
+     * @param email          String with the user email
+     * @param password       String with the user password
+     * @param activationCode String with the user activation code
+     */
+    private void sendActivationCode(String email, String password, String activationCode) {
+        try {
+            Response responseBody = RESTRequest.create(BuildConfig.SERVER_URL
+                    .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
+                    .concat(FeedbackMonkeyAPI.getResourcePath("authentication"))
+                    .concat(FeedbackMonkeyAPI.getSubResourcePath("authentication"
+                            , "Activate Account")))
+                    .withMediaType(RESTRequest.RequestMediaType.JSON)
+                    .withBody(new Gson().toJson(new UserJSONService(email, password, activationCode)))
+                    .POST();
+            switch (responseBody.code()) {
+                case 200:
+                    showToastMessage(ACCOUNT_ACTIVATED_WITH_SUCCESS);
+                    break;
+                case 400:
+                    showToastMessage(ACCOUNT_NOT_ACTIVATED_WITH_SUCCESS);
+                    break;
+                case 401:
+                    showToastMessage(ACCOUNT_ALREADY_ACTIVATED);
+            }
+        } catch (IOException ioException) {
+            showToastMessage(NO_INTERNET_CONNECTION);
+        }
+    }
+
+    /**
+     * Shows a Toast on the current activity with a certain message
+     * @param toastMessage String with the toast message
+     */
+    private void showToastMessage(String toastMessage) {
+        LoginActivity.this.runOnUiThread(() -> ToastNotification.show(LoginActivity.this, toastMessage));
     }
 }
