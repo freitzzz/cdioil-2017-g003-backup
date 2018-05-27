@@ -95,6 +95,17 @@ public class LoginActivity extends AppCompatActivity {
         startLogin();
         startActivateAccount();
         startSignUp();
+        showSignUpInfo();
+    }
+
+    /**
+     * Shows info regarding a registration process if one occurred
+     */
+    private void showSignUpInfo(){
+        if(this.getIntent().getExtras() != null){
+            ToastNotification.show(LoginActivity.this,this.getIntent().
+                    getExtras().getString("toastText"));
+        }
     }
 
     /**
