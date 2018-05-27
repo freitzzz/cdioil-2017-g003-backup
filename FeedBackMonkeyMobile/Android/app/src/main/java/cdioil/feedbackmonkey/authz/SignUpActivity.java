@@ -165,6 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
                         backToLoginIntent.putExtras(backToLoginBundle);
                         startActivity(backToLoginIntent);
                     }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
+                        System.out.println("BAD REQUEST :( ");
                         RegistrationJSONService restResponseBody = new Gson().
                                 fromJson(restResponse.body().string(),RegistrationJSONService.class);
                         String restResponseMessage = restResponseBody.getMessage();
@@ -175,6 +176,7 @@ public class SignUpActivity extends AppCompatActivity {
                         startActivity(backToLoginIntent);
                     }
                 } catch (IOException e) {
+                    System.out.println(" EXCEPTION =((");
                     ToastNotification.show(this,NO_INTERNET_CONNECTION);
                 }
             }
@@ -204,76 +206,82 @@ public class SignUpActivity extends AppCompatActivity {
                         sendRegisterRequestButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                String firstName = firstNameTextView.getText().toString();
-                                String lastName = lastNameTextView.getText().toString();
-                                String email = emailTextView.getText().toString();
-                                String password = passwordTextView.getText().toString();
-                                String phoneNumber = phoneNumberTextView.getText().toString();
-                                String location = locationText.getText().toString();
-                                String birthDate = birthDateText.getText().toString();
-                                //rest request to register account
-                                String restRequestBody = new Gson().toJson(new RegistrationJSONService(email,password,
-                                        firstName + " " + lastName
-                                        ,phoneNumber,location,birthDate));
-                                Response restResponse = null;
-                                try {
-                                    restResponse = RESTRequest.
-                                            create(BuildConfig.SERVER_URL.
-                                                    concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
-                                                    concat(FeedbackMonkeyAPI.getResourcePath("authentication")).
-                                                    concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register account")).
-                                                    concat("?validate=true")).
-                                            withMediaType(RESTRequest.RequestMediaType.JSON).
-                                            withBody(restRequestBody).
-                                            POST();
-                                } catch (IOException e) {
-                                    ToastNotification.show(SignUpActivity.this,NO_INTERNET_CONNECTION);
-                                }
-                                if(restResponse.code() == HttpsURLConnection.HTTP_OK){
-                                    try{
-                                        restResponse = RESTRequest.
-                                                create(BuildConfig.SERVER_URL.
-                                                        concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
-                                                        concat(FeedbackMonkeyAPI.getResourcePath("authentication")).
-                                                        concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register"))).
-                                                withMediaType(RESTRequest.RequestMediaType.JSON).
-                                                withBody(restRequestBody).
-                                                POST();
-                                    }catch(IOException e){
-                                        ToastNotification.show(SignUpActivity.this,NO_INTERNET_CONNECTION);
-                                    }
-                                    if(restResponse.code() == HttpsURLConnection.HTTP_OK){
-                                        Intent backToLoginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
-                                        Bundle backToLoginBundle = new Bundle();
-                                        backToLoginBundle.putString("toastText",SIGNUP_SUCCESS);
-                                        backToLoginIntent.putExtras(backToLoginBundle);
-                                        startActivity(backToLoginIntent);
-                                    }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
-                                        RegistrationJSONService restResponseBody = null;
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String firstName = firstNameTextView.getText().toString();
+                                        String lastName = lastNameTextView.getText().toString();
+                                        String email = emailTextView.getText().toString();
+                                        String password = passwordTextView.getText().toString();
+                                        String phoneNumber = phoneNumberTextView.getText().toString();
+                                        String location = locationText.getText().toString();
+                                        String birthDate = birthDateText.getText().toString();
+                                        //rest request to register account
+                                        String restRequestBody = new Gson().toJson(new RegistrationJSONService(email,password,
+                                                firstName + " " + lastName
+                                                ,phoneNumber,location,birthDate));
+                                        Response restResponse = null;
                                         try {
-                                            restResponseBody = new Gson().
-                                                    fromJson(restResponse.body().string(),RegistrationJSONService.class);
+                                            restResponse = RESTRequest.
+                                                    create(BuildConfig.SERVER_URL.
+                                                            concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
+                                                            concat(FeedbackMonkeyAPI.getResourcePath("Authentication")).
+                                                            concat(FeedbackMonkeyAPI.getSubResourcePath("Authentication","Register Account")).
+                                                            concat("?validate=true")).
+                                                    withMediaType(RESTRequest.RequestMediaType.JSON).
+                                                    withBody(restRequestBody).
+                                                    POST();
                                         } catch (IOException e) {
-                                            e.printStackTrace();
+                                            ToastNotification.show(SignUpActivity.this,NO_INTERNET_CONNECTION);
                                         }
-                                        String restResponseMessage = restResponseBody.getMessage();
-                                        Intent backToLoginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
-                                        Bundle backToLoginBundle = new Bundle();
-                                        backToLoginBundle.putString("toastText",restResponseMessage);
-                                        backToLoginIntent.putExtras(backToLoginBundle);
-                                        startActivity(backToLoginIntent);
+                                        if(restResponse.code() == HttpsURLConnection.HTTP_OK){
+                                            try{
+                                                restResponse = RESTRequest.
+                                                        create(BuildConfig.SERVER_URL.
+                                                                concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
+                                                                concat(FeedbackMonkeyAPI.getResourcePath("Authentication")).
+                                                                concat(FeedbackMonkeyAPI.getSubResourcePath("Authentication","Register Account")).
+                                                                concat("?validate=true")).
+                                                        withMediaType(RESTRequest.RequestMediaType.JSON).
+                                                        withBody(restRequestBody).
+                                                        POST();
+                                            }catch(IOException e){
+                                                ToastNotification.show(SignUpActivity.this,NO_INTERNET_CONNECTION);
+                                            }
+                                            if(restResponse.code() == HttpsURLConnection.HTTP_OK){
+                                                Intent backToLoginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
+                                                Bundle backToLoginBundle = new Bundle();
+                                                backToLoginBundle.putString("toastText",SIGNUP_SUCCESS);
+                                                backToLoginIntent.putExtras(backToLoginBundle);
+                                                startActivity(backToLoginIntent);
+                                            }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
+                                                RegistrationJSONService restResponseBody = null;
+                                                try {
+                                                    restResponseBody = new Gson().
+                                                            fromJson(restResponse.body().string(),RegistrationJSONService.class);
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                String restResponseMessage = restResponseBody.getMessage();
+                                                Intent backToLoginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
+                                                Bundle backToLoginBundle = new Bundle();
+                                                backToLoginBundle.putString("toastText",restResponseMessage);
+                                                backToLoginIntent.putExtras(backToLoginBundle);
+                                                startActivity(backToLoginIntent);
+                                            }
+                                        }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
+                                            RegistrationJSONService restResponseBody = new Gson().
+                                                    fromJson(restResponse.body().toString(),RegistrationJSONService.class);
+                                            String restResponseField = restResponseBody.getField();
+                                            String restResponseMessage = restResponseBody.getMessage();
+                                            if(restResponseField.equals(JSON_FIELD_FOR_INVALID_LOCATION)){
+                                                locationText.setError(restResponseMessage);
+                                            }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_BIRTH_DATE)){
+                                                birthDateText.setError(restResponseMessage);
+                                            }
+                                        }
                                     }
-                                }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
-                                    RegistrationJSONService restResponseBody = new Gson().
-                                            fromJson(restResponse.body().toString(),RegistrationJSONService.class);
-                                    String restResponseField = restResponseBody.getField();
-                                    String restResponseMessage = restResponseBody.getMessage();
-                                    if(restResponseField.equals(JSON_FIELD_FOR_INVALID_LOCATION)){
-                                        locationText.setError(restResponseMessage);
-                                    }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_BIRTH_DATE)){
-                                        birthDateText.setError(restResponseMessage);
-                                    }
-                                }
+                                }).start();
                             }
                         });
                         activateAccountAlert.show();
@@ -325,37 +333,7 @@ public class SignUpActivity extends AppCompatActivity {
            String restResponseMessage = restResponseBody.getMessage();
            if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
                validCredentials = false;
-               if(restResponseField.equals(JSON_FIELD_FOR_INVALID_EMAIL)){
-                   SignUpActivity.this.runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           emailTextView.setError(restResponseMessage);
-                       }
-                   });
-               }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_NAME)){
-                   SignUpActivity.this.runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           firstNameTextView.setError(restResponseMessage);
-                       }
-                   });
-               }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_PASSWORD)){
-                   SignUpActivity.this.runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           passwordTextView.setError(restResponseMessage);
-                       }
-                   });
-               }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_PHONE_NUMBER)){
-                   SignUpActivity.this.runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           phoneNumberTextView.setError(restResponseMessage);
-                       }
-                   });
-               }else if(restResponseField.equals(JSON_FIELD_FOR_MISSING_CREDENTIALS)){
-                   ToastNotification.show(SignUpActivity.this,restResponseMessage);
-               }
+               setErrorOnWrongCredential(restResponseField,restResponseMessage);
            }
         } catch (IOException e) {
             ToastNotification.show(this,NO_INTERNET_CONNECTION);
@@ -363,4 +341,36 @@ public class SignUpActivity extends AppCompatActivity {
         return validCredentials;
     }
 
+    /**
+     * Checks which mandatory credential has mistakes and sets error on it's corresponding text view
+     * @param restResponseField field that identifies the credential that has mistakes
+     * @param restResponseMessage error message to set on the credential's text view
+     */
+    private void setErrorOnWrongCredential(String restResponseField, String restResponseMessage){
+        if(restResponseField.equals(JSON_FIELD_FOR_INVALID_EMAIL)){
+            setErrorOnEditText(emailTextView,restResponseMessage);
+        }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_NAME)){
+            setErrorOnEditText(firstNameTextView,restResponseMessage);
+        }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_PASSWORD)){
+            setErrorOnEditText(passwordTextView,restResponseMessage);
+        }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_PHONE_NUMBER)){
+            setErrorOnEditText(phoneNumberTextView,restResponseMessage);
+        }else if(restResponseField.equals(JSON_FIELD_FOR_MISSING_CREDENTIALS)){
+            ToastNotification.show(SignUpActivity.this,restResponseMessage);
+        }
+    }
+
+    /**
+     * Creates a runnable on the UI Thread to set an error in a text view
+     * @param textView text view in question
+     * @param errorMessage error message to set in the edit text
+     */
+    private void setErrorOnEditText(TextView textView, String errorMessage){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.setError(errorMessage);
+            }
+        });
+    }
 }
