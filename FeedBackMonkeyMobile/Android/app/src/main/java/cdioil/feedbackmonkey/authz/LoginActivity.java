@@ -2,15 +2,18 @@ package cdioil.feedbackmonkey.authz;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -100,21 +103,21 @@ public class LoginActivity extends AppCompatActivity {
                 LoginActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AlertDialog activateAccountAlert =
-                                new AlertDialog.Builder(LoginActivity.this).create();
+                        AlertDialog.Builder activateAccountAlert =
+                                new AlertDialog.Builder(LoginActivity.this);
                         activateAccountAlert.setTitle("Ativação de Conta");
-                        activateAccountAlert.setMessage("Insira o seu código de ativação");
+                        activateAccountAlert.setMessage("Insira os dados seguintes para ativar a sua conta");
                         activateAccountAlert.setIcon(R.drawable.ic_info_black_18dp);
-                        final EditText activationCodeInput = new EditText(LoginActivity.this);
-                        activationCodeInput.setHint("Código de Ativação Aqui");
-                        activationCodeInput.setGravity(Gravity.CENTER);
-                        activateAccountAlert.setView(activationCodeInput);
-                        activateAccountAlert.setButton(DialogInterface.BUTTON_NEUTRAL,"Ativar Conta",
-                                new DialogInterface.OnClickListener() {
+                        LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
+                        View promptView = layoutInflater.inflate(R.layout.activate_account_view, null);
+                        activateAccountAlert.setView(promptView);
+                        Button sendActivationRequestButton = promptView.findViewById(R.id.sendActivationRequestButton);
+                        sendActivationRequestButton.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //REST request to activate account
-                                //show toast or other component with success message
+                            public void onClick(View view) {
+                                //rest request to activate account
+                                //show toast with success/failure message and go back to login screen
+                                Toast.makeText(getApplicationContext(),"Tá a funcionar",Toast.LENGTH_LONG);
                             }
                         });
                         activateAccountAlert.show();
@@ -204,18 +207,23 @@ public class LoginActivity extends AppCompatActivity {
         new Thread() {
             public void run() {
                 LoginActivity.this.runOnUiThread(() -> {
-                    AlertDialog invalidCredentialsAlert =
-                            new AlertDialog.Builder(LoginActivity.this).create();
+                    AlertDialog.Builder invalidCredentialsAlert =
+                            new AlertDialog.Builder(LoginActivity.this);
                     invalidCredentialsAlert.setTitle(messageTitle);
                     invalidCredentialsAlert.setMessage(messageContent);
-                    invalidCredentialsAlert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                    invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
+                    invalidCredentialsAlert.setPositiveButton("OK",null);
+                    final AlertDialog alertDialog = invalidCredentialsAlert.create();
+                    alertDialog.show();
+                    Button closeAlertWindowButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                    closeAlertWindowButton.setBackgroundResource(R.color.zxing_transparent);
+                    closeAlertWindowButton.setTextColor(Color.parseColor("#3D3D3D"));
+                    closeAlertWindowButton.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            invalidCredentialsAlert.dismiss();
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
                         }
                     });
-                    invalidCredentialsAlert.setIcon(R.drawable.ic_error_black_18dp);
-                    invalidCredentialsAlert.show();
                     emailText.getText().clear();
                     passwordText.getText().clear();
                 });

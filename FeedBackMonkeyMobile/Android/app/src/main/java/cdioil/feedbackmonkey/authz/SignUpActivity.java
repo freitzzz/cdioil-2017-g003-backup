@@ -123,7 +123,7 @@ public class SignUpActivity extends AppCompatActivity {
             restResponse = RESTRequest.
                     create(BuildConfig.SERVER_URL.
                             concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
-                            concat(FeedbackMonkeyAPI.getResourcePath("regiserwhatever")).
+                            concat(FeedbackMonkeyAPI.getResourcePath("")).
                             concat(FeedbackMonkeyAPI.getSubResourcePath("regiserwhatever","aougha")))
                     .POST();
         } catch (IOException e) {

@@ -15,4 +15,6 @@
     <string name="additional_data">Dados Adicionais</string>
     <string name="create_account">Efetuar Registo</string>
     <string name="activate_account">Ative a sua conta aqui!</string>
+    <string name="activation_code">Código de Ativação</string>
+    <string name="send_activate_account_request">Ativar Conta</string>
 </resources>

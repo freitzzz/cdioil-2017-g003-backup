@@ -89,7 +89,7 @@
 
     <EditText
         android:id="@+id/signupFirstNameText"
-        android:layout_width="160dp"
+        android:layout_width="165dp"
         android:layout_height="49dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -149,7 +149,7 @@
 
     <EditText
         android:id="@+id/signupLastNameText"
-        android:layout_width="160dp"
+        android:layout_width="155dp"
         android:layout_height="49dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -164,7 +164,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.965"
+        app:layout_constraintHorizontal_bias="0.966"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.328" />
