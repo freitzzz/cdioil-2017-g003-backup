@@ -62,6 +62,24 @@ public final class RegistrationJSONService {
         this.field=field;
     }
     /**
+     * Builds a new RegistrationJSONService with the registration form fields
+     * @param email String with the user email being registered
+     * @param password String with the user password being registered
+     * @param name String with the user name being registered
+     * @param phoneNumber String with the user phone number being registered
+     * @param location String with the user location being registered
+     * @param birthDate String with the user birth date being registered
+     */
+    public RegistrationJSONService(String email,String password,String name,String phoneNumber
+            ,String location,String birthDate){
+        this.email=email;
+        this.password=password;
+        this.name=name;
+        this.phoneNumber=phoneNumber;
+        this.location=location;
+        this.birthDate=birthDate;
+    }
+    /**
      * Returns the user email
      * @return String with the user email
      */
