@@ -39,35 +39,35 @@ public class SignUpActivity extends AppCompatActivity {
     /**
      * JSON field for invalid email while signing up.
      */
-    private static final String JSON_FIELD_FOR_INVALID_EMAIL = "email";
+    private static final String JSON_FIELD_FOR_INVALID_EMAIL = "Whitelist";
     /**
      * JSON field for invalid password while signing up.
      */
-    private static final String JSON_FIELD_FOR_INVALID_PASSWORD = "password";
+    private static final String JSON_FIELD_FOR_INVALID_PASSWORD = "Password";
     /**
      * JSON field for invalid name while signing up.
      */
-    private static final String JSON_FIELD_FOR_INVALID_NAME = "name";
+    private static final String JSON_FIELD_FOR_INVALID_NAME = "Name";
     /**
      * JSON field for invalid phone number while signing up.
      */
-    private static final String JSON_FIELD_FOR_INVALID_PHONE_NUMBER = "phoneNumber";
+    private static final String JSON_FIELD_FOR_INVALID_PHONE_NUMBER = "PhoneNumber";
     /**
      * JSON field for invalid location while signing up.
      */
-    private static final String JSON_FIELD_FOR_INVALID_LOCATION = "location";
+    private static final String JSON_FIELD_FOR_INVALID_LOCATION = "Location";
     /**
      * JSON field for invalid birth date while signing up.
      */
-    private static final String JSON_FIELD_FOR_INVALID_BIRTH_DATE = "birthDate";
+    private static final String JSON_FIELD_FOR_INVALID_BIRTH_DATE = "BirthDate";
     /**
      * JSON field for missing mandatory credentials while signing up.
      */
-    private static final String JSON_FIELD_FOR_MISSING_CREDENTIALS = "form";
+    private static final String JSON_FIELD_FOR_MISSING_CREDENTIALS = "Form";
     /**
      * JSON field for a registration error happening while signing up.
      */
-    private static final String JSON_FIELD_FOR_REGISTRATION_ERROR = "register";
+    private static final String JSON_FIELD_FOR_REGISTRATION_ERROR = "Register";
     /**
      * Success message to let the user know the sign up was a success.
      */
@@ -154,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
                             create(BuildConfig.SERVER_URL.
                                     concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
                                     concat(FeedbackMonkeyAPI.getResourcePath("authentication")).
-                                    concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register"))).
+                                    concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register account"))).
                             withMediaType(RESTRequest.RequestMediaType.JSON).
                             withBody(restRequestBody).
                             POST();
@@ -166,7 +166,7 @@ public class SignUpActivity extends AppCompatActivity {
                         startActivity(backToLoginIntent);
                     }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
                         RegistrationJSONService restResponseBody = new Gson().
-                                fromJson(restResponse.body().toString(),RegistrationJSONService.class);
+                                fromJson(restResponse.body().string(),RegistrationJSONService.class);
                         String restResponseMessage = restResponseBody.getMessage();
                         Intent backToLoginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
                         Bundle backToLoginBundle = new Bundle();
@@ -221,7 +221,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             create(BuildConfig.SERVER_URL.
                                                     concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
                                                     concat(FeedbackMonkeyAPI.getResourcePath("authentication")).
-                                                    concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register")).
+                                                    concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register account")).
                                                     concat("?validate=true")).
                                             withMediaType(RESTRequest.RequestMediaType.JSON).
                                             withBody(restRequestBody).
@@ -249,8 +249,13 @@ public class SignUpActivity extends AppCompatActivity {
                                         backToLoginIntent.putExtras(backToLoginBundle);
                                         startActivity(backToLoginIntent);
                                     }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
-                                        RegistrationJSONService restResponseBody = new Gson().
-                                                fromJson(restResponse.body().toString(),RegistrationJSONService.class);
+                                        RegistrationJSONService restResponseBody = null;
+                                        try {
+                                            restResponseBody = new Gson().
+                                                    fromJson(restResponse.body().string(),RegistrationJSONService.class);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                         String restResponseMessage = restResponseBody.getMessage();
                                         Intent backToLoginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
                                         Bundle backToLoginBundle = new Bundle();
@@ -278,6 +283,7 @@ public class SignUpActivity extends AppCompatActivity {
         };
     }
 
+
     /**
      * Validates the mandatory credentials that the user must insert in order to sign up
      * @return true if all the credentials are valid, false if otherwise
@@ -291,34 +297,62 @@ public class SignUpActivity extends AppCompatActivity {
         String email = emailTextView.getText().toString();
         String password = passwordTextView.getText().toString();
         String phoneNumber = phoneNumberTextView.getText().toString();
-        String restRequestBody = new Gson().toJson(new RegistrationJSONService(email,password,
-                firstName + " " + lastName
-                ,phoneNumber,null,null));
-        Response restResponse = null;
+        String restRequestBody;
+        if(firstName.isEmpty() && lastName.isEmpty() && email.isEmpty() &&
+                password.isEmpty() && phoneNumber.isEmpty()){
+            restRequestBody = new Gson().toJson(new RegistrationJSONService(null,
+                    null,null,null,null,null));
+        }else{
+            restRequestBody = new Gson().toJson(new RegistrationJSONService(email,password,
+                    firstName + " " + lastName
+                    ,phoneNumber,null,null));
+        }
+        Response restResponse;
         try {
              restResponse = RESTRequest.
                     create(BuildConfig.SERVER_URL.
                             concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
-                            concat(FeedbackMonkeyAPI.getResourcePath("authentication")).
-                            concat(FeedbackMonkeyAPI.getSubResourcePath("authentication","register")).
+                            concat(FeedbackMonkeyAPI.getResourcePath("Authentication")).
+                            concat(FeedbackMonkeyAPI.getSubResourcePath("Authentication","Register Account")).
                             concat("?validate=true")).
                     withMediaType(RESTRequest.RequestMediaType.JSON).
                     withBody(restRequestBody).
                     POST();
+             String body = restResponse.body().string();
            RegistrationJSONService restResponseBody = new Gson().
-                    fromJson(restResponse.body().toString(),RegistrationJSONService.class);
+                    fromJson(body,RegistrationJSONService.class);
            String restResponseField = restResponseBody.getField();
            String restResponseMessage = restResponseBody.getMessage();
            if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
                validCredentials = false;
                if(restResponseField.equals(JSON_FIELD_FOR_INVALID_EMAIL)){
-                   emailTextView.setError(restResponseMessage);
+                   SignUpActivity.this.runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           emailTextView.setError(restResponseMessage);
+                       }
+                   });
                }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_NAME)){
-                   firstNameTextView.setError("Primeiro ou Último nome inválidos!");
+                   SignUpActivity.this.runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           firstNameTextView.setError(restResponseMessage);
+                       }
+                   });
                }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_PASSWORD)){
-                   passwordTextView.setError(restResponseMessage);
+                   SignUpActivity.this.runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           passwordTextView.setError(restResponseMessage);
+                       }
+                   });
                }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_PHONE_NUMBER)){
-                   phoneNumberTextView.setError(restResponseMessage);
+                   SignUpActivity.this.runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           phoneNumberTextView.setError(restResponseMessage);
+                       }
+                   });
                }else if(restResponseField.equals(JSON_FIELD_FOR_MISSING_CREDENTIALS)){
                    ToastNotification.show(SignUpActivity.this,restResponseMessage);
                }
