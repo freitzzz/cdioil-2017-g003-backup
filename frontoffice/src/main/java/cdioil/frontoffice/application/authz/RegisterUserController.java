@@ -205,10 +205,12 @@ public final class RegisterUserController implements Serializable {
                     addPassword(registerForms[i]);
                     break;
                 case 2:
-                    addName(registerForms[i]);
+                    if(registerForms[i]!=null)
+                        addName(registerForms[i]);
                     break;
                 case 3:
-                    addPhoneNumber(registerForms[i]);
+                    if(registerForms[i]!=null)
+                        addPhoneNumber(registerForms[i]);
                     break;
                 case 4:
                     if(registerForms[i]!=null)

@@ -7,7 +7,6 @@ import cdioil.persistence.impl.EmailSendersRepositoryImpl;
 
 /**
  * Service class that sends the account activation code to the SystemUser email
- * <br>TO-DO: DTO's ??
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public final class EmailSenderService {
@@ -47,8 +46,9 @@ public final class EmailSenderService {
             return false;
         }
         String toEmail=currentSystemUser.getID().toString();
+        String userName=currentSystemUser.getName()!=null ? currentSystemUser.getName().toString() : "";
         String content=String.format(FORMATED_EMAIL_ACTIVATION_CODE_CONTENT
-                ,currentSystemUser.getName().toString(),toEmail,currentSystemUser.getActivationCode());
+                ,userName,toEmail,currentSystemUser.getActivationCode());
         return EmailSenderFactory
                 .create(sender.getEmail(),sender.getPassword())
                 .sendEmail(toEmail,EMAIL_ACTIVATION_CODE_TITLE,content);
