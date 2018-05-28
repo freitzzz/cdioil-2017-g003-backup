@@ -6,4 +6,4 @@
 
    	Classes do domínio: Survey, RegisteredUser, SystemUser
    	Controller: SurveyController, AuthenticationController
-   	Repository: UserRepository, RegisteredUserRepository
+   	Repository: UserRepository, RegisteredUserRepository, SurveyRepository

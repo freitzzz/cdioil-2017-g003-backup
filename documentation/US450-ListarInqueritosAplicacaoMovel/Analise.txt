@@ -12,7 +12,7 @@
 	FORMATO BREVE
 	______________________
 
-	O utilizaodr inicia o processo de listagem de inquéritos.
+	O utilizador inicia o processo de listagem de inquéritos.
 	O sistema lista os inquéritos a que o utilizador pode responder.
 	______________________
 
