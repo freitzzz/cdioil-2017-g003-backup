@@ -46,10 +46,9 @@ public class SystemUserBuilderTest {
     public void testInvalidBuild() {
         System.out.println("Invalid Build");
         SystemUserBuilder instance = SystemUserBuilder.create();
-        instance.withEmail("lilpump@blip.pt");
         instance.withPassword("Password123");
         instance.withName("Gazzy","Garcia");
-        System.out.println("The build should not be successful since it is missing the user phone number");
+        System.out.println("The build should not be successful since it is missing the user email");
         instance.build();
     }
 

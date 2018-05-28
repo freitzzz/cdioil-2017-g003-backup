@@ -130,6 +130,8 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
         if (password == null) {
             throw new IllegalArgumentException("A password não pode ser null!");
         }
+        //#(28/05/2018) Commented out due to client feedback on Sprint Review #5
+        //Still needs to be discussed
 //        if (name == null) {
 //            throw new IllegalArgumentException("O nome não pode ser null!");
 //        }
