@@ -6,18 +6,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -31,7 +26,6 @@ import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.UserJSONService;
 import cdioil.feedbackmonkey.utils.ToastNotification;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 /**
  * LoginActivity class for the mobile app's login system.
@@ -76,6 +70,10 @@ public class LoginActivity extends AppCompatActivity {
      * Text field for password.
      */
     private EditText passwordText;
+    /**
+     * Static boolean that is used to check if the application just started up
+     */
+    private static boolean onStartup;
 
     /**
      * Method that runs the mobile app's login.
@@ -102,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
      * Shows info regarding a registration process if one occurred
      */
     private void showSignUpInfo(){
-        if(this.getIntent().getExtras() != null){
+        if(onStartup){
             ToastNotification.show(LoginActivity.this,this.getIntent().
                     getExtras().getString("toastText"));
         }
@@ -122,42 +120,35 @@ public class LoginActivity extends AppCompatActivity {
      * Sets on click listener to begin the activating account process.
      */
     private void startActivateAccount() {
-        activateAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LoginActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AlertDialog.Builder activateAccountAlert =
-                                new AlertDialog.Builder(LoginActivity.this);
-                        activateAccountAlert.setTitle("Ativação de Conta");
-                        activateAccountAlert.setMessage("Insira os dados seguintes para ativar a sua conta");
-                        activateAccountAlert.setIcon(R.drawable.ic_info_black_18dp);
-                        LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
-                        View promptView = layoutInflater.inflate(R.layout.activate_account_view, null);
-                        activateAccountAlert.setView(promptView);
-                        Button sendActivationRequestButton = promptView.findViewById(R.id.sendActivationRequestButton);
-                        EditText activateAccountEmail = promptView.findViewById(R.id.activateAccountEmail);
-                        EditText activateAccountPassword = promptView.findViewById(R.id.activateAccountPassword);
-                        EditText activateAccountCode = promptView.findViewById(R.id.activateAccountCode);
-                        sendActivationRequestButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                String email = activateAccountEmail.getText().toString();
-                                String password = activateAccountPassword.getText().toString();
-                                String code = activateAccountCode.getText().toString();
-                                Thread thread = new Thread(() -> sendActivationCode(email, password, code));
-                                thread.setDaemon(true);
-                                thread.start();
-                                //rest request to activate account
-                                //show toast with success/failure message and go back to login screen
-                            }
-                        });
-                        activateAccountAlert.show();
-                    }
-                });
-            }
-        });
+        activateAccountButton.setOnClickListener(view ->
+                LoginActivity.this.runOnUiThread(() -> {
+                    AlertDialog.Builder activateAccountAlert =
+                            new AlertDialog.Builder(LoginActivity.this);
+                    activateAccountAlert.setTitle("Ativação de Conta");
+                    activateAccountAlert.setMessage("Insira os dados seguintes para ativar a sua conta");
+                    activateAccountAlert.setIcon(R.drawable.ic_info_black_18dp);
+                    LayoutInflater layoutInflater = LayoutInflater.from(LoginActivity.this);
+                    View promptView = layoutInflater.inflate(R.layout.activate_account_view, null);
+                    activateAccountAlert.setView(promptView);
+                    Button sendActivationRequestButton = promptView.findViewById(R.id.sendActivationRequestButton);
+                    EditText activateAccountEmail = promptView.findViewById(R.id.activateAccountEmail);
+                    EditText activateAccountPassword = promptView.findViewById(R.id.activateAccountPassword);
+                    EditText activateAccountCode = promptView.findViewById(R.id.activateAccountCode);
+                    sendActivationRequestButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view1) {
+                            String email = activateAccountEmail.getText().toString();
+                            String password = activateAccountPassword.getText().toString();
+                            String code = activateAccountCode.getText().toString();
+                            Thread thread = new Thread(() -> sendActivationCode(email, password, code));
+                            thread.setDaemon(true);
+                            thread.start();
+                            //rest request to activate account
+                            //show toast with success/failure message and go back to login screen
+                        }
+                    });
+                    activateAccountAlert.show();
+                }));
     }
 
     /**
@@ -165,6 +156,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void startSignUp() {
         signupButton.setOnClickListener(view -> {
+            onStartup = true;
             Intent signupIntent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(signupIntent);
         });

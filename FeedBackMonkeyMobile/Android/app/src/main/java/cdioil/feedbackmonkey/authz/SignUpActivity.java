@@ -270,14 +270,19 @@ public class SignUpActivity extends AppCompatActivity {
                                                 startActivity(backToLoginIntent);
                                             }
                                         }else if(restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST){
-                                            RegistrationJSONService restResponseBody = new Gson().
-                                                    fromJson(restResponse.body().toString(),RegistrationJSONService.class);
+                                            RegistrationJSONService restResponseBody = null;
+                                            try {
+                                                restResponseBody = new Gson().
+                                                        fromJson(restResponse.body().string(),RegistrationJSONService.class);
+                                            } catch (IOException e) {
+                                                ToastNotification.show(SignUpActivity.this,NO_INTERNET_CONNECTION);
+                                            }
                                             String restResponseField = restResponseBody.getField();
                                             String restResponseMessage = restResponseBody.getMessage();
                                             if(restResponseField.equals(JSON_FIELD_FOR_INVALID_LOCATION)){
-                                                locationText.setError(restResponseMessage);
+                                                setErrorOnEditText(locationText,restResponseMessage);
                                             }else if(restResponseField.equals(JSON_FIELD_FOR_INVALID_BIRTH_DATE)){
-                                                birthDateText.setError(restResponseMessage);
+                                                setErrorOnEditText(birthDateText,restResponseMessage);
                                             }
                                         }
                                     }
