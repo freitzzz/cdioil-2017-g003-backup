@@ -77,7 +77,7 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getSurveysByProductCode/{authenticationToken}/{code}")
     @Override
-    public Response getSurveysByProductCode(@PathParam("authenticationToken") String authenticationToken,@PathParam("code") String code) {
+    public Response getSurveysByProductCode(@PathParam("authenticationToken") String authenticationToken, @PathParam("code") String code) {
         AuthenticationController authenticationCtrl = new AuthenticationController();
 
         SystemUser user = authenticationCtrl.getUserByAuthenticationToken(authenticationToken);
@@ -90,27 +90,16 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
             return createInvalidUserResponse();
         }
 
-        List<Product> products = new ProductRepositoryImpl().getProductsByCode(code);
-        
-        if (products == null) {
+        SurveyController ctrl = new SurveyController();
+        List<Product> products = ctrl.getProductsByCode(code);
+
+        if (products == null || products.isEmpty()) {
             return createProductNotFoundResponse();
         }
-        
-        List<Survey> surveyList = new ArrayList<>();
-        SurveyRepositoryImpl surveyRepo = new SurveyRepositoryImpl();
-        
-        for(Product p : products){
-            List<Survey> productSurveys = surveyRepo.getActiveSurveysByProductAndRegisteredUser(p, registeredUser);
-            if(productSurveys != null){
-                for(Survey s : productSurveys){
-                    if(!surveyList.contains(s)){
-                        surveyList.add(s);
-                    }
-                }
-            }
-        }
-        
-        if (surveyList.isEmpty()) {
+
+        List<Survey> surveyList = ctrl.getSurveysByProduct(products, registeredUser);
+
+        if (surveyList == null || surveyList.isEmpty()) {
             return createNoAvailableSurveysResponse();
         }
         return Response.status(Status.OK).entity(getSurveysAsJSON(surveyList)).build();
@@ -166,7 +155,7 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
                 .entity(JSON_INVALID_PAGINATION_ID)
                 .build();
     }
-    
+
     /**
      * Creates a Response for warning the user that product does not exist.
      *
