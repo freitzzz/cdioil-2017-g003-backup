@@ -31,10 +31,10 @@ import cdioil.feedbackmonkey.R;
 
 public class MainMenuActivity extends AppCompatActivity {
     private static final int CURRENT_WINDOW_HEIGHT = Resources.getSystem().getDisplayMetrics().heightPixels;
-    private String[] menuOptions = {"Listar Inquéritos", "Scan QR Code", "Perfil", "Funcionalidade 4"};
+    private String[] menuOptions = {"Listar Inquéritos", "Scan de Códigos", "Perfil", "Partilhe as suas ideias connosco!"};
     private int[] menuOptionImages = {R.drawable.survey_icon, R.drawable.code_search_icon, R.drawable.profile_icon,
             R.drawable.question_mark};
-    private String[] menuBackgroundColors = {"#17a2da","#ffd05b","#f96955","#17a2da"};
+    private String[] menuBackgroundColors = {"#ffffff","#ffd05b","#ffffff","#ffd05b"};
 
     private int optionIndex;
 
@@ -127,6 +127,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 ImageView imageView = convertView.findViewById(R.id.mainMenuOptionImgView);
                 TextView textView = convertView.findViewById(R.id.mainMenuOptionTxtView);
                 textView.setText(menuOptions[optionIndex]);
+                if(optionIndex % 2 == 0){
+                    textView.setTextColor(Color.parseColor("#3d3d3d"));
+                }
                 imageView.setImageResource(menuOptionImages[optionIndex]);
                 optionIndex++;
             }
