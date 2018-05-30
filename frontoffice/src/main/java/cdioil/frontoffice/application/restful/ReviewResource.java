@@ -101,7 +101,6 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (!ctrl.saveReview()) {
             return createInvalidReviewResponse();
         }
-        System.out.println("is review finished after answering question: " + review.isFinished());
         return createValidReviewResponse(review.getCurrentQuestion());
     }
 
@@ -250,7 +249,6 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     /**
      * Creates a Response for warning the user that the review is invalid.
      *
-     * @param question Current question of the Review
      * @return Response with the response warning the user that the review is
      * invalid
      */

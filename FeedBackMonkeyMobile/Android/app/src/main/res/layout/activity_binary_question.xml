@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-    tools:context=".authz.BinaryQuestion">
+    tools:context="cdioil.feedbackmonkey.authz.BinaryQuestionActivity">
 
 
     <Button
-        android:id="@+id/Não"
+        android:id="@+id/no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -45,7 +45,7 @@
         tools:text="Gosta da textura do produto?" />
 
     <Button
-        android:id="@+id/Sim"
+        android:id="@+id/yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
