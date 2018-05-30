@@ -199,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putString("authenticationToken", getAuthenticationToken(restResponseBodyContent));
                     mainMenuIntent.putExtras(bundle);
-                    runOnUiThread(this::clearActivityComponents);
+                    runOnUiThread(this::clearPasswordText);
                     startActivity(mainMenuIntent);
                 } else if (restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     showLoginErrorMessage("Login Inválido",
@@ -251,8 +251,7 @@ public class LoginActivity extends AppCompatActivity {
                             alertDialog.dismiss();
                         }
                     });
-                    emailText.getText().clear();
-                    passwordText.getText().clear();
+                     clearPasswordText();
                 });
             }
         }.start();
@@ -276,14 +275,15 @@ public class LoginActivity extends AppCompatActivity {
                     .withBody(new Gson().toJson(new UserJSONService(email, password, activationCode)))
                     .POST();
             switch (responseBody.code()) {
-                case 200:
+                case HttpsURLConnection.HTTP_OK:
                     showToastMessage(ACCOUNT_ACTIVATED_WITH_SUCCESS);
                     break;
-                case 400:
+                case HttpsURLConnection.HTTP_BAD_REQUEST:
                     showToastMessage(ACCOUNT_NOT_ACTIVATED_WITH_SUCCESS);
                     break;
-                case 401:
+                case HttpsURLConnection.HTTP_UNAUTHORIZED:
                     showToastMessage(ACCOUNT_ALREADY_ACTIVATED);
+                    break;
             }
         } catch (IOException ioException) {
             showToastMessage(NO_INTERNET_CONNECTION);
@@ -299,10 +299,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Clears the current activity components
+     * Clears password edit text
      */
-    private void clearActivityComponents(){
-        emailText.getText().clear();
+    private void clearPasswordText(){
         passwordText.getText().clear();
     }
 }
