@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import cdioil.feedbackmonkey.R;
 
-public class QuantitativeQuestion extends AppCompatActivity {
+public class QuantitativeQuestionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

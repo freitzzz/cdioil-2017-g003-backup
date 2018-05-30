@@ -211,25 +211,6 @@ public class SurveyTest {
     }
 
     /**
-     * Test of getProductSurveys method, of class Survey.
-     */
-    @Test
-    public void testGetProductSurveys() {
-        System.out.println("getProductSurveys");
-        //test method with both parameters null or an empty list
-        assertEquals(new ArrayList<>(), Survey.getProductSurveys(null, null));
-        assertEquals(new ArrayList<>(), Survey.getProductSurveys(new ArrayList<>(), null));
-        //test method with 1 paramater as null or empty list
-        assertEquals(new ArrayList<>(), Survey.getProductSurveys(null, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
-        assertEquals(new ArrayList<>(), Survey.getProductSurveys(new ArrayList<>(), new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
-        List<Survey> surveys = new ArrayList<>();
-        surveys.add(testGlobalSurvey);
-        assertEquals(new ArrayList<>(), Survey.getProductSurveys(surveys, null));
-        //test working method
-        assertEquals(surveys, Survey.getProductSurveys(surveys, new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235"))));
-    }
-
-    /**
      * Test of method getName, of class Survey.
      */
     @Test

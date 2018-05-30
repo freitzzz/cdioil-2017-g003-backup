@@ -7,6 +7,7 @@ import cdioil.application.authz.AuthenticationController;
 import cdioil.application.domain.authz.exceptions.AuthenticationException;
 import cdioil.frontoffice.application.authz.RegisterUserController;
 import com.google.gson.Gson;
+import java.time.format.DateTimeParseException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -138,7 +139,7 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
            RegisterUserController controller=new RegisterUserController(registerForms);
            if(validate)return Response.status(Status.OK).entity(JSON_VALID_REGISTRATION_FORM).build();
            controller.registerUser();
-        }catch(IllegalArgumentException|IllegalStateException registerException){
+        }catch(IllegalArgumentException|IllegalStateException|DateTimeParseException registerException){
            return Response.status(Status.BAD_REQUEST)
                     .entity(new Gson()
                             .toJson(new RegistrationJSONService(registerException.getMessage()

@@ -17,4 +17,5 @@
     <string name="activate_account">Ative a sua conta aqui!</string>
     <string name="activation_code">Código de Ativação</string>
     <string name="send_activate_account_request">Ativar Conta</string>
+    <string name="send_activate_account_and_login_on_register">Ativar Conta e fazer login</string>
 </resources>
