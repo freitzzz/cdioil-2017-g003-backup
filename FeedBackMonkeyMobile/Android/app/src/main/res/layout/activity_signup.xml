@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/signupImageView"
         android:layout_width="wrap_content"
-        android:layout_height="233dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
@@ -66,48 +66,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.432" />
 
-    <EditText
-        android:id="@+id/signupPhoneNumberText"
-        android:layout_width="287dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:drawableLeft="@drawable/ic_phone_black_18dp"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_phone_black_18dp"
-        android:ems="10"
-        android:fontFamily="@font/roboto_thin"
-        android:hint="@string/phone_number"
-        android:inputType="phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.674" />
-
-    <EditText
-        android:id="@+id/signupFirstNameText"
-        android:layout_width="165dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:drawableLeft="@drawable/ic_person_black_18dp"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_person_black_18dp"
-        android:ems="10"
-        android:fontFamily="@font/roboto_thin"
-        android:hint="@string/first_name"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.034"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.328" />
 
     <Button
         android:id="@+id/signupCreateAccountButton"
@@ -126,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.794" />
+        app:layout_constraintVertical_bias="0.825" />
 
     <Button
         android:id="@+id/signupAdditionalInfoButton"
@@ -136,36 +94,15 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/yellow_button"
+        android:background="@color/zxing_transparent"
         android:text="@string/signup_continue"
         android:textColor="#3D3D3D"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.914" />
+        app:layout_constraintVertical_bias="0.684" />
 
-    <EditText
-        android:id="@+id/signupLastNameText"
-        android:layout_width="155dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:drawableLeft="@drawable/ic_person_black_18dp"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_person_black_18dp"
-        android:ems="10"
-        android:fontFamily="@font/roboto_thin"
-        android:hint="@string/last_name"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.966"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.328" />
 </android.support.constraint.ConstraintLayout>

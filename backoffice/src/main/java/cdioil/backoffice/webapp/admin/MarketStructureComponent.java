@@ -20,7 +20,7 @@ public class MarketStructureComponent extends DefaultPanelView {
     /**
      * Controller Class
      */
-    private MarketStructureComponentController controller;
+    private transient MarketStructureComponentController controller;
 
     /**
      * Constructs an instance of the Market Structure view

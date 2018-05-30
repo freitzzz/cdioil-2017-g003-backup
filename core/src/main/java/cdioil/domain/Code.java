@@ -90,13 +90,4 @@ public abstract class Code<T extends Serializable> implements Serializable, Valu
     public String toString() {
         return getClass().getSimpleName() + ": " + productCode.toString() + "\n";
     }
-
-    /**
-     * Retrieves code as a string
-     *
-     * @return string equivalent to code
-     */
-    public String getCodeAsString() {
-        return productCode.toString();
-    }
 }
