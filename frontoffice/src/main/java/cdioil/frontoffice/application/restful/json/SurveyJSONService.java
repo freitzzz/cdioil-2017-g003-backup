@@ -1,4 +1,4 @@
-package cdioil.frontoffice.application.restful;
+package cdioil.frontoffice.application.restful.json;
 
 import cdioil.domain.Survey;
 import com.google.gson.annotations.SerializedName;

@@ -19,7 +19,7 @@
 /* --------------------------------------    Test listSurveys    -------------------------------------- */
 
 /*
-Request URL to use for these tests: http://localhost8080/feedbackmonkeyapi/authentication/login/surveys/useravailablesurveys/{authenticationToken}/
+Request URL to use for these tests: http://localhost8080/feedbackmonkeyapi/authentication/surveys/useravailablesurveys/{authenticationToken}?paginationID=0
 HTTP Method for all tests: GET
 */
 
@@ -35,7 +35,7 @@ pm.test("Response should be okay to process", function(){
 })
 
 // If the user has not surveys to answer
-pm.test("Status code is 200", function () {
+pm.test("Status code is 400", function () {
     pm.response.to.have.status(400);
 });
 

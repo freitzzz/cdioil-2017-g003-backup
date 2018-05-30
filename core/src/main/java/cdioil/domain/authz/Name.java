@@ -39,17 +39,20 @@ public class Name implements Serializable, ValueObject {
      */
     public Name(String firstName, String surname) {
         if (firstName == null || surname == null || firstName.isEmpty() || surname.isEmpty()) {
-            throw new IllegalArgumentException("O primeiro nome e o apelido não devem ser vazios.");
+            throw new IllegalArgumentException("O primeiro nome e o apelido não devem ser vazios."
+                    ,new Throwable(this.getClass().getSimpleName()));
         }
 
         Matcher matcher = VALID_NAME_REGEX.matcher(firstName);
         if (!matcher.find()) {
-            throw new IllegalArgumentException("Primeiro nome inválido: " + firstName);
+            throw new IllegalArgumentException("Primeiro nome inválido: " + firstName
+                    ,new Throwable(this.getClass().getSimpleName()));
         }
 
         matcher = VALID_NAME_REGEX.matcher(surname);
         if (!matcher.find()) {
-            throw new IllegalArgumentException("Apelido inválido: " + surname);
+            throw new IllegalArgumentException("Apelido inválido: " + surname
+                    ,new Throwable(this.getClass().getSimpleName()));
         }
 
         this.firstName = firstName;

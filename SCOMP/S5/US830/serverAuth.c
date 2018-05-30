@@ -200,6 +200,7 @@ int main(int argc, char* argv[]) {
 		parameters.newSock=newSock;
 		pthread_t threadID;
 		pthread_create(&threadID,NULL,handle_connection,&parameters);
+		pthread_detach(threadID);
 	}
 	return 0;
 }

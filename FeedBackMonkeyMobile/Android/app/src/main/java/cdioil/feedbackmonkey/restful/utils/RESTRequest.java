@@ -45,26 +45,20 @@ public final class RESTRequest {
     /**
      * Performs a POST request on the requested URL
      * @return Response with the POST response or null if an error ocurred
+     * @throws IOException IOException if an error ocured while sending the request
      */
-    public Response POST(){
+    public Response POST() throws IOException {
         this.currentRequestBuilder.post(createRequestBody(getMediaType(currentMediaType),currentRequestBody));
-        try{
-            return sendRequest();
-        }catch(IOException e){
-            return null;
-        }
+        return sendRequest();
     }
     /**
      * Performs a GET request on the requested URL
      * @return Response with the GET response or null if an error ocurred
+     * @throws IOException IOException if an error ocured while sending the request
      */
-    public Response GET(){
+    public Response GET() throws IOException {
         this.currentRequestBuilder.get();
-        try{
-            return sendRequest();
-        }catch(IOException e){
-            return null;
-        }
+        return sendRequest();
     }
     /**
      * Method that sets the current request media type as a certain RequestMediaType

@@ -1,0 +1,15 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Autenticação com Sucesso
+	________________________________________________
+
+	1. Autenticar me no sistema.
+	2. Ler um código utilizando o scanner.
+	3. Obter lista de inquéritos acerca do produto correspondente ao código lido aos quais posso responder.
+
+
+	Nota: Ver ficheiro US455_Testes_Postman.js onde se encontram
+	      os testes à API Rest.

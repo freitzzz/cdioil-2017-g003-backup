@@ -1,0 +1,31 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #5
+	
+	* Como Utilizador na aplicação móvel, ao ler um código de barras ou um QRCode quero poder responder aoinquérito associado, se tiver permissão para tal.
+
+	______________________
+	
+	FORMATO BREVE
+	______________________
+
+	O utilizador lê um código utilizando o scanner.
+	O sistema lista os inquéritos a que o utilizador pode responder acerca do produto correspondente ao código lido.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------

@@ -38,7 +38,7 @@ public class AddCategoriesManagerWindow extends CategoryManagementWindow {
     /**
      * Controller class
      */
-    private CategoryManagementController controller;
+    private transient CategoryManagementController controller;
 
     /**
      * Creates window with a manager email
@@ -58,6 +58,7 @@ public class AddCategoriesManagerWindow extends CategoryManagementWindow {
         controller = new CategoryManagementController();
         if (!controller.setManager(selectedEmail)) {
             Notification.show(MANAGER_NOT_SET_ERROR, Notification.Type.ERROR_MESSAGE);
+            close();
             return;
         }
     }
@@ -88,6 +89,8 @@ public class AddCategoriesManagerWindow extends CategoryManagementWindow {
             Notification.show(String.format(ADDED_NOTADDED_MESSAGE,
                     successCounter, errorCounter, notAddedPaths.toString()),
                     Notification.Type.TRAY_NOTIFICATION);
+            close();
+            return;
         }
     }
 }

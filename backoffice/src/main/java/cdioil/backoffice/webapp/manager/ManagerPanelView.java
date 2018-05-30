@@ -60,11 +60,10 @@ public class ManagerPanelView extends MainLayoutView implements View {
 
     /**
      * Builds a new ManagerPanelView
-     * @param authenticationController AuthenticationController with the current 
      * authentication controller
      */
     public ManagerPanelView(AuthenticationController authenticationController){
-        super(authenticationController);
+        super();
         configuration();
         setRightPanelContents(new DashboardComponent());
     }

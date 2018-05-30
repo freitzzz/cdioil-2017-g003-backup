@@ -74,6 +74,7 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
      * User's name.
      */
     @Embedded
+    @Column(nullable = true)
     private Name name;
     /**
      * User's password.
@@ -84,7 +85,7 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
      * User's Phone Number
      */
     @Embedded
-    @Column(unique = true)
+    @Column(nullable = true,unique = true)
     private PhoneNumber phoneNumber;
     /**
      * User's Location
@@ -129,12 +130,14 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
         if (password == null) {
             throw new IllegalArgumentException("A password não pode ser null!");
         }
-        if (name == null) {
-            throw new IllegalArgumentException("O nome não pode ser null!");
-        }
-        if (phoneNumber == null) {
-            throw new IllegalArgumentException("O número de telemóvel não pode ser null!");
-        }
+        //#(28/05/2018) Commented out due to client feedback on Sprint Review #5
+        //Still needs to be discussed
+//        if (name == null) {
+//            throw new IllegalArgumentException("O nome não pode ser null!");
+//        }
+//        if (phoneNumber == null) {
+//            throw new IllegalArgumentException("O número de telemóvel não pode ser null!");
+//        }
         this.email = email;
         this.name = name;
         this.password = password;

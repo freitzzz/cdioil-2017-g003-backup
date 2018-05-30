@@ -21,4 +21,12 @@ public interface AuthenticationAPI {
      * @return Response with the response regarding the account activation
      */
     public Response activateAccount(String requestBody);
+    /**
+     * Registers an account using the FeedbackMonkey API
+     * @param requestBody String with the register request body
+     * @param validate Boolean if the registration is to be validated instead of 
+     * register
+     * @return Response with the response regarding the account registration
+     */
+    public Response registerAccount(String requestBody,boolean validate);
 }

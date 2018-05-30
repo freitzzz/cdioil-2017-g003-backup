@@ -222,25 +222,4 @@ public abstract class Survey implements Serializable {
 
         return stringBuilder.toString();
     }
-
-    /**
-     * Filters a list of surveys using a product
-     *
-     * @param surveys list of surveys
-     * @param p product to filter by
-     * @return list of surveys about the product
-     */
-    public static List<Survey> getProductSurveys(List<Survey> surveys, Product p) {
-        if (surveys == null || surveys.isEmpty() || p == null) {
-            return new ArrayList<>();
-        }
-        List<Survey> filteredSurveys = new ArrayList<>();
-        for (Survey survey : surveys) {
-            if (survey.itemList.contains(p)) {
-                filteredSurveys.add(survey);
-            }
-        }
-        return filteredSurveys;
-    }
-
 }

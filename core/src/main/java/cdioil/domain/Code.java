@@ -38,7 +38,7 @@ public abstract class Code<T extends Serializable> implements Serializable, Valu
      */
     @Column(unique = true)
     protected T productCode;
-    
+
     /**
      * Empty constructor for JPA.
      */
@@ -47,6 +47,7 @@ public abstract class Code<T extends Serializable> implements Serializable, Valu
 
     /**
      * Returns the instance's hash.
+     *
      * @return the hash value
      */
     @Override
@@ -58,7 +59,9 @@ public abstract class Code<T extends Serializable> implements Serializable, Valu
     }
 
     /**
-     * Checks for true equality with another object based on the productCode's value.
+     * Checks for true equality with another object based on the productCode's
+     * value.
+     *
      * @param obj object to compare to
      * @return true if the objects are truly equal, false otherwise
      */
@@ -74,7 +77,7 @@ public abstract class Code<T extends Serializable> implements Serializable, Valu
             return false;
         }
         final Code other = (Code) obj;
-        
+
         return Objects.equals(this.productCode, other.productCode);
     }
 
@@ -87,5 +90,4 @@ public abstract class Code<T extends Serializable> implements Serializable, Valu
     public String toString() {
         return getClass().getSimpleName() + ": " + productCode.toString() + "\n";
     }
-
 }

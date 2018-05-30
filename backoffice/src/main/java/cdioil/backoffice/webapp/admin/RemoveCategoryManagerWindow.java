@@ -65,7 +65,7 @@ public class RemoveCategoryManagerWindow extends Window {
     /**
      * Controller class
      */
-    private CategoryManagementController controller;
+    private transient CategoryManagementController controller;
 
     /**
      * Main Window Layout

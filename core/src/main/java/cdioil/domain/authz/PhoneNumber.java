@@ -55,7 +55,8 @@ public class PhoneNumber implements Serializable, ValueObject {
      */
     public PhoneNumber(String number) {
         if (!validateNumber(number)) {
-            throw new IllegalArgumentException(NUMBER_INVALID);
+            throw new IllegalArgumentException(NUMBER_INVALID
+                    ,new Throwable(this.getClass().getSimpleName()));
         }
         this.number = encryptNumber(number);
     }
@@ -88,7 +89,8 @@ public class PhoneNumber implements Serializable, ValueObject {
         Matcher matcher = pattern.matcher(number);
 
         if (!StringUtils.isNumber(number)) {
-            throw new IllegalArgumentException(CONTAINS_NON_DIGIT_CHARACTERS);
+            throw new IllegalArgumentException(CONTAINS_NON_DIGIT_CHARACTERS
+                    ,new Throwable(this.getClass().getSimpleName()));
         }
 
         return matcher.matches();

@@ -15,12 +15,12 @@
             android:id="@+id/textViewListSurveys"
             android:layout_width="match_parent"
             android:layout_height="51dp"
-            android:background="@android:color/holo_red_light"
+            android:background="#ffffff"
             android:fontFamily="@font/fabrica_font"
             android:gravity="center"
             android:text="Inquéritos Disponiveis"
             android:textAppearance="@style/TextAppearance.AppCompat.Tooltip"
-            android:textColor="@android:color/background_light"
+            android:textColor="@android:color/black"
             android:textColorHighlight="@android:color/transparent"
             android:textSize="30dp" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/listViewListSurveys"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/j_shine"
+            android:background="@android:color/white"
             android:scrollbars="vertical" />
 
     </LinearLayout>

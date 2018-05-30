@@ -43,6 +43,21 @@ public final class RegisterUserController implements Serializable {
      */
     private static final String INVALID_NAME_MESSAGE="O nome do utilizador deve conter apenas o primeiro e segundo nome!";
     /**
+     * Constant that represents the message that ocures if the controller is initialized with an invalid 
+     * register form
+     */
+    private static final String INVALID_REGISTER_FORM="Por favor preencha os campos obrigatórios!";
+    /**
+     * Constant that represents the message that represents the cause of when the controller is initialized with 
+     * an invalid register form
+     */
+    private static final String INVALID_REGISTER_FORM_CAUSE="Form";
+    /**
+     * Constant that represents the message that represents the cause of when the registration process state 
+     * is invalid
+     */
+    private static final String INVALID_REGISTER_STATE_CAUSE="Registo";
+    /**
      * Constant that represents the Email identifier (<b>@</b>)
      */
     private static final String EMAIL_IDENTIFIER = "@";
@@ -54,7 +69,20 @@ public final class RegisterUserController implements Serializable {
      * Current SystemUserBuilder
      */
     private final transient SystemUserBuilder userBuilder=SystemUserBuilder.create();
-    
+    /**
+     * Builds a new RegisterUserController with a pre-defined registration form
+     * @param registerForm Array of Strings with the registration form
+     */
+    public RegisterUserController(String[] registerForm){
+        if(registerForm==null||registerForm.length==0)
+            throw new IllegalArgumentException(INVALID_REGISTER_FORM
+                    ,new Throwable(INVALID_REGISTER_FORM_CAUSE));
+        initializeRegisterForms(registerForm);
+    }
+    /**
+     * Empty constructor for console UI
+     */
+    public RegisterUserController(){}
     /**
      * Adds the email of the user to the current registration process
      * @param email String with the user email
@@ -62,10 +90,12 @@ public final class RegisterUserController implements Serializable {
     public void addEmail(String email){
         try{
             if(new WhitelistRepositoryImpl().find(email.split(EMAIL_IDENTIFIER)[1])==null)
-                throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE);
+                throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE
+                        ,new Throwable(Whitelist.class.getSimpleName()));
             userBuilder.withEmail(email);
         }catch(IndexOutOfBoundsException e){
-            throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE);
+            throw new IllegalArgumentException(DOMAIN_NOT_FOUND_MESSAGE
+                    ,new Throwable(Whitelist.class.getSimpleName()));
         }
     }
     /**
@@ -81,7 +111,9 @@ public final class RegisterUserController implements Serializable {
      */
     public void addName(String name){
         String[] splittedName=name.trim().split(REGEX_SPACES);
-        if(splittedName.length!=SPLITTED_NAME_LENGTH)throw new IllegalArgumentException(INVALID_NAME_MESSAGE);
+        if(splittedName.length!=SPLITTED_NAME_LENGTH)
+            throw new IllegalArgumentException(INVALID_NAME_MESSAGE
+                    ,new Throwable(Name.class.getSimpleName()));
         userBuilder.withName(splittedName[0],splittedName[1]);
     }
     /**
@@ -117,7 +149,8 @@ public final class RegisterUserController implements Serializable {
         }else if(importedUser.isUserImported() && !importedUser.isUserActivated()){
             registerImportedUser(importedUser,builtUser);
         }else{
-            throw new IllegalStateException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            throw new IllegalStateException(EMAIL_ALREADY_IN_USE_MESSAGE
+                    ,new Throwable(INVALID_REGISTER_STATE_CAUSE));
         }
     }
     /**
@@ -131,7 +164,8 @@ public final class RegisterUserController implements Serializable {
                     : new RegisteredUser(new UserRepositoryImpl().add(systemUser));
             registerUserRepository.add(registeredUser);
         }else{
-            throw new IllegalStateException(REGISTERED_USED_SUCCESS_FAILURE);
+            throw new IllegalStateException(REGISTERED_USED_SUCCESS_FAILURE
+                    ,new Throwable(INVALID_REGISTER_STATE_CAUSE));
         }
     }
     /**
@@ -145,7 +179,8 @@ public final class RegisterUserController implements Serializable {
             importedUser.mergeImportedSystemUser(builtUser);
             registerUser(importedUser,true);
         }else{
-            throw new IllegalStateException(EMAIL_ALREADY_IN_USE_MESSAGE);
+            throw new IllegalStateException(EMAIL_ALREADY_IN_USE_MESSAGE
+                    ,new Throwable(INVALID_REGISTER_STATE_CAUSE));
         }
     }
 
@@ -155,5 +190,40 @@ public final class RegisterUserController implements Serializable {
      */
     private boolean sendRegisterCode(SystemUser user){
         return new EmailSenderService(user).sendActivationCode();
+    }
+    /**
+     * Initializes the controller with the registration form
+     * @param registerForms 
+     */
+    private void initializeRegisterForms(String[] registerForms){
+        for(int i=0;i<registerForms.length;i++){
+            switch(i){
+                case 0:
+                    addEmail(registerForms[i]);
+                    break;
+                case 1:
+                    addPassword(registerForms[i]);
+                    break;
+                case 2:
+                    if(registerForms[i]!=null)
+                        addName(registerForms[i]);
+                    break;
+                case 3:
+                    if(registerForms[i]!=null)
+                        addPhoneNumber(registerForms[i]);
+                    break;
+                case 4:
+                    if(registerForms[i]!=null)
+                        addLocation(registerForms[i]);
+                    break;
+                case 5:
+                    if(registerForms[i]!=null)
+                        addBirthDate(registerForms[i]);
+                    break;
+                default:
+                    throw new IllegalArgumentException(INVALID_REGISTER_FORM
+                            ,new Throwable(INVALID_REGISTER_STATE_CAUSE));
+            }
+        }
     }
 }

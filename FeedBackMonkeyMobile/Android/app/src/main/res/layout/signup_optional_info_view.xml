@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+
+    <TextView
+        android:id="@+id/additionalDataInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_mono_medium"
+        android:gravity="center"
+        android:text="@string/additional_data"
+        android:textColor="#3D3D3D"
+        android:textSize="24sp"
+        android:textStyle="normal|bold" />
+
+    <ImageView
+        android:id="@+id/signupOptionalInfoImage"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/feedback_monkey_small" />
+
+    <EditText
+        android:id="@+id/signupFirstNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_person_black_18dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_person_black_18dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto_thin"
+        android:hint="@string/first_name"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.328" />
+
+    <EditText
+        android:id="@+id/signupLastNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_person_black_18dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_person_black_18dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto_thin"
+        android:hint="@string/last_name"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.966"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.328" />
+
+    <EditText
+        android:id="@+id/signupPhoneNumberText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_phone_black_18dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_phone_black_18dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto_thin"
+        android:hint="@string/phone_number"
+        android:inputType="phone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.674" />
+
+    <EditText
+        android:id="@+id/signupLocationText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_location_on_black_18dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_location_on_black_18dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto_thin"
+        android:hint="@string/location"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/signupBirthDateText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:autoText="false"
+        android:drawableLeft="@drawable/ic_calendar_black_18dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_calendar_black_18dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto_thin"
+        android:hint="@string/birth_date"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/signupRequestButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/yellow_button"
+        android:text="@string/create_account"
+        android:textColor="#3D3D3D"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+</LinearLayout>
