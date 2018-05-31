@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:seekarc="http://jitpack.io"
-    tools:context=".authz.QuantitativeQuestion">
+    tools:context="cdioil.feedbackmonkey.authz.QuantitativeQuestionActivity">
 
     <com.triggertrap.seekarc.SeekArc
         android:id="@+id/seekArc"

@@ -186,13 +186,13 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
         //A native query is used since JPQL does not allow direct interaction with join tables
         //Two lists are used rather than on, since a sequence ID generation could cause clashing of IDs
         q = entityManager().createNativeQuery("SELECT t.TARGETEDSURVEY_ID FROM TARGETEDSURVEY_SURVEYITEM t "
-                + "WHERE t.ITEMLIST_ID = " + productID);
-
+                + "WHERE t.ITEMLIST_ID = ?");
+        q.setParameter(1, productID);
         List<Long> targetedSurveyIDs = (List<Long>) q.getResultList();
 
         q = entityManager().createNativeQuery("SELECT g.GLOBALSURVEY_ID FROM GLOBALSURVEY_SURVEYITEM g "
-                + "WHERE g.ITEMLIST_ID = " + productID);
-
+                + "WHERE g.ITEMLIST_ID = ?");
+        q.setParameter(1, productID);
         List<Long> globalSurveyIDs = (List<Long>) q.getResultList();
 
         if (targetedSurveyIDs.isEmpty() && globalSurveyIDs.isEmpty()) {

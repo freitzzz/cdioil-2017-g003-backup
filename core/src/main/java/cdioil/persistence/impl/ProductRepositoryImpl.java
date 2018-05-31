@@ -29,7 +29,7 @@ public class ProductRepositoryImpl extends BaseJPARepository<Product,Long> imple
     @Override
     public List<Product> getProductsByCode(String code) {
         
-        Query q = entityManager().createNativeQuery("SELECT pc.PRODUCT_ID FROM PRODUCT_CODE pc WHERE pc.CODES_ID IN "
+        Query q = entityManager().createNativeQuery("SELECT DISTINCT pc.PRODUCT_ID FROM PRODUCT_CODE pc WHERE pc.CODES_ID IN "
                 + "(SELECT q.ID FROM QR_CODE q WHERE q.PRODUCTCODE = ?"
                 + " UNION "
                 + "SELECT e.ID FROM EAN e WHERE e.PRODUCTCODE = ?)");

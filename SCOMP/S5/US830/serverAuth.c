@@ -68,7 +68,9 @@ Used by passively waiting thread.*/
 void* print_incoming_reviews(void* arg){
 	while(1){
 		pthread_mutex_lock(&mutex);
-		pthread_cond_wait(&cond,&mutex);
+		while(last_written_review_index == written_review_counter){
+			pthread_cond_wait(&cond,&mutex);
+		}
 		int i;
 		for(i = last_written_review_index; i < written_review_counter; i++){
 			printf("\n\nProduct %s",shared_review[i].product_name);
