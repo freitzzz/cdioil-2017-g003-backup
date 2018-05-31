@@ -3,6 +3,7 @@ package cdioil.application.bootstrap.domain;
 import cdioil.application.utils.CSVCategoriesReader;
 import cdioil.domain.Category;
 import cdioil.domain.Code;
+import cdioil.domain.EAN;
 import cdioil.domain.MarketStructure;
 import cdioil.domain.Product;
 import cdioil.domain.QRCode;
@@ -40,11 +41,13 @@ public class MarketStructureBootstrap {
         Category cat = new Category("Bootstrap Cat", "10938DC");
         String skuCode = Integer.toString(Integer.MAX_VALUE);
         String qrCode = Integer.toString(Integer.MAX_VALUE - 1);
+        String eanCode = Integer.toString(Integer.MAX_VALUE - 1);
         SKU sku = new SKU(skuCode);
         Code qr = new QRCode(qrCode);
+        Code ean = new EAN(eanCode);
         String quantity = "1 L";
         Product prod = new Product("Bootstrap Product", sku,quantity,
-                qr);
+                qr, ean);
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {
             File catFile = findCSVFile();
