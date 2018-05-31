@@ -7,6 +7,7 @@ import cdioil.domain.authz.*;
 import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.persistence.impl.WhitelistRepositoryImpl;
 import java.io.Serializable;
+import java.time.format.DateTimeParseException;
 
 /**
  * Controller for the Register User use case (US-180)
@@ -57,6 +58,11 @@ public final class RegisterUserController implements Serializable {
      * is invalid
      */
     private static final String INVALID_REGISTER_STATE_CAUSE="Registo";
+    /**
+     * Constant that represents the message that ocures if the user inserts a birth date which format 
+     * is invalid
+     */
+    private static final String INVALID_BIRTH_DATE_MESSAGE="O formato da data de nascimento é inválido!";
     /**
      * Constant that represents the Email identifier (<b>@</b>)
      */
@@ -135,7 +141,14 @@ public final class RegisterUserController implements Serializable {
      * @param birthDate String with the user birth date
      */
     public void addBirthDate(String birthDate){
-        userBuilder.withBirthDate(birthDate);
+        try{
+            userBuilder.withBirthDate(birthDate);
+        }catch(DateTimeParseException dateTimeParseException){
+            throw new DateTimeParseException(INVALID_BIRTH_DATE_MESSAGE
+                    ,dateTimeParseException.getParsedString()
+                    ,dateTimeParseException.getErrorIndex()
+                    ,new Throwable(BirthDate.class.getSimpleName()));
+        }
     }
     
     /**
