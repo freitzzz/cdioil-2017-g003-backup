@@ -17,4 +17,8 @@ public interface CommonFileExtensions {
      * Constant that represents a CSV file extension
      */
     public static final String CSV_EXTENSION=".csv";
+    /**
+     * Constant that represents a JSON file extension
+     */
+    public static final String JSON_EXTENSION=".json";
 }

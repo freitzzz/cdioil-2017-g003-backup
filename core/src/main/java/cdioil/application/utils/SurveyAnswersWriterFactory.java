@@ -25,6 +25,8 @@ public final class SurveyAnswersWriterFactory {
     public static SurveyAnswersWriter create(String filename,List<Review> surveyReviews){
         if(filename.endsWith(CommonFileExtensions.CSV_EXTENSION)){
             return new CSVSurveyAnswersWriter(filename,surveyReviews);
+        }else if(filename.endsWith(CommonFileExtensions.JSON_EXTENSION)){
+            return new JSONSurveyAnswersWriter(filename,surveyReviews);
         }
         return null;
     }
