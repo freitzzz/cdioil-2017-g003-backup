@@ -278,7 +278,17 @@ public class ReviewTest {
         assertEquals(result, expResult);
         assertNotEquals(result, null);
     }
-
+    /**
+     * Test of getSuggestion method, of class Review.
+     */
+    @Test
+    public void testGetSuggestion(){
+        System.out.println("getSuggestion");
+        Review review=createReview(instance.getSurvey());
+        assertNull("The condition must be succesful since the current review has no suggestion",review.getSuggestion());
+        review.submitSuggestion("Grimes X Elon Musk <3");
+        assertNotNull("The condition must be succesful since the current review has a suggestion",review.getSuggestion());
+    }
     /**
      * Builds a Review instance with a survey.
      *

@@ -223,7 +223,13 @@ public class Review implements Serializable {
     public boolean hasSuggestion() {
         return suggestion != null;
     }
-
+    /**
+     * Returns the Review suggestion
+     * @return String with review suggestion
+     */
+    public String getSuggestion(){
+        return suggestion!=null ? suggestion.toString() : null;
+    }
     /**
      * Review's hash code
      *

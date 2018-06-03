@@ -1,13 +1,18 @@
 package cdioil.application.utils;
 
+import cdioil.application.utils.services.json.ReviewJSONService;
 import cdioil.domain.Review;
+import cdioil.files.FileWriter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * JSONSurveyAnswersWriter class that writes survey answers into a JSON file
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
- * @since Version 5.0 of FeedbackMonkey
+ * @since Version 6.0 of FeedbackMonkey
  */
 public final class JSONSurveyAnswersWriter implements SurveyAnswersWriter{
     /**
@@ -36,6 +41,11 @@ public final class JSONSurveyAnswersWriter implements SurveyAnswersWriter{
      */
     @Override
     public boolean write() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<String> surveyAnswers=new ArrayList<>();
+        Gson gson=new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
+        surveyReviews.forEach((review) -> {
+            surveyAnswers.add(gson.toJson(new ReviewJSONService(review.getReviewQuestionAnswers(),review.getSuggestion())));
+        });
+        return FileWriter.writeFile(file,surveyAnswers);
     }
 }
