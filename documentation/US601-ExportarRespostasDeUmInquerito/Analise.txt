@@ -5,8 +5,13 @@
 
 	USER STORY DE SPRINT #2
 
-	* Como Gestor pretendo exportar todas as respostas de um determinado inqu�rito para um ficheiro
-	* Os ficheiros a serem exportados dever�o ser do formato CSV
+	* Como Gestor pretendo exportar todas as respostas de um determinado inquérito para um ficheiro
+	* Os ficheiros a serem exportados deverão ser do formato CSV
+
+	USER STORY DE SPRINT #6
+
+	* Como Gestor pretendo exportar todas as respostas de um determinado inquérito para um ficheiro
+	* Os ficheiros a serem exportados deverão ser do formato CSV,XML ou JSON
 
 	----------------------
 	Formato Breve

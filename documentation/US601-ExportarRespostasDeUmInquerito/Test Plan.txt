@@ -1,15 +1,48 @@
-
-
 	TEST PLAN
 
-	_______________________________
-	CASO #1: Exportar Respostas de um Inqu�rito para um ficheiro do formato CSV
-	_______________________________
+		---------------------------------------------------------------------------
+		CASO #1: Exportar Respostas de um Inquérito para um ficheiro do formato CSV
+		---------------------------------------------------------------------------
 
-	1. Mostrar os inqu�ritos disponiveis
-	2. Escolher um inqu�rito
-	3. Encontrar todas as respostas do inqu�rito
-	4. Pedir informa��o do nome do ficheiro CSV
-	5. Exportar as respostas para o ficheiro CSV
-	6. Informar o sucesso da opera��o
-	7. Verificar se o ficheiro CSV exportado contém as respostas do inquérito
+		1. Mostrar os inquéritos disponíveis
+		2. Escolher um inquérito
+		3. Encontrar todas as respostas do inquérito
+		4. Pedir informação do nome do ficheiro CSV
+		5. Inserir o nome do ficheiro CSV
+		6. Exportar as respostas para o ficheiro CSV
+		7. Verificar se o ficheiro CSV exportado contém as respostas a serem exportadas
+
+		---------------------------------------------------------------------------
+		CASO #2: Exportar Respostas de um Inquérito para um ficheiro do formato XML
+		---------------------------------------------------------------------------
+
+		1. Mostrar os inquéritos disponíveis
+		2. Escolher um inquérito
+		3. Encontrar todas as respostas do inquérito
+		4. Pedir informação do nome do ficheiro XML
+		5. Inserir o nome do ficheiro XML
+		6. Exportar as respostas para o ficheiro XML
+		7. Verificar se o ficheiro XML exportado contém as respostas a serem exportadas
+
+		----------------------------------------------------------------------------
+		CASO #3: Exportar Respostas de um Inquérito para um ficheiro do formato JSON
+		----------------------------------------------------------------------------
+
+		1. Mostrar os inquéritos disponíveis
+		2. Escolher um inquérito
+		3. Encontrar todas as respostas do inquérito
+		4. Pedir informação do nome do ficheiro JSON
+		5. Inserir o nome do ficheiro JSON
+		6. Exportar as respostas para o ficheiro JSON
+		7. Verificar se o ficheiro JSON exportado contém as respostas a serem exportadas
+
+		--------------------------------------------------------------------------------
+		CASO #4: Exportar Respostas de um Inquérito para um ficheiro de formato inválido
+		--------------------------------------------------------------------------------
+
+		1. Mostrar os inquéritos disponíveis
+		2. Escolher um inquérito
+		3. Encontrar todas as respostas do inquérito
+		4. Pedir informação do nome do ficheiro com formato inválido
+		5. Inserir o nome do ficheiro inválido (Qualquer ficheiro sem ter as extensões CSV,XML ou JSON)
+		6. Informar o Gestor que o ficheiro a ser exportado é invalido

@@ -6,6 +6,6 @@
 
 
 
-   	Classes do domínio:  Survey, Review, Question, Answer
-   	Controlador: ExportSurveyAnswersController
+   	Classes do dominio:  Survey, Review, Question, Answer
+   	Controlador: ExportSurveyAnswersController, SurveyController
    	Repository: ReviewRepository,SurveyRepository
