@@ -27,6 +27,8 @@ public final class SurveyAnswersWriterFactory {
             return new CSVSurveyAnswersWriter(filename,surveyReviews);
         }else if(filename.endsWith(CommonFileExtensions.JSON_EXTENSION)){
             return new JSONSurveyAnswersWriter(filename,surveyReviews);
+        }else if(filename.endsWith(CommonFileExtensions.XML_EXTENSION)){
+            return new XMLSurveyAnswersWriter(filename,surveyReviews);
         }
         return null;
     }

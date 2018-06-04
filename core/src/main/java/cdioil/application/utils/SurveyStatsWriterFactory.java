@@ -28,8 +28,7 @@ public final class SurveyStatsWriterFactory {
      * @param binaryMeanDeviation Mean deviation for binary answers
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
-     * @return the created SurveyStatsWriter. If the file is not valid, returns
-     * null.
+     * @return the created SurveyStatsWriter. If the file is not valid, returns null.
      */
     public static SurveyStatsWriter create(String filename, Map<Question, Integer> totalBinary, Map<Question, Integer> totalQuantitative,
             Map<Question, Double> binaryMean, Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation,
@@ -38,7 +37,14 @@ public final class SurveyStatsWriterFactory {
             return new CSVSurveyStatsWriter(filename, totalBinary,
                     totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         }
+        if (filename.endsWith(CommonFileExtensions.XML_EXTENSION)) {
+            return new XMLSurveyStatsWriter(filename, totalBinary,
+                    totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+        }
+        if (filename.endsWith(CommonFileExtensions.JSON_EXTENSION)) {
+            return new JSONSurveyStatsWriter(filename, totalBinary,
+                    totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+        }
         return null;
     }
-
 }
