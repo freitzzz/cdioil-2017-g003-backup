@@ -8,7 +8,7 @@
 	* Como Gestor, pretendo exportar todas as estatísticas de um determinado inquérito para um ficheiro.
 	* As estatísticas incluem o número total de respostas, a sua média e o desvio padrão.
 	* As estatísticas só se aplicam para questões binárias e quantitativas, excluindo as de escolha múltipla.
-	* Os ficheiros a serem exportados deverão ser do formato CSV.
+	* Os ficheiros a serem exportados deverão ser do formato CSV, XML ou JSON.
 
 	______________________
 
