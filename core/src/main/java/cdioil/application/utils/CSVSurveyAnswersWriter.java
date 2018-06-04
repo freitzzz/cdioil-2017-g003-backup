@@ -22,7 +22,23 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
     /**
      * Constant that represents the label used for the answer identifier on the CSV file
      */
-    private static final String ANSWER_LABEL="Resposta";
+    private static final String ANSWER_LABEL="Respostas";
+    /**
+     * Constant that represents the label used for suggestion identified on the CSV file
+     */
+    private static final String SUGGESTION_LABEL="Sugestões";
+    /**
+     * Constant that represents the label being used for the Survey Informations header
+     */
+    private static final String SURVEY_INFORMATIONS_HEADER="Informações Inquérito";
+    /**
+     * Constant that represents the label being used for the survey review count identified on the CSV file
+     */
+    private static final String SURVEY_REVIEW_COUNT="NºAvaliações:";
+    /**
+     * Constant that represents the number of lines used to space different information about the reviews
+     */
+    private static final int CSV_LINES_SPACING=3;
     /**
      * Constant that represents the delimiter use for the CSV file (UTF-8 semi-colon like)
      */
@@ -53,13 +69,18 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
     public boolean write() {
         Map<Question,List<Answer>> mapQuestionAnswers=allQuestionsPerAnswers();
         List<String> csvContent=new ArrayList<>();
+        csvContent.addAll(prepareCSVHeader());
+        for(int i=0;i<CSV_LINES_SPACING;i++)csvContent.add(""+CSV_DELIMITER);
+        csvContent.addAll(prepareReviewSuggestionsListing());
+        for(int i=0;i<CSV_LINES_SPACING;i++)csvContent.add(""+CSV_DELIMITER);
         String header=QUESTION_LABEL+CSV_DELIMITER+ANSWER_LABEL;
         csvContent.add(header);
-        mapQuestionAnswers.forEach((question,answers)->
-            answers.forEach(answer->
-                csvContent.add(question.toString()+CSV_DELIMITER+answer.toString())
-            )
-        );
+        mapQuestionAnswers.forEach((question,answers)->{
+            csvContent.add(question.toString());
+            answers.forEach(answer->{
+                csvContent.add(CSV_DELIMITER+answer.toString());
+            });
+        });
         return FileWriter.writeFile(file,csvContent);
     }
     /**
@@ -68,8 +89,8 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
      */
     private Map<Question,List<Answer>> allQuestionsPerAnswers(){
         Map<Question,List<Answer>> mapQuestionAnswers=new HashMap<>();
-        surveyReviews.forEach(t->{
-            Map<Question,Answer> surveyAnswers=t.getReviewQuestionAnswers();
+        surveyReviews.forEach(review->{
+            Map<Question,Answer> surveyAnswers=review.getReviewQuestionAnswers();
             surveyAnswers.forEach((question,answer)->{
                 List<Answer> questionAnswers=mapQuestionAnswers.get(question);
                 if(questionAnswers==null){
@@ -80,5 +101,29 @@ public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
             });
         });
         return mapQuestionAnswers;
+    }
+    /**
+     * Prepares the CSV header containing the survey information
+     * @return List with the CSV header used containing the survey information
+     */
+    private List<String> prepareCSVHeader(){
+        List<String> csvHeader=new ArrayList<>();
+        csvHeader.add(SURVEY_INFORMATIONS_HEADER);
+        csvHeader.add(SURVEY_REVIEW_COUNT+CSV_DELIMITER+surveyReviews.size());
+        return csvHeader;
+    }
+    /**
+     * Prepares the reviews suggestions listing
+     * @return List with the reviews suggestions prepared for the CSV file on a listing mode
+     */
+    private List<String> prepareReviewSuggestionsListing(){
+        List<String> csvReviewSuggestions=new ArrayList<>();
+        csvReviewSuggestions.add(SUGGESTION_LABEL);
+        for(int i=0;i<surveyReviews.size();i++){
+            if(surveyReviews.get(i).getSuggestion()!=null){
+                csvReviewSuggestions.add(surveyReviews.get(i).getSuggestion());
+            }
+        }
+        return csvReviewSuggestions;
     }
 }

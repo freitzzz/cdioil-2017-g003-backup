@@ -41,11 +41,11 @@ public final class JSONSurveyAnswersWriter implements SurveyAnswersWriter{
      */
     @Override
     public boolean write() {
-        List<String> surveyAnswers=new ArrayList<>();
+        List<ReviewJSONService> surveyAnswers=new ArrayList<>();
         Gson gson=new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
         surveyReviews.forEach((review) -> {
-            surveyAnswers.add(gson.toJson(new ReviewJSONService(review.getReviewQuestionAnswers(),review.getSuggestion())));
+            surveyAnswers.add(new ReviewJSONService(review.getReviewQuestionAnswers(),review.getSuggestion()));
         });
-        return FileWriter.writeFile(file,surveyAnswers);
+        return FileWriter.writeFile(file,gson.toJson(surveyAnswers));
     }
 }
