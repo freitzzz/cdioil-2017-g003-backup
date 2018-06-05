@@ -28,8 +28,8 @@ char produtos[][20] = {
 	"Cereais",
 	"Leite"};
 
-#define QUEUE_NAME "queueReviews.txt"
-#define REVIEW_LABEL "# Review"
+#define QUEUE_NAME "ReviewsDatabase.txt"
+#define REVIEW_LABEL "Review"
 #define PRODUCT_NAME_LABEL "PRODUCT_NAME="
 #define ID_LABEL "ID="
 #define VALOR_LABEL "VALOR="
@@ -49,44 +49,57 @@ Review* initialize_review_shm_queue(){
 	for(i=0;i<lines;i++){
 		if(startsWith(REVIEW_LABEL,queue[i]))reviews++;
 	}
+	printf("Reviews on file: %d\n",reviews);
 	Review* review=malloc((reviews+1)*sizeof(Review));
 	int currentReview=0;
 	for(i=0;i<lines;i++){
 		if(startsWith(REVIEW_LABEL,queue[i])){
-			strcpy(review[currentReview].product_name,getIdentifierName(queue[++i],PRODUCT_NAME_LABEL));
-			review[currentReview].id=*(getIdentifierValue(queue[++i],ID_LABEL));
-			review[currentReview].valor=*(getIdentifierValue(queue[++i],VALOR_LABEL));
-			//printf("Product Name read: %s\nProduct ID read: %d\nProduct Value read: %d\n",review[currentReview].product_name,review[currentReview].id,review[currentReview].valor);
+			printf("Line with Product name (down):\n%s\n",queue[i+1]);
+			char* identifierName=getIdentifierName(queue[i+1],PRODUCT_NAME_LABEL);
+			int j;
+			int length=strlen(identifierName);
+			for(j=0;j<length;j++){
+				if(identifierName[j]<32){
+					identifierName[j]=0;
+					j=length;
+				}
+			}
+			strcpy(review[currentReview].product_name,identifierName);
+			review[currentReview].id=*(getIdentifierValue(queue[i+2],ID_LABEL));
+			int* value=(getIdentifierValue(queue[i+3],VALOR_LABEL));
+			review[currentReview].id=*value;
 			currentReview++;
 		}
 	}
+	printf("Reviews Read: %d\n",currentReview);
 	queueReviewsSize=currentReview;
 	return review;
 }
 
 void persist_queue_reviews(Review* queueReviews,Review reviewToPersist){
+	printf("Queue Size: %d\n",queueReviewsSize);
 	if(!queueReviewsSize){
 			queueReviewsSize=0;
 			queueReviews=malloc(sizeof(Review));
-			strcpy(queueReviews[queueReviewsSize].product_name,reviewToPersist.product_name);
-			queueReviews[queueReviewsSize].id=reviewToPersist.id;
-			queueReviews[queueReviewsSize].valor=reviewToPersist.valor;
-			queueReviewsSize++;
 	}
+	strcpy(queueReviews[queueReviewsSize].product_name,reviewToPersist.product_name);
+	queueReviews[queueReviewsSize].id=reviewToPersist.id;
+	queueReviews[queueReviewsSize].valor=reviewToPersist.valor;
+	queueReviewsSize++;
+	printf("First Product Name: %s\n",queueReviews[0].product_name);
 	int i,j;
-	int reviewSize=((strlen(REVIEW_LABEL)+strlen(PRODUCT_NAME_LABEL)+strlen(ID_LABEL)+strlen(VALOR_LABEL)+5)+sizeof(Review));
-	char queueContent[reviewSize][queueReviewsSize];
-	for(i=0;i<queueReviewsSize;i++){
-			snprintf(queueContent[i],reviewSize,"%s\n%s%s\n%s%d\n%s%d\n",REVIEW_LABEL,PRODUCT_NAME_LABEL,queueReviews[i].product_name,ID_LABEL,queueReviews[i].id,VALOR_LABEL,queueReviews[i].valor);
-	}
+	int reviewSize=((strlen(REVIEW_LABEL)+strlen(PRODUCT_NAME_LABEL)+strlen(ID_LABEL)+strlen(VALOR_LABEL)+60)+sizeof(Review));
+	char queueContent[queueReviewsSize][reviewSize];
 	int queueContentSize=(reviewSize*queueReviewsSize);
 	int currentSize=0;
-	//char* content=malloc(500);
-	// for(i=0;i<queueReviewsSize;i++)
-	// 	for(j=0;j<reviewSize;j++)
-	// 		content[currentSize]=queueContent[i][j];
-	// printf("->>>>>>>>>>>>>> %s\n",content);
-	write_all_lines(QUEUE_NAME,(char*)queueContent);
+	char ok[queueContentSize];
+	for(i=0;i<queueReviewsSize;i++){
+			snprintf(queueContent[i],reviewSize,"#### REVIEW ####\n%s\n%s%s\n%s%d\n%s%d\n#### END REVIEW ####\n",REVIEW_LABEL,PRODUCT_NAME_LABEL,queueReviews[i].product_name,ID_LABEL,queueReviews[i].id,VALOR_LABEL,queueReviews[i].valor);
+			strcat(ok,queueContent[i]);
+			printf("What it's supose to read:\n\n%s\n",queueContent[i]);
+	}
+	printf("WHAT IT'S SUPPOSE TO PERSIST........\n\n%s\n",ok);
+	write_all_lines(QUEUE_NAME,ok);
 }
 
 
@@ -234,7 +247,10 @@ int main(int argc,char *argv[]){
 	strcpy((char*)randomProduct, produtos[idx]); //fetch random product
 	int id = getpid();
 	int randomValor = rand() % 6;
-
+	Review reviewX;
+	strcpy(reviewX.product_name,produtos[idx]);
+	reviewX.id=id;
+	reviewX.valor=randomValor;
 	Review* queueReviews=initialize_review_shm_queue();
 
 
@@ -242,7 +258,6 @@ int main(int argc,char *argv[]){
 	BYTE iv[1][16] = {
 		{0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f}
 	};
-
 	BYTE key[1][32];
 	strncpy((char*)key, c.key, 32); //Gets first 32 bytes of authentication key for encryption key
 	//Prepares key for encryption
@@ -253,9 +268,9 @@ int main(int argc,char *argv[]){
 	aes_encrypt_ctr((BYTE*)&randomValor,4, (BYTE *)&review.valor, key_schedule, 256, iv[0]);
 
 	ssl_err = SSL_write(cSSL,&review,sizeof(Review)); //Writes the review to the socket
-	persist_queue_reviews(queueReviews,review);
+	persist_queue_reviews(queueReviews,reviewX);
 	if(ssl_err <= 0){
-		persist_queue_reviews(queueReviews,review);
+		persist_queue_reviews(queueReviews,reviewX);
 		printf("An error occured while sending the review to the server\n");
 		ssl_err = SSL_get_error(cSSL,ssl_err);
 		if(ssl_err == 6){
@@ -267,9 +282,9 @@ int main(int argc,char *argv[]){
 		return 0;
 	}
 
-	printf("\nProduct %s", randomProduct);
-	printf("\nPID %d", id);
-	printf("\nValue %u\n", randomValor);
+	// printf("\nProduct %s", randomProduct);
+	// printf("\nPID %d", id);
+	// printf("\nValue %u\n", randomValor);
 
 	ssl_err=SSL_shutdown(cSSL);
 	int count = 1;
