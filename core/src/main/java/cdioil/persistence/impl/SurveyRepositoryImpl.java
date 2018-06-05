@@ -220,4 +220,22 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
 
         return surveys.isEmpty() ? null : surveys;
     }
+    
+    /**
+     * Method that returns the ID of a given survey.
+     *
+     * @param survey survey
+     * @return the survey's ID or null if the survey was not found in the
+     * database.
+     */
+    public Long getSurveyID(Survey survey) {
+        if (survey == null) {
+            return null;
+        }
+        String queryString = "SELECT s.id FROM " + survey.getClass().getSimpleName() + " s WHERE s = :survey";
+        Query q = entityManager().createQuery(queryString);
+        q.setParameter("survey", survey);
+
+        return q.getResultList().isEmpty() ? null : (Long) q.getSingleResult();
+    }
 }

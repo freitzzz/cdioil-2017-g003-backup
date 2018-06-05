@@ -230,6 +230,15 @@ public class Review implements Serializable {
     public String getSuggestion(){
         return suggestion!=null ? suggestion.toString() : null;
     }
+    
+    /**
+     * Returns the Review's graph.
+     * @return review's graph.
+     */
+    public Graph getAnswerGraph(){
+        return answerGraph;
+    }
+    
     /**
      * Review's hash code
      *
