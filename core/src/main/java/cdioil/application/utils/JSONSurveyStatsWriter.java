@@ -19,7 +19,7 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
 
     //Attributes
     /**
-     * File to read.
+     * File to write.
      */
     private final File file;
 
@@ -79,7 +79,7 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
     private static final String MEAN_DEVIATION = "Desvio Padrão";
 
     /**
-     * Creates a new CSVSurveyStatsWriter.
+     * Creates a new JSONSurveyStatsWriter.
      *
      * @param filename Path of the file
      * @param binaryTotal Total of answers to binary questions
@@ -101,6 +101,11 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
         this.binaryMean = binaryMean;
     }
 
+    /**
+     * Writes the statistics into a JSON file.
+     *
+     * @return true, if the statistics are successfully exported. Otherwise, returns false
+     */
     @Override
     public boolean writeStats() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
