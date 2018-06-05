@@ -184,6 +184,27 @@ public class GraphTest {
 
         assertEquals(expected, result);
     }
+    
+    @Test
+    public void ensureAllVerticesWorks(){
+        
+        Graph graph = new Graph();
+        
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+        Question q2 = new BinaryQuestion("This is yet another yes/no question", "A123");
+        Question q3 = new BinaryQuestion("A wild binary question appears!", "A423");
+        
+        graph.insertEdge(q1, q2, new BinaryQuestionOption(Boolean.TRUE), 0);
+        graph.insertEdge(q1, q3, new BinaryQuestionOption(Boolean.FALSE), 0);
+        graph.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.TRUE), 0);
+        graph.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.FALSE), 0);
+        
+        Iterator<Vertex> iterator = graph.allVertices().iterator();
+        
+        assertEquals(q1, iterator.next().getElement());
+        assertEquals(q2, iterator.next().getElement());
+        assertEquals(q3, iterator.next().getElement());
+    }
 
     @Test
     public void ensureAllEdgesWorks() {
