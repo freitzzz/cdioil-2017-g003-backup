@@ -29,7 +29,7 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
 
     //Attributes
     /**
-     * File to read.
+     * File to write.
      */
     private final File file;
 
@@ -136,7 +136,7 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
         if (quantitativeQuestions.isEmpty()) {
             fileContent.add("Não há questões quantitativas");
         }
-        for (Map.Entry<Question, Double> entry : quantitativeQuestions) {
+        for (Entry<Question, Double> entry : quantitativeQuestions) {
             Question q = entry.getKey();
             String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + quantitativeTotal.get(q) + SPLITTER + quantitativeMean.get(q) + SPLITTER + quantitativeMeanDeviation.get(q);
             fileContent.add(info);
