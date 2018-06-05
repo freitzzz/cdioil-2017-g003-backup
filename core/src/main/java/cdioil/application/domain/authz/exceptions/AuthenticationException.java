@@ -10,6 +10,10 @@ public final class AuthenticationException extends RuntimeException{
      */
     private static final String INVALID_CREDENTIALS_MESSAGE="Credênciais inválidas!";
     /**
+     * Constant that represents the account locked cause message
+     */
+    private static final String ACCOUNT_LOCKED_MESSAGE="A sua conta está bloqueada devido a várias tentativas sucessivas de login sem sucesso. Aguarde uns momentos";
+    /**
      * Constant that represents the account not activated cause message
      */
     private static final String ACCOUNT_NOT_ACTIVATED_MESSAGE="Conta não activada";
@@ -43,6 +47,7 @@ public final class AuthenticationException extends RuntimeException{
     public enum AuthenticationExceptionCause{
         INVALID_CREDENTIALS{@Override public String toString(){return INVALID_CREDENTIALS_MESSAGE;}},
         NOT_ACTIVATED{@Override public String toString(){return ACCOUNT_NOT_ACTIVATED_MESSAGE;}},
-        ALREADY_ACTIVATED{@Override public String toString(){return ACCOUNT_ALREADY_ACTIVATED_MESSAGE;}}
+        ALREADY_ACTIVATED{@Override public String toString(){return ACCOUNT_ALREADY_ACTIVATED_MESSAGE;}},
+        ACCOUNT_LOCKED{@Override public String toString(){return ACCOUNT_LOCKED_MESSAGE;}}
     }
 }
