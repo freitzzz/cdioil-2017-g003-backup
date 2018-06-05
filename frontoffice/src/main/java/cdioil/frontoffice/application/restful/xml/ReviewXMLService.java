@@ -211,38 +211,24 @@ public class ReviewXMLService {
 
         Element questionGraphElement = doc.createElement("QuestionGraph");
         reviewElement.appendChild(questionGraphElement);
-
-        Question firstQuestion = reviewGraph.getFirstQuestion();
-        Element firstQuestionElement = doc.createElement("Question");
-        questionGraphElement.appendChild(firstQuestionElement);
-        firstQuestionElement.setAttribute("questionID", firstQuestion.getQuestionID());
-        buildGraphFlow(firstQuestionElement, doc, firstQuestion, reviewGraph);
-    }
-
-    /**
-     * Builds the question graph element by setting the next question elements recursively. 
-     * @param questionElement current question element
-     * @param doc XML document
-     * @param question question
-     * @param reviewGraph review's question graph
-     */
-    private static void buildGraphFlow(Element questionElement, Document doc, Question question, Graph reviewGraph) {
-
-        Iterable<Edge> outgoingEdges = reviewGraph.outgoingEdges(question);
-
-        for (Edge edge : outgoingEdges) {
-
-            Question nextQuestion = edge.getDestinationVertexElement();
-
-            Element nextQuestionElement = doc.createElement("NextQuestion");
-            questionElement.appendChild(nextQuestionElement);
-            nextQuestionElement.setAttribute("option", edge.getElement().toString());
-
-            Element qElement = doc.createElement("Question");
-            nextQuestionElement.appendChild(qElement);
-            qElement.setAttribute("questionID", nextQuestion.getQuestionID());
-
-            buildGraphFlow(qElement, doc, nextQuestion, reviewGraph);
+        
+        Iterable<Vertex> vertices = reviewGraph.allVertices();
+        
+        for(Vertex vert : vertices){
+            Iterable<Edge> outgoingEdges = vert.getAllOutgoingEdges();
+            
+            if(outgoingEdges.iterator().hasNext()){
+                Element questionElement = doc.createElement("Question");
+                questionGraphElement.appendChild(questionElement);
+                questionElement.setAttribute("questionID", vert.getElement().getQuestionID());
+                
+                for(Edge edge : outgoingEdges){
+                    Element nextQuestionElement = doc.createElement("NextQuestion");
+                    questionElement.appendChild(nextQuestionElement);
+                    nextQuestionElement.setAttribute("option", edge.getElement().toString());
+                    nextQuestionElement.setAttribute("questionID", edge.getDestinationVertexElement().getQuestionID());
+                }
+            }
         }
     }
 }
