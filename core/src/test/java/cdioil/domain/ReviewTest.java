@@ -1,5 +1,6 @@
 package cdioil.domain;
 
+import cdioil.application.utils.Graph;
 import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
@@ -288,6 +289,36 @@ public class ReviewTest {
         assertNull("The condition must be succesful since the current review has no suggestion",review.getSuggestion());
         review.submitSuggestion("Grimes X Elon Musk <3");
         assertNotNull("The condition must be succesful since the current review has a suggestion",review.getSuggestion());
+    }
+    /**
+     * Test of getAnswerGraph method, of class Review.
+     */
+    @Test
+    public void testGetAnswerGraph(){
+        System.out.println("getAnswerGraph");
+        TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
+                LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
+        List<SurveyItem> list = new LinkedList<>();
+        list.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
+        Survey globalSurvey = new GlobalSurvey(list, timePeriod);
+        BinaryQuestion firstQuestion = new BinaryQuestion("Question 1", "567");
+        BinaryQuestion secondQuestion = new BinaryQuestion("Question 2", "456");
+        BinaryQuestion thirdQuestion = new BinaryQuestion("Question 3", "345");
+        globalSurvey.addQuestion(firstQuestion);
+        globalSurvey.setNextQuestion(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
+        globalSurvey.setNextQuestion(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
+       
+        Review review = new Review(globalSurvey);
+        
+        Graph expected = new Graph();
+        expected.insertEdge(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
+        expected.insertEdge(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
+        
+        assertEquals(review.getAnswerGraph(), expected);
+        
+        globalSurvey.setNextQuestion(secondQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
+                
+        assertNotEquals(globalSurvey.getGraphCopy(), expected);
     }
     /**
      * Builds a Review instance with a survey.
