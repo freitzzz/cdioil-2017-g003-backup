@@ -38,7 +38,7 @@ typedef struct{
 }ReviewQueue;
 
 
-Review* reviewShmQueue;
+int queueReviewsSize=0;
 
 Review* initialize_review_shm_queue(){
 	int lines=0;
@@ -56,16 +56,37 @@ Review* initialize_review_shm_queue(){
 			strcpy(review[currentReview].product_name,getIdentifierName(queue[++i],PRODUCT_NAME_LABEL));
 			review[currentReview].id=*(getIdentifierValue(queue[++i],ID_LABEL));
 			review[currentReview].valor=*(getIdentifierValue(queue[++i],VALOR_LABEL));
-			int i;
 			//printf("Product Name read: %s\nProduct ID read: %d\nProduct Value read: %d\n",review[currentReview].product_name,review[currentReview].id,review[currentReview].valor);
 			currentReview++;
 		}
 	}
+	queueReviewsSize=currentReview;
 	return review;
 }
 
-void persist_queue_reviews(Review* queueReviews){
-	if(queueReviews==NULL)return;
+void persist_queue_reviews(Review* queueReviews,Review reviewToPersist){
+	if(!queueReviewsSize){
+			queueReviewsSize=0;
+			queueReviews=malloc(sizeof(Review));
+			strcpy(queueReviews[queueReviewsSize].product_name,reviewToPersist.product_name);
+			queueReviews[queueReviewsSize].id=reviewToPersist.id;
+			queueReviews[queueReviewsSize].valor=reviewToPersist.valor;
+			queueReviewsSize++;
+	}
+	int i,j;
+	int reviewSize=((strlen(REVIEW_LABEL)+strlen(PRODUCT_NAME_LABEL)+strlen(ID_LABEL)+strlen(VALOR_LABEL)+5)+sizeof(Review));
+	char queueContent[reviewSize][queueReviewsSize];
+	for(i=0;i<queueReviewsSize;i++){
+			snprintf(queueContent[i],reviewSize,"%s\n%s%s\n%s%d\n%s%d\n",REVIEW_LABEL,PRODUCT_NAME_LABEL,queueReviews[i].product_name,ID_LABEL,queueReviews[i].id,VALOR_LABEL,queueReviews[i].valor);
+	}
+	int queueContentSize=(reviewSize*queueReviewsSize);
+	int currentSize=0;
+	//char* content=malloc(500);
+	// for(i=0;i<queueReviewsSize;i++)
+	// 	for(j=0;j<reviewSize;j++)
+	// 		content[currentSize]=queueContent[i][j];
+	// printf("->>>>>>>>>>>>>> %s\n",content);
+	write_all_lines(QUEUE_NAME,(char*)queueContent);
 }
 
 
@@ -214,7 +235,8 @@ int main(int argc,char *argv[]){
 	int id = getpid();
 	int randomValor = rand() % 6;
 
-	printf("->>>>> %p\n",initialize_review_shm_queue());
+	Review* queueReviews=initialize_review_shm_queue();
+
 
 	WORD key_schedule[60];
 	BYTE iv[1][16] = {
@@ -231,7 +253,9 @@ int main(int argc,char *argv[]){
 	aes_encrypt_ctr((BYTE*)&randomValor,4, (BYTE *)&review.valor, key_schedule, 256, iv[0]);
 
 	ssl_err = SSL_write(cSSL,&review,sizeof(Review)); //Writes the review to the socket
+	persist_queue_reviews(queueReviews,review);
 	if(ssl_err <= 0){
+		persist_queue_reviews(queueReviews,review);
 		printf("An error occured while sending the review to the server\n");
 		ssl_err = SSL_get_error(cSSL,ssl_err);
 		if(ssl_err == 6){
