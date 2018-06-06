@@ -48,6 +48,5 @@ char* getIdentifierName(char *line,char* identifier){
     identifierName[currentNameIndex++]=line[i];
   }
   identifierName[identifierSize]=0;
-  printf("wow ->>>>>>>>> %s\n",identifierName);
   return identifierName;
 }
