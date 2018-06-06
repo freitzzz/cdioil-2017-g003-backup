@@ -82,8 +82,8 @@ public class ReviewXMLService {
              reviewFilePath = Environment.getExternalStorageDirectory().toString()+File.separator+
                     "Reviews"+File.separator+fileName;
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result xmlOutput = new StreamResult(new File(reviewFilePath));
-            Source input = new DOMSource(document);
+            StreamResult xmlOutput = new StreamResult(new File(reviewFilePath));
+            DOMSource input = new DOMSource(document);
             transformer.transform(input,xmlOutput);
         } catch (ParserConfigurationException | SAXException | IOException | TransformerException e) {
             e.printStackTrace();
@@ -201,7 +201,7 @@ public class ReviewXMLService {
      *
      * @return list of Strings containing the information of a Question
      */
-    private List<String> getCurrentQuestionInfo(){
+    public List<String> getCurrentQuestionInfo(){
         LinkedList<String> questionInfo = new LinkedList<>();
 
         try {
