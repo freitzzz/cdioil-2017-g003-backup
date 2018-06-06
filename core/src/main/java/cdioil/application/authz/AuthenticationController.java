@@ -47,6 +47,9 @@ public final class AuthenticationController implements Serializable {
             if(tryToLogin(email,password)){
                 logSessionStart();
                 LoginManagement loginManagement = loginManagementRepo.find(new Email(email));
+                if(loginManagement == null){
+                    return true;
+                }
                 if(loginManagement.isUserLocked()){
                     throw new AuthenticationException(AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED.toString(),
                             AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED);
