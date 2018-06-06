@@ -167,6 +167,15 @@ public class Graph implements Serializable {
         return numVertices;
     }
 
+    
+    /**
+     * Returns an Iterable Collection of all the Vertex elements present in the Graph.
+     * @return Iterable Collection of all Vertices
+     */
+    public Iterable<Vertex> allVertices(){
+        return vertices.values();
+    }
+    
     /**
      * Retrieves an Iterable Collection of all the Edges in the Graph.
      *

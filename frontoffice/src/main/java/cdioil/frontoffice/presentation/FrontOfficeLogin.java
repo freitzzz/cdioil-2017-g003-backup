@@ -5,7 +5,7 @@ import cdioil.application.domain.authz.exceptions.AuthenticationException;
 import cdioil.console.Console;
 
 /**
- * Classe responsável pelo login no FrontOffice da aplicação.
+ * Login in the frontoffice class.
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */

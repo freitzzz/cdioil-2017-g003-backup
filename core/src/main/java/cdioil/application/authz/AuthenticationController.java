@@ -1,13 +1,17 @@
 package cdioil.application.authz;
 
 import cdioil.application.domain.authz.AuthenticationService;
+import cdioil.application.domain.authz.LoginManagement;
 import cdioil.application.domain.authz.UserSession;
+import cdioil.application.domain.authz.exceptions.AuthenticationException;
 import cdioil.domain.authz.Admin;
+import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.User;
 import cdioil.persistence.impl.AdminRepositoryImpl;
+import cdioil.persistence.impl.LoginManagementRepositoryImpl;
 import cdioil.persistence.impl.ManagerRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.UserSessionRepositoryImpl;
@@ -38,11 +42,45 @@ public final class AuthenticationController implements Serializable {
      * @return boolean true if the user logged in successfully, false if not
      */
     public boolean login(String email,String password){
-        if(tryToLogin(email,password)){
-            logSessionStart();
-            return true;
-        }else{
-            return false;
+         LoginManagementRepositoryImpl loginManagementRepo = new LoginManagementRepositoryImpl();
+        try{
+            if(tryToLogin(email,password)){
+                logSessionStart();
+                LoginManagement loginManagement = loginManagementRepo.find(new Email(email));
+                if(loginManagement == null){
+                    return true;
+                }
+                if(loginManagement.isUserLocked()){
+                    throw new AuthenticationException(AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED.toString(),
+                            AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED);
+                }else{
+                    return true;
+                }
+            }else{
+                return false;
+            }
+        }catch(AuthenticationException authException){
+            manageAccountLocks(authException, loginManagementRepo, email);
+            throw authException;
+        }
+    }
+    /**
+     * Method that manages account locks if the user inserts invalid credentials
+     * @param authException Authentication Exception that occurred
+     * @param loginManagementRepo LoginManagement Repository
+     * @param email Email that was used
+     */
+    private void manageAccountLocks(AuthenticationException authException, LoginManagementRepositoryImpl loginManagementRepo, String email) {
+        if(authException.getAuthenticationExceptionCause() == AuthenticationException.AuthenticationExceptionCause.INVALID_CREDENTIALS){
+            LoginManagement loginManagement = loginManagementRepo.find(new Email(email));
+            if(loginManagement == null){
+                LoginManagement newLoginManagement = new LoginManagement(new Email(email));
+                newLoginManagement.incrementLoginAttempts();
+                loginManagementRepo.add(newLoginManagement);
+            }else{
+                loginManagement.incrementLoginAttempts();
+                loginManagementRepo.merge(loginManagement);
+            }
         }
     }
     /**

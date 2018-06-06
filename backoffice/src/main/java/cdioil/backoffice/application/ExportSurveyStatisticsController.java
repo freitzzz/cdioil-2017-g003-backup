@@ -88,8 +88,8 @@ public class ExportSurveyStatisticsController {
      */
     public List<Survey> getAllSurveys() {
         Iterable<Survey> iterableAllSurveys = new SurveyRepositoryImpl().findAll();
-        iterableAllSurveys.forEach(validSurvey -> 
-            surveys.add(validSurvey)
+        iterableAllSurveys.forEach(validSurvey
+                -> surveys.add(validSurvey)
         );
         return surveys;
     }
@@ -239,6 +239,15 @@ public class ExportSurveyStatisticsController {
     }
 
     /**
+     * Retrieves the survey's database ID.
+     *
+     * @return the ID of the chosen survey
+     */
+    private long getSurveyID() {
+        return new SurveyRepositoryImpl().getSurveyID(survey);
+    }
+
+    /**
      * Exports the statistics about the survey to a file.
      *
      * @param filePath Path where the file will be stored
@@ -246,10 +255,11 @@ public class ExportSurveyStatisticsController {
      */
     public boolean exportStatsFromSurvey(String filePath) {
         calculateStats();
-        SurveyStatsWriter statsWriter = SurveyStatsWriterFactory.create(filePath, binaryTotal, quantitativeTotal,
-                binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+        SurveyStatsWriter statsWriter = SurveyStatsWriterFactory.create(filePath, getSurveyID(), survey.getName(),
+                binaryTotal, quantitativeTotal, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         if (statsWriter == null) {
             return false;
+
         }
         return statsWriter.writeStats();
     }
