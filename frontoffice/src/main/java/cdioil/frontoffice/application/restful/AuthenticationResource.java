@@ -163,6 +163,9 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
             }else if(((AuthenticationException)exception).getAuthenticationExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.ALREADY_ACTIVATED)){
                 return Response.status(Status.UNAUTHORIZED)
                         .entity(JSON_ACCOUNT_ALREADY_ACTIVATED).build();
+            }else if(((AuthenticationException)exception).getAuthenticationExceptionCause().equals(AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED)){
+                return Response.status(Status.FORBIDDEN)
+                        .entity(JSON_ACCOUNT_LOCKED).build();
             }else{
                 return Response.status(Status.BAD_REQUEST)
                         .entity(JSON_ACTIVATION_CODE_REQUIRED).build();
