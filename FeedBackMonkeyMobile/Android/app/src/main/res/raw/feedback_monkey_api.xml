@@ -29,5 +29,13 @@
                 </subresource>
             </subresources>
         </resource>
+        <resource name = "Reviews" path = "/reviews">
+            <subresources>
+                <subresource name = "Create Review" path = "/newreview">
+                    <method>POST</method>
+                    <datatype>JSON</datatype>
+                </subresource>
+            </subresources>
+        </resource>
     </resources>
 </feedbackmonkeyapi>
