@@ -18,4 +18,6 @@
     <string name="activation_code">Código de Ativação</string>
     <string name="send_activate_account_request">Ativar Conta</string>
     <string name="send_activate_account_and_login_on_register">Ativar Conta e fazer login</string>
+    <string name="yes_answer">S I M</string>
+    <string name="no_answer">N Ã O</string>
 </resources>

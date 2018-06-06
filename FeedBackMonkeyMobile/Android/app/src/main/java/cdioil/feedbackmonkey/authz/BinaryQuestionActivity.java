@@ -34,11 +34,11 @@ public class BinaryQuestionActivity extends AppCompatActivity {
 
         Button yes = findViewById(R.id.yes);
 
-        yes.setOnClickListener(view -> {
+       /* yes.setOnClickListener(view -> {
             //rest request
             Thread loginThread = new Thread(nextQuestion());
             loginThread.start();
-        });
+        });*/
     }
 
 

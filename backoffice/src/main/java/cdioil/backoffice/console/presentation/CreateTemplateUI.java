@@ -1,6 +1,5 @@
 package cdioil.backoffice.console.presentation;
 
-
 import cdioil.backoffice.application.CreateTemplateController;
 import cdioil.console.Console;
 import cdioil.domain.Category;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateTemplateUI {
-
 
     public CreateTemplateUI(Manager manager) {
         mainCreateTemplateUI(manager);
@@ -30,9 +28,14 @@ public class CreateTemplateUI {
         QuestionGroup questionGroup;
         String title;
 
+        if (categoriesForManager.isEmpty()) {
+            System.out.println("O gestor não tem categorias");
+            return;
+        }
+
         System.out.println("Categories available: \n");
 
-        for(int i = 0; i < categoriesForManager.size(); i++) {
+        for (int i = 0; i < categoriesForManager.size(); i++) {
             System.out.println((i + 1) + ". " + categoriesForManager.get(i) + "\n");
         }
 
@@ -55,16 +58,16 @@ public class CreateTemplateUI {
                 boolean flagCategoryQuestions;
                 do {
                     flagCategoryQuestions = false;
-                    try {
-                        String[] catQuestionsChosen = Console.readLine("Please choose the questions of the category (Separated by commas): \n").split(",");
+                    String insertedString = Console.readLine("Please choose the questions of the category (Separated by commas): \n");
 
-                        for (String question : catQuestionsChosen) {
-                            questionsChosen.add(categoryQuestions.get(Integer.parseInt(question) - 1));
+                    if (insertedString.contains(",")) {
+                        String[] catQuestionsChosen = insertedString.split(",");
+
+                        for (int i = 0; i < catQuestionsChosen.length; i++) {
+                            questionsChosen.add(categoryQuestions.get(i));
                         }
-
-                    } catch (IllegalArgumentException exception) {
-                        flagCategoryQuestions = true;
-                        System.out.println("ERROR: Please try again");
+                    } else {
+                       questionsChosen.add(categoryQuestions.get(Integer.parseInt(insertedString)-1)); 
                     }
                 } while (flagCategoryQuestions);
             }
@@ -115,7 +118,7 @@ public class CreateTemplateUI {
     }
 
     private int menuYesNo() {
-        return Console.readInteger("1. Yes\n" +
-                "2. No\n");
+        return Console.readInteger("1. Yes\n"
+                + "2. No\n");
     }
 }
