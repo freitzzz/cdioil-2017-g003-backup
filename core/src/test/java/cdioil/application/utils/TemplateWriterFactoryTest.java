@@ -46,6 +46,6 @@ public class TemplateWriterFactoryTest {
         questionGroup.addQuestion(new BinaryQuestion("Question", "435"));
         Template template = new Template("template", questionGroup);
         assertEquals(XMLTemplateWriter.class,
-                TemplateWriterFactory.create(filename, template));
+                TemplateWriterFactory.create(filename,template).getClass());
     }
 }
