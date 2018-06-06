@@ -207,6 +207,10 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST) {
                     showLoginErrorMessage("Login Inválido",
                             "A sua conta não está ativada!");
+                } else if (restResponse.code() == HttpsURLConnection.HTTP_FORBIDDEN){
+                    showLoginErrorMessage("Conta bloqueada",
+                            "A sua conta foi bloqueada temporariamente devido a " +
+                                    "várias tentativas de login sem sucesso. Por favor aguarde uns momentos");
                 }
             } catch (IOException ioException) {
                 ToastNotification.show(this, NO_INTERNET_CONNECTION);
