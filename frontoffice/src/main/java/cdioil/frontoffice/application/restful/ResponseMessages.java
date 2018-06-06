@@ -95,6 +95,11 @@ public interface ResponseMessages {
      */
     public static final String JSON_ACCOUNT_ALREADY_ACTIVATED = "{\n\t\"accountalreadyactivated\":\"true\"\n}";
     /**
+     * Constant that represents the JSON used on the response message for
+     * warning the user that the account is locked.
+     */
+    public static final String JSON_ACCOUNT_LOCKED = "{\n\t\"accountlocked\":\"true\"\n}";
+    /**
      * Constant that represents the JSON used on the response message for warning 
      * the user that his account was created with success
      */
