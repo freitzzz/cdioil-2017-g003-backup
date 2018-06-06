@@ -42,7 +42,11 @@ public class TemplateTest {
     public void ensureEmptyQuestionGroupThrowsException(){
         instance = new Template("Template", new QuestionGroup("Empty Question Group"));
     }
-    
+   
+    @Test
+    public void testGetTitle(){
+        assertEquals("template", instance.getTitle());    
+    }
     /**
      * Test of the method hashCode, of the class Template.
      */

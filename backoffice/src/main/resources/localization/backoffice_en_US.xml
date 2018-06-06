@@ -24,7 +24,9 @@
         <Message messageId = "info_number_categories_question_was_added_to" value = "The number of categories the question was added to was: "/>
         <Message messageId = "info_number_categories_imported" value = "The number of imported categories was:"/>      
         <Message messageId = "info_success_exporting_stats" value = "Statistics successfully exported!&#10;"/>
+        <Message messageId = "info_success_exporting_template" value = "Template successfully exported!&#10;"/>
         <Message messageId = "info_survey_message" value = "Survey"/>
+        <Message messageId = "info_template_message" value = "Template"/>
         <Message messageId = "info_option_message" value= "Option"/>
         <Message messageId = "info_no_more_options" value = "To finish inserting options type"/>
         <Message messageId = "info_changed_extreme_values" value = "The extreme values were exchanged, because the minimum was higher than the maximum."/>
@@ -48,6 +50,7 @@
         <Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
         <Message messageId = "request_category_identifier_general" value = "Please type in the category/categories identifier(s):&#10;"/>
         <Message messageId = "request_select_survey" value = "Select a survey (number):&#10;"/>
+        <Message messageId = "request_select_template" value = "Select a template (number):&#10;"/>
         <Message messageId = "request_select_question_type" value = "Please select the question type:"/>
         <Message messageId = "request_confirmation_to_continue" value = "Do you wish to insert more questions? If yes, type a different message from 'Exit'.&#10;"/>
         <Message messageId = "request_question_id" value = "Please insert the ID of the question:"/>
@@ -77,12 +80,15 @@
         <Message messageId = "error_invalid_email" value = "Invalid email! Please, try again.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Invalid category! Please, try again.&#10;"/>
         <Message messageId = "error_invalid_survey" value = "Invalid survey! Please, try again.&#10;"/>
+        <Message messageId = "error_invalid_template" value = "Invalid template! Please, try again.&#10;"/>
         <Message messageId = "error_no_managers" value = "There are no managers registered in the system.&#10;"/>
         <Message messageId = "error_survey_with_no_reviews" value = "The chosen survey doesn't have any reviews.&#10;"/>
         <Message messageId = "error_exporting_stats" value = "An error occurred while exporting the statistics of the survey!&#10;Please check if the file is valid.&#10;"/>
+        <Message messageId = "error_exporting_template" value = "An error occurred while exporting the template!&#10;Please check if the file is valid.&#10;"/>
         <Message messageId = "error_importing_categories" value = "File path not found! Do you wish to try again?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "No categories were imported."/>
         <Message messageId = "error_no_surveys_available" value = "There are no surveys.&#10;"/>
+        <Message messageId = "error_no_templates" value = "There are no templates.&#10;"/>
         <Message messageId = "error_select_a_valid_question_type" value = "Insert a valid question type:"/>
         <Message messageId = "error_user_not_found" value = "No user found."/>
         <Message messageId = "error_question_not_added_to_any_category" value = "The question wasn't added to any category."/>
@@ -124,6 +130,7 @@
             <Message messageId = "option_insert_question_category" value = "Insert Question about one or more Categories"/>
             <Message messageId = "option_export_stats_survey" value = "Export Statistics about a Survey"/>
             <Message messageId = "option_create_template" value = "Create Template"/>
+            <Message messageId = "option_export_template" value = "Export Template"/>
             <Message messageId = "option_filter_domain" value = "Filter by domain"/>
             <Message messageId = "option_filter_username" value = "Filter by username"/>
             <Message messageId = "option_filter_year" value = "Filter by birth year"/>

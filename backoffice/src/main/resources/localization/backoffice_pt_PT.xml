@@ -24,7 +24,9 @@
         <Message messageId = "info_number_categories_imported" value = "O número de categorias importadas foi:"/>
         <Message messageId = "info_atualization_products" value= "Insira a opção Sim se pretende actualizar o produto já existente: "/>
         <Message messageId = "info_success_exporting_stats" value = "Estatísticas exportadas com sucesso!&#10;"/>
+        <Message messageId = "info_success_exporting_template" value = "Template exportado com sucesso!&#10;"/>
         <Message messageId = "info_survey_message" value = "Inquérito"/>
+        <Message messageId = "info_template_message" value = "Template"/>
         <Message messageId = "info_option_message" value= "Opção"/>
         <Message messageId = "info_no_more_options" value = "Para terminar a inserção de opções escreva"/>
         <Message messageId = "info_changed_extreme_values" value ="Os valores foram trocados, porque o mínimo era superior ao máximo."/>
@@ -48,6 +50,7 @@
         <Message messageId = "request_category_identifier_association" value = "Insira o descritivo da(s) categoria(s) que quer associar ao gestor selecionado&#10;"/>
         <Message messageId = "request_category_identifier_general" value = "Insira o descritivo da(s) categoria(s):&#10;"/>
         <Message messageId = "request_select_survey" value = "Selecione um inquérito (número):&#10;"/>
+        <Message messageId = "request_select_template" value = "Selecione um template (número):&#10;"/>
         <Message messageId = "request_select_question_type" value = "Por favor selecione o tipo de questão:"/>
         <Message messageId = "request_confirmation_to_continue" value = "Deseja inserir mais questões? Se sim, escreva uma mensagem diferente de 'Sair'.&#10;"/>
         <Message messageId = "request_question_id" value = "Por favor insira o ID da questão:"/>
@@ -77,12 +80,15 @@
         <Message messageId = "error_invalid_email" value = "Email inválido! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Categoria inválida! Por favor, tente novamente.&#10;"/>
         <Message messageId = "error_invalid_survey" value = "Inquérito inválido! Por favor, tente novamente.&#10;"/>
+        <Message messageId = "error_invalid_template" value = "Template inválido! Por favor, tente novamente.&#10;"/>        
         <Message messageId = "error_no_managers" value = "Não existem gestores, logo não é possível efetuar a associação.&#10;"/>
         <Message messageId = "error_survey_with_no_reviews" value = "O inquérito selecionado não tem nenhuma avaliação.&#10;"/>
-        <Message messageId = "error_exporting_stats" value = "Ocorreu um erro ao exportar as estatísticas do inquérito!&#10;Verifique se o ficheiro é valido.&#10;"/>
+        <Message messageId = "error_exporting_stats" value = "Ocorreu um erro ao exportar as estatísticas do inquérito!&#10;Verifique se o ficheiro é valido.&#10;"/>    
+        <Message messageId = "error_exporting_template" value = "Ocorreu um erro ao exportar o template!&#10;Verifique se o ficheiro é valido.&#10;"/>
         <Message messageId = "error_importing_categories" value = "Caminho de ficheiro não encontrado! Pretende continuar?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "Não foi importada nenhuma categoria."/>
         <Message messageId = "error_no_surveys_available" value = "Não existem inquéritos.&#10;"/>
+        <Message messageId = "error_no_templates" value = "Não existem templates.&#10;"/>
         <Message messageId = "error_select_a_valid_question_type" value = "Insira um tipo de questão válido:"/>
         <Message messageId = "error_user_not_found" value = "Nenhum utilizador encontrado."/>
         <Message messageId = "error_question_not_added_to_any_category" value = "A questão não foi adicionada a nenhuma cateogoria."/>
@@ -124,6 +130,7 @@
             <Message messageId = "option_insert_question_category" value = "Inserir Questão Sobre Categoria(s)"/>
             <Message messageId = "option_export_stats_survey" value = "Exportar Estatísticas sobre Inquérito"/>
             <Message messageId = "option_create_template" value="Criar Template"/>
+            <Message messageId = "option_export_template" value = "Exportar Template"/>
             <Message messageId = "option_filter_domain" value = "Filtrar por domínio"/>
             <Message messageId = "option_filter_username" value = "Filtrar por nome de utilizador"/>
             <Message messageId = "option_filter_year" value = "Filtrar por ano de nascimento"/>
