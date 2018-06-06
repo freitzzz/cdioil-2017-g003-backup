@@ -38,6 +38,16 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
     private final File file;
 
     /**
+     * ID of the survey.
+     */
+    private final long surveyID;
+
+    /**
+     * Name of the survey.
+     */
+    private final String surveyName;
+
+    /**
      * Average value for answers of binary questions.
      */
     private final Map<Question, Double> binaryMean;
@@ -69,12 +79,12 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
 
     //Constants
     /**
-     * Field that represents a list of questions.
+     * Field that identifies the list of questions.
      */
     private static final String QUESTIONS_LIST = "Questions";
 
     /**
-     * Field that identified the survey.
+     * Field that identifies the survey.
      */
     private static final String SURVEY = "Survey";
 
@@ -94,34 +104,51 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
     private static final String QUANTITATIVE_QUESTION_TYPE = "QuantitativeQuestion";
 
     /**
-     * Field that represents a list of binary questions.
+     * Field that identifies the list of binary questions.
      */
     private static final String BINARY_QUESTIONS_LIST = "BinaryQuestions";
 
     /**
-     * Field that represents a list of quantitative questions.
+     * Field that identifies the list of quantitative questions.
      */
     private static final String QUANTITATIVE_QUESTIONS_LIST = "QuantitativesQuestions";
 
     /**
-     * Field that contains the number of answers to the question.
+     * Field that identifies the number of answers to the question.
      */
     private static final String TOTAL = "Total";
 
     /**
-     * Field that contains the average of the answers to the question.
+     * Field that identifies the average of the answers to the question.
      */
     private static final String AVG = "Average";
 
     /**
-     * Field that contains the mean deviation of the answers to the question.
+     * Field that identifies the mean deviation of the answers to the question.
      */
     private static final String MEAN_DEVIATION = "MeanDeviation";
+
+    /**
+     * Field that identifies the text of the question.
+     */
+    private static final String QUESTION_TEXT = "QuestionText";
+
+    /**
+     * Field that identifies the survey by its ID.
+     */
+    private static final String SURVEY_ID = "surveyID";
+    
+    /**
+     * Field that identifies the survey by its title.
+     */
+    private static final String SURVEY_NAME = "SurveyTitle";
 
     /**
      * Creates a new XMLSurveyStatsWriter.
      *
      * @param filename Path of the file
+     * @param surveyID ID of the survey
+     * @param surveyName Name of the survey
      * @param binaryTotal Total of answers to binary questions
      * @param quantitativeTotal Total of answers to quantitative questions
      * @param binaryMean Average value for binary answers
@@ -130,9 +157,12 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
      */
-    public XMLSurveyStatsWriter(String filename, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
-            Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
+    public XMLSurveyStatsWriter(String filename, long surveyID, String surveyName, Map<Question, Integer> binaryTotal,
+            Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean, Map<Question, Double> quantitativeMean,
+            Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
         this.file = new File(filename);
+        this.surveyID = surveyID;
+        this.surveyName = surveyName;
         this.binaryTotal = binaryTotal;
         this.quantitativeTotal = quantitativeTotal;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
@@ -153,10 +183,16 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
-
+            //Survey element
             Element rootElement = doc.createElement(SURVEY);
             doc.appendChild(rootElement);
-
+            //Survey ID field
+            rootElement.setAttribute(SURVEY_ID, String.valueOf(surveyID));
+            //Survey title field
+            Element surveyNameElement = doc.createElement(SURVEY_NAME);
+            surveyNameElement.appendChild(doc.createTextNode(surveyName));
+            rootElement.appendChild(surveyNameElement);
+            //Questions element
             Element questionsElement = doc.createElement(QUESTIONS_LIST);
             rootElement.appendChild(questionsElement);
 
@@ -245,14 +281,19 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
      */
     private void writeQuestionStatistics(Document doc, Element questionElement, Question question,
             Map<Question, Integer> total, Map<Question, Double> mean, Map<Question, Double> meanDeviation) {
+        //Question text field
+        Element questionTextElement = doc.createElement(QUESTION_TEXT);
+        questionTextElement.appendChild(doc.createTextNode(question.getQuestionText()));
+        questionElement.appendChild(questionTextElement);
+        //Total answers field
         Element totalElement = doc.createElement(TOTAL);
         totalElement.appendChild(doc.createTextNode(String.valueOf(total.get(question))));
         questionElement.appendChild(totalElement);
-
-        Element meanElement = doc.createElement(AVG);
-        meanElement.appendChild(doc.createTextNode(String.valueOf(mean.get(question))));
-        questionElement.appendChild(meanElement);
-
+        //Average field
+        Element averageElement = doc.createElement(AVG);
+        averageElement.appendChild(doc.createTextNode(String.valueOf(mean.get(question))));
+        questionElement.appendChild(averageElement);
+        //Mean deviation field
         Element meanDeviationElement = doc.createElement(MEAN_DEVIATION);
         meanDeviationElement.appendChild(doc.createTextNode(String.valueOf(meanDeviation.get(question))));
         questionElement.appendChild(meanDeviationElement);
