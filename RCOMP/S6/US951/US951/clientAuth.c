@@ -42,27 +42,23 @@ int currentReviewsSize=1;
 
 Review* initialize_review_shm_queue() {
     FILE* fileStream=fopen(QUEUE_NAME,READ_RIGHTS);
-    if(fileStream==NULL)return NULL;
-    Review* review=malloc(currentReviewsSize*sizeof(Review));
-    while(!feof(fileStream)) {
-        if(currentReviewsSize==currentReviews) {
-            currentReviewsSize+=5;
-            review=realloc(review,currentReviewsSize*sizeof(Review));
-        }
-        Review reviewX;
-        fread(&reviewX,sizeof(Review),1,fileStream);
-        strcpy(review[currentReviews].product_name,reviewX.product_name);
-        review[currentReviews].id=reviewX.id;
-        review[currentReviews].valor=reviewX.valor;
-        currentReviews++;
+    if(fileStream==NULL){
+      while(!feof(fileStream))currentReviews++;
+      fclose(fileStream);
+      if(currentReviews==0)currentReviews++;
+      Review reviews[currentReviews];
+      fileStream=fopen(QUEUE_NAME,READ_RIGHTS);
+      int currentSize=0;
+      while(!feof(fileStream)){
+          fread(&reviews[currentSize++],sizeof(Review),1,fileStream);
+      }
+      fclose(fileStream);
+      return &reviews;
+    }else{
+      currentReviews++;
+      Review reviews[currentReviews];
+      return &reviews;
     }
-		if(currentReviews==0)free(review);//
-    fclose(fileStream);
-    int i;
-    for(i=0; i<currentReviews; i++) {
-        //printf("%s\n",review[i].product_name);
-    }
-    return review;
 }
 
 void persist_queue_reviews(Review* queueReviews,Review reviewToPersist) {
