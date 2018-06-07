@@ -51,13 +51,14 @@ public final class AuthenticationController implements Serializable {
                     return true;
                 }
                 if(loginManagement.isUserLocked()){
+                    currentUserSession = null;
                     throw new AuthenticationException(AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED.toString(),
                             AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED);
                 }else{
                     return true;
                 }
             }else{
-                return false;
+                return true;
             }
         }catch(AuthenticationException authException){
             manageAccountLocks(authException, loginManagementRepo, email);
@@ -72,6 +73,7 @@ public final class AuthenticationController implements Serializable {
      */
     private void manageAccountLocks(AuthenticationException authException, LoginManagementRepositoryImpl loginManagementRepo, String email) {
         if(authException.getAuthenticationExceptionCause() == AuthenticationException.AuthenticationExceptionCause.INVALID_CREDENTIALS){
+            currentUserSession = null;
             LoginManagement loginManagement = loginManagementRepo.find(new Email(email));
             if(loginManagement == null){
                 LoginManagement newLoginManagement = new LoginManagement(new Email(email));
@@ -213,7 +215,19 @@ public final class AuthenticationController implements Serializable {
         if((currentUser=getAdmin())!=null){
             return true;
         }
-        return (currentUser=getManager())!=null;
+        if((currentUser=getManager())!=null){
+            return true;
+        }
+                LoginManagement loginManagement = new LoginManagementRepositoryImpl().find(new Email(email));
+                if(loginManagement == null){
+                    return true;
+                }
+                if(loginManagement.isUserLocked()){
+                    throw new AuthenticationException(AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED.toString(),
+                            AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED);
+                }else{
+                    return true;
+                }
     }
     /**
      * Logs the start of the user session
