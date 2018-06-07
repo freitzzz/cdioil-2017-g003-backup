@@ -72,9 +72,10 @@ public class ManagerPanelView extends MainLayoutView implements View {
      * Configures current page
      */
     private void configuration(){
-        //configureHomeButton();
-        //configureImportButton();
-        //configureExportButton();
+        configureHomeButton();
+        configureCatButton();
+        configureImportButton();
+        configureExportButton();
     }
 
     /**
@@ -82,10 +83,14 @@ public class ManagerPanelView extends MainLayoutView implements View {
      */
     private void configureHomeButton() {
         dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
-        dashboardBtn.addClickListener((Button.ClickEvent clickEvent) -> 
+        dashboardBtn.addClickListener((Button.ClickEvent clickEvent) ->
             setRightPanelContents(new DashboardComponent())
         );
         addNewButtonToLeftPanel(dashboardBtn);
+    }
+
+    private void configureCatButton() {
+
     }
 
     /**

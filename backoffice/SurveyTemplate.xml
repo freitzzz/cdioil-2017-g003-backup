@@ -1,0 +1,61 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<Template name = "Template Example">
+	<!--This is where all the questions that are to be used are declared-->
+	<Questions>
+		<!--QuestionID attributes may or may not be database ID's-->
+		<BinaryQuestion questionID = "B1">
+			<Text>Do you like apples?</Text>
+		</BinaryQuestion>
+		<BinaryQuestion questionID = "B2">
+			<Text>Do you like bananas?</Text>
+		</BinaryQuestion>
+		<BinaryQuestion questionID = "B3">
+			<Text>Do you like cherries?</Text>
+		</BinaryQuestion>
+		<BinaryQuestion questionID = "B4">
+			<Text>Do you like chocolate?</Text>
+		</BinaryQuestion>
+		<QuantitativeQuestion questionID = "Q1">
+			<Text>Rate our apples</Text>
+			<scaleMinValue>1</scaleMinValue>
+			<scaleMaxValue>5</scaleMaxValue>
+		</QuantitativeQuestion>
+		<MultipleChoiceQuestion questionID = "M1">
+			<Text>Why do you dislike apples?</Text>
+			<Option num = "1" text = "They're too sour"/>
+			<Option num = "2" text = "They're too sweet"/>
+			<Option num = "3" text = "They're too big"/>
+			<Option num = "4" text = "They're too small"/>
+		</MultipleChoiceQuestion>
+	</Questions>
+	
+	<!--This tag is optional, and if present, defines the list of items associated with this template-->
+	<!--It is a list of categories, products or both-->
+	<SurveyItems>
+		<Category path = "10DC-11UN-25CAT"/>
+		<Product sku = "4342343"/>
+	</SurveyItems>
+	
+	<!--This tag is optional, and if present, defines the order by which questions are to be presented-->
+	<QuestionScript>
+		<Question questionID = "B1">
+			<OnReply option = "yes">
+				<Question questionID = "Q1">
+					<OnReply option = "2, 3">
+						<Question questionID = "B2"></Question>
+					</OnReply>
+				</Question>
+			</OnReply>
+			<OnReply option = "no">
+				<Question questionID = "M1">
+					<OnReply option = "2">
+						<Question questionID = "B2"></Question>
+					</OnReply>								
+				</Question>
+			</OnReply>
+		</Question>
+		<Question questionID = "B3"/>
+		<!--If no reply attribute is defined, all the options connect to the next question-->
+		<Question questionID = "B4"/>
+	</QuestionScript>
+</Template>

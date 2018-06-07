@@ -19,14 +19,16 @@ public class CreateTemplateUI {
     public void mainCreateTemplateUI(Manager manager) {
         CreateTemplateController controller = new CreateTemplateController();
         List<Category> categoriesForManager = controller.listAllCategoriesForManager(manager);
-        Category category;
+        Category category = null;
         List<Question> categoryQuestions;
         List<Question> questionsChosen = new ArrayList<>();
         List<Question> independentQuestions;
-        int menuCategory;
-        int menuIndependent;
+        int menuCategory = -1;
+        int menuIndependent = -1;
         QuestionGroup questionGroup;
         String title;
+        //new just because
+        int out = 0;
 
         if (categoriesForManager.isEmpty()) {
             System.out.println("O gestor não tem categorias");
@@ -39,12 +41,16 @@ public class CreateTemplateUI {
             System.out.println((i + 1) + ". " + categoriesForManager.get(i) + "\n");
         }
 
-        int catChosen = Console.readInteger("Please choose a category: ");
+        int catChosen = Console.readInteger("Please choose a category: (SELECT THE NUMBER)");
         category = categoriesForManager.get(catChosen - 1);
 
+
         do {
-            System.out.println("Would you like to add questions of the category to the template?\n");
-            menuCategory = menuYesNo();
+            while (menuCategory == -1) {
+                System.out.println("Would you like to add questions of the category to the template? (SELECT THE NUMBER)\n");
+                menuCategory = menuYesNo();
+            }
+
 
             if (menuCategory == 1) {
                 System.out.println("\nQuestions for the category " + category.toString() + ": \n");
@@ -58,22 +64,32 @@ public class CreateTemplateUI {
                 boolean flagCategoryQuestions;
                 do {
                     flagCategoryQuestions = false;
-                    String insertedString = Console.readLine("Please choose the questions of the category (Separated by commas): \n");
+                    String insertedString = Console.readLine("Please choose the questions of the category (Separated by commas): (SELECT THE NUMBERS)\n");
 
                     if (insertedString.contains(",")) {
                         String[] catQuestionsChosen = insertedString.split(",");
 
-                        for (int i = 0; i < catQuestionsChosen.length; i++) {
-                            questionsChosen.add(categoryQuestions.get(i));
+                        try {
+                            for (int i = 0; i < catQuestionsChosen.length; i++) {
+                                questionsChosen.add(categoryQuestions.get(i));
+                            }
+                        } catch (IndexOutOfBoundsException ex) {
+                            flagCategoryQuestions = true;
+                            System.out.println("ERROR: Please choose within the range presented\n");
                         }
+
+
                     } else {
-                       questionsChosen.add(categoryQuestions.get(Integer.parseInt(insertedString)-1)); 
+                        questionsChosen.add(categoryQuestions.get(Integer.parseInt(insertedString) - 1));
                     }
                 } while (flagCategoryQuestions);
             }
 
-            System.out.println("Would you like to add independent questions to the template?\n");
-            menuIndependent = menuYesNo();
+            while (menuIndependent == -1) {
+                System.out.println("Would you like to add independent questions to the template? (SELECT THE NUMBER)\n");
+                menuIndependent = menuYesNo();
+
+            }
 
             if (menuIndependent == 1) {
                 System.out.println("Independent Questions: \n");
@@ -88,15 +104,19 @@ public class CreateTemplateUI {
                 do {
                     flagIndependentQuestions = false;
                     try {
-                        String[] independentQuestionsChosen = Console.readLine("Please choose the questions (Separated by commas): \n").split(",");
-
-                        for (String question : independentQuestionsChosen) {
-                            questionsChosen.add(independentQuestions.get(Integer.parseInt(question) - 1));
+                        String[] independentQuestionsChosen = Console.readLine("Please choose the questions (Separated by commas): (SELECT THE NUMBERS)\n").split(",");
+                        try {
+                            for (String question : independentQuestionsChosen) {
+                                questionsChosen.add(independentQuestions.get(Integer.parseInt(question) - 1));
+                            }
+                        } catch (IndexOutOfBoundsException ex) {
+                            flagIndependentQuestions = true;
+                            System.out.println("ERROR: Please choose within the range presented\n");
                         }
 
                     } catch (IllegalArgumentException exception) {
                         flagIndependentQuestions = true;
-                        System.out.println("ERROR: Please try again");
+                        System.out.println("ERROR: Please try again\n");
                     }
                 } while (flagIndependentQuestions);
             }
@@ -115,10 +135,19 @@ public class CreateTemplateUI {
         } else {
             System.out.println("Couldn't create template");
         }
+
     }
 
+
     private int menuYesNo() {
-        return Console.readInteger("1. Yes\n"
-                + "2. No\n");
+        int response = -1;
+        try {
+            response = Integer.parseInt(Console.readLine("1. Yes\n"
+                    + "2. No\n"));
+        } catch (NumberFormatException ex) {
+            System.out.println("Please select the number of the option");
+        }
+
+        return response;
     }
 }

@@ -258,7 +258,7 @@ public class ListSurveyActivity extends AppCompatActivity {
      *
      * @return List with all the surveys available for the current user depending on the pagination ID,
      * null if an error ocured
-     * @throws IOException Throws IOException if an error ocured while sending the REST Request
+     * @throws IOException Throws IOException if an error occurred while sending the REST Request
      */
     private List<String> getNextSurveys() throws IOException {
         String userAvailableSurveysURL;

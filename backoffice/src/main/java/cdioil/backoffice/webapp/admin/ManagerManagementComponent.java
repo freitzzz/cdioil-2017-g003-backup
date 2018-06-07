@@ -95,18 +95,15 @@ public class ManagerManagementComponent extends DefaultPanelView {
         searchTextField.setIcon(VaadinIcons.SEARCH);
         searchTextField.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
-        searchTextField.addValueChangeListener(new HasValue.ValueChangeListener<String>() {
-            @Override
-            public void valueChange(HasValue.ValueChangeEvent<String> valueChangeEvent) {
-                final String input = searchTextField.getValue().toLowerCase();
+        searchTextField.addValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
+            final String input = searchTextField.getValue().toLowerCase();
 
-                List<SystemUserDTO> filteredUsers =
-                        controller.findFilteredSystemUserDTO(input);
+            List<SystemUserDTO> filteredUsers =
+                    controller.findFilteredSystemUserDTO(input);
 
-                managerGridData.clear();
-                managerGridData.addAll(filteredUsers);
-                managerGrid.getDataProvider().refreshAll();
-            }
+            managerGridData.clear();
+            managerGridData.addAll(filteredUsers);
+            managerGrid.getDataProvider().refreshAll();
         });
 
         return searchTextField;
