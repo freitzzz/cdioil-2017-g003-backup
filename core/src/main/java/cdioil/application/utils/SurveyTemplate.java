@@ -29,6 +29,11 @@ public final class SurveyTemplate {
     @XmlElement(name = "Questions")
     private Questions templateQuestions;
     /**
+     * QuestionScript with the current template question script
+     */
+    @XmlElement(name = "QuestionScript")
+    private QuestionScript templateQuestionScript;
+    /**
      * Returns the current Survey Template name
      * @return String with the current template name
      */
@@ -43,6 +48,11 @@ public final class SurveyTemplate {
      * @return SurveyItems with the current template survey items
      */
     public SurveyItems getTemplateSurveyItems(){return templateSurveyItems;}
+    /**
+     * Returns the current template question script
+     * @return QuestionScript with the current template question script
+     */
+    public QuestionScript getTemplateQuestionScript(){return templateQuestionScript;}
     /**
      * Class that represents an aggregate of templateQuestions
      */
@@ -162,5 +172,46 @@ public final class SurveyTemplate {
          */
         @XmlAttribute(name = "sku")
         private String sku;
+    }
+    /**
+     * Class that represents the template Question Script
+     */
+    public static class QuestionScript{
+        /**
+         * List with all the on reply trigger questions of the question script
+         */
+        @XmlElements(@XmlElement(name = "Question"))
+        private List<Question> onReplyQuestions;
+        /**
+         * Returns all the on reply questions of the template question script
+         * @return List with all the on reply questions of the the template question script
+         */
+        public List<Question> getOnReplyQuestions(){return onReplyQuestions;}
+    }
+    /**
+     * Class that represents a question that leads to another question on the 
+     * question script
+     */
+    private static class OnReplyQuestion extends Question{
+        /**
+         * OnReply with the question trigger
+         */
+        @XmlElement(name = "OnReply")
+        private OnReply onReply;
+    }
+    /**
+     * Class that represents the on reply trigger question
+     */
+    private static class OnReply{
+        /**
+         * OnReplyQuestion with the next question that is proceeded
+         */
+        @XmlElement(name = "Question")
+        private OnReplyQuestion onReplyQuestion;
+        /**
+         * String with the options that trigger the on reply question
+         */
+        @XmlAttribute(name = "option")
+        private String onReplyOptions;
     }
 }
