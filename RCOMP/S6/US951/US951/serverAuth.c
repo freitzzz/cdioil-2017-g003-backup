@@ -256,7 +256,6 @@ int main(int argc,char *argv[]){
 				BYTE iv[1][16] = {
 					{0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f}
 				};
-        printf("->>>>>>>>>>\n");
 				BYTE key[1][32];
 				strncpy((char*)key, receivedCode.key, 32); //Gets first 32 bytes of authentication key for encryption key
 				//Prepares key for encryption
@@ -265,7 +264,6 @@ int main(int argc,char *argv[]){
 				aes_decrypt_ctr((BYTE*)client_review.product_name, 20,randomProduct,key_schedule, 256, iv[0]);
 				aes_decrypt_ctr((unsigned char *)&client_review.valor, 4,(unsigned char*)&randomValor, key_schedule, 256, iv[0]);
 				aes_decrypt_ctr((unsigned char *)&client_review.id, 4,(unsigned char*)&id, key_schedule, 256, iv[0]);
-        printf("->>>>>>>>>>\n");
 				strcpy(client_review.product_name,(char*)randomProduct);
 				client_review.valor = randomValor;
 				client_review.id = id;

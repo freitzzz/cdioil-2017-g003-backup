@@ -117,20 +117,20 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
     if(failure){
         printf("An error ocured while retrieving server info\n");
         persist_queue_reviews(reviews);
-        return 0;
+        return -5;
     }
     int sock = socket(list->ai_family, list->ai_socktype, list->ai_protocol); //Creates a socket to use in the TCP connection
     if(sock==-1){
         printf("An error ocured while creating the TCP Connection Socket\n");
         persist_queue_reviews(reviews);
-        return 0;
+        return -5;
     }
 
     int connectionStatus=connect(sock, (struct sockaddr *)list->ai_addr, list->ai_addrlen); //Creates the TCP connection
     if(connectionStatus==-1){
         printf("An error occured while connecting to the TCP Connection\n");
         persist_queue_reviews(reviews);
-        return 0;
+        return -5;
     }
 
 	/*Context structure for server and client with SSLv2_method*/
@@ -142,7 +142,7 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 	if(load_cert <= 0){
 		printf("An error occured while loading the server's certificate\n");
     persist_queue_reviews(reviews);
-		return 0;
+		return -5;
 	}
 
 	/*Certificate and key set up*/
@@ -150,7 +150,7 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 	if(use_cert <= 0){
 		printf("An error occured while setting up the client's certificate file\n");
     persist_queue_reviews(reviews);
-		return 0;
+		return -5;
 	}
 
 	/*Load the password for the Private Key*/
@@ -160,21 +160,21 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 	if(use_prv <= 0){
 		printf("An error occured while setting up the client's private key\n");
     persist_queue_reviews(reviews);
-    return 0;
+    return -5;
 	}
 
 	/*Make sure the key and certificate file match*/
 	if (SSL_CTX_check_private_key(sslctx) == 0) {
 	   printf("Private key does not match the certificate public key\n");
      persist_queue_reviews(reviews);
-	   return 0;
+	   return -5;
 	}
 
 	/* Set the list of trusted CAs based on the file and/or directory provided*/
 	if(SSL_CTX_load_verify_locations(sslctx,CERT_FILE,NULL)<1) {
 	   printf("Error setting verify location\n");
      persist_queue_reviews(reviews);
-	   return 0;
+	   return -5;
 	}
 
 	/* Set for server verification*/
@@ -190,7 +190,7 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 	if(ssl_err < 1){
 		printf("An error occured while performing the SSL handshake\n");
     persist_queue_reviews(reviews);
-		return 0;
+		return -5;
 	}
 
 	ssl_err = SSL_write(cSSL,&c,sizeof(c));
@@ -205,7 +205,7 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 			SSL_CTX_free(sslctx);
 		}
     persist_queue_reviews(reviews);
-		return 0;
+		return -5;
 	}
 
 	int statusCode = 0;
@@ -222,13 +222,13 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 			SSL_CTX_free(sslctx);
 		}
     persist_queue_reviews(reviews);
-		return 0;
+		return -5;
 	}
 	if(statusCode==FAILURE_CODE){
 		printf("The device is not allowed to send reviews\n");
 		close(sock);
     persist_queue_reviews(reviews);
-		return 0;
+		return -5;
 	}
 
 
@@ -245,7 +245,7 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 			SSL_CTX_free(sslctx);
 		}
     persist_queue_reviews(reviews);
-		return 0;
+		return -5;
 	}
 
 
@@ -268,7 +268,7 @@ int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
 	if(ssl_err<0){
 		printf("Error in shutdown\n");
     persist_queue_reviews(reviews);
-    return 0;
+    return -5;
 	}else if(ssl_err==1){
 		printf("Client exited gracefully\n");
 	}
@@ -304,7 +304,12 @@ int main(int argc,char *argv[]){
       if(currentReviews!=1){
         int nextReview=0;
         while(currentReviews!=nextReview){
-          send_reviews(argv[1],c,reviews_to_persist,nextReview++);
+          int successCode=send_reviews(argv[1],c,reviews_to_persist,nextReview);
+					if(successCode==-5){
+						sleep(5);
+					}else{
+						nextReview++;
+					}
           c=start_cominhos(argv[2]);
         }
         persist_queue_reviews(reviews_to_persist);
