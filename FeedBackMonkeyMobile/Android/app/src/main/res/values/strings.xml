@@ -21,4 +21,7 @@
     <string name="yes_answer">S I M</string>
     <string name="no_answer">N Ã O</string>
     <string name="zero">0</string>
+    <string name="ok">OK</string>
+    <string name="Sugestão">Sugestão</string>
+    <string name="sugestao">sugestão</string>
 </resources>
