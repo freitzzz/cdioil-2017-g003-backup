@@ -1,11 +1,11 @@
 package cdioil.application.domain.authz;
 
 import cdioil.domain.authz.Email;
-import cdioil.domain.authz.SystemUser;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Version;
 
 /**
  * Class that's responsible for mananing the login attempts of users in the
@@ -17,6 +17,17 @@ import javax.persistence.Entity;
  */
 @Entity
 public class LoginManagement implements Serializable {
+    
+    /**
+     * Serialization number.
+     */
+    private static final long serialVersionUID = 98L;
+    
+    /**
+     * Object version.
+     */
+    @Version
+    private long version;
 
     /**
      * Maximum number of unsucessful login attempts that a user can do before
@@ -27,11 +38,11 @@ public class LoginManagement implements Serializable {
      * Time interval (in minutes) for which the user is locked from logging in
      * the application.
      */
-    private static final int LOCK_USER_TIME_MINUTES = 5;
+    private static final int LOCK_USER_TIME_MINUTES = 1;
     /**
-     * Number of login attempts that have been made with a certain Email.
+     * Number of unsuccessful login attempts that have been made with a certain Email.
      */
-    private int loginAttempts;
+    private int unsuccessfulLoginAttempts;
     /**
      * Email that was used to attempt a login.
      */
@@ -62,8 +73,8 @@ public class LoginManagement implements Serializable {
      * Increments the number of login attempts that were made using an email.
      */
     public void incrementLoginAttempts() {
-        loginAttempts++;
-        if (loginAttempts == MAXIMUM_NUMBER_OF_UNSUCCESSFUL_LOGIN_ATTEMPTS) {
+        unsuccessfulLoginAttempts++;
+        if (unsuccessfulLoginAttempts >= MAXIMUM_NUMBER_OF_UNSUCCESSFUL_LOGIN_ATTEMPTS) {
             lockUser();
         }
     }
@@ -90,7 +101,7 @@ public class LoginManagement implements Serializable {
      * login.
      */
     private void lockUser() {
-        if (loginAttempts == MAXIMUM_NUMBER_OF_UNSUCCESSFUL_LOGIN_ATTEMPTS) {
+        if (unsuccessfulLoginAttempts >= MAXIMUM_NUMBER_OF_UNSUCCESSFUL_LOGIN_ATTEMPTS) {
             lockedUserTimestamp = LocalDateTime.now();
         }
     }
@@ -100,7 +111,7 @@ public class LoginManagement implements Serializable {
      * null.
      */
     private void unlockUser() {
-        loginAttempts = 0;
+        unsuccessfulLoginAttempts = 0;
         lockedUserTimestamp = null;
     }
 }
