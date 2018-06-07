@@ -67,15 +67,10 @@ void persist_queue_reviews(Review* queueReviews) {
       }
       fclose(fileStream);
   }
-/*Runs the Machine*/
-/*The Server IP needs to be passed as argument*/
-int main(int argc,char *argv[]){
-    if(argc!=2){
-        printf("You need to pass the Server IP as argument\n");
-        return 0;
-    }
 
-	SSL_CTX *sslctx; //SSL context structure
+
+int send_reviews(char* ip,char* authenticationKey){
+  SSL_CTX *sslctx; //SSL context structure
 	SSL *cSSL; //SSL socket
 
 	initializeSSL(); //Initializes SSL libraries
@@ -87,7 +82,7 @@ int main(int argc,char *argv[]){
     req.ai_family = AF_UNSPEC; //Defines the family of the connection
     req.ai_socktype = SOCK_STREAM; //Defines the type of the socket
 
-    int failure=getaddrinfo(argv[1], SERVER_PORT, &req, &list); //Fills the structure with the needed information
+    int failure=getaddrinfo(ip, SERVER_PORT, &req, &list); //Fills the structure with the needed information
     if(failure){
         printf("An error ocured while retrieving server info\n");
         return 0;
@@ -150,7 +145,7 @@ int main(int argc,char *argv[]){
 
 	char temp[256];
 
-	strncpy(temp, (char*) generate(), sizeof(temp));
+	strncpy(temp,authenticationKey, sizeof(temp));
 	strncpy(c.key, temp, sizeof(temp));
 
     time(&c.timestamp);
@@ -268,6 +263,17 @@ int main(int argc,char *argv[]){
 	close(sock);
 	SSL_free(cSSL);
 	SSL_CTX_free(sslctx);
+  return 0;
+}
 
+
+/*Runs the Machine*/
+/*The Server IP needs to be passed as argument*/
+int main(int argc,char *argv[]){
+    if(argc!=3){
+        printf("You need to pass the Server IP as argument & the client authentication key\n");
+        return 0;
+    }
+    send_reviews(argv[1],argv[2]);
     return 0;
 }
