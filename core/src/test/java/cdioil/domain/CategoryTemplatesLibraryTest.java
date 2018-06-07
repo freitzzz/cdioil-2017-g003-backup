@@ -1,7 +1,6 @@
 package cdioil.domain;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -115,6 +114,28 @@ public class CategoryTemplatesLibraryTest {
     }
 
     /**
+     * Test of getLibrary method, of the class CategoryTemplatesLibrary.
+     */
+    @Test
+    public void testGetLibrary() {
+        System.out.println("getLibrary");
+        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
+        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
+        questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
+        
+        Template template = new Template("template", questionGroup);
+        CategoryTemplatesLibrary result = new CategoryTemplatesLibrary();
+        result.addCategory(category);
+        result.addTemplate(category, template);
+
+        CategoryTemplatesLibrary expected = new CategoryTemplatesLibrary();
+        expected.addCategory(category);
+        expected.addTemplate(category, template);
+        
+        assertEquals("Should be equal!", expected.getLibrary(), result.getLibrary());
+    }
+
+    /**
      * Test of doesTemplateExist method, of class CategoryTemplatesLibrary.
      */
     @Test
@@ -146,8 +167,8 @@ public class CategoryTemplatesLibraryTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
-        instance.addCategory(new Category("name","10938DC"));
-        assertNotEquals("".hashCode(),instance.hashCode());
+        instance.addCategory(new Category("name", "10938DC"));
+        assertNotEquals("".hashCode(), instance.hashCode());
     }
 
     /**

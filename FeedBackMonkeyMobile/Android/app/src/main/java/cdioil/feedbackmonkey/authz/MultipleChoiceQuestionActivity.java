@@ -8,56 +8,71 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.ListSurveyActivity;
 
-public class MultipleQuestionActivity extends AppCompatActivity {
+public class MultipleChoiceQuestionActivity extends AppCompatActivity {
 
     private ListView questionListView;
 
     private MultipleChoiceQuestionItemListViewAdapter currentAdapter;
 
-    private TextView questionText;
+    private TextView questionTextView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_question);
+        configureView();
+    }
+
+    private void configureView() {
         questionListView = findViewById(R.id.multiple_choice_question_list_view);
         currentAdapter = new MultipleChoiceQuestionItemListViewAdapter(this);
-        questionListView.setAdapter(currentAdapter);
-        for(int i = 0; i < 50; i++){
-            currentAdapter.add("aotiehgeaoirghaeorihgaorengaoeig");
+        if(getIntent().getExtras() != null){
+            questionTextView.setText(getIntent().getExtras().getString("questionText"));
+            ArrayList<String> temp = getIntent().getExtras().getStringArrayList("questionOptions");
+            for(int i = 0; i < temp.size(); i++){
+                currentAdapter.add(temp.get(i));
+                questionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                });
+            }
         }
     }
 
 
-
     /**
      * MultipleChoiceQuestionItemListViewAdapter that represents a custom adapter used for the ListView that holds the
-     * surveys that an user can currently answer
-     * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
-     * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
+     * questions for a multiple choice question
+     * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+     * @author <a href="1161191@isep.ipp.pt">Rita Gonçalves</a>
+     * @author <a href="1169999@isep.ipp.pt">Joana Pinheiro</a>
      */
     private class MultipleChoiceQuestionItemListViewAdapter extends ArrayAdapter<String>{
         /**
-         * Builds a new {@link ListSurveyActivity.SurveyItemListViewAdapter} being adapted on a certain activity ListView
+         * Builds a new {@link MultipleChoiceQuestionActivity.MultipleChoiceQuestionItemListViewAdapter} being adapted on a certain activity ListView
          * @param activity Activity with the activity which the ListView is being added the adapter
-         * @param surveyItems List with a previous survey items predefined
+         * @param questionItems List with the question options
          */
-        public MultipleChoiceQuestionItemListViewAdapter(Activity activity, List<String> surveyItems) {
-            super(activity,R.layout.survey_item_list_row,surveyItems);
+        public MultipleChoiceQuestionItemListViewAdapter(Activity activity, List<String> questionItems) {
+            super(activity,R.layout.survey_item_list_row,questionItems);
         }
 
         /**
-         * Builds a new {@link ListSurveyActivity.SurveyItemListViewAdapter} being adapted on a certain activity ListView
+         * Builds a new {@link MultipleChoiceQuestionActivity.MultipleChoiceQuestionItemListViewAdapter} being adapted on a certain activity ListView
          * @param activity Activity with the activity which the ListView is being added the adapter
          */
         public MultipleChoiceQuestionItemListViewAdapter(Activity activity){

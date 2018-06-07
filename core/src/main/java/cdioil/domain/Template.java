@@ -59,6 +59,13 @@ public class Template implements Serializable {
     }
 
     /**
+     * Returns the title of the template
+     * @return String with the title of the template
+     */
+    public String getTitle(){
+        return title;
+    }
+    /**
      * Returns a copy of the group of questions
      *
      * @return QuestionGroup

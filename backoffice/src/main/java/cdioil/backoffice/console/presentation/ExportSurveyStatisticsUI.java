@@ -79,7 +79,7 @@ public class ExportSurveyStatisticsUI {
     private final String separator = localizationHandler.getMessageValue("separator");
 
     /**
-     * Instance of Controller that intermediates the interactions between the administrator and the domain classes.
+     * Instance of Controller that intermediates the interactions between the manager and the domain classes.
      */
     private final ExportSurveyStatisticsController ctrl;
 

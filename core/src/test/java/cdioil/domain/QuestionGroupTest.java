@@ -1,6 +1,7 @@
 package cdioil.domain;
 
 import java.util.HashSet;
+import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -33,8 +34,8 @@ public class QuestionGroupTest {
     public void testGetQuestions() {
         System.out.println("getQuestions");
         QuestionGroup instance = new QuestionGroup("QuestionGroup");
-        HashSet<Question> expResult = new HashSet<>();
-        HashSet<Question> result = (HashSet<Question>) instance.getQuestions();
+        Set<Question> expResult = new HashSet<>();
+        Set<Question> result = instance.getQuestions();
         assertEquals(expResult, result);
     }
 

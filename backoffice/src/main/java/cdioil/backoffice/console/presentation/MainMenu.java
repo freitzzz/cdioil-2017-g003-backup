@@ -41,6 +41,7 @@ public class MainMenu {
     private String optionInsertCategoryQuestion = localizationHandler.getMessageValue("option_insert_question_category");
     private String optionExportSurveyStatistics = localizationHandler.getMessageValue("option_export_stats_survey");
     private String optionCreateTemplate = localizationHandler.getMessageValue("option_create_template");
+    private String optionExportTemplate = localizationHandler.getMessageValue("option_export_template");
 
 
     /* ==============
@@ -71,7 +72,7 @@ public class MainMenu {
             switch (opcao) {
                 case 0:
                     System.out.println(authenticationController.logout());
-                    Console.log(infoShutdown,Console.ConsoleColors.PURPLE);
+                    Console.log(infoShutdown, Console.ConsoleColors.PURPLE);
                     break;
                 case 1:
                     new AssignManagerUI();
@@ -129,10 +130,10 @@ public class MainMenu {
             switch (opcao) {
                 case 0:
                     authenticationController.logout();
-                    Console.log(infoShutdown,Console.ConsoleColors.PURPLE);
+                    Console.log(infoShutdown, Console.ConsoleColors.PURPLE);
                     break;
                 case 1:
-                    new ImportQuestionsUI((Manager)authenticationController.getUser());
+                    new ImportQuestionsUI((Manager) authenticationController.getUser());
                     break;
                 case 2:
                     new ChangeLanguageUI();
@@ -146,16 +147,19 @@ public class MainMenu {
                     break;
                 case 5:
                     System.out.println(authenticationController.getUser());
-                    new CreateSurveyUI((Manager)authenticationController.getUser());
+                    new CreateSurveyUI((Manager) authenticationController.getUser());
                     break;
                 case 6:
-                    new InsertQuestionUI((Manager)authenticationController.getUser());
+                    new InsertQuestionUI((Manager) authenticationController.getUser());
                     break;
                 case 7:
                     new ExportSurveyStatisticsUI();
                     break;
                 case 8:
-                    new CreateTemplateUI((Manager)authenticationController.getUser());
+                    new CreateTemplateUI((Manager) authenticationController.getUser());
+                    break;
+                case 9:
+                    new ExportTemplateUI();
                     break;
                 default:
                     System.out.println(errorInvalidOption);
@@ -177,6 +181,7 @@ public class MainMenu {
         System.out.println("6. " + optionInsertCategoryQuestion);
         System.out.println("7. " + optionExportSurveyStatistics);
         System.out.println("8. " + optionCreateTemplate);
+        System.out.println("9. " + optionExportTemplate);
         System.out.println(SEPARATOR);
         System.out.println("0. " + optionExit);
         option = Console.readInteger(requestSelectOption);

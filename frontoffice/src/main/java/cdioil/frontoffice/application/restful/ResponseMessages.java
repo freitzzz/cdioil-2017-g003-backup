@@ -24,33 +24,33 @@ public interface ResponseMessages {
 
     /**
      * Constant that represents the JSON used on the response message for
-     * warning the user that the chosen review has already been answered.
-     */
-    public static final String JSON_FINISHED_REVIEW = "{\n\t\"finishedreview\":\"true\"\n}";
-
-    /**
-     * Constant that represents the JSON used on the response message for
-     * warning the user that the chosen survey is not valid.
-     */
-    public static final String JSON_INVALID_SURVEY = "{\n\t\"invalidsurvey\":\"true\"\n}";
-
-    /**
-     * Constant that represents the JSON used on the response message for
      * warning the user that the review is not valid.
      */
     public static final String JSON_INVALID_REVIEW = "{\n\t\"invalidreview\":\"true\"\n}";
 
     /**
-     * Constant that represents the JSON used on the response message for
-     * warning the user that the review is incomplete
+     * Constant that represents the JSON chunk used on the response message used
+     * for warning the user that the review was created successfully.
      */
-    public static final String JSON_INCOMPLETE_REVIEW = "{\n\t\"reviewdoesnotmeetconditions\":\"true\"\n}";
+    public static final String JSON_REVIEW_CREATION_SUCCESS = "{\n\t\"reviewcreated\":true\"\n}";
 
     /**
-     * Constant that represents the JSON used on the response message for
-     * warning the user when the review was not found
+     * Constant that represents the JSON chunk used on the response message used
+     * for warning the user that the review failed to be created.
      */
-    public static final String JSON_REVIEW_NOT_FOUND = "{\n\t\"reviewnotfound\":\"true\"\n}";
+    public static final String JSON_REVIEW_CREATION_FAILURE = "{\n\t\"reviewcreated\":\"false\"\n}";
+
+    /**
+     * Constant that represents the JSON chunk used on the response message that
+     * warns the user that the review was added to their profile successfully.
+     */
+    public static final String JSON_REVIEW_ADDED_TO_PROFILE_SUCCESS = "{\n\t\"reviewaddedtoprofile\":\"true\"}";
+
+    /**
+     * Constant that represents the JSON chunk used on the response message that
+     * warns the user that the review failed to be added to their profile.
+     */
+    public static final String JSON_REVIEW_ADDED_TO_PROFILE_FAILURE = "{\n\t\"reviewaddedtoprofile\":\"false\"}";
 
     /**
      * Constant that represents the JSON used on the response message for
@@ -100,17 +100,29 @@ public interface ResponseMessages {
      */
     public static final String JSON_ACCOUNT_LOCKED = "{\n\t\"accountlocked\":\"true\"\n}";
     /**
-     * Constant that represents the JSON used on the response message for warning 
-     * the user that his account was created with success
+     * Constant that represents the JSON used on the response message for
+     * warning the user that his account was created with success
      */
-    public static final String JSON_ACCOUNT_CREATED_WITH_SUCCESS="{\n\n\"accountcreationsuccessful\":\"true\"\n}";
-    
+    public static final String JSON_ACCOUNT_CREATED_WITH_SUCCESS = "{\n\n\"accountcreationsuccessful\":\"true\"\n}";
+
+    /**
+     * Constant that represents the JSON chunk used on the response message that
+     * warns the user that their data was updated sucessfully.
+     */
+    public static final String JSON_USER_DATA_UPDATED_SUCCESS = "{\n\t\"userdataupdated\":\"true\"\n}";
+
+    /**
+     * Constant that represents the JSON chunk used on the response message that
+     * warns the user that their data failed to be updated.
+     */
+    public static final String JSON_USER_DATA_UPDATED_FAILURE = "{\n\t\"userdataupdated\":\"false\"\n}";
+
     /**
      * Constant that represents the JSON used on the response message for
      * warning the user when the product was not found
      */
     public static final String JSON_PRODUCT_NOT_FOUND = "{\n\t\"productnotfound\":\"true\"\n}";
-    
+
     /**
      * Constant that represents the JSON used on the response message for
      * warning the user when no surveys are found
