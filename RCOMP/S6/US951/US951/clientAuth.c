@@ -34,13 +34,11 @@ char produtos[][20] = {
 
   Review* initialize_review_shm_queue() {
     currentReviews=0;
-    currentReviewsSize=20;
+    currentReviewsSize=100;
       FILE* fileStream=fopen(QUEUE_NAME,READ_RIGHTS);
-      Review* reviews=malloc(sizeof(Review));
-      printf("%p\n",fileStream);
+      Review* reviews=malloc(currentReviewsSize*sizeof(Review));
       if(fileStream!=NULL){
         while(!feof(fileStream)){
-          printf("aaa\n");
           if(currentReviews==currentReviewsSize){
             currentReviewsSize+=5;
             reviews=realloc(reviews,currentReviewsSize);
@@ -53,10 +51,8 @@ char produtos[][20] = {
           currentReviews++;
         }
       }else{
-        printf("? ? ? ?\n");
         currentReviews++;
       }
-      printf("Read %d\n",currentReviews);
       return reviews;
   }
 
@@ -70,7 +66,6 @@ void persist_queue_reviews(Review* queueReviews) {
               fwrite(&queueReviews[i],sizeof(Review),1,fileStream);
           }
       }
-      printf("Wrote %d\n",i);
       fclose(fileStream);
   }
 
@@ -100,8 +95,6 @@ void persist_queue_reviews(Review* queueReviews) {
   	aes_encrypt_ctr((BYTE*)&id,4, (BYTE*)&review.id, key_schedule, 256, iv[0]);
   	aes_encrypt_ctr((BYTE*)&randomValor,4, (BYTE *)&review.valor, key_schedule, 256, iv[0]);
     Review* reviewsX=initialize_review_shm_queue();
-    int xasx=strlen(review.product_name);
-    printf("%d\n",xasx);
     strcpy(reviewsX[0].product_name,review.product_name);
     reviewsX[0].id=review.id;
     reviewsX[0].valor=review.valor;
@@ -109,7 +102,7 @@ void persist_queue_reviews(Review* queueReviews) {
   }
 
 
-int send_reviews(char* ip,Cominhos c,Review* reviews){
+int send_reviews(char* ip,Cominhos c,Review* reviews,int currentIndex){
   SSL_CTX *sslctx; //SSL context structure
 	SSL *cSSL; //SSL socket
 
@@ -120,14 +113,12 @@ int send_reviews(char* ip,Cominhos c,Review* reviews){
     bzero((char *)&req, sizeof(req)); //Clears the structure
     req.ai_family = AF_UNSPEC; //Defines the family of the connection
     req.ai_socktype = SOCK_STREAM; //Defines the type of the socket
-    printf(">>>>>>>\n");
     int failure=getaddrinfo(ip, SERVER_PORT, &req, &list); //Fills the structure with the needed information
     if(failure){
         printf("An error ocured while retrieving server info\n");
         persist_queue_reviews(reviews);
         return 0;
     }
-    printf("<<<<<<<\n");
     int sock = socket(list->ai_family, list->ai_socktype, list->ai_protocol); //Creates a socket to use in the TCP connection
     if(sock==-1){
         printf("An error ocured while creating the TCP Connection Socket\n");
@@ -233,7 +224,6 @@ int send_reviews(char* ip,Cominhos c,Review* reviews){
     persist_queue_reviews(reviews);
 		return 0;
 	}
-  printf("%d\n",statusCode);
 	if(statusCode==FAILURE_CODE){
 		printf("The device is not allowed to send reviews\n");
 		close(sock);
@@ -243,8 +233,8 @@ int send_reviews(char* ip,Cominhos c,Review* reviews){
 
 
 
-	ssl_err = SSL_write(cSSL,&reviews[0],sizeof(Review)); //Writes the review to the socket
-  reviews[0].id=-1;
+	ssl_err = SSL_write(cSSL,&reviews[currentIndex],sizeof(Review)); //Writes the review to the socket
+  reviews[currentIndex].id=-1;
   if(ssl_err <= 0){
 		printf("An error occured while reading the code sent from the server\n");
 		ssl_err = SSL_get_error(cSSL,ssl_err);
@@ -286,7 +276,6 @@ int send_reviews(char* ip,Cominhos c,Review* reviews){
 	close(sock);
 	SSL_free(cSSL);
 	SSL_CTX_free(sslctx);
-  persist_queue_reviews(reviews);
   return 0;
 }
 
@@ -310,9 +299,18 @@ int main(int argc,char *argv[]){
         return 0;
     }
     while(1){
-      Cominhos c=start_cominhos("d6c67b926311591a3faa9bdeaaefad65c6d2e2c011fa00554b038f6c88d5934340307b73e761b68775d4a65ab800c2b0d3b17f48a4d63210c9d406cb01cbb619");
+      Cominhos c=start_cominhos(argv[2]);
       Review* reviews_to_persist=get_reviews_to_persist(c);
-			send_reviews("localhost",c,reviews_to_persist);
+      if(currentReviews!=1){
+        int nextReview=0;
+        while(currentReviews!=nextReview){
+          send_reviews(argv[1],c,reviews_to_persist,nextReview++);
+          c=start_cominhos(argv[2]);
+        }
+        persist_queue_reviews(reviews_to_persist);
+      }else{
+        send_reviews(argv[1],c,reviews_to_persist,0);
+      }
 			sleep(5);
 		}
     return 0;
