@@ -19,14 +19,13 @@
         app:clockwise="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.872"
-        app:progress="90"
+        app:layout_constraintVertical_bias="0.764"
+        app:progress="0"
         app:progressColor="#b9b6b6"
         app:progressWidth="6dp"
-        seekarc:max="5"
         seekarc:rotation="180"
         seekarc:startAngle="30"
         seekarc:sweepAngle="300"
@@ -42,9 +41,10 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/header" />
 
     <TextView
@@ -69,7 +69,25 @@
         app:layout_constraintVertical_bias="0.147"
         tools:text="Como classificaria o produto?" />
 
-
+    <TextView
+        android:id="@+id/seekArcProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:text="@string/zero"
+        android:textColor="#FFFFFF"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.643" />
 
 
 </android.support.constraint.ConstraintLayout>
