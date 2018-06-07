@@ -34,11 +34,13 @@ char produtos[][20] = {
 
   Review* initialize_review_shm_queue() {
     currentReviews=0;
-    currentReviewsSize=1;
+    currentReviewsSize=20;
       FILE* fileStream=fopen(QUEUE_NAME,READ_RIGHTS);
       Review* reviews=malloc(sizeof(Review));
-      if(fileStream==NULL){
+      printf("%p\n",fileStream);
+      if(fileStream!=NULL){
         while(!feof(fileStream)){
+          printf("aaa\n");
           if(currentReviews==currentReviewsSize){
             currentReviewsSize+=5;
             reviews=realloc(reviews,currentReviewsSize);
@@ -48,10 +50,13 @@ char produtos[][20] = {
           strcpy(reviews[currentReviews].product_name,reviewX.product_name);
           reviews[currentReviews].id=reviewX.id;
           reviews[currentReviews].valor=reviewX.valor;
+          currentReviews++;
         }
       }else{
+        printf("? ? ? ?\n");
         currentReviews++;
       }
+      printf("Read %d\n",currentReviews);
       return reviews;
   }
 
@@ -65,6 +70,7 @@ void persist_queue_reviews(Review* queueReviews) {
               fwrite(&queueReviews[i],sizeof(Review),1,fileStream);
           }
       }
+      printf("Wrote %d\n",i);
       fclose(fileStream);
   }
 
@@ -94,9 +100,11 @@ void persist_queue_reviews(Review* queueReviews) {
   	aes_encrypt_ctr((BYTE*)&id,4, (BYTE*)&review.id, key_schedule, 256, iv[0]);
   	aes_encrypt_ctr((BYTE*)&randomValor,4, (BYTE *)&review.valor, key_schedule, 256, iv[0]);
     Review* reviewsX=initialize_review_shm_queue();
-    strcpy(reviewsX[currentReviews-1].product_name,review.product_name);
-    reviewsX[currentReviews-1].id=review.id;
-    reviewsX[currentReviews-1].valor=review.valor;
+    int xasx=strlen(review.product_name);
+    printf("%d\n",xasx);
+    strcpy(reviewsX[0].product_name,review.product_name);
+    reviewsX[0].id=review.id;
+    reviewsX[0].valor=review.valor;
     return reviewsX;
   }
 
@@ -282,6 +290,17 @@ int send_reviews(char* ip,Cominhos c,Review* reviews){
   return 0;
 }
 
+Cominhos start_cominhos(char* authenticationKey){
+  Cominhos c;
+
+  char temp[256];
+
+  strncpy(temp,authenticationKey, sizeof(temp));
+  strncpy(c.key, temp, sizeof(temp));
+
+  time(&c.timestamp);
+  return c;
+}
 
 /*Runs the Machine*/
 /*The Server IP needs to be passed as argument*/
@@ -290,15 +309,8 @@ int main(int argc,char *argv[]){
         printf("You need to pass the Server IP as argument & the client authentication key\n");
         return 0;
     }
-    Cominhos c;
-
-  	char temp[256];
-
-  	strncpy(temp,"d6c67b926311591a3faa9bdeaaefad65c6d2e2c011fa00554b038f6c88d5934340307b73e761b68775d4a65ab800c2b0d3b17f48a4d63210c9d406cb01cbb619", sizeof(temp));
-  	strncpy(c.key, temp, sizeof(temp));
-
-    time(&c.timestamp);
     while(1){
+      Cominhos c=start_cominhos("d6c67b926311591a3faa9bdeaaefad65c6d2e2c011fa00554b038f6c88d5934340307b73e761b68775d4a65ab800c2b0d3b17f48a4d63210c9d406cb01cbb619");
       Review* reviews_to_persist=get_reviews_to_persist(c);
 			send_reviews("localhost",c,reviews_to_persist);
 			sleep(5);

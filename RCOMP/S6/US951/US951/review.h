@@ -3,7 +3,7 @@
  */
 typedef struct
 {
-	char product_name[20];
+	char product_name[500];
 	int valor;
 	int id;
 } Review;
