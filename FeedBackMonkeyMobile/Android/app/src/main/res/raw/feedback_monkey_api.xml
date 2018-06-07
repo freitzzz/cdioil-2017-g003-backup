@@ -23,7 +23,7 @@
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>
-				<subresource name="Available Surveys By Product Code" path="/getSurveysByProductCode/">
+                <subresource name="Available Surveys By Product Code" path="/getSurveysByProductCode/">
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>
@@ -31,8 +31,9 @@
         </resource>
         <resource name = "Reviews" path = "/reviews">
             <subresources>
-                <subresource name = "Create Review" path = "/newreview">
-                    <method>POST</method>
+                <subresource name = "Create New Review" path = "/newreview">
+                    <method>GET</method>
+                    <datatype>XML</datatype>
                     <datatype>JSON</datatype>
                 </subresource>
             </subresources>
