@@ -24,12 +24,6 @@ public interface ResponseMessages {
 
     /**
      * Constant that represents the JSON used on the response message for
-     * warning the user that the chosen survey is not valid.
-     */
-    public static final String JSON_INVALID_SURVEY = "{\n\t\"invalidsurvey\":\"true\"\n}";
-
-    /**
-     * Constant that represents the JSON used on the response message for
      * warning the user that the review is not valid.
      */
     public static final String JSON_INVALID_REVIEW = "{\n\t\"invalidreview\":\"true\"\n}";
