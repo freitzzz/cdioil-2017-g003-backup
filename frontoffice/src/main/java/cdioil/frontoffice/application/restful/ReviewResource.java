@@ -22,12 +22,20 @@ import javax.ws.rs.core.Response;
  *
  * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  * @author <a href="1161380@isep.ipp.pt">Joana Pinheiro</a>
+ * @author <a href="1161371@isep.ipp.pt">António Sousa</a>
  *
- * @since Version 5.0 of FeedbackMonkey
+ * @since Version 6.0 of FeedbackMonkey
  */
 @Path("/reviews")
 public class ReviewResource implements ReviewAPI, ResponseMessages {
 
+    /**
+     * Creates a new review and adds it to the user's profile.
+     * 
+     * @param authenticationToken Authentication token of the user
+     * @param surveyID ID of the survey to answer
+     * @return Response with JSON Response containing a XML formatted String with the graph.
+     */
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/newreview/{authenticationToken}/{surveyID}")
@@ -78,7 +86,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         String messageBody = ReviewXMLService.createReviewXML(newReview);
 
         return messageBody == null ? createInvalidReviewResponse()
-                : Response.status(Response.Status.OK).entity(messageBody).build();
+                : createValidReviewResponse(messageBody);
     }
 
 
@@ -130,7 +138,9 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * not persisted.
      */
     private Response createUnableToCreateReviewResponse() {
-        return Response.status(Response.Status.BAD_REQUEST).entity(JSON_REVIEW_CREATION_FAILURE).build();
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(JSON_REVIEW_CREATION_FAILURE)
+                .build();
     }
 
     /**
@@ -141,18 +151,22 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * not added to their profile.
      */
     private Response createUnableToAddReviewToProfileResponse() {
-        return Response.status(Response.Status.BAD_REQUEST).entity(JSON_REVIEW_ADDED_TO_PROFILE_FAILURE).build();
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(JSON_REVIEW_ADDED_TO_PROFILE_FAILURE)
+                .build();
     }
 
     /**
      * Creates a response with the status code 400, warning the user that their
-     * data failed to be updated
+     * data failed to be updated.
      *
      * @return <code>Response</code> warning the user that their data failed to
      * be updated.
      */
     private Response createUnableToUpdateUserDataResponse() {
-        return Response.status(Response.Status.BAD_REQUEST).entity(JSON_USER_DATA_UPDATED_FAILURE).build();
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(JSON_USER_DATA_UPDATED_FAILURE)
+                .build();
     }
 
     /**
@@ -163,6 +177,20 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
      * found
      */
     private Response createSurveyNotFoundResponse() {
-        return Response.status(Response.Status.NOT_FOUND).entity(JSON_INVALID_SURVEY).build();
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(JSON_SURVEY_NOT_FOUND)
+                .build();
+    }
+    
+    /**
+     * Creates a response with the status code 200, informing the user that the
+     * review was successfully created.
+     * 
+     * @return <code>Response</code> informing the user that the review is valid
+     */
+    private Response createValidReviewResponse(String messageBody){
+        return Response.status(Response.Status.OK)
+                .entity(messageBody)
+                .build();
     }
 }
