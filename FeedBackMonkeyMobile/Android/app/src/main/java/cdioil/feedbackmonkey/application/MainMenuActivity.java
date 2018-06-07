@@ -63,6 +63,8 @@ public class MainMenuActivity extends AppCompatActivity {
                                     break;
                                 case 3:
                                     //Create intent to something
+                                    Intent intent = new Intent(MainMenuActivity.this, SubmitSuggestionActivity.class);
+                                    startActivity(intent);
                                     break;
                             }
             }
