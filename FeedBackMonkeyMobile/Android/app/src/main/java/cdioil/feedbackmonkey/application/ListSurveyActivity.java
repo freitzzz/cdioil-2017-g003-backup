@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,9 +30,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.authz.BinaryQuestionActivity;
-import cdioil.feedbackmonkey.authz.MultipleChoiceQuestionActivity;
-import cdioil.feedbackmonkey.authz.QuantitativeQuestionActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
@@ -51,23 +49,23 @@ public class ListSurveyActivity extends AppCompatActivity {
     /**
      * Constant that represents the Surveys resource path
      */
-    String SURVEYS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Surveys");
+    private static final String SURVEYS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Surveys");
     /**
      * Constant that represents the user available surveys resource path under survey resource
      */
-    String USER_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available User Surveys");
+    private static final String USER_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available User Surveys");
     /**
      * Constant that represents the surveys available to the user with a given code resource path under survey resource.
      */
-    String PRODUCT_CODE_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available Surveys By Product Code");
+    private static final String PRODUCT_CODE_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available Surveys By Product Code");
     /**
      * Constant that represents the Reviews resource path.
      */
-    String REVIEWS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Reviews");
+    private static final String REVIEWS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Reviews");
     /**
      * Constant that represents the new review resource path under reviews resource.
      */
-    String NEW_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Create New Review");
+    private static final String NEW_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Create New Review");
     /**
      * Constant representing an error message to be displayed when a connection error occurs.
      */
@@ -99,7 +97,10 @@ public class ListSurveyActivity extends AppCompatActivity {
      */
     private String itemCode;
 
-    private Response reviewRestResponse;
+    private int reviewRestResponseCode;
+
+    private String reviewRestResponseBody;
+
 
     /**
      * Creates the current activity.
@@ -134,11 +135,11 @@ public class ListSurveyActivity extends AppCompatActivity {
             //wait for the connection thread in order to get the REST response containing review data
             try {
                 connectionThread.join();
-                if (reviewRestResponse.code() == HttpsURLConnection.HTTP_OK) {
+                if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
                     try {
                         File dirFile = getFilesDir();
                         ReviewXMLService xmlService = ReviewXMLService.newInstance();
-                        String fileContent = reviewRestResponse.body().string();
+                        String fileContent = reviewRestResponseBody;
 
                         //may or may not create file, depending on whether or not that survey has a pending review
                         File reviewFile = xmlService.createFile(dirFile, fileContent);
@@ -158,7 +159,7 @@ public class ListSurveyActivity extends AppCompatActivity {
                     }
                 } else {
                     //TODO: create messagediaolog informing user an error occured
-                    ToastNotification.show(this, "Erro: " + reviewRestResponse.code());
+                    ToastNotification.show(this, "Erro: " + reviewRestResponseCode);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -182,16 +183,19 @@ public class ListSurveyActivity extends AppCompatActivity {
         switch (currentQuestionType) {
             case "B":
                 Intent binaryIntent = new Intent(ListSurveyActivity.this, BinaryQuestionActivity.class);
+                binaryIntent.putExtra("authenticationToken", authenticationToken);
                 binaryIntent.putExtras(questionBundle);
                 startActivity(binaryIntent);
                 break;
             case "Q":
                 Intent quantitativeIntent = new Intent(ListSurveyActivity.this, QuantitativeQuestionActivity.class);
+                quantitativeIntent.putExtra("authenticationToken", authenticationToken);
                 quantitativeIntent.putExtras(questionBundle);
                 startActivity(quantitativeIntent);
                 break;
             case "MC":
                 Intent multipleChoiceIntent = new Intent(ListSurveyActivity.this, MultipleChoiceQuestionActivity.class);
+                multipleChoiceIntent.putExtra("authenticationToken", authenticationToken);
                 multipleChoiceIntent.putExtras(questionBundle);
                 startActivity(multipleChoiceIntent);
                 break;
@@ -210,13 +214,16 @@ public class ListSurveyActivity extends AppCompatActivity {
         return () -> {
             try {
                 String surveyID = currentAdapter.getItem(position).split(" ")[1];
-                reviewRestResponse = RESTRequest.create(BuildConfig.SERVER_URL.
+                Response reviewRestResponse = RESTRequest.create(BuildConfig.SERVER_URL.
                         concat(FeedbackMonkeyAPI.getAPIEntryPoint().
                                 concat(REVIEWS_RESOURCE_PATH).
                                 concat(NEW_REVIEW_RESOURCE_PATH).
                                 concat("/" + authenticationToken).
                                 concat("/" + surveyID))).
                         GET();
+
+                reviewRestResponseCode = reviewRestResponse.code();
+                reviewRestResponseBody = reviewRestResponse.body().string();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -248,7 +255,7 @@ public class ListSurveyActivity extends AppCompatActivity {
                 }
             } catch (IOException ioException) {
                 //TODO: log exceptions to logger file
-                ToastNotification.show(getActivity(), ERROR_CONNECTION_LOST);
+                ToastNotification.show(this, ERROR_CONNECTION_LOST);
             }
         };
     }
