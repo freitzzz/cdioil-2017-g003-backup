@@ -1,4 +1,4 @@
-package cdioil.feedbackmonkey.authz;
+package cdioil.feedbackmonkey.application;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,7 +18,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.application.SubmitSuggestionActivity;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 
 public class QuantitativeQuestionActivity extends AppCompatActivity {
@@ -29,6 +28,8 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView;
 
+    private String authenticationToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
         seekArc = findViewById(R.id.seekArc);
         questionTextView = findViewById(R.id.question);
         seekArcProgress = findViewById(R.id.seekArcProgress);
+        authenticationToken = getIntent().getExtras().getString("authenticationToken");
         configureView();
     }
 
@@ -104,16 +106,19 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
                 switch (currentQuestionType) {
                     case "B":
                         Intent binaryIntent = new Intent(QuantitativeQuestionActivity.this, BinaryQuestionActivity.class);
+                        binaryIntent.putExtra("authenticationToken", authenticationToken);
                         binaryIntent.putExtras(questionBundle);
                         startActivity(binaryIntent);
                         break;
                     case "Q":
                         Intent quantitativeIntent = new Intent(QuantitativeQuestionActivity.this, QuantitativeQuestionActivity.class);
+                        quantitativeIntent.putExtra("authenticationToken", authenticationToken);
                         quantitativeIntent.putExtras(questionBundle);
                         startActivity(quantitativeIntent);
                         break;
                     case "MC":
                         Intent multipleChoiceIntent = new Intent(QuantitativeQuestionActivity.this, MultipleChoiceQuestionActivity.class);
+                        multipleChoiceIntent.putExtra("authenticationToken", authenticationToken);
                         multipleChoiceIntent.putExtras(questionBundle);
                         startActivity(multipleChoiceIntent);
                         break;
@@ -140,10 +145,13 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
             wantToSubmitSuggestionDialog.setPositiveButton("Sim", (dialog, which) -> {
 
                 Intent submitSuggestionIntent = new Intent(QuantitativeQuestionActivity.this, SubmitSuggestionActivity.class);
+                submitSuggestionIntent.putExtra("authenticationToken", authenticationToken);
                 startActivity(submitSuggestionIntent);
             });
             wantToSubmitSuggestionDialog.setNegativeButton("Não", (dialog, which) -> {
-                //
+                Intent skipSuggestionIntent = new Intent(QuantitativeQuestionActivity.this, MainMenuActivity.class);
+                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
+                startActivity(skipSuggestionIntent);
             });
             final AlertDialog alertDialog = wantToSubmitSuggestionDialog.create();
             alertDialog.setOnShowListener(dialog -> {

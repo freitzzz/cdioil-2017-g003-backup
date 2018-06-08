@@ -1,4 +1,4 @@
-package cdioil.feedbackmonkey.authz;
+package cdioil.feedbackmonkey.application;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.application.SubmitSuggestionActivity;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 
 public class MultipleChoiceQuestionActivity extends AppCompatActivity {
@@ -37,11 +35,13 @@ public class MultipleChoiceQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView;
 
+    private String authenticationToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_question);
+        authenticationToken = getIntent().getExtras().getString("authenticationToken");
         configureView();
     }
 
@@ -55,11 +55,9 @@ public class MultipleChoiceQuestionActivity extends AppCompatActivity {
             questionTextView.setText(getIntent().getExtras().getString("questionText"));
             ArrayList<String> questionOptions = getIntent().getExtras().getStringArrayList("options");
             currentAdapter.addAll(questionOptions);
-//            for (String option : questionOptions) {
-//                currentAdapter.add(option);
+
             questionListView.setOnItemClickListener((adapterView, view, i, l) ->
                     startQuestionActivity(currentAdapter.getItem(i)));
-//            }
         }
 
     }
@@ -89,16 +87,19 @@ public class MultipleChoiceQuestionActivity extends AppCompatActivity {
                 switch (currentQuestionType) {
                     case "B":
                         Intent binaryIntent = new Intent(MultipleChoiceQuestionActivity.this, BinaryQuestionActivity.class);
+                        binaryIntent.putExtra("authenticationToken", authenticationToken);
                         binaryIntent.putExtras(questionBundle);
                         startActivity(binaryIntent);
                         break;
                     case "Q":
                         Intent quantitativeIntent = new Intent(MultipleChoiceQuestionActivity.this, QuantitativeQuestionActivity.class);
+                        quantitativeIntent.putExtra("authenticationToken", authenticationToken);
                         quantitativeIntent.putExtras(questionBundle);
                         startActivity(quantitativeIntent);
                         break;
                     case "MC":
                         Intent multipleChoiceIntent = new Intent(MultipleChoiceQuestionActivity.this, MultipleChoiceQuestionActivity.class);
+                        multipleChoiceIntent.putExtra("authenticationToken", authenticationToken);
                         multipleChoiceIntent.putExtras(questionBundle);
                         startActivity(multipleChoiceIntent);
                         break;
@@ -125,10 +126,13 @@ public class MultipleChoiceQuestionActivity extends AppCompatActivity {
             wantToSubmitSuggestionDialog.setPositiveButton("Sim", (dialog, which) -> {
 
                 Intent submitSuggestionIntent = new Intent(MultipleChoiceQuestionActivity.this, SubmitSuggestionActivity.class);
+                submitSuggestionIntent.putExtra("authenticationToken", authenticationToken);
                 startActivity(submitSuggestionIntent);
             });
             wantToSubmitSuggestionDialog.setNegativeButton("Não", (dialog, which) -> {
-                //
+                Intent skipSuggestionIntent = new Intent(MultipleChoiceQuestionActivity.this, MainMenuActivity.class);
+                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
+                startActivity(skipSuggestionIntent);
             });
             final AlertDialog alertDialog = wantToSubmitSuggestionDialog.create();
             alertDialog.setOnShowListener(dialog -> {

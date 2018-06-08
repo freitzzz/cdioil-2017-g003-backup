@@ -1,12 +1,10 @@
-package cdioil.feedbackmonkey.authz;
+package cdioil.feedbackmonkey.application;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,7 +17,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import cdioil.feedbackmonkey.R;
-import cdioil.feedbackmonkey.application.SubmitSuggestionActivity;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 
 
@@ -27,25 +24,21 @@ public class BinaryQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView;
 
-    private List<String> questionInfo;
-
     private Button yesButton;
 
     private Button noButton;
 
+    private String authenticationToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_binary_question);
-
         questionTextView = findViewById(R.id.question);
-
         yesButton = findViewById(R.id.yes_button);
         noButton = findViewById(R.id.no_button);
-
+        authenticationToken = getIntent().getExtras().getString("authenticationToken");
         configureView();
-
     }
 
     private void configureView() {
@@ -85,16 +78,19 @@ public class BinaryQuestionActivity extends AppCompatActivity {
                 switch (currentQuestionType) {
                     case "B":
                         Intent binaryIntent = new Intent(BinaryQuestionActivity.this, BinaryQuestionActivity.class);
+                        binaryIntent.putExtra("authenticationToken", authenticationToken);
                         binaryIntent.putExtras(questionBundle);
                         startActivity(binaryIntent);
                         break;
                     case "Q":
                         Intent quantitativeIntent = new Intent(BinaryQuestionActivity.this, QuantitativeQuestionActivity.class);
+                        quantitativeIntent.putExtra("authenticationToken", authenticationToken);
                         quantitativeIntent.putExtras(questionBundle);
                         startActivity(quantitativeIntent);
                         break;
                     case "MC":
                         Intent multipleChoiceIntent = new Intent(BinaryQuestionActivity.this, MultipleChoiceQuestionActivity.class);
+                        multipleChoiceIntent.putExtra("authenticationToken", authenticationToken);
                         multipleChoiceIntent.putExtras(questionBundle);
                         startActivity(multipleChoiceIntent);
                         break;
@@ -121,10 +117,13 @@ public class BinaryQuestionActivity extends AppCompatActivity {
             wantToSubmitSuggestionDialog.setPositiveButton("Sim", (dialog, which) -> {
 
                 Intent submitSuggestionIntent = new Intent(BinaryQuestionActivity.this, SubmitSuggestionActivity.class);
+                submitSuggestionIntent.putExtra("authenticationToken", authenticationToken);
                 startActivity(submitSuggestionIntent);
             });
             wantToSubmitSuggestionDialog.setNegativeButton("Não", (dialog, which) -> {
-                //
+                Intent skipSuggestionIntent = new Intent(BinaryQuestionActivity.this, MainMenuActivity.class);
+                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
+                startActivity(skipSuggestionIntent);
             });
             final AlertDialog alertDialog = wantToSubmitSuggestionDialog.create();
             alertDialog.setOnShowListener(dialog -> {
