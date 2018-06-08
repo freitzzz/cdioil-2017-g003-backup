@@ -20,7 +20,7 @@ public class Client implements Runnable {
     @Override
     public void run() {
         while (!reviewList.isFlag()) {
-            int reviewNumber = new Random().nextInt();
+            int reviewNumber = new Random().nextInt(Integer.MAX_VALUE);
             String newReview = "Review number " + reviewNumber;
             try {
                 System.out.println("Client sending " + newReview);
