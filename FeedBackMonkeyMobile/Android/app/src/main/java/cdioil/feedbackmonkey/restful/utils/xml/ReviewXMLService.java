@@ -6,7 +6,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -51,13 +50,21 @@ public class ReviewXMLService {
      * Index for the answer map node of the review XML file.
      */
     private final static int ANSWER_MAP_NODE_INDEX = 4;
-
+    /**
+     * Static reference to single instance of ReviewXMLService.
+     */
     private static ReviewXMLService instance;
-
+    /**
+     * Current review file.
+     */
     private File reviewFile;
-
+    /**
+     * Current review document.
+     */
     private Document document;
-
+    /**
+     * Map used for fetching the review's question elements by questionID.
+     */
     private Map<String, Element> reviewQuestionElements;
 
     /**
@@ -108,7 +115,6 @@ public class ReviewXMLService {
         return newFile;
     }
 
-
     /**
      * Sets the file containing review data.
      *
@@ -122,7 +128,6 @@ public class ReviewXMLService {
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         document = documentBuilder.parse(reviewFile);
         if (document != null) {
-            Element rootElement = document.getDocumentElement();
 
             Element questionList = (Element) document.getElementsByTagName("Questions").item(0);
 
@@ -136,7 +141,7 @@ public class ReviewXMLService {
     }
 
     /**
-     * Method used all the given Element's sub-Elements.
+     * Method used for getting all of the given Element's sub-Elements.
      *
      * @param element preceding Element
      * @return list of all the Element's sub-Elements.
@@ -331,13 +336,20 @@ public class ReviewXMLService {
      *
      * @return the current question's ID.
      */
-    public String getCurrentQuestionID() {
+    private String getCurrentQuestionID() {
 
         Element currentQuestionElement = (Element) document.getElementsByTagName("CurrentQuestion").item(0);
 
         return currentQuestionElement.getAttribute("questionID");
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getReviewID(){
+        return document.getDocumentElement().getAttribute("id");
+    }
     /**
      * Saves a user's suggestion of a review.
      *
@@ -349,11 +361,11 @@ public class ReviewXMLService {
             document = documentBuilder.parse(reviewFile);
 
             if (document != null) {
-                NodeList nodeList = document.getChildNodes();
-                Element suggestionElement = (Element) nodeList.item(SUGGESTION_NODE_INDEX);
-                Text suggestionNode = document.createTextNode("Text");
-                suggestionNode.setTextContent(suggestion);
-                suggestionElement.appendChild(suggestionNode);
+                Element suggestionElement = (Element) document.getElementsByTagName("Suggestion").item(0);
+
+                Element textElement = (Element) suggestionElement.getElementsByTagName("Text").item(0);
+                textElement.setTextContent(suggestion);
+
                 Transformer transformer = TransformerFactory.newInstance().newTransformer();
                 Result xmlOutput = new StreamResult(reviewFile);
                 Source input = new DOMSource(document);
