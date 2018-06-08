@@ -53,6 +53,7 @@
     <class>cdioil.application.domain.authz.UserSession</class>
     <class>cdioil.application.utils.EdgeQuestion</class>
     <class>cdioil.application.domain.authz.LoginManagement</class>
+    <class>cdioil.domain.ScriptedTemplate</class>
     <properties>
       <!-->H2 Properties<-->
       <!--property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>

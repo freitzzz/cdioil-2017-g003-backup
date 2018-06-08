@@ -11,6 +11,7 @@ import javax.persistence.*;
  * @author Ana Guerra (1161191)
  */
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Template implements Serializable {
 
     /**
