@@ -36,6 +36,10 @@
                     <datatype>XML</datatype>
                     <datatype>JSON</datatype>
                 </subresource>
+				<subresource name = "Save Review" path = "/savereview">
+					<method>POST</method>
+					<datatype>JSON</datatype>
+				</subresource>
             </subresources>
         </resource>
     </resources>
