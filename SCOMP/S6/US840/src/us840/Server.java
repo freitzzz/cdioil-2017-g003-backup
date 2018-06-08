@@ -21,17 +21,19 @@ public class Server implements Runnable {
     public void run() {
         while (true) {
             try {
-               /* String review = reviewList.getReviewList().get(reviewList.getListSize());
-                System.out.println("Server received " + review);*/
+               reviewList.waitPassively();
+                for(int i=reviewList.getListSize();i<reviewList.getListRealSize();i++){
+                    System.out.println(reviewList.getReviewList().get(i));
+                }
+                reviewList.setNewSize();
                 if(reviewList.getReviewList().size() >= TOTAL_REVIEWS_TO_END_SIMULATION){
                     reviewList.setFlag();
-                    for(String review : reviewList.getReviewList()){
-                        System.out.println("Server saved " + review);
-                    }
                     System.out.println("Simulation over");
                     return;
                 }
+                reviewList.sendMore();
             } catch (InterruptedException ex) {
+                System.out.println(ex.getMessage());
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
