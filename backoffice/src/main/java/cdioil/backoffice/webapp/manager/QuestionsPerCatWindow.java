@@ -25,7 +25,7 @@ public class QuestionsPerCatWindow extends Window {
     /**
      * Controler Class
      */
-    private QuestionsPerCategoryController controller = new QuestionsPerCategoryController();
+    private transient QuestionsPerCategoryController controller = new QuestionsPerCategoryController();
 
     /**
      * Window Layout
@@ -50,7 +50,7 @@ public class QuestionsPerCatWindow extends Window {
     /**
      * Grid Items/Data Provider
      */
-    private List<QuestionDTO> gridItems = new ArrayList<>();
+    private transient List<QuestionDTO> gridItems = new ArrayList<>();
 
     /**
      * Instantiates a new Window
