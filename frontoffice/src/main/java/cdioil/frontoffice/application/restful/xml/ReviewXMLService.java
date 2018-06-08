@@ -3,6 +3,9 @@ package cdioil.frontoffice.application.restful.xml;
 import cdioil.application.utils.Edge;
 import cdioil.application.utils.Graph;
 import cdioil.application.utils.Vertex;
+import cdioil.domain.BinaryQuestionOption;
+import cdioil.domain.MultipleChoiceQuestionOption;
+import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
@@ -10,7 +13,10 @@ import cdioil.logger.ExceptionLogger;
 import cdioil.logger.LoggerFileNames;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +32,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -122,6 +131,11 @@ public class ReviewXMLService {
      * Constant representing the NextQuestion element tag.
      */
     private static final String NEXT_QUESTION_ELEMENT_TAG = "NextQuestion";
+
+    /**
+     * Constant representing the answer element tag.
+     */
+    private static final String ANSWER_ELEMENT_TAG = "Answer";
 
     /**
      * Constant representing the text attribute tag.
@@ -342,5 +356,72 @@ public class ReviewXMLService {
                 }
             }
         }
+    }
+
+    /**
+     * Parses a String that represents an XML File of a Finished Review and
+     * extracts the answers that were given, turns them into their respective
+     * QuestionOptions and returns a list with all of them
+     *
+     * @param fileContent String that represents an XML File of a Finished
+     * Review
+     * @return List of QuestionOption objects
+     */
+    public static List<QuestionOption> getAnswerList(String fileContent) {
+        List<QuestionOption> answersList = new LinkedList<>();
+
+        try {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+            Element reviewElement = document.getDocumentElement();
+
+            Element answerMapElement = (Element)reviewElement.getElementsByTagName(ANSWERS_ELEMENT_TAG).item(0);
+
+            NodeList answersNodeList = answerMapElement.getElementsByTagName(ANSWER_ELEMENT_TAG);
+
+            for (int i = 0; i < answersNodeList.getLength(); i++) {
+                Element answerNode = (Element) answersNodeList.item(i);
+                
+                String answer = answerNode.getAttribute(TEXT_ATTRIBUTE_TAG);
+
+                if (answer.equals("true") || answer.equals("false")) {
+                    BinaryQuestionOption binaryAnswer
+                            = new BinaryQuestionOption(Boolean.parseBoolean(answer));
+                    answersList.add(binaryAnswer);
+                } else if (answer.matches("[0-9]+.[0-9]+")) {
+                    QuantitativeQuestionOption quantitativeAnswer
+                            = new QuantitativeQuestionOption(Double.parseDouble(answer));
+                    answersList.add(quantitativeAnswer);
+                } else {
+                    MultipleChoiceQuestionOption multipleChoiceAnswer
+                            = new MultipleChoiceQuestionOption(answer);
+                    answersList.add(multipleChoiceAnswer);
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(ReviewXMLService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return answersList;
+    }
+
+    public static String getSuggestion(String fileContent) {
+        try {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+            Element reviewElement = document.getDocumentElement();
+
+            Element suggestionElement = (Element) reviewElement.getElementsByTagName(SUGGESTION_ELEMENT_TAG).item(0);
+            String suggestion = suggestionElement.getElementsByTagName(TEXT_ELEMENT_TAG).item(0).getTextContent();
+            
+            if(suggestion != null && !suggestion.isEmpty()){
+                return suggestion;
+            }
+            
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(ReviewXMLService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 }

@@ -133,4 +133,10 @@ public interface ResponseMessages {
      * warning the user the registration form is valid
      */
     public static final String JSON_VALID_REGISTRATION_FORM = "{\n\t\"registrationformvalid\":\"true\"\n}";
+    
+    /**
+     * Constant that represents the JSON used on the response message for
+     * warning the user the review was saved with success
+     */
+    public static final String JSON_REVIEW_SAVED_WITH_SUCCESS = "{\n\t\"reviewsavedsuccess\":\"true\"\n}";
 }

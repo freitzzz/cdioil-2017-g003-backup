@@ -1,6 +1,7 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.application.authz.AuthenticationController;
+import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.RegisteredUser;
@@ -12,6 +13,7 @@ import cdioil.frontoffice.application.restful.xml.ReviewXMLService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,10 +33,11 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
     /**
      * Creates a new review and adds it to the user's profile.
-     * 
+     *
      * @param authenticationToken Authentication token of the user
      * @param surveyID ID of the survey to answer
-     * @return Response with JSON Response containing a XML formatted String with the graph.
+     * @return Response with JSON Response containing a XML formatted String
+     * with the graph.
      */
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -89,6 +92,39 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
                 : createValidReviewResponse(messageBody);
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/savereview/{reviewID}")
+    @Override
+    public Response saveReview(@PathParam("reviewID") String reviewID, String fileContent) {
+
+        Review reviewToAnswer = new ReviewRepositoryImpl().find(Long.parseLong(reviewID));
+
+        List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
+        String suggestion = ReviewXMLService.getSuggestion(fileContent);
+
+        if(reviewToAnswer == null){
+            return createInvalidReviewResponse();
+        }
+        
+        for(QuestionOption answer : answers){
+            reviewToAnswer.answerQuestion(answer);
+        }
+        
+        if(suggestion != null){
+            reviewToAnswer.submitSuggestion(suggestion);
+        }
+
+        
+        reviewToAnswer = new ReviewRepositoryImpl().merge(reviewToAnswer);
+        
+        if(reviewToAnswer == null){
+            return createInvalidReviewResponse();
+        }
+
+        return createSavedReviewWithSuccessResponse();
+    }
 
     /* Response methods */
     /**
@@ -181,16 +217,30 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
                 .entity(JSON_SURVEY_NOT_FOUND)
                 .build();
     }
+
+    /**
+     * Creates a response with the status code 200, informing the user that the
+     * review was successfully created.
+     *
+     * @return <code>Response</code> informing the user that the review is valid
+     */
+    private Response createValidReviewResponse(String messageBody) {
+        return Response.status(Response.Status.OK)
+                .entity(messageBody)
+                .build();
+    }
     
     /**
      * Creates a response with the status code 200, informing the user that the
      * review was successfully created.
      * 
-     * @return <code>Response</code> informing the user that the review is valid
+     * @param messageBody message body of the response
+     * @return <code>Response</code> informing the user that the review was submitted
+     * with success
      */
-    private Response createValidReviewResponse(String messageBody){
+    private Response createSavedReviewWithSuccessResponse(){
         return Response.status(Response.Status.OK)
-                .entity(messageBody)
+                .entity(JSON_REVIEW_SAVED_WITH_SUCCESS)
                 .build();
     }
 }
