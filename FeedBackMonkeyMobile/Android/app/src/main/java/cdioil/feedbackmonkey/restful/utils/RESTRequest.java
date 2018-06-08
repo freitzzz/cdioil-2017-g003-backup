@@ -128,7 +128,8 @@ public final class RESTRequest {
      * Enum class that represents the request media types available for REST requests
      */
     public enum RequestMediaType{
-        JSON{@Override public String toString(){return "JSON";}}
+        JSON{@Override public String toString(){return "JSON";}},
+        XML{@Override public String toString(){return "XML";}}
     }
 
     /**
