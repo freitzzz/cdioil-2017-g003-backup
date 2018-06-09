@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -97,8 +96,14 @@ public class ListSurveyActivity extends AppCompatActivity {
      */
     private String itemCode;
 
+    /**
+     * HTTP Response code when attempting to retrieve new review data.
+     */
     private int reviewRestResponseCode;
 
+    /**
+     * HTTP Response body when attempting to retrieve new review data.
+     */
     private String reviewRestResponseBody;
 
 
@@ -137,16 +142,12 @@ public class ListSurveyActivity extends AppCompatActivity {
                 connectionThread.join();
                 if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
                     try {
-                        File dirFile = getFilesDir();
-                        ReviewXMLService xmlService = ReviewXMLService.newInstance();
+
                         String fileContent = reviewRestResponseBody;
 
-                        //may or may not create file, depending on whether or not that survey has a pending review
-                        File reviewFile = xmlService.createFile(dirFile, fileContent);
-
-                        xmlService.setFile(reviewFile);
-
-                        startQuestionActivity(xmlService);
+                        //TODO: Add check when creating file, depending on whether or not that survey has a pending review
+                        ReviewXMLService.instance().createNewReviewFile(getPendingReviewsDirectory(), fileContent);
+                        startQuestionActivity();
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -168,40 +169,31 @@ public class ListSurveyActivity extends AppCompatActivity {
     }
 
     /**
+     * Creates a pending reviews directory or fetches the existing one.
+     * @return pending reviews directory
+     */
+    private File getPendingReviewsDirectory() {
+        String pendingReviews = "pending_reviews";
+
+        File filesDirectory = getFilesDir();
+
+        File pendingReviewsDirectory = new File(filesDirectory, pendingReviews);
+
+        if (!pendingReviewsDirectory.exists()) {
+            pendingReviewsDirectory.mkdir();
+        }
+
+        return pendingReviewsDirectory;
+    }
+
+    /**
      * Starts a new question activity.
      */
-    private void startQuestionActivity(ReviewXMLService xmlService) {
+    private void startQuestionActivity() {
 
-        Bundle questionBundle = xmlService.getCurrentQuestionBundle();
-
-        String currentQuestionType = questionBundle.getString("currentQuestionType");
-
-        if (currentQuestionType == null) {
-            return;
-        }
-
-        switch (currentQuestionType) {
-            case "B":
-                Intent binaryIntent = new Intent(ListSurveyActivity.this, BinaryQuestionActivity.class);
-                binaryIntent.putExtra("authenticationToken", authenticationToken);
-                binaryIntent.putExtras(questionBundle);
-                startActivity(binaryIntent);
-                break;
-            case "Q":
-                Intent quantitativeIntent = new Intent(ListSurveyActivity.this, QuantitativeQuestionActivity.class);
-                quantitativeIntent.putExtra("authenticationToken", authenticationToken);
-                quantitativeIntent.putExtras(questionBundle);
-                startActivity(quantitativeIntent);
-                break;
-            case "MC":
-                Intent multipleChoiceIntent = new Intent(ListSurveyActivity.this, MultipleChoiceQuestionActivity.class);
-                multipleChoiceIntent.putExtra("authenticationToken", authenticationToken);
-                multipleChoiceIntent.putExtras(questionBundle);
-                startActivity(multipleChoiceIntent);
-                break;
-            default:
-                break;
-        }
+        Intent questionIntent = new Intent(ListSurveyActivity.this, QuestionActivity.class);
+        questionIntent.putExtra("authenticationToken", authenticationToken);
+        startActivity(questionIntent);
     }
 
     /**
