@@ -27,6 +27,7 @@ import javax.xml.transform.TransformerException;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 
+@Deprecated
 public class MultipleChoiceQuestionActivity extends AppCompatActivity {
 
     private ListView questionListView;
@@ -68,7 +69,7 @@ public class MultipleChoiceQuestionActivity extends AppCompatActivity {
     private void startQuestionActivity(String answer) {
 
         try {
-            ReviewXMLService xmlService = ReviewXMLService.newInstance();
+            ReviewXMLService xmlService = ReviewXMLService.instance();
 
             boolean displayNextQuestion = xmlService.saveAnswer(answer);
 
@@ -76,7 +77,7 @@ public class MultipleChoiceQuestionActivity extends AppCompatActivity {
                 submitSuggestion();
             } else {
 
-                Bundle questionBundle = ReviewXMLService.newInstance().getCurrentQuestionBundle();
+                Bundle questionBundle = ReviewXMLService.instance().getCurrentQuestionBundle();
 
                 String currentQuestionType = questionBundle.getString("currentQuestionType");
 
