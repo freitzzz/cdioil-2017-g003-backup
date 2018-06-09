@@ -38,18 +38,11 @@ import javax.xml.transform.stream.StreamResult;
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class ReviewXMLService {
+
     /**
-     * Index for the current question node of the review XML file.
+     * Constant representing the XML file extension.
      */
-    private final static int CURRENT_QUESTION_NODE_INDEX = 2;
-    /**
-     * Index for the suggestion node of the review XML file.
-     */
-    private final static int SUGGESTION_NODE_INDEX = 3;
-    /**
-     * Index for the answer map node of the review XML file.
-     */
-    private final static int ANSWER_MAP_NODE_INDEX = 4;
+    private static final String XML_EXTENSION = ".xml";
     /**
      * Static reference to single instance of ReviewXMLService.
      */
@@ -59,7 +52,7 @@ public class ReviewXMLService {
      */
     private File reviewFile;
     /**
-     * Current review document.
+     * Current review XML document.
      */
     private Document document;
     /**
@@ -68,11 +61,11 @@ public class ReviewXMLService {
     private Map<String, Element> reviewQuestionElements;
 
     /**
-     * Creates a new single instance of ReviewXMLService.
+     * Creates a new single instance of ReviewXMLService, if one does not already exist, or refers to the previously created instance.
      *
-     * @return new instance of ReviewXMLService.
+     * @return instance of ReviewXMLService.
      */
-    public static ReviewXMLService newInstance() {
+    public static ReviewXMLService instance() {
 
         if (instance == null) {
             synchronized (ReviewXMLService.class) {
@@ -98,50 +91,41 @@ public class ReviewXMLService {
      *
      * @param fileContent String with the XML file content
      */
-    public File createFile(File dirFile, String fileContent) throws IOException, SAXException, ParserConfigurationException {
+    public void createNewReviewFile(File dirFile, String fileContent) throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+        document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+
+        buildReviewQuestionElements();
+
         Element reviewElement = document.getDocumentElement();
-        String reviewID = reviewElement.getAttribute("id");
-        String fileSurveyID = reviewElement.getAttribute("surveyID");
+        String reviewID = reviewElement.getAttribute(ReviewFileTags.ID_ATTRIBUTE_TAG);
+        String surveyID = reviewElement.getAttribute(ReviewFileTags.SURVEY_ID_ATTRIBUTE_TAG);
 
         String separator = "_";
-        String fileName = "review".concat(separator).concat(reviewID).concat(separator).concat(fileSurveyID).concat(".xml");
-        File newFile = new File(dirFile, fileName);
-        FileOutputStream outputStream = new FileOutputStream(newFile);
+        String fileName = "review".concat(separator).concat(reviewID).concat(separator).concat(surveyID).concat(XML_EXTENSION);
+        reviewFile = new File(dirFile, fileName);
+        FileOutputStream outputStream = new FileOutputStream(reviewFile);
         outputStream.write(fileContent.getBytes());
         outputStream.close();
-
-        return newFile;
     }
 
     /**
-     * Sets the file containing review data.
-     *
-     * @param file
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
+     * Builds a Map in which the keys represent the question ID's and values the associated Element.
      */
-    public void setFile(File file) throws ParserConfigurationException, IOException, SAXException {
-        this.reviewFile = file;
-        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        document = documentBuilder.parse(reviewFile);
-        if (document != null) {
+    private void buildReviewQuestionElements() {
+        Element questionList = (Element) document.getElementsByTagName(ReviewFileTags.QUESTIONS_ELEMENT_TAG).item(0);
 
-            Element questionList = (Element) document.getElementsByTagName("Questions").item(0);
+        List<Element> questions = getAllChildElements(questionList);
 
-            List<Element> questions = getAllChildElements(questionList);
-
-            for (Element question : questions) {
-                String questionID = question.getAttribute("questionID");
-                reviewQuestionElements.put(questionID, question);
-            }
+        for (Element question : questions) {
+            String questionID = question.getAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG);
+            reviewQuestionElements.put(questionID, question);
         }
     }
 
     /**
      * Method used for getting all of the given Element's sub-Elements.
+     * This is used since the Element's getChildNodes method does not return only Nodes of the type Element.
      *
      * @param element preceding Element
      * @return list of all the Element's sub-Elements.
@@ -172,77 +156,115 @@ public class ReviewXMLService {
     public boolean saveAnswer(String answer) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
         boolean canContinueReview = false;
-        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        document = documentBuilder.parse(reviewFile);
 
-        if (document != null) {
-            Element answerMapElement = (Element) document.getElementsByTagName("Answers").item(0);
+        Element answerMapElement = (Element) document.getElementsByTagName(ReviewFileTags.ANSWERS_ELEMENT_TAG).item(0);
 
-            Element answerElement = document.createElement("Answer");
-            answerElement.setAttribute("questionID", getCurrentQuestionID());
-            answerElement.setAttribute("text", answer);
-            answerMapElement.appendChild(answerElement);
+        Element answerElement = document.createElement(ReviewFileTags.ANSWER_ELEMENT_TAG);
+        answerElement.setAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG, getCurrentQuestionID());
+        answerElement.setAttribute(ReviewFileTags.TEXT_ATTRIBUTE_TAG, answer);
+        answerMapElement.appendChild(answerElement);
 
-            canContinueReview = updateCurrentQuestion(answer);
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            Result xmlOutput = new StreamResult(reviewFile);
-            Source input = new DOMSource(document);
-            transformer.transform(input, xmlOutput);
+        canContinueReview = updateCurrentQuestion(answer);
+
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        Result xmlOutput = new StreamResult(reviewFile);
+        Source input = new DOMSource(document);
+        transformer.transform(input, xmlOutput);
+
+        if (!canContinueReview) {
+
+            String newFileName = getFinishedReviewsDirectory().getAbsolutePath().concat(File.separator).concat(reviewFile.getName());
+            File newFile = new File(newFileName);
+            reviewFile.renameTo(newFile);
+            reviewFile.delete();
+            reviewFile = newFile;
         }
+
         return canContinueReview;
+    }
+
+    /**
+     * Fetches the finished reviews directory or creates it if it does not exist.
+     *
+     * @return finished reviews directory
+     */
+    private File getFinishedReviewsDirectory() {
+
+        File pendingReviewsDirectory = new File(reviewFile.getParent());
+
+        File filesDirectory = new File(pendingReviewsDirectory.getParent());
+
+        String finishedReviews = "finished_reviews";
+
+        File finishedReviewsDirectory = new File(filesDirectory, finishedReviews);
+
+        if (!finishedReviewsDirectory.exists()) {
+            finishedReviewsDirectory.mkdir();
+        }
+
+        return finishedReviewsDirectory;
     }
 
     /**
      * Undoes an answer that was given by a user for a review on its XML file.
      */
-    public void undoAnswer() {
-        try {
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = documentBuilder.parse(reviewFile);
+    public boolean undoAnswer() throws TransformerException {
 
-            if (document != null) {
-                NodeList nodeList = document.getChildNodes();
-                Element answerMapElement = (Element) nodeList.item(ANSWER_MAP_NODE_INDEX);
-                NodeList answersNodeList = answerMapElement.getChildNodes();
-                answerMapElement.removeChild(answersNodeList.item(answersNodeList.getLength() - 1));
-                Element newCurrentQuestionElement = (Element) answersNodeList.item(answersNodeList.getLength() - 1);
-                String newCurrentQuestionID = newCurrentQuestionElement.getAttribute("questionID");
-                Element currentQuestionElement = (Element) nodeList.item(CURRENT_QUESTION_NODE_INDEX);
-                currentQuestionElement.setAttribute("questionID", newCurrentQuestionID);
+        boolean canUndo = false;
+
+        if (document != null) {
+            Element answerMapElement = (Element) document.getElementsByTagName(ReviewFileTags.ANSWERS_ELEMENT_TAG).item(0);
+            NodeList answersNodeList = answerMapElement.getElementsByTagName(ReviewFileTags.ANSWER_ELEMENT_TAG);
+
+            int numAnswers = answersNodeList.getLength();
+
+            if (numAnswers > 0) {
+                Element currentQuestionElement = (Element) document.getElementsByTagName(ReviewFileTags.CURRENT_QUESTION_ELEMENT_TAG).item(0);
+                Element lastAnswerElement = (Element) answersNodeList.item(answersNodeList.getLength() - 1);
+
+                answerMapElement.removeChild(lastAnswerElement);
+
+                currentQuestionElement.setAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG,
+                        lastAnswerElement.getAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG));
+
                 Transformer transformer = TransformerFactory.newInstance().newTransformer();
                 Result xmlOutput = new StreamResult(reviewFile);
                 Source input = new DOMSource(document);
                 transformer.transform(input, xmlOutput);
+
+                canUndo = true;
             }
-        } catch (SAXException | ParserConfigurationException | IOException | TransformerException e) {
-            e.printStackTrace();
         }
+
+        return canUndo;
     }
 
     /**
      * Updates the current question node of the review XML file
      *
      * @param answer Answer given to the question that was answered
+     * @return true - if the current question can be updated
+     * <p>false - if the question can't be updated, meaning that a final question has been answered</p>
      */
     private boolean updateCurrentQuestion(String answer) {
 
-        Element questionGraphElement = (Element) document.getElementsByTagName("QuestionGraph").item(0);
+        Element questionGraphElement = (Element) document.getElementsByTagName(ReviewFileTags.QUESTION_GRAPH_ELEMENT_TAG).item(0);
 
-        Element currentQuestionElement = (Element) document.getElementsByTagName("CurrentQuestion").item(0);
+        Element currentQuestionElement = (Element) document.getElementsByTagName(ReviewFileTags.CURRENT_QUESTION_ELEMENT_TAG).item(0);
 
         String currentQuestionID = getCurrentQuestionID();
 
         List<Element> graphQuestionElementList = getAllChildElements(questionGraphElement);
 
         for (Element graphQuestionElement : graphQuestionElementList) {
-            String graphQuestionID = graphQuestionElement.getAttribute("questionID");
+            String graphQuestionID = graphQuestionElement.getAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG);
             if (currentQuestionID.equals(graphQuestionID)) {
                 List<Element> nextQuestionElementList = getAllChildElements(graphQuestionElement);
                 for (Element nextQuestionElement : nextQuestionElementList) {
-                    if (answer.equals(nextQuestionElement.getAttribute("option"))) {
-                        currentQuestionElement.setAttribute("questionID",
-                                nextQuestionElement.getAttribute("questionID"));
+                    if (answer.equals(nextQuestionElement.getAttribute(ReviewFileTags.OPTION_ATTRIBUTE_TAG))) {
+                        currentQuestionElement.setAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG,
+                                nextQuestionElement.getAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG));
                         return true;
                     }
                 }
@@ -255,21 +277,12 @@ public class ReviewXMLService {
      * Parses the Review XML file to obtain the information (question ID, question text, question type
      * and question options) of the current question that the user is at while answering a survey.
      * <p>
-     * The information is in a list of Strings:
+     * The information is in a Bundle and has the following keys:
      * <p>
-     * Index 0 of the list will contain the questions ID.
-     * Index 1 of the list will contain the questions text (the question itself).
-     * Index 2 of the list will contain the questions type ("B" for Binary, "Q" for Quantitative and
-     * "MC" for Multiple Choice)
-     * <p>
-     * From index 3 and onward the list will contain all of the options that the question has
-     * (e.g. for a Binary Question index 3 will have "true" and index 4 will have "false";
-     * <p>
-     * for a Quantitative Question index 3 will have "1", index 4 will have "2", index 5 will have "3",
-     * so on and so forth until it reaches the maximum value of the scale;
-     * <p>
-     * for a Multiple Choice Question index 3 will have "Too salty", index 4 will have "Too sour",
-     * index 5 will have "Too sweet", so on and so forth until it has all of the options of the question)
+     * questionID;
+     * questionText;
+     * currentQuestionType: which might have a value of "B", "Q" or "MC";
+     * options: which holds an ArrayList of Strings containing the question's options
      * <p>
      * This method returns this much information to facilitate the manipulation of the Question's
      * Activities to answer a survey.
@@ -288,40 +301,40 @@ public class ReviewXMLService {
             return null;
         }
 
-        String questionID = questionElement.getAttribute("questionID");
+        String questionID = questionElement.getAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG);
 
         bundle.putString("questionID", questionID);
-        bundle.putString("questionText", questionElement.getElementsByTagName("Text").item(0).getTextContent());
+        bundle.putString("questionText", questionElement.getElementsByTagName(ReviewFileTags.TEXT_ELEMENT_TAG).item(0).getTextContent());
         ArrayList<String> questionOptions = new ArrayList<>();
 
         String questionType = questionElement.getNodeName();
 
-        if (questionType.equals("BinaryQuestion")) {
+        if (questionType.equals(ReviewFileTags.BINARY_QUESTION_ELEMENT_TAG)) {
             bundle.putString("currentQuestionType", "B");
             questionOptions.add("true");
             questionOptions.add("false");
 
-        } else if (questionType.equals("QuantitativeQuestion")) {
+        } else if (questionType.equals(ReviewFileTags.QUANTITATIVE_QUESTION_ELEMENT_TAG)) {
 
             bundle.putString("currentQuestionType", "Q");
 
             double scaleMinValue = Double.parseDouble(questionElement.
-                    getElementsByTagName("MinScaleValue").item(0).getTextContent());
+                    getElementsByTagName(ReviewFileTags.MIN_SCALE_VALUE_ELEMENT_TAG).item(0).getTextContent());
             double scaleMaxValue = Double.parseDouble(questionElement.
-                    getElementsByTagName("MaxScaleValue").item(0).getTextContent());
+                    getElementsByTagName(ReviewFileTags.MAX_SCALE_VALUE_ELEMENT_TAG).item(0).getTextContent());
 
             for (double scaleValue = scaleMinValue; scaleValue <= scaleMaxValue; scaleValue++) {
                 questionOptions.add(Double.toString(scaleValue));
             }
 
-        } else if (questionType.equals("MultipleChoiceQuestion")) {
+        } else if (questionType.equals(ReviewFileTags.MULTIPLE_CHOICE_QUESTION_ELEMENT_TAG)) {
 
             bundle.putString("currentQuestionType", "MC");
 
-            NodeList optionsNodeList = questionElement.getElementsByTagName("Option");
+            NodeList optionsNodeList = questionElement.getElementsByTagName(ReviewFileTags.OPTION_ELEMENT_TAG);
 
             for (int k = 0; k < optionsNodeList.getLength(); k++) {
-                questionOptions.add(((Element) optionsNodeList.item(k)).getAttribute("text"));
+                questionOptions.add(((Element) optionsNodeList.item(k)).getAttribute(ReviewFileTags.TEXT_ATTRIBUTE_TAG));
             }
         }
 
@@ -338,60 +351,51 @@ public class ReviewXMLService {
      */
     private String getCurrentQuestionID() {
 
-        Element currentQuestionElement = (Element) document.getElementsByTagName("CurrentQuestion").item(0);
+        Element currentQuestionElement = (Element) document.getElementsByTagName(ReviewFileTags.CURRENT_QUESTION_ELEMENT_TAG).item(0);
 
-        return currentQuestionElement.getAttribute("questionID");
+        return currentQuestionElement.getAttribute(ReviewFileTags.QUESTION_ID_ATTRIBUTE_TAG);
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getReviewID(){
-        return document.getDocumentElement().getAttribute("id");
-    }
     /**
      * Saves a user's suggestion of a review.
      *
      * @param suggestion Content of the suggestion submitted by the user
      */
-    public void saveSuggestion(String suggestion) {
-        try {
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = documentBuilder.parse(reviewFile);
+    public void saveSuggestion(String suggestion) throws TransformerException {
 
-            if (document != null) {
-                Element suggestionElement = (Element) document.getElementsByTagName("Suggestion").item(0);
+        Element suggestionElement = (Element) document.getElementsByTagName(ReviewFileTags.SUGGESTION_ELEMENT_TAG).item(0);
 
-                Element textElement = (Element) suggestionElement.getElementsByTagName("Text").item(0);
-                textElement.setTextContent(suggestion);
+        Element textElement = (Element) suggestionElement.getElementsByTagName(ReviewFileTags.TEXT_ELEMENT_TAG).item(0);
+        textElement.setTextContent(suggestion);
 
-                Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                Result xmlOutput = new StreamResult(reviewFile);
-                Source input = new DOMSource(document);
-                transformer.transform(input, xmlOutput);
-            }
-        } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
-            e.printStackTrace();
-        }
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        Result xmlOutput = new StreamResult(reviewFile);
+        Source input = new DOMSource(document);
+        transformer.transform(input, xmlOutput);
     }
 
+
     /**
-     * Parses the XML File's content to a string so it can be sent to the server
+     * Parses an XML review file. This method is static since it will not be used for review's that are currently being answered.
      *
-     * @return XML File content in a String
+     * @param finishedReviewFile a finished review's XML File
+     * @return the given XML file's content
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     * @throws TransformerException
      */
-    public String parseFileContentToString() {
-        try {
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = documentBuilder.parse(reviewFile);
-            StringWriter stringWriter = new StringWriter();
-            Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            serializer.transform(new DOMSource(document), new StreamResult(stringWriter));
-            return stringWriter.toString();
-        } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
-            e.printStackTrace();
+    public static String parseReviewFile(File finishedReviewFile) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+
+        if (finishedReviewFile == null || !finishedReviewFile.getName().endsWith(XML_EXTENSION)) {
+            return null;
         }
-        return null;
+
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = documentBuilder.parse(finishedReviewFile);
+        StringWriter stringWriter = new StringWriter();
+        Transformer serializer = TransformerFactory.newInstance().newTransformer();
+        serializer.transform(new DOMSource(document), new StreamResult(stringWriter));
+        return stringWriter.toString();
     }
 }

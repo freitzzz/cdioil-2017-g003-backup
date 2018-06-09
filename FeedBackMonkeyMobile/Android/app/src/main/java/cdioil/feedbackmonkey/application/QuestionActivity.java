@@ -127,7 +127,14 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
     @Override
     public void onBackPressed() {
         try {
-            ReviewXMLService.instance().undoAnswer();
+            boolean canUndo = ReviewXMLService.instance().undoAnswer();
+
+            if(canUndo){
+                loadQuestionInfo();
+            }else{
+                super.onBackPressed();
+            }
+
         } catch (TransformerException e) {
             e.printStackTrace();
         }
