@@ -1,18 +1,22 @@
 package cdioil.feedbackmonkey.application;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,50 +27,94 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
+import cdioil.feedbackmonkey.restful.utils.RESTRequest;
+import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
+import okhttp3.Response;
 
 public class MainMenuActivity extends AppCompatActivity {
     private static final int CURRENT_WINDOW_HEIGHT = Resources.getSystem().getDisplayMetrics().heightPixels;
+    /**
+     * Constant that represents the Reviews resource path.
+     */
+    private static final String REVIEWS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Reviews");
+    /**
+     * Constant that represents the save review resource path.
+     */
+    private static final String SAVE_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Save Review");
     private String[] menuOptions = {"Listar Inquéritos", "Scan de Códigos", "Perfil", "Partilhe as suas ideias connosco!"};
     private int[] menuOptionImages = {R.drawable.survey_icon, R.drawable.code_search_icon, R.drawable.profile_icon,
             R.drawable.question_mark};
-    private String[] menuBackgroundColors = {"#ffffff","#ffd05b","#ffffff","#ffd05b"};
-
+    private String[] menuBackgroundColors = {"#ffffff", "#ffd05b", "#ffffff", "#ffd05b"};
+    private String authenticationToken;
     private int optionIndex;
+    /**
+     * Receiver responsible for receiving signals regarding network state changes.
+     */
+    private ConnectionReceiver connectionReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         configureView();
+        connectionReceiver = new ConnectionReceiver();
+        authenticationToken = getIntent().getExtras().getString("authenticationToken");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(connectionReceiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(connectionReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(connectionReceiver);
     }
 
     private void configureView() {
         ListView mainMenuListView = findViewById(R.id.mainMenuListView);
-        mainMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            switch(i){
-                                case 0:
-                                    startListSurveyActivity();
-                                    break;
-                                case 1:
-                                    //Create intent to qr scan
-                                    scanItemCode();
-                                    break;
-                                case 2:
-                                    //Create intent to profile
-                                    break;
-                                case 3:
-                                    //Create intent to something
-                                    Intent intent = new Intent(MainMenuActivity.this, SubmitSuggestionActivity.class);
-                                    startActivity(intent);
-                                    break;
-                            }
+        mainMenuListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            switch (i) {
+                case 0:
+                    startListSurveyActivity();
+                    break;
+                case 1:
+                    //Create intent to qr scan
+                    scanItemCode();
+                    break;
+                case 2:
+                    //Create intent to profile
+                    break;
+                case 3:
+                    //Create intent to something
+                    Intent intent = new Intent(MainMenuActivity.this, SubmitSuggestionActivity.class);
+
+                    startActivity(intent);
+                    break;
             }
         });
         MainMenuItemListViewAdapter mainMenuItemListViewAdapter = new MainMenuItemListViewAdapter(MainMenuActivity.this);
@@ -77,15 +125,34 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
+     * Creates a finished reviews directory or fetches the existing one.
+     *
+     * @return finished reviews directory
+     */
+    private File getFinishedReviewsDirectory() {
+        String finishedReviews = "finished_reviews";
+
+        File filesDirectory = getFilesDir();
+
+        File finishedReviewsDirectory = new File(filesDirectory, finishedReviews);
+
+        if (!finishedReviewsDirectory.exists()) {
+            finishedReviewsDirectory.mkdir();
+        }
+
+        return finishedReviewsDirectory;
+    }
+
+    /**
      * Starts the ListSurveyActivity activity with extra information being stored within the bundle, besides the authentication token.
+     *
      * @param bundleExtras extra information being stored in the bundle
      */
-    private void startListSurveyActivity(Map<String, String> bundleExtras){
-        String authenticationToken = getIntent().getExtras().getString("authenticationToken");
-        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
+    private void startListSurveyActivity(Map<String, String> bundleExtras) {
+        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("authenticationToken",authenticationToken);
-        for(Map.Entry<String, String> entry : bundleExtras.entrySet()){
+        bundle.putString("authenticationToken", authenticationToken);
+        for (Map.Entry<String, String> entry : bundleExtras.entrySet()) {
             bundle.putString(entry.getKey(), entry.getValue());
         }
         listSurveyActivityIntent.putExtras(bundle);
@@ -95,11 +162,10 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Starts the ListSurveyActivity activity with authentication token as the single content within the bundle.
      */
-    private void startListSurveyActivity(){
-        String authenticationToken = getIntent().getExtras().getString("authenticationToken");
-        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
+    private void startListSurveyActivity() {
+        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("authenticationToken",authenticationToken);
+        bundle.putString("authenticationToken", authenticationToken);
         listSurveyActivityIntent.putExtras(bundle);
         startActivity(listSurveyActivityIntent);
     }
@@ -126,8 +192,8 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
+        if (result != null) {
+            if (result.getContents() == null) {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Leitura Cancelada", Toast.LENGTH_SHORT).show();
             } else {
@@ -135,14 +201,13 @@ public class MainMenuActivity extends AppCompatActivity {
 
                 String itemCode = result.getContents();
 
-                if(!itemCode.trim().isEmpty()) {
+                if (!itemCode.trim().isEmpty()) {
                     Toast.makeText(this, "Código Lido: " + itemCode, Toast.LENGTH_LONG).show();
 
                     Map<String, String> bundleExtras = new HashMap<>();
                     bundleExtras.put("itemCode", itemCode);
                     startListSurveyActivity(bundleExtras);
-                }
-                else{
+                } else {
                     Toast.makeText(this, "Por favor leia um código válido", Toast.LENGTH_LONG).show();
                 }
             }
@@ -205,7 +270,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 ImageView imageView = convertView.findViewById(R.id.mainMenuOptionImgView);
                 TextView textView = convertView.findViewById(R.id.mainMenuOptionTxtView);
                 textView.setText(menuOptions[optionIndex]);
-                if(optionIndex % 2 == 0){
+                if (optionIndex % 2 == 0) {
                     textView.setTextColor(Color.parseColor("#3d3d3d"));
                 }
                 imageView.setImageResource(menuOptionImages[optionIndex]);
@@ -214,5 +279,80 @@ public class MainMenuActivity extends AppCompatActivity {
             return convertView;
         }
 
+    }
+
+    /**
+     * Receiver responsible for checking for active internet connection.
+     */
+    private class ConnectionReceiver extends BroadcastReceiver {
+
+        /**
+         * HTTP Response code when attempting to submit a review.
+         */
+        private int reviewRestResponseCode;
+
+        private ConnectionReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+            boolean isConnected = false;
+
+            if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+                isConnected = true;
+            }
+
+            if (isConnected) {
+                submitPendingReviews();
+            }
+        }
+
+        /**
+         * Method that attempts to submit all pending reviews if an internet connection is active.
+         */
+        private void submitPendingReviews() {
+
+            try {
+                File[] files = getFinishedReviewsDirectory().listFiles();
+
+                for (File f : files) {
+
+                    String fileContent = ReviewXMLService.parseReviewFile(f);
+
+                    String reviewID = f.getName().split("_")[1];
+
+                    String saveReviewURL = BuildConfig.SERVER_URL
+                            .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
+                            .concat(REVIEWS_RESOURCE_PATH)
+                            .concat(SAVE_REVIEW_RESOURCE_PATH)
+                            .concat("/")
+                            .concat(reviewID);
+
+                    Thread connectionThread = new Thread(() -> {
+                        try {
+                            Response saveReviewResponse = RESTRequest.create(saveReviewURL).withMediaType(RESTRequest.RequestMediaType.XML).withBody(fileContent).POST();
+                            reviewRestResponseCode = saveReviewResponse.code();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    connectionThread.start();
+
+                    connectionThread.join();
+                    if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
+                        f.delete();
+                    } else {
+                        return;
+                    }
+                }
+            } catch (ParserConfigurationException | IOException | SAXException | InterruptedException | TransformerException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
