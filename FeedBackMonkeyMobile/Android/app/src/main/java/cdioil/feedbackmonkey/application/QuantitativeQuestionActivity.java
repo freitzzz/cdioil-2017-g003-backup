@@ -48,18 +48,17 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
         ArrayList<String> questionScaleValues = getIntent().getExtras().getStringArrayList("options");
         int questionScaleValuesSize = questionScaleValues.size();
 
-        Double doubleValue = Double.parseDouble(questionScaleValues.get(questionScaleValuesSize - 1));
+        Double minValue = Double.parseDouble(questionScaleValues.get(0));
+        Double maxValue = Double.parseDouble(questionScaleValues.get(questionScaleValuesSize - 1));
 
-        seekArc.setMax(doubleValue.intValue());
+        seekArc.setMax(maxValue.intValue()-minValue.intValue());
+        seekArcProgress.setText(Integer.toString(minValue.intValue()));
 
         seekArc.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
-//                if(i != doubleValue.intValue()){
-//                    seekArcProgress.setText(String.valueOf(i+1));
-//                }else{
-                seekArcProgress.setText(String.valueOf(i));
-//                }
+                seekArcProgress.setText(String.valueOf(i+1));
             }
 
             @Override
