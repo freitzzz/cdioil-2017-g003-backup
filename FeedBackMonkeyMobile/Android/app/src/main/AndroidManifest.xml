@@ -36,6 +36,7 @@
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
         <activity android:name=".application.SubmitSuggestionActivity" />
+        <activity android:name=".application.QuestionActivity" />
     </application>
 
 </manifest>
