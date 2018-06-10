@@ -31,52 +31,6 @@ import java.io.File;
  */
 public class XMLSurveyStatsWriter implements SurveyStatsWriter {
 
-    //Attributes
-    /**
-     * File to write.
-     */
-    private final File file;
-
-    /**
-     * ID of the survey.
-     */
-    private final long surveyID;
-
-    /**
-     * Name of the survey.
-     */
-    private final String surveyName;
-
-    /**
-     * Average value for answers of binary questions.
-     */
-    private final Map<Question, Double> binaryMean;
-
-    /**
-     * Average value for answers of quantitative questions.
-     */
-    private final Map<Question, Double> quantitativeMean;
-
-    /**
-     * Mean deviation for answers of binary questions.
-     */
-    private final Map<Question, Double> binaryMeanDeviation;
-
-    /**
-     * Mean deviation for answers of quantitative questions.
-     */
-    private final Map<Question, Double> quantitativeMeanDeviation;
-
-    /**
-     * Total of binary questions.
-     */
-    private final Map<Question, Integer> binaryTotal;
-
-    /**
-     * Total of quantitative questions.
-     */
-    private final Map<Question, Integer> quantitativeTotal;
-
     //Constants
     /**
      * Field that identifies the list of questions.
@@ -142,6 +96,52 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
      * Field that identifies the survey by its title.
      */
     private static final String SURVEY_NAME = "SurveyTitle";
+    
+    //Attributes
+    /**
+     * File to write.
+     */
+    private final File file;
+
+    /**
+     * ID of the survey.
+     */
+    private final long surveyID;
+
+    /**
+     * Name of the survey.
+     */
+    private final String surveyName;
+
+    /**
+     * Average value for answers of binary questions.
+     */
+    private final Map<Question, Double> binaryMean;
+
+    /**
+     * Average value for answers of quantitative questions.
+     */
+    private final Map<Question, Double> quantitativeMean;
+
+    /**
+     * Mean deviation for answers of binary questions.
+     */
+    private final Map<Question, Double> binaryMeanDeviation;
+
+    /**
+     * Mean deviation for answers of quantitative questions.
+     */
+    private final Map<Question, Double> quantitativeMeanDeviation;
+
+    /**
+     * Total of binary questions.
+     */
+    private final Map<Question, Integer> binaryTotal;
+
+    /**
+     * Total of quantitative questions.
+     */
+    private final Map<Question, Integer> quantitativeTotal;
 
     /**
      * Creates a new XMLSurveyStatsWriter.

@@ -20,7 +20,7 @@ public class Admin implements Serializable,AggregateRoot<SystemUser>,User{
     private static final long serialVersionUID = 1L;
     
     @Version
-    private Long version;
+    private long version;
 
     /**
      * SystemUser associated with the admin.

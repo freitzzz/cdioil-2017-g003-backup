@@ -23,7 +23,7 @@ public abstract class SurveyItem implements Serializable {
      * Version for JPA.
      */
     @Version
-    private Long version;
+    private long version;
     
     /**
      * Serialization code.
@@ -35,7 +35,7 @@ public abstract class SurveyItem implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     /**
      * Constructor for JPA.

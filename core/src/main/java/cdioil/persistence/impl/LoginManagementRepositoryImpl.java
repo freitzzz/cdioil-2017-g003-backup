@@ -5,7 +5,6 @@ import cdioil.domain.authz.Email;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.LoginManagementRepository;
 import cdioil.persistence.PersistenceUnitNameCore;
-import javax.persistence.Query;
 
 /**
  * LoginManagementRepositoryImplementation class

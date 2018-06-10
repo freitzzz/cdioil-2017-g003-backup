@@ -30,7 +30,7 @@ public class ProductQuestionsLibrary implements AggregateRoot<Map<Product, Quest
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
     /**
      * Map that containsQuestion all questions (values) related to products
      * (keys).

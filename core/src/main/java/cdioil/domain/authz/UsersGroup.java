@@ -36,7 +36,7 @@ public class UsersGroup implements Serializable {
      * Version for JPA.
      */
     @Version
-    private Long version;
+    private long version;
 
     /**
      * Manager that created the UsersGroup.

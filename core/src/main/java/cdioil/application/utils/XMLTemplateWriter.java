@@ -33,14 +33,6 @@ import org.w3c.dom.Element;
 public class XMLTemplateWriter implements TemplateWriter {
 
     /**
-     * File with the file that is going to be written with all survey answers
-     */
-    private final File file;
-    /**
-     * Template to export.
-     */
-    private final Template template;
-    /**
      * Constant that represents the label used for the template identifier on the XML file
      */
     private static final String TEMPLATE_LABEL = "Template";
@@ -68,6 +60,15 @@ public class XMLTemplateWriter implements TemplateWriter {
      * Constant that represents the label used for the title of the question identifier on the XML file
      */
     private static final String QUESTION_TITLE = "title";
+    
+    /**
+     * File with the file that is going to be written with all survey answers
+     */
+    private final File file;
+    /**
+     * Template to export.
+     */
+    private final Template template;
 
     /**
      * Builds a new XMLTemplateWriter with the file that is going to be written

@@ -14,17 +14,6 @@ import cdioil.files.InvalidFileFormattingException;
  * @author Rita Gonçalves (1160912)
  */
 public class CSVCategoriesReader implements CategoriesReader {
-
-    /**
-     * File to read.
-     */
-    private final File file;
-
-    /**
-     * List with the Categories that were read.
-     */
-    private final List<Category> lc;
-
     /**
      * Splitter of the columns of the file.
      */
@@ -49,6 +38,16 @@ public class CSVCategoriesReader implements CategoriesReader {
      * Unrecognized file format Message content
      */
     private static final String UNRECOGNIZED_FILE_FORMAT = "Unrecognized file formatting";
+    
+    /**
+     * File to read.
+     */
+    private final File file;
+
+    /**
+     * List with the Categories that were read.
+     */
+    private final List<Category> lc;
 
     /**
      * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.

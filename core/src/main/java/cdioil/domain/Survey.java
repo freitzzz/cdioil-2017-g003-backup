@@ -4,7 +4,6 @@ import cdioil.application.utils.Graph;
 import cdioil.time.TimePeriod;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -21,7 +20,7 @@ public abstract class Survey implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Version
-    private Long version;
+    private long version;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "surveySeq")

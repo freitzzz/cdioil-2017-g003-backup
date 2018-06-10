@@ -30,7 +30,7 @@ public class TemplateGroup implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     /**
      * Title of the template group.

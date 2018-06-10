@@ -30,7 +30,7 @@ public class CategoryQuestionsLibrary implements AggregateRoot<Map<Category, Que
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     /**
      * Map that contains questions (values) related to categories (keys).

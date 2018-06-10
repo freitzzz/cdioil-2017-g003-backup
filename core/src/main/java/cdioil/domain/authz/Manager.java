@@ -38,7 +38,7 @@ public class Manager implements DTOable, Serializable, AggregateRoot<SystemUser>
     @Column(name = "MANAGER_ID")
     private long id;
     @Version
-    private Long version;
+    private long version;
     /**
      * SystemUser associated with a Manager.
      */

@@ -25,7 +25,7 @@ public class IndependentQuestionsLibrary implements AggregateRoot<Set<Question>>
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Question> library;

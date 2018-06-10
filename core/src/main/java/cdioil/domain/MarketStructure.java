@@ -37,7 +37,7 @@ public class MarketStructure implements Serializable {
      * Database Version number.
      */
     @Version
-    private Long version;
+    private long version;
 
     /**
      * The Market Structure's first Node.

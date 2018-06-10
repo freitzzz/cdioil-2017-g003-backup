@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
 import cdioil.domain.Category;
@@ -25,20 +20,6 @@ import java.util.Map;
  * @author Ana Guerra (1161191)
  */
 public class CSVProductsReader implements ProductsReader {
-
-    /**
-     * File being read.
-     */
-    private final File file;
-
-    /**
-     * File to export.
-     */
-    private final File fileExp;
-    /**
-     * List with the product
-     */
-    private final Map<String, List<Product>> existsProducts;
     /**
      * Character used for splitting data within the file.
      */
@@ -108,6 +89,20 @@ public class CSVProductsReader implements ProductsReader {
      */
     private static final String PATH_REGEX = SCALE + DC_IDENTIFIER + SEPARATOR + SCALE + UN_IDENTIFIER + SEPARATOR
             + SCALE + CAT_IDENTIFIER + SEPARATOR + SCALE + SCAT_IDENTIFIER + SEPARATOR + SCALE + UB_IDENTIFIER;
+    
+    /**
+     * File being read.
+     */
+    private final File file;
+
+    /**
+     * File to export.
+     */
+    private final File fileExp;
+    /**
+     * List with the product
+     */
+    private final Map<String, List<Product>> existsProducts;
 
     /**
      * Creates an instance of CSVProductsReader, receiving the name of the file to read.

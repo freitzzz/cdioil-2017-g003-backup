@@ -24,7 +24,7 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
     @Column(name = "REGISTEREDUSER_ID")
     private long id;
     @Version
-    private Long version;
+    private long version;
     /**
      * SystemUser account associated to the registered user.
      */

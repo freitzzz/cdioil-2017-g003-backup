@@ -25,10 +25,6 @@ import java.util.Map;
 public class CSVQuestionsReader implements QuestionsReader {
 
     /**
-     * File being read.
-     */
-    private final File file;
-    /**
      * Character used for splitting data within the file.
      */
     private static final String SPLITTER = ";";
@@ -108,6 +104,11 @@ public class CSVQuestionsReader implements QuestionsReader {
      * The number of cells skipped in order to reach the start of a new question in a file with independent questions.
      */
     private static final int INDEPENDENT_FILE_OFFSET = 0;
+    
+    /**
+     * File being read.
+     */
+    private final File file;
 
     /**
      * Creates an instance of CSVQuestionsReader, receiving the name of the file to read.

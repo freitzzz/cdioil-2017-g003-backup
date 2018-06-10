@@ -31,7 +31,7 @@ public class CategoryTemplatesLibrary implements AggregateRoot<Map<Category, Tem
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     /**
      * Map that contains a template group (values) for each category (key).

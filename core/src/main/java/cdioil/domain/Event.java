@@ -37,10 +37,10 @@ public abstract class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "EVENT_ID")
-    private Long id;
+    private long id;
     
     @Version
-    private Long version;
+    private long version;
 
     /**
      * Event's title.

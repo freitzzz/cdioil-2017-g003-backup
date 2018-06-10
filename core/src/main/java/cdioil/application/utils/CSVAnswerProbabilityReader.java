@@ -17,11 +17,6 @@ import java.util.Map;
 public class CSVAnswerProbabilityReader implements AnswerProbabilityReader {
 
     /**
-     * File currently being read.
-     */
-    private final File file;
-
-    /**
      * Header used for identifying the row in which the Question's identifier
      * values are to be inserted.
      */
@@ -76,6 +71,11 @@ public class CSVAnswerProbabilityReader implements AnswerProbabilityReader {
      * distribution function.
      */
     private static final String PROBABILISTIC_DISTRIBUTION = "FDP";
+    
+    /**
+     * File currently being read.
+     */
+    private final File file;
 
     /**
      * Creates a new instance of CSVAnswerProbabilityReader for a file with the

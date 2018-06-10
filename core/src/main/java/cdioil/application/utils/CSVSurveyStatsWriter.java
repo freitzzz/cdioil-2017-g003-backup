@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
 import cdioil.domain.Question;
@@ -26,6 +21,31 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
      * Splitter of the columns of the file.
      */
     private static final String SPLITTER = ";";
+    
+    /**
+     * Field that identifies the question by its ID.
+     */
+    private static final String QUESTION_ID = "Questão (ID)";
+
+    /**
+     * Field that identifies the type of the question.
+     */
+    private static final String QUESTION_TYPE = "Tipo";
+
+    /**
+     * Field that contains the number of answers to the question.
+     */
+    private static final String TOTAL = "Total";
+
+    /**
+     * Field that contains the average of the answers to the question.
+     */
+    private static final String AVG = "Média";
+
+    /**
+     * Field that contains the mean deviation of the answers to the question.
+     */
+    private static final String MEAN_DEVIATION = "Desvio Padrão";
 
     //Attributes
     /**
@@ -62,31 +82,6 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
      * Total of quantitative questions.
      */
     private final Map<Question, Integer> quantitativeTotal;
-
-    /**
-     * Field that identifies the question by its ID.
-     */
-    private static final String QUESTION_ID = "Questão (ID)";
-
-    /**
-     * Field that identifies the type of the question.
-     */
-    private static final String QUESTION_TYPE = "Tipo";
-
-    /**
-     * Field that contains the number of answers to the question.
-     */
-    private static final String TOTAL = "Total";
-
-    /**
-     * Field that contains the average of the answers to the question.
-     */
-    private static final String AVG = "Média";
-
-    /**
-     * Field that contains the mean deviation of the answers to the question.
-     */
-    private static final String MEAN_DEVIATION = "Desvio Padrão";
 
     /**
      * Creates a new CSVSurveyStatsWriter.

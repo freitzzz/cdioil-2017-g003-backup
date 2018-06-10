@@ -18,7 +18,7 @@ public class Template implements Serializable {
      * Version for JPA.
      */
     @Version
-    private Long version;
+    private long version;
 
     /**
      * Serialization code.

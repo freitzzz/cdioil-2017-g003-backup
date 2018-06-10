@@ -54,15 +54,16 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
      * Serialization number.
      */
     private static final long serialVersionUID = 1L;
+    
     @Version
-    private Long version;
+    private long version;
     /**
      * ID of the SystemUser for JPA.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "SYSTEMUSER_ID")
-    private Long id;
+    private long id;
 
     /**
      * User's email.

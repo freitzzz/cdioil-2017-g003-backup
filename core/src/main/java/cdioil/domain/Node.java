@@ -40,7 +40,7 @@ public class Node implements Serializable {
      * Database Version number.
      */
     @Version
-    private Long version;
+    private long version;
 
     /**
      * Reference to a preceding Node in the structure.

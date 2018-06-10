@@ -28,7 +28,7 @@ public class QuestionGroup implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     /**
      * Set of questions.

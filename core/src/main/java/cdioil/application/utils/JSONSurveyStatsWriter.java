@@ -17,6 +17,31 @@ import java.util.Map;
  */
 public class JSONSurveyStatsWriter implements SurveyStatsWriter {
 
+    /**
+     * Field that identifies the question by its ID.
+     */
+    private static final String QUESTION_ID = "Questão (ID)";
+
+    /**
+     * Field that identifies the type of the question.
+     */
+    private static final String QUESTION_TYPE = "Tipo";
+
+    /**
+     * Field that contains the number of answers to the question.
+     */
+    private static final String TOTAL = "Total";
+
+    /**
+     * Field that contains the average of the answers to the question.
+     */
+    private static final String AVG = "Média";
+
+    /**
+     * Field that contains the mean deviation of the answers to the question.
+     */
+    private static final String MEAN_DEVIATION = "Desvio Padrão";
+    
     //Attributes
     /**
      * File to write.
@@ -52,31 +77,6 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
      * Total of quantitative questions.
      */
     private final Map<Question, Integer> quantitativeTotal;
-
-    /**
-     * Field that identifies the question by its ID.
-     */
-    private static final String QUESTION_ID = "Questão (ID)";
-
-    /**
-     * Field that identifies the type of the question.
-     */
-    private static final String QUESTION_TYPE = "Tipo";
-
-    /**
-     * Field that contains the number of answers to the question.
-     */
-    private static final String TOTAL = "Total";
-
-    /**
-     * Field that contains the average of the answers to the question.
-     */
-    private static final String AVG = "Média";
-
-    /**
-     * Field that contains the mean deviation of the answers to the question.
-     */
-    private static final String MEAN_DEVIATION = "Desvio Padrão";
 
     /**
      * Creates a new JSONSurveyStatsWriter.
