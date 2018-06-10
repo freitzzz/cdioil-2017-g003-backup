@@ -41,6 +41,16 @@ public final class UserJSONService {
         this.password=password;
         this.activationCode=activationCode;
     }
+
+    /**
+     * Builds a new UserJSONService with the user email & password
+     * @param email String with the user email
+     * @param password String with the user password
+     */
+    public UserJSONService(String email,String password){
+        this.email=email;
+        this.password=password;
+    }
     /**
      * Returns the user email
      * @return String with the user email

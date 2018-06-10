@@ -200,17 +200,11 @@ public class LoginActivity extends AppCompatActivity {
                                 .concat(FeedbackMonkeyAPI.getResourcePath("authentication")
                                         .concat(FeedbackMonkeyAPI.getSubResourcePath("authentication", "login")))))
                         .withMediaType(RESTRequest.RequestMediaType.JSON)
-                        .withBody("{\n\t\"email\":" + emailText.getText().toString() + ",\"password\":" +
-                                passwordText.getText().toString() + "\n}").POST();
+                        .withBody(getUserLoginForm()).POST();
                 String restResponseBodyContent = "";
                 try {
                     restResponseBodyContent = restResponse.body().string();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Thread.currentThread().sleep(2000);
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 if (restResponse.code() == HttpsURLConnection.HTTP_OK) {
@@ -251,6 +245,12 @@ public class LoginActivity extends AppCompatActivity {
     private String getAuthenticationToken(String jsonBody) {
         return new Gson().fromJson(jsonBody, UserJSONService.class).getAuthenticationToken();
     }
+
+    /**
+     * Returns the user login form as a JSON form based on the user input from the email & password fields
+     * @return String with the user login form as a JSON form based on the user input from the email & password fields
+     */
+    private String getUserLoginForm(){return new Gson().toJson(new UserJSONService(emailText.getText().toString(),passwordText.getText().toString()));}
 
     /**
      * Creates a new thread to display a login error message using an AlertBuilder
