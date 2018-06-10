@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerException;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 
+@Deprecated
 public class QuantitativeQuestionActivity extends AppCompatActivity {
 
     private SeekArc seekArc;
@@ -48,18 +49,17 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
         ArrayList<String> questionScaleValues = getIntent().getExtras().getStringArrayList("options");
         int questionScaleValuesSize = questionScaleValues.size();
 
-        Double doubleValue = Double.parseDouble(questionScaleValues.get(questionScaleValuesSize - 1));
+        Double minValue = Double.parseDouble(questionScaleValues.get(0));
+        Double maxValue = Double.parseDouble(questionScaleValues.get(questionScaleValuesSize - 1));
 
-        seekArc.setMax(doubleValue.intValue());
+        seekArc.setMax(maxValue.intValue()-minValue.intValue());
+        seekArcProgress.setText(Integer.toString(minValue.intValue()));
 
         seekArc.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
+
             @Override
             public void onProgressChanged(SeekArc seekArc, int i, boolean b) {
-//                if(i != doubleValue.intValue()){
-//                    seekArcProgress.setText(String.valueOf(i+1));
-//                }else{
-                seekArcProgress.setText(String.valueOf(i));
-//                }
+                seekArcProgress.setText(String.valueOf(i+1));
             }
 
             @Override
@@ -87,7 +87,7 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
     private void startQuestionActivity(String answer) {
 
         try {
-            ReviewXMLService xmlService = ReviewXMLService.newInstance();
+            ReviewXMLService xmlService = ReviewXMLService.instance();
 
             boolean displayNextQuestion = xmlService.saveAnswer(answer);
 
@@ -95,7 +95,7 @@ public class QuantitativeQuestionActivity extends AppCompatActivity {
                 submitSuggestion();
             } else {
 
-                Bundle questionBundle = ReviewXMLService.newInstance().getCurrentQuestionBundle();
+                Bundle questionBundle = ReviewXMLService.instance().getCurrentQuestionBundle();
 
                 String currentQuestionType = questionBundle.getString("currentQuestionType");
 

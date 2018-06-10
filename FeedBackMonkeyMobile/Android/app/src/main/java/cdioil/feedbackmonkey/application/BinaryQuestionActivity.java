@@ -11,7 +11,6 @@ import android.widget.TextView;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -19,7 +18,7 @@ import javax.xml.transform.TransformerException;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 
-
+@Deprecated
 public class BinaryQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView;
@@ -59,7 +58,7 @@ public class BinaryQuestionActivity extends AppCompatActivity {
     private void startQuestionActivity(String answer) {
 
         try {
-            ReviewXMLService xmlService = ReviewXMLService.newInstance();
+            ReviewXMLService xmlService = ReviewXMLService.instance();
 
             boolean displayNextQuestion = xmlService.saveAnswer(answer);
 
@@ -67,7 +66,7 @@ public class BinaryQuestionActivity extends AppCompatActivity {
                 submitSuggestion();
             } else {
 
-                Bundle questionBundle = ReviewXMLService.newInstance().getCurrentQuestionBundle();
+                Bundle questionBundle = ReviewXMLService.instance().getCurrentQuestionBundle();
 
                 String currentQuestionType = questionBundle.getString("currentQuestionType");
 
