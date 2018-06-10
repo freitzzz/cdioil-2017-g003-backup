@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.gson.Gson;
 
 
@@ -71,6 +74,14 @@ public class LoginActivity extends AppCompatActivity {
      */
     private EditText passwordText;
     /**
+     * Progress bar with the progress bar used on the login
+     */
+    private ProgressBar loginProgressBar;
+    /**
+     * Alert Dialog with that holds the login progress bar
+     */
+    private AlertDialog loginProgressDialog;
+    /**
      * Static boolean that is used to check if the application just started up
      */
     private static boolean onStartup;
@@ -90,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.passwordText);
         signupButton = findViewById(R.id.signupButton);
         activateAccountButton = findViewById(R.id.activateAccountButton);
+        loginProgressBar=findViewById(R.id.circle_loading_bar);
+        System.out.println(loginProgressBar);
         startLogin();
         startActivateAccount();
         startSignUp();
@@ -180,6 +193,7 @@ public class LoginActivity extends AppCompatActivity {
     private Runnable login() {
         return () -> {
             try {
+                runOnUiThread(this::startLoadingDialog);
                 Response restResponse = RESTRequest.create(BuildConfig.SERVER_URL
                         .concat(FeedbackMonkeyAPI
                                 .getAPIEntryPoint()
@@ -194,25 +208,35 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                try {
+                    Thread.currentThread().sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 if (restResponse.code() == HttpsURLConnection.HTTP_OK) {
                     Intent mainMenuIntent = new Intent(LoginActivity.this, MainMenuActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("authenticationToken", getAuthenticationToken(restResponseBodyContent));
                     mainMenuIntent.putExtras(bundle);
+                    runOnUiThread(this::stopLoadingDialog);
                     runOnUiThread(this::clearPasswordText);
                     startActivity(mainMenuIntent);
                 } else if (restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                    runOnUiThread(this::stopLoadingDialog);
                     showLoginErrorMessage("Login Inválido",
                             "\nCredenciais inválidas, tente novamente!\n");
                 } else if (restResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                    runOnUiThread(this::stopLoadingDialog);
                     showLoginErrorMessage("Login Inválido",
                             "A sua conta não está ativada!");
                 } else if (restResponse.code() == HttpsURLConnection.HTTP_FORBIDDEN){
+                    runOnUiThread(this::stopLoadingDialog);
                     showLoginErrorMessage("Conta bloqueada",
                             "A sua conta foi bloqueada temporariamente devido a " +
                                     "várias tentativas de login sem sucesso. Por favor aguarde uns momentos");
                 }
             } catch (IOException ioException) {
+                runOnUiThread(this::stopLoadingDialog);
                 ToastNotification.show(this, NO_INTERNET_CONNECTION);
             }
         };
@@ -307,5 +331,35 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void clearPasswordText(){
         passwordText.getText().clear();
+    }
+
+    /**
+     * Starts the login progress dialog
+     */
+    private void startLoadingDialog(){
+        if(loginProgressDialog==null)createLoginProgressDialog();
+        loginProgressDialog.show();
+    }
+
+    /**
+     * Stops the login progress dialog
+     */
+    private void stopLoadingDialog(){
+        loginProgressDialog.cancel();
+        loginProgressBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * Creates the login progress dialog used to keep the user alert from the login action
+     */
+    private void createLoginProgressDialog(){
+        loginProgressBar=(LayoutInflater.from(this).inflate(R.layout.circle_loading_bar,null))
+                .findViewById(R.id.circle_loading_bar);
+        loginProgressDialog=new AlertDialog.Builder(LoginActivity.this)
+                .setTitle(R.string.login_progress_dialog_info)
+                .setView(loginProgressBar)
+                .setCancelable(false)
+                .create();
+        loginProgressDialog.setOnShowListener(dialogInterface -> loginProgressBar.setVisibility(View.VISIBLE));
     }
 }

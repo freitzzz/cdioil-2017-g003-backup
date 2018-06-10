@@ -25,4 +25,5 @@
     <string name="suggestion">Sugestão</string>
     <string name="submit_suggestion">Enviar Sugestão</string>
     <string name="write_suggestion_info">Escreva a sua sugestão aqui!</string>
+    <string name="login_progress_dialog_info">Login em progresso</string>
 </resources>
