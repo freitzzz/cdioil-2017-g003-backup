@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Survey>
+    <!-- Answers for each respective question (based on Key:Value pairs, Key=Question, Value=Question Answers -->
+    <Question ID="BQS1" type="BINARY" name="Questao Binaria 1 Survey Bootstrap">
+        <Answer>false</Answer>
+        <Answer>false</Answer>
+    </Question>
+    <Question ID="BQS3" type="BINARY" name="Questao Binaria 3 Survey Bootstrap">
+        <Answer>false</Answer>
+        <Answer>true</Answer>
+    </Question>
+    <!-- All Survey Suggestions -->
+    <Suggestions>
+        <Suggestion value="Adorei o produto!!! :)"/>
+        <Suggestion value="Os meus filhos adoraram esta massa!!! Definitivamente vou comprar mais :)"/>
+        <Suggestion value="Acidentalmente fiz o estrugido para a massa com Lean, e vim para ao hospital"/>
+        <Suggestion value="Uso o código PUMP na sua próxima compra para 20% desconto imediato"/>
+    </Suggestions>
+</Survey>
