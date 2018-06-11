@@ -46,6 +46,27 @@
         app:layout_constraintVertical_bias="0.559" />
 
     <EditText
+        android:id="@+id/signupRetypePasswordText"
+        android:layout_width="287dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_vpn_key_black_18dp"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_vpn_key_black_18dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto_thin"
+        android:hint="@string/rewrite_password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.663" />
+
+    <EditText
         android:id="@+id/signupEmailText"
         android:layout_width="287dp"
         android:layout_height="49dp"
@@ -64,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.432" />
+        app:layout_constraintVertical_bias="0.45" />
 
 
     <Button
@@ -84,7 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.825" />
+        app:layout_constraintVertical_bias="0.888" />
 
     <Button
         android:id="@+id/signupAdditionalInfoButton"
@@ -103,6 +124,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.684" />
+        app:layout_constraintVertical_bias="0.773" />
 
 </android.support.constraint.ConstraintLayout>
