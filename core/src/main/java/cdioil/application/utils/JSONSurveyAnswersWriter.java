@@ -1,12 +1,10 @@
 package cdioil.application.utils;
 
-import cdioil.application.utils.services.json.ReviewJSONService;
+import cdioil.application.utils.services.xml.SurveyAnswersXMLService;
 import cdioil.domain.Review;
 import cdioil.files.FileWriter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import cdioil.xsl.XSLTransformer;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,11 +39,9 @@ public final class JSONSurveyAnswersWriter implements SurveyAnswersWriter{
      */
     @Override
     public boolean write() {
-        List<ReviewJSONService> surveyAnswers=new ArrayList<>();
-        Gson gson=new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
-        surveyReviews.forEach((review) -> {
-            surveyAnswers.add(new ReviewJSONService(review.getReviewQuestionAnswers(),review.getSuggestion()));
-        });
-        return FileWriter.writeFile(file,gson.toJson(surveyAnswers));
+        return FileWriter.writeFile(file,XSLTransformer.create(XSLSurveyAnswersDocuments
+                .JSON_SURVEY_ANSWERS_XSLT)
+                .transform(new SurveyAnswersXMLService(surveyReviews)
+                        .toXMLDocument()));
     }
 }
