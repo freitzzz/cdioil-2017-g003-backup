@@ -4,7 +4,7 @@
     Document   : CSVSurveyReviewsXSLT.xsl
     Created on : 5 de Junho de 2018, 16:36
     Author     : <a href="1160907@isep.ipp.pt">João Freitas</a>
-    Description: XSLT Document containg the structure of the CSV file containg all 
+    Description: XSL Document containg the structure of the CSV file containg all 
         Survey Reviews that will be transformed with XSLT
         
 Purpose of transformation follows.
