@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Survey>
+<Survey id="555" reviews="444">
     <!-- Answers for each respective question (based on Key:Value pairs, Key=Question, Value=Question Answers -->
     <Question ID="BQS1" type="BINARY" name="Questao Binaria 1 Survey Bootstrap">
         <Answer>false</Answer>
