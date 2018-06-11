@@ -29,7 +29,20 @@ public final class XSLTransformer {
      */
     public static XSLTransformer create(File xslDocument){
         try{
-            return new XSLTransformer(xslDocument);
+            return new XSLTransformer(new StreamSource(xslDocument));
+        }catch(TransformerConfigurationException transformerConfigurationException){
+            throw new IllegalStateException(transformerConfigurationException.getException());
+        }
+    }
+    /**
+     * Creates a new XSLTransformer with a certain XSL document
+     * @param xslDocument String with the XSL document that will serve as transformer
+     * @return XSLTransformer with the new transformer
+     * @throws IllegalStateException if the XSL document is invalid
+     */
+    public static XSLTransformer create(String xslDocument){
+        try{
+            return new XSLTransformer(new StreamSource(new StringReader(xslDocument)));
         }catch(TransformerConfigurationException transformerConfigurationException){
             throw new IllegalStateException(transformerConfigurationException.getException());
         }
@@ -69,8 +82,9 @@ public final class XSLTransformer {
     }
     /**
      * Builds a new XSLTransformer with a certain XSL document
+     * @param xslDocumentSource Source with the source of the XSL document
      */
-    private XSLTransformer(File xslDocument) throws TransformerConfigurationException{
-        xslTransformer=TransformerFactory.newInstance().newTransformer(new StreamSource(xslDocument));
+    private XSLTransformer(Source xslDocumentSource) throws TransformerConfigurationException{
+        xslTransformer=TransformerFactory.newInstance().newTransformer(xslDocumentSource);
     }
 }

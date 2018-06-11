@@ -4,6 +4,7 @@ import cdioil.logger.ExceptionLogger;
 import cdioil.logger.LoggerFileNames;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -69,5 +70,17 @@ public final class FilesUtils {
         }
 
         return result;
+    }
+    /**
+     * Method that converts a list into a pure String
+     * <br>Each item of the list is a new line
+     * @param <T> Generic-Type with the type of List items
+     * @param content List with the content being
+     * @return String with the content of the list as a pure string
+     */
+    public static <T> String listAsString(List<T> content){
+        StringBuilder builder=new StringBuilder();
+        content.forEach((line)->{builder.append(line).append('\n');});
+        return builder.toString();
     }
 }
