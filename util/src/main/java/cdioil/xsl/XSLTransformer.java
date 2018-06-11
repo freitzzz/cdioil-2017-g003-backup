@@ -1,7 +1,9 @@
 package cdioil.xsl;
 
 import java.io.File;
+import java.io.StringReader;
 import java.io.StringWriter;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -39,9 +41,27 @@ public final class XSLTransformer {
      * @throws IllegalStateException if the XML document is invalid
      */
     public String transform(File xmlDocument){
-        StringWriter transformedDocument=new StringWriter();
+        return transform(new StreamSource(xmlDocument));
+    }
+    /**
+     * Applies a XSL Transformation on a given XML document
+     * @param xmlDocument File with the XML document being applied the transformation
+     * @return String with the transformed document content
+     * @throws IllegalStateException if the XML document is invalid
+     */
+    public String transform(String xmlDocument){
+        return transform(new StreamSource(new StringReader(xmlDocument)));
+    }
+    /**
+     * Applies a XSL Transformation on a certain source representing a XML document
+     * @param xslSource Source with the source containing the XML document being applied on
+     * @return String with the transformed document content
+     * @throws IllegalStateException if the XML document is invalid
+     */
+    private String transform(Source xslSource){
         try{
-            xslTransformer.transform(new StreamSource(xmlDocument),new StreamResult(transformedDocument));
+            StringWriter transformedDocument=new StringWriter();
+            xslTransformer.transform(xslSource,new StreamResult(transformedDocument));
             return transformedDocument.getBuffer().toString();
         }catch(TransformerException transformerException){
             throw new IllegalStateException(transformerException.getException());
