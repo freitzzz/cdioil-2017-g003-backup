@@ -3,6 +3,7 @@ package cdioil.domain.authz;
 import cdioil.framework.domain.ddd.AggregateRoot;
 import cdioil.framework.dto.SystemUserDTO;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.*;
 
 /**
@@ -53,7 +54,9 @@ public class Admin implements Serializable,AggregateRoot<SystemUser>,User{
      */
     @Override
     public int hashCode() {
-        return sysUser.hashCode();
+        int hash = 5;
+        hash = 17 * hash + sysUser.hashCode();
+        return hash;
     }
 
     /**
