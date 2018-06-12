@@ -306,7 +306,7 @@ public class Graph implements Serializable {
      */
     public boolean insertVertex(Question element) {
 
-        if (vertexExists(element)) {
+        if (element == null || vertexExists(element)) {
             return false;
         }
         Vertex vertex = new Vertex(element);
@@ -330,7 +330,7 @@ public class Graph implements Serializable {
      */
     public boolean removeVertex(Question element) {
 
-        if (!vertexExists(element)) {
+        if (element == null || !vertexExists(element)) {
             return false;
         }
 

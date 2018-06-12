@@ -2,16 +2,10 @@ package cdioil.application.utils;
 
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.BinaryQuestionOption;
-import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.Question;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -68,6 +62,16 @@ public class GraphTest {
         graph.insertVertex(q1);
 
         assertFalse(graph.insertVertex(q1));
+    }
+    
+    @Test
+    public void ensureInsertVertexReturnsFalseIfVertexIsNull(){
+        Graph graph = new Graph();
+        
+        assertFalse(graph.insertVertex(null));
+        
+        assertFalse(graph.allVertices().iterator().hasNext());
+        assertEquals(graph.numVertices(), 0);
     }
 
     @Test
@@ -711,6 +715,17 @@ public class GraphTest {
         Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
 
         assertFalse(g.removeVertex(q1));
+    }
+    
+    @Test
+    public void ensureRemoveVertexDoesNotRemoveNull(){
+        Graph g = new Graph();
+        
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+        g.insertVertex(q1);
+        
+        assertFalse(g.removeVertex(null));
+        assertEquals(g.numVertices(), 1);
     }
 
     @Test
