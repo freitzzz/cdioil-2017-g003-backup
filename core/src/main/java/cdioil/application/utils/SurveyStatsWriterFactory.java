@@ -22,7 +22,6 @@ public final class SurveyStatsWriterFactory {
      *
      * @param filename Path of the file
      * @param surveyID ID of the survey
-     * @param surveyName Name of the survey
      * @param totalBinary Total of answers to binary questions
      * @param totalQuantitative Total of answers to quantitative questions
      * @param binaryMean Average value for binary answers
@@ -32,15 +31,15 @@ public final class SurveyStatsWriterFactory {
      *
      * @return the created SurveyStatsWriter. If the file is not valid, returns null.
      */
-    public static SurveyStatsWriter create(String filename, long surveyID, String surveyName, Map<Question, Integer> totalBinary, 
+    public static SurveyStatsWriter create(String filename, long surveyID, Map<Question, Integer> totalBinary, 
             Map<Question, Integer> totalQuantitative, Map<Question, Double> binaryMean, Map<Question, Double> quantitativeMean,
             Map<Question, Double> binaryMeanDeviation,  Map<Question, Double> quantitativeMeanDeviation) {
         if (filename.endsWith(CommonFileExtensions.CSV_EXTENSION)) {
-            return new CSVSurveyStatsWriter(filename, totalBinary,
-                    totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+            return new CSVSurveyStatsWriter(filename, totalBinary, totalQuantitative, binaryMean, quantitativeMean,
+                    binaryMeanDeviation, quantitativeMeanDeviation);
         }
         if (filename.endsWith(CommonFileExtensions.XML_EXTENSION)) {
-            return new XMLSurveyStatsWriter(filename, surveyID, surveyName, totalBinary,
+            return new XMLSurveyStatsWriter(filename, surveyID, totalBinary,
                     totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         }
         if (filename.endsWith(CommonFileExtensions.JSON_EXTENSION)) {

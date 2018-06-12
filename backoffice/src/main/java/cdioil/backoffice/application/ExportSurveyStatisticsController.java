@@ -255,8 +255,8 @@ public class ExportSurveyStatisticsController {
      */
     public boolean exportStatsFromSurvey(String filePath) {
         calculateStats();
-        SurveyStatsWriter statsWriter = SurveyStatsWriterFactory.create(filePath, getSurveyID(), survey.getName(),
-                binaryTotal, quantitativeTotal, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
+        SurveyStatsWriter statsWriter = SurveyStatsWriterFactory.create(filePath, getSurveyID(), binaryTotal,
+                quantitativeTotal, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         if (statsWriter == null) {
             return false;
 
