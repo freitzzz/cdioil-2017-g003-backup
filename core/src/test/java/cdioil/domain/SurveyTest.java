@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -236,8 +235,8 @@ public class SurveyTest {
         System.out.println("getSurveyEndDate");
         TimePeriod timePeriodX=new TimePeriod(LocalDateTime.now(),LocalDateTime.MAX);
         TimePeriod timePeriodY=new TimePeriod(LocalDateTime.now(),LocalDateTime.MAX);
-        Survey surveyX=new GlobalSurvey(new ArrayList<>(),timePeriodX);
-        Survey surveyY=new GlobalSurvey(new ArrayList<>(),timePeriodY);
+        Survey surveyX=new GlobalSurvey(new ArrayList<>(list),timePeriodX);
+        Survey surveyY=new GlobalSurvey(new ArrayList<>(list),timePeriodY);
         assertEquals("The condition should be succesful since both surveys have the same end date"
                 ,surveyX.getSurveyEndDate(),surveyY.getSurveyEndDate());
     }
