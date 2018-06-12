@@ -215,6 +215,7 @@ public class LoginActivity extends AppCompatActivity {
                     runOnUiThread(this::stopLoadingDialog);
                     runOnUiThread(this::clearPasswordText);
                     startActivity(mainMenuIntent);
+                    finish();
                 } else if (restResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     runOnUiThread(this::stopLoadingDialog);
                     showLoginErrorMessage("Login Inválido",
