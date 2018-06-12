@@ -12,13 +12,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
     <xsl:output method="text" indent="yes"/>
     
-    <!-- #TO-DO: VERIFY IF THERE ARE ANY SUGGESTIONS OR ANY ANSWERS TO GRANT THAT EVERYTHING IS FORMATTED CORRECTLY -->
-    
-    
     <!-- TODO customize transformation rules
          syntax recommendation http://www.w3.org/TR/xslt 
     -->
     <xsl:template match="/Survey">
+        <xsl:variable name="suggestionsNumber" select="count(Suggestions/*)"/>
         {
             "id":"<xsl:value-of select="@id"/>",
             "reviews":"<xsl:value-of select="@reviews"/>",
@@ -35,21 +33,27 @@
                                                                                  the nodes being iterated. If so adds a colon, else doesn't add since it's the last element -->
                     </xsl:for-each>
                     ]
-                },<!-- <xsl:if test="position() != last()">,</xsl:if> -->
+                }<xsl:choose> <!-- choose -> if|else -->
+                        <xsl:when test="position()=last()"> <!-- if the current node position is the same as the last position -->
+                            <xsl:if test="$suggestionsNumber">,</xsl:if> <!-- If there are any suggestions add a colen -->
+                        </xsl:when>
+                        <xsl:otherwise>,</xsl:otherwise> <!-- If hte node position is different from the last add a colon -->
+                    </xsl:choose>
         </xsl:for-each>
+            <xsl:if test="$suggestionsNumber">
                 <xsl:apply-templates select="Suggestions"/>
-        
+            </xsl:if>
         }
     </xsl:template>
     
     <!-- Matches Survey Reviews Suggestions -->
     <xsl:template match="Suggestions">
-        "suggestions":[
-        <xsl:for-each select="Suggestion">
-            {
-                "suggestion":"<xsl:value-of select="@value"/>"
-            }<xsl:if test="position() != last()">,</xsl:if>
-        </xsl:for-each>
-        ]
+            "suggestions":[
+            <xsl:for-each select="Suggestion">
+                {
+                    "suggestion":"<xsl:value-of select="@value"/>"
+                }<xsl:if test="position() != last()">,</xsl:if>
+            </xsl:for-each>
+            ]
     </xsl:template>
 </xsl:stylesheet>
