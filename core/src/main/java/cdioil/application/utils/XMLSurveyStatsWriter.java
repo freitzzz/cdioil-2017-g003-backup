@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.Map;
 import java.io.File;
 import java.io.StringWriter;
+import javax.xml.transform.OutputKeys;
 import org.w3c.dom.DOMException;
 
 /**
@@ -206,7 +207,7 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(file);
-
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             try {
                 transformer.transform(source, result);
                 return true;
