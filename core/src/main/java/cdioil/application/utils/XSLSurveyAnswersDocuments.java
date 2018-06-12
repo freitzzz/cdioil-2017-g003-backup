@@ -16,12 +16,12 @@ public interface XSLSurveyAnswersDocuments {
      */
     public static final String CSV_SURVEY_ANSWERS_XSLT
             =FilesUtils.listAsString(FileReader.readFile(
-                    new File(XSLSurveyAnswersDocuments.class.getClassLoader().getResource("xsl/CSVSurveyReviewsXSLT.xsl").getPath())));
+                    new File(XSLSurveyAnswersDocuments.class.getClassLoader().getResource("xsl/CSVSurveyReviewsXSLT.xsl").getFile())));
     /**
      * Constant that represents the XSL document containing the transformation being applied to a XML file 
      * to transform it as a JSON document containing all reviews of a Survey
      */
     public static final String JSON_SURVEY_ANSWERS_XSLT
             =FilesUtils.listAsString(FileReader.readFile(
-                    new File(XSLSurveyAnswersDocuments.class.getClassLoader().getResource("xsl/JSONSurveyReviewsXSLT.xsl").getPath())));
+                    new File(XSLSurveyAnswersDocuments.class.getClassLoader().getResource("xsl/JSONSurveyReviewsXSLT.xsl").getFile())));
 }
