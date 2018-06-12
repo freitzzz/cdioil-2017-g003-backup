@@ -1,0 +1,102 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema">
+	<xs:element name = "Template">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name = "Questions">
+					<xs:complexType>
+						<xs:choice minOccurs = "1" maxOccurs = "unbounded">
+							<xs:element name = "BinaryQuestion" type = "TBinaryQuestion"/>
+							<xs:element name = "QuantitativeQuestion" type = "TQuantitativeQuestion"/>
+							<xs:element name = "MultipleChoiceQuestion" type = "TMultipleChoiceQuestion"/>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name = "SurveyItems" type = "TSurveyItems"/>
+				<xs:element name = "QuestionScript" type = "TScript" minOccurs = "0" maxOccurs = "1" />
+			</xs:sequence>
+			<xs:attribute name = "name" type = "xs:string" use = "required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!--Since the question ID attribute can also represent the database ID, 
+	all of the question's sub-elements should be optional-->
+	<xs:complexType name = "TBinaryQuestion">
+		<xs:sequence minOccurs = "0" maxOccurs = "1">
+			<xs:element name = "Text" type = "xs:string"/>
+		</xs:sequence>
+		<xs:attribute name = "questionID" type = "xs:ID" use = "required"/>
+	</xs:complexType>
+
+	<xs:complexType name = "TQuantitativeQuestion">
+		<!--VALIDATE SCALE VALUES-->
+		<xs:sequence minOccurs = "0" maxOccurs = "1">
+			<xs:element name = "Text" type = "xs:string"/>
+			<xs:element name = "scaleMinValue" type = "xs:double"/>
+			<xs:element name = "scaleMaxValue" type = "xs:double"/>
+		</xs:sequence>
+		<xs:attribute name = "questionID" type = "xs:ID" use = "required"/>
+	</xs:complexType>
+
+	<xs:complexType name = "TMultipleChoiceQuestion">
+		<xs:sequence minOccurs = "0" maxOccurs = "1">
+			<xs:element name = "Text" type = "xs:string"/>
+			<!--VALIDATE NUMBERS OUT OF RANGE AND ORDER-->
+			<xs:element name = "Option" minOccurs = "1" maxOccurs = "unbounded">
+				<xs:complexType>
+					<xs:attribute name = "num" type = "xs:unsignedInt"/>
+					<xs:attribute name = "text" type = "xs:string" use = "required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name = "questionID" type = "xs:ID" use = "required"/>
+	</xs:complexType>	
+
+	<xs:complexType name = "TSurveyItems">
+		<xs:sequence>
+			<xs:element name = "Category" type = "TCategory"/>
+			<xs:element name = "Product" type = "TProduct"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name = "TCategory">
+		<xs:attribute name = "path">
+			<xs:simpleType>
+				<xs:restriction base = "xs:string">
+					<xs:pattern value = "[0-9]+DC((-[0-9]+UN(-[0-9]+CAT(-[0-9]+SCAT(-[0-9]+UB)?)?)?)?)"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name = "TProduct">
+		<xs:attribute name = "sku" type = "xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name = "TScript">
+		<xs:sequence>
+			<xs:element name = "Question" type = "TQuestion" maxOccurs = "unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name = "TQuestion">
+		<xs:sequence minOccurs = "0" maxOccurs = "unbounded">
+			<xs:element name = "OnReply">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name = "Question" type = "TQuestion"/>
+					</xs:sequence>
+					<xs:attribute name = "option">
+						<xs:simpleType>
+							<xs:restriction base = "xs:string">
+								<xs:pattern value = "yes|no|\d([, ]*\d)*"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>	
+				</xs:complexType>
+			</xs:element>		
+		</xs:sequence>
+		<xs:attribute name = "questionID" type = "xs:IDREF" use = "required"/>
+	</xs:complexType>
+</xs:schema>
