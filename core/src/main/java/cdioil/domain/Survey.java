@@ -81,6 +81,13 @@ public abstract class Survey implements Serializable {
     }
 
     /**
+     * Access method to id of survey.
+     * @return the id of the survey
+     */
+    public long getID(){
+        return id;
+    }
+    /**
      * Access method to the item list of survey.
      *
      * @return the list with all items regarding the survey
