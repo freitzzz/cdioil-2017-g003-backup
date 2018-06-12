@@ -117,8 +117,10 @@ public class Manager implements DTOable, Serializable, AggregateRoot<SystemUser>
      * @return SystemUser's hash code.
      */
     @Override
-    public int hashCode() {
-        return sysUser.hashCode();
+    public int hashCode() {  
+        int hash = 9;
+        hash = 43 * hash + sysUser.hashCode();
+        return hash;
     }
 
     /**

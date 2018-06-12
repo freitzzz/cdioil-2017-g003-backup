@@ -49,9 +49,18 @@ public class ManagerTest {
     public void hashCodeTest() {
         System.out.println("hashCode");
         Manager g = new Manager(sysUser);
-        int expResult = sysUser.hashCode();
+        Manager otherManager = new Manager(sysUser);
+        int expResult = otherManager.hashCode();
         int result = g.hashCode();
         assertEquals(expResult, result);
+        
+        int sysUserHashCode = sysUser.hashCode();
+        assertNotEquals(sysUserHashCode, result);
+        
+        //This chunk kills code mutations
+        assertNotEquals("".hashCode(), result);
+        int num = 43 * 9 + sysUser.hashCode();
+        assertEquals(num, result);
     }
 
     /**
