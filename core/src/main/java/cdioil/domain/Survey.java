@@ -88,6 +88,11 @@ public abstract class Survey implements Serializable {
         return id;
     }
     /**
+     * Method that returns the survey end date
+     * @return String with the survey end date
+     */
+    public String getSurveyEndDate(){return surveyPeriod.getEndDate();}
+    /**
      * Access method to the item list of survey.
      *
      * @return the list with all items regarding the survey

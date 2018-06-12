@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -196,7 +197,22 @@ public class TimePeriodTest {
         assertNotEquals("The condition should succeed because we are comparing "
                 + "time periods that end in a different hour", instance, instance2);
     }
-
+    /**
+     * Test of getEndDate method, of class TimePeriod
+     */
+    @Test
+    public void testGetEndDate(){
+        System.out.println("getEndDate");
+        LocalDateTime localDateTimeX=LocalDateTime.now();
+        LocalDateTime localDateTimeY=LocalDateTime.MAX;
+        LocalDateTime localDateTimeZ=LocalDateTime.MIN;
+        TimePeriod timePeriodX=new TimePeriod(localDateTimeX,localDateTimeY);
+        TimePeriod timePeriodY=new TimePeriod(localDateTimeZ,localDateTimeX);
+        assertEquals("The condition should be successful since both dates are the same"
+                ,timePeriodX.getEndDate(),localDateTimeY.format(DateTimeFormatter.ISO_DATE_TIME));
+        assertNotEquals("The condition should be successful since both dates are not the same"
+                ,timePeriodX.getEndDate(),timePeriodY.getEndDate());
+    }
     /**
      * Test of toString method, of class TimePeriod.
      */
