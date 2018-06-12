@@ -22,16 +22,18 @@ Purpose of transformation follows.
         ;
         ; <!-- Three semicolons for Excel Spacing -->
         ;
-        Sugestões
-        <xsl:apply-templates select="Suggestions"/>
-        ;
-        ; <!-- Three semicolons for Excel Spacing -->
-        ;
-        Questão;Respostas
+        <xsl:if test="count(Suggestions/Suggestion)">
+            Sugestões
+            <xsl:apply-templates select="Suggestions"/>
+            ;
+            ; <!-- Three semicolons for Excel Spacing -->
+            ;
+        </xsl:if>
+        Questão;ID;Tipo;Respostas
         <xsl:for-each select="Question"> <!-- Iterates through all Survey Question Labels -->
-            <xsl:value-of select="@name"/><!-- Selects the value of the attribute "name" -->
+            <xsl:value-of select="@name"/>;<xsl:value-of select="@id"/>;<xsl:value-of select="@type"/><!-- Selects the value of the attribute "name" -->
             <xsl:for-each select="Answer"> <!-- Iterates all "Answer" nodes -->
-                ;<xsl:value-of select="."/> <!-- Selects the node internal value -->
+                ;;;<xsl:value-of select="."/> <!-- Selects the node internal value -->
             </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
