@@ -2,57 +2,28 @@ package cdioil.application.utils;
 
 import cdioil.domain.Question;
 import cdioil.files.FileWriter;
+import cdioil.xsl.XSLTransformer;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Exports statistics of a survey to a .csv file.
  *
- * @author Rita Gonçalves (1160912)
+ * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
+ * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class CSVSurveyStatsWriter implements SurveyStatsWriter {
 
-    //Constants
-    /**
-     * Splitter of the columns of the file.
-     */
-    private static final String SPLITTER = ";";
-    
-    /**
-     * Field that identifies the question by its ID.
-     */
-    private static final String QUESTION_ID = "Questão (ID)";
-
-    /**
-     * Field that identifies the type of the question.
-     */
-    private static final String QUESTION_TYPE = "Tipo";
-
-    /**
-     * Field that contains the number of answers to the question.
-     */
-    private static final String TOTAL = "Total";
-
-    /**
-     * Field that contains the average of the answers to the question.
-     */
-    private static final String AVG = "Média";
-
-    /**
-     * Field that contains the mean deviation of the answers to the question.
-     */
-    private static final String MEAN_DEVIATION = "Desvio Padrão";
-
-    //Attributes
     /**
      * File to write.
      */
-    private final File file;
+    private String fileName;
 
+    /**
+     * Survey's ID.
+     */
+    private long surveyID;
+    
     /**
      * Average value for answers of binary questions.
      */
@@ -87,6 +58,7 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
      * Creates a new CSVSurveyStatsWriter.
      *
      * @param filename Path of the file
+     * @param surveyID Survey's ID
      * @param binaryTotal Total of answers to binary questions
      * @param quantitativeTotal Total of answers to quantitative questions
      * @param binaryMean Average value for binary answers
@@ -95,9 +67,10 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
      */
-    public CSVSurveyStatsWriter(String filename, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
+    public CSVSurveyStatsWriter(String filename,long surveyID, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
             Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
-        this.file = new File(filename);
+        this.fileName = filename;
+        this.surveyID = surveyID;
         this.binaryTotal = binaryTotal;
         this.quantitativeTotal = quantitativeTotal;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
@@ -109,33 +82,16 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
     /**
      * Writes the statistics in a .csv file.
      *
-     * @return true, if the statistics are successfully exported. Otherwise, returns false
+     * @return true, if the statistics are successfully exported. Otherwise,
+     * returns false
      */
     @Override
     public boolean writeStats() {
-        List<String> fileContent = new ArrayList<>();
-        String header = QUESTION_ID + SPLITTER + QUESTION_TYPE + SPLITTER + TOTAL + SPLITTER + AVG + SPLITTER + MEAN_DEVIATION;
-        fileContent.add(header);
-
-        Set<Entry<Question, Double>> binaryAnswers = binaryMean.entrySet();
-        if (binaryAnswers.isEmpty()) {
-            fileContent.add("Não há questões binárias");
-        }
-        for (Map.Entry<Question, Double> entry : binaryAnswers) {
-            Question q = entry.getKey();
-            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + binaryTotal.get(q) + SPLITTER + binaryMean.get(q) + SPLITTER + binaryMeanDeviation.get(q);
-            fileContent.add(info);
-        }
-        
-        Set<Entry<Question, Double>> quantitativeQuestions = quantitativeMean.entrySet();
-        if (quantitativeQuestions.isEmpty()) {
-            fileContent.add("Não há questões quantitativas");
-        }
-        for (Entry<Question, Double> entry : quantitativeQuestions) {
-            Question q = entry.getKey();
-            String info = q.getQuestionID() + SPLITTER + q.getType() + SPLITTER + quantitativeTotal.get(q) + SPLITTER + quantitativeMean.get(q) + SPLITTER + quantitativeMeanDeviation.get(q);
-            fileContent.add(info);
-        }
-        return FileWriter.writeFile(file, fileContent);
+        XMLSurveyStatsWriter xmlWriter = new XMLSurveyStatsWriter(fileName,surveyID,
+        binaryTotal,quantitativeTotal,quantitativeMeanDeviation,binaryMeanDeviation,
+        quantitativeMean,binaryMean);
+        return FileWriter.writeFile(new File(fileName),XSLTransformer.
+                create(XSLSurveyStatsDocuments.CSV_SURVEY_STATS_XSLT).
+                transform(xmlWriter.getXMLAsString()));
     }
 }
