@@ -88,8 +88,8 @@ public class CSVSurveyStatsWriter implements SurveyStatsWriter {
     @Override
     public boolean writeStats() {
         XMLSurveyStatsWriter xmlWriter = new XMLSurveyStatsWriter(fileName,surveyID,
-        binaryTotal,quantitativeTotal,quantitativeMeanDeviation,binaryMeanDeviation,
-        quantitativeMean,binaryMean);
+        binaryTotal,quantitativeTotal,binaryMean,quantitativeMean,
+        binaryMeanDeviation,quantitativeMeanDeviation);
         return FileWriter.writeFile(new File(fileName),XSLTransformer.
                 create(XSLSurveyStatsDocuments.CSV_SURVEY_STATS_XSLT).
                 transform(xmlWriter.getXMLAsString()));

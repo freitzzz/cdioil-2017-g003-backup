@@ -70,6 +70,7 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
     public JSONSurveyStatsWriter(String filename,long surveyID, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
             Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
         this.fileName = filename;
+        this.surveyID = surveyID;
         this.binaryTotal = binaryTotal;
         this.quantitativeTotal = quantitativeTotal;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
@@ -86,8 +87,8 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
     @Override
     public boolean writeStats() {
         XMLSurveyStatsWriter xmlWriter = new XMLSurveyStatsWriter(fileName,surveyID,
-        binaryTotal,quantitativeTotal,quantitativeMeanDeviation,binaryMeanDeviation,
-        quantitativeMean,binaryMean);
+        binaryTotal,quantitativeTotal,binaryMean,quantitativeMean,
+        binaryMeanDeviation,quantitativeMeanDeviation);
         return FileWriter.writeFile(new File(fileName),XSLTransformer.
                 create(XSLSurveyStatsDocuments.JSON_SURVEY_STATS_XSLT).
                 transform(xmlWriter.getXMLAsString()));

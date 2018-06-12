@@ -161,6 +161,10 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
         this.binaryMean = binaryMean;
     }
 
+    /**
+     * Returns a string with the content of an xml file.
+     * @return string with the content of an xml file with the stats of a survey
+     */
     public String getXMLAsString(){
         try {
             Document doc = DocumentBuilderFactory.newInstance().
@@ -216,6 +220,11 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
         return false;
     }
 
+    /**
+     * Writes information into a Document object
+     * @param doc Document instance
+     * @throws DOMException 
+     */
     private void writeToDocument(Document doc) throws DOMException {
         //Survey element
         Element rootElement = doc.createElement(SURVEY);
