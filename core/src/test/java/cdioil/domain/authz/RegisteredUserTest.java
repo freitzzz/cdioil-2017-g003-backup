@@ -1,9 +1,7 @@
 package cdioil.domain.authz;
 
 import cdioil.framework.dto.SystemUserDTO;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class RegisteredUserTest {
@@ -12,12 +10,30 @@ public class RegisteredUserTest {
     public void criaInstanciaInvalidaDeUserRegistadoTest() {
         new RegisteredUser(null);
     }
+    
+    @Test
+    public void testHashCode(){
+        SystemUser sysUser = new SystemUser(new Email("myPrecious@gmail.com"), 
+                new Name("Gollum", "Smeagol"), new Password("Precious3"));
+        
+        RegisteredUser regUser = new RegisteredUser(sysUser);
+        RegisteredUser otherRegUser = new RegisteredUser(sysUser);
+        
+        int result = regUser.hashCode();
+        int otherResult = otherRegUser.hashCode();
+        
+        assertEquals(result, otherResult);
+        assertNotEquals(result, sysUser.hashCode());
+        
+        //This chunk kills code mutations
+        assertNotEquals("".hashCode(), result);
+        int num = 41 * 5 + sysUser.hashCode();
+        assertEquals(num, result);
+    }
 
     @Test
-    public void equalsHashCodeTest() {
+    public void equalTest() {
         RegisteredUser ur = new RegisteredUser(new SystemUser(new Email("myPrecious@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3")));
-        //test hashCode
-        assertEquals(new Email("myPrecious@gmail.com").hashCode(), ur.hashCode());
         //test same instance
         assertTrue(ur.equals(ur));
         //test with null parameter

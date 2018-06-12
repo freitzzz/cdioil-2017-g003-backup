@@ -219,6 +219,15 @@ public class SurveyTest {
         assertEquals("The condition should be successful since the both survey names are the same",
                 testGlobalSurvey.getName(), new GlobalSurvey(list, timePeriod).getName());
     }
+     /**
+     * Test of method getID, of class Survey.
+     */
+    @Test
+    public void testGetID() {
+        System.out.println("getID");
+        assertEquals("The condition should be successful since the both survey id are the same",
+                testGlobalSurvey.getID(), new GlobalSurvey(list, timePeriod).getID());
+    }
 
     /**
      * Test of method getItemList, of class Survey.

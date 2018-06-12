@@ -26,6 +26,12 @@ public final class QuestionsReaderFactory {
         if (filename.endsWith((CommonFileExtensions.CSV_EXTENSION))) {
             return new CSVQuestionsReader(filename);
         }
+        if(filename.endsWith((CommonFileExtensions.XML_EXTENSION))){
+            return new XMLQuestionsReader(filename);
+        }
+        if(filename.endsWith((CommonFileExtensions.JSON_EXTENSION))){
+            
+        }
         return null;
     }
 

@@ -46,7 +46,7 @@ public class ImportQuestionsController {
      * Import questions related to categories from a file.
      *
      * @param filename Name of the file
-     * @return number of succesfully imported questions
+     * @return number of successfully imported questions
      * @throws cdioil.files.InvalidFileFormattingException if the file's
      * formatting is not consistent with the file guidelines
      */

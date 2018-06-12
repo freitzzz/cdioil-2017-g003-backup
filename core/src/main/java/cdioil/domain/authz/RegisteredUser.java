@@ -3,6 +3,7 @@ package cdioil.domain.authz;
 import cdioil.framework.domain.ddd.AggregateRoot;
 import cdioil.framework.dto.SystemUserDTO;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -100,9 +101,11 @@ public class RegisteredUser implements Serializable, AggregateRoot<SystemUser>, 
      *
      * @return hashcode
      */
-    @Override
+    @Override    
     public int hashCode() {
-        return sysUser.hashCode();
+        int hash = 5;
+        hash = 41 * hash + sysUser.hashCode();
+        return hash;
     }
 
     /**
