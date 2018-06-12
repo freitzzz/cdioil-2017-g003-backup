@@ -228,6 +228,19 @@ public class SurveyTest {
         assertEquals("The condition should be successful since the both survey id are the same",
                 testGlobalSurvey.getID(), new GlobalSurvey(list, timePeriod).getID());
     }
+    /**
+     * Test of method getSurveyEndDate, of class Survey
+     */
+    @Test
+    public void testGetSurveyEndDate(){
+        System.out.println("getSurveyEndDate");
+        TimePeriod timePeriodX=new TimePeriod(LocalDateTime.now(),LocalDateTime.MAX);
+        TimePeriod timePeriodY=new TimePeriod(LocalDateTime.now(),LocalDateTime.MAX);
+        Survey surveyX=new GlobalSurvey(new ArrayList<>(),timePeriodX);
+        Survey surveyY=new GlobalSurvey(new ArrayList<>(),timePeriodY);
+        assertEquals("The condition should be succesful since both surveys have the same end date"
+                ,surveyX.getSurveyEndDate(),surveyY.getSurveyEndDate());
+    }
 
     /**
      * Test of method getItemList, of class Survey.

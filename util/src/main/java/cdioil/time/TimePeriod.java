@@ -2,6 +2,7 @@ package cdioil.time;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.Embeddable;
 
 /**
@@ -55,7 +56,11 @@ public class TimePeriod implements Serializable {
     protected TimePeriod() {
         //For ORM.
     }
-
+    /**
+     * Method that returns the end date of the current time period
+     * @return String with the end date of the current time period
+     */
+    public String getEndDate(){return endDate.format(DateTimeFormatter.ISO_DATE_TIME);}
     /**
      * TimePeriod's hash code.
      *
@@ -87,7 +92,6 @@ public class TimePeriod implements Serializable {
         }
         return this.endDate.equals(other.endDate);
     }
-
     /**
      * Returns the starting date and the ending date
      *
