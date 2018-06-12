@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
 import cdioil.domain.Question;
+import cdioil.files.FileWriter;
+import cdioil.xsl.XSLTransformer;
 import java.io.File;
 import java.util.Map;
 
@@ -18,35 +15,14 @@ import java.util.Map;
 public class JSONSurveyStatsWriter implements SurveyStatsWriter {
 
     /**
-     * Field that identifies the question by its ID.
-     */
-    private static final String QUESTION_ID = "Questão (ID)";
-
-    /**
-     * Field that identifies the type of the question.
-     */
-    private static final String QUESTION_TYPE = "Tipo";
-
-    /**
-     * Field that contains the number of answers to the question.
-     */
-    private static final String TOTAL = "Total";
-
-    /**
-     * Field that contains the average of the answers to the question.
-     */
-    private static final String AVG = "Média";
-
-    /**
-     * Field that contains the mean deviation of the answers to the question.
-     */
-    private static final String MEAN_DEVIATION = "Desvio Padrão";
-    
-    //Attributes
-    /**
      * File to write.
      */
-    private final File file;
+    private final String fileName;
+    
+    /**
+     * Survey's ID.
+     */
+    private long surveyID;
 
     /**
      * Average value for answers of binary questions.
@@ -82,6 +58,7 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
      * Creates a new JSONSurveyStatsWriter.
      *
      * @param filename Path of the file
+     * @param surveyID Survey's ID
      * @param binaryTotal Total of answers to binary questions
      * @param quantitativeTotal Total of answers to quantitative questions
      * @param binaryMean Average value for binary answers
@@ -90,9 +67,10 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
      */
-    public JSONSurveyStatsWriter(String filename, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
+    public JSONSurveyStatsWriter(String filename,long surveyID, Map<Question, Integer> binaryTotal, Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean,
             Map<Question, Double> quantitativeMean, Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
-        this.file = new File(filename);
+        this.fileName = filename;
+        this.surveyID = surveyID;
         this.binaryTotal = binaryTotal;
         this.quantitativeTotal = quantitativeTotal;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
@@ -108,7 +86,12 @@ public class JSONSurveyStatsWriter implements SurveyStatsWriter {
      */
     @Override
     public boolean writeStats() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        XMLSurveyStatsWriter xmlWriter = new XMLSurveyStatsWriter(fileName,surveyID,
+        binaryTotal,quantitativeTotal,binaryMean,quantitativeMean,
+        binaryMeanDeviation,quantitativeMeanDeviation);
+        return FileWriter.writeFile(new File(fileName),XSLTransformer.
+                create(XSLSurveyStatsDocuments.JSON_SURVEY_STATS_XSLT).
+                transform(xmlWriter.getXMLAsString()));
     }
 
 }

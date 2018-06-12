@@ -22,6 +22,9 @@ import org.w3c.dom.Element;
 import java.util.Set;
 import java.util.Map;
 import java.io.File;
+import java.io.StringWriter;
+import javax.xml.transform.OutputKeys;
+import org.w3c.dom.DOMException;
 
 /**
  * Exports statistics of a survey to a .xml file.
@@ -160,6 +163,32 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
     }
 
     /**
+     * Returns a string with the content of an xml file.
+     * @return string with the content of an xml file with the stats of a survey
+     */
+    public String getXMLAsString(){
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().
+                    newDocumentBuilder().newDocument();
+            
+            writeToDocument(doc);
+            
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StringWriter stringWriter = new StringWriter();
+            StreamResult result = new StreamResult(stringWriter);
+            transformer.transform(source, result);
+            return stringWriter.getBuffer().toString();
+        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
+            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
+    /**
      * Writes the statistics into a XML file.
      *
      * @return true, if the statistics are successfully exported. Otherwise, returns false
@@ -171,24 +200,14 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
-            //Survey element
-            Element rootElement = doc.createElement(SURVEY);
-            doc.appendChild(rootElement);
-            //Survey ID field
-            rootElement.setAttribute(SURVEY_ID, String.valueOf(surveyID));
-            //Questions element
-            Element questionsElement = doc.createElement(QUESTIONS_LIST);
-            rootElement.appendChild(questionsElement);
-
-            writeBinaryStatistics(doc, questionsElement);
-
-            writeQuantitativeStatistics(doc, questionsElement);
+            
+            writeToDocument(doc);
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(file);
-
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             try {
                 transformer.transform(source, result);
                 return true;
@@ -200,6 +219,26 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
             Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    /**
+     * Writes information into a Document object
+     * @param doc Document instance
+     * @throws DOMException 
+     */
+    private void writeToDocument(Document doc) throws DOMException {
+        //Survey element
+        Element rootElement = doc.createElement(SURVEY);
+        doc.appendChild(rootElement);
+        //Survey ID field
+        rootElement.setAttribute(SURVEY_ID, String.valueOf(surveyID));
+        //Questions element
+        Element questionsElement = doc.createElement(QUESTIONS_LIST);
+        rootElement.appendChild(questionsElement);
+        
+        writeBinaryStatistics(doc, questionsElement);
+        
+        writeQuantitativeStatistics(doc, questionsElement);
     }
 
     /**
