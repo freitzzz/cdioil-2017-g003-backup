@@ -59,9 +59,9 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Intent mainMenuIntent = new Intent(SubmitSuggestionActivity.this, MainMenuActivity.class);
-            mainMenuIntent.putExtra("authenticationToken", authenticationToken);
-            startActivity(mainMenuIntent);
+//            Intent mainMenuIntent = new Intent(SubmitSuggestionActivity.this, MainMenuActivity.class);
+//            mainMenuIntent.putExtra("authenticationToken", authenticationToken);
+//            startActivity(mainMenuIntent);
             finish();
         });
     }

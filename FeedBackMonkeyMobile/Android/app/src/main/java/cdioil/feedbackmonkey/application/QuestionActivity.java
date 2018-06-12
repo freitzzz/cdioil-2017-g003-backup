@@ -92,11 +92,13 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
                 Intent submitSuggestionIntent = new Intent(QuestionActivity.this, SubmitSuggestionActivity.class);
                 submitSuggestionIntent.putExtra("authenticationToken", authenticationToken);
                 startActivity(submitSuggestionIntent);
+                finish();
             });
             wantToSubmitSuggestionDialog.setNegativeButton("Não", (dialog, which) -> {
-                Intent skipSuggestionIntent = new Intent(QuestionActivity.this, MainMenuActivity.class);
-                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
-                startActivity(skipSuggestionIntent);
+//                Intent skipSuggestionIntent = new Intent(QuestionActivity.this, MainMenuActivity.class);
+//                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
+//                startActivity(skipSuggestionIntent);
+                finish();
             });
             final AlertDialog alertDialog = wantToSubmitSuggestionDialog.create();
             alertDialog.setOnShowListener(dialog -> {
@@ -129,9 +131,9 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         try {
             boolean canUndo = ReviewXMLService.instance().undoAnswer();
 
-            if(canUndo){
+            if (canUndo) {
                 loadQuestionInfo();
-            }else{
+            } else {
                 super.onBackPressed();
             }
 
