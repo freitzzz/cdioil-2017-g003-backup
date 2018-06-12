@@ -92,11 +92,6 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
      */
     private static final String SURVEY_ID = "surveyID";
     
-    /**
-     * Field that identifies the survey by its title.
-     */
-    private static final String SURVEY_NAME = "SurveyTitle";
-    
     //Attributes
     /**
      * File to write.
@@ -222,7 +217,6 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
             
             for (Map.Entry<Question, Double> entry : binaryAnswers) {
                 Question q = entry.getKey();
-                String type = q.getType().toString();
                 Element binaryQuestionElement = doc.createElement(BINARY_QUESTION_TYPE);
 
                 binaryQuestionsElement.appendChild(binaryQuestionElement);
@@ -249,13 +243,12 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
 
             for (Map.Entry<Question, Double> entry : quantitativeAnswers) {
                 Question q = entry.getKey();
-                String type = q.getType().toString();
                 Element quantitativeQuestionElement = doc.createElement(QUANTITATIVE_QUESTION_TYPE);
 
                 quantitativeQuestionsElement.appendChild(quantitativeQuestionElement);
                 quantitativeQuestionElement.setAttribute(QUESTION_ID, q.getQuestionID());
 
-                writeQuestionStatistics(doc, quantitativeQuestionsElement, q, quantitativeTotal, quantitativeMean, quantitativeMeanDeviation);
+                writeQuestionStatistics(doc, quantitativeQuestionElement, q, quantitativeTotal, quantitativeMean, quantitativeMeanDeviation);
                 quantitativeQuestionsElement.appendChild(quantitativeQuestionElement);
             }
         }
