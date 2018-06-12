@@ -43,7 +43,7 @@ public final class SurveyStatsWriterFactory {
                     totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         }
         if (filename.endsWith(CommonFileExtensions.JSON_EXTENSION)) {
-            return new JSONSurveyStatsWriter(filename, totalBinary,
+            return new JSONSurveyStatsWriter(filename, surveyID, totalBinary,
                     totalQuantitative, binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation);
         }
         return null;
