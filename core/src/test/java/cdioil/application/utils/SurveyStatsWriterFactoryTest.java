@@ -21,7 +21,6 @@ public class SurveyStatsWriterFactoryTest {
         System.out.println("create CSV file");
         String filename = "test_passes.csv";
         long id = (long) 23.4;
-        String title = "Test Passes";
         Map<Question, Integer> totalBinary = new HashMap<>();
         Map<Question, Integer> totalQuantitative = new HashMap<>();
         Map<Question, Double> binaryMean = new HashMap<>();
@@ -29,7 +28,7 @@ public class SurveyStatsWriterFactoryTest {
         Map<Question, Double> binaryMeanDeviation = new HashMap<>();
         Map<Question, Double> quantitativeMeanDeviation = new HashMap<>();
         assertEquals(CSVSurveyStatsWriter.class,
-                SurveyStatsWriterFactory.create(filename, id, title, totalBinary, totalQuantitative,
+                SurveyStatsWriterFactory.create(filename, id, totalBinary, totalQuantitative,
                         binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation).getClass());
     }
 
@@ -41,14 +40,13 @@ public class SurveyStatsWriterFactoryTest {
         System.out.println("create invalid file");
         String filename = "test_fails.failure";
         long id = (long) 23.4;
-        String title = "Test Passes";
         Map<Question, Integer> totalBinary = new HashMap<>();
         Map<Question, Integer> totalQuantitative = new HashMap<>();
         Map<Question, Double> binaryMean = new HashMap<>();
         Map<Question, Double> quantitativeMean = new HashMap<>();
         Map<Question, Double> binaryMeanDeviation = new HashMap<>();
         Map<Question, Double> quantitativeMeanDeviation = new HashMap<>();
-        assertNull(SurveyStatsWriterFactory.create(filename, id, title, totalBinary, totalQuantitative,
+        assertNull(SurveyStatsWriterFactory.create(filename, id, totalBinary, totalQuantitative,
                 binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation));
     }
     
@@ -60,7 +58,6 @@ public class SurveyStatsWriterFactoryTest {
         System.out.println("create XML file");
         String filename = "test_passes.xml";
         long id = (long) 23.4;
-        String title = "Test Passes";
         Map<Question, Integer> totalBinary = new HashMap<>();
         Map<Question, Integer> totalQuantitative = new HashMap<>();
         Map<Question, Double> binaryMean = new HashMap<>();
@@ -68,7 +65,7 @@ public class SurveyStatsWriterFactoryTest {
         Map<Question, Double> binaryMeanDeviation = new HashMap<>();
         Map<Question, Double> quantitativeMeanDeviation = new HashMap<>();
         assertEquals(XMLSurveyStatsWriter.class,
-                SurveyStatsWriterFactory.create(filename, id, title, totalBinary, totalQuantitative,
+                SurveyStatsWriterFactory.create(filename, id, totalBinary, totalQuantitative,
                         binaryMean, quantitativeMean, binaryMeanDeviation, quantitativeMeanDeviation).getClass());
     }
 }

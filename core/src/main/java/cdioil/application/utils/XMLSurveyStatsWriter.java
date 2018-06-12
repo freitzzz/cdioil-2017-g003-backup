@@ -109,11 +109,6 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
     private final long surveyID;
 
     /**
-     * Name of the survey.
-     */
-    private final String surveyName;
-
-    /**
      * Average value for answers of binary questions.
      */
     private final Map<Question, Double> binaryMean;
@@ -148,7 +143,6 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
      *
      * @param filename Path of the file
      * @param surveyID ID of the survey
-     * @param surveyName Name of the survey
      * @param binaryTotal Total of answers to binary questions
      * @param quantitativeTotal Total of answers to quantitative questions
      * @param binaryMean Average value for binary answers
@@ -157,12 +151,11 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
      * @param quantitativeMeanDeviation Mean deviation for quantitative answers
      *
      */
-    public XMLSurveyStatsWriter(String filename, long surveyID, String surveyName, Map<Question, Integer> binaryTotal,
+    public XMLSurveyStatsWriter(String filename, long surveyID, Map<Question, Integer> binaryTotal,
             Map<Question, Integer> quantitativeTotal, Map<Question, Double> binaryMean, Map<Question, Double> quantitativeMean,
             Map<Question, Double> binaryMeanDeviation, Map<Question, Double> quantitativeMeanDeviation) {
         this.file = new File(filename);
         this.surveyID = surveyID;
-        this.surveyName = surveyName;
         this.binaryTotal = binaryTotal;
         this.quantitativeTotal = quantitativeTotal;
         this.quantitativeMeanDeviation = quantitativeMeanDeviation;
@@ -188,10 +181,6 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
             doc.appendChild(rootElement);
             //Survey ID field
             rootElement.setAttribute(SURVEY_ID, String.valueOf(surveyID));
-            //Survey title field
-            Element surveyNameElement = doc.createElement(SURVEY_NAME);
-            surveyNameElement.appendChild(doc.createTextNode(surveyName));
-            rootElement.appendChild(surveyNameElement);
             //Questions element
             Element questionsElement = doc.createElement(QUESTIONS_LIST);
             rootElement.appendChild(questionsElement);
@@ -230,12 +219,15 @@ public class XMLSurveyStatsWriter implements SurveyStatsWriter {
         if (!binaryAnswers.isEmpty()) {
             Element binaryQuestionsElement = doc.createElement(BINARY_QUESTIONS_LIST);
             questionsElement.appendChild(binaryQuestionsElement);
+            
             for (Map.Entry<Question, Double> entry : binaryAnswers) {
                 Question q = entry.getKey();
                 String type = q.getType().toString();
-                Element binaryQuestionElement;
-                binaryQuestionElement = doc.createElement(BINARY_QUESTION_TYPE);
+                Element binaryQuestionElement = doc.createElement(BINARY_QUESTION_TYPE);
 
+                binaryQuestionsElement.appendChild(binaryQuestionElement);
+                binaryQuestionElement.setAttribute(QUESTION_ID, q.getQuestionID());
+                
                 writeQuestionStatistics(doc, binaryQuestionElement, q, binaryTotal, binaryMean, binaryMeanDeviation);
                 binaryQuestionsElement.appendChild(binaryQuestionElement);
             }
