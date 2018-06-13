@@ -209,7 +209,7 @@ public class TimePeriodTest {
         TimePeriod timePeriodX=new TimePeriod(localDateTimeX,localDateTimeY);
         TimePeriod timePeriodY=new TimePeriod(localDateTimeZ,localDateTimeX);
         assertEquals("The condition should be successful since both dates are the same"
-                ,timePeriodX.getEndDate(),localDateTimeY.format(DateTimeFormatter.ofPattern("YYYY-MM-DD HH:MM:SS")));
+                ,timePeriodX.getEndDate(),localDateTimeY.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         assertNotEquals("The condition should be successful since both dates are not the same"
                 ,timePeriodX.getEndDate(),timePeriodY.getEndDate());
     }

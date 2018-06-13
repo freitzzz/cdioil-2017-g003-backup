@@ -15,7 +15,7 @@ public class TimePeriod implements Serializable {
     /**
      * Constant that represents the format of the parser used to format the local date times
      */
-    private static final String LOCAL_DATE_TIME_PARSER_FORMAT="YYYY-MM-DD HH:MM:SS";
+    private static final String LOCAL_DATE_TIME_PARSER_FORMAT="yyyy-MM-dd HH:mm:ss";
     private static final long serialVersionUID = 1L;
 
     /**
