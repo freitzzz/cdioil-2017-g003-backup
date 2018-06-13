@@ -7,9 +7,9 @@ package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.ImportProductsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.console.Console;
 import cdioil.domain.Product;
-import cdioil.files.InvalidFileFormattingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,48 +26,54 @@ public class ImportProductsUI {
      * Single instance of <code>BackOfficeLocalizationHandler</code>.
      */
     private final BackOfficeLocalizationHandler localizationHandler = BackOfficeLocalizationHandler.getInstance();
+
     /**
      * Represents the exit code for the User Interface.
      */
     private final String optionExit = localizationHandler.getMessageValue("option_exit");
+
     /**
-     * Represents the code for the option "yes".
+     * Represents the code for the option 'yes'.
      */
-    private final String optionYes = localizationHandler.getMessageValue("option_yes");
+    private final String yesOption = localizationHandler.getMessageValue("option_yes");
+
     /**
      * Represents a message that indicates the user to insert the path of the file to import.
      */
     private final String requestFilePath = localizationHandler.getMessageValue("request_file_path");
+
     /**
-     * Represents a message that indicates the user to insert the path of the file to export.
-     */
-    private final String requestExportFilePath = localizationHandler.getMessageValue("request_file_path_export");
-    /**
-     * Represents a message that informs the user that the inserted filepath was not found.
+     * Represents a message that informs the user that the input file was not found.
      */
     private final String errorFileNotFound = localizationHandler.getMessageValue("error_file_not_found");
+
     /**
-     * Represents a message that delimitates the imported products.
+     * Represents a message that indicates the number of imported products.
      */
     private final String infoNumProductsImported = localizationHandler.getMessageValue("info_num_products_imported");
+
     /**
-     * Represents a message that asks the user if a product needs to be updated.
+     * Represents a message that requests the user to indicate if a certain product needs to be updated.
      */
-    private final String infoUpdateProduct = localizationHandler.getMessageValue("info_atualization_products");
+    private final String infoUpdateProduct = localizationHandler.getMessageValue("info_update_products");
+
     /**
      * Represents a message that indicates the user to enter the exit code in order to exit.
      */
     private final String infoExitInput = localizationHandler.getMessageValue("info_exit_input");
+
     /**
-     * Represents a message that indicate the invalid file format.
+     * Represents a message that indicates the user that the file format is not valid.
      */
     private final String errorInvalidFileFormat = localizationHandler.getMessageValue("error_invalid_file_format");
+
     /**
-     * Represents a message that indicate that no imported products
+     * Represents a message that indicates the user that no products were imported.
      */
     private final String errorNoImportedProducts = localizationHandler.getMessageValue("error_no_imported_products");
+
     /**
-     * Instance of Controller that intermediates the interactions between the admin and the system.
+     * Instance of Controller that intermediates the interactions between the administrator and the system.
      */
     private final ImportProductsController controller;
 
@@ -80,35 +86,30 @@ public class ImportProductsUI {
     }
 
     /**
-     * Method for showing the UI itself.
+     * Shows the UI itself.
      */
     private void importProducts() {
 
-        String fileRead = Console.readLine(requestFilePath + "\n" + infoExitInput);
-        if (fileRead.equalsIgnoreCase(optionExit)) {
+        String filePath = Console.readLine(requestFilePath + "\n" + infoExitInput);
+        if (filePath.equalsIgnoreCase(optionExit)) {
             return;
         }
-        String fileExport = Console.readLine(requestExportFilePath + "\n" + infoExitInput);
-
-        if (fileExport.equalsIgnoreCase(optionExit)) {
-            return;
-        }
-        Map<String, List<Product>> existsProducts = new HashMap<>();
-        Map<String, Product> atualizationProducts = new HashMap<>();
 
         try {
-            Integer numImportedProducts = controller.importProducts(fileRead, fileExport, existsProducts);
-            if (!existsProducts.isEmpty()) {
-                Set<Map.Entry<String, List<Product>>> entries = existsProducts.entrySet();
+            Map<String, List<Product>> repeatedProducts = new HashMap<>();
+            Integer numImportedProducts = controller.importProducts(filePath, repeatedProducts);
+
+            if (!repeatedProducts.isEmpty()) {
+                Set<Map.Entry<String, List<Product>>> entries = repeatedProducts.entrySet();
                 for (Map.Entry<String, List<Product>> mapEntry : entries) {
                     String path = mapEntry.getKey();
                     List<Product> productList = mapEntry.getValue();
                     for (Product pro : productList) {
                         String op = Console.readLine(infoUpdateProduct + "\n" + pro.toString());
-                        if (op.equalsIgnoreCase(optionYes)) {
-                            atualizationProducts.put(path, pro);
-                            numImportedProducts += controller.updateProducts(atualizationProducts);
-
+                        if (op.trim().equalsIgnoreCase(yesOption)) {
+                            if (controller.updateProduct(path, pro)) {
+                                numImportedProducts++;
+                            }
                         }
                     }
                 }
@@ -118,9 +119,8 @@ public class ImportProductsUI {
             } else if (numImportedProducts == 0) {
                 System.out.println(errorNoImportedProducts);
             } else if (numImportedProducts > 0) {
-                System.out.println(infoNumProductsImported + " " + numImportedProducts);
+                System.out.println(infoNumProductsImported + numImportedProducts);
             }
-
         } catch (InvalidFileFormattingException e) {
             System.out.println(errorInvalidFileFormat);
         }
