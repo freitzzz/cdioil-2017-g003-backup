@@ -3,22 +3,22 @@
 	<xs:element name = "Template">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name = "Questions">
-					<xs:complexType>
-						<xs:choice minOccurs = "1" maxOccurs = "unbounded">
-							<xs:element name = "BinaryQuestion" type = "TBinaryQuestion"/>
-							<xs:element name = "QuantitativeQuestion" type = "TQuantitativeQuestion"/>
-							<xs:element name = "MultipleChoiceQuestion" type = "TMultipleChoiceQuestion"/>
-						</xs:choice>
-					</xs:complexType>
-				</xs:element>
-
+				<xs:element name = "Questions" type = "TQuestions"/>
 				<xs:element name = "SurveyItems" type = "TSurveyItems"/>
 				<xs:element name = "QuestionScript" type = "TScript" minOccurs = "0" maxOccurs = "1" />
 			</xs:sequence>
 			<xs:attribute name = "name" type = "xs:string" use = "required"/>
 		</xs:complexType>
 	</xs:element>
+
+	<xs:complexType name = "TQuestions">
+		<xs:choice minOccurs = "1" maxOccurs = "unbounded">
+			<xs:element name = "BinaryQuestion" type = "TBinaryQuestion"/>
+			<xs:element name = "QuantitativeQuestion" type = "TQuantitativeQuestion"/>
+			<xs:element name = "MultipleChoiceQuestion" type = "TMultipleChoiceQuestion"/>
+		</xs:choice>
+	</xs:complexType>
+
 
 	<!--Since the question ID attribute can also represent the database ID, 
 	all of the question's sub-elements should be optional-->
@@ -30,7 +30,6 @@
 	</xs:complexType>
 
 	<xs:complexType name = "TQuantitativeQuestion">
-		<!--VALIDATE SCALE VALUES-->
 		<xs:sequence minOccurs = "0" maxOccurs = "1">
 			<xs:element name = "Text" type = "xs:string"/>
 			<xs:element name = "scaleMinValue" type = "xs:double"/>
@@ -42,7 +41,6 @@
 	<xs:complexType name = "TMultipleChoiceQuestion">
 		<xs:sequence minOccurs = "0" maxOccurs = "1">
 			<xs:element name = "Text" type = "xs:string"/>
-			<!--VALIDATE NUMBERS OUT OF RANGE AND ORDER-->
 			<xs:element name = "Option" minOccurs = "1" maxOccurs = "unbounded">
 				<xs:complexType>
 					<xs:attribute name = "num" type = "xs:unsignedInt"/>

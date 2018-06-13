@@ -4,7 +4,7 @@ import cdioil.files.FilesUtils;
 import cdioil.langs.Language;
 import cdioil.langs.LocalizationParserXML;
 import cdioil.langs.LocalizationSchemaFiles;
-import cdioil.langs.LocalizationValidatorXML;
+import cdioil.files.ValidatorXML;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -96,7 +96,7 @@ public class BackOfficeLocalizationHandler {
 
             if (xmlFile != null) {
 
-                boolean isValid = LocalizationValidatorXML.validateFile(SCHEMA_FILE, xmlFile);
+                boolean isValid = ValidatorXML.validateFile(SCHEMA_FILE, xmlFile);
 
                 if (isValid) {
 

@@ -128,7 +128,7 @@ public class XMLTemplateWriter implements TemplateWriter {
      * @param rootElement Root element
      */
     private void writeTemplate(Document doc, Element rootElement) {
-        for (Question question : template.getQuestionGroup().getQuestions()) {
+        for (Question question : template.getQuestions()) {
             Element questionElement = doc.createElement(QUESTION_LABEL);
             rootElement.appendChild(questionElement);
 
