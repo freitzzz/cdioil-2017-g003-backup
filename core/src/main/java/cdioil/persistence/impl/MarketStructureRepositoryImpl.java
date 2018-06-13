@@ -21,26 +21,15 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
 
-    /**
-     * Method that finds all categories with a certain identifier pattern
-     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
-     *
-     * @param identifierPattern String with the identifier pattern to search
-     * @return List with all categories found, or null if an error occured
-     */
+    //TODO: fix this method since it is completely redundant
+    @Override
     public List<Category> findCategoriesByIdentifierPattern(String identifierPattern) {
         Query queryRegexed = getCategoriesQueryByPathPattern(identifierPattern);
         queryRegexed.setParameter(1,identifierPattern);
         return (List<Category>) queryRegexed.getResultList();
     }
-
-    /**
-     * Method that finds all categories with a certain path pattern
-     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
-     *
-     * @param pathPattern String with the path pattern to search
-     * @return List with all categories found, or null if an error occured
-     */
+    
+    @Override
     public List<Category> findCategoriesByPathPattern(String pathPattern) {
         Query queryRegexed = getCategoriesQueryByPathPattern(pathPattern);
         if ((List<Category>) queryRegexed.getResultList() == null) {
@@ -49,24 +38,14 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         return (List<Category>) queryRegexed.getResultList();
     }
 
-    /**
-     * Returns the market structure persisted in the database.
-     *
-     * @return market structure
-     */
+    @Override
     public MarketStructure findMarketStructure() {
         Query query = entityManager().createQuery("SELECT e FROM " + MarketStructure.class.getSimpleName() + " e");
         List<MarketStructure> list = query.getResultList();
         return !list.isEmpty() ? list.get(0) : null;
     }
 
-    /**
-     * Method that finds products by name
-     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
-     *
-     * @param productName String with the name of the Product
-     * @return List of all products found, or null if there was any error
-     */
+    @Override
     public List<Product> findProductByName(String productName) {
         EntityManager em = entityManager();
         Query query = em.createQuery("SELECT P from Product p where p.name regexp ?1");
@@ -74,13 +53,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         return (List<Product>) query.getResultList() != null ? query.getResultList() : null;
     }
 
-     /**
-     * Method that verifies if a product exists by its name
-     * <br>Uses Native Queries since JPQL doesn't allow the use of regex functions in queries
-     *
-     * @param product String with the name of the Product
-     * @return true is the product exists, or false if not
-     */
+    @Override
     public boolean findIfProductExist(String product) {
         List<Product> products=findProductByName(product);
         return products!=null && !products.isEmpty();
@@ -93,5 +66,13 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
     private Query getCategoriesQueryByPathPattern(String pattern){
         return entityManager().createQuery("SELECT C FROM Category C WHERE C.categoryPath regexp ?1")
                 .setParameter(1,pattern);
+    }
+    
+    @Override
+    public Category findCategoryByPath(String path) {
+        Query q = entityManager().createQuery("SELECT c FROM Category c WHERE c.categoryPath = :p_path");
+        q.setParameter("p_path", path);
+
+        return (Category) q.getSingleResult();
     }
 }
