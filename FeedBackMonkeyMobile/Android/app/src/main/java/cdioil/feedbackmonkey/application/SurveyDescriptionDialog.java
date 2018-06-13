@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.application.services.SurveyService;
 
 /**
  * SurveyDescriptionDialog class that represents the dialog used to show the description
@@ -41,6 +42,6 @@ public final class SurveyDescriptionDialog extends Dialog {
         ((TextView)findViewById(R.id.survey_end_date_survey_dialog_content)).setText(currentSurveyService.getSurveyEndDate());
         ((TextView)findViewById(R.id.survey_average_time_survey_dialog_content)).setText(currentSurveyService.getSurveyAverageTime());
         ListView surveyDialogItems=findViewById(R.id.survey_items_list_view_survey_dialog);
-        surveyDialogItems.setAdapter(new ArrayAdapter<>(surveyDialogItems.getContext(),R.layout.survey_dialog,currentSurveyService.getSurveyItems()));
+        surveyDialogItems.setAdapter(new ArrayAdapter<>(surveyDialogItems.getContext(),R.layout.survey_dialog_info,currentSurveyService.getSurveyItems()));
     }
 }
