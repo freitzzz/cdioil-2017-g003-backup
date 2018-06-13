@@ -6,8 +6,9 @@
 package cdioil.application.utils;
 
 import cdioil.domain.Category;
+import cdioil.domain.Code;
+import cdioil.domain.EAN;
 import cdioil.domain.Product;
-import cdioil.domain.SKU;
 import cdioil.files.FileWriter;
 import cdioil.files.InputSchemaFiles;
 import cdioil.files.ValidatorXML;
@@ -134,6 +135,11 @@ public class XMLProductsReader implements ProductsReader {
      */
     private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH);
 
+    private static final String CATEGORY_PATH_ELEMENT = "ID";
+    private static final String PRODUCT_CODE_ELEMENT = "COD";
+    private static final String PRODUCT_NAME_ELEMENT = "descritivo";
+    private static final String PRODUCT_BRAND_ELEMENT = "marca";
+
     /**
      * Builds an instance of XMLProductsReader, receiving the path of the file to read.
      *
@@ -171,16 +177,15 @@ public class XMLProductsReader implements ProductsReader {
                     Node product = products.item(i);
                     if (product.getNodeType() == Node.ELEMENT_NODE) {
                         Element productElement = (Element) product;
-                        String categoryPath = recreateProductPath(productElement.getElementsByTagName("ClasseID").item(0).getTextContent());
+                        String categoryPath = recreateProductPath(productElement.getElementsByTagName(CATEGORY_PATH_ELEMENT).item(0).getTextContent());
 
                         if (isProductPathValid(categoryPath)) {
-                            SKU sku = new SKU(productElement.getElementsByTagName("ProdutoID").item(0).getTextContent());
-                            String name = productElement.getElementsByTagName("Designacao").item(0).getTextContent();
-                            String quantity = productElement.getElementsByTagName("Quantidade").item(0).getTextContent()
-                                    + productElement.getElementsByTagName("Unidade").item(0).getTextContent();
+                            Code code = new EAN(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                            String name = productElement.getElementsByTagName(PRODUCT_NAME_ELEMENT).item(0).getTextContent();
+                            String brand = productElement.getElementsByTagName(PRODUCT_BRAND_ELEMENT).item(0).getTextContent();
+                            Product p = new Product(name, brand, code);
 
                             Category category = getCategoryByPath(categoryPath);
-                            Product p = new Product(name, sku, quantity);
                             if (category != null) {
                                 addProductToMap(category, p);
                             } else {
@@ -216,16 +221,16 @@ public class XMLProductsReader implements ProductsReader {
         int un = Integer.parseInt(unString);
         actualPath.append(PATH_SPLITTER).append(un).append(UN_IDENTIFIER);
 
-        String catString = Character.toString(path.charAt(4)) + Character.toString(path.charAt(5))
-                + Character.toString(path.charAt(6)) + Character.toString(path.charAt(7));
+        String catString = Character.toString(path.charAt(2)) + Character.toString(path.charAt(3))
+                + Character.toString(path.charAt(4)) + Character.toString(path.charAt(5));
         int cat = Integer.parseInt(catString);
         actualPath.append(PATH_SPLITTER).append(cat).append(CAT_IDENTIFIER);
 
-        String scatString = Character.toString(path.charAt(8)) + Character.toString(path.charAt(9));
+        String scatString = Character.toString(path.charAt(6)) + Character.toString(path.charAt(7));
         int scat = Integer.parseInt(scatString);
         actualPath.append(PATH_SPLITTER).append(scat).append(SCAT_IDENTIFIER);
 
-        String ubString = Character.toString(path.charAt(10)) + Character.toString(path.charAt(11));
+        String ubString = Character.toString(path.charAt(8)) + Character.toString(path.charAt(9));
         int ub = Integer.parseInt(ubString);
         actualPath.append(PATH_SPLITTER).append(ub).append(UB_IDENTIFIER);
         return actualPath.toString();
@@ -240,6 +245,11 @@ public class XMLProductsReader implements ProductsReader {
         return ValidatorXML.validateFile(SCHEMA_FILE, file);
     }
 
+    /**
+     * Gets a category from the repository given its path.
+     * @param path
+     * @return 
+     */
     private Category getCategoryByPath(String path) {
         List<Category> categories = new MarketStructureRepositoryImpl().findCategoriesByPathPattern(path);
         if (categories != null && categories.size() == 1 && categories.get(0).categoryPath().equalsIgnoreCase(path)) {
@@ -248,6 +258,11 @@ public class XMLProductsReader implements ProductsReader {
         return null;
     }
 
+    /**
+     * Adds a new product with a certain category to the map that holds all products from the file.
+     * @param category Product's category (key)
+     * @param product Product to add (value)
+     */
     private void addProductToMap(Category category, Product product) {
         if (product != null) {
             List<Product> products = new LinkedList<>();

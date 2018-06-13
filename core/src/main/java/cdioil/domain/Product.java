@@ -20,25 +20,22 @@ import javax.persistence.OneToOne;
 @Entity
 public class Product extends SurveyItem implements AggregateRoot<SKU> {
 
+    private static final long serialVersionUID = 1L;
     /**
      * Constant representing the default content of a Product's image.
      */
     private static final String IMAGEM_PRODUTO_DEFAULT = "Produto sem Imagem";
-    private static final long serialVersionUID = 1L;
-
     /**
      * Product's name.
      */
     @Column(name = "NOME")
     private String name;
-
     /**
      * Product's Stock Keeping Unit.
      */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private SKU sku;
-
     /**
      * List of the Product's Codes.
      */
@@ -53,6 +50,11 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
      * The Product's image.
      */
     private Image productImage;
+    /**
+     * The brand of the product.
+     */
+    @Column(name = "MARCA")
+    private String brand;
 
     /**
      * Empty Constructor for JPA.
@@ -61,7 +63,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     }
 
     /**
-     * Instantiates a new Product with a given name and 1 or more codes.
+     * Instantiates a new Product with a given name, its SKU and quantity, and 0 or more codes.
      *
      *
      * @param name the product's name
@@ -84,6 +86,21 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
         this.quantity = quantity;
 
         this.productImage = new Image(IMAGEM_PRODUTO_DEFAULT.getBytes());
+    }
+
+    /**
+     * Instantiates a new Product with a given name and brand, and 0 or more codes.
+     * @param name Product's name
+     * @param brand Product's brand
+     * @param codes 0 or more codes
+     */
+    public Product(String name, String brand, Code... codes) {
+        if (name == null || brand == null || name.trim().isEmpty() || brand.trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid parameters.");
+        }
+        this.name = name;
+        this.brand = brand;
+        this.codes.addAll(Arrays.asList(codes));
     }
 
     /**
@@ -121,7 +138,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     public String toString() {
 
         StringBuilder result = new StringBuilder(128);
-        
+
         result.append("Nome: ");
         result.append(name);
         result.append("\n");
@@ -130,8 +147,8 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
         result.append("\n");
         result.append("Códigos:\n");
 
-        codes.forEach(c -> 
-            result.append(c.toString())
+        codes.forEach(c
+                -> result.append(c.toString())
         );
         return result.toString();
     }

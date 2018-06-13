@@ -11,11 +11,10 @@ import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
 import cdioil.domain.Product;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Controller for use case US-203 (import products from CSV, JSON or XML file).
@@ -36,7 +35,7 @@ public class ImportProductsController {
      */
     public Integer importProducts(String filePath, Map<Category, List<Product>> repeatedProducts) {
         ProductsReader productsReader = ProductsReaderFactory.create(filePath, repeatedProducts);
-        Set<Product> successfullyImportedProducts = new HashSet<>();
+        List<Product> successfullyImportedProducts = new LinkedList<>();
 
         MarketStructure marketStructure = new MarketStructureRepositoryImpl().findMarketStructure();
 
