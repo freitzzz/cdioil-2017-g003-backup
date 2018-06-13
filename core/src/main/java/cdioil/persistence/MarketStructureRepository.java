@@ -57,7 +57,7 @@ public interface MarketStructureRepository {
      * @param product String with the name of the Product
      * @return true is the product exists, or false if not
      */
-    public boolean findIfProductExist(String product);
+    public boolean findIfProductExists(String product);
 
     /**
      * Retrieves a single Category with a fully matching pattern.

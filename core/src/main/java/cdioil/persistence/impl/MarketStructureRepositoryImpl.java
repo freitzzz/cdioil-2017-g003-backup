@@ -54,7 +54,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
     }
 
     @Override
-    public boolean findIfProductExist(String product) {
+    public boolean findIfProductExists(String product) {
         List<Product> products=findProductByName(product);
         return products!=null && !products.isEmpty();
     }
