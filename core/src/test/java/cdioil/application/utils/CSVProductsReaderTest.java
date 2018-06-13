@@ -5,6 +5,7 @@
  */
 package cdioil.application.utils;
 
+import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.files.InvalidFileFormattingException;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class CSVProductsReaderTest {
     @Test(expected = InvalidFileFormattingException.class)
     public void ensureIsProductsFileValidThrowsException() {
 
-        Map<String, List<Product>> map = new HashMap<>();
+        Map<Category, List<Product>> map = new HashMap<>();
         CSVProductsReader reader
                 = new CSVProductsReader("Invalid_Products.csv", map);
 

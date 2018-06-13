@@ -9,10 +9,12 @@ import cdioil.backoffice.application.ImportProductsController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.console.Console;
+import cdioil.domain.Category;
 import cdioil.domain.Product;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -96,18 +98,17 @@ public class ImportProductsUI {
         }
 
         try {
-            Map<String, List<Product>> repeatedProducts = new HashMap<>();
+            Map<Category, List<Product>> repeatedProducts = new HashMap<>();
             Integer numImportedProducts = controller.importProducts(filePath, repeatedProducts);
 
             if (!repeatedProducts.isEmpty()) {
-                Set<Map.Entry<String, List<Product>>> entries = repeatedProducts.entrySet();
-                for (Map.Entry<String, List<Product>> mapEntry : entries) {
-                    String path = mapEntry.getKey();
+                Set<Entry<Category, List<Product>>> entries = repeatedProducts.entrySet();
+                for (Entry<Category, List<Product>> mapEntry : entries) {
                     List<Product> productList = mapEntry.getValue();
                     for (Product pro : productList) {
-                        String op = Console.readLine(infoUpdateProduct + "\n" + pro.toString());
+                        String op = Console.readLine(infoUpdateProduct + "\n" + pro.productName());
                         if (op.trim().equalsIgnoreCase(yesOption)) {
-                            if (controller.updateProduct(path, pro)) {
+                            if (controller.updateProduct(mapEntry.getKey(), pro)) {
                                 numImportedProducts++;
                             }
                         }

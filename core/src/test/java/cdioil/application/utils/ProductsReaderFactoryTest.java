@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import cdioil.domain.Category;
 import cdioil.domain.Product;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ProductsReaderFactoryTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        Map<String, List<Product>> existsProducts = new HashMap<>();
+        Map<Category, List<Product>> existsProducts = new HashMap<>();
         assertEquals(CSVProductsReader.class,
                 ProductsReaderFactory.create("test_pass.csv", existsProducts).getClass());
         assertNull(ProductsReaderFactory.create("test_will_fail.failure", existsProducts));

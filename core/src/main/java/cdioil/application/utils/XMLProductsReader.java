@@ -127,7 +127,7 @@ public class XMLProductsReader implements ProductsReader {
     /**
      * Map that will hold all already existent products for the user to decide if they need to be updated or not.
      */
-    private final Map<Category, List<Product>> existentProducts;
+    private final Map<Category, List<Product>> repeatedProducts;
 
     /**
      * Schema file (XSD) used for validating the input file.
@@ -138,12 +138,13 @@ public class XMLProductsReader implements ProductsReader {
      * Builds an instance of XMLProductsReader, receiving the path of the file to read.
      *
      * @param filePath Path of the file
+     * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated or not
      */
-    public XMLProductsReader(String filePath) {
+    public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts) {
         this.file = new File(filePath);
         this.logFile = new File(LOG_FILENAME);
         this.productsReadFromFile = new HashMap<>();
-        this.existentProducts = new HashMap<>();
+        this.repeatedProducts = repeatedProducts;
     }
 
     /**
@@ -259,11 +260,11 @@ public class XMLProductsReader implements ProductsReader {
                     productsReadFromFile.get(category).add(product);
                 }
             } else { // Non existent products
-                if (existentProducts.containsKey(category)) {
-                    existentProducts.get(category).add(product);
+                if (repeatedProducts.containsKey(category)) {
+                    repeatedProducts.get(category).add(product);
                 } else {
                     products.add(product);
-                    existentProducts.put(category, products);
+                    repeatedProducts.put(category, products);
                 }
             }
         }

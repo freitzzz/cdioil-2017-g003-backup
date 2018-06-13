@@ -34,7 +34,7 @@ public class ImportProductsController {
      *
      * @throws cdioil.files.InvalidFileFormattingException if the file's formatting is not consistent with the file guidelines
      */
-    public Integer importProducts(String filePath, Map<String, List<Product>> repeatedProducts) {
+    public Integer importProducts(String filePath, Map<Category, List<Product>> repeatedProducts) {
         ProductsReader productsReader = ProductsReaderFactory.create(filePath, repeatedProducts);
         Set<Product> successfullyImportedProducts = new HashSet<>();
 
@@ -42,7 +42,7 @@ public class ImportProductsController {
 
         if (productsReader == null) {
             return null;
-        
+
         }
         Map<Category, List<Product>> newProductsByCategory = productsReader.readProducts();
         if (newProductsByCategory == null) {
@@ -66,23 +66,18 @@ public class ImportProductsController {
     /**
      * Updates a certain product in the market structure.
      *
-     * @param categoryPath Path of the category of the product
+     * @param category Category of the product
      * @param product Product to update
      *
      * @return true if the product has been updated. Otherwise, returns false
      */
-    public boolean updateProduct(String categoryPath, Product product) {
+    public boolean updateProduct(Category category, Product product) {
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         MarketStructure marketStructure = marketStructureRepository.findMarketStructure();
-        List<Category> categoryList = marketStructureRepository.findCategoriesByPathPattern(categoryPath);
-        if (categoryList != null) {
-            for (Category cat : categoryList) {
-                if (cat.categoryPath().equalsIgnoreCase(categoryPath)) {
-                    marketStructure.updateProduct(cat, product);
-                    new MarketStructureRepositoryImpl().merge(marketStructure);
-                    return true;
-                }
-            }
+        if (category != null) {
+            marketStructure.updateProduct(category, product);
+            new MarketStructureRepositoryImpl().merge(marketStructure);
+            return true;
         }
         return false;
     }

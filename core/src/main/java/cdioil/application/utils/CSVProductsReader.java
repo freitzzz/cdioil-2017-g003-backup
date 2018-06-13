@@ -152,10 +152,6 @@ public class CSVProductsReader implements ProductsReader {
      */
     private static final String NOT_LEAF_CATEGORY_MESSAGE = "Categoria não folha, logo não é possível adicionar um produto!";
 
-    /**
-     * Message added to the file content if the product is not valid.
-     */
-    private static final String INVALID_PRODUCT_MESSAGE = "Produto já existe!";
 
     /**
      * Message displayed to the user if the file formatting is not recognized.
@@ -170,7 +166,7 @@ public class CSVProductsReader implements ProductsReader {
     /**
      * Map that will hold all already existent products for the user to decide if they need to be updated or not.
      */
-    private final Map<String, List<Product>> existentProducts;
+    private final Map<Category, List<Product>> existentProducts;
 
     /**
      * Creates an instance of CSVProductsReader, receiving the name of the file to read.
@@ -178,7 +174,7 @@ public class CSVProductsReader implements ProductsReader {
      * @param filename Name of the file to read
      * @param existentProducts Map that will hold all already existent products
      */
-    public CSVProductsReader(String filename, Map<String, List<Product>> existentProducts) {
+    public CSVProductsReader(String filename, Map<Category, List<Product>> existentProducts) {
         this.file = new File(filename);
         this.logFile = new File(LOG_FILENAME);
         this.existentProducts = existentProducts;
@@ -232,7 +228,7 @@ public class CSVProductsReader implements ProductsReader {
                                 } else {
                                     List<Product> listE = new LinkedList<>();
                                     listE.add(product);
-                                    existentProducts.put(path, listE);
+                                   // existentProducts.put(path, listE);
                                 }
                             }
                         }
