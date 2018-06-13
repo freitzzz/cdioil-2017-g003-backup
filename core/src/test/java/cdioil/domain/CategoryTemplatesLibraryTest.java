@@ -78,9 +78,8 @@ public class CategoryTemplatesLibraryTest {
     public void testAddTemplate() {
         System.out.println("addTemplate");
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
-        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
-        questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template("template", questionGroup);
+        Template template = new SimpleTemplate("template");
+        template.addQuestion(new BinaryQuestion("Question", "324"));
         CategoryTemplatesLibrary instance = new CategoryTemplatesLibrary();
         assertFalse("The condition should succeed because the category doesn't "
                 + "exist in the library", instance.addTemplate(category, template));
@@ -99,9 +98,8 @@ public class CategoryTemplatesLibraryTest {
     public void testRemoveTemplate() {
         System.out.println("removeTemplate");
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
-        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
-        questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template("template", questionGroup);
+        Template template = new SimpleTemplate("template");
+        template.addQuestion(new BinaryQuestion("Question", "324"));
         CategoryTemplatesLibrary instance = new CategoryTemplatesLibrary();
         assertFalse("The condition should succeed because the category "
                 + "doesn't exist in the library", instance.removeTemplate(category, template));
@@ -120,10 +118,8 @@ public class CategoryTemplatesLibraryTest {
     public void testGetLibrary() {
         System.out.println("getLibrary");
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
-        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
-        questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        
-        Template template = new Template("template", questionGroup);
+        Template template = new SimpleTemplate("template");
+        template.addQuestion(new BinaryQuestion("Question", "324"));
         CategoryTemplatesLibrary result = new CategoryTemplatesLibrary();
         result.addCategory(category);
         result.addTemplate(category, template);
@@ -131,7 +127,7 @@ public class CategoryTemplatesLibraryTest {
         CategoryTemplatesLibrary expected = new CategoryTemplatesLibrary();
         expected.addCategory(category);
         expected.addTemplate(category, template);
-        
+
         assertEquals("Should be equal!", expected.getLibrary(), result.getLibrary());
     }
 
@@ -142,9 +138,8 @@ public class CategoryTemplatesLibraryTest {
     public void testDoesTemplateExist() {
         System.out.println("doesTemplateExist");
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
-        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
-        questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template("template", questionGroup);
+        Template template = new SimpleTemplate("template");
+        template.addQuestion(new BinaryQuestion("Question", "324"));
         CategoryTemplatesLibrary instance = new CategoryTemplatesLibrary();
         assertFalse("The condition should succeed because there aren't "
                 + "any categories in the library", instance.doesTemplateExist(category, template));
@@ -180,9 +175,8 @@ public class CategoryTemplatesLibraryTest {
         CategoryTemplatesLibrary instance = new CategoryTemplatesLibrary();
         CategoryTemplatesLibrary other = new CategoryTemplatesLibrary();
         Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
-        QuestionGroup questionGroup = new QuestionGroup("QuestionGroup");
-        questionGroup.addQuestion(new BinaryQuestion("Question", "324"));
-        Template template = new Template("template", questionGroup);
+        Template template = new SimpleTemplate("template");
+        template.addQuestion(new BinaryQuestion("Question", "324"));
         assertNotEquals("The condition should succeed because we are comparing "
                 + "an instance to a null value", instance, null);
         assertEquals("The condition should succeed because we are comparing "
