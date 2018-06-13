@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -59,7 +60,7 @@ public final class SurveyAnswersXMLService {
     /**
      * Constant that represents the label used for the ID identifier on the XML file
      */
-    private static final String ID_LABEL = "ID";
+    private static final String ID_LABEL = "id";
     /**
      * Constant that represents the label used for the name identifier on the XML file
      */
@@ -72,6 +73,19 @@ public final class SurveyAnswersXMLService {
      * Constant that represents the label used for the value identifier on the XML file
      */
     private static final String REVIEWS_LABEL = "reviews";
+    /**
+     * Constant that represents if the XML document should be indented or not
+     */
+    private static final String INDENTATION="yes";
+    /**
+     * Constant that represents the property used on the XML file to reference the amount of indent 
+     * blocks to be used on indentation
+     */
+    private static final String XML_INDENTATION_AMOUNT_PROPERTY="{http://xml.apache.org/xslt}indent-amount";
+    /**
+     * Constant that represents the amount of indent blocks to be used on indentation
+     */
+    private static final String INDENTATION_AMOUNT="2";
     /**
      * List with all survey reviews being exported
      */
@@ -107,7 +121,7 @@ public final class SurveyAnswersXMLService {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
-
+            
             Element rootElement = doc.createElement(SURVEY_LABEL);
             doc.appendChild(rootElement);
 
@@ -123,6 +137,8 @@ public final class SurveyAnswersXMLService {
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT,INDENTATION);
+            transformer.setOutputProperty(XML_INDENTATION_AMOUNT_PROPERTY,INDENTATION_AMOUNT);
             DOMSource source = new DOMSource(doc);
             StringWriter xmlDocument = new StringWriter();
             StreamResult result = new StreamResult(xmlDocument);
@@ -187,15 +203,18 @@ public final class SurveyAnswersXMLService {
                 idQuestion.appendChild(elementAnswer);
             }
         }
-        Element suggestions = doc.createElement(SUGGESTIONS_LABEL);
-        rootElement.appendChild(suggestions);
-        for (Review review : surveyReviews) {
-            Element elementSuggestion = doc.createElement(SUGGESTION_LABEL);
-            suggestions.appendChild(elementSuggestion);
-
-            Attr attrSug = doc.createAttribute(VALUE_LABEL);
-            attrSug.setValue(review.getSuggestion());
-            elementSuggestion.setAttributeNode(attrSug);
+        List<String> reviewSuggestions=new ArrayList<>();
+        surveyReviews.forEach((review) -> {if(review.hasSuggestion())reviewSuggestions.add(review.getSuggestion());});
+        if (!reviewSuggestions.isEmpty()) {
+            Element suggestions = doc.createElement(SUGGESTIONS_LABEL);
+            rootElement.appendChild(suggestions);
+            for(int i=0;i<reviewSuggestions.size();i++){
+                Element elementSuggestion = doc.createElement(SUGGESTION_LABEL);
+                suggestions.appendChild(elementSuggestion);
+                Attr attrSug = doc.createAttribute(VALUE_LABEL);
+                attrSug.setValue(reviewSuggestions.get(i));
+                elementSuggestion.setAttributeNode(attrSug);
+            }
         }
     }
 }

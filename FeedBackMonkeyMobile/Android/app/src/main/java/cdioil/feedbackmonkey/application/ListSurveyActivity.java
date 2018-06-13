@@ -148,7 +148,7 @@ public class ListSurveyActivity extends AppCompatActivity {
                         //TODO: Add check when creating file, depending on whether or not that survey has a pending review
                         ReviewXMLService.instance().createNewReviewFile(getPendingReviewsDirectory(), fileContent);
                         startQuestionActivity();
-
+                        finish();
                     } catch (IOException e) {
                         e.printStackTrace();
                         ToastNotification.show(this, ERROR_CONNECTION_LOST);
