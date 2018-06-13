@@ -42,6 +42,7 @@ public class MainMenu {
     private String optionExportSurveyStatistics = localizationHandler.getMessageValue("option_export_stats_survey");
     private String optionCreateTemplate = localizationHandler.getMessageValue("option_create_template");
     private String optionExportTemplate = localizationHandler.getMessageValue("option_export_template");
+    private String optionImportTemplate = localizationHandler.getMessageValue("option_import_template");
 
 
     /* ==============
@@ -160,6 +161,8 @@ public class MainMenu {
                     break;
                 case 9:
                     new ExportTemplateUI();
+                case 10:
+                    new ImportTemplateUI();
                     break;
                 default:
                     System.out.println(errorInvalidOption);
@@ -182,6 +185,7 @@ public class MainMenu {
         System.out.println("7. " + optionExportSurveyStatistics);
         System.out.println("8. " + optionCreateTemplate);
         System.out.println("9. " + optionExportTemplate);
+        System.out.println("10. " + optionImportTemplate);
         System.out.println(SEPARATOR);
         System.out.println("0. " + optionExit);
         option = Console.readInteger(requestSelectOption);

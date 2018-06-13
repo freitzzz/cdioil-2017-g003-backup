@@ -14,80 +14,71 @@ import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * Controller for use cases US-203 (import products from file).
+ * Controller for use case US-203 (import products from CSV, JSON or XML file).
  *
- * @author Ana Guerra (1161191)
+ * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
+ * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  */
 public class ImportProductsController {
 
     /**
-     * Import products from a file.
+     * Import products from a CSV, XML or JSON file.
      *
-     * @param fileName Name of the file
-     * @param fileExp Name of the fil to export
-     * @param existsProducts Mpa with the path of the category and the product
+     * @param filePath Path of the file
+     * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated
      * @return number of succesfully imported products
+     *
      * @throws cdioil.files.InvalidFileFormattingException if the file's formatting is not consistent with the file guidelines
      */
-    public Integer importProducts(String fileName, String fileExp, Map<String, List<Product>> existsProducts) {
-
-        ProductsReader productsReader = ProductsReaderFactory.create(fileName, fileExp, existsProducts);
+    public Integer importProducts(String filePath, Map<Category, List<Product>> repeatedProducts) {
+        ProductsReader productsReader = ProductsReaderFactory.create(filePath, repeatedProducts);
         Set<Product> successfullyImportedProducts = new HashSet<>();
 
-        MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
-        MarketStructure marketStructure = marketStructureRepository.findMarketStructure();
+        MarketStructure marketStructure = new MarketStructureRepositoryImpl().findMarketStructure();
 
-        if (productsReader != null) {
-            Map<String, List<Product>> productByCatPath = productsReader.readProducts();
-            Set<Map.Entry<String, List<Product>>> entries = productByCatPath.entrySet();
-
-            for (Map.Entry<String, List<Product>> mapEntry : entries) {
-                String path = mapEntry.getKey();
-                List<Product> productList = mapEntry.getValue();
-                List<Category> categoryList = marketStructureRepository.findCategoriesByPathPattern(path);
-                if (categoryList != null) {
-                    for (Category cat : categoryList) {
-                        if (cat.categoryPath().equalsIgnoreCase(path)) {
-                            productList.forEach(pro -> {
-                                if (marketStructure.addProduct(pro, cat)) {
-                                    successfullyImportedProducts.add(pro);
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-            new MarketStructureRepositoryImpl().merge(marketStructure);
+        if (productsReader == null) {
+            return null;
 
         }
+        Map<Category, List<Product>> newProductsByCategory = productsReader.readProducts();
+        if (newProductsByCategory == null) {
+            return null;
+        }
+
+        for (Entry<Category, List<Product>> mapEntry : newProductsByCategory.entrySet()) {
+            Category category = mapEntry.getKey();
+            List<Product> productsList = mapEntry.getValue();
+            for (Product product : productsList) {
+                if (marketStructure.addProduct(product, category)) {
+                    successfullyImportedProducts.add(product);
+                }
+            }
+        }
+        new MarketStructureRepositoryImpl().merge(marketStructure);
+
         return successfullyImportedProducts.size();
     }
 
     /**
-     * Updates the product if the user prefixes
+     * Updates a certain product in the market structure.
      *
-     * @param updatedProducts Map with the path of the category and product
-     * @return 1 if the product has been updated or 0 if not
+     * @param category Category of the product
+     * @param product Product to update
+     *
+     * @return true if the product has been updated. Otherwise, returns false
      */
-    public int updateProducts(Map<String, Product> updatedProducts) {
+    public boolean updateProduct(Category category, Product product) {
         MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
         MarketStructure marketStructure = marketStructureRepository.findMarketStructure();
-        for (Map.Entry<String, Product> entry : updatedProducts.entrySet()) {
-            String path = entry.getKey();
-            List<Category> categoryList = marketStructureRepository.findCategoriesByPathPattern(path);
-            if (categoryList != null) {
-                for (Category cat : categoryList) {
-                    if (cat.categoryPath().equalsIgnoreCase(path)) {
-                        marketStructure.updateProduct(cat, updatedProducts.get(path));
-                        new MarketStructureRepositoryImpl().merge(marketStructure);
-                        return 1;
-                    }
-                }
-            }
+        if (category != null) {
+            marketStructure.updateProduct(category, product);
+            new MarketStructureRepositoryImpl().merge(marketStructure);
+            return true;
         }
-        return 0;
+        return false;
     }
 }
