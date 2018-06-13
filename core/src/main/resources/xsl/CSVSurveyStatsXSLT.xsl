@@ -26,7 +26,7 @@ Purpose of transformation follows.
 		BinaryQuestions
 		QuestionID;QuestionText;Total;Average;MeanDeviation
 		<xsl:for-each select = "Questions/BinaryQuestions/BinaryQuestion">
-			<xsl:value-of select = "@questionID"/>;<xsl:value-of select = "QuestionText"/>;<xsl:value-of select = "Total"/>;<xsl:value-of select = "Average"/>;<xsl:value-of select = "MeanDeviation"/>
+<xsl:value-of select = "@questionID"/>;<xsl:value-of select = "QuestionText"/>;<xsl:value-of select = "Total"/>;<xsl:value-of select = "Average"/>;<xsl:value-of select = "MeanDeviation"/>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:for-each>
         ;
@@ -35,7 +35,7 @@ Purpose of transformation follows.
 		QuantitativeQuestions
 		QuestionID;QuestionText;Total;Average;MeanDeviation
 		<xsl:for-each select = "Questions/QuantitativesQuestions/QuantitativeQuestion">
-			<xsl:value-of select = "@questionID"/>;<xsl:value-of select = "QuestionText"/>;<xsl:value-of select = "Total"/>;<xsl:value-of select = "Average"/>;<xsl:value-of select = "MeanDeviation"/>
+<xsl:value-of select = "@questionID"/>;<xsl:value-of select = "QuestionText"/>;<xsl:value-of select = "Total"/>;<xsl:value-of select = "Average"/>;<xsl:value-of select = "MeanDeviation"/>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:for-each>
 	</xsl:template>

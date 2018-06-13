@@ -8,7 +8,7 @@ public final class AuthenticationException extends RuntimeException{
     /**
      * Constant that represents the invalid credentials cause message
      */
-    private static final String INVALID_CREDENTIALS_MESSAGE="Credênciais inválidas!";
+    private static final String INVALID_CREDENTIALS_MESSAGE="Credenciais inválidas!";
     /**
      * Constant that represents the account locked cause message
      */

@@ -137,13 +137,13 @@ public final class SurveyTemplateElement {
     /**
      * Class that represents a binary question from the template
      */
-    private static class BinaryQuestionElement extends QuestionElement {
+    public static class BinaryQuestionElement extends QuestionElement {
     }
 
     /**
      * Class that represents a multiple choice question from the template
      */
-    private static class MultipleChoiceQuestionElement extends QuestionElement {
+    public static class MultipleChoiceQuestionElement extends QuestionElement {
 
         /**
          * List with all the multiple choice question options
@@ -165,7 +165,7 @@ public final class SurveyTemplateElement {
     /**
      * Class that represents a quantitive question from the template
      */
-    private static class QuantitativeQuestionElement extends QuestionElement {
+    public static class QuantitativeQuestionElement extends QuestionElement {
 
         /**
          * Short with the quantitive question min value scale
@@ -177,23 +177,39 @@ public final class SurveyTemplateElement {
          */
         @XmlElement(name = "scaleMaxValue")
         private double maxValueScale;
+
+        public double getMinScaleValue() {
+            return minValueScale;
+        }
+
+        public double getMaxScaleValue() {
+            return maxValueScale;
+        }
     }
 
     /**
      * Class that represents a multiple choice question option
      */
-    private static class OptionElement {
+    public static class OptionElement {
 
         /**
          * Short that represents the option number
          */
         @XmlAttribute(name = "num")
-        private short optionNumber;
+        private int optionNumber;
         /**
          * String that represents the option text
          */
         @XmlAttribute(name = "text")
         private String text;
+
+        public int getOptionNumber() {
+            return optionNumber;
+        }
+
+        public String getText() {
+            return text;
+        }
     }
 
     /**
@@ -296,7 +312,7 @@ public final class SurveyTemplateElement {
      * Class that represents a question that leads to another question on the
      * question script
      */
-    private static class OnReplyQuestionElement extends QuestionElement {
+    public static class OnReplyQuestionElement extends QuestionElement {
 
         /**
          * OnReply with the question trigger
@@ -308,7 +324,7 @@ public final class SurveyTemplateElement {
     /**
      * Class that represents the on reply trigger question
      */
-    private static class OnReplyElement {
+    public static class OnReplyElement {
 
         /**
          * OnReplyQuestion with the next question that is proceeded
