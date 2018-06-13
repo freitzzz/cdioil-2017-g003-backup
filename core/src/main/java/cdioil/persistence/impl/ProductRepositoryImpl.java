@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.persistence.impl;
 
 import cdioil.domain.Product;
+import cdioil.domain.SKU;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ProductRepository;
@@ -16,19 +12,16 @@ import javax.persistence.Query;
  *
  * @author Ana Guerra (1161191)
  */
-public class ProductRepositoryImpl extends BaseJPARepository<Product,Long> implements ProductRepository{
-    /**
-     * Method that returns the persistence unit name that the repository uses
-     * @return String with the persistence unit name that the repository uses
-     */
+public class ProductRepositoryImpl extends BaseJPARepository<Product, Long> implements ProductRepository {
+
     @Override
     protected String persistenceUnitName() {
         return PersistenceUnitNameCore.PERSISTENCE_UNIT_NAME;
     }
-    
+
     @Override
     public List<Product> getProductsByCode(String code) {
-        
+
         Query q = entityManager().createNativeQuery("SELECT DISTINCT pc.PRODUCT_ID FROM PRODUCT_CODE pc WHERE pc.CODES_ID IN "
                 + "(SELECT q.ID FROM QR_CODE q WHERE q.PRODUCTCODE = ?"
                 + " UNION "
@@ -42,5 +35,13 @@ public class ProductRepositoryImpl extends BaseJPARepository<Product,Long> imple
         List<Product> p = (List<Product>) q.getResultList();
 
         return p.isEmpty() ? null : p;
+    }
+
+    @Override
+    public Product getProductBySKU(SKU sku) {
+        Query q = entityManager().createQuery("SELECT p FROM Product p WHERE p.sku = :p_sku");
+        q.setParameter("p_sku", sku);
+
+        return (Product) q.getSingleResult();
     }
 }
