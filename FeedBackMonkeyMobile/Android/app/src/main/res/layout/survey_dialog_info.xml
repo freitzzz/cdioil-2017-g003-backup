@@ -8,7 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:gravity="center"
-        android:text="@string/info_text_survey_dialog" />
+        android:text="@string/info_text_survey_dialog"
+        android:textAllCaps="false"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,7 +63,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/survey_items_list_view_header"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <ListView
         android:id="@+id/survey_items_list_view_survey_dialog"

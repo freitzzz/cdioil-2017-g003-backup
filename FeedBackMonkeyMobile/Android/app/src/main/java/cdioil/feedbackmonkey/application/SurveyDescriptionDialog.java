@@ -3,12 +3,11 @@ package cdioil.feedbackmonkey.application;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.services.SurveyService;
@@ -41,6 +40,7 @@ public final class SurveyDescriptionDialog extends Dialog {
      * Configures the current dialog components
      */
     private void configureComponents(){
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.survey_dialog_info);
         ((TextView)findViewById(R.id.survey_end_date_survey_dialog_content)).setText(currentSurveyService.getSurveyEndDate());
         ((TextView)findViewById(R.id.survey_average_time_survey_dialog_content)).setText(currentSurveyService.getSurveyAverageTime());
