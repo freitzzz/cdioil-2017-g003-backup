@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -366,7 +365,7 @@ public class ListSurveyActivity extends AppCompatActivity {
          * @param surveyItems List with a previous survey items predefined
          */
         public SurveyItemListViewAdapter(Activity activity, List<String> surveyItems) {
-            super(activity, R.layout.survey_item_list_row, surveyItems);
+            super(activity, R.layout.survey_list_row_item, surveyItems);
         }
 
         /**
@@ -375,7 +374,7 @@ public class ListSurveyActivity extends AppCompatActivity {
          * @param activity Activity with the activity which the ListView is being added the adapter
          */
         public SurveyItemListViewAdapter(Activity activity) {
-            super(activity, R.layout.survey_item_list_row);
+            super(activity, R.layout.survey_list_row_item);
         }
 
         /**
@@ -392,7 +391,7 @@ public class ListSurveyActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = LayoutInflater
                         .from(parent.getContext())
-                        .inflate(R.layout.survey_item_list_row, parent, false);
+                        .inflate(R.layout.survey_list_row_item, parent, false);
             }
             TextView viewSurveyName = convertView.findViewById(R.id.textViewSurveyItemListRow);
             viewSurveyName.setText(getItem(position));

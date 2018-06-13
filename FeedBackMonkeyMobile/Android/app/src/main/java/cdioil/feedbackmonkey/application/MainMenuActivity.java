@@ -227,7 +227,7 @@ public class MainMenuActivity extends AppCompatActivity {
          * @param surveyItems List with a previous survey items predefined
          */
         public MainMenuItemListViewAdapter(Activity activity, List<Integer> surveyItems) {
-            super(activity, R.layout.survey_item_list_row, surveyItems);
+            super(activity, R.layout.survey_list_row_item, surveyItems);
         }
 
         /**
@@ -236,7 +236,7 @@ public class MainMenuActivity extends AppCompatActivity {
          * @param activity Activity with the activity which the ListView is being added the adapter
          */
         public MainMenuItemListViewAdapter(Activity activity) {
-            super(activity, R.layout.survey_item_list_row);
+            super(activity, R.layout.survey_list_row_item);
         }
 
         /**
