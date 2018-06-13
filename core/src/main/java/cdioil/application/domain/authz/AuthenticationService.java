@@ -22,7 +22,7 @@ public final class AuthenticationService {
      * Constant that represents the message that ocures if the user trying to login 
      * has inserted invalid credentials
      */
-    private static final String INVALID_CREDENTIALS_MESSAGE="Credênciais erradas!";
+    private static final String INVALID_CREDENTIALS_MESSAGE="Credenciais erradas!";
     /**
      * Constant that represents the message that ocures if the user trying to login 
      * has his account not activated

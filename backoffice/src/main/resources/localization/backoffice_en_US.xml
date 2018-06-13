@@ -7,14 +7,13 @@
         <Message messageId = "info_welcome" value = "Welcome to the BackOffice&#10;"/>
         <Message messageId = "info_shutdown" value = "The program will shutdown"/>
         <Message messageId = "info_exiting" value = "Exiting..."/>
-        <Message messageId = "info_atualization_products" value= "Insert the option Yes if atualization the exists product: "/>
+        <Message messageId = "info_update_products" value= "Type 'Yes' if you want to update the following product: "/>
         <Message messageId = "info_manager_header" value = "&#x9;Manager's Back Office"/>
         <Message messageId = "info_admin_header" value = "&#x9;Admin's Back Office"/>
         <Message messageId = "info_exit_input" value = "Type in 'exit' if you wish to cancel."/>
         <Message messageId = "info_users" value = "Users"/>
         <Message messageId = "info_num_questions_imported" value = "Number of successfully imported questions:"/>
         <Message messageId = "info_num_products_imported" value = "Number of successfully imported products:"/>
-        <Message messageId = "info_num_products_exported" value = "Number of exported products:"/>
         <Message messageId = "info_all_users_list" value = "List of all Users of the System&#10;"/>
         <Message messageId = "info_all_managers_list" value = "List of all Managers&#10;"/>
         <Message messageId = "info_categories_removed" value = "Category/Categories removed with success!&#10;"/>
@@ -32,6 +31,7 @@
         <Message messageId = "info_changed_extreme_values" value = "The extreme values were exchanged, because the minimum was higher than the maximum."/>
         <Message messageId = "info_active_surveys" value = "Currently active surveys"/>
         <Message messageId = "info_num_users_added_survey" value = "User(s) added to the survey"/>
+        <Message messageId = "info_success_importing_template" value = "The template script was successfully imported!"/>
     </InfoMessages>
 
 	
@@ -44,7 +44,6 @@
         <Message messageId = "request_user_email" value = "Type the email of the user to search:"/>
         <Message messageId = "request_select_language" value = "Select your language:"/>
         <Message messageId = "request_file_path" value = "Please type in the file's path:"/>
-        <Message messageId = "request_file_path_export" value = "Please type in the file's path to export invalid products:"/>
         <Message messageId = "request_manager_email" value = "Please select a manager by inserting his email address:&#10;"/>
         <Message messageId = "request_category_identifier_removal" value = "Please type in the category/categories identifier(s) you wish to remove from the selected manager&#10;"/>
         <Message messageId = "request_category_identifier_association" value = "Please type in the category/categories identifier(s) you wish to associate to the selected manager&#10;"/>
@@ -75,8 +74,8 @@
         <Message messageId = "error_not_implemented" value = "Feature not yet implemented"/>
         <Message messageId = "error_invalid_file_format" value = "Invalid file format!"/>
         <Message messageId = "error_file_not_found" value = "File not found, please try again."/>
-        <Message messageId = "error_no_imported_questions" value = "No question was imported."/>
-        <Message messageId = "error_no_imported_products" value = "No products was imported."/>
+        <Message messageId = "error_no_imported_questions" value = "No questions were imported."/>
+        <Message messageId = "error_no_imported_products" value = "No products were imported."/>
         <Message messageId = "error_invalid_email" value = "Invalid email! Please, try again.&#10;"/>
         <Message messageId = "error_invalid_category" value = "Invalid category! Please, try again.&#10;"/>
         <Message messageId = "error_invalid_survey" value = "Invalid survey! Please, try again.&#10;"/>
@@ -94,18 +93,19 @@
         <Message messageId = "error_question_not_added_to_any_category" value = "The question wasn't added to any category."/>
         <Message messageId = "error_invalid_question" value = "The question wasn't added because it was invalid."/> 
         <Message messageId = "error_invalid_value" value = "Invalid value!"/>
-		<Message messageId = "error_no_whitelist" value = "There are no authorized email domains"/>
+        <Message messageId = "error_no_whitelist" value = "There are no authorized email domains"/>
         <Message messageId = "error_no_users_added_survey" value = "No users have been added to the survey"/>
+        <Message messageId = "error_importing_template_failed" value = "An error occurred while importing the template!&#10;Please check if the file is valid.&#10;"/>
     </ErrorMessages>
 
     <MenuOptions>
-		<GlobalOptions>
-			<Message messageId = "option_exit" value = "Exit"/>
-			<Message messageId = "option_confirm" value = "Confirm"/>
-			<Message messageId = "option_change_language" value = "Change Language"/>
-			<Message messageId = "option_yes" value = "Yes"/>
-			<Message messageId = "option_no" value = "No"/>
-		</GlobalOptions>
+        <GlobalOptions>
+            <Message messageId = "option_exit" value = "Exit"/>
+            <Message messageId = "option_confirm" value = "Confirm"/>
+            <Message messageId = "option_change_language" value = "Change Language"/>
+            <Message messageId = "option_yes" value = "Yes"/>
+            <Message messageId = "option_no" value = "No"/>
+        </GlobalOptions>
         <AdminMenuOptions>
             <Message messageId = "option_assign_manager" value = "Assign Manager Role"/>
             <Message messageId = "option_whitelist_domain" value = "Whitelist Domains"/>
@@ -131,6 +131,7 @@
             <Message messageId = "option_export_stats_survey" value = "Export Statistics about a Survey"/>
             <Message messageId = "option_create_template" value = "Create Template"/>
             <Message messageId = "option_export_template" value = "Export Template"/>
+            <Message messageId = "option_import_template" value= "Import Template"/>
             <Message messageId = "option_filter_domain" value = "Filter by domain"/>
             <Message messageId = "option_filter_username" value = "Filter by username"/>
             <Message messageId = "option_filter_year" value = "Filter by birth year"/>

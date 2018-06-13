@@ -81,7 +81,7 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
      * @param product String with the name of the Product
      * @return true is the product exists, or false if not
      */
-    public boolean findIfProductExist(String product) {
+    public boolean findIfProductExists(String product) {
         List<Product> products=findProductByName(product);
         return products!=null && !products.isEmpty();
     }

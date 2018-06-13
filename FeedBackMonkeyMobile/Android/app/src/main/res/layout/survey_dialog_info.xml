@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/info_survey_dialog_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:gravity="center"
+        android:text="@string/info_text_survey_dialog" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/survey_end_date_survey_dialog_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:layout_weight="1"
+            android:drawablePadding="18dp"
+            android:drawableStart="@drawable/ic_calendar_black_18dp"
+            android:gravity="center_vertical"
+            android:text="@string/survey_end_date" />
+
+        <TextView
+            android:id="@+id/survey_end_date_survey_dialog_content"
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/survey_average_time_survey_dialog_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:layout_weight="1"
+            android:drawablePadding="18dp"
+            android:drawableStart="@drawable/ic_access_time_black_24dp"
+            android:gravity="center_vertical"
+            android:text="@string/survey_average_time" />
+
+        <TextView
+            android:id="@+id/survey_average_time_survey_dialog_content"
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/survey_items_survey_dialog_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/survey_items_list_view_header"
+        android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/survey_items_list_view_survey_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

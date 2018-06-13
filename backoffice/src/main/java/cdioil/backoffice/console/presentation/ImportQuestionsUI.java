@@ -68,7 +68,7 @@ public class ImportQuestionsUI {
      */
     public ImportQuestionsUI() {
         controller = new ImportQuestionsController();
-        importCategories(INDEPENDENT_QUESTIONS_FILE_TYPE);
+        importQuestions(INDEPENDENT_QUESTIONS_FILE_TYPE);
     }
 
     /**
@@ -78,13 +78,13 @@ public class ImportQuestionsUI {
      */
     public ImportQuestionsUI(Manager manager) {
         controller = new ImportQuestionsController(manager);
-        importCategories(CATEGORY_QUESTIONS_FILE_TYPE);
+        importQuestions(CATEGORY_QUESTIONS_FILE_TYPE);
     }
 
     /**
      * Method for showing the UI itself.
      */
-    private void importCategories(int fileType) {
+    private void importQuestions(int fileType) {
 
         while (true) {
 
