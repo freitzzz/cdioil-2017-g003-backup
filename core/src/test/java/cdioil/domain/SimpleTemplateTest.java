@@ -1,23 +1,20 @@
 package cdioil.domain;
 
-import cdioil.application.utils.Graph;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Unit testing class for ScriptedTemplate.
  *
- * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+ * @author António Sousa [1161371]
  */
-public class ScriptedTemplateTest {
+public class SimpleTemplateTest {
 
     @Test
     public void ensureJPAConstructorBuildsInstance() {
-        ScriptedTemplate template = new ScriptedTemplate();
+        SimpleTemplate template = new SimpleTemplate();
 
         assertNotNull(template);
     }
@@ -25,18 +22,18 @@ public class ScriptedTemplateTest {
     @Test(expected = IllegalArgumentException.class)
     public void ensureInstanceWithNullNameIsNotConstructed() {
 
-        ScriptedTemplate template = new ScriptedTemplate(null);
+        SimpleTemplate template = new SimpleTemplate(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void ensureInstanceWithEmptyNameIsNotConstructed() {
 
-        ScriptedTemplate template = new ScriptedTemplate("      ");
+        SimpleTemplate template = new SimpleTemplate("      ");
     }
 
     @Test
     public void ensureAddQuestionDoesNotAddDuplicate() {
-        ScriptedTemplate template = new ScriptedTemplate("Super Cool And Awesome Template");
+        SimpleTemplate template = new SimpleTemplate("Super Cool And Awesome Template");
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         assertTrue(template.addQuestion(q));
 
@@ -52,7 +49,7 @@ public class ScriptedTemplateTest {
 
     @Test
     public void ensureAddQuestionDoesNotAddNull() {
-        ScriptedTemplate template = new ScriptedTemplate("You won't believe it's not butter!");
+        SimpleTemplate template = new SimpleTemplate("You won't believe it's not butter!");
         assertFalse(template.addQuestion(null));
 
         Iterator<Question> questionIterator = template.getQuestions().iterator();
@@ -60,8 +57,8 @@ public class ScriptedTemplateTest {
     }
 
     @Test
-    public void ensureAddQuestionAddsNewQuestion() {
-        ScriptedTemplate template = new ScriptedTemplate("Third time's charm");
+    public void testAddQuestionAddsNewQuestion() {
+        SimpleTemplate template = new SimpleTemplate("Third time's charm");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         assertTrue(template.addQuestion(q));
@@ -76,27 +73,22 @@ public class ScriptedTemplateTest {
 
     @Test
     public void ensureRemoveNullReturnsFalse() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+        SimpleTemplate template = new SimpleTemplate("New Template");
 
-        Question q = new BinaryQuestion("Do you like apples?", "B1");
-        template.addQuestion(q);
         assertFalse(template.removeQuestion(null));
-        assertTrue(template.getQuestions().iterator().hasNext());
     }
 
     @Test
     public void ensureRemoveNotAddedQuestionReturnsFalse() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
-
         assertFalse(template.removeQuestion(q));
-        assertFalse(template.getQuestions().iterator().hasNext());
     }
 
     @Test
     public void ensureRemoveQuestionWorks() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -104,15 +96,14 @@ public class ScriptedTemplateTest {
         template.addQuestion(q2);
 
         assertTrue(template.removeQuestion(q));
+        assertTrue(template.removeQuestion(q2));
 
-        Iterator<Question> questionIterator = template.getQuestions().iterator();
-        assertTrue(questionIterator.hasNext());
-        assertEquals(q2, questionIterator.next());
+        assertFalse(template.getQuestions().iterator().hasNext());
     }
 
     @Test
     public void ensureGetQuestionsWorks() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -121,26 +112,17 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        template.addQuestion(q);
+        Iterator<Question> iterator = template.getQuestions().iterator();
+        assertEquals(q, iterator.next());
+        assertEquals(q2, iterator.next());
+        assertEquals(q3, iterator.next());
 
-        Iterator<Question> resultIterator = template.getQuestions().iterator();
-        Iterator<Question> expectedIterator = new ArrayList<>(Arrays.asList(q, q2, q3)).iterator();
-
-        //q1
-        assertEquals(resultIterator.next(), expectedIterator.next());
-
-        //q2
-        assertEquals(resultIterator.next(), expectedIterator.next());
-
-        //q3
-        assertEquals(resultIterator.next(), expectedIterator.next());
-
-        assertFalse(resultIterator.hasNext());
+        assertFalse(iterator.hasNext());
     }
 
     @Test
-    public void ensureSetNextQuestionWorks() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithEqualQuestionsListsAndTitlesHaveSameHashCode() {
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -149,46 +131,21 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        template.setNextQuestion(q, q2, q.getOptionList().get(0), 0);
-        template.setNextQuestion(q, q3, q.getOptionList().get(1), 0);
-
-        Field graphField = template.getClass().getDeclaredField("graph");
-        graphField.setAccessible(true);
-        Graph g = (Graph) graphField.get(template);
-
-        Iterator<Question> adjQuestionIterator = g.adjacentQuestions(q).iterator();
-
-        assertEquals(adjQuestionIterator.next(), q2);
-        assertEquals(adjQuestionIterator.next(), q3);
-        assertFalse(adjQuestionIterator.hasNext());
-    }
-
-    @Test
-    public void ensureTemplatesWithEqualQuestionsGraphAndTitlesHaveSameHashCode() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
-
-        Question q = new BinaryQuestion("Do you like apples?", "B1");
-        template.addQuestion(q);
-        Question q2 = new BinaryQuestion("Do you like our fruit section?", "B2");
-        template.addQuestion(q2);
-        Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
-        template.addQuestion(q3);
-
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("New Template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Simple Template");
         otherTemplate.addQuestion(q);
         otherTemplate.addQuestion(q2);
         otherTemplate.addQuestion(q3);
 
-        int result = template.hashCode();
-        int otherResult = otherTemplate.hashCode();
+        int templateHashcode = template.hashCode();
+        int otherTemplateHashcode = otherTemplate.hashCode();
 
-        assertEquals(result, otherResult);
+        assertEquals(templateHashcode, otherTemplateHashcode);
     }
 
     @Test
-    public void ensureTemplatesWithSameTitleButDiffferentQuestionGraphHaveDifferentHashCode() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithSameTitleButDiffferentQuestionListsHaveDifferentHashCode() {
+
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -197,22 +154,22 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("New Template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Simple Template");
         otherTemplate.addQuestion(q);
-        otherTemplate.addQuestion(q2);
         otherTemplate.addQuestion(q3);
-        otherTemplate.setNextQuestion(q, q3, q.getOptionList().get(0), 0);
+        otherTemplate.addQuestion(q2);
 
-        int result = template.hashCode();
-        int otherResult = otherTemplate.hashCode();
+        int templateHashcode = template.hashCode();
+        int otherTemplateHashcode = otherTemplate.hashCode();
 
-        assertNotEquals(result, otherResult);
+        assertNotEquals(templateHashcode, otherTemplateHashcode);
+
     }
 
     @Test
-    public void ensureTemplatesWithEqualQuestionGraphsButDifferentTitleHaveDifferentHashCode() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithEqualQuestionListsButDifferentTitleHaveDifferentHashCode() {
+
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -221,21 +178,21 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("Other Template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Other Template");
         otherTemplate.addQuestion(q);
         otherTemplate.addQuestion(q2);
         otherTemplate.addQuestion(q3);
 
-        int result = template.hashCode();
-        int otherResult = otherTemplate.hashCode();
+        int templateHashcode = template.hashCode();
+        int otherTemplateHashcode = otherTemplate.hashCode();
 
-        assertNotEquals(result, otherResult);
+        assertNotEquals(templateHashcode, otherTemplateHashcode);
     }
 
     @Test
-    public void ensureTemplatesWithDifferentQuestionGraphAndNameHaveDifferentHashCodes() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithDifferentQuestionListsAndNameHaveDifferentHashCodes() {
+
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -244,29 +201,27 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("Other Template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Other Template");
         otherTemplate.addQuestion(q);
         otherTemplate.addQuestion(q3);
         otherTemplate.addQuestion(q2);
-        otherTemplate.setNextQuestion(q2, q3, q2.getOptionList().get(0), 0);
 
-        int result = template.hashCode();
-        int otherResult = otherTemplate.hashCode();
+        int templateHashcode = template.hashCode();
+        int otherTemplateHashcode = otherTemplate.hashCode();
 
-        assertNotEquals(result, otherResult);
+        assertNotEquals(templateHashcode, otherTemplateHashcode);
     }
 
     @Test
-    public void ensureHashCodeMutationsAreKilled() {
+    public void ensureHashCodeMutationsAreKilled() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         String title = "Template Title";
 
-        ScriptedTemplate template = new ScriptedTemplate(title);
+        SimpleTemplate template = new SimpleTemplate(title);
 
-        int hash = 7;
-        hash = 29 * hash + template.getGraph().hashCode();
-        hash = 29 * hash + title.hashCode();
+        int hash = 5;
+        hash = 71 * hash + template.getQuestions().hashCode();
+        hash = 71 * hash + title.hashCode();
 
         int result = template.hashCode();
 
@@ -277,7 +232,8 @@ public class ScriptedTemplateTest {
 
     @Test
     public void ensureSameInstanceIsEqual() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+
+        SimpleTemplate template = new SimpleTemplate("New Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -285,16 +241,14 @@ public class ScriptedTemplateTest {
         template.addQuestion(q2);
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
-
-        template.setNextQuestion(q, q3, q.getOptionList().get(0), 0);
-        template.setNextQuestion(q, q2, q.getOptionList().get(1), 0);
 
         assertEquals(template, template);
     }
 
     @Test
-    public void ensureTemplatesWithEqualQuestionGraphAndTitleAreEqual() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithEqualQuestionListsAndTitleAreEqual() {
+
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -303,8 +257,7 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("New Template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Simple Template");
         otherTemplate.addQuestion(q);
         otherTemplate.addQuestion(q2);
         otherTemplate.addQuestion(q3);
@@ -314,17 +267,17 @@ public class ScriptedTemplateTest {
 
     @Test
     public void ensureNullIsNotEqual() {
+        SimpleTemplate template = new SimpleTemplate("New Template");
 
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
-
-        ScriptedTemplate otherTemplate = null;
+        SimpleTemplate otherTemplate = null;
 
         assertFalse(template.equals(otherTemplate));
     }
 
     @Test
     public void ensureDifferentClassObjectIsNotEqual() {
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+
+        SimpleTemplate template = new SimpleTemplate("New Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
 
@@ -332,9 +285,8 @@ public class ScriptedTemplateTest {
     }
 
     @Test
-    public void ensureTemplatesWithEqualQuestionGraphButDifferentTitleAreNotEqual() {
-
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithEqualQuestionListsButDifferentTitleAreNotEqual() {
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -343,25 +295,17 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        template.setNextQuestion(q, q3, q.getOptionList().get(0), 0);
-        template.setNextQuestion(q, q2, q.getOptionList().get(1), 0);
-
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("Other template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Other Template");
         otherTemplate.addQuestion(q);
         otherTemplate.addQuestion(q2);
         otherTemplate.addQuestion(q3);
-
-        otherTemplate.setNextQuestion(q, q3, q.getOptionList().get(0), 0);
-        otherTemplate.setNextQuestion(q, q2, q.getOptionList().get(1), 0);
 
         assertNotEquals(template, otherTemplate);
     }
 
     @Test
-    public void ensureTemplatesWithEqualTitleButDifferentQuestionsGraphAreNotEqual() {
-
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithEqualTitleButDifferentQuestionsListAreNotEqual() {
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -370,25 +314,17 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        template.setNextQuestion(q, q3, q.getOptionList().get(0), 0);
-        template.setNextQuestion(q, q2, q.getOptionList().get(1), 0);
-
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("New Template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Simple Template");
         otherTemplate.addQuestion(q);
-        otherTemplate.addQuestion(q2);
         otherTemplate.addQuestion(q3);
-
-        otherTemplate.setNextQuestion(q, q2, q.getOptionList().get(0), 0);
-        otherTemplate.setNextQuestion(q, q3, q.getOptionList().get(1), 0);
+        otherTemplate.addQuestion(q2);
 
         assertNotEquals(template, otherTemplate);
     }
 
     @Test
-    public void ensureTemplatesWithDifferentQuestionGraphAndTitlesAreNotEqual() {
-
-        ScriptedTemplate template = new ScriptedTemplate("New Template");
+    public void ensureTemplatesWithDifferentQuestionListsAndTitlesAreNotEqual() {
+        SimpleTemplate template = new SimpleTemplate("Simple Template");
 
         Question q = new BinaryQuestion("Do you like apples?", "B1");
         template.addQuestion(q);
@@ -397,17 +333,10 @@ public class ScriptedTemplateTest {
         Question q3 = new BinaryQuestion("Do you like grapes?", "B3");
         template.addQuestion(q3);
 
-        template.setNextQuestion(q, q3, q.getOptionList().get(0), 0);
-        template.setNextQuestion(q, q2, q.getOptionList().get(1), 0);
-
-        ScriptedTemplate otherTemplate = new ScriptedTemplate("Other Template");
-
+        SimpleTemplate otherTemplate = new SimpleTemplate("Other Template");
         otherTemplate.addQuestion(q);
-        otherTemplate.addQuestion(q2);
         otherTemplate.addQuestion(q3);
-
-        otherTemplate.setNextQuestion(q, q2, q.getOptionList().get(0), 0);
-        otherTemplate.setNextQuestion(q, q3, q.getOptionList().get(1), 0);
+        otherTemplate.addQuestion(q2);
 
         assertNotEquals(template, otherTemplate);
     }
