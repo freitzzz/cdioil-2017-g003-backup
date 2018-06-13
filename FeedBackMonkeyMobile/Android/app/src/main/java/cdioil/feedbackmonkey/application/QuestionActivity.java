@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.xml.sax.SAXException;
@@ -36,11 +37,22 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
      */
     private String authenticationToken;
 
+    /**
+     * Progress bar to indicate how far the user is in the survey.
+     */
+    private ProgressBar progressBar;
+
+    /**
+     * Integer that indicates the progress the user has made in %
+     */
+    private int progressMade;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
         questionTextView = findViewById(R.id.question);
+        progressBar = findViewById(R.id.answerSurveyProgressBar);
 
         if (getIntent().getExtras() != null) {
             authenticationToken = getIntent().getExtras().getString("authenticationToken");
@@ -112,7 +124,8 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         try {
             ReviewXMLService xmlService = ReviewXMLService.instance();
             boolean canAnswerNextQuestion = xmlService.saveAnswer(answer);
-
+            progressMade = progressMade + 25;
+            progressBar.setProgress(progressMade);
             if (!canAnswerNextQuestion) {
                 submitSuggestion();
             } else {
@@ -128,7 +141,8 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
     public void onBackPressed() {
         try {
             boolean canUndo = ReviewXMLService.instance().undoAnswer();
-
+            progressMade = progressMade - 25;
+            progressBar.setProgress(progressMade);
             if(canUndo){
                 loadQuestionInfo();
             }else{
