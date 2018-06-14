@@ -90,6 +90,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
 
     /**
      * Instantiates a new Product with a given name and brand, and 0 or more codes.
+     *
      * @param name Product's name
      * @param brand Product's brand
      * @param codes 0 or more codes
@@ -101,6 +102,16 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
         this.name = name;
         this.brand = brand;
         this.codes.addAll(Arrays.asList(codes));
+    }
+
+    /**
+     * Access method to the SKU of the product.
+     *
+     * @return SKU of the product
+     */
+    @Override
+    public SKU getID() {
+        return sku;
     }
 
     /**
@@ -169,7 +180,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
      * Compares this instance with another Object.
      *
      * @param obj object to compare to
-     * @return true, if the Products have the same list of Code elements, false otherwise
+     * @return true, if the Products have the same list of Code elements and SKU, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -181,11 +192,7 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
         }
         final Product other = (Product) obj;
 
-        return Objects.equals(this.sku, other.sku);
-    }
-
-    @Override
-    public SKU getID() {
-        return sku;
+        return Objects.equals(this.sku, other.sku)
+                && Objects.equals(this.codes, other.codes);
     }
 }

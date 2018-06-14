@@ -5,14 +5,21 @@
  */
 package cdioil.application.utils;
 
-import cdioil.domain.Category;
-import cdioil.domain.Code;
-import cdioil.domain.EAN;
-import cdioil.domain.Product;
-import cdioil.files.FileWriter;
+import cdioil.persistence.impl.MarketStructureRepositoryImpl;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
 import cdioil.files.InputSchemaFiles;
 import cdioil.files.ValidatorXML;
-import cdioil.persistence.impl.MarketStructureRepositoryImpl;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import cdioil.files.FileWriter;
+import cdioil.domain.Category;
+import cdioil.domain.Product;
+import cdioil.domain.Code;
+import cdioil.domain.EAN;
+import cdioil.domain.SKU;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,11 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -80,6 +83,7 @@ public class XMLProductsReader implements ProductsReader {
     private static final String PATH_REGEX = CATEGORIES_SCALE + DC_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UN_IDENTIFIER + PATH_SPLITTER
             + CATEGORIES_SCALE + CAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + SCAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UB_IDENTIFIER;
 
+    //File related constants and attributes
     /**
      * File to read.
      */
@@ -135,10 +139,35 @@ public class XMLProductsReader implements ProductsReader {
      */
     private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH);
 
+    /**
+     * Element in XML file that represents the product's path in the market structure.
+     */
     private static final String CATEGORY_PATH_ELEMENT = "ID";
+
+    /**
+     * Element in XML file that represents the product's EAN.
+     */
     private static final String PRODUCT_CODE_ELEMENT = "COD";
+
+    /**
+     * Element in XML file that represents the name of the product.
+     */
     private static final String PRODUCT_NAME_ELEMENT = "descritivo";
+
+    /**
+     * Element in XML file that reprents the brand of the product.
+     */
     private static final String PRODUCT_BRAND_ELEMENT = "marca";
+    
+    /**
+     * Element in XML file that represents the quantity of the product.
+     */
+    private static final String PRODUCT_QUANTITY_ELEMENT = "Quantidade";
+    
+    /**
+     * Element in XML file that represents the unity of the product.
+     */
+    private static final String PRODUCT_UNITY_ELEMENT = "Unidade";
 
     /**
      * Builds an instance of XMLProductsReader, receiving the path of the file to read.
@@ -180,10 +209,20 @@ public class XMLProductsReader implements ProductsReader {
                         String categoryPath = recreateProductPath(productElement.getElementsByTagName(CATEGORY_PATH_ELEMENT).item(0).getTextContent());
 
                         if (isProductPathValid(categoryPath)) {
-                            Code code = new EAN(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                            NodeList brandNodeList = productElement.getElementsByTagName(PRODUCT_BRAND_ELEMENT);
                             String name = productElement.getElementsByTagName(PRODUCT_NAME_ELEMENT).item(0).getTextContent();
-                            String brand = productElement.getElementsByTagName(PRODUCT_BRAND_ELEMENT).item(0).getTextContent();
-                            Product p = new Product(name, brand, code);
+                            Product p;
+
+                            if (brandNodeList.getLength() == 0) {
+                                SKU sku = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                                String quantity = productElement.getElementsByTagName(PRODUCT_QUANTITY_ELEMENT).item(0).getTextContent()
+                                        + productElement.getElementsByTagName(PRODUCT_UNITY_ELEMENT).item(0).getTextContent();
+                                p = new Product(name, sku, quantity);
+                            } else {
+                                Code code = new EAN(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                                String brand = brandNodeList.item(0).getTextContent();
+                                p = new Product(name, brand, code);
+                            }
 
                             Category category = getCategoryByPath(categoryPath);
                             if (category != null) {
@@ -213,26 +252,35 @@ public class XMLProductsReader implements ProductsReader {
     private String recreateProductPath(String path) {
         StringBuilder actualPath = new StringBuilder();
 
-        String dcString = Character.toString(path.charAt(0)) + Character.toString(path.charAt(1));
-        int dc = Integer.parseInt(dcString);
-        actualPath.append(dc).append(DC_IDENTIFIER);
+        String dc = Character.toString(path.charAt(0)) + Character.toString(path.charAt(1));
+        actualPath.append(Integer.parseInt(dc)).append(DC_IDENTIFIER);
 
-        String unString = Character.toString(path.charAt(2)) + Character.toString(path.charAt(3));
-        int un = Integer.parseInt(unString);
-        actualPath.append(PATH_SPLITTER).append(un).append(UN_IDENTIFIER);
+        String un = Character.toString(path.charAt(2)) + Character.toString(path.charAt(3));
+        actualPath.append(PATH_SPLITTER).append(Integer.parseInt(un)).append(UN_IDENTIFIER);
 
-        String catString = Character.toString(path.charAt(2)) + Character.toString(path.charAt(3))
-                + Character.toString(path.charAt(4)) + Character.toString(path.charAt(5));
-        int cat = Integer.parseInt(catString);
-        actualPath.append(PATH_SPLITTER).append(cat).append(CAT_IDENTIFIER);
+        String ub, cat, scat;
 
-        String scatString = Character.toString(path.charAt(6)) + Character.toString(path.charAt(7));
-        int scat = Integer.parseInt(scatString);
-        actualPath.append(PATH_SPLITTER).append(scat).append(SCAT_IDENTIFIER);
+        if (path.length() == 10) {
+            cat = Character.toString(path.charAt(2)) + Character.toString(path.charAt(3))
+                    + Character.toString(path.charAt(4)) + Character.toString(path.charAt(5));
 
-        String ubString = Character.toString(path.charAt(8)) + Character.toString(path.charAt(9));
-        int ub = Integer.parseInt(ubString);
-        actualPath.append(PATH_SPLITTER).append(ub).append(UB_IDENTIFIER);
+            scat = Character.toString(path.charAt(6)) + Character.toString(path.charAt(7));
+
+            ub = Character.toString(path.charAt(8)) + Character.toString(path.charAt(9));
+
+        } else {
+            cat = Character.toString(path.charAt(4)) + Character.toString(path.charAt(5))
+                    + Character.toString(path.charAt(6)) + Character.toString(path.charAt(7));
+
+            scat = Character.toString(path.charAt(8)) + Character.toString(path.charAt(9));
+
+            ub = Character.toString(path.charAt(10)) + Character.toString(path.charAt(11));
+        }
+
+        actualPath.append(PATH_SPLITTER).append(Integer.parseInt(cat)).append(CAT_IDENTIFIER);
+        actualPath.append(PATH_SPLITTER).append(Integer.parseInt(scat)).append(SCAT_IDENTIFIER);
+        actualPath.append(PATH_SPLITTER).append(Integer.parseInt(ub)).append(UB_IDENTIFIER);
+
         return actualPath.toString();
     }
 
@@ -247,8 +295,9 @@ public class XMLProductsReader implements ProductsReader {
 
     /**
      * Gets a category from the repository given its path.
+     *
      * @param path
-     * @return 
+     * @return
      */
     private Category getCategoryByPath(String path) {
         List<Category> categories = new MarketStructureRepositoryImpl().findCategoriesByPathPattern(path);
@@ -260,6 +309,7 @@ public class XMLProductsReader implements ProductsReader {
 
     /**
      * Adds a new product with a certain category to the map that holds all products from the file.
+     *
      * @param category Product's category (key)
      * @param product Product to add (value)
      */
