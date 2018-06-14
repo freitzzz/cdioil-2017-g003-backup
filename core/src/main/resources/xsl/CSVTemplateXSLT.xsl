@@ -8,20 +8,22 @@
         Purpose of transformation follows.
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="html"/>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+    <xsl:output method="text" indent="no"/>
 
-    <!-- TODO customize transformation rules 
-         syntax recommendation http://www.w3.org/TR/xslt 
-    -->
-    <xsl:template match="/">
-        <html>
-            <head>
-                <title>CSVTemplateXSLT.xsl</title>
-            </head>
-            <body>
-            </body>
-        </html>
+    <xsl:template match="/Template">
+    Template Information
+                Template title:;<xsl:value-of select= "@title"/>
+                ; <!-- Semicolon for Excel spacing -->
+                Questions:
+                ;QuestionID;QuestionText      
+               <xsl:for-each select = "Question">
+                   Question   
+                      ;<xsl:value-of select = "@ID"/>;<xsl:value-of select = "QuestionText"/>
+                        Options:  
+                        <xsl:for-each select = "Question/Options/Option">
+                             <xsl:value-of select = "Option"/>;
+                         </xsl:for-each>
+                </xsl:for-each>
     </xsl:template>
-
 </xsl:stylesheet>
