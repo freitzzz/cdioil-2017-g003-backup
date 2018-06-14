@@ -20,7 +20,7 @@ public final class FileReader {
     /**
      * Method that reads the content of a file
      * @param file String with the file path
-     * @return List with the content of the file, or null if an error occured
+     * @return List with the content of the file, or null if an error occurred
      */
     public static List<String> readFile(File file){
         if(file==null){
