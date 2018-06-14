@@ -30,7 +30,7 @@ public final class QuestionsReaderFactory {
             return new XMLQuestionsReader(filename);
         }
         if(filename.endsWith((CommonFileExtensions.JSON_EXTENSION))){
-            
+            return new JSONQuestionsReader(filename);
         }
         return null;
     }
