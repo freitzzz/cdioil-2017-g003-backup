@@ -150,4 +150,8 @@ public class XMLTemplateWriter implements TemplateWriter {
             }
         }
     }
+
+    File getXMLAsString() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
