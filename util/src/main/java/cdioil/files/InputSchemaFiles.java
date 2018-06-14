@@ -18,5 +18,10 @@ public interface InputSchemaFiles {
      */
     public static final String LOCALIZATION_SCHEMA_PATH = FilesUtils.convertStringToUTF8(
             InputSchemaFiles.class.getClassLoader().getResource("xsd/import_products_schema.xsd").getFile());
+    /**
+     * String XSD schema file's path. The XSD file is used for verifying XML files for importing category questions.
+     */
+    public static final String LOCALIZATION_SCHEMA_PATH_CATEGORY_QUESTIONS = FilesUtils.convertStringToUTF8(
+            InputSchemaFiles.class.getClassLoader().getResource("xsd/import_category_questions_schema.xsd").getFile());
 
 }

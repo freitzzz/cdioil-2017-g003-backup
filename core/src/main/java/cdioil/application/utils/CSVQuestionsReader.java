@@ -308,7 +308,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Checks if the content of the file is valid - not null and has all the expected identifiers properly splitted.
+     * Checks if the content of the file is valid - not null and has all the expected identifiers properly split.
      *
      * @param fileContent All the lines of the file
      * @return true, if the content is valid. Otherwise, returns false
@@ -388,7 +388,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Checks if the content of the file is valid - not null and has all the expected identifiers properly splitted.
+     * Checks if the content of the file is valid - not null and has all the expected identifiers properly split.
      *
      * @param fileContent All the lines of the file
      * @return true, if the content is valid. Otherwise, returns false

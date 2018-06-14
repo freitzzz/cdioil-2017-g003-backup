@@ -7,6 +7,8 @@ import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
+import cdioil.files.InputSchemaFiles;
+import cdioil.files.ValidatorXML;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,47 +35,51 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     private final File file;
     /**
-     * name of question node in xml file
+     * Schema file (XSD) used for validating the input file.
+     */
+    private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY_QUESTIONS);
+    /**
+     * name of question node in XML file
      */
     private static final String QUESTION = "question";
     /**
-     * Name of root node in xml file
+     * Name of root node in XML file
      */
     private static final String LISTA_QUESTOES = "lista_questoes";
     /**
-     * name of scale minimum value node in xml file
+     * name of scale minimum value node in XML file
      */
     private static final String SCALE_MAX_VALUE = "scaleMaxValue";
     /**
-     * name of scale maximum value node in xml file
+     * name of scale maximum value node in XML file
      */
     private static final String SCALE_MIN_VALUE = "scaleMinValue";
     /**
-     * name of question id attribute of question node in xml file
+     * name of question id attribute of question node in XML file
      */
     private static final String QUESTION_ID_TEXT = "questionID";
     /**
-     * name of question text node in xml file
+     * name of question text node in XML file
      */
     private static final String TEXT = "Text";
     /**
-     * name multiple choice question option node in xml file
+     * name multiple choice question option node in XML file
      */
     private static final String OPTION_TEXT = "Option";
     /**
-     * name of category id node in xml file
+     * name of category id node in XML file
      */
     private static final String CATEGORY_ID_NODE = "CAT_ID";
     /**
-     * name of quantitative question node in xml file
+     * name of quantitative question node in XML file
      */
     private static final String QUANTITATIVE_QUESTION_NODE = "QuantitativeQuestion";
     /**
-     * name of multiple choice question node in xml file
+     * name of multiple choice question node in XML file
      */
     private static final String MULTIPLE_CHOICE_QUESTION_NODE = "MultipleChoiceQuestion";
     /**
-     * name of binary question node in xml file
+     * name of binary question node in XML file
      */
     private static final String BINARY_QUESTION_NODE = "BinaryQuestion";
 
@@ -94,6 +100,9 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
+        if(!ValidatorXML.validateFile(SCHEMA_FILE, file)){
+            return null;
+        }
         Map<String, List<Question>> readQuestions = new HashMap<>();
         try {
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -113,7 +122,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Iterates through category question xml nodes
+     * Iterates through category question XML nodes
      *
      * @param childNodes child nodes of root node
      * @param readQuestions map of questions
@@ -173,7 +182,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Creates a binary question from xml nodes
+     * Creates a binary question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
      * @param id attribute questionID of BinaryQuestion node
@@ -191,7 +200,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Creates a multiple choice question from xml nodes
+     * Creates a multiple choice question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
      * @param id attribute questionID of BinaryQuestion node
@@ -224,7 +233,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     }
 
     /**
-     * Creates a quantitative question from xml nodes
+     * Creates a quantitative question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
      * @param id attribute questionID of BinaryQuestion node
