@@ -238,10 +238,22 @@ public class SignUpActivity extends AppCompatActivity {
                                         String phoneNumber = phoneNumberText.getText().toString();
                                         String location = locationText.getText().toString();
                                         String birthDate = birthDateText.getText().toString();
+                                        String fullName = firstName.concat(" ").concat(lastName);
                                         //rest request to register account
+                                        if(firstName.isEmpty() || lastName.isEmpty()){
+                                            fullName = null;
+                                        }
+                                        if(phoneNumber.isEmpty()){
+                                            phoneNumber = null;
+                                        }
+                                        if(location.isEmpty()){
+                                            location = null;
+                                        }
+                                        if(birthDate.isEmpty()){
+                                            birthDate = null;
+                                        }
                                         String restRequestBody = new Gson().toJson(new RegistrationJSONService(email, password,
-                                                firstName + " " + lastName
-                                                , phoneNumber, location, birthDate));
+                                                fullName, phoneNumber, location, birthDate));
                                         /**
                                          * The credentials are validated twice here for the sake of UX.
                                          * If a user chooses to add optional information while signing up
