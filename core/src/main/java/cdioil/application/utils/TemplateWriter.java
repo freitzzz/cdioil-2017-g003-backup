@@ -1,15 +1,17 @@
 package cdioil.application.utils;
 
 /**
- * @author Pedro Portela
+ * Utilitary class that writes a template's information into a file.
+ *
+ * @author Pedro Portela (1150782)
  * @author Ana Guerra (1161191)
  */
 public interface TemplateWriter {
+
     /**
-     * Exports statistics about a template to a file of any format.
+     * Exports the information about a template to a file of any supported format.
      *
-     * @return true, if the stats are successfully exported. Otherwise, returns false
+     * @return true, if the file is successfully exported. Otherwise, returns false
      */
     public abstract boolean write();
-    
 }
