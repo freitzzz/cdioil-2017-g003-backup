@@ -120,7 +120,7 @@ public class ImportProductsUI {
             } else if (numImportedProducts == 0) {
                 System.out.println(errorNoImportedProducts);
             } else if (numImportedProducts > 0) {
-                System.out.println(infoNumProductsImported + numImportedProducts);
+                System.out.println(infoNumProductsImported + " " + numImportedProducts);
             }
         } catch (InvalidFileFormattingException e) {
             System.out.println(errorInvalidFileFormat);
