@@ -249,10 +249,10 @@ public class SignUpActivity extends AppCompatActivity {
                                          * able to add the optional info.
                                          */
                                         Response validateCredentialsRestResponse =
-                                                getRestRequestToValidateCredentials(restRequestBody);
+                                                getRestRequestToValidateCredentials(restRequestBody,"true");
                                         if (validateCredentialsRestResponse.code() == HttpsURLConnection.HTTP_OK) {
                                             Response registerAccountRestResponse =
-                                                    getRestRequestToValidateCredentials(restRequestBody);
+                                                    getRestRequestToValidateCredentials(restRequestBody,"false");
                                             if (registerAccountRestResponse.code() == HttpsURLConnection.HTTP_OK) {
                                                 activateAccount();
                                             } else if (registerAccountRestResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST) {
@@ -438,7 +438,7 @@ public class SignUpActivity extends AppCompatActivity {
                     null
                     , null, null, null));
         }
-        Response restResponse = getRestRequestToValidateCredentials(restRequestBody);
+        Response restResponse = getRestRequestToValidateCredentials(restRequestBody,"true");
         RegistrationJSONService restResponseBody = getRegistrationJSONService(restResponse);
         String restResponseField = restResponseBody.getField();
         String restResponseMessage = restResponseBody.getMessage();
@@ -486,14 +486,14 @@ public class SignUpActivity extends AppCompatActivity {
      * @param restRequestBody REST Request Body containing the credentials to be validated
      * @return REST response to whether the sign up credentials are valid or not
      */
-    private Response getRestRequestToValidateCredentials(String restRequestBody) {
+    private Response getRestRequestToValidateCredentials(String restRequestBody, String validateParameter) {
         try {
             return RESTRequest.
                     create(BuildConfig.SERVER_URL.
                             concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
                             concat(FeedbackMonkeyAPI.getResourcePath("Authentication")).
                             concat(FeedbackMonkeyAPI.getSubResourcePath("Authentication", "Register Account")).
-                            concat("?validate=true")).
+                            concat("?validate=".concat(validateParameter))).
                     withMediaType(RESTRequest.RequestMediaType.JSON).
                     withBody(restRequestBody).
                     POST();
