@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cdioil.feedbackmonkey.BuildConfig;
+import cdioil.feedbackmonkey.restful.exceptions.RESTfulException;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
@@ -101,7 +102,7 @@ public final class SurveyServiceController {
             for(int i=0;i<surveyJSONServices.size();i++)surveyServices.add(new SurveyService(surveyJSONServices.get(i)));
             return surveyServices;
         }else{
-            throw new IllegalStateException(responseBody);
+            throw new RESTfulException(responseBody,(short)response.code());
         }
     }
 }
