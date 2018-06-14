@@ -50,7 +50,7 @@ public final class SurveyServiceController {
      * Method that returns all current active surveys relatively to a certain product code
      * @param productCode String with the product code
      * @return List with all the current active surveys relatively to a certain product code
-     * @throws IOException Throws IOException if an error occurred during the surveys retrieval
+     * @throws IOException Throws {@link IOException} if an error occurred during the surveys retrieval
      */
     public List<SurveyService> getSurveysByProductCode(String productCode) throws IOException {
         Response response= RESTRequest.create(
@@ -71,7 +71,7 @@ public final class SurveyServiceController {
      * @param paginationID Short with the surveys pagination ID
      * @return List with all the current active surveys that the current user can answer with
      * a certain pagination ID
-     * @throws IOException Throws IOException if an error occurred during the surveys retrieval
+     * @throws IOException Throws {@link IOException} if an error occurred during the surveys retrieval
      */
     public List<SurveyService> getSurveysByPaginationID(short paginationID) throws IOException {
         Response response=RESTRequest.create(BuildConfig.SERVER_URL
@@ -86,10 +86,10 @@ public final class SurveyServiceController {
 
     /**
      * Method that gets all surveys contained on a certain response body
-     * <br>Throws IllegalArgumentException if the response was not successful
+     * <br>Throws {@link RESTfulException} if the response was not successful
      * @param response Response with the response that holds the surveys
      * @return List with all the surveys contained on the response body
-     * @throws IOException Throws IOException if an occurred while accessing the response body
+     * @throws IOException Throws {@link IOException} if an occurred while accessing the response body
      */
     private List<SurveyService> getSurveysByResponse(Response response) throws IOException {
         String responseBody=response.body().string();
