@@ -26,7 +26,7 @@ and open the template in the editor.
     </xs:complexType>
     
     <xs:simpleType name = "TCategoryPath">
-        <xs:restriction base="xs:integer">
+        <xs:restriction base="xs:positiveInteger">
             <xs:pattern value="\d{5,}"/>        
         </xs:restriction>
     </xs:simpleType>
