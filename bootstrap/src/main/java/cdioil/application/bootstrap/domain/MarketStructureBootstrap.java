@@ -60,6 +60,7 @@ public class MarketStructureBootstrap {
             CSVCategoriesReader reader = new CSVCategoriesReader(catFile);
             marketStruct = reader.readCategories();
             cat.addProduct(prod);
+            cat.addProduct(createDummyProduct());
             marketStruct.addCategory(cat);
             repo.add(marketStruct);
         }
@@ -72,6 +73,14 @@ public class MarketStructureBootstrap {
     private File findCSVFile() {
         ClassLoader cl = getClass().getClassLoader();
         return new File(cl.getResource(CAT_FILE).getFile());
+    }
+    /**
+     * Creates a dummy product for usage of the scan functionality
+     * @return Product with a dummy product to be used on the scan functionality
+     */
+    private Product createDummyProduct(){
+        return new Product("Agua Mineral Natural",new SKU("S76900"),"20L",new EAN("8480017377760")
+                ,new QRCode("Agua Mineral Natural"));
     }
 
 }
