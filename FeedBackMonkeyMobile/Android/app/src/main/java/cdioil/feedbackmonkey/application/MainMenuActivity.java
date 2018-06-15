@@ -244,6 +244,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 if(surveysToAnswer.size()==1){
                     startAnswerSurveyActivity(surveysToAnswer.get(0));
                 }else{
+                    startListSurveyActivity(surveysToAnswer);
                     System.out.println("->>>>>>> "+surveysToAnswer.size());
                 }
             }catch(RESTfulException restfulException){
@@ -256,6 +257,18 @@ public class MainMenuActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Starts a ListSurveyActivity with a certain list of surveys
+     * @param surveyServices List with the surveys to show on the ListSurveyActivity
+     */
+    private void startListSurveyActivity(List<SurveyService> surveyServices){
+        Intent questionIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
+        Bundle bundle=new Bundle(surveyServices.size()+1);
+        bundle.putString("authenticationToken", authenticationToken);
+        for(int i=0;i<surveyServices.size();i++)bundle.putSerializable(""+i,surveyServices.get(i));
+        questionIntent.putExtra(ListSurveyActivity.class.getSimpleName(),bundle);
+        MainMenuActivity.this.startActivity(questionIntent);
+    }
     /**
      * Starts a new AnswerSurveyActivity with a certain SurveyService which represents
      * the survey being reviewed
