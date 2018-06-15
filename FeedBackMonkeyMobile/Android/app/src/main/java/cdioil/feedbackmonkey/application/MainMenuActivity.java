@@ -32,7 +32,6 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.ParserConfigurationException;
@@ -220,14 +219,20 @@ public class MainMenuActivity extends AppCompatActivity {
                     startAnswerSurveyActivity(surveysToAnswer.get(0));
                 }else{
                     startListSurveyActivity(surveysToAnswer);
-                    System.out.println("->>>>>>> "+surveysToAnswer.size());
                 }
             }catch(RESTfulException restfulException){
                 switch(restfulException.getCode()){
-                    //Treat unsuccessful
+                    case HttpsURLConnection.HTTP_BAD_REQUEST:
+                        ToastNotification.show(MainMenuActivity.this,getString(R.string.no_surveys_with_certain_code));
+                        break;
+                    case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                        //#TO-DO: Authentication Token is not valid anymore, Go back to LoginActivity
+                        break;
+                    default:
+                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
             }catch(IOException ioException){
-                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
             }
         };
     }
@@ -244,10 +249,17 @@ public class MainMenuActivity extends AppCompatActivity {
                 startListSurveyActivity(surveysToAnswer);
             }catch(RESTfulException restfulException){
                 switch(restfulException.getCode()){
-                    //Treat unsuccessful
+                    case HttpsURLConnection.HTTP_BAD_REQUEST:
+                        ToastNotification.show(MainMenuActivity.this,getString(R.string.no_available_surveys));
+                        break;
+                    case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                        //#TO-DO: Authentication Token is not valid anymore, Go back to LoginActivity
+                        break;
+                    default:
+                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
             }catch(IOException ioException){
-                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
             }
         };
     }
@@ -286,10 +298,18 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
             }catch(RESTfulException restfulException){
                 switch(restfulException.getCode()){
-                    //Treat unsuccessful
+                    case HttpsURLConnection.HTTP_BAD_REQUEST:
+                        //#TO-DO: There are a lot of codes here to treat
+                        ToastNotification.show(MainMenuActivity.this,"#TO-DO (400) newReview");
+                        break;
+                    case HttpsURLConnection.HTTP_NOT_FOUND:
+                        ToastNotification.show(MainMenuActivity.this,getString(R.string.survey_not_availalbe));
+                        break;
+                    default:
+                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
             }catch(IOException ioException){
-                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
             }
         };
     }

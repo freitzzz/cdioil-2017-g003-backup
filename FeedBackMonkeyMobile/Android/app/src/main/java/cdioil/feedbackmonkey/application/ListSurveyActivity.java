@@ -48,18 +48,6 @@ import okhttp3.Response;
 public class ListSurveyActivity extends AppCompatActivity {
 
     /**
-     * Constant that represents the Surveys resource path
-     */
-    private static final String SURVEYS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Surveys");
-    /**
-     * Constant that represents the user available surveys resource path under survey resource
-     */
-    private static final String USER_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available User Surveys");
-    /**
-     * Constant that represents the surveys available to the user with a given code resource path under survey resource.
-     */
-    private static final String PRODUCT_CODE_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available Surveys By Product Code");
-    /**
      * Constant that represents the Reviews resource path.
      */
     private static final String REVIEWS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Reviews");
@@ -67,15 +55,6 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Constant that represents the new review resource path under reviews resource.
      */
     private static final String NEW_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Create New Review");
-    /**
-     * Constant representing an error message to be displayed when a connection error occurs.
-     */
-    private static final String ERROR_CONNECTION_LOST = "Ocorreu um erro com a sua ligação à internet";
-
-    /**
-     * Constant representing an error message to be displayed when an error occurs whilst parsing a file.
-     */
-    private static final String ERROR_PARSING_FILE = "Ocorreu um erro na leitura do ficheiro recebido";
     /**
      * ListView that is hold by the scroll view
      */
@@ -169,10 +148,10 @@ public class ListSurveyActivity extends AppCompatActivity {
                         finish();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        ToastNotification.show(this, ERROR_CONNECTION_LOST);
+                        ToastNotification.show(this,getString(R.string.no_internet_connection));
                     } catch (ParserConfigurationException | SAXException e) {
                         e.printStackTrace();
-                        ToastNotification.show(this, ERROR_PARSING_FILE);
+                        ToastNotification.show(this, getString(R.string.error_parsing_file));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -248,7 +227,7 @@ public class ListSurveyActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                ToastNotification.show(this, ERROR_CONNECTION_LOST);
+                ToastNotification.show(this, getString(R.string.no_internet_connection));
             }
         };
     }
@@ -276,7 +255,7 @@ public class ListSurveyActivity extends AppCompatActivity {
                 }
             } catch (IOException ioException) {
                 //TODO: log exceptions to logger file
-                ToastNotification.show(this, ERROR_CONNECTION_LOST);
+                ToastNotification.show(this, getString(R.string.no_internet_connection));
             }
         };
     }
