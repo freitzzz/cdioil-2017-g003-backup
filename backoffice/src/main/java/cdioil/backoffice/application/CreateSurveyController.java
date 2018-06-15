@@ -1,6 +1,7 @@
 package cdioil.backoffice.application;
 
 import cdioil.domain.*;
+import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.persistence.impl.*;
@@ -109,7 +110,8 @@ public class CreateSurveyController {
      * @param surveyItems list of survey items
      * @param map
      */
-    public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateBeginning, LocalDateTime dateEnding, Map<SurveyItem, List<Question>> map, UsersGroup targetAudience) {
+    public boolean createSurvey(List<SurveyItem> surveyItems, LocalDateTime dateBeginning, LocalDateTime dateEnding,
+                                Map<SurveyItem, List<Question>> map, UsersGroup targetAudience) {
         SurveyRepositoryImpl repo = new SurveyRepositoryImpl();
         Survey survey;
 

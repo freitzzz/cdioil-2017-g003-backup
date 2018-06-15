@@ -6,6 +6,7 @@ import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
+import cdioil.framework.SurveyDTO;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -251,5 +252,19 @@ public class SurveyTest {
         list.add(new Product("ProdutoTeste 2", new SKU("566341098"), "1 Kg", new QRCode("4563218")));
         testGlobalSurvey = new GlobalSurvey(list, timePeriod);
         assertEquals("Should be the same", list, testGlobalSurvey.getItemList());
+    }
+
+    @Test
+    public void testToDTO() {
+        ArrayList<SurveyItem> items = new ArrayList<>();
+        items.add(new Product());
+
+        Survey s = new GlobalSurvey(items, new TimePeriod(LocalDateTime.MIN,
+                LocalDateTime.now()));
+
+        SurveyDTO expected = new SurveyDTO("survey", s.getName(),
+                s.getSurveyEndDate(), SurveyState.DRAFT.toString());
+
+        assertEquals(expected, s.toDTO());
     }
 }
