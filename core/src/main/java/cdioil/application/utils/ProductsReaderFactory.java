@@ -33,6 +33,8 @@ public class ProductsReaderFactory {
             return new CSVProductsReader(filePath, repeatedProducts);
         } else if (filePath.endsWith(CommonFileExtensions.XML_EXTENSION)) {
             return new XMLProductsReader(filePath, repeatedProducts);
+        } else if (filePath.endsWith(CommonFileExtensions.JSON_EXTENSION)) {
+            return new JSONProductsReader(filePath, repeatedProducts);
         }
         return null;
     }

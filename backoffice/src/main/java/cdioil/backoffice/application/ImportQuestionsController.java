@@ -23,7 +23,7 @@ import java.util.Set;
 public class ImportQuestionsController {
 
     /**
-     * Currrently logged-in manager.
+     * Currently logged-in manager.
      */
     private Manager manager;
 
