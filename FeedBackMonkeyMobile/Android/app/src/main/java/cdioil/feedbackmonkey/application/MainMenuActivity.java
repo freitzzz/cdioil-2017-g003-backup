@@ -41,6 +41,7 @@ import javax.xml.transform.TransformerException;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.authz.UserProfileActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
@@ -101,7 +102,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     scanItemCode();
                     break;
                 case 2:
-                    //Create intent to profile
+                    startUserProfileActivity();
                     break;
                 case 3:
                     //Create intent to something
@@ -138,7 +139,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts the ListSurveyActivity activity with extra information being stored within the bundle, besides the authentication token.
+     * Starts the ListSurveyActivity with extra information being stored within the bundle, besides the authentication token.
      *
      * @param bundleExtras extra information being stored in the bundle
      */
@@ -154,7 +155,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts the ListSurveyActivity activity with authentication token as the single content within the bundle.
+     * Starts the ListSurveyActivity with authentication token as the single content within the bundle.
      */
     private void startListSurveyActivity() {
         Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
@@ -162,6 +163,17 @@ public class MainMenuActivity extends AppCompatActivity {
         bundle.putString("authenticationToken", authenticationToken);
         listSurveyActivityIntent.putExtras(bundle);
         startActivity(listSurveyActivityIntent);
+    }
+
+    /**
+     * Starts the UserProfileActivity.
+     */
+    private void startUserProfileActivity() {
+        Intent userProfileActivityIntent = new Intent(MainMenuActivity.this, UserProfileActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("authenticationToken", authenticationToken);
+        userProfileActivityIntent.putExtras(bundle);
+        startActivity(userProfileActivityIntent);
     }
 
 
