@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.github.ybq.android.spinkit.SpinKitView;
-import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.gson.Gson;
 
 
@@ -44,15 +42,15 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Constant that represents the message that occurs if the user activates his account with success
      */
-    private static final String ACCOUNT_ACTIVATED_WITH_SUCCESS="Conta activada com successo!";
+    private static final String ACCOUNT_ACTIVATED_WITH_SUCCESS = "Conta activada com successo!";
     /**
      * Constant that represents the message that occurs if the user activates his account with success
      */
-    private static final String ACCOUNT_NOT_ACTIVATED_WITH_SUCCESS="Ocorreu um erro ao ativar a conta!";
+    private static final String ACCOUNT_NOT_ACTIVATED_WITH_SUCCESS = "Ocorreu um erro ao ativar a conta!";
     /**
      * Constant that represents the message that occurs if the user activates his account with success
      */
-    private static final String ACCOUNT_ALREADY_ACTIVATED="A conta já se encontra activada!";
+    private static final String ACCOUNT_ALREADY_ACTIVATED = "A conta já se encontra activada!";
     /**
      * Login button.
      */
@@ -65,6 +63,10 @@ public class LoginActivity extends AppCompatActivity {
      * Activate account button.
      */
     private Button activateAccountButton;
+    /**
+     * Password recovery button.
+     */
+    private Button passwordRecoveryButton;
     /**
      * Text field for email address.
      */
@@ -101,20 +103,22 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.passwordText);
         signupButton = findViewById(R.id.signupButton);
         activateAccountButton = findViewById(R.id.activateAccountButton);
-        loginProgressBar=findViewById(R.id.circle_loading_bar);
+        passwordRecoveryButton = findViewById(R.id.passwordRecoveryButton);
+        loginProgressBar = findViewById(R.id.circle_loading_bar);
         System.out.println(loginProgressBar);
         startLogin();
         startActivateAccount();
         startSignUp();
+        startPasswordRecovery();
         showSignUpInfo();
     }
 
     /**
      * Shows info regarding a registration process if one occurred
      */
-    private void showSignUpInfo(){
-        if(onStartup){
-            ToastNotification.show(LoginActivity.this,this.getIntent().
+    private void showSignUpInfo() {
+        if (onStartup) {
+            ToastNotification.show(LoginActivity.this, this.getIntent().
                     getExtras().getString("toastText"));
         }
     }
@@ -176,6 +180,94 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
+     * Sets on click listener to begin the password recovery process.
+     */
+    private void startPasswordRecovery() {
+        passwordRecoveryButton.setOnClickListener(view -> {
+            showRequestEmailForPasswordRecoveryDialog();
+        });
+    }
+
+    /**
+     * Presents a dialog to the user requesting their email so a code to recover their password
+     * can be sent.
+     */
+    private void showRequestEmailForPasswordRecoveryDialog() {
+        AlertDialog.Builder requestPasswordRecoveryCodeDialog =
+                new AlertDialog.Builder(this);
+        requestPasswordRecoveryCodeDialog.setTitle(R.string.password_recovery_header);
+        requestPasswordRecoveryCodeDialog.setMessage("Insira o seu email para receber um código que permitirá a " +
+                "mudança de password");
+        requestPasswordRecoveryCodeDialog.setIcon(R.drawable.ic_info_black_18dp);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.password_recovery_email_and_code_request, null);
+        requestPasswordRecoveryCodeDialog.setView(promptView);
+        Button sendCodeRequestButton = promptView.findViewById(R.id.requestPasswordRecoveryCodeButton);
+        sendCodeRequestButton.setText(R.string.request_password_recovery_code);
+        EditText emailText = promptView.findViewById(R.id.pwdRecoveryEmailEditText);
+        sendCodeRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                //TODO RESTRequest to confirm email and launch the code insertion dialog only if the request returns code 200
+                showInsertPasswordRecoveryCodeDialog();
+            }
+        });
+        requestPasswordRecoveryCodeDialog.show();
+    }
+
+    /**
+     * Presents a dialog to the user so they can insert the password recovery code to change
+     * their password.
+     */
+    private void showInsertPasswordRecoveryCodeDialog(){
+        AlertDialog.Builder requestPasswordRecoveryCodeDialog =
+                new AlertDialog.Builder(this);
+        requestPasswordRecoveryCodeDialog.setTitle(R.string.password_recovery_header);
+        requestPasswordRecoveryCodeDialog.setMessage("Insira o código que foi enviado para o seu email para " +
+                "alterar a sua password");
+        requestPasswordRecoveryCodeDialog.setIcon(R.drawable.ic_info_black_18dp);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.insert_activation_code, null);
+        requestPasswordRecoveryCodeDialog.setView(promptView);
+        Button requestPasswordChangeButton = promptView.findViewById(R.id.sendActivationRequestButton);
+        requestPasswordChangeButton.setText(R.string.change_password);
+        EditText passwordRecoveryCodeEditText = promptView.findViewById(R.id.activateAccountCode);
+        requestPasswordChangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                //TODO RESTRequest to confirm code and launch the change password dialog only if the request returns code 200
+                showChangePasswordDialog();
+            }
+        });
+        requestPasswordRecoveryCodeDialog.show();
+    }
+
+    private void showChangePasswordDialog(){
+        AlertDialog.Builder setNewPasswordDialog =
+                new AlertDialog.Builder(this);
+        setNewPasswordDialog.setTitle(R.string.password_recovery_header);
+        setNewPasswordDialog.setMessage("Insira a sua nova password");
+        setNewPasswordDialog.setIcon(R.drawable.ic_info_black_18dp);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.password_recovery_set_new_password, null);
+        setNewPasswordDialog.setView(promptView);
+        Button setNewPassword = promptView.findViewById(R.id.setNewPassword);
+        EditText newPasswordEditText = promptView.findViewById(R.id.newPasswordEditText);
+        EditText rewriteNewPasswordEditText = promptView.findViewById(R.id.rewriteNewPasswordEditText);
+        setNewPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                /**
+                 * TODO RESTRequest to confirm and set the new password and automatically log in the user
+                 * to the app only if the request returns code 200
+                 */
+                ToastNotification.show(LoginActivity.this,"Hey hey hey");
+            }
+        });
+        setNewPasswordDialog.show();
+    }
+
+    /**
      * Initializes the application.
      */
     private void initializeApplication() {
@@ -224,7 +316,7 @@ public class LoginActivity extends AppCompatActivity {
                     runOnUiThread(this::stopLoadingDialog);
                     showLoginErrorMessage("Login Inválido",
                             "A sua conta não está ativada!");
-                } else if (restResponse.code() == HttpsURLConnection.HTTP_FORBIDDEN){
+                } else if (restResponse.code() == HttpsURLConnection.HTTP_FORBIDDEN) {
                     runOnUiThread(this::stopLoadingDialog);
                     showLoginErrorMessage("Conta bloqueada",
                             "A sua conta foi bloqueada temporariamente devido a " +
@@ -249,9 +341,12 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Returns the user login form as a JSON form based on the user input from the email & password fields
+     *
      * @return String with the user login form as a JSON form based on the user input from the email & password fields
      */
-    private String getUserLoginForm(){return new Gson().toJson(new UserJSONService(emailText.getText().toString(),passwordText.getText().toString()));}
+    private String getUserLoginForm() {
+        return new Gson().toJson(new UserJSONService(emailText.getText().toString(), passwordText.getText().toString()));
+    }
 
     /**
      * Creates a new thread to display a login error message using an AlertBuilder
@@ -280,7 +375,7 @@ public class LoginActivity extends AppCompatActivity {
                             alertDialog.dismiss();
                         }
                     });
-                     clearPasswordText();
+                    clearPasswordText();
                 });
             }
         }.start();
@@ -321,6 +416,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Shows a Toast on the current activity with a certain message
+     *
      * @param toastMessage String with the toast message
      */
     private void showToastMessage(String toastMessage) {
@@ -330,22 +426,22 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Clears password edit text
      */
-    private void clearPasswordText(){
+    private void clearPasswordText() {
         passwordText.getText().clear();
     }
 
     /**
      * Starts the login progress dialog
      */
-    private void startLoadingDialog(){
-        if(loginProgressDialog==null)createLoginProgressDialog();
+    private void startLoadingDialog() {
+        if (loginProgressDialog == null) createLoginProgressDialog();
         loginProgressDialog.show();
     }
 
     /**
      * Stops the login progress dialog
      */
-    private void stopLoadingDialog(){
+    private void stopLoadingDialog() {
         loginProgressDialog.cancel();
         loginProgressBar.setVisibility(View.GONE);
     }
@@ -353,10 +449,10 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Creates the login progress dialog used to keep the user alert from the login action
      */
-    private void createLoginProgressDialog(){
-        loginProgressBar=(LayoutInflater.from(this).inflate(R.layout.circle_loading_bar,null))
+    private void createLoginProgressDialog() {
+        loginProgressBar = (LayoutInflater.from(this).inflate(R.layout.circle_loading_bar, null))
                 .findViewById(R.id.circle_loading_bar);
-        loginProgressDialog=new AlertDialog.Builder(LoginActivity.this)
+        loginProgressDialog = new AlertDialog.Builder(LoginActivity.this)
                 .setTitle(R.string.login_progress_dialog_info)
                 .setView(loginProgressBar)
                 .setCancelable(false)

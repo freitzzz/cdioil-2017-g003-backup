@@ -96,6 +96,7 @@
         <Message messageId = "error_no_whitelist" value = "There are no authorized email domains"/>
         <Message messageId = "error_no_users_added_survey" value = "No users have been added to the survey"/>
         <Message messageId = "error_importing_template_failed" value = "An error occurred while importing the template!&#10;Please check if the file is valid.&#10;"/>
+        <Message messageId = "error_wrong_file_configuration" value = "An error occurred while importing the file containing the independent questions!&#10;Please check if the file is valid.&#10;"/>
     </ErrorMessages>
 
     <MenuOptions>

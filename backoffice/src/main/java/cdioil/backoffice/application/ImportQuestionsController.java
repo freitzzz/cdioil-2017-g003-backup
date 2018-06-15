@@ -7,6 +7,8 @@ import cdioil.application.utils.QuestionsReader;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.util.HashSet;
 
 import java.util.Map;
@@ -109,19 +111,20 @@ public class ImportQuestionsController {
      * @param filename Name of the file
      * @return number of successfully imported questions
      */
-    public Integer importIndependentQuestions(String filename) {
+    public Integer importIndependentQuestions(String filename) throws ParserConfigurationException {
 
         Integer numImportedQuestions = 0;
 
         QuestionsReader questionsReader = QuestionsReaderFactory.create(filename);
-
         if (questionsReader != null) {
 
             IndependentQuestionsLibraryRepositoryImpl indQuestionLibRepo = new IndependentQuestionsLibraryRepositoryImpl();
 
             IndependentQuestionsLibrary indQuestionLib = indQuestionLibRepo.findLibrary();
 
+
             List<Question> questions = questionsReader.readIndependentQuestions();
+
 
             if (questions != null && !questions.isEmpty()) {
 
@@ -137,6 +140,7 @@ public class ImportQuestionsController {
             }
             indQuestionLibRepo.merge(indQuestionLib);
         }
+
         return numImportedQuestions;
     }
 

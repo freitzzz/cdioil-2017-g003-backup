@@ -97,6 +97,7 @@
         <Message messageId = "error_no_whitelist" value = "Não existem domínios autorizados"/>
         <Message messageId = "error_no_users_added_survey" value = "Não foram adicionados utilizadores ao inquérito"/>
         <Message messageId = "error_importing_template_failed" value = "Ocorreu um erro ao importar o template de inquérito!&#10;Verifique se o ficheiro é válido.&#10;"/>
+        <Message messageId = "error_wrong_file_configuration" value = "Ocorreu um erro ao importar o ficheiro que continha as questões independentes!&#10;Por favor, verifique se o ficheiro é valido..&#10;"/>
     </ErrorMessages>
 	
     <MenuOptions>

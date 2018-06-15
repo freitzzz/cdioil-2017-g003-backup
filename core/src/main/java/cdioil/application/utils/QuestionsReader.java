@@ -1,6 +1,8 @@
 package cdioil.application.utils;
 
 import cdioil.domain.Question;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,6 @@ public interface QuestionsReader {
      *
      * @return list of questions read from file.
      */
-    List<Question> readIndependentQuestions();
+    List<Question> readIndependentQuestions() throws ParserConfigurationException;
 
 }

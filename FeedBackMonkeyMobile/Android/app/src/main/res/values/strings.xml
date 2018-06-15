@@ -39,4 +39,10 @@
     <string name="survey_not_availalbe">O inquérito já não se encontra disponivel</string>
     <string name="no_available_surveys">Não existem inquéritos disponiveis de momento</string>
     <string name="no_surveys_with_certain_code">Não existem inquéritos disponiveis com o código</string>
+    <string name="password_recovery">Esqueceu-se da sua password?</string>
+    <string name="password_recovery_header">Recuperação da Password</string>
+    <string name="request_password_recovery_code">Pedir código de recuperação</string>
+    <string name="change_password">Alterar Password</string>
+    <string name="new_password">Nova Password</string>
+    <string name="set_new_password">Registar nova Password</string>
 </resources>
