@@ -238,10 +238,22 @@ public class SignUpActivity extends AppCompatActivity {
                                         String phoneNumber = phoneNumberText.getText().toString();
                                         String location = locationText.getText().toString();
                                         String birthDate = birthDateText.getText().toString();
+                                        String fullName = firstName.concat(" ").concat(lastName);
                                         //rest request to register account
+                                        if(firstName.isEmpty() || lastName.isEmpty()){
+                                            fullName = null;
+                                        }
+                                        if(phoneNumber.isEmpty()){
+                                            phoneNumber = null;
+                                        }
+                                        if(location.isEmpty()){
+                                            location = null;
+                                        }
+                                        if(birthDate.isEmpty()){
+                                            birthDate = null;
+                                        }
                                         String restRequestBody = new Gson().toJson(new RegistrationJSONService(email, password,
-                                                firstName + " " + lastName
-                                                , phoneNumber, location, birthDate));
+                                                fullName, phoneNumber, location, birthDate));
                                         /**
                                          * The credentials are validated twice here for the sake of UX.
                                          * If a user chooses to add optional information while signing up
@@ -249,10 +261,10 @@ public class SignUpActivity extends AppCompatActivity {
                                          * able to add the optional info.
                                          */
                                         Response validateCredentialsRestResponse =
-                                                getRestRequestToValidateCredentials(restRequestBody);
+                                                getRestRequestToValidateCredentials(restRequestBody,"true");
                                         if (validateCredentialsRestResponse.code() == HttpsURLConnection.HTTP_OK) {
                                             Response registerAccountRestResponse =
-                                                    getRestRequestToValidateCredentials(restRequestBody);
+                                                    getRestRequestToValidateCredentials(restRequestBody,"false");
                                             if (registerAccountRestResponse.code() == HttpsURLConnection.HTTP_OK) {
                                                 activateAccount();
                                             } else if (registerAccountRestResponse.code() == HttpsURLConnection.HTTP_BAD_REQUEST) {
@@ -438,7 +450,7 @@ public class SignUpActivity extends AppCompatActivity {
                     null
                     , null, null, null));
         }
-        Response restResponse = getRestRequestToValidateCredentials(restRequestBody);
+        Response restResponse = getRestRequestToValidateCredentials(restRequestBody,"true");
         RegistrationJSONService restResponseBody = getRegistrationJSONService(restResponse);
         String restResponseField = restResponseBody.getField();
         String restResponseMessage = restResponseBody.getMessage();
@@ -486,14 +498,14 @@ public class SignUpActivity extends AppCompatActivity {
      * @param restRequestBody REST Request Body containing the credentials to be validated
      * @return REST response to whether the sign up credentials are valid or not
      */
-    private Response getRestRequestToValidateCredentials(String restRequestBody) {
+    private Response getRestRequestToValidateCredentials(String restRequestBody, String validateParameter) {
         try {
             return RESTRequest.
                     create(BuildConfig.SERVER_URL.
                             concat(FeedbackMonkeyAPI.getAPIEntryPoint()).
                             concat(FeedbackMonkeyAPI.getResourcePath("Authentication")).
                             concat(FeedbackMonkeyAPI.getSubResourcePath("Authentication", "Register Account")).
-                            concat("?validate=true")).
+                            concat("?validate=".concat(validateParameter))).
                     withMediaType(RESTRequest.RequestMediaType.JSON).
                     withBody(restRequestBody).
                     POST();

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema  elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="lista_questoes">
+		<xsd:complexType>
+			<xsd:sequence maxOccurs="unbounded">
+				<xsd:element name="question" type="TQuestion"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="TQuestion">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="BinaryQuestion">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Text" type="xsd:string"/>
+						</xsd:sequence>
+						<xsd:attribute name="questionID" type="xsd:string" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="MultipleChoiceQuestion">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Text" type="xsd:string"/>
+							<xsd:element name="Option" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="num" type="xsd:integer"/>
+									<xsd:attribute name="text" type="xsd:string"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="questionID" type="xsd:string" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="QuantitativeQuestion">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Text" type="xsd:string"/>
+							<xsd:element name="scaleMinValue" type="xsd:integer"/>
+							<xsd:element name="scaleMaxValue" type="xsd:integer"/>
+						</xsd:sequence>
+						<xsd:attribute name="questionID" type="xsd:string" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="CAT_ID" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

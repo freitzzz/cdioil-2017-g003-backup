@@ -61,11 +61,12 @@ public class CreateTemplateController {
      * @param questionGroup questionGroup of the template
      * @return true is the template was persisted with success and false if it wasn't persisted
      */
+    //TODO: refactor method
     public boolean createTemplate(Category category, String title, QuestionGroup questionGroup) {
-        Template template = new Template(title, questionGroup);
+        //Template template = new Template(title, questionGroup);
         CategoryTemplatesLibraryRepositoryImpl categoryTemplatesLibraryRepository = new CategoryTemplatesLibraryRepositoryImpl();
         CategoryTemplatesLibrary templatesLibrary = categoryTemplatesLibraryRepository.findTemplatesForCategory();
-        templatesLibrary.addTemplate(category, template);
+        //templatesLibrary.addTemplate(category, template);
 
         return categoryTemplatesLibraryRepository.merge(templatesLibrary) != null;
     }

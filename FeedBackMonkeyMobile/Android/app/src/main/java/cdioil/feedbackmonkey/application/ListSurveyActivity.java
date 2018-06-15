@@ -29,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.application.services.SurveyService;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
@@ -105,6 +106,10 @@ public class ListSurveyActivity extends AppCompatActivity {
      * HTTP Response body when attempting to retrieve new review data.
      */
     private String reviewRestResponseBody;
+    /**
+     * List with all current surveys displayed on the list
+     */
+    private List<SurveyService> currentSurveys;
 
 
     /**
@@ -128,9 +133,18 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Configures the current view and view adapter properties.
      */
     private void configure() {
+        currentSurveys=new ArrayList<>();
         listSurveysListView = findViewById(R.id.listViewListSurveys);
         currentAdapter = new SurveyItemListViewAdapter(getActivity());
         listSurveysListView.setAdapter(currentAdapter);
+        configureListViewOnItemClick();
+        configureListViewOnLongItemClick();
+    }
+
+    /**
+     * Configures the onItemClick event of the current list view
+     */
+    private void configureListViewOnItemClick(){
         listSurveysListView.setOnItemClickListener((parent, view, position, id) -> {
 
             //Start a new Thread responsible for establishing a connection to the HTTP server
@@ -169,6 +183,17 @@ public class ListSurveyActivity extends AppCompatActivity {
     }
 
     /**
+     * Configures the onLongItemClick event of the current list view
+     */
+    private void configureListViewOnLongItemClick(){
+        listSurveysListView.setOnItemLongClickListener((adapterView, view, position, timeClicked)->{
+            SurveyDescriptionDialog surveyDialog=new SurveyDescriptionDialog(ListSurveyActivity.this
+                    ,currentSurveys.get(position));
+            surveyDialog.show();
+            return true;
+        });
+    }
+    /**
      * Creates a pending reviews directory or fetches the existing one.
      * @return pending reviews directory
      */
@@ -205,7 +230,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     private Runnable requestNewReview(int position) {
         return () -> {
             try {
-                String surveyID = currentAdapter.getItem(position).split(" ")[1];
+                String surveyID = currentSurveys.get(position).getSurveyID();
                 Response reviewRestResponse = RESTRequest.create(BuildConfig.SERVER_URL.
                         concat(FeedbackMonkeyAPI.getAPIEntryPoint().
                                 concat(REVIEWS_RESOURCE_PATH).
@@ -289,7 +314,8 @@ public class ListSurveyActivity extends AppCompatActivity {
                 }.getType();
                 List<SurveyJSONService> surveyJSONServices = gson.fromJson(responseBody, surveyJSONServicesType);
                 for (int i = 0; i < surveyJSONServices.size(); i++) {
-                    surveyItems.add(surveyJSONServices.get(i).getSurveyName());
+                    currentSurveys.add(new SurveyService(surveyJSONServices.get(i)));
+                    surveyItems.add(currentSurveys.get(currentSurveys.size()-1).getSurveyName());
                 }
                 return surveyItems;
             case 400:
@@ -339,7 +365,7 @@ public class ListSurveyActivity extends AppCompatActivity {
          * @param surveyItems List with a previous survey items predefined
          */
         public SurveyItemListViewAdapter(Activity activity, List<String> surveyItems) {
-            super(activity, R.layout.survey_item_list_row, surveyItems);
+            super(activity, R.layout.survey_list_row_item, surveyItems);
         }
 
         /**
@@ -348,7 +374,7 @@ public class ListSurveyActivity extends AppCompatActivity {
          * @param activity Activity with the activity which the ListView is being added the adapter
          */
         public SurveyItemListViewAdapter(Activity activity) {
-            super(activity, R.layout.survey_item_list_row);
+            super(activity, R.layout.survey_list_row_item);
         }
 
         /**
@@ -365,7 +391,7 @@ public class ListSurveyActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = LayoutInflater
                         .from(parent.getContext())
-                        .inflate(R.layout.survey_item_list_row, parent, false);
+                        .inflate(R.layout.survey_list_row_item, parent, false);
             }
             TextView viewSurveyName = convertView.findViewById(R.id.textViewSurveyItemListRow);
             viewSurveyName.setText(getItem(position));

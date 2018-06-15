@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testes unitários relativo a classe Preco
+ * Testes unitários relativo a classe Price
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  */
 public class PrecoTest {
@@ -23,7 +23,7 @@ public class PrecoTest {
     
     
     /**
-     * Testes relativos à construção do objecto Preco
+     * Testes relativos à construção do objecto Price
      */
     @Test
     public void testConstrucao(){
@@ -35,16 +35,16 @@ public class PrecoTest {
                 + "argumentos são inválidos",createPreco(PRECOS_INVALIDOS[i]));
     }
     /**
-     * Test of equals method, of class Preco.
+     * Test of equals method, of class Price.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Preco precoX = new Preco("50 €");
-        Preco precoY=new Preco("50 EUR");
-        Preco precoZ=new Preco("50 $");
-        Preco precoK = new Preco("20 €");
-        Preco precoM = new Preco("15 $");
+        Price precoX = new Price("50 €");
+        Price precoY=new Price("50 EUR");
+        Price precoZ=new Price("50 $");
+        Price precoK = new Price("20 €");
+        Price precoM = new Price("15 $");
         assertEquals("A condição deve acertar porque os Preco a comparar sao a mesma instância"
                 ,precoX,precoX);
         assertNotEquals("A condição deve falhar porque o Preco a comparar é null",precoX,null);
@@ -60,25 +60,25 @@ public class PrecoTest {
     }
 
     /**
-     * Test of hashCode method, of class Preco.
+     * Test of hashCode method, of class Price.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Preco instance = new Preco("50 €");
+        Price instance = new Price("50 €");
         int expResult = 1643727029;
         int result = instance.hashCode();
         assertEquals("A condição deve acertar pois os valores são iguais",expResult,result);
     }
 
     /**
-     * Test of toString method, of class Preco.
+     * Test of toString method, of class Price.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        Preco instanceX = new Preco("50 €");
-        Preco instanceY=new Preco("50 EUR");
+        Price instanceX = new Price("50 €");
+        Price instanceY=new Price("50 EUR");
         String expResult = "50.0 EUR";
         assertEquals("A condição deve acertar porque o contéudo das Strings é o mesmo"
                 ,instanceX.toString(),expResult);
@@ -90,13 +90,13 @@ public class PrecoTest {
      */
     @Test
     public void testMisc(){
-        assertNotNull("Creation of the object shouldn't be null",new Preco());
+        assertNotNull("Creation of the object shouldn't be null",new Price());
     }
     /**
-     * Cria um novo objecto Preco com um determinado preço
+     * Cria um novo objecto Price com um determinado preço
      * @param preco String com o preço
-     * @return Preco com um determinado preço ou null caso tenha ocurrido alguma excecão
+     * @return Price com um determinado preço ou null caso tenha ocurrido alguma excecão
      */
-    private Preco createPreco(String preco){try{return new Preco(preco);}catch(IllegalArgumentException e){return null;}}
+    private Price createPreco(String preco){try{return new Price(preco);}catch(IllegalArgumentException e){return null;}}
     
 }

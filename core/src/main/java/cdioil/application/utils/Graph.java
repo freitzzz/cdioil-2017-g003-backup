@@ -34,7 +34,7 @@ import javax.persistence.Version;
  * @author António Sousa [1161371]
  */
 @Entity
-@SequenceGenerator(name = "graphSeq",initialValue = 1,allocationSize = 1)
+@SequenceGenerator(name = "graphSeq", initialValue = 1, allocationSize = 1)
 public class Graph implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public class Graph implements Serializable {
      * Database identifier.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "graphSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "graphSeq")
     private long id;
 
     /**
@@ -167,15 +167,16 @@ public class Graph implements Serializable {
         return numVertices;
     }
 
-    
     /**
-     * Returns an Iterable Collection of all the Vertex elements present in the Graph.
+     * Returns an Iterable Collection of all the Vertex elements present in the
+     * Graph.
+     *
      * @return Iterable Collection of all Vertices
      */
-    public Iterable<Vertex> allVertices(){
+    public Iterable<Vertex> allVertices() {
         return vertices.values();
     }
-    
+
     /**
      * Retrieves an Iterable Collection of all the Edges in the Graph.
      *
@@ -370,7 +371,9 @@ public class Graph implements Serializable {
     public boolean insertEdge(Question origElement, Question destElement, QuestionOption edgeElement, double edgeWeight) {
 
         //Do not allow loops
-        if (origElement.equals(destElement)) {
+        //This check prevents mismatch between a question and the option leading to a new question
+        if (origElement.equals(destElement)
+                || !origElement.getOptionList().contains(edgeElement)) {
             return false;
         }
 

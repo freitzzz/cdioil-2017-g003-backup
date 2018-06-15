@@ -1,7 +1,9 @@
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
-import java.util.Objects;
+import cdioil.application.utils.Vertex;
+import java.util.LinkedList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -26,10 +28,9 @@ public class ScriptedTemplate extends Template {
      * group
      *
      * @param title title of the scripted template
-     * @param questionGroup question group of the scripted template
      */
-    public ScriptedTemplate(String title, QuestionGroup questionGroup) {
-        super(title, questionGroup);
+    public ScriptedTemplate(String title) {
+        super(title);
         graph = new Graph();
     }
 
@@ -39,30 +40,28 @@ public class ScriptedTemplate extends Template {
     protected ScriptedTemplate() {
     }
 
-    /**
-     * Adds a question to the list of questions and to the graph
-     *
-     * @param question question to be added
-     * @return true, if the question is added, false if the question is invalid
-     */
+    @Override
     public boolean addQuestion(Question question) {
-        if (question == null || isValidQuestion(question)) {
-            return false;
-        }
         return graph.insertVertex(question);
     }
 
-    /**
-     * Remove a question from the graph and the template's question group
-     *
-     * @param question question to be removed
-     * @return true if the question was removed, false if otherwise
-     */
+    @Override
     public boolean removeQuestion(Question question) {
-        if (question == null || !isValidQuestion(question)) {
-            return false;
+        return graph.removeVertex(question);
+    }
+
+    @Override
+    public Iterable<Question> getQuestions() {
+
+        List<Question> questions = new LinkedList<>();
+
+        Iterable<Vertex> vertices = graph.allVertices();
+
+        for (Vertex v : vertices) {
+            questions.add(v.getElement());
         }
-        return graph.removeVertex(question) && getQuestionGroup().removeQuestion(question);
+
+        return questions;
     }
 
     /**
@@ -79,32 +78,32 @@ public class ScriptedTemplate extends Template {
             QuestionOption option, double weight) {
         return graph.insertEdge(origin, destination, option, weight);
     }
-
+    
     /**
-     * Checks if a question already exists in the graph and in the question
-     * group
-     *
-     * @param question question to be verified
-     * @return true, if it already exists in the graph and in the question group
-     * , false if otherwise
+     * Retrieves the Template's Graph.
+     * @return the Template's Graph
      */
-    public boolean isValidQuestion(Question question) {
-        return graph.vertexExists(question) && getQuestionGroup().containsQuestion(question);
+    public Graph getGraph(){
+        return graph;
     }
-
+    
     /**
      * ScriptedTemplate's hash code
+     *
      * @return hash code
      */
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.graph);
+        hash = 29 * hash + graph.hashCode();
+        hash = 29 * hash + title.hashCode();
         return hash;
     }
 
     /**
-     * Checks if two instances of ScriptedTemplate are equal based on their graph
+     * Checks if two instances of ScriptedTemplate are equal based on their
+     * graph
+     *
      * @param obj object to be compared
      * @return true if the objects are equal, false if otherwise
      */
@@ -120,9 +119,11 @@ public class ScriptedTemplate extends Template {
             return false;
         }
         final ScriptedTemplate other = (ScriptedTemplate) obj;
-        if (!Objects.equals(this.graph, other.graph)) {
+
+        if (!this.title.equals(other.title)) {
             return false;
         }
-        return true;
+
+        return this.graph.equals(other.graph);
     }
 }
