@@ -31,7 +31,6 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,7 +100,7 @@ public class MainMenuActivity extends AppCompatActivity {
         mainMenuListView.setOnItemClickListener((adapterView, view, i, l) -> {
             switch (i) {
                 case 0:
-                    startListSurveyActivity();
+                    prepareListSurveyActivityStart();
                     break;
                 case 1:
                     //Create intent to qr scan
@@ -145,30 +144,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts the ListSurveyActivity with extra information being stored within the bundle, besides the authentication token.
-     *
-     * @param bundleExtras extra information being stored in the bundle
-     */
-    private void startListSurveyActivity(Map<String, String> bundleExtras) {
-        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("authenticationToken", authenticationToken);
-        for (Map.Entry<String, String> entry : bundleExtras.entrySet()) {
-            bundle.putString(entry.getKey(), entry.getValue());
-        }
-        listSurveyActivityIntent.putExtras(bundle);
-        startActivity(listSurveyActivityIntent);
-    }
-
-    /**
      * Starts the ListSurveyActivity with authentication token as the single content within the bundle.
      */
-    private void startListSurveyActivity() {
-        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("authenticationToken", authenticationToken);
-        listSurveyActivityIntent.putExtras(bundle);
-        startActivity(listSurveyActivityIntent);
+    private void prepareListSurveyActivityStart() {
+        new Thread(fetchSurveysToAnswers()).start();
     }
 
     /**
@@ -215,10 +194,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
                 if (!itemCode.trim().isEmpty()) {
                     Toast.makeText(this, "Código Lido: " + itemCode, Toast.LENGTH_LONG).show();
-
-                    /*Map<String, String> bundleExtras = new HashMap<>();
-                    bundleExtras.put("itemCode", itemCode);
-                    startListSurveyActivity(bundleExtras);*/
                     new Thread(fetchScannedCodeSurveys(itemCode)).start();
                 } else {
                     Toast.makeText(this, "Por favor leia um código válido", Toast.LENGTH_LONG).show();
@@ -257,6 +232,25 @@ public class MainMenuActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Method fetches all active surveys that the current user can answer based on a
+     * pagination ID
+     * @return Runnable with the runnable action which will fetch the surveys to answer
+     */
+    private Runnable fetchSurveysToAnswers(){
+        return () -> {
+            try {
+                List<SurveyService> surveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByPaginationID((short)0);
+                startListSurveyActivity(surveysToAnswer);
+            }catch(RESTfulException restfulException){
+                switch(restfulException.getCode()){
+                    //Treat unsuccessful
+                }
+            }catch(IOException ioException){
+                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+            }
+        };
+    }
     /**
      * Starts a ListSurveyActivity with a certain list of surveys
      * @param surveyServices List with the surveys to show on the ListSurveyActivity

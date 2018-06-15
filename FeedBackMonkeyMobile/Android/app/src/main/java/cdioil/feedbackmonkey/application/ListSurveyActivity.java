@@ -93,7 +93,6 @@ public class ListSurveyActivity extends AppCompatActivity {
      */
     private String authenticationToken;
 
-
     /**
      * HTTP Response code when attempting to retrieve new review data.
      */
@@ -107,7 +106,6 @@ public class ListSurveyActivity extends AppCompatActivity {
      * List with all current surveys displayed on the list
      */
     private List<SurveyService> currentSurveys;
-
 
     /**
      * Creates the current activity.
