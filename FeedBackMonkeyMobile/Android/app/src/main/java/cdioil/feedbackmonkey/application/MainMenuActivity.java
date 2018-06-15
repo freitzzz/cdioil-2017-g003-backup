@@ -206,6 +206,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     /*Map<String, String> bundleExtras = new HashMap<>();
                     bundleExtras.put("itemCode", itemCode);
                     startListSurveyActivity(bundleExtras);*/
+                    new Thread(fetchScannedCodeSurveys(itemCode)).start();
                 } else {
                     Toast.makeText(this, "Por favor leia um código válido", Toast.LENGTH_LONG).show();
                 }
@@ -228,7 +229,9 @@ public class MainMenuActivity extends AppCompatActivity {
             try {
                 List<SurveyService> surveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByProductCode(productCode);
                 if(surveysToAnswer.size()==1){
-
+                    startAnswerSurveyActivity(surveysToAnswer.get(0));
+                }else{
+                    System.out.println("->>>>>>> "+surveysToAnswer.size());
                 }
             }catch(RESTfulException restfulException){
                 switch(restfulException.getCode()){
@@ -252,8 +255,15 @@ public class MainMenuActivity extends AppCompatActivity {
     private Runnable startReviewRequest(SurveyService surveyService){
         return () -> {
             try {
-                String surveyFlux=new RequestNewReviewController(surveyService).requestNewReview(authenticationToken);
-                ReviewXMLService.instance().createNewReviewFile(getPendingReviewsDirectory(),surveyFlux);
+                RequestNewReviewController requestNewReview=new RequestNewReviewController(surveyService);
+                try {
+                    requestNewReview.createNewReview(requestNewReview.requestNewReview(authenticationToken),MainMenuActivity.this);
+                    Intent questionIntent = new Intent(MainMenuActivity.this, QuestionActivity.class);
+                    questionIntent.putExtra("authenticationToken", authenticationToken);
+                    MainMenuActivity.this.startActivity(questionIntent);
+                } catch (ParserConfigurationException | SAXException e) {
+                    System.out.println(e.getMessage());
+                }
             }catch(RESTfulException restfulException){
                 switch(restfulException.getCode()){
                     //Treat unsuccessful
