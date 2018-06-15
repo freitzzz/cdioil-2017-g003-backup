@@ -19,10 +19,28 @@ public final class EmailSenderService {
      * Constant that represents the email activation content which is going to be sent to a 
      * certain user email
      */
-    private static final String FORMATED_EMAIL_ACTIVATION_CODE_CONTENT="Olá %s!"
-                + "\nReparamos que acabaste de te registar na nossa aplicação com o endereço %s."
-                + "\nDe modo a provarmos a tua autenticidade, pedimos que insiras o seguinte código %s "
-                + "aquando o inicio da aplicação.\n\nIsto é uma mensagem automática, por favor não responda para este endereço!";
+    private static final String FORMATED_EMAIL_ACTIVATION_CODE_CONTENT="Olá %s!<p>"
+            + "Reparamos que acabaste de te registar na nossa aplicação com o endereço %s.<p>"
+            + "De modo a provarmos a tua autenticidade, pedimos que insiras o seguinte código <strong>%s</strong> "
+            + "aquando o início da aplicação."
+            + "<p><p><i>Isto é uma mensagem automática, por favor não responda para este endereço.</i>";
+    
+    /**
+     * Constant that represents the email title when resetting a user's password.
+     */
+    private static final String EMAIL_PASSWORD_RESET_CODE_TITLE = "Reposição de Password 🍌";
+    
+    /**
+     * Constant that represents the email content when resetting a user's password.
+     */
+    private static final String FORMATED_EMAIL_PASSWORD_RESET_CODE_CONTENT = "Olá %s!<p>"
+            + "No Feedback Monkey sabemos que as passwords podem por vezes ser esquecidas.<p>"
+            + "É por isso que lhe estamos a enviar este email!<p>"
+            + "Basta inserir o código <strong>%s</strong> na nossa aplicação para que possa "
+            + "proceder com a renovação da sua password!<p>"
+            + "Se não pediu a renovação da sua password, por favor ignore esta mensagem.<p><p>"
+            + "<i>Isto é uma mensagem automática, por favor não responda para este endereço.</i>";
+    
     /**
      * SystemUser with the current system user that is going to be sent the email
      */
@@ -52,5 +70,29 @@ public final class EmailSenderService {
         return EmailSenderFactory
                 .create(sender.getEmail(),sender.getPassword())
                 .sendEmail(toEmail,EMAIL_ACTIVATION_CODE_TITLE,content);
+    }
+
+    /**
+     * Sends an email to the SystemUser's email address with the activation code
+     * when attempting to recover their password.
+     *
+     * @return true - if the email with the password recovery code was sent
+     * successfully<p>
+     * false - if not
+     */
+    public boolean sendPasswordResetCode() {
+        EmailSenders sender = new EmailSendersRepositoryImpl().getRandomEmailSender();
+        if (sender == null) {
+            return false;
+        }
+        String destinationEmail = currentSystemUser.getID().toString();
+        String userName = currentSystemUser.getName() != null ? currentSystemUser.getName().toString() : "";
+
+        String content = String.format(FORMATED_EMAIL_PASSWORD_RESET_CODE_CONTENT,
+                userName, currentSystemUser.getActivationCode());
+
+        return EmailSenderFactory
+                .create(sender.getEmail(), sender.getPassword())
+                .sendEmail(destinationEmail, EMAIL_PASSWORD_RESET_CODE_TITLE, content);
     }
 }

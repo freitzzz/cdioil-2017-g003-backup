@@ -25,6 +25,11 @@ public final class EmailSender {
      * Constant that represents the string representation for the UTF-8 Base 64 encoding
      */
     private static final String UTF8_BASE_64_ENCODING="B";
+    
+    /**
+     * Constant used for setting a MimeMessage's content formatting.
+     */
+    private static final String HTML_UTF_8 = "text/html; charset=utf-8";
     /**
      * String that represents the client email address that is going to send a certain email
      */
@@ -58,7 +63,7 @@ public final class EmailSender {
             messageToSent.setFrom(new InternetAddress(clientEmail));
             messageToSent.addRecipient(Message.RecipientType.TO,new InternetAddress(clientToSend));
             messageToSent.setSubject(encodeText(title));
-            messageToSent.setText(message);
+            messageToSent.setContent(message, HTML_UTF_8);  //this makes sure HTML is used instead of plain text
             Transport.send(messageToSent);
             return true;
         }catch(MessagingException|UnsupportedEncodingException e){

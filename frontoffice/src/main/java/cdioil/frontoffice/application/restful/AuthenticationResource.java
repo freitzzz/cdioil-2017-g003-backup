@@ -130,7 +130,7 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
         }
 
         //send email
-        boolean sentSucessfully = new EmailSenderService(sysUser).sendActivationCode();
+        boolean sentSucessfully = new EmailSenderService(sysUser).sendPasswordResetCode();
 
         if (!sentSucessfully) {
             //create Response informing the user an error occured while sending activation code email
