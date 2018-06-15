@@ -41,10 +41,16 @@ import javax.xml.transform.TransformerException;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
+
+import cdioil.feedbackmonkey.application.services.RequestNewReviewController;
+import cdioil.feedbackmonkey.application.services.SurveyService;
+import cdioil.feedbackmonkey.application.services.SurveyServiceController;
+import cdioil.feedbackmonkey.restful.exceptions.RESTfulException;
 import cdioil.feedbackmonkey.authz.UserProfileActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
+import cdioil.feedbackmonkey.utils.ToastNotification;
 import okhttp3.Response;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -210,9 +216,10 @@ public class MainMenuActivity extends AppCompatActivity {
                 if (!itemCode.trim().isEmpty()) {
                     Toast.makeText(this, "Código Lido: " + itemCode, Toast.LENGTH_LONG).show();
 
-                    Map<String, String> bundleExtras = new HashMap<>();
+                    /*Map<String, String> bundleExtras = new HashMap<>();
                     bundleExtras.put("itemCode", itemCode);
-                    startListSurveyActivity(bundleExtras);
+                    startListSurveyActivity(bundleExtras);*/
+                    new Thread(fetchScannedCodeSurveys(itemCode)).start();
                 } else {
                     Toast.makeText(this, "Por favor leia um código válido", Toast.LENGTH_LONG).show();
                 }
@@ -221,6 +228,63 @@ public class MainMenuActivity extends AppCompatActivity {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    /**
+     * Method that fetches all active surveys which products being reviewed
+     * have a certain code which was previously scanned by the user
+     * @param productCode String with the scanned product code
+     * @return Runnable with the runnable which will fetch the active surveys which products
+     * being reviewed have a certain scanned code
+     */
+    private Runnable fetchScannedCodeSurveys(String productCode){
+        return () -> {
+            try {
+                List<SurveyService> surveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByProductCode(productCode);
+                if(surveysToAnswer.size()==1){
+                    startAnswerSurveyActivity(surveysToAnswer.get(0));
+                }else{
+                    System.out.println("->>>>>>> "+surveysToAnswer.size());
+                }
+            }catch(RESTfulException restfulException){
+                switch(restfulException.getCode()){
+                    //Treat unsuccessful
+                }
+            }catch(IOException ioException){
+                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+            }
+        };
+    }
+
+    /**
+     * Starts a new AnswerSurveyActivity with a certain SurveyService which represents
+     * the survey being reviewed
+     */
+    private void startAnswerSurveyActivity(SurveyService surveyService){
+        Thread requestReviewThread=new Thread(startReviewRequest(surveyService));
+        requestReviewThread.start();
+
+    }
+    private Runnable startReviewRequest(SurveyService surveyService){
+        return () -> {
+            try {
+                RequestNewReviewController requestNewReview=new RequestNewReviewController(surveyService);
+                try {
+                    requestNewReview.createNewReview(requestNewReview.requestNewReview(authenticationToken),MainMenuActivity.this);
+                    Intent questionIntent = new Intent(MainMenuActivity.this, QuestionActivity.class);
+                    questionIntent.putExtra("authenticationToken", authenticationToken);
+                    MainMenuActivity.this.startActivity(questionIntent);
+                } catch (ParserConfigurationException | SAXException e) {
+                    System.out.println(e.getMessage());
+                }
+            }catch(RESTfulException restfulException){
+                switch(restfulException.getCode()){
+                    //Treat unsuccessful
+                }
+            }catch(IOException ioException){
+                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+            }
+        };
     }
 
     /**
