@@ -1,5 +1,6 @@
 package cdioil.feedbackmonkey.application.services;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
@@ -11,7 +12,7 @@ import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
  * @since Version 7.0 of FeedbackMonkey
  */
 
-public final class SurveyService {
+public final class SurveyService implements Serializable{
     /**
      * String with the survey ID
      */

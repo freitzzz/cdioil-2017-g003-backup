@@ -31,9 +31,7 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.ParserConfigurationException;
@@ -101,7 +99,7 @@ public class MainMenuActivity extends AppCompatActivity {
         mainMenuListView.setOnItemClickListener((adapterView, view, i, l) -> {
             switch (i) {
                 case 0:
-                    startListSurveyActivity();
+                    prepareListSurveyActivityStart();
                     break;
                 case 1:
                     //Create intent to qr scan
@@ -145,30 +143,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts the ListSurveyActivity with extra information being stored within the bundle, besides the authentication token.
-     *
-     * @param bundleExtras extra information being stored in the bundle
-     */
-    private void startListSurveyActivity(Map<String, String> bundleExtras) {
-        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("authenticationToken", authenticationToken);
-        for (Map.Entry<String, String> entry : bundleExtras.entrySet()) {
-            bundle.putString(entry.getKey(), entry.getValue());
-        }
-        listSurveyActivityIntent.putExtras(bundle);
-        startActivity(listSurveyActivityIntent);
-    }
-
-    /**
      * Starts the ListSurveyActivity with authentication token as the single content within the bundle.
      */
-    private void startListSurveyActivity() {
-        Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("authenticationToken", authenticationToken);
-        listSurveyActivityIntent.putExtras(bundle);
-        startActivity(listSurveyActivityIntent);
+    private void prepareListSurveyActivityStart() {
+        new Thread(fetchSurveysToAnswers()).start();
     }
 
     /**
@@ -215,10 +193,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
                 if (!itemCode.trim().isEmpty()) {
                     Toast.makeText(this, "Código Lido: " + itemCode, Toast.LENGTH_LONG).show();
-
-                    /*Map<String, String> bundleExtras = new HashMap<>();
-                    bundleExtras.put("itemCode", itemCode);
-                    startListSurveyActivity(bundleExtras);*/
                     new Thread(fetchScannedCodeSurveys(itemCode)).start();
                 } else {
                     Toast.makeText(this, "Por favor leia um código válido", Toast.LENGTH_LONG).show();
@@ -244,18 +218,63 @@ public class MainMenuActivity extends AppCompatActivity {
                 if(surveysToAnswer.size()==1){
                     startAnswerSurveyActivity(surveysToAnswer.get(0));
                 }else{
-                    System.out.println("->>>>>>> "+surveysToAnswer.size());
+                    startListSurveyActivity(surveysToAnswer);
                 }
             }catch(RESTfulException restfulException){
                 switch(restfulException.getCode()){
-                    //Treat unsuccessful
+                    case HttpsURLConnection.HTTP_BAD_REQUEST:
+                        ToastNotification.show(MainMenuActivity.this,getString(R.string.no_surveys_with_certain_code));
+                        break;
+                    case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                        //#TO-DO: Authentication Token is not valid anymore, Go back to LoginActivity
+                        break;
+                    default:
+                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
             }catch(IOException ioException){
-                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
             }
         };
     }
 
+    /**
+     * Method fetches all active surveys that the current user can answer based on a
+     * pagination ID
+     * @return Runnable with the runnable action which will fetch the surveys to answer
+     */
+    private Runnable fetchSurveysToAnswers(){
+        return () -> {
+            try {
+                List<SurveyService> surveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByPaginationID((short)0);
+                startListSurveyActivity(surveysToAnswer);
+            }catch(RESTfulException restfulException){
+                switch(restfulException.getCode()){
+                    case HttpsURLConnection.HTTP_BAD_REQUEST:
+                        ToastNotification.show(MainMenuActivity.this,getString(R.string.no_available_surveys));
+                        break;
+                    case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                        //#TO-DO: Authentication Token is not valid anymore, Go back to LoginActivity
+                        break;
+                    default:
+                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
+                }
+            }catch(IOException ioException){
+                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
+            }
+        };
+    }
+    /**
+     * Starts a ListSurveyActivity with a certain list of surveys
+     * @param surveyServices List with the surveys to show on the ListSurveyActivity
+     */
+    private void startListSurveyActivity(List<SurveyService> surveyServices){
+        Intent questionIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
+        Bundle bundle=new Bundle(surveyServices.size()+1);
+        bundle.putString("authenticationToken", authenticationToken);
+        for(int i=0;i<surveyServices.size();i++)bundle.putSerializable(""+i,surveyServices.get(i));
+        questionIntent.putExtra(ListSurveyActivity.class.getSimpleName(),bundle);
+        MainMenuActivity.this.startActivity(questionIntent);
+    }
     /**
      * Starts a new AnswerSurveyActivity with a certain SurveyService which represents
      * the survey being reviewed
@@ -279,10 +298,18 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
             }catch(RESTfulException restfulException){
                 switch(restfulException.getCode()){
-                    //Treat unsuccessful
+                    case HttpsURLConnection.HTTP_BAD_REQUEST:
+                        //#TO-DO: There are a lot of codes here to treat
+                        ToastNotification.show(MainMenuActivity.this,"#TO-DO (400) newReview");
+                        break;
+                    case HttpsURLConnection.HTTP_NOT_FOUND:
+                        ToastNotification.show(MainMenuActivity.this,getString(R.string.survey_not_availalbe));
+                        break;
+                    default:
+                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
             }catch(IOException ioException){
-                ToastNotification.show(MainMenuActivity.this,"Não existe conexão à Internet");
+                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
             }
         };
     }
