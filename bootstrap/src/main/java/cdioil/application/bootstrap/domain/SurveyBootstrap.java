@@ -5,6 +5,7 @@ import cdioil.domain.Category;
 import cdioil.domain.CategoryQuestionsLibrary;
 import cdioil.domain.GlobalSurvey;
 import cdioil.domain.IndependentQuestionsLibrary;
+import cdioil.domain.Product;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
@@ -114,7 +115,7 @@ public class SurveyBootstrap {
 
         survey.changeState(SurveyState.ACTIVE);
         surveyRepository.add(survey);
-
+        surveyRepository.add(createDummySurveyForDummyProduct());
         survey = createStressTestSurvey();
         surveyRepository.add(survey);
 
@@ -213,5 +214,59 @@ public class SurveyBootstrap {
         Survey dummyTargetSurvey=new TargetedSurvey(surveyItems,new TimePeriod(LocalDateTime.now(),LocalDateTime.of(2020,Month.MARCH,22,22,22)),usersGroup);
         dummyTargetSurvey.changeState(SurveyState.ACTIVE);
         return dummyTargetSurvey;
+    }
+    /**
+     * Method that creates a dummy survey for a dummy product (Agua Mineral Natural)
+     * @return Survey with the survey for the dummy product
+     */
+    private Survey createDummySurveyForDummyProduct(){
+        List<SurveyItem> surveyItems=new ArrayList<>();
+        Product product=new MarketStructureRepositoryImpl().findProductByName("Agua Mineral Natural").get(0);
+        surveyItems.add(product);
+        GlobalSurvey globalSurvey=new GlobalSurvey(surveyItems,new TimePeriod(LocalDateTime.now()
+                ,LocalDateTime.of(2099,Month.JULY,31,15,55)));
+        BinaryQuestion question1 = new BinaryQuestion("Gosta da textura da Agua?", "AGUA1");
+        BinaryQuestion question2 = new BinaryQuestion("Considera esta agua superior a Lean?", "AGUA2");
+        BinaryQuestion question3 = new BinaryQuestion("Esta Agua e superior a qualquer liquido alguma vez ja ingerido?", "AGUA3");
+        IndependentQuestionsLibraryRepositoryImpl independentQuestionsRepo = new IndependentQuestionsLibraryRepositoryImpl();
+
+        IndependentQuestionsLibrary independentQuestionsLibrary = independentQuestionsRepo.findLibrary();
+
+        independentQuestionsLibrary.addQuestion(question1);
+        independentQuestionsLibrary.addQuestion(question2);
+        independentQuestionsLibrary.addQuestion(question3);
+
+        independentQuestionsRepo.merge(independentQuestionsLibrary);
+
+        //Persisted questions need to be used rather than using the previous Question instances.
+        List<String> questionIDList = new LinkedList<>(Arrays.asList("AGUA1", "AGUA2", "AGUA3"));
+        List<Question> fetchedQuestions = new LinkedList<>();
+
+        Set<Question> persistedQuestions = independentQuestionsLibrary.getID();
+
+        for (String questionID : questionIDList) {
+            for (Question question : persistedQuestions) {
+                if (questionID.equalsIgnoreCase(question.getQuestionID())) {
+                    fetchedQuestions.add(question);
+                }
+            }
+        }
+
+        Question firstQuestion = fetchedQuestions.get(0);
+        Question secondQuestion = fetchedQuestions.get(1);
+        Question thirdQuestion = fetchedQuestions.get(2);
+
+        globalSurvey.addQuestion(firstQuestion);
+        globalSurvey.addQuestion(secondQuestion);
+        globalSurvey.addQuestion(thirdQuestion);
+
+        globalSurvey.setNextQuestion(firstQuestion, secondQuestion,
+                firstQuestion.getOptionList().get(0), 0); //true
+        globalSurvey.setNextQuestion(firstQuestion, thirdQuestion,
+                firstQuestion.getOptionList().get(1), 0); //false
+        globalSurvey.setNextQuestion(secondQuestion,thirdQuestion,secondQuestion.getOptionList().get(0),0);
+
+        globalSurvey.changeState(SurveyState.ACTIVE);
+        return globalSurvey;
     }
 }
