@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.files.CommonFileExtensions;
 import java.util.List;
@@ -7,32 +8,34 @@ import java.util.Map;
 
 /**
  *
- * Factory de ProductsReader.
+ * ProductsReader Factory.
  *
- * @author Ana Guerra (1161191)
+ * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
+ * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  */
 public class ProductsReaderFactory {
 
     /**
-     * Hides default constructor
+     * Hides the default public constructor.
      */
     private ProductsReaderFactory() {
     }
 
     /**
-     * Creates a ProductsReader instance according to the format of the file
-     * being read.
+     * Creates a ProductsReader instance according to the format of the file being read.
      *
-     * @param filename file name
-     * @param fileExport file of the export
-     * @param existsProducts List with products
-     * @return an instance of QuestionsReader
+     * @param filePath Path of the file to import
+     * @param repeatedProducts Map that will hold all repeated products
+     * @return an instance of ProductsReader
      */
-    public static ProductsReader create(String filename, String fileExport, Map<String, List<Product>> existsProducts) {
-        if (filename.endsWith((CommonFileExtensions.CSV_EXTENSION))) {
-            return new CSVProductsReader(filename, fileExport, existsProducts);
+    public static ProductsReader create(String filePath, Map<Category, List<Product>> repeatedProducts) {
+        if (filePath.endsWith((CommonFileExtensions.CSV_EXTENSION))) {
+            return new CSVProductsReader(filePath, repeatedProducts);
+        } else if (filePath.endsWith(CommonFileExtensions.XML_EXTENSION)) {
+            return new XMLProductsReader(filePath, repeatedProducts);
+        } else if (filePath.endsWith(CommonFileExtensions.JSON_EXTENSION)) {
+            return new JSONProductsReader(filePath, repeatedProducts);
         }
         return null;
     }
-
 }

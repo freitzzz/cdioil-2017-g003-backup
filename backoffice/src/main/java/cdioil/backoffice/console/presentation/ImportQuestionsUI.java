@@ -6,6 +6,8 @@ import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.console.Console;
 import cdioil.domain.authz.Manager;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 /**
  * User Interface for use cases US-205 (import independent questions from file) and US-210 (import category questions from file).
  *
@@ -50,6 +52,11 @@ public class ImportQuestionsUI {
     private final String errorNoImportedQuestions = localizationHandler.getMessageValue("error_no_imported_questions");
 
     /**
+     * Represents a message that indicates that an error occurred while importing the independent questions
+     */
+    private final String errorWrongFileConfiguration = localizationHandler.getMessageValue("error_wrong_file_configuration");
+
+    /**
      * Option for import the category questions
      */
     private static final int CATEGORY_QUESTIONS_FILE_TYPE = 0;
@@ -68,7 +75,7 @@ public class ImportQuestionsUI {
      */
     public ImportQuestionsUI() {
         controller = new ImportQuestionsController();
-        importCategories(INDEPENDENT_QUESTIONS_FILE_TYPE);
+        importQuestions(INDEPENDENT_QUESTIONS_FILE_TYPE);
     }
 
     /**
@@ -78,13 +85,13 @@ public class ImportQuestionsUI {
      */
     public ImportQuestionsUI(Manager manager) {
         controller = new ImportQuestionsController(manager);
-        importCategories(CATEGORY_QUESTIONS_FILE_TYPE);
+        importQuestions(CATEGORY_QUESTIONS_FILE_TYPE);
     }
 
     /**
      * Method for showing the UI itself.
      */
-    private void importCategories(int fileType) {
+    private void importQuestions(int fileType) {
 
         while (true) {
 
@@ -100,7 +107,11 @@ public class ImportQuestionsUI {
                     numImportedQuestions = controller.importCategoryQuestions(fileName);
 
                 } else if (fileType == INDEPENDENT_QUESTIONS_FILE_TYPE) {
-                    numImportedQuestions = controller.importIndependentQuestions(fileName);
+                    try {
+                        numImportedQuestions = controller.importIndependentQuestions(fileName);
+                    } catch (ParserConfigurationException exception) {
+                        System.out.println(errorWrongFileConfiguration);
+                    }
                 }
 
                 if (numImportedQuestions == null) {

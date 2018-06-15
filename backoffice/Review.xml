@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Survey id="555" reviews="444">
     <!-- Answers for each respective question (based on Key:Value pairs, Key=Question, Value=Question Answers -->
-    <Question ID="BQS1" type="BINARY" name="Questao Binaria 1 Survey Bootstrap">
+    <Question id="BQS1" type="BINARY" name="Questao Binaria 1 Survey Bootstrap">
         <Answer>false</Answer>
         <Answer>false</Answer>
     </Question>
-    <Question ID="BQS3" type="BINARY" name="Questao Binaria 3 Survey Bootstrap">
+    <Question id="BQS3" type="BINARY" name="Questao Binaria 3 Survey Bootstrap">
         <Answer>false</Answer>
         <Answer>true</Answer>
     </Question>

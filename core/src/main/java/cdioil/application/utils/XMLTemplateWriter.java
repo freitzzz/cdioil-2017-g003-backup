@@ -9,6 +9,7 @@ import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Template;
 import java.io.File;
+import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -60,7 +61,7 @@ public class XMLTemplateWriter implements TemplateWriter {
      * Constant that represents the label used for the title of the question identifier on the XML file
      */
     private static final String QUESTION_TITLE = "title";
-    
+
     /**
      * File with the file that is going to be written with all survey answers
      */
@@ -82,9 +83,9 @@ public class XMLTemplateWriter implements TemplateWriter {
     }
 
     /**
-     * Method that writes the template into a XML file
+     * Method that writes the template into a XML file.
      *
-     * @return boolean true if template was written with success, false if not
+     * @return true if the file was successfully exported. Otherwise, returns false
      */
     @Override
     public boolean write() {
@@ -95,14 +96,7 @@ public class XMLTemplateWriter implements TemplateWriter {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
 
-            Element rootElement = doc.createElement(TEMPLATE_LABEL);
-            doc.appendChild(rootElement);
-
-            Attr attrTitle = doc.createAttribute(QUESTION_TITLE);
-            attrTitle.setValue(template.getTitle());
-            rootElement.setAttributeNode(attrTitle);
-
-            writeTemplate(doc, rootElement);
+            writeTemplate(doc);
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -125,10 +119,15 @@ public class XMLTemplateWriter implements TemplateWriter {
      * Writes the template into a XML file.
      *
      * @param doc Representation of the XML document
-     * @param rootElement Root element
      */
-    private void writeTemplate(Document doc, Element rootElement) {
-        for (Question question : template.getQuestionGroup().getQuestions()) {
+    private void writeTemplate(Document doc) {
+        Element rootElement = doc.createElement(TEMPLATE_LABEL);
+        doc.appendChild(rootElement);
+
+        Attr attrTitle = doc.createAttribute(QUESTION_TITLE);
+        attrTitle.setValue(template.getTitle());
+        rootElement.setAttributeNode(attrTitle);
+        for (Question question : template.getQuestions()) {
             Element questionElement = doc.createElement(QUESTION_LABEL);
             rootElement.appendChild(questionElement);
 
@@ -149,5 +148,31 @@ public class XMLTemplateWriter implements TemplateWriter {
                 questionOptionsElement.appendChild(questionOption);
             }
         }
+    }
+
+    /**
+     * Returns a String with the content of a XML file with the template's information.
+     *
+     * @return a String with the content of the XML file
+     */
+    public String getXMLAsString() {
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().
+                    newDocumentBuilder().newDocument();
+
+            writeTemplate(doc);
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StringWriter stringWriter = new StringWriter();
+            StreamResult result = new StreamResult(stringWriter);
+            transformer.transform(source, result);
+            return stringWriter.getBuffer().toString();
+        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
+            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

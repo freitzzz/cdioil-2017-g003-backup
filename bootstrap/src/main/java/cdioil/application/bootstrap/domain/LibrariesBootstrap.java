@@ -13,6 +13,7 @@ import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.QuestionGroup;
 import cdioil.domain.QuestionOption;
+import cdioil.domain.SimpleTemplate;
 import cdioil.domain.Template;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.CategoryTemplatesLibraryRepositoryImpl;
@@ -168,18 +169,17 @@ public class LibrariesBootstrap {
     }
 
     private void bootstrapCategoryTemplatesLibrary(CategoryTemplatesLibrary categoryTemplatesLibrary) {
-        QuestionGroup bootstrapQuestionGroup = new QuestionGroup("Bootstrap Template Question Group");
         BinaryQuestion q = new BinaryQuestion("Questao Binaria Template Bootstrap A578", "A578");
         BinaryQuestion q2 = new BinaryQuestion("Questao Binaria Template Bootstrap K999", "K999");
         MultipleChoiceQuestion q3 = new MultipleChoiceQuestion("Questao EM Template "
                 + "Bootstrap Q123", "Q123", createMultipleChoiceOptionList());
         QuantitativeQuestion q4 = new QuantitativeQuestion("Questao Quantitativa Template Bootstrap V956",
                 "V956", createQuantitativeOptionList());
-        bootstrapQuestionGroup.addQuestion(q);
-        bootstrapQuestionGroup.addQuestion(q2);
-        bootstrapQuestionGroup.addQuestion(q3);
-        bootstrapQuestionGroup.addQuestion(q4);
-        Template bootstrapTemplate = new Template("template", bootstrapQuestionGroup);
+        Template bootstrapTemplate = new SimpleTemplate("template");
+        bootstrapTemplate.addQuestion(q);
+        bootstrapTemplate.addQuestion(q2);
+        bootstrapTemplate.addQuestion(q3);
+        bootstrapTemplate.addQuestion(q4);
         categoryTemplatesLibrary.addCategory(cat);
         categoryTemplatesLibrary.addTemplate(cat, bootstrapTemplate);
     }

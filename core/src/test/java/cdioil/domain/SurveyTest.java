@@ -6,12 +6,12 @@ import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
+import cdioil.framework.SurveyDTO;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -219,6 +219,28 @@ public class SurveyTest {
         assertEquals("The condition should be successful since the both survey names are the same",
                 testGlobalSurvey.getName(), new GlobalSurvey(list, timePeriod).getName());
     }
+     /**
+     * Test of method getID, of class Survey.
+     */
+    @Test
+    public void testGetID() {
+        System.out.println("getID");
+        assertEquals("The condition should be successful since the both survey id are the same",
+                testGlobalSurvey.getID(), new GlobalSurvey(list, timePeriod).getID());
+    }
+    /**
+     * Test of method getSurveyEndDate, of class Survey
+     */
+    @Test
+    public void testGetSurveyEndDate(){
+        System.out.println("getSurveyEndDate");
+        TimePeriod timePeriodX=new TimePeriod(LocalDateTime.now(),LocalDateTime.MAX);
+        TimePeriod timePeriodY=new TimePeriod(LocalDateTime.now(),LocalDateTime.MAX);
+        Survey surveyX=new GlobalSurvey(new ArrayList<>(list),timePeriodX);
+        Survey surveyY=new GlobalSurvey(new ArrayList<>(list),timePeriodY);
+        assertEquals("The condition should be succesful since both surveys have the same end date"
+                ,surveyX.getSurveyEndDate(),surveyY.getSurveyEndDate());
+    }
 
     /**
      * Test of method getItemList, of class Survey.
@@ -230,5 +252,19 @@ public class SurveyTest {
         list.add(new Product("ProdutoTeste 2", new SKU("566341098"), "1 Kg", new QRCode("4563218")));
         testGlobalSurvey = new GlobalSurvey(list, timePeriod);
         assertEquals("Should be the same", list, testGlobalSurvey.getItemList());
+    }
+
+    @Test
+    public void testToDTO() {
+        ArrayList<SurveyItem> items = new ArrayList<>();
+        items.add(new Product());
+
+        Survey s = new GlobalSurvey(items, new TimePeriod(LocalDateTime.MIN,
+                LocalDateTime.now()));
+
+        SurveyDTO expected = new SurveyDTO("survey", s.getName(),
+                s.getSurveyEndDate(), SurveyState.DRAFT.toString());
+
+        assertEquals(expected, s.toDTO());
     }
 }

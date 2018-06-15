@@ -24,7 +24,11 @@ public final class CategoriesReaderFactory {
      * @return an instance of CategoriesReader
      */
     public static CategoriesReader create(File file) {
-        if (file.getAbsolutePath().endsWith(CommonFileExtensions.CSV_EXTENSION)) {
+        if (file.getAbsolutePath().endsWith(CommonFileExtensions.XML_EXTENSION)) {
+            return new XMLCategoriesReader(file);
+        }else if (file.getAbsolutePath().endsWith(CommonFileExtensions.CSV_EXTENSION)) {
+            return new CSVCategoriesReader(file);
+        }else if (file.getAbsolutePath().endsWith(CommonFileExtensions.JSON_EXTENSION)) {
             return new CSVCategoriesReader(file);
         }
         return null;

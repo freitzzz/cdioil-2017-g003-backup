@@ -1,21 +1,21 @@
 package cdioil.application.utils;
 
+import cdioil.domain.Category;
 import cdioil.domain.Product;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Interface for reading products from files.
- * 
+ *
  * @author Ana Guerra (1161191)
  */
 public interface ProductsReader {
-     /**
-     * Imports products associated to categories from a file.
+
+    /**
+     * Imports products from a file.
      *
-     * @return map with category' path as key and product related to
-     * that category as values.
+     * @return a map with the categories as keys and their products as values.
      */
-    Map<String, List<Product>> readProducts();
-    
+    Map<Category, List<Product>> readProducts();
 }

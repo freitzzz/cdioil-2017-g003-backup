@@ -1,6 +1,7 @@
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
+import cdioil.framework.SurveyDTO;
 import cdioil.time.TimePeriod;
 
 import java.io.Serializable;
@@ -80,6 +81,18 @@ public abstract class Survey implements Serializable {
         //For ORM
     }
 
+    /**
+     * Access method to id of survey.
+     * @return the id of the survey
+     */
+    public long getID(){
+        return id;
+    }
+    /**
+     * Method that returns the survey end date
+     * @return String with the survey end date
+     */
+    public String getSurveyEndDate(){return surveyPeriod.getEndDate();}
     /**
      * Access method to the item list of survey.
      *
@@ -169,6 +182,16 @@ public abstract class Survey implements Serializable {
     public String getName() {
         return "Inquérito: "+id;
     }
+
+    /**
+     * Creates a DTO from this class instance
+     * @return SurveyDTO
+     */
+    public SurveyDTO toDTO() {
+        return new SurveyDTO("survey",
+                getName(), getSurveyEndDate(), state.toString());
+    }
+
     /**
      * Survey's hash code.
      *

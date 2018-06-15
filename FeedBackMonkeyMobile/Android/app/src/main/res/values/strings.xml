@@ -26,4 +26,12 @@
     <string name="submit_suggestion">Enviar Sugestão</string>
     <string name="write_suggestion_info">Escreva a sua sugestão aqui!</string>
     <string name="login_progress_dialog_info">Login em progresso</string>
+    <string name="rewrite_password">Reescreva a password</string>
+    <string name="reviewed_surveys">As minhas avaliações</string>
+    <string name="my_contests_badges">Concursos e Badges</string>
+    <string name="suggestion_list">As minhas sugestões</string>
+    <string name="info_text_survey_dialog">Informações Inquérito</string>
+    <string name="survey_end_date">Data Fim</string>
+    <string name="survey_average_time">Tempo Médio</string>
+    <string name="survey_items_list_view_header">Items a serem avaliados</string>
 </resources>

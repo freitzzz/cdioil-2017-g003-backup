@@ -42,9 +42,19 @@ public class AdminTest {
     public void testeHashCode() {
         System.out.println("hashCode");
         Admin a = createAdmin(sysUser);
-        int expResult = sysUser.hashCode();
+        Admin otherAdmin = new Admin(sysUser);
+        
+        int expResult = otherAdmin.hashCode();
         int result = a.hashCode();
         assertEquals(expResult,result);
+    
+        int sysUserHashCode = sysUser.hashCode();
+        assertNotEquals(sysUserHashCode, result);
+        
+        //This chunk kills code mutations
+        assertNotEquals("".hashCode(), result);
+        int num = 17 * 5 + sysUser.hashCode();
+        assertEquals(num, result);
     }
 
     /**

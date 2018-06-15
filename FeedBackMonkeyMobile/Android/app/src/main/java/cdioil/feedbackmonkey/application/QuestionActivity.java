@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.xml.sax.SAXException;
@@ -36,11 +39,22 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
      */
     private String authenticationToken;
 
+    /**
+     * Progress bar to indicate how far the user is in the survey.
+     */
+    private ProgressBar progressBar;
+
+    /**
+     * Integer that indicates the progress the user has made in %
+     */
+    private int progressMade;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
         questionTextView = findViewById(R.id.question);
+        progressBar = findViewById(R.id.answerSurveyProgressBar);
 
         if (getIntent().getExtras() != null) {
             authenticationToken = getIntent().getExtras().getString("authenticationToken");
@@ -49,10 +63,10 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
             return;
         }
 
-        loadQuestionInfo();
+        loadQuestionInfo(false);
     }
 
-    private void loadQuestionInfo() {
+    private void loadQuestionInfo(boolean onBackPressed) {
         Bundle currentQuestionBundle = ReviewXMLService.instance().getCurrentQuestionBundle();
         questionTextView.setText(currentQuestionBundle.getString("questionText"));
 
@@ -63,6 +77,7 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        configureActivityAnimations(onBackPressed, fragmentTransaction);
         Fragment newFragment = null;
 
         if (currentQuestionType.compareTo("B") == 0) {
@@ -75,6 +90,29 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
 
         fragmentTransaction.replace(R.id.fragment_container, newFragment);
         fragmentTransaction.commit();
+    }
+
+    /**
+     * Configures the activity's animations for the question text view and the fragment transaction
+     *
+     * @param onBackPressed       boolean to know whether the user is pressing the back button or not
+     * @param fragmentTransaction fragment transaction that is going to happen to show the previous or
+     *                            the next question to the user
+     */
+    private void configureActivityAnimations(boolean onBackPressed, FragmentTransaction fragmentTransaction) {
+        if (onBackPressed) {
+            Animation textViewAnimation = AnimationUtils.loadAnimation(this, R.anim.enter_from_right);
+            textViewAnimation.reset();
+            questionTextView.clearAnimation();
+            questionTextView.startAnimation(textViewAnimation);
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+        } else {
+            Animation textViewAnimation = AnimationUtils.loadAnimation(this, R.anim.enter_from_left);
+            textViewAnimation.reset();
+            questionTextView.clearAnimation();
+            questionTextView.startAnimation(textViewAnimation);
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+        }
     }
 
     /**
@@ -92,11 +130,13 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
                 Intent submitSuggestionIntent = new Intent(QuestionActivity.this, SubmitSuggestionActivity.class);
                 submitSuggestionIntent.putExtra("authenticationToken", authenticationToken);
                 startActivity(submitSuggestionIntent);
+                finish();
             });
             wantToSubmitSuggestionDialog.setNegativeButton("Não", (dialog, which) -> {
-                Intent skipSuggestionIntent = new Intent(QuestionActivity.this, MainMenuActivity.class);
-                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
-                startActivity(skipSuggestionIntent);
+//                Intent skipSuggestionIntent = new Intent(QuestionActivity.this, MainMenuActivity.class);
+//                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
+//                startActivity(skipSuggestionIntent);
+                finish();
             });
             final AlertDialog alertDialog = wantToSubmitSuggestionDialog.create();
             alertDialog.setOnShowListener(dialog -> {
@@ -112,11 +152,12 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         try {
             ReviewXMLService xmlService = ReviewXMLService.instance();
             boolean canAnswerNextQuestion = xmlService.saveAnswer(answer);
-
+            progressMade = progressMade + 25;
+            progressBar.setProgress(progressMade);
             if (!canAnswerNextQuestion) {
                 submitSuggestion();
             } else {
-                loadQuestionInfo();
+                loadQuestionInfo(false);
             }
 
         } catch (ParserConfigurationException | IOException | TransformerException | SAXException e) {
@@ -128,10 +169,11 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
     public void onBackPressed() {
         try {
             boolean canUndo = ReviewXMLService.instance().undoAnswer();
-
-            if(canUndo){
-                loadQuestionInfo();
-            }else{
+            progressMade = progressMade - 25;
+            progressBar.setProgress(progressMade);
+            if (canUndo) {
+                loadQuestionInfo(true);
+            } else {
                 super.onBackPressed();
             }
 

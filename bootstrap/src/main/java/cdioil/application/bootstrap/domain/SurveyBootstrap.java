@@ -125,7 +125,7 @@ public class SurveyBootstrap {
         UsersGroup usersGroup = new UsersGroup(manager);
         usersGroup.addUser(registeredUser);
         survey = new TargetedSurvey(surveyItems,
-                new TimePeriod(LocalDateTime.now(), LocalDateTime.MAX), usersGroup);
+                new TimePeriod(LocalDateTime.now(), LocalDateTime.of(2099,Month.JULY,31,15,55)), usersGroup);
         survey.changeState(SurveyState.ACTIVE);
         survey.addQuestion(firstQuestion);
         survey.addQuestion(secondQuestion);

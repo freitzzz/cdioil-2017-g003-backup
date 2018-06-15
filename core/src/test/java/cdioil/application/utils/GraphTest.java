@@ -2,16 +2,14 @@ package cdioil.application.utils;
 
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.BinaryQuestionOption;
-import cdioil.domain.MultipleChoiceQuestion;
+import cdioil.domain.QuantitativeQuestion;
+import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
-import java.util.ArrayList;
+import cdioil.domain.QuestionOption;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -68,6 +66,16 @@ public class GraphTest {
         graph.insertVertex(q1);
 
         assertFalse(graph.insertVertex(q1));
+    }
+
+    @Test
+    public void ensureInsertVertexReturnsFalseIfVertexIsNull() {
+        Graph graph = new Graph();
+
+        assertFalse(graph.insertVertex(null));
+
+        assertFalse(graph.allVertices().iterator().hasNext());
+        assertEquals(graph.numVertices(), 0);
     }
 
     @Test
@@ -136,6 +144,24 @@ public class GraphTest {
     }
 
     @Test
+    public void ensureInsertEdgeDoesNotInsertEdgeIfOptionDoesNotBelongToOriginQuestion() {
+
+        Graph graph = new Graph();
+
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+
+        List<QuestionOption> quantitativeOptions = new LinkedList<>();
+        quantitativeOptions.add(new QuantitativeQuestionOption(1.0));
+        quantitativeOptions.add(new QuantitativeQuestionOption(2.0));
+        quantitativeOptions.add(new QuantitativeQuestionOption(3.0));
+        Question q2 = new QuantitativeQuestion("Rate our app!", "Q1", quantitativeOptions);
+
+        assertFalse(graph.insertEdge(q1, q2, q2.getOptionList().get(0), 0));
+        assertEquals(graph.numEdges(), 0);
+        assertEquals(graph.numVertices(), 0);
+    }
+
+    @Test
     public void ensureAdjacentQuestionsReturnsNullIfVertexHasNotYetBeenInserted() {
 
         Graph graph = new Graph();
@@ -184,23 +210,23 @@ public class GraphTest {
 
         assertEquals(expected, result);
     }
-    
+
     @Test
-    public void ensureAllVerticesWorks(){
-        
+    public void ensureAllVerticesWorks() {
+
         Graph graph = new Graph();
-        
+
         Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
         Question q2 = new BinaryQuestion("This is yet another yes/no question", "A123");
         Question q3 = new BinaryQuestion("A wild binary question appears!", "A423");
-        
+
         graph.insertEdge(q1, q2, new BinaryQuestionOption(Boolean.TRUE), 0);
         graph.insertEdge(q1, q3, new BinaryQuestionOption(Boolean.FALSE), 0);
         graph.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.TRUE), 0);
         graph.insertEdge(q2, q3, new BinaryQuestionOption(Boolean.FALSE), 0);
-        
+
         Iterator<Vertex> iterator = graph.allVertices().iterator();
-        
+
         assertEquals(q1, iterator.next().getElement());
         assertEquals(q2, iterator.next().getElement());
         assertEquals(q3, iterator.next().getElement());
@@ -711,6 +737,17 @@ public class GraphTest {
         Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
 
         assertFalse(g.removeVertex(q1));
+    }
+
+    @Test
+    public void ensureRemoveVertexDoesNotRemoveNull() {
+        Graph g = new Graph();
+
+        Question q1 = new BinaryQuestion("This is a yes/no question", "A424");
+        g.insertVertex(q1);
+
+        assertFalse(g.removeVertex(null));
+        assertEquals(g.numVertices(), 1);
     }
 
     @Test

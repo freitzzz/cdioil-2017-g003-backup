@@ -31,6 +31,12 @@ public class ManagerPanelView extends MainLayoutView implements View {
             "Dashboard";
 
     /**
+     * Survey Button Caption
+     */
+    private static final String SURVEY_BTN_CAPTION =
+            "Inquéritos";
+
+    /**
      * Import Button Caption
      */
     private static final String IMPORT_BTN_CAPTION =
@@ -47,6 +53,11 @@ public class ManagerPanelView extends MainLayoutView implements View {
      * Dashboard Button
      */
     private Button dashboardBtn;
+
+    /**
+     * Survey Button
+     */
+    private Button surveyButton;
 
     /**
      * Import Button
@@ -73,9 +84,7 @@ public class ManagerPanelView extends MainLayoutView implements View {
      */
     private void configuration(){
         configureHomeButton();
-        configureCatButton();
-        configureImportButton();
-        configureExportButton();
+        configureSurveyButton();
     }
 
     /**
@@ -89,8 +98,15 @@ public class ManagerPanelView extends MainLayoutView implements View {
         addNewButtonToLeftPanel(dashboardBtn);
     }
 
-    private void configureCatButton() {
-
+    /**
+     * Configures Survey Button
+     */
+    private void configureSurveyButton() {
+        surveyButton = new Button(SURVEY_BTN_CAPTION, VaadinIcons.CLIPBOARD_CHECK);
+        surveyButton.addClickListener(clickEvent ->
+            setRightPanelContents(new SurveyComponent())
+        );
+        addNewButtonToLeftPanel(surveyButton);
     }
 
     /**

@@ -41,6 +41,7 @@ import javax.xml.transform.TransformerException;
 
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.authz.UserProfileActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
@@ -72,7 +73,6 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         configureView();
-        connectionReceiver = new ConnectionReceiver();
         authenticationToken = getIntent().getExtras().getString("authenticationToken");
     }
 
@@ -80,19 +80,14 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        connectionReceiver = new ConnectionReceiver();
         registerReceiver(connectionReceiver, filter);
     }
 
     @Override
     protected void onPause() {
+        unregisterReceiver(connectionReceiver);
         super.onPause();
-        unregisterReceiver(connectionReceiver);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(connectionReceiver);
     }
 
     private void configureView() {
@@ -107,7 +102,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     scanItemCode();
                     break;
                 case 2:
-                    //Create intent to profile
+                    startUserProfileActivity();
                     break;
                 case 3:
                     //Create intent to something
@@ -144,7 +139,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts the ListSurveyActivity activity with extra information being stored within the bundle, besides the authentication token.
+     * Starts the ListSurveyActivity with extra information being stored within the bundle, besides the authentication token.
      *
      * @param bundleExtras extra information being stored in the bundle
      */
@@ -160,7 +155,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts the ListSurveyActivity activity with authentication token as the single content within the bundle.
+     * Starts the ListSurveyActivity with authentication token as the single content within the bundle.
      */
     private void startListSurveyActivity() {
         Intent listSurveyActivityIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
@@ -168,6 +163,17 @@ public class MainMenuActivity extends AppCompatActivity {
         bundle.putString("authenticationToken", authenticationToken);
         listSurveyActivityIntent.putExtras(bundle);
         startActivity(listSurveyActivityIntent);
+    }
+
+    /**
+     * Starts the UserProfileActivity.
+     */
+    private void startUserProfileActivity() {
+        Intent userProfileActivityIntent = new Intent(MainMenuActivity.this, UserProfileActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("authenticationToken", authenticationToken);
+        userProfileActivityIntent.putExtras(bundle);
+        startActivity(userProfileActivityIntent);
     }
 
 
@@ -233,7 +239,7 @@ public class MainMenuActivity extends AppCompatActivity {
          * @param surveyItems List with a previous survey items predefined
          */
         public MainMenuItemListViewAdapter(Activity activity, List<Integer> surveyItems) {
-            super(activity, R.layout.survey_item_list_row, surveyItems);
+            super(activity, R.layout.survey_list_row_item, surveyItems);
         }
 
         /**
@@ -242,7 +248,7 @@ public class MainMenuActivity extends AppCompatActivity {
          * @param activity Activity with the activity which the ListView is being added the adapter
          */
         public MainMenuItemListViewAdapter(Activity activity) {
-            super(activity, R.layout.survey_item_list_row);
+            super(activity, R.layout.survey_list_row_item);
         }
 
         /**
@@ -296,18 +302,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-            boolean isConnected = false;
-
-            if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-                isConnected = true;
-            }
-
-            if (isConnected) {
+            if (checkConnectivity()) {
                 submitPendingReviews();
             }
         }
@@ -335,7 +330,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
                     Thread connectionThread = new Thread(() -> {
                         try {
-                            Response saveReviewResponse = RESTRequest.create(saveReviewURL).withMediaType(RESTRequest.RequestMediaType.XML).withBody(fileContent).POST();
+                            Response saveReviewResponse = RESTRequest.create(saveReviewURL)
+                                    .withMediaType(RESTRequest.RequestMediaType.XML).withBody(fileContent).POST();
                             reviewRestResponseCode = saveReviewResponse.code();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -353,6 +349,19 @@ public class MainMenuActivity extends AppCompatActivity {
             } catch (ParserConfigurationException | IOException | SAXException | InterruptedException | TransformerException e) {
                 e.printStackTrace();
             }
+        }
+
+        /**
+         * Checks if an Internet connection is active.
+         *
+         * @return true, if an Internet connection is currently active
+         */
+        private boolean checkConnectivity() {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+            return networkInfo != null && networkInfo.isConnectedOrConnecting();
         }
     }
 }

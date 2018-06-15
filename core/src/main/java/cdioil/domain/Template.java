@@ -1,8 +1,6 @@
 package cdioil.domain;
 
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -12,8 +10,14 @@ import javax.persistence.*;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Template implements Serializable {
+public abstract class Template implements Serializable {
 
+    /**
+     * ID of the Template for JPA.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     /**
      * Version for JPA.
      */
@@ -26,31 +30,15 @@ public class Template implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * ID of the Template for JPA.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
-    /**
      * Template title
      */
-    private String title;
+    protected String title;
 
-    /**
-     * List of Questions of the Template.
-     */
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private QuestionGroup questionGroup;
-
-    public Template(String title, QuestionGroup questionGroup) {
-        this.title = title;
-
-        if(questionGroup == null || questionGroup.getQuestions().isEmpty()){
-            throw new IllegalArgumentException("O conjunto de questões do "
-                    + "template não pode ser vazio nem null");
+    protected Template(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Unable to instantiate a template without a valid title");
         }
-        this.questionGroup = questionGroup;
+        this.title = title;
     }
 
     /**
@@ -61,62 +49,44 @@ public class Template implements Serializable {
 
     /**
      * Returns the title of the template
+     *
      * @return String with the title of the template
      */
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
-    /**
-     * Returns a copy of the group of questions
-     *
-     * @return QuestionGroup
-     */
-    public QuestionGroup getQuestionGroup() {
-        String questionGroupTitle = questionGroup.toString();
-        Set<Question> setCopy = questionGroup.getQuestions();
-        QuestionGroup questionGroupCopy = new QuestionGroup(questionGroupTitle);
-        questionGroupCopy.getQuestions().addAll(setCopy);
-        return questionGroupCopy;
-    }
 
     /**
-     * Generates an unique index for the Template.
+     * Adds the given question to the Template.
      *
-     * @return the generated hash value
+     * @param q new question
+     * @return true - if the question was added successfully<p>
+     * false - if the question already exists or is null
      */
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 43 * hash + Objects.hashCode(this.questionGroup);
-        return hash;
-    }
+    public abstract boolean addQuestion(Question q);
 
     /**
-     * Compares the Template with another Object.
+     * Removes the given question from the Template.
      *
-     * @param obj Object to compare
-     * @return true, if the two Objects have the same attributes. Otherwise,
-     * returns false
+     * @param q question to be removed
+     * @return true if the question was removed successfully<p>
+     * false - if it was not added previously or is null
      */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Template)) {
-            return false;
-        }
-        final Template other = (Template) obj;
-        return this.questionGroup.equals(other.questionGroup);
-    }
+    public abstract boolean removeQuestion(Question q);
+
+    /**
+     * Retrieves an Iterable Collection of all the questions within the Template.
+     * @return Iterable Collection of the Template's questions
+     */
+    public abstract Iterable<Question> getQuestions();
 
     /**
      * ToString of the class template
      *
      * @return title of template
      */
+    @Override
     public String toString() {
         return title;
     }
 }
-

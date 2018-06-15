@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -24,13 +25,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * SurveyAnswersXMLService class that represents a service that allows the serialization 
- * of the reviews of a Survey into a XML document
+ * SurveyAnswersXMLService class that represents a service that allows the serialization of the reviews of a Survey into a XML document
+ *
  * @author <a href="1161191@isep.ipp.pt">Margarida Guerra</a>
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 6.0 & 7.0 of FeedbackMonkey
  */
 public final class SurveyAnswersXMLService {
+
     /**
      * Constant that represents the label used for the survey identifier on the XML file
      */
@@ -42,60 +44,112 @@ public final class SurveyAnswersXMLService {
     /**
      * Constant that represents the label used for the type of question identifier on the XML file
      */
-    private static final String TYPE_LABEL = "Type";
+    private static final String TYPE_LABEL = "type";
     /**
      * Constant that represents the label used for the answer identifier on the XML file
      */
     private static final String ANSWERS_LABEL = "Answer";
     /**
+     * Constant that represents the label used for the suggestions identifier on the XML file
+     */
+    private static final String SUGGESTIONS_LABEL = "Suggestions";
+    /**
+     * Constant that represents the label used for the suggestion identifier on the XML file
+     */
+    private static final String SUGGESTION_LABEL = "Suggestion";
+    /**
+     * Constant that represents the label used for the ID identifier on the XML file
+     */
+    private static final String ID_LABEL = "id";
+    /**
+     * Constant that represents the label used for the name identifier on the XML file
+     */
+    private static final String NAME_LABEL = "name";
+    /**
+     * Constant that represents the label used for the value identifier on the XML file
+     */
+    private static final String VALUE_LABEL = "value";
+     /**
+     * Constant that represents the label used for the value identifier on the XML file
+     */
+    private static final String REVIEWS_LABEL = "reviews";
+    /**
+     * Constant that represents if the XML document should be indented or not
+     */
+    private static final String INDENTATION="yes";
+    /**
+     * Constant that represents the property used on the XML file to reference the amount of indent 
+     * blocks to be used on indentation
+     */
+    private static final String XML_INDENTATION_AMOUNT_PROPERTY="{http://xml.apache.org/xslt}indent-amount";
+    /**
+     * Constant that represents the amount of indent blocks to be used on indentation
+     */
+    private static final String INDENTATION_AMOUNT="2";
+    /**
      * List with all survey reviews being exported
      */
     private final List<Review> surveyReviews;
+
     /**
-     * Builds a new SurveyAnswersXMLService with the list of the reviews of a certain 
-     * survey being serialized into a XML document
-     * @param surveyReviews List with all the reviews of a certain Survey being serialized 
-     * into a XML document
+     * Builds a new SurveyAnswersXMLService with the list of the reviews of a certain survey being serialized into a XML document
+     *
+     * @param surveyReviews List with all the reviews of a certain Survey being serialized into a XML document
      */
-    public SurveyAnswersXMLService(List<Review> surveyReviews){
-        this.surveyReviews=surveyReviews;
+    public SurveyAnswersXMLService(List<Review> surveyReviews) {
+        this.surveyReviews = surveyReviews;
     }
+
     /**
      * Method that serializes the current reviews of a certain survey into a XML document
+     *
      * @return String with the serialized survey reviews as a XML document
      */
-    public String toXMLDocument(){
+    public String toXMLDocument() {
         return serializeReviewsXMLDocument();
     }
+
     /**
      * Method that serializes the reviews of a certain survey into a XML document
+     *
      * @return String with the XML document content containing the serialized survey reviews
      */
-    private String serializeReviewsXMLDocument(){
+    private String serializeReviewsXMLDocument() {
         Map<Question, List<Answer>> mapQuestionAnswers = allQuestionsPerAnswers();
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         try {
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
-
+            
             Element rootElement = doc.createElement(SURVEY_LABEL);
             doc.appendChild(rootElement);
+
+            Attr attrID = doc.createAttribute(ID_LABEL);
+            attrID.setValue(String.valueOf(surveyReviews.get(0).getSurvey().getID()));
+            rootElement.setAttributeNode(attrID);
+
+            Attr attrSurveys = doc.createAttribute(REVIEWS_LABEL);
+            attrSurveys.setValue(String.valueOf(surveyReviews.size()));
+            rootElement.setAttributeNode(attrSurveys);
 
             writeAnswers(doc, rootElement, mapQuestionAnswers);
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT,INDENTATION);
+            transformer.setOutputProperty(XML_INDENTATION_AMOUNT_PROPERTY,INDENTATION_AMOUNT);
             DOMSource source = new DOMSource(doc);
-            StringWriter xmlDocument=new StringWriter();
+            StringWriter xmlDocument = new StringWriter();
             StreamResult result = new StreamResult(xmlDocument);
-            transformer.transform(source,result);
+            transformer.transform(source, result);
             return xmlDocument.getBuffer().toString();
-        } catch (ParserConfigurationException |TransformerException transformationException) {
+        } catch (ParserConfigurationException | TransformerException transformationException) {
             Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, transformationException);
             throw new IllegalStateException(transformationException.getCause());
         }
     }
+
     /**
      * Method that returns a map with all answers given for each question
      *
@@ -131,11 +185,15 @@ public final class SurveyAnswersXMLService {
             Element idQuestion = doc.createElement(QUESTION_LABEL);
             rootElement.appendChild(idQuestion);
 
-            Attr attrType = doc.createAttribute("type");
+            Attr attrName = doc.createAttribute(NAME_LABEL);
+            attrName.setValue(question.getQuestionText());
+            idQuestion.setAttributeNode(attrName);
+
+            Attr attrType = doc.createAttribute(TYPE_LABEL);
             attrType.setValue(question.getType().name());
             idQuestion.setAttributeNode(attrType);
 
-            Attr attrID = doc.createAttribute("ID");
+            Attr attrID = doc.createAttribute(ID_LABEL);
             attrID.setValue(question.getQuestionID());
             idQuestion.setAttributeNode(attrID);
 
@@ -145,6 +203,18 @@ public final class SurveyAnswersXMLService {
                 idQuestion.appendChild(elementAnswer);
             }
         }
-
+        List<String> reviewSuggestions=new ArrayList<>();
+        surveyReviews.forEach((review) -> {if(review.hasSuggestion())reviewSuggestions.add(review.getSuggestion());});
+        if (!reviewSuggestions.isEmpty()) {
+            Element suggestions = doc.createElement(SUGGESTIONS_LABEL);
+            rootElement.appendChild(suggestions);
+            for(int i=0;i<reviewSuggestions.size();i++){
+                Element elementSuggestion = doc.createElement(SUGGESTION_LABEL);
+                suggestions.appendChild(elementSuggestion);
+                Attr attrSug = doc.createAttribute(VALUE_LABEL);
+                attrSug.setValue(reviewSuggestions.get(i));
+                elementSuggestion.setAttributeNode(attrSug);
+            }
+        }
     }
 }
