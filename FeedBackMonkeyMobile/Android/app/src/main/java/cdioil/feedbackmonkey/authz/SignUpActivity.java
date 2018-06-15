@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -339,9 +338,10 @@ public class SignUpActivity extends AppCompatActivity {
                     " ativar a sua conta e efetuar login!");
             activateAccountAlert.setIcon(R.drawable.ic_info_black_18dp);
             LayoutInflater layoutInflater = LayoutInflater.from(SignUpActivity.this);
-            View promptView = layoutInflater.inflate(R.layout.activate_account_view_on_register, null);
+            View promptView = layoutInflater.inflate(R.layout.insert_activation_code, null);
             activateAccountAlert.setView(promptView);
             Button sendActivationRequestButton = promptView.findViewById(R.id.sendActivationRequestButton);
+            sendActivationRequestButton.setText(R.string.send_activate_account_and_login_on_register);
             EditText activateAccountCode = promptView.findViewById(R.id.activateAccountCode);
             sendActivationRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
