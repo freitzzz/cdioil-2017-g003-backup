@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -28,7 +27,6 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     /**
      * Product's name.
      */
-    @Column(name = "NOME")
     private String name;
     /**
      * Product's Stock Keeping Unit.
@@ -44,7 +42,6 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     /**
      * Quantity of the product.
      */
-    @Column(name = "QUANTIDADE")
     private String quantity;
     /**
      * The Product's image.
@@ -53,7 +50,6 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     /**
      * The brand of the product.
      */
-    @Column(name = "MARCA")
     private String brand;
 
     /**
