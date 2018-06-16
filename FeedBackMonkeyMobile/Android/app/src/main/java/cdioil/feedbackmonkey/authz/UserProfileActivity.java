@@ -5,12 +5,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -19,7 +23,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.utils.GenericFileProvider;
 
 /**
  * Activity that presents the user's profile.
@@ -67,6 +77,10 @@ public class UserProfileActivity extends AppCompatActivity {
      * Button that on click will take the user to a list of their suggestions.
      */
     private Button suggestionListButton;
+    /**
+     * String that holds the profile picture path.
+     */
+    private String pictureImagePath;
 
     /**
      * Activity will execute this code when its created
@@ -105,7 +119,7 @@ public class UserProfileActivity extends AppCompatActivity {
          */
         nameTextView.setText("João Ferreira");
         ageTextView.setText("52    Anos");
-        locationTextView.setText("Porto,  Portugal");
+        locationTextView.setText("Porto,  Portugal ");
         badgeTextView.setText("Especialista  em Vinhos Tintos");
         setProfilePicture();
 
@@ -130,7 +144,22 @@ public class UserProfileActivity extends AppCompatActivity {
                         requestPermissions(new String[]{Manifest.permission.CAMERA},
                                 MY_CAMERA_PERMISSION_CODE);
                     } else {
+                        System.out.println("hey hey hey hey");
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String imageFileName = timeStamp + ".jpg";
+                        File storageDir = getFilesDir();
+                        File imageFile = new File(storageDir,imageFileName);
+                        try {
+                            imageFile.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        pictureImagePath = imageFile.getAbsolutePath();
+                        Uri outputFileUri = GenericFileProvider.getUriForFile(getApplicationContext(),
+                                        "cdioil.feedbackmonkey.utils.GenericFileProvider",imageFile);
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                         startActivityForResult(cameraIntent, CAMERA_REQUEST);
                     }
                 }
@@ -150,9 +179,9 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("entrei aqui");
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
-
             }
         }
     }
@@ -166,13 +195,11 @@ public class UserProfileActivity extends AppCompatActivity {
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap untreatedBitmap = (Bitmap) data.getExtras().get("data");
-            //TODO treat photo so it doesn't appear blurry on screen
-            /**
-             * TODO Discuss whether the picture should be just saved in the phone or
-             * if a RESTRequest should be made to save it in the server.
-             */
-            profilePhotoImageView.setImageBitmap(untreatedBitmap);
+            File imageFile = new File(pictureImagePath);
+            if(imageFile.exists()){
+                Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                profilePhotoImageView.setImageBitmap(imageBitmap);
+            }
         }
     }
 }

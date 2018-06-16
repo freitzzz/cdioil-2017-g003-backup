@@ -31,7 +31,6 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginTop="@dimen/fab_margin"
         android:background="@drawable/yellow_button"
-        android:text="@string/send_activate_account_and_login_on_register"
         android:textColor="#3D3D3D"
         android:textSize="18sp"
         android:textStyle="bold" />

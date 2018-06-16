@@ -6,6 +6,8 @@ import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.console.Console;
 import cdioil.domain.authz.Manager;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 /**
  * User Interface for use cases US-205 (import independent questions from file) and US-210 (import category questions from file).
  *
@@ -48,6 +50,11 @@ public class ImportQuestionsUI {
      * Represents a message that indicate that no imported questions
      */
     private final String errorNoImportedQuestions = localizationHandler.getMessageValue("error_no_imported_questions");
+
+    /**
+     * Represents a message that indicates that an error occurred while importing the independent questions
+     */
+    private final String errorWrongFileConfiguration = localizationHandler.getMessageValue("error_wrong_file_configuration");
 
     /**
      * Option for import the category questions
@@ -100,7 +107,11 @@ public class ImportQuestionsUI {
                     numImportedQuestions = controller.importCategoryQuestions(fileName);
 
                 } else if (fileType == INDEPENDENT_QUESTIONS_FILE_TYPE) {
-                    numImportedQuestions = controller.importIndependentQuestions(fileName);
+                    try {
+                        numImportedQuestions = controller.importIndependentQuestions(fileName);
+                    } catch (ParserConfigurationException exception) {
+                        System.out.println(errorWrongFileConfiguration);
+                    }
                 }
 
                 if (numImportedQuestions == null) {

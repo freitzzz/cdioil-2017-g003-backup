@@ -30,6 +30,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.services.SurveyService;
+import cdioil.feedbackmonkey.application.services.SurveyServiceController;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
@@ -47,18 +48,6 @@ import okhttp3.Response;
 public class ListSurveyActivity extends AppCompatActivity {
 
     /**
-     * Constant that represents the Surveys resource path
-     */
-    private static final String SURVEYS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Surveys");
-    /**
-     * Constant that represents the user available surveys resource path under survey resource
-     */
-    private static final String USER_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available User Surveys");
-    /**
-     * Constant that represents the surveys available to the user with a given code resource path under survey resource.
-     */
-    private static final String PRODUCT_CODE_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available Surveys By Product Code");
-    /**
      * Constant that represents the Reviews resource path.
      */
     private static final String REVIEWS_RESOURCE_PATH = FeedbackMonkeyAPI.getResourcePath("Reviews");
@@ -66,15 +55,6 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Constant that represents the new review resource path under reviews resource.
      */
     private static final String NEW_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Create New Review");
-    /**
-     * Constant representing an error message to be displayed when a connection error occurs.
-     */
-    private static final String ERROR_CONNECTION_LOST = "Ocorreu um erro com a sua ligação à internet";
-
-    /**
-     * Constant representing an error message to be displayed when an error occurs whilst parsing a file.
-     */
-    private static final String ERROR_PARSING_FILE = "Ocorreu um erro na leitura do ficheiro recebido";
     /**
      * ListView that is hold by the scroll view
      */
@@ -93,11 +73,6 @@ public class ListSurveyActivity extends AppCompatActivity {
     private String authenticationToken;
 
     /**
-     * String with the scanned item code.
-     */
-    private String itemCode;
-
-    /**
      * HTTP Response code when attempting to retrieve new review data.
      */
     private int reviewRestResponseCode;
@@ -111,7 +86,6 @@ public class ListSurveyActivity extends AppCompatActivity {
      */
     private List<SurveyService> currentSurveys;
 
-
     /**
      * Creates the current activity.
      *
@@ -120,22 +94,31 @@ public class ListSurveyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        authenticationToken = getIntent().getExtras().getString("authenticationToken");
-        if (getIntent().getExtras().containsKey("itemCode")) {
-            itemCode = getIntent().getExtras().getString("itemCode");
-        }
+        configureActivityStart(getIntent().getBundleExtra(ListSurveyActivity.class.getSimpleName()));
         setContentView(R.layout.activity_list_survey_activity);
         configure();
-        fetchSurveys();
     }
 
+    /**
+     * Configures the activity start based on a bundle that was passed
+     * @param bundle Bundle with the bundle which was brought by another activity
+     */
+    private void configureActivityStart(Bundle bundle){
+        authenticationToken=bundle.getString("authenticationToken");
+        int surveysToAdd=bundle.size()-1;
+        System.out.println(surveysToAdd);
+        currentSurveys=new ArrayList<>(surveysToAdd);
+        for(int i=0;i<surveysToAdd;i++)currentSurveys.add((SurveyService)bundle.getSerializable(""+i));
+        System.out.println(currentSurveys);
+        currentPaginationID++;
+    }
     /**
      * Configures the current view and view adapter properties.
      */
     private void configure() {
-        currentSurveys=new ArrayList<>();
         listSurveysListView = findViewById(R.id.listViewListSurveys);
         currentAdapter = new SurveyItemListViewAdapter(getActivity());
+        currentAdapter.addAll(currentSurveys);
         listSurveysListView.setAdapter(currentAdapter);
         configureListViewOnItemClick();
         configureListViewOnLongItemClick();
@@ -165,10 +148,10 @@ public class ListSurveyActivity extends AppCompatActivity {
                         finish();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        ToastNotification.show(this, ERROR_CONNECTION_LOST);
+                        ToastNotification.show(this,getString(R.string.no_internet_connection));
                     } catch (ParserConfigurationException | SAXException e) {
                         e.printStackTrace();
-                        ToastNotification.show(this, ERROR_PARSING_FILE);
+                        ToastNotification.show(this, getString(R.string.error_parsing_file));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -244,7 +227,7 @@ public class ListSurveyActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                ToastNotification.show(this, ERROR_CONNECTION_LOST);
+                ToastNotification.show(this, getString(R.string.no_internet_connection));
             }
         };
     }
@@ -266,13 +249,13 @@ public class ListSurveyActivity extends AppCompatActivity {
     private Runnable fetchNextSurveys() {
         return () -> {
             try {
-                List<String> nextSurveys = getNextSurveys();
+                List<SurveyService> nextSurveys = getNextSurveys();
                 if (nextSurveys != null) {
                     ListSurveyActivity.this.runOnUiThread(addSurveys(nextSurveys));
                 }
             } catch (IOException ioException) {
                 //TODO: log exceptions to logger file
-                ToastNotification.show(this, ERROR_CONNECTION_LOST);
+                ToastNotification.show(this, getString(R.string.no_internet_connection));
             }
         };
     }
@@ -281,55 +264,11 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Gets the next current surveys available for the current user depending on the pagination ID
      *
      * @return List with all the surveys available for the current user depending on the pagination ID,
-     * null if an error ocured
+     * null if an error occurred
      * @throws IOException Throws IOException if an error occurred while sending the REST Request
      */
-    private List<String> getNextSurveys() throws IOException {
-        String userAvailableSurveysURL;
-
-        if (itemCode == null) {
-            userAvailableSurveysURL = BuildConfig.SERVER_URL
-                    .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
-                    .concat(SURVEYS_RESOURCE_PATH)
-                    .concat(USER_AVAILABLE_RESOURCE_PATH)
-                    .concat(authenticationToken)
-                    .concat("?paginationID=" + (currentPaginationID++));
-        } else {
-            userAvailableSurveysURL = BuildConfig.SERVER_URL
-                    .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
-                    .concat(SURVEYS_RESOURCE_PATH)
-                    .concat(PRODUCT_CODE_AVAILABLE_RESOURCE_PATH)
-                    .concat(authenticationToken)
-                    .concat("/")
-                    .concat(itemCode);
-        }
-        Response requestResponse = RESTRequest.create(userAvailableSurveysURL)
-                .GET();
-        String responseBody = requestResponse.body().string();
-        switch (requestResponse.code()) {
-            case 200:
-                List<String> surveyItems = new ArrayList<>();
-                Gson gson = new Gson();
-                Type surveyJSONServicesType = new TypeToken<ArrayList<SurveyJSONService>>() {
-                }.getType();
-                List<SurveyJSONService> surveyJSONServices = gson.fromJson(responseBody, surveyJSONServicesType);
-                for (int i = 0; i < surveyJSONServices.size(); i++) {
-                    currentSurveys.add(new SurveyService(surveyJSONServices.get(i)));
-                    surveyItems.add(currentSurveys.get(currentSurveys.size()-1).getSurveyName());
-                }
-                return surveyItems;
-            case 400:
-                System.out.println("400 ->>>\n" + responseBody);
-                break;
-            case 401:
-                System.out.println("401 ->>>\n" + responseBody);
-                break;
-            case 404:
-                //happens when no products are found
-                break;
-
-        }
-        return null;
+    private List<SurveyService> getNextSurveys() throws IOException {
+        return new SurveyServiceController(authenticationToken).getSurveysByPaginationID((short)currentPaginationID++);
     }
 
     /**
@@ -337,7 +276,7 @@ public class ListSurveyActivity extends AppCompatActivity {
      *
      * @param surveys List with the new list of surveys being added to the adapter
      */
-    private Runnable addSurveys(List<String> surveys) {
+    private Runnable addSurveys(List<SurveyService> surveys) {
         return () -> currentAdapter.addAll(surveys);
     }
 
@@ -357,14 +296,14 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
      * @author <a href="1161191@isep.ipp.pt">Ana Guerra</a>
      */
-    private class SurveyItemListViewAdapter extends ArrayAdapter<String> {
+    private class SurveyItemListViewAdapter extends ArrayAdapter<SurveyService> {
         /**
          * Builds a new {@link SurveyItemListViewAdapter} being adapted on a certain activity ListView
          *
          * @param activity    Activity with the activity which the ListView is being added the adapter
          * @param surveyItems List with a previous survey items predefined
          */
-        public SurveyItemListViewAdapter(Activity activity, List<String> surveyItems) {
+        public SurveyItemListViewAdapter(Activity activity, List<SurveyService> surveyItems) {
             super(activity, R.layout.survey_list_row_item, surveyItems);
         }
 
@@ -394,7 +333,7 @@ public class ListSurveyActivity extends AppCompatActivity {
                         .inflate(R.layout.survey_list_row_item, parent, false);
             }
             TextView viewSurveyName = convertView.findViewById(R.id.textViewSurveyItemListRow);
-            viewSurveyName.setText(getItem(position));
+            viewSurveyName.setText(getItem(position).getSurveyName());
             return convertView;
         }
     }

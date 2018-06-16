@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -61,10 +63,10 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
             return;
         }
 
-        loadQuestionInfo();
+        loadQuestionInfo(false);
     }
 
-    private void loadQuestionInfo() {
+    private void loadQuestionInfo(boolean onBackPressed) {
         Bundle currentQuestionBundle = ReviewXMLService.instance().getCurrentQuestionBundle();
         questionTextView.setText(currentQuestionBundle.getString("questionText"));
 
@@ -75,6 +77,7 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        configureActivityAnimations(onBackPressed, fragmentTransaction);
         Fragment newFragment = null;
 
         if (currentQuestionType.compareTo("B") == 0) {
@@ -87,6 +90,29 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
 
         fragmentTransaction.replace(R.id.fragment_container, newFragment);
         fragmentTransaction.commit();
+    }
+
+    /**
+     * Configures the activity's animations for the question text view and the fragment transaction
+     *
+     * @param onBackPressed       boolean to know whether the user is pressing the back button or not
+     * @param fragmentTransaction fragment transaction that is going to happen to show the previous or
+     *                            the next question to the user
+     */
+    private void configureActivityAnimations(boolean onBackPressed, FragmentTransaction fragmentTransaction) {
+        if (onBackPressed) {
+            Animation textViewAnimation = AnimationUtils.loadAnimation(this, R.anim.enter_from_right);
+            textViewAnimation.reset();
+            questionTextView.clearAnimation();
+            questionTextView.startAnimation(textViewAnimation);
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+        } else {
+            Animation textViewAnimation = AnimationUtils.loadAnimation(this, R.anim.enter_from_left);
+            textViewAnimation.reset();
+            questionTextView.clearAnimation();
+            questionTextView.startAnimation(textViewAnimation);
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+        }
     }
 
     /**
@@ -131,7 +157,7 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
             if (!canAnswerNextQuestion) {
                 submitSuggestion();
             } else {
-                loadQuestionInfo();
+                loadQuestionInfo(false);
             }
 
         } catch (ParserConfigurationException | IOException | TransformerException | SAXException e) {
@@ -146,7 +172,7 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
             progressMade = progressMade - 25;
             progressBar.setProgress(progressMade);
             if (canUndo) {
-                loadQuestionInfo();
+                loadQuestionInfo(true);
             } else {
                 super.onBackPressed();
             }
