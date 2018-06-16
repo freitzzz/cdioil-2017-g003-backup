@@ -58,7 +58,7 @@ public class CreateSurveyWindow extends Window {
     /**
      * Controller Class
      */
-    private CreateSurveyController controller = new CreateSurveyController();
+    private transient CreateSurveyController controller = new CreateSurveyController();
 
     /**
      * Constructor

@@ -12,7 +12,7 @@ public class ShowSurveyInfoWindow extends Window {
     /**
      * Selected Survey
      */
-    private SurveyDTO selectedSurvey;
+    private transient SurveyDTO selectedSurvey;
 
     /**
      * Main Window Layout

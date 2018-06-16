@@ -203,13 +203,13 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
         if (!changed) {
             //create Response informing the user that data was unable to be changed
             //code 400
-            return Response.status(Status.BAD_REQUEST).entity(JSON_PASSWORD_CHANGE_FAILED).build();
+            return Response.status(Status.BAD_REQUEST).entity(JSON_COMINHOS_CHANGE_FAILED).build();
         }
 
         //update system user with new data
         new UserRepositoryImpl().merge(sysUser);
         
-        return Response.status(Status.OK).entity(JSON_PASSWORD_CHANGE_SUCCESS).build();
+        return Response.status(Status.OK).entity(JSON_COMINHOS_CHANGE_SUCCESS).build();
     }
 
     /**

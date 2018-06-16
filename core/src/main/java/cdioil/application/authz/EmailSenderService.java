@@ -28,12 +28,12 @@ public final class EmailSenderService {
     /**
      * Constant that represents the email title when resetting a user's password.
      */
-    private static final String EMAIL_PASSWORD_RESET_CODE_TITLE = "Reposição de Password 🍌";
+    private static final String EMAIL_COMINHOS_RESET_CODE_TITLE = "Reposição de Password 🍌";
     
     /**
      * Constant that represents the email content when resetting a user's password.
      */
-    private static final String FORMATED_EMAIL_PASSWORD_RESET_CODE_CONTENT = "Olá %s!<p>"
+    private static final String FORMATED_EMAIL_COMINHOS_RESET_CODE_CONTENT = "Olá %s!<p>"
             + "No Feedback Monkey sabemos que as passwords podem por vezes ser esquecidas.<p>"
             + "É por isso que lhe estamos a enviar este email!<p>"
             + "Basta inserir o código <strong>%s</strong> na nossa aplicação para que possa "
@@ -88,11 +88,11 @@ public final class EmailSenderService {
         String destinationEmail = currentSystemUser.getID().toString();
         String userName = currentSystemUser.getName() != null ? currentSystemUser.getName().toString() : "";
 
-        String content = String.format(FORMATED_EMAIL_PASSWORD_RESET_CODE_CONTENT,
+        String content = String.format(FORMATED_EMAIL_COMINHOS_RESET_CODE_CONTENT,
                 userName, currentSystemUser.getActivationCode());
 
         return EmailSenderFactory
                 .create(sender.getEmail(), sender.getPassword())
-                .sendEmail(destinationEmail, EMAIL_PASSWORD_RESET_CODE_TITLE, content);
+                .sendEmail(destinationEmail, EMAIL_COMINHOS_RESET_CODE_TITLE, content);
     }
 }

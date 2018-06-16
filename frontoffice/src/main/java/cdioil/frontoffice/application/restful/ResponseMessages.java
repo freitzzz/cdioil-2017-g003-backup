@@ -168,11 +168,11 @@ public interface ResponseMessages {
      * Constant that represents the JSON used on the response message warning
      * the user that the password was changed successfully.
      */
-    public static final String JSON_PASSWORD_CHANGE_SUCCESS = "{\n\t\"passwordchanged\":\"true\"\n}";
+    public static final String JSON_COMINHOS_CHANGE_SUCCESS = "{\n\t\"passwordchanged\":\"true\"\n}";
 
     /**
      * Constant that represents the JSON used on the response message warning
      * the user that the password was unable to be changed.
      */
-    public static final String JSON_PASSWORD_CHANGE_FAILED = "{\n\t\"passwordchanged\":\"false\"\n}";
+    public static final String JSON_COMINHOS_CHANGE_FAILED = "{\n\t\"passwordchanged\":\"false\"\n}";
 }
