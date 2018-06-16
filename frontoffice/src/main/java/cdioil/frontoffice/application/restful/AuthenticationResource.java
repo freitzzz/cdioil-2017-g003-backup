@@ -121,14 +121,6 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
             return Response.status(Status.BAD_REQUEST).entity(JSON_INVALID_USER).build();
         }
 
-        RegisteredUser registeredUser = new RegisteredUserRepositoryImpl().findBySystemUser(sysUser);
-
-        if (registeredUser == null) {
-            //create Response informing the user there's no registered user with the given email address
-            //code 400
-            return Response.status(Status.BAD_REQUEST).entity(JSON_INVALID_USER).build();
-        }
-
         //send email
         boolean sentSucessfully = new EmailSenderService(sysUser).sendPasswordResetCode();
 
