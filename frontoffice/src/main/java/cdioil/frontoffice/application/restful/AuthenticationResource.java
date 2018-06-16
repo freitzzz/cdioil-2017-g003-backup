@@ -4,12 +4,22 @@ import cdioil.frontoffice.application.restful.json.RegistrationJSONService;
 import cdioil.frontoffice.application.restful.json.UserJSONService;
 import cdioil.frontoffice.application.api.AuthenticationAPI;
 import cdioil.application.authz.AuthenticationController;
+import cdioil.application.authz.EmailSenderService;
 import cdioil.application.domain.authz.exceptions.AuthenticationException;
+import cdioil.domain.authz.Email;
+import cdioil.domain.authz.Password;
+import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
+import cdioil.emails.EmailSender;
 import cdioil.frontoffice.application.authz.RegisterUserController;
+import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
+import cdioil.persistence.impl.UserRepositoryImpl;
 import com.google.gson.Gson;
 import java.time.format.DateTimeParseException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -92,6 +102,116 @@ public final class AuthenticationResource implements AuthenticationAPI, Response
                 ,registrationService.getName(),registrationService.getPhoneNumber(),registrationService.getLocation()
                 ,registrationService.getBirthDate());
     }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/requestactivationcode")
+    @Override
+    public Response requestActivationCode(String jsonEmail) {
+
+        UserJSONService userService = new Gson().fromJson(jsonEmail, UserJSONService.class);
+        String email = userService.getEmail();
+        
+        SystemUser sysUser = new UserRepositoryImpl().findByEmail(new Email(email));
+
+        if (sysUser == null) {
+            //create Response informing the user there's no system user with the given email address
+            //code 400
+            return Response.status(Status.BAD_REQUEST).entity(JSON_INVALID_USER).build();
+        }
+
+        //send email
+        boolean sentSucessfully = new EmailSenderService(sysUser).sendPasswordResetCode();
+
+        if (!sentSucessfully) {
+            //create Response informing the user an error occured while sending activation code email
+            //Code 503
+            return Response.status(Status.SERVICE_UNAVAILABLE).entity(JSON_ACTIVATION_CODE_DISPATCH_FAILED).build();
+        }
+
+        //code 200
+        return Response.status(Status.OK).entity(JSON_ACTIVATION_CODE_DISPATCH_SUCESS).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/confirmactivationcode")
+    @Override
+    public Response confirmActivationCode(String jsonReactivationData) {
+
+        /*Note: While this method could appear redundant, since the changePassword 
+        method also requires the activation code, it helps improve the user 
+        experience, since it'll be possible to warn the user if the code is valid 
+        as soon as they finish typing it in, since the Mobile APP presents
+        separate dialogs for user input*/
+    
+        UserJSONService userService = new Gson().fromJson(jsonReactivationData, UserJSONService.class);
+        String email = userService.getEmail();
+        String activationCode = userService.getActivationCode();
+
+        SystemUser sysUser = new UserRepositoryImpl().findByEmail(new Email(email));
+
+        if (sysUser == null) {
+            //create Response informing the user there's no system user with the given email address
+            //code 400
+            return Response.status(Status.BAD_REQUEST).entity(JSON_INVALID_USER).build();
+        }
+
+        if (!activationCode.equals(sysUser.getActivationCode())) {
+            //create Response informing the user there's no system user with the given email address
+            //code 400
+            return Response.status(Status.BAD_REQUEST).entity(JSON_INVALID_ACTIVATION_CODE).build();
+        }
+
+        return Response.status(Status.OK).entity(JSON_VALID_ACTIVATION_CODE).build();
+    }
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/changepassword")
+    @Override
+    public Response changePassword(String jsonChangePasswordData) {
+
+        /*Note: This method also uses the activation code in order to prevent 
+        other users from changing a user's password*/
+        
+        UserJSONService userService = new Gson().fromJson(jsonChangePasswordData, UserJSONService.class);
+
+        String email = userService.getEmail();
+        String activationCode = userService.getActivationCode();
+        String passwordText = userService.getPassword();
+
+        SystemUser sysUser = new UserRepositoryImpl().findByEmail(new Email(email));
+
+        if (sysUser == null) {
+            //create Response informing the user there's no system user with the given email address
+            //code 400
+            return Response.status(Status.BAD_REQUEST).entity(JSON_INVALID_USER).build();
+        }
+
+        if (!activationCode.equals(sysUser.getActivationCode())) {
+            //create Response informing the user there's no system user with the given email address
+            //code 400
+            return Response.status(Status.BAD_REQUEST).entity(JSON_INVALID_ACTIVATION_CODE).build();
+        }
+
+        boolean changed = sysUser.changeUserDatafield(passwordText, SystemUser.CHANGE_PASSWORD_OPTION);
+
+        if (!changed) {
+            //create Response informing the user that data was unable to be changed
+            //code 400
+            return Response.status(Status.BAD_REQUEST).entity(JSON_COMINHOS_CHANGE_FAILED).build();
+        }
+
+        //update system user with new data
+        new UserRepositoryImpl().merge(sysUser);
+        
+        return Response.status(Status.OK).entity(JSON_COMINHOS_CHANGE_SUCCESS).build();
+    }
+
     /**
      * Creates a Response for the Login Request
      * <br>Check JSON messages for the content that is going to be sent on the response

@@ -16,14 +16,14 @@
                 Template title:;<xsl:value-of select= "@title"/>
                 ; <!-- Semicolon for Excel spacing -->
                 Questions:
-                ;QuestionID;QuestionText      
+                QuestionID;QuestionText      
                <xsl:for-each select = "Question">
                    Question   
                       ;<xsl:value-of select = "@ID"/>;<xsl:value-of select = "QuestionText"/>
                         Options:  
-                        <xsl:for-each select = "Question/Options/Option">
-                             <xsl:value-of select = "Option"/>;
-                         </xsl:for-each>
-                </xsl:for-each>
+                      <xsl:for-each select="Options/Option">
+                          ;<xsl:value-of select = "."/>
+                    </xsl:for-each> 
+               </xsl:for-each>
     </xsl:template>
 </xsl:stylesheet>

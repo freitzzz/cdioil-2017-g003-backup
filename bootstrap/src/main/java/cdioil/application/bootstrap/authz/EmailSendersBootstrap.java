@@ -46,5 +46,27 @@ public final class EmailSendersBootstrap {
         sendersRepo.add(new EmailSenders("feedbackmonkeysender10@yahoo.com", OperatorsEncryption.decrypt(COMINHOS_2)));
         sendersRepo.add(new EmailSenders("feedbackmonkeysender11@yahoo.com", OperatorsEncryption.decrypt(COMINHOS_2)));
         sendersRepo.add(new EmailSenders("feedbackmonkeysender12@yahoo.com", OperatorsEncryption.decrypt(COMINHOS_2)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender13@gmail.com", OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender14@yahoo.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender15@yahoo.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender16@yahoo.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender17@yahoo.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender18@yahoo.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender19@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender20@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender21@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender22@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender24@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender25@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender26@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender27@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender28@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender29@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender30@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender31@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender32@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender33@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender34@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
+        sendersRepo.add(new EmailSenders("feedbackmonkeysender35@outlook.com",OperatorsEncryption.decrypt(COMINHOS)));
     }
 }

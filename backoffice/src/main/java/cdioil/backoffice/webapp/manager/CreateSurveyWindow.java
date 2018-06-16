@@ -7,10 +7,14 @@ import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.TwinColSelect;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -18,6 +22,7 @@ import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,7 +58,7 @@ public class CreateSurveyWindow extends Window {
     /**
      * Controller Class
      */
-    private CreateSurveyController controller = new CreateSurveyController();
+    private transient CreateSurveyController controller = new CreateSurveyController();
 
     /**
      * Constructor
@@ -67,7 +72,7 @@ public class CreateSurveyWindow extends Window {
      * Sets Window Properties
      */
     private void setProperties() {
-        setModal(true);
+        //setModal(true);
         setResizable(false);
         setWindowMode(WindowMode.MAXIMIZED);
         setSizeFull();
@@ -139,6 +144,7 @@ public class CreateSurveyWindow extends Window {
 
     /**
      * Prepares Question List Panel
+     *
      * @return Panel
      */
     private Panel prepareQuestionListPanel() {
@@ -165,6 +171,7 @@ public class CreateSurveyWindow extends Window {
 
     /**
      * Prepares Selected Questions List Panel
+     *
      * @return Panel
      */
     private Panel prepareSelectedQuestionsPanel() {
@@ -205,9 +212,9 @@ public class CreateSurveyWindow extends Window {
         private Label typeQuestionLabel = new Label();
 
         /**
-         * Question Options Button
+         * Question Option Popup View
          */
-        private Button questionOptionsBtn = new Button(VaadinIcons.ARROW_DOWN);
+        private QuestionOptionPopupContent questionOptionPopupContent;
 
         /**
          * Remove Question from List Button
@@ -259,7 +266,12 @@ public class CreateSurveyWindow extends Window {
             dropTarget.addDropListener(dropEvent -> {
                 dropEvent.getDragSourceComponent().ifPresent(dragSource -> {
                     if (dragSource instanceof Label) {
-                        updateNewQuestion(((Label)dragSource).getValue());
+                        updateNewQuestion(((Label) dragSource).getValue());
+
+                        if (((HorizontalLayout) dropTarget.getParent().getContent())
+                                .getComponentCount() == 1) {
+                            addNewQuestionSlotToLayout();
+                        }
                     }
                 });
             });
@@ -269,7 +281,7 @@ public class CreateSurveyWindow extends Window {
          * When a new question is dragged onto this panel,
          * updates components to show question information
          *
-         * @param questionText ragged question text
+         * @param questionText dragged question text
          */
         private void updateNewQuestion(String questionText) {
             mainLayout.removeAllComponents();
@@ -283,24 +295,92 @@ public class CreateSurveyWindow extends Window {
 
             typeQuestionLabel.setValue("Tipo");
 
-            questionOptionsBtn.addClickListener(clickAction -> {
-               //TODO Show Question Options
-            });
+            questionOptionPopupContent = new QuestionOptionPopupContent();
+
+            PopupView popup = new PopupView(questionOptionPopupContent);
+            popup.setHideOnMouseOut(true);
 
             QuestionRow current = this;
             removeQuestionBtn.addClickListener(clickAction ->
-               selectedQuestionsLayout.removeComponent(current));
+                    selectedQuestionsLayout.removeComponent(current));
 
             mainLayout.addComponents(indexLabel, questionLabel, typeQuestionLabel,
-                    questionOptionsBtn, removeQuestionBtn);
+                    popup, removeQuestionBtn);
 
             mainLayout.setExpandRatio(indexLabel, 0.1f);
-            mainLayout.setExpandRatio(questionLabel, 0.5f);
+            mainLayout.setExpandRatio(questionLabel, 0.45f);
             mainLayout.setExpandRatio(typeQuestionLabel, 0.2f);
-            mainLayout.setExpandRatio(questionOptionsBtn, 0.1f);
+            mainLayout.setExpandRatio(popup, 0.1f);
             mainLayout.setExpandRatio(removeQuestionBtn, 0.1f);
+        }
 
-            addNewQuestionSlotToLayout();
+        /**
+         * Popup View Content Class
+         */
+        private class QuestionOptionPopupContent implements PopupView.Content {
+
+            /**
+             * View Layout
+             */
+            private FormLayout layout;
+
+            /**
+             * Constructor
+             */
+            private QuestionOptionPopupContent() {
+                layout = new FormLayout();
+                setCaption("Opções Fluxo");
+                prepareQuestionOptionPopupLayout();
+            }
+
+            /**
+             * Prepares Layout
+             */
+            private void prepareQuestionOptionPopupLayout() {
+                //TODO Get Question Options
+                List<String> questionOptions = new ArrayList<>(Arrays.asList("Sim", "Não"));
+
+                for (String questionOption :
+                        questionOptions) {
+                    TextField tf = new TextField();
+                    tf.setCaption(questionOption);
+                    tf.setMaxLength(3);
+                    tf.setSizeUndefined();
+                    layout.addComponent(tf);
+                }
+            }
+
+            /**
+             * Placeholder HTML Value
+             * @return
+             */
+            @Override
+            public String getMinimizedValueAsHTML() {
+                return "Opções";
+            }
+
+            /**
+             * PopupView Content
+             * @return layout
+             */
+            @Override
+            public Component getPopupComponent() {
+                return layout;
+            }
+
+            /**
+             * Gets a list of all text field values
+             * @return List
+             */
+            public List<String> getTextFieldValues() {
+                List<String> tfValues = new ArrayList<>();
+
+                for (int i = 0; i < layout.getComponentCount(); i++) {
+                    tfValues.add(((TextField) layout.getComponent(i)).getValue().trim());
+                }
+
+                return tfValues;
+            }
         }
     }
 

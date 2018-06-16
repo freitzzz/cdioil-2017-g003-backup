@@ -25,7 +25,7 @@ public class SurveyComponent extends DefaultPanelView {
     /**
      * Controller class
      */
-    private ListSurveysController controller;
+    private transient ListSurveysController controller;
 
     /**
      * SurveyGrid
@@ -42,14 +42,14 @@ public class SurveyComponent extends DefaultPanelView {
      */
     public SurveyComponent() {
         super("Inquéritos");
-        instantiateComponents();
+        createComponents();
         prepareComponents();
     }
 
     /**
      * Instantiate Components
      */
-    private void instantiateComponents() {
+    private void createComponents() {
         controller = new ListSurveysController();
         surveyGrid = new Grid<>();
         surveyGridData = new ArrayList<>();
