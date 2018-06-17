@@ -70,6 +70,16 @@ public class LoginView extends LoginDesign implements View {
      */
     private static final String INVALID_USER_LOGIN_DESCRIPTION = "Não tem permissões para aceder à plataforma";
     /**
+     * Constant that represents the title of the popup notification that informs the user that his 
+     * account is blocked due too many unsuccessful logins
+     */
+    private static final String ACCOUNT_LOCKED_TITLE="Conta bloqueada";
+    /**
+     * Constant that represents the message of the popup notification that informs the user that his 
+     * account is blocked due too many unsuccessful logins
+     */
+    private static final String ACCOUNT_LOCKED_MESSAGE="A sua conta está temporáriamente bloqueada devido a vários logins incorretos";
+    /**
      * Constant that represents the background image path
      */
     private static final String BACKGROUND_IMAGE_PATH ="/WEB-INF/logos/Feedback_Monkey_Full.png";
@@ -206,11 +216,15 @@ public class LoginView extends LoginDesign implements View {
      * @param authenticationException AuthenticationException with the exception thrown if the authentication failed
      */
     private void treatAuthenticationFailure(AuthenticationException authenticationException){
-        if(authenticationException.getAuthenticationExceptionCause()
-                .equals(AuthenticationException.AuthenticationExceptionCause.INVALID_CREDENTIALS)){
-            showInvalidLoginCredentialsNotification();
-        }else{
-            showActivationCodePopup();
+        switch(authenticationException.getAuthenticationExceptionCause()){
+            case INVALID_CREDENTIALS:
+                showInvalidLoginCredentialsNotification();
+                return;
+            case ACCOUNT_LOCKED:
+                showAccountLockedNotification();
+                return;
+            case NOT_ACTIVATED:
+                showActivationCodePopup();
         }
     }
     /**
@@ -252,5 +266,11 @@ public class LoginView extends LoginDesign implements View {
      */
     private void showActivationCodePopup(){
         sendActivationCodePopupView.setPopupVisible(true);
+    }
+    /**
+     * Shows a popup dialog informing the use that his account is blocked for a period of time
+     */
+    private void showAccountLockedNotification(){
+        PopupNotification.show(ACCOUNT_LOCKED_TITLE,ACCOUNT_LOCKED_MESSAGE, Notification.Type.WARNING_MESSAGE,Position.TOP_RIGHT);
     }
 }
