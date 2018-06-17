@@ -41,8 +41,25 @@
     <string name="no_surveys_with_certain_code">Não existem inquéritos disponiveis com o código</string>
     <string name="password_recovery">Esqueceu-se da sua password?</string>
     <string name="password_recovery_header">Recuperação da Password</string>
+    <string name="password_recovery_email_msg">Insira o seu email para receber um código que permitirá a mudança de password</string>
+    <string name="password_recovery_code_msg">Insira o código que foi enviado para o seu email para alterar a sua password</string>
     <string name="request_password_recovery_code">Pedir código de recuperação</string>
     <string name="change_password">Alterar Password</string>
     <string name="new_password">Nova Password</string>
     <string name="set_new_password">Registar nova Password</string>
+    <string name="account_activation_title">Ativação da Conta</string>
+    <string name="account_activation_msg">Insira os dados seguintes para ativar a sua conta</string>
+    <string name="account_activation_success">Conta activada com successo!</string>
+    <string name="account_activation_error">Ocorreu um erro ao ativar a conta!</string>
+    <string name="account_already_activated">A conta já se encontra activada!</string>
+    <string name="email_edit_text_error">Preencha o campo com o seu email</string>
+    <string name="user_not_registered_error">Utilizador não registado</string>
+    <string name="email_dispatch_error">Não foi possível enviar email</string>
+    <string name="code_edit_text_error">Por favor insira o código</string>
+    <string name="invalid_code_edit_text_error">Código inválido!</string>
+    <string name="new_password_msg">Insira a sua nova password</string>
+    <string name="empty_password_edit_text_error">Por favor introduza uma password</string>
+    <string name="different_password_edit_text_error">Por favor introduza a mesma password</string>
+    <string name="not_strong_password_edit_text_error">Password não é forte o suficiente!</string>
+    <string name="password_changed_success">Password alterada!</string>
 </resources>
