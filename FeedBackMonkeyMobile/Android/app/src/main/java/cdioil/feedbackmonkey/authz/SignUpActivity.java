@@ -196,6 +196,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void run() {
                 passwordEditText.getText().clear();
+                rewritePasswordEditTexT.getText().clear();
             }
         });
     }
