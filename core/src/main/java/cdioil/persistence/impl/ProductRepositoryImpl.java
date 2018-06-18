@@ -41,7 +41,9 @@ public class ProductRepositoryImpl extends BaseJPARepository<Product, Long> impl
     public Product getProductBySKU(SKU sku) {
         Query q = entityManager().createQuery("SELECT p FROM Product p WHERE p.sku = :p_sku");
         q.setParameter("p_sku", sku);
-
-        return (Product) q.getSingleResult();
+        
+        List<Product> p = (List<Product>)q.getResultList();
+        
+        return p.isEmpty() ? null : p.get(0);
     }
 }
