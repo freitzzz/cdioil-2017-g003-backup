@@ -162,7 +162,7 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
      * @return Response warning the user that the product does not exist
      */
     private Response createProductNotFoundResponse() {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.status(Status.BAD_REQUEST)
                 .entity(JSON_PRODUCT_NOT_FOUND)
                 .build();
     }
