@@ -13,34 +13,6 @@ import java.util.List;
  */
 public final class CSVSurveyAnswersWriter implements SurveyAnswersWriter{
     /**
-     * Constant that represents the label used for the question identifier on the CSV file
-     */
-    private static final String QUESTION_LABEL="Questão";
-    /**
-     * Constant that represents the label used for the answer identifier on the CSV file
-     */
-    private static final String ANSWER_LABEL="Respostas";
-    /**
-     * Constant that represents the label used for suggestion identified on the CSV file
-     */
-    private static final String SUGGESTION_LABEL="Sugestões";
-    /**
-     * Constant that represents the label being used for the Survey Informations header
-     */
-    private static final String SURVEY_INFORMATIONS_HEADER="Informações Inquérito";
-    /**
-     * Constant that represents the label being used for the survey review count identified on the CSV file
-     */
-    private static final String SURVEY_REVIEW_COUNT="NºAvaliações:";
-    /**
-     * Constant that represents the number of lines used to space different information about the reviews
-     */
-    private static final int CSV_LINES_SPACING=3;
-    /**
-     * Constant that represents the delimiter use for the CSV file (UTF-8 semi-colon like)
-     */
-    private static final char CSV_DELIMITER=';';
-    /**
      * File with the file that is going to be written with all survey answers
      */
     private final File file;
