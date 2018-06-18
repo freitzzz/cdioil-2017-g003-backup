@@ -1,5 +1,6 @@
 package cdioil.application.utils;
 
+import java.util.Arrays;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -7,7 +8,7 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * SurveyTemplate class that represents a template of a survey
+ * SurveyTemplate class that represents the structure of a Template.
  *
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 6.0 of FeedbackMonkey
@@ -78,7 +79,7 @@ public final class SurveyTemplateElement {
     public static class QuestionsElement {
 
         /**
-         * List with all the template templateQuestions
+         * List with all the template QuestionElement.
          */
         @XmlElements(value = {
             @XmlElement(name = "BinaryQuestion", type = BinaryQuestionElement.class)
@@ -112,7 +113,7 @@ public final class SurveyTemplateElement {
         /**
          * String that represents the text of the question
          */
-        @XmlElement(name = "text")
+        @XmlElement(name = "Text")
         private String text;
 
         /**
@@ -163,31 +164,6 @@ public final class SurveyTemplateElement {
     }
 
     /**
-     * Class that represents a quantitive question from the template
-     */
-    public static class QuantitativeQuestionElement extends QuestionElement {
-
-        /**
-         * Short with the quantitive question min value scale
-         */
-        @XmlElement(name = "scaleMinValue")
-        private double minValueScale;
-        /**
-         * Short with the quantitive question min value scale
-         */
-        @XmlElement(name = "scaleMaxValue")
-        private double maxValueScale;
-
-        public double getMinScaleValue() {
-            return minValueScale;
-        }
-
-        public double getMaxScaleValue() {
-            return maxValueScale;
-        }
-    }
-
-    /**
      * Class that represents a multiple choice question option
      */
     public static class OptionElement {
@@ -209,6 +185,31 @@ public final class SurveyTemplateElement {
 
         public String getText() {
             return text;
+        }
+    }
+
+    /**
+     * Class that represents a quantitive question from the template
+     */
+    public static class QuantitativeQuestionElement extends QuestionElement {
+
+        /**
+         * Short with the quantitive question min value scale
+         */
+        @XmlElement(name = "scaleMinValue")
+        private double minValueScale;
+        /**
+         * Short with the quantitive question min value scale
+         */
+        @XmlElement(name = "scaleMaxValue")
+        private double maxValueScale;
+
+        public double getMinScaleValue() {
+            return minValueScale;
+        }
+
+        public double getMaxScaleValue() {
+            return maxValueScale;
         }
     }
 
@@ -295,7 +296,7 @@ public final class SurveyTemplateElement {
          */
         @XmlElements(
                 @XmlElement(name = "Question"))
-        private List<QuestionElement> onReplyQuestions;
+        private List<ScriptedQuestionElement> scriptedQuestions;
 
         /**
          * Returns all the on reply questions of the template question script
@@ -303,8 +304,8 @@ public final class SurveyTemplateElement {
          * @return List with all the on reply questions of the the template
          * question script
          */
-        public List<QuestionElement> getOnReplyQuestions() {
-            return onReplyQuestions;
+        public List<ScriptedQuestionElement> getScriptedQuestions() {
+            return scriptedQuestions;
         }
     }
 
@@ -312,13 +313,38 @@ public final class SurveyTemplateElement {
      * Class that represents a question that leads to another question on the
      * question script
      */
-    public static class OnReplyQuestionElement extends QuestionElement {
+    public static class ScriptedQuestionElement {
 
         /**
-         * OnReply with the question trigger
+         * ScriptedQuestion's questionID.
          */
-        @XmlElement(name = "OnReply")
-        private OnReplyElement onReply;
+        @XmlAttribute(name = "questionID")
+        private String questionID;
+
+        /**
+         * ScriptedQuestion's list of OnReplyElement.
+         */
+        @XmlElements(
+                @XmlElement(name = "OnReply"))
+        private List<OnReplyElement> onReplyList;
+
+        /**
+         * Retrieves the question's ID.
+         *
+         * @return the question's ID.
+         */
+        public String getQuestionID() {
+            return questionID;
+        }
+
+        /**
+         * Retrieves a list of OnReplyElement.
+         *
+         * @return list of OnReplyElement
+         */
+        public List<OnReplyElement> getOnReplyList() {
+            return onReplyList;
+        }
     }
 
     /**
@@ -330,11 +356,37 @@ public final class SurveyTemplateElement {
          * OnReplyQuestion with the next question that is proceeded
          */
         @XmlElement(name = "Question")
-        private OnReplyQuestionElement onReplyQuestion;
+        private ScriptedQuestionElement onReplyQuestion;
+
         /**
          * String with the options that trigger the on reply question
          */
         @XmlAttribute(name = "option")
         private String onReplyOptions;
+
+        /**
+         * Retrieves the option leading to the next question.
+         *
+         * @return option that leads to the next question
+         */
+        public List<String> getOnReplyOptions() {
+
+            String[] options = onReplyOptions.split(",");
+
+            for (int i = 0; i < options.length; i++) {
+                options[i] = options[i].trim();
+            }
+
+            return Arrays.asList(options);
+        }
+
+        /**
+         * Retrieves the next question.
+         *
+         * @return the next question
+         */
+        public ScriptedQuestionElement getOnReplyQuestion() {
+            return onReplyQuestion;
+        }
     }
 }
