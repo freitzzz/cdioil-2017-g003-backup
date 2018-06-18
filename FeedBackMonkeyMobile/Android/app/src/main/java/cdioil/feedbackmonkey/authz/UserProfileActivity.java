@@ -30,6 +30,7 @@ import java.util.Date;
 
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.utils.GenericFileProvider;
+import cdioil.feedbackmonkey.utils.ToastNotification;
 
 /**
  * Activity that presents the user's profile.
@@ -129,7 +130,15 @@ public class UserProfileActivity extends AppCompatActivity {
      * Configures the buttons of this activity.
      */
     private void configureButtons() {
-
+        reviewedSurveysButton.setOnClickListener(view ->{
+            //TODO Create Intent to activity that will show the users reviews.
+        });
+        contestBadgeListButton.setOnClickListener(view ->{
+            ToastNotification.show(this,getString(R.string.functionality_not_implemented));
+        });
+        suggestionListButton.setOnClickListener(view ->{
+            //TODO Create Intent to activity that will show the users suggestion list.
+        });
     }
 
     /**
