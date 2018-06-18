@@ -49,6 +49,7 @@ import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 import cdioil.feedbackmonkey.utils.ToastNotification;
+import cdioil.feedbackmonkey.utils.WaitingDialog;
 import okhttp3.Response;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -71,6 +72,10 @@ public class MainMenuActivity extends AppCompatActivity {
      * Receiver responsible for receiving signals regarding network state changes.
      */
     private ConnectionReceiver connectionReceiver;
+    /**
+     * WaitingDialog with the dialog that keeps the user waiting for the surveys to be fetched
+     */
+    private WaitingDialog fetchingSurveysWaitingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         configureView();
         authenticationToken = getIntent().getExtras().getString("authenticationToken");
+        fetchingSurveysWaitingDialog=WaitingDialog.create(this).setWaitingDialogTitle(getString(R.string.fetching_surveys_waiting_dialog));
     }
 
     @Override
@@ -118,7 +124,6 @@ public class MainMenuActivity extends AppCompatActivity {
             mainMenuItemListViewAdapter.add(i);
         }
     }
-
     /**
      * Creates a finished reviews directory or fetches the existing one.
      *
@@ -218,13 +223,16 @@ public class MainMenuActivity extends AppCompatActivity {
     private Runnable fetchScannedCodeSurveys(String productCode){
         return () -> {
             try {
+                runOnUiThread(this::showFetchingSurveysWaitingDialog);
                 List<SurveyService> surveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByProductCode(productCode);
                 if(surveysToAnswer.size()==1){
                     startAnswerSurveyActivity(surveysToAnswer.get(0));
                 }else{
                     startListSurveyActivity(surveysToAnswer);
                 }
+                runOnUiThread(this::hideFetchingSurveysWaitingDialog);
             }catch(RESTfulException restfulException){
+                runOnUiThread(this::hideFetchingSurveysWaitingDialog);
                 switch(restfulException.getCode()){
                     case HttpsURLConnection.HTTP_BAD_REQUEST:
                         ToastNotification.show(MainMenuActivity.this,getString(R.string.no_surveys_with_certain_code));
@@ -236,6 +244,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
             }catch(IOException ioException){
+                runOnUiThread(this::hideFetchingSurveysWaitingDialog);
                 ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
             }
         };
@@ -318,6 +327,15 @@ public class MainMenuActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Shows the fetching surveys waiting dialog
+     */
+    private void showFetchingSurveysWaitingDialog(){fetchingSurveysWaitingDialog.show();}
+
+    /**
+     * Hides the fetching surveys waiting dialog
+     */
+    private void hideFetchingSurveysWaitingDialog(){fetchingSurveysWaitingDialog.hide();}
     /**
      * MainMenuItemListViewAdapter that represents a custom adapter used for the ListView that holds the
      * main menu options

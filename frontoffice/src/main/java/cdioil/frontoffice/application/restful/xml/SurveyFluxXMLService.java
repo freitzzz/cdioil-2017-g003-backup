@@ -30,6 +30,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -51,6 +52,10 @@ public final class SurveyFluxXMLService {
      * Constant that represents the Survey element tag
      */
     private static final String SURVEY_ELEMENT_TAG="Survey";
+    /**
+     * Constant that represents the Surveys element tag
+     */
+    private static final String SURVEYS_ELEMENT_TAG="Surveys";
 
     /**
      * Constant representing the ID attribute tag.
@@ -275,17 +280,38 @@ public final class SurveyFluxXMLService {
         return documentAsString();
     }
     /**
+     * Method that represents a List of Surveys with a certain flux as a XML document
+     * @param surveys List with all the Surveys flux being represented as a XML document
+     * @return String with the XML document containing a List of Surveys with a certain flux
+     */
+    public String createSurveyListXML(List<Survey> surveys){
+        initializeSurveyListDocument();
+        surveys.forEach((survey)->{
+            Element surveyElement=initializeSurveyDocument(survey);
+            addSurveyFlux(survey.getGraphCopy(),surveyElement);
+        });
+        return documentAsString();
+    }
+    /**
+     * Initializes the document as a list of Survey Flux
+     */
+    private void initializeSurveyListDocument(){
+        xmlDocument.appendChild(xmlDocument.createElement(SURVEYS_ELEMENT_TAG));
+    }
+    /**
      * Initializes the XML document as a Review Service
      * @param review Review with the review which document is being represented on
+     * @return Element with the element which document was created on
      */
-    private void initializeReviewDocument(Review review){
+    private Element initializeReviewDocument(Review review){
         Long reviewID = new ReviewRepositoryImpl().getReviewID(review);
         //check if review has been persisted
         if (reviewID == null) {
             throw new IllegalStateException(INVALID_REVIEW_MESSAGE);
         }
         Element reviewElement = xmlDocument.createElement(REVIEW_ELEMENT_TAG);
-        xmlDocument.appendChild(reviewElement);
+        Node nodeToAppendChild=xmlDocument.getDocumentElement()==null ? xmlDocument : xmlDocument.getDocumentElement();
+        nodeToAppendChild.appendChild(reviewElement);
         reviewElement.setAttribute(ID_ATTRIBUTE_TAG, reviewID.toString());
         
         Long surveyID = new SurveyRepositoryImpl().getSurveyID(review.getSurvey());
@@ -293,19 +319,23 @@ public final class SurveyFluxXMLService {
             throw new IllegalStateException(INVALID_SURVEY_MESSAGE);
         }
         reviewElement.setAttribute(SURVEY_ID_ATTRIBUTE_TAG,surveyID.toString());
+        return reviewElement;
     }
     /**
      * Initializes the XML document as a Survey Service
      * @param survey Survey with the survey which document is being represented on
+     * @return Element with the element which document was created on
      */
-    private void initializeSurveyDocument(Survey survey){
+    private Element initializeSurveyDocument(Survey survey){
         Long surveyID = new SurveyRepositoryImpl().getSurveyID(survey);
         if (surveyID == null) {
             throw new IllegalStateException(INVALID_SURVEY_MESSAGE);
         }
         Element surveyRootElement = xmlDocument.createElement(SURVEY_ELEMENT_TAG);
-        xmlDocument.appendChild(surveyRootElement);
+        Node nodeToAppendChild=xmlDocument.getDocumentElement()==null ? xmlDocument : xmlDocument.getDocumentElement();
+        nodeToAppendChild.appendChild(surveyRootElement);
         surveyRootElement.setAttribute(ID_ATTRIBUTE_TAG, surveyID.toString());
+        return surveyRootElement;
     }
     /**
      * Adds the survey flux to the current service XML document

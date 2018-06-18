@@ -1,15 +1,53 @@
-	
+
 
 	TEST PLAN
 
-	________________________________________________
-	CASO #1: Autenticação com Sucesso
-	________________________________________________
+	_____________________________________________________________________
+	CASO #1: Listagem de vários Inquéritos válidos com sucesso (Via REST)
+	_____________________________________________________________________
 
-	1. Autenticar me no sistema.
-	2. Ler um código utilizando o scanner.
-	3. Obter lista de inquéritos acerca do produto correspondente ao código lido aos quais posso responder.
+	1. Autenticar me no sistema com um utilizador registado
+	2. Fazer um pedido de REST com um código de produto com vários inquéritos associados (e.g. QRCode: 2147483646)
+	3. Verificar que foi obtido uma lista de inquéritos associados ao produto correspondente ao código lido
+	______________________________________________________________
+	CASO #2: Listagem de um Inquérito válido com sucesso (Via REST)
+	______________________________________________________________
 
+	1. Autenticar me no sistema com um utilizador registado
+	2. Fazer um pedido de REST com um código de produto com um inquérito associado (e.g. QRCode: Agua Mineral Natural)
+	3. Verificar que foi obtido apenas um inquérito associado ao produto correspondente ao código lido
+	______________________________________________________________
+	CASO #3: Listagem de Inquéritos sem sucesso (Via REST)
+	______________________________________________________________
+
+	1. Autenticar me no sistema com um utilizador registado
+	2. Fazer um pedido de REST com um código de produto inválido (e.g. QRCode: Caneta Bic)
+	3. Verificar que não foram obtidos nenhuns inquéritos associados ao produto corresponde ao código lido
+
+	/********************************************************************/
 
 	Nota: Ver ficheiro US455_Testes_Postman.js onde se encontram
-	      os testes à API Rest.
+	os testes à API REST com o Postman.
+
+	/********************************************************************/
+	________________________________________________________________________________
+	CASO #4: Listagem de vários Inquéritos válidos com sucesso (Via Aplicação Móvel)
+	________________________________________________________________________________
+
+	1. Autenticar me na aplicação móvel com um utilizador registado
+	2. Iniciar o scan de um código válido de produto com vários inquéritos associados (e.g. QRCode: 2147483646)
+	3. Verificar que foi obtido uma lista de inquéritos associados ao produto correspondente ao código lido numa nova janela
+	__________________________________________________________________________
+	CASO #5: Listagem de um Inquérito válido com sucesso (Via Aplicação Móvel)
+	__________________________________________________________________________
+
+	1. Autenticar me na aplicação móvel com um utilizador registado
+	2. Iniciar o scan de um código válido de produto com um inquérito associado (e.g. QRCode: Agua Mineral Natural)
+	3. Verificar que foi obtido apenas um inquérito associado ao produto correspondente ao código lido abrindo o processo de responder ao inquérito
+	__________________________________________________________________
+	CASO #6: Listagem de Inquéritos sem sucesso (Via Aplicação Móvel)
+	__________________________________________________________________
+
+	1. Autenticar me na aplicação móvel com um utilizador registado
+	2. Iniciar o scan de um código com um código de produto inválido (e.g. QRCode: Caneta Bic)
+	3. Verificar que não foram obtidos nenhuns inquéritos associados ao produto corresponde ao código lido através de uma notificação na aplicação móvel

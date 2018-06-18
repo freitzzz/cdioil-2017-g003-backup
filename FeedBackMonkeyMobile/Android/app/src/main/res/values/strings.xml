@@ -62,6 +62,7 @@
     <string name="different_password_edit_text_error">Por favor introduza a mesma password</string>
     <string name="not_strong_password_edit_text_error">Password não é forte o suficiente!</string>
     <string name="password_changed_success">Password alterada!</string>
+    <string name="fetching_surveys_waiting_dialog">Extraindo Inquéritos</string>
     <string name="submit_suggestion_photo_hint">Clique na câmara para anexar uma foto à sua sugestão</string>
     <string name="functionality_not_implemented">Esta funcionalidade ainda não foi implementada!</string>
     <string name="exit">S A I R</string>

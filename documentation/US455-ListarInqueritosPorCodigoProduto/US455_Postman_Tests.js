@@ -16,7 +16,7 @@
         4. Use the generated code by the login request to authenticate yourself in the following steps
 */
 
-/* --------------------------------------    Test listSurveys    -------------------------------------- */
+/* --------------------------------------    Test getSurveysByProductCode    -------------------------------------- */
 
 /*
 Request URL to use for these tests: http://localhost8080/feedbackmonkeyapi/authentication/surveys/getSurveysByProductCode/{authenticationToken}/{code}
