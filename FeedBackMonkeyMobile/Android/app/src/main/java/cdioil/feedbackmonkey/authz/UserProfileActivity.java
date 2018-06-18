@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -146,35 +147,32 @@ public class UserProfileActivity extends AppCompatActivity {
      * TODO Check if a picture already exists in the app's folders.
      */
     private void setProfilePicture() {
-        profilePhotoImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA},
-                                MY_CAMERA_PERMISSION_CODE);
-                    } else {
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                        String imageFileName = timeStamp + ".jpg";
-                        File storageDir = getFilesDir();
-                        File imageDir = new File(storageDir,"images");
-                        if(!imageDir.exists()){
-                            imageDir.mkdir();
-                        }
-                        File imageFile = new File(imageDir,imageFileName);
-                        try {
-                            imageFile.createNewFile();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        pictureImagePath = imageFile.getAbsolutePath();
-                        Uri outputFileUri = GenericFileProvider.getUriForFile(getApplicationContext(),
-                                        "cdioil.feedbackmonkey.utils.GenericFileProvider",imageFile);
-                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        profilePhotoImageView.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA},
+                            MY_CAMERA_PERMISSION_CODE);
+                } else {
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String imageFileName = timeStamp + ".jpg";
+                    File storageDir = getFilesDir();
+                    File imageDir = new File(storageDir,"images");
+                    if(!imageDir.exists()){
+                        imageDir.mkdir();
                     }
+                    File imageFile = new File(imageDir,imageFileName);
+                    try {
+                        imageFile.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    pictureImagePath = imageFile.getAbsolutePath();
+                    Uri outputFileUri = GenericFileProvider.getUriForFile(getApplicationContext(),
+                                    "cdioil.feedbackmonkey.utils.GenericFileProvider",imageFile);
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 }
             }
         });
@@ -192,7 +190,6 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                System.out.println("entrei aqui");
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
@@ -211,11 +208,22 @@ public class UserProfileActivity extends AppCompatActivity {
             File imageFile = new File(pictureImagePath);
             if(imageFile.exists()){
                 Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
-                Bitmap rotatedImageBitmap = Bitmap.createBitmap(imageBitmap,0,0,
-                        imageBitmap.getWidth(),imageBitmap.getHeight(),matrix,true);
-                profilePhotoImageView.setImageBitmap(rotatedImageBitmap);
+                try {
+                    ExifInterface exifInterface = new ExifInterface(imageFile.getAbsolutePath());
+                    int orientation =  exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                            1);
+                    Matrix matrix = new Matrix();
+                    if(orientation == 8){
+                        matrix.postRotate(270);
+                    }else if(orientation == 6){
+                        matrix.postRotate(90);
+                    }
+                    Bitmap rotatedImageBitmap = Bitmap.createBitmap(imageBitmap,0,0,
+                            imageBitmap.getWidth(),imageBitmap.getHeight(),matrix,true);
+                    profilePhotoImageView.setImageBitmap(rotatedImageBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
