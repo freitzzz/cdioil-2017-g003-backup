@@ -60,6 +60,16 @@ public final class RESTRequest {
         this.currentRequestBuilder.get();
         return sendRequest();
     }
+
+    /**
+     * Performs a PUT request on the request URL.
+     * @return Response with the POST response or null if an error occurred
+     * @throws IOException if an error occurred while sending the request
+     */
+    public Response PUT() throws IOException {
+        this.currentRequestBuilder.put(createRequestBody(getMediaType(currentMediaType),currentRequestBody));
+        return sendRequest();
+    }
     /**
      * Method that sets the current request media type as a certain RequestMediaType
      * @param requestMediaType RequestMediaType enum with the media type of the request

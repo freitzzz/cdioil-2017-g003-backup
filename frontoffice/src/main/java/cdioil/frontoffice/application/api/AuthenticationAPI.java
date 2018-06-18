@@ -29,4 +29,34 @@ public interface AuthenticationAPI {
      * @return Response with the response regarding the account registration
      */
     public Response registerAccount(String requestBody,boolean validate);
+
+    /**
+     * Requests that an email be sent to an account's email address using the
+     * FeedbackMonkeyAPI.
+     *
+     * @param requestBody String representing the request's body with the user's
+     * email address
+     * @return Response informing the user of the request's status
+     */
+    public Response requestActivationCode(String requestBody);
+
+    /**
+     * Checks if the request's body information regarding the account activation
+     * code matches with the user's actual activation code using the
+     * FeedbackMonkeyAPI.
+     *
+     * @param requestBody String representing the request's body containing the
+     * user's email address and account activation code
+     * @return Response informing the user of the request's status
+     */
+    public Response confirmActivationCode(String requestBody);
+
+    /**
+     * Changes the user's password using the FeedbackMonkeyAPI.
+     *
+     * @param requestBody String representing the request's body containing the
+     * user's email address, activation code and new password
+     * @return Response informing the user of the request's status
+     */
+    public Response changePassword(String requestBody);
 }

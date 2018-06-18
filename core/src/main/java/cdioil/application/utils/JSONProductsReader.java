@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
 import cdioil.domain.Category;
@@ -12,15 +7,10 @@ import de.odysseus.staxon.json.JsonXMLConfig;
 import de.odysseus.staxon.json.JsonXMLConfigBuilder;
 import de.odysseus.staxon.json.JsonXMLInputFactory;
 import de.odysseus.staxon.xml.util.PrettyXMLEventWriter;
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +56,9 @@ public class JSONProductsReader implements ProductsReader {
 
     @Override
     public Map<Category, List<Product>> readProducts() {
+        InputStream input = null;
         try {
-            InputStream input = new FileInputStream(new File(filePath));
+            input = new FileInputStream(new File(filePath));
             StringWriter output = new StringWriter();
 
             JsonXMLConfig config = new JsonXMLConfigBuilder().multiplePI(false).build();
@@ -91,6 +82,14 @@ public class JSONProductsReader implements ProductsReader {
             FileWriter.writeFile(new File(JSON_FILE_PATH), output.getBuffer().toString());
         } catch (IOException | XMLStreamException ex) {
             Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            if(input != null){
+                try {
+                    input.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         return new XMLProductsReader(JSON_FILE_PATH, repeatedProducts).readProducts();
     }

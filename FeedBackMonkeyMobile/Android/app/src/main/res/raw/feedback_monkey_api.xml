@@ -11,10 +11,22 @@
                     <method>POST</method>
                     <datatype>JSON</datatype>
                 </subresource>
-                <subresouce name="Register Account" path="/register">
+                <subresource name="Register Account" path="/register">
                     <method>POST</method>
                     <datatype>JSON</datatype>
-                </subresouce>
+                </subresource>
+				<subresource name = "Request Activation Code" path = "/requestactivationcode">
+					<method>POST</method>
+					<datatype>JSON</datatype>
+				</subresource>
+				<subresource name = "Confirm Activation Code" path = "/confirmactivationcode">
+					<method>POST</method>
+					<datatype>JSON</datatype>
+				</subresource>
+				<subresource name = "Change Password" path = "/changepassword">
+					<method>PUT</method>
+					<datatype>JSON</datatype>
+				</subresource>
             </subresources>
         </resource>
         <resource name="Surveys" path="/surveys">

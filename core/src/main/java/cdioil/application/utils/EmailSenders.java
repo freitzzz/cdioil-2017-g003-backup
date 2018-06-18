@@ -23,8 +23,9 @@ public class EmailSenders implements Serializable {
     /**
      * Constant that represents the encryption loop times (number of times that the 
      * password is encrypted over & over)
+     * <br>Currently at value 1 due to MySQL column length restrinctions
      */
-    private static final short ENCRYPTION_LOOP_TIMES=2;
+    private static final short ENCRYPTION_LOOP_TIMES=1;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

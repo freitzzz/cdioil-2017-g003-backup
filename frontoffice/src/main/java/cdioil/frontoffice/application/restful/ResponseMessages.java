@@ -133,10 +133,46 @@ public interface ResponseMessages {
      * warning the user the registration form is valid
      */
     public static final String JSON_VALID_REGISTRATION_FORM = "{\n\t\"registrationformvalid\":\"true\"\n}";
-    
+
     /**
      * Constant that represents the JSON used on the response message for
      * warning the user the review was saved with success
      */
     public static final String JSON_REVIEW_SAVED_WITH_SUCCESS = "{\n\t\"reviewsavedsuccess\":\"true\"\n}";
+
+    /**
+     * Constant that represents the JSON used on the response message warning
+     * the user that the activation code was sent successfully.
+     */
+    public static final String JSON_ACTIVATION_CODE_DISPATCH_SUCESS = "{\n\t\"activationcodesent\":\"true\"\n}";
+
+    /**
+     * Constant that represents the JSON used on the response message warning
+     * the user that the activation code failed to be sent.
+     */
+    public static final String JSON_ACTIVATION_CODE_DISPATCH_FAILED = "{\n\t\"activationcodesent\":\"false\"\n}";
+
+    /**
+     * Constant that represents the JSON used on the response message warning
+     * the user that the given activation code is valid.
+     */
+    public static final String JSON_VALID_ACTIVATION_CODE = "{\n\t\"validactivationcode\":\"true\"\n}";
+
+    /**
+     * Constant that represents the JSON used on the response message warning
+     * the user that the given activation code is invalid.
+     */
+    public static final String JSON_INVALID_ACTIVATION_CODE = "{\n\t\"validactivationcode\":\"false\"\n}";
+
+    /**
+     * Constant that represents the JSON used on the response message warning
+     * the user that the password was changed successfully.
+     */
+    public static final String JSON_COMINHOS_CHANGE_SUCCESS = "{\n\t\"passwordchanged\":\"true\"\n}";
+
+    /**
+     * Constant that represents the JSON used on the response message warning
+     * the user that the password was unable to be changed.
+     */
+    public static final String JSON_COMINHOS_CHANGE_FAILED = "{\n\t\"passwordchanged\":\"false\"\n}";
 }

@@ -1,15 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -63,7 +61,8 @@ public class XMLCategoriesReader implements CategoriesReader {
             NodeList categorias = lista_categorias.getElementsByTagName("categoria");
             read(categorias, me);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionLogger.logException(LoggerFileNames.CORE_LOGGER_FILE_NAME,
+                    Level.SEVERE, e.getMessage());
         }
         return me;
     }

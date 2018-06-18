@@ -1,6 +1,5 @@
 package cdioil.backoffice.application;
 
-
 import cdioil.domain.*;
 import cdioil.domain.authz.Manager;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
@@ -9,6 +8,7 @@ import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class CreateTemplateController {
 
@@ -59,20 +59,22 @@ public class CreateTemplateController {
      * @param category category for the template
      * @param title tile of the template
      * @param questionGroup questionGroup of the template
-     * @return true is the template was persisted with success and false if it wasn't persisted
+     * @return true is the template was persisted with success and false if it
+     * wasn't persisted
      */
-    //TODO: refactor method
     public boolean createTemplate(Category category, String title, QuestionGroup questionGroup) {
-        //Template template = new Template(title, questionGroup);
+        Template template = new SimpleTemplate(title);
+        Set<Question> questions = questionGroup.getQuestions();
+
+        for (Question q : questions) {
+            template.addQuestion(q);
+        }
+
         CategoryTemplatesLibraryRepositoryImpl categoryTemplatesLibraryRepository = new CategoryTemplatesLibraryRepositoryImpl();
         CategoryTemplatesLibrary templatesLibrary = categoryTemplatesLibraryRepository.findTemplatesForCategory();
-        //templatesLibrary.addTemplate(category, template);
+        templatesLibrary.addTemplate(category, template);
 
         return categoryTemplatesLibraryRepository.merge(templatesLibrary) != null;
     }
-
-
-
-
 
 }
