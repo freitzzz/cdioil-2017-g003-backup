@@ -6,24 +6,16 @@ import de.odysseus.staxon.json.JsonXMLConfig;
 import de.odysseus.staxon.json.JsonXMLConfigBuilder;
 import de.odysseus.staxon.json.JsonXMLInputFactory;
 import de.odysseus.staxon.xml.util.PrettyXMLEventWriter;
-<<<<<<< HEAD
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-=======
-
-import java.io.*;
->>>>>>> 651b3452d5acbc947867b6d4abbe2284dc1a6bfa
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-<<<<<<< HEAD
-=======
 import javax.xml.parsers.ParserConfigurationException;
->>>>>>> 651b3452d5acbc947867b6d4abbe2284dc1a6bfa
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
@@ -43,15 +35,13 @@ public class JSONQuestionsReader implements QuestionsReader {
     private final File file;
 
     /**
-<<<<<<< HEAD
      * String with the file path of the converted file (from JSON to XML).
      */
     private static final String JSON_FILE_PATH = "jsonToXml.xml";
-=======
+    /**
      * String with the path of the file converted from JSON to XML
      */
-    private static final String outputFilePath = "independent_questions_output_file.xml";
->>>>>>> 651b3452d5acbc947867b6d4abbe2284dc1a6bfa
+    private static final String OUTPUT_FILE_PATH = "independent_questions_output_file.xml";
 
     /**
      * Creates an instance of JSONQuestionsReader, receiving the name of the
@@ -130,7 +120,7 @@ public class JSONQuestionsReader implements QuestionsReader {
         } catch (XMLStreamException | IOException ex) {
             Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if(input != null) {
+            if (input != null) {
                 try {
                     input.close();
                 } catch (IOException ex) {
@@ -139,7 +129,7 @@ public class JSONQuestionsReader implements QuestionsReader {
             }
         }
 
-        return new XMLQuestionsReader(outputFilePath).readIndependentQuestions();
+        return new XMLQuestionsReader(OUTPUT_FILE_PATH).readIndependentQuestions();
     }
 
 }
