@@ -187,8 +187,6 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
      * @return String with a XML document containg all surveys serialized
      */
     private String getSurveysAsXML(List<Survey> surveys){
-        StringBuilder builder=new StringBuilder();
-        surveys.forEach((survey) -> {builder.append(SurveyFluxXMLService.create().createSurveyXML(survey));});
-        return builder.toString();
+        return SurveyFluxXMLService.create().createSurveyListXML(surveys);
     }
 }
