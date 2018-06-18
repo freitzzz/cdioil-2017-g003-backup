@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -45,6 +46,11 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
     private ProgressBar progressBar;
 
     /**
+     * Button to stop the users review.
+     */
+    private Button stopReviewButton;
+
+    /**
      * Integer that indicates the progress the user has made in %
      */
     private int progressMade;
@@ -55,6 +61,7 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         setContentView(R.layout.activity_question);
         questionTextView = findViewById(R.id.question);
         progressBar = findViewById(R.id.answerSurveyProgressBar);
+        stopReviewButton = findViewById(R.id.stopReviewButton);
 
         if (getIntent().getExtras() != null) {
             authenticationToken = getIntent().getExtras().getString("authenticationToken");
@@ -64,6 +71,14 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         }
 
         loadQuestionInfo(false);
+        stopReview();
+    }
+
+
+    private void stopReview(){
+        stopReviewButton.setOnClickListener(view ->{
+            finish();
+        });
     }
 
     private void loadQuestionInfo(boolean onBackPressed) {
