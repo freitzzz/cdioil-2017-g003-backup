@@ -64,7 +64,7 @@ public class ImportTemplateController {
 //            String path = "";
 //            for (SurveyItem s : surveyItems) {
 //                if (s instanceof cdioil.application.utils.SurveyTemplate.Category) {
-//                    path = ((cdioil.application.utils.SurveyTemplate.Category) s).getPath();
+//                    path = ((cdioil.application.utils.SurveyTemplate.Category) s).getItemID();
 //                }
 //            }
 //
