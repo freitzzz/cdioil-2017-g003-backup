@@ -4,7 +4,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name = "Questions" type = "TQuestions"/>
-				<xs:element name = "SurveyItems" type = "TSurveyItems"/>
+				<xs:element name = "SurveyItems" type = "TSurveyItems" minOccurs = "0" maxOccurs = "1"/>
 				<xs:element name = "QuestionScript" type = "TScript" minOccurs = "0" maxOccurs = "1" />
 			</xs:sequence>
 			<xs:attribute name = "name" type = "xs:string" use = "required"/>
@@ -52,10 +52,10 @@
 	</xs:complexType>	
 
 	<xs:complexType name = "TSurveyItems">
-		<xs:sequence>
+		<xs:choice minOccurs = "1" maxOccurs = "unbounded">
 			<xs:element name = "Category" type = "TCategory"/>
 			<xs:element name = "Product" type = "TProduct"/>
-		</xs:sequence>
+		</xs:choice>
 	</xs:complexType>
 
 	<xs:complexType name = "TCategory">
@@ -88,7 +88,7 @@
 					<xs:attribute name = "option">
 						<xs:simpleType>
 							<xs:restriction base = "xs:string">
-								<xs:pattern value = "yes|no|\d([, ]*\d)*"/>
+								<xs:pattern value = "yes|no|([0-9]+(\.[0-9][0-9]?)?)([, ]*([0-9]+(\.[0-9][0-9]?)?))*"/>
 							</xs:restriction>
 						</xs:simpleType>
 					</xs:attribute>	
