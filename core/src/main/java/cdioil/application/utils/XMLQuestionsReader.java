@@ -11,15 +11,18 @@ import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import cdioil.domain.QuestionOption;
 import cdioil.files.InputSchemaFiles;
 import cdioil.files.ValidatorXML;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -86,6 +89,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     private static final String BINARY_QUESTION_NODE = "BinaryQuestion";
 
+
     /**
      * Creates an instance of XMLQuestionsReader, receiving the name of the file
      * to read.
@@ -103,7 +107,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
-        if(!ValidatorXML.validateFile(SCHEMA_FILE, file)){
+        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
             return null;
         }
         Map<String, List<Question>> readQuestions = new HashMap<>();
@@ -121,14 +125,15 @@ public class XMLQuestionsReader implements QuestionsReader {
 
     @Override
     public List<Question> readIndependentQuestions() throws ParserConfigurationException {
-
+        List<Question> independentQuestions = new ArrayList<>();
+        Document document;
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.newDocument();
+        document = documentBuilder.newDocument();
 
         document.getDocumentElement().normalize();
-        // If there is a name then check it
+
         //Question
         NodeList nodeList = document.getElementsByTagName("question");
 
@@ -142,17 +147,24 @@ public class XMLQuestionsReader implements QuestionsReader {
                 NodeList binaryQuestions = element.getElementsByTagName("BinaryQuestion");
 
                 if (binaryQuestions != null) {
-                    for (int b = 0; b < binaryQuestions.getLength(); b++) {
-                        Node binary = binaryQuestions.item(b);
+//                    for (int b = 0; b < binaryQuestions.getLength(); b++) {
+//                        Node binary = binaryQuestions.item(b);
+//
+//                        if (binary.getNodeType() == Node.ELEMENT_NODE) {
+//                            Element binaryQuestion = (Element) binary;
+//
+//                            binaryQuestion.getAttribute("questionID");
+//                            binaryQuestion.getAttribute("Text");
+//
+//                        }
+//                    }
+                    Question binaryQuestion = createBinaryQuestion(binaryQuestions, element.getAttribute("questionID"));
 
-                        if (binary.getNodeType() == Node.ELEMENT_NODE) {
-                            Element binaryQuestion = (Element) binary;
-
-                            binaryQuestion.getAttribute("questionID");
-                            binaryQuestion.getAttribute("Text");
-                        }
+                    if (binaryQuestion != null) {
+                        independentQuestions.add(binaryQuestion);
                     }
                 }
+
 
                 NodeList multipleChoiceQuestions = element.getElementsByTagName("MultipleChoiceQuestion");
 
@@ -162,23 +174,27 @@ public class XMLQuestionsReader implements QuestionsReader {
 
                         if (multiple.getNodeType() == Node.ELEMENT_NODE) {
                             Element multipleQuestion = (Element) multiple;
+//
+//                            multipleQuestion.getAttribute("questionID");
+//                            multipleQuestion.getAttribute("Text");
+//                            NodeList options = multipleQuestion.getElementsByTagName("choice");
+//
+//                            for (int o = 0; o < options.getLength(); o++) {
+//                                Node option = options.item(o);
+//
+//                                if (option.getNodeType() == Node.ELEMENT_NODE) {
+//                                    Element oneOption = (Element) option;
+//                                    oneOption.getAttribute("text");
+//                                }
+//                            }
 
-                            multipleQuestion.getAttribute("questionID");
-                            multipleQuestion.getAttribute("Text");
-                            NodeList options = multipleQuestion.getElementsByTagName("choice");
-
-                            for (int o = 0; o < options.getLength(); o++) {
-                                Node option = options.item(o);
-
-                                if (option.getNodeType() == Node.ELEMENT_NODE) {
-                                    Element oneOption = (Element) option;
-                                    oneOption.getAttribute("text");
-                                }
-                            }
+                            independentQuestions.add(createMCQuestion(multipleChoiceQuestions, multipleQuestion.getAttribute("questionID")));
 
                         }
                     }
                 }
+
+                //Quantitative Question
 
                 NodeList quantitativeQuestions = element.getElementsByTagName("QuantitativeQuestion");
 
@@ -189,23 +205,25 @@ public class XMLQuestionsReader implements QuestionsReader {
                         if (quantitative.getNodeType() == Node.ELEMENT_NODE) {
                             Element quantitativeQuestion = (Element) quantitative;
 
-                            quantitativeQuestion.getAttribute("questionID");
-                            quantitativeQuestion.getAttribute("Text");
-                            quantitativeQuestion.getAttribute("scaleMinValue");
-                            quantitativeQuestion.getAttribute("scaleMaxValue");
+//                            quantitativeQuestion.getAttribute("questionID");
+//                            quantitativeQuestion.getAttribute("Text");
+//                            quantitativeQuestion.getAttribute("scaleMinValue");
+//                            quantitativeQuestion.getAttribute("scaleMaxValue");
+
+                            independentQuestions.add(crateQuantitativeQuestion(quantitativeQuestions, ((Element) quantitative).getAttribute("questionID")));
                         }
                     }
                 }
 
             }
         }
-        return null;
+        return independentQuestions;
     }
 
     /**
      * Iterates through category question XML nodes
      *
-     * @param childNodes child nodes of root node
+     * @param childNodes    child nodes of root node
      * @param readQuestions map of questions
      */
     private void iterateCategoryQuestionNodes(NodeList childNodes, Map<String, List<Question>> readQuestions) {
@@ -227,7 +245,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     /**
      * Iterates question content nodes
      *
-     * @param contentNodes list of content nodes
+     * @param contentNodes  list of content nodes
      * @param readQuestions map of questions
      */
     private void putContentOnMap(NodeList contentNodes, Map<String, List<Question>> readQuestions) {
@@ -266,7 +284,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a binary question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
-     * @param id attribute questionID of BinaryQuestion node
+     * @param id             attribute questionID of BinaryQuestion node
      * @return a new binary question if enough information was found within the
      * nodes, null if not
      */
@@ -284,7 +302,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a multiple choice question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
-     * @param id attribute questionID of BinaryQuestion node
+     * @param id             attribute questionID of BinaryQuestion node
      * @return a new multiple choice if enough information was found within the
      * nodes, null if not
      */
@@ -317,7 +335,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a quantitative question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
-     * @param id attribute questionID of BinaryQuestion node
+     * @param id             attribute questionID of BinaryQuestion node
      * @return a new quantitative if enough information was found within the
      * nodes, null if not
      */
