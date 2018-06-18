@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
@@ -51,7 +52,7 @@ public class JSONQuestionsReader implements QuestionsReader {
     }
 
     @Override
-    public List<Question> readIndependentQuestions() {
+    public List<Question> readIndependentQuestions() throws ParserConfigurationException {
         InputStream input = null;
 
         try {
@@ -85,8 +86,8 @@ public class JSONQuestionsReader implements QuestionsReader {
                 }
             }
         }
-        //return new XMLQuestionReader(...).readIndependentQuestions();
-        return null;
+
+        return new XMLQuestionsReader(outputFilePath).readIndependentQuestions();
     }
 
 }
