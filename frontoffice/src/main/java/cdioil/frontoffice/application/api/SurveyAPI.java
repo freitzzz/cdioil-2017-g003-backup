@@ -16,9 +16,10 @@ public interface SurveyAPI {
      *
      * @param authenticationToken String with the user authentication token
      * @param paginationID Short with the surveys pagination ID
+     * @param surveyFlux boolean true if the survey flux should be sent, false if not
      * @return Response with the all the surveys that an user can answer
      */
-    public Response getSurveys(String authenticationToken, short paginationID);
+    public Response getSurveys(String authenticationToken, short paginationID,boolean surveyFlux);
 
     /**
      * Retrieves all Surveys about a product via a JSON XXX REQUEST
