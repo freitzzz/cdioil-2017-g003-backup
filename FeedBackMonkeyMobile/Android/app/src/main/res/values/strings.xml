@@ -24,7 +24,7 @@
     <string name="ok">OK</string>
     <string name="suggestion">Sugestão</string>
     <string name="submit_suggestion">Enviar Sugestão</string>
-    <string name="write_suggestion_info">Escreva a sua sugestão aqui!</string>
+    <string name="write_suggestion_info">Dê-nos a sua sugestão!</string>
     <string name="login_progress_dialog_info">Login em progresso</string>
     <string name="rewrite_password">Reescreva a password</string>
     <string name="reviewed_surveys">As minhas avaliações</string>
@@ -63,4 +63,7 @@
     <string name="not_strong_password_edit_text_error">Password não é forte o suficiente!</string>
     <string name="password_changed_success">Password alterada!</string>
     <string name="fetching_surveys_waiting_dialog">Extraindo Inquéritos</string>
+    <string name="submit_suggestion_photo_hint">Clique na câmara para anexar uma foto à sua sugestão</string>
+    <string name="functionality_not_implemented">Esta funcionalidade ainda não foi implementada!</string>
+    <string name="exit">S A I R</string>
 </resources>

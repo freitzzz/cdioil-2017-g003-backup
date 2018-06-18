@@ -108,17 +108,13 @@ public class MainMenuActivity extends AppCompatActivity {
                     prepareListSurveyActivityStart();
                     break;
                 case 1:
-                    //Create intent to qr scan
                     scanItemCode();
                     break;
                 case 2:
                     startUserProfileActivity();
                     break;
                 case 3:
-                    //Create intent to something
-                    Intent intent = new Intent(MainMenuActivity.this, SubmitSuggestionActivity.class);
-
-                    startActivity(intent);
+                    startSuggestionActivity();
                     break;
             }
         });
@@ -163,6 +159,14 @@ public class MainMenuActivity extends AppCompatActivity {
         bundle.putString("authenticationToken", authenticationToken);
         userProfileActivityIntent.putExtras(bundle);
         startActivity(userProfileActivityIntent);
+    }
+
+    private void startSuggestionActivity(){
+        Intent submitSuggestionIntent = new Intent(MainMenuActivity.this, SubmitSuggestionActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("authenticationToken", authenticationToken);
+        submitSuggestionIntent.putExtras(bundle);
+        startActivity(submitSuggestionIntent);
     }
 
 
