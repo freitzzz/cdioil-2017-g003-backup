@@ -134,6 +134,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     /**
      * Sets an on click listener to the image view so the user can take his profile picture
+     * TODO Check if a picture already exists in the app's folders.
      */
     private void setProfilePicture() {
         profilePhotoImageView.setOnClickListener(new View.OnClickListener() {
@@ -144,11 +145,14 @@ public class UserProfileActivity extends AppCompatActivity {
                         requestPermissions(new String[]{Manifest.permission.CAMERA},
                                 MY_CAMERA_PERMISSION_CODE);
                     } else {
-                        System.out.println("hey hey hey hey");
                         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                         String imageFileName = timeStamp + ".jpg";
                         File storageDir = getFilesDir();
-                        File imageFile = new File(storageDir,imageFileName);
+                        File imageDir = new File(storageDir,"images");
+                        if(!imageDir.exists()){
+                            imageDir.mkdir();
+                        }
+                        File imageFile = new File(imageDir,imageFileName);
                         try {
                             imageFile.createNewFile();
                         } catch (IOException e) {
@@ -198,7 +202,11 @@ public class UserProfileActivity extends AppCompatActivity {
             File imageFile = new File(pictureImagePath);
             if(imageFile.exists()){
                 Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                profilePhotoImageView.setImageBitmap(imageBitmap);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap rotatedImageBitmap = Bitmap.createBitmap(imageBitmap,0,0,
+                        imageBitmap.getWidth(),imageBitmap.getHeight(),matrix,true);
+                profilePhotoImageView.setImageBitmap(rotatedImageBitmap);
             }
         }
     }
