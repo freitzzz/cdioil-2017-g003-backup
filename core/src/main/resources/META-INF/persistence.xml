@@ -87,10 +87,10 @@
       
       <!-- MYSQL DEPLOYMENT DATABASE SERVER (SERVER) -->
       
-      <!--property name="javax.persistence.jdbc.url" value="jdbc:mysql://ADDRESS/feedback_monkey?useLegacyDatetimeCode=false&amp;serverTimezone=Portugal&amp;verifyServerCertificate=false&amp;useSSL=true"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
+      <!--property name="javax.persistence.jdbc.url" value="jdbc:mysql://209.97.131.21:3306/feedback_monkey?useLegacyDatetimeCode=false&amp;serverTimezone=Portugal&amp;verifyServerCertificate=false&amp;useSSL=true"/>
+      <property name="javax.persistence.jdbc.user" value="feedbackmonkey"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="PASSWORD_HERE"/-->
+      <property name="javax.persistence.jdbc.password" value="freitas"/-->
     </properties>
   </persistence-unit>
 </persistence>
