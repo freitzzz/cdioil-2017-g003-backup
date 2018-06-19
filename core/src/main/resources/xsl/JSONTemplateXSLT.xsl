@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
     Document   : JSONTemplateXSLT.xsl
@@ -9,29 +9,27 @@
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
-	<xsl:output method="text" indent="yes"/>
+    <xsl:output method="text" indent="yes"/>
 
-	<xsl:template match="/Template">
-	{
-		"title":"<xsl:value-of select="@title"/>",
-            	"questions":
-			"questions":[
-		<xsl:for-each select="Question">
-			"question":{
-				"id":"<xsl:value-of select="@ID"/>",
-				"questiontext":"<xsl:value-of select="QuestionText"/>",
-				"options":
-					"options":[
-					<xsl:for-each select="Options/Option">
-						"option":{
-					<xsl:value-of select = "."/>,
-						},
-					</xsl:for-each>
-						]
-				},
-			</xsl:for-each>
-				]					
-		}   
-    	</xsl:template>
+    <xsl:template match="/Template">
+        {
+        "title":"<xsl:value-of select="@title"/>",
+        "list_questions":{
+            "questions":[<xsl:for-each select="Question">
+                {"question":{
+                    "id":"<xsl:value-of select="@ID"/>",
+                    "questiontext":"<xsl:value-of select="QuestionText"/>",
+                    "list_options":{
+                        "options":[<xsl:for-each select="Options/Option">
+                            {"option":"<xsl:value-of select = "."/>"
+                            }<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>
+                        ]
+                    }
+                }
+                }<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>              	
+            ]
+        }				
+        } 
+    </xsl:template>
 
 </xsl:stylesheet>
