@@ -5,7 +5,6 @@ import cdioil.application.domain.authz.UserActionHistory;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserActionHistoryRepository;
-import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 
 /**
@@ -33,7 +32,6 @@ public class UserActionHistoryRepositoryImpl extends BaseJPARepository<UserActio
      */
     @Override
     public long getNumberOfUserActions(LocalDateTime dateTimeX, LocalDateTime dateTimeY) {
-        checkPeriodOfTime(dateTimeX,dateTimeY);
         return (long)entityManager().createQuery("SELECT COUNT(UAH) FROM UserActionHistory UAH "
                 + "WHERE UAH.actionDateTime BETWEEN :dateTimeX AND :dateTimeY")
                 .setParameter("dateTimeX",dateTimeX)
@@ -51,7 +49,6 @@ public class UserActionHistoryRepositoryImpl extends BaseJPARepository<UserActio
      */
     @Override
     public long getNumberOfCertainUserAction(LocalDateTime dateTimeX, LocalDateTime dateTimeY, UserAction userAction) {
-        checkPeriodOfTime(dateTimeX,dateTimeY);
         return (long)entityManager().createQuery("SELECT COUNT(UAH) FROM UserActionHistory UAH "
                 + "WHERE UAH.actionDateTime BETWEEN :dateTimeX AND :dateTimeY "
                 + "AND UAH.userAction = :userAction")
@@ -60,14 +57,4 @@ public class UserActionHistoryRepositoryImpl extends BaseJPARepository<UserActio
                 .setParameter("userAction",userAction)
                 .getSingleResult();
     }
-    /**
-     * Method that verifies if a certain period of time is valid or not
-     * @param dateTimeX LocalDateTime with the date time of the period start
-     * @param dateTimeY LocalDateTime with the date time of the period end
-     */
-    private void checkPeriodOfTime(LocalDateTime dateTimeX, LocalDateTime dateTimeY){
-        TimePeriod validTimePeriod = new TimePeriod(dateTimeX,dateTimeY);
-        validTimePeriod=null;
-    }
-    
 }
