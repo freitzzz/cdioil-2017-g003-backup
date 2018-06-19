@@ -42,7 +42,7 @@ public class CSVCategoriesReader implements CategoriesReader {
     /**
      * File to read.
      */
-    private final File file;
+    private final String file;
 
     /**
      * List with the Categories that were read.
@@ -54,7 +54,7 @@ public class CSVCategoriesReader implements CategoriesReader {
      *
      * @param file File to read
      */
-    public CSVCategoriesReader(File file) {
+    public CSVCategoriesReader(String file) {
         this.file = file;
         lc = new LinkedList<>();
     }
@@ -66,7 +66,7 @@ public class CSVCategoriesReader implements CategoriesReader {
      */
     @Override
     public MarketStructure readCategories() {
-        List<String> fileContent = FileReader.readFile(file);
+        List<String> fileContent = FileReader.readFile(new File(file));
 
         if (!isFileValid(fileContent)) {
             throw new InvalidFileFormattingException(UNRECOGNIZED_FILE_FORMAT);

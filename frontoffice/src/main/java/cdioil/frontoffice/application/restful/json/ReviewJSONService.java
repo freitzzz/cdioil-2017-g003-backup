@@ -5,10 +5,14 @@
  */
 package cdioil.frontoffice.application.restful.json;
 
+import cdioil.domain.Answer;
 import cdioil.domain.Question;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * JSON Service that represents a user that is reviewing a product (answering a survey).
@@ -19,47 +23,31 @@ import java.util.List;
  * @since Version 5.0 of FeedbackMonkey
  */
 public class ReviewJSONService {
-
     /**
-     * String with the question name.
+     * Question Answer map of a review.
      */
-    @SerializedName(value = "questionName", alternate = {"QUESTIONNAME", "questionname"})
-    private final String questionName;
-
+    @SerializedName(value = "questionAsnwerMap", alternate = {"QUESTIONANSWERMAP", "questionanswermap"})
+    private Map<String,String> questionAnswerMap;
+    
     /**
-     * List with all options of that question.
+     * Builds a new ReviewJSONService with the question answer map of the review
+     * being serialized
+     * 
+     * @param questionAnswerMap  question answer map of the review being serialized
      */
-    @SerializedName(value = "questionOptions", alternate = {"QUESTIONOPTIONS", "questionoptions"})
-    private List<String> questionOptions;
-
-    /**
-     * Builds a new QuestionJSONService with the survey being serialized.
-     *
-     * @param question QuestionJSONService with the survey being serialized
-     */
-    public ReviewJSONService(Question question) {
-        this.questionName = question.getQuestionText();
-        questionOptions = new ArrayList<>();
-        question.getOptionList().forEach(questionOption
-                -> this.questionOptions.add(questionOption.toString())
-        );
+    public ReviewJSONService(Map<String,String> questionAnswerMap){
+        this.questionAnswerMap = new HashMap<>();
+        questionAnswerMap.entrySet().forEach((entry) -> {
+            this.questionAnswerMap.put(entry.getKey(),entry.getValue());
+        });
     }
 
     /**
-     * Access method to the question name.
-     *
-     * @return String with the question name
+     * Access method to the question answer map.
+     * 
+     * @return map with the questions and answers of a review
      */
-    public String getQuestionName() {
-        return questionName;
-    }
-
-    /**
-     * Access method to thq question options.
-     *
-     * @return List with the options of that question
-     */
-    public List<String> getQuestionOptions() {
-        return questionOptions;
+    public Map<String,String> getQuestionAnswerMap(){
+        return questionAnswerMap;
     }
 }
