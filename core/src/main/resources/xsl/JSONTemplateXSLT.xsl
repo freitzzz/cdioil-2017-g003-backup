@@ -8,20 +8,28 @@
         Purpose of transformation follows.
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="html"/>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
+    <xsl:output method="text" indent="yes"/>
 
-    <!-- TODO customize transformation rules 
-         syntax recommendation http://www.w3.org/TR/xslt 
-    -->
-    <xsl:template match="/">
-        <html>
-            <head>
-                <title>JSONTemplateXSLT.xsl</title>
-            </head>
-            <body>
-            </body>
-        </html>
+    <xsl:template match="/Template">
+        {
+        "title":"<xsl:value-of select="@title"/>",
+        "list_questions":{
+            "questions":[<xsl:for-each select="Question">
+                {"question":{
+                    "id":"<xsl:value-of select="@ID"/>",
+                    "questiontext":"<xsl:value-of select="QuestionText"/>",
+                    "list_options":{
+                        "options":[<xsl:for-each select="Options/Option">
+                            {"option":"<xsl:value-of select = "."/>"
+                            }<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>
+                        ]
+                    }
+                }
+                }<xsl:if test="position() != last()">,</xsl:if></xsl:for-each>              	
+            ]
+        }				
+        } 
     </xsl:template>
 
 </xsl:stylesheet>

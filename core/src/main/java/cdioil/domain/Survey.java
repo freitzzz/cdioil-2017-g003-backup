@@ -1,7 +1,7 @@
 package cdioil.domain;
 
 import cdioil.application.utils.Graph;
-import cdioil.framework.SurveyDTO;
+import cdioil.framework.dto.SurveyDTO;
 import cdioil.time.TimePeriod;
 
 import java.io.Serializable;

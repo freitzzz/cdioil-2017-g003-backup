@@ -1,7 +1,4 @@
-package cdioil.framework;
-
-import cdioil.framework.dto.DTO;
-import cdioil.framework.dto.GenericDTO;
+package cdioil.framework.dto;
 
 public class SurveyDTO extends GenericDTO implements DTO {
 

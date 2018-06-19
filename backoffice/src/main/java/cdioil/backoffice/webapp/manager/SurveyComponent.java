@@ -1,8 +1,9 @@
 package cdioil.backoffice.webapp.manager;
 
+import cdioil.application.authz.AuthenticationController;
 import cdioil.backoffice.application.ListSurveysController;
 import cdioil.backoffice.webapp.DefaultPanelView;
-import cdioil.framework.SurveyDTO;
+import cdioil.framework.dto.SurveyDTO;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Alignment;
@@ -38,10 +39,18 @@ public class SurveyComponent extends DefaultPanelView {
     private transient List<SurveyDTO> surveyGridData;
 
     /**
+     * Authentication Controller Class
+     */
+    private AuthenticationController authenticationController;
+
+    /**
      * Creates a new instance
      */
-    public SurveyComponent() {
+    public SurveyComponent(AuthenticationController authenticationController) {
         super("Inquéritos");
+
+        this.authenticationController = authenticationController;
+
         createComponents();
         prepareComponents();
     }
@@ -113,7 +122,7 @@ public class SurveyComponent extends DefaultPanelView {
         MenuBar.MenuItem menuItem = settingsMenuBar.addItem("", null);
 
         menuItem.addItem("Criar Inquérito", VaadinIcons.PLUS_CIRCLE, command -> {
-            UI.getCurrent().addWindow(new CreateSurveyWindow());
+            UI.getCurrent().addWindow(new CreateSurveyWindow(authenticationController));
         });
 
         menuItem.addItem("Templates", VaadinIcons.BOOKMARK, command -> {

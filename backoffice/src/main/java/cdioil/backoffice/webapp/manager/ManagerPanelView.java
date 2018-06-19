@@ -70,11 +70,19 @@ public class ManagerPanelView extends MainLayoutView implements View {
     private Button exportBtn;
 
     /**
+     * Authentication Controller Class
+     */
+    private AuthenticationController authenticationController;
+
+    /**
      * Builds a new ManagerPanelView
      * authentication controller
      */
     public ManagerPanelView(AuthenticationController authenticationController){
         super();
+
+        this.authenticationController = authenticationController;
+
         configuration();
         setRightPanelContents(new DashboardComponent());
     }
@@ -104,7 +112,7 @@ public class ManagerPanelView extends MainLayoutView implements View {
     private void configureSurveyButton() {
         surveyButton = new Button(SURVEY_BTN_CAPTION, VaadinIcons.CLIPBOARD_CHECK);
         surveyButton.addClickListener(clickEvent ->
-            setRightPanelContents(new SurveyComponent())
+            setRightPanelContents(new SurveyComponent(authenticationController))
         );
         addNewButtonToLeftPanel(surveyButton);
     }

@@ -8,8 +8,10 @@ import de.odysseus.staxon.json.JsonXMLInputFactory;
 import de.odysseus.staxon.xml.util.PrettyXMLEventWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class JSONQuestionsReader implements QuestionsReader {
     /**
      * String with the file path of the converted file (from JSON to XML).
      */
-    private static final String JSON_FILE_PATH = "jsonToXml.xml";
+    private static final String CAT_QUESTIONS_OUTPUT_PATH = "category_questions_output.xml";
     /**
      * String with the path of the file converted from JSON to XML
      */
@@ -58,14 +60,16 @@ public class JSONQuestionsReader implements QuestionsReader {
         InputStream input = null;
         try {
             input = new FileInputStream(file);
-            StringWriter output = new StringWriter();
+            //StringWriter output = new StringWriter();
+            File outFile = new File(CAT_QUESTIONS_OUTPUT_PATH);
+            OutputStream output = new FileOutputStream(outFile);
 
             JsonXMLConfig config = new JsonXMLConfigBuilder().multiplePI(false).build();
 
             //JSON reader
             XMLEventReader reader = new JsonXMLInputFactory(config).createXMLEventReader(input);
             //XML writer
-            XMLEventWriter writer = XMLOutputFactory.newInstance().createXMLEventWriter(output);
+            XMLEventWriter writer = XMLOutputFactory.newInstance().createXMLEventWriter(output, "UTF-8");
 
             //Format output
             writer = new PrettyXMLEventWriter(writer);
@@ -78,7 +82,7 @@ public class JSONQuestionsReader implements QuestionsReader {
             input.close();
 
             //Write XML content to file
-            FileWriter.writeFile(new File(JSON_FILE_PATH), output.getBuffer().toString());
+            //FileWriter.writeFile(new File(CAT_QUESTIONS_OUTPUT_PATH), output.getBuffer().toString());
         } catch (IOException | XMLStreamException ex) {
             Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -90,7 +94,7 @@ public class JSONQuestionsReader implements QuestionsReader {
                 }
             }
         }
-        return new XMLQuestionsReader(file.getName()).readCategoryQuestions();
+        return new XMLQuestionsReader(CAT_QUESTIONS_OUTPUT_PATH).readCategoryQuestions();
     }
 
     @Override

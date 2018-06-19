@@ -6,7 +6,7 @@ import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
-import cdioil.framework.SurveyDTO;
+import cdioil.framework.dto.SurveyDTO;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
 import java.time.Month;
