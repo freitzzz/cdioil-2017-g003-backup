@@ -16,7 +16,7 @@
         {
             "surveyid":"<xsl:value-of select="@surveyID"/>",
             "questions":
-			"binaryquestions":[
+			{"binaryquestions":[{
 		<xsl:for-each select="Questions/BinaryQuestions/BinaryQuestion">
 			<!-- Iterates through all Survey BinaryQuestion Labels -->
 				"question":{
@@ -24,21 +24,23 @@
 					"questiontext":"<xsl:value-of select="QuestionText"/>",
 					"total":"<xsl:value-of select="Total"/>",
 					"average":"<xsl:value-of select="Average"/>",
-					"meandeviation":"<xsl:value-of select="MeanDeviation"/>",
-                },
+					"meandeviation":"<xsl:value-of select="MeanDeviation"/>"
+                }<xsl:if test = "position() != last()">,</xsl:if>
 		</xsl:for-each>
-			]
-			"quantitativequestions":[
+				}]
+			,
+			"quantitativequestions":[{
 		<xsl:for-each select = "Questions/QuantitativesQuestions/QuantitativeQuestion">
 				"question":{
 					"id":"<xsl:value-of select="@questionID"/>",
 					"questiontext":"<xsl:value-of select="QuestionText"/>",
 					"total":"<xsl:value-of select="Total"/>",
 					"average":"<xsl:value-of select="Average"/>",
-					"meandeviation":"<xsl:value-of select="MeanDeviation"/>",
-                },
+					"meandeviation":"<xsl:value-of select="MeanDeviation"/>"
+                }<xsl:if test = "position() != last()">,</xsl:if>
 		</xsl:for-each>
-			]
+				}]
+			}
         }
 	</xsl:template>
 
