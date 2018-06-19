@@ -105,11 +105,11 @@ public class XMLTemplateWriter implements TemplateWriter {
             try {
                 transformer.transform(source, result);
             } catch (TransformerException ex) {
-                Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
         } catch (ParserConfigurationException | TransformerConfigurationException ex) {
-            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         return true;
@@ -169,9 +169,9 @@ public class XMLTemplateWriter implements TemplateWriter {
             transformer.transform(source, result);
             return stringWriter.getBuffer().toString();
         } catch (ParserConfigurationException | TransformerConfigurationException ex) {
-            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
         } catch (TransformerException ex) {
-            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
