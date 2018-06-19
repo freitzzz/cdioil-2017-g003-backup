@@ -188,6 +188,58 @@ public class IndependentTemplatesLibraryTest {
     }
 
     @Test
+    public void ensureSameReferenceIsEqual() {
+
+        IndependentTemplatesLibrary library = new IndependentTemplatesLibrary();
+
+        Template template = new SimpleTemplate("Simple Template");
+        Template template2 = new SimpleTemplate("Other template");
+        Template template3 = new SimpleTemplate("A third template");
+
+        library.addTemplate(template);
+        library.addTemplate(template2);
+        library.addTemplate(template3);
+
+        IndependentTemplatesLibrary library2 = library;
+
+        assertEquals(library, library2);
+    }
+
+    @Test
+    public void ensureNullIsNotEqual() {
+
+        IndependentTemplatesLibrary library = new IndependentTemplatesLibrary();
+
+        Template template = new SimpleTemplate("Simple Template");
+        Template template2 = new SimpleTemplate("Other template");
+        Template template3 = new SimpleTemplate("A third template");
+
+        library.addTemplate(template);
+        library.addTemplate(template2);
+        library.addTemplate(template3);
+
+        IndependentTemplatesLibrary library2 = null;
+
+        assertFalse(library.equals(library2));
+    }
+
+    @Test
+    public void ensureOtherObjectIsNotEqual() {
+
+        IndependentTemplatesLibrary library = new IndependentTemplatesLibrary();
+
+        Template template = new SimpleTemplate("Simple Template");
+        Template template2 = new SimpleTemplate("Other template");
+        Template template3 = new SimpleTemplate("A third template");
+
+        library.addTemplate(template);
+        library.addTemplate(template2);
+        library.addTemplate(template3);
+
+        assertFalse(library.equals(template));
+    }
+
+    @Test
     public void ensureGetIDWorks() {
 
         IndependentTemplatesLibrary library = new IndependentTemplatesLibrary();
