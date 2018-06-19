@@ -127,18 +127,13 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (userReviews == null || userReviews.isEmpty()) {
             createNoReviewsFoundResponse();
         }
-        try{
-            for (Review userReview : userReviews) {
+        for (Review userReview : userReviews) {
             if (userReview.getSurvey().equals(survey) && userReview.isFinished()) {
                 return Response.status(Status.OK).
                         entity(new Gson().toJson(new ReviewJSONService(userReview.getReviewQuestionAnswers())
                                 .getQuestionAnswerMap())).build();
             }
         }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        
 
         return createInvalidReviewResponse();
     }
