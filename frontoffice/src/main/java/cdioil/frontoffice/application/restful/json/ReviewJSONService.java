@@ -9,6 +9,7 @@ import cdioil.domain.Answer;
 import cdioil.domain.Question;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -62,6 +63,7 @@ public class ReviewJSONService {
      */
     public ReviewJSONService(Map<Question,Answer> questionAnswerMap){
         this.questionName = "";
+        this.questionAnswerMap = new HashMap<>();
         questionAnswerMap.entrySet().forEach((entry) -> {
             this.questionAnswerMap.put(entry.getKey().getQuestionText(),
                     entry.getValue().getContent());
