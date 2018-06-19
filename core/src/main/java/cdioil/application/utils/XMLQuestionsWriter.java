@@ -37,18 +37,57 @@ public class XMLQuestionsWriter {
      * File with the file that is going to be written with all survey answers
      */
     private final File file;
+    /**
+     * Constant that represents the label used for the question list on the XML file
+     */
     private static final String QUESTION_LIST_LABEL = "lista_questoes";
+    /**
+     * Constant that represents the label used for the question identifier on the XML file
+     */
     private static final String QUESTION_LABEL = "question";
+    /**
+     * Constant that represents the label used for the binary question identifier on the XML file
+     */
     private static final String BINARY_QUESTION_LABEL = "BinaryQuestion";
+    /**
+     * Constant that represents the label used for the quantitative question identifier on the XML file
+     */
     private static final String QUANTITATIVE_QUESTION_LABEL = "QuantitativeQuestion";
+    /**
+     * Constant that represents the label used for the scale minimum value identifier on the XML file
+     */
     private static final String SCALE_MIN_VALUE_LABEL = "scaleMinValue";
+    /**
+     * Constant that represents the label used for the scale maximum value identifier on the XML file
+     */
     private static final String SCALE_MAX_VALUE_LABEL = "scaleMaxValue";
+    /**
+     * Constant that represents the label used for the multiple choice question identifier on the XML file
+     */
     private static final String MCQ_LABEL = "MultipleChoiceQuestion";
+    /**
+     * Constant that represents the label used for the text identifier on the XML file
+     */
     private static final String TEXT_LABEL = "Text";
+    /**
+     * Constant that represents the label used for the option identifier on the XML file
+     */
     private static final String OPTION_LABEL = "Option";
+    /**
+     * Constant that represents the label used for the num attribute identifier on the XML file
+     */
     private static final String NUM_ATTR = "num";
+    /**
+     * Constant that represents the label used for the text attribute identifier on the XML file
+     */
     private static final String TEXT_ATTR = "text";
+    /**
+     * Constant that represents the label used for the question ID attribute identifier on the XML file
+     */
     private static final String QUESTION_ID_LABEL = "questionID";
+    /**
+     * Constant that represents the label used for the category path identifier on the XML file
+     */
     private static final String CATID_LABEL = "CAT_ID";
     
     /**
