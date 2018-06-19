@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.Status;
 public final class SurveyResource implements SurveyAPI, ResponseMessages {
 
     /**
-     * List the Surveys via a JSON POST Request
+     * List the Surveys via a JSON GET Request
      *
      * @param authenticationToken String the authentication token
      * @param paginationID Short with the surveys pagination ID
@@ -64,6 +64,45 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
         }
         if(surveyFlux)return Response.status(Status.OK).entity(getSurveysAsXML(listTargetedSurvey)).build();
         return Response.status(Status.OK).entity(getSurveysAsJSON(listTargetedSurvey)).build();
+    }
+    
+    /**
+     * Gets the surveys a user has answered.
+     * 
+     * @param authenticationToken user's authentication token
+     * @param paginationID pagination ID so the list doesn't contain all surveys at once
+     * @return Response with the surveys a user has answered or an error Response in case 
+     * several errors happen
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/useransweredsurveys/{authenticationToken}/")
+    @Override
+    public Response getUserAnsweredSurveys(@PathParam("authenticationToken") String authenticationToken,
+            @QueryParam("paginationID") short paginationID){
+        
+        if(paginationID < 0){
+           createInvalidPaginationIDResponse();
+        }
+        
+        AuthenticationController authenticationController = new AuthenticationController();
+        
+        SystemUser user = authenticationController.getUserByAuthenticationToken(authenticationToken);
+        if(user == null){
+            createInvalidAuthTokenResponse();
+        }
+        
+        RegisteredUser registeredUser = authenticationController.getUserAsRegisteredUser(user);
+        if(registeredUser == null){
+            createInvalidUserResponse();
+        }
+        
+        List<Survey> answeredSurveys = new SurveyController().getUserAnsweredSurveys(registeredUser,
+                paginationID);
+        if(answeredSurveys == null || answeredSurveys.isEmpty()){
+            createNoAvailableSurveysResponse();
+        }
+        return Response.status(Status.OK).entity(getSurveysAsJSON(answeredSurveys)).build();
     }
 
     /**
