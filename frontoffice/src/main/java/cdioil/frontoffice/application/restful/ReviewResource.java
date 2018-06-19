@@ -14,6 +14,7 @@ import cdioil.frontoffice.application.restful.xml.ReviewXMLService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import com.google.gson.Gson;
 import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -126,14 +127,18 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (userReviews == null || userReviews.isEmpty()) {
             createNoReviewsFoundResponse();
         }
-
-        for (Review userReview : userReviews) {
+        try{
+            for (Review userReview : userReviews) {
             if (userReview.getSurvey().equals(survey)) {
                 return Response.status(Status.OK).
-                        entity(new ReviewJSONService(userReview.getReviewQuestionAnswers())
-                                .getQuestionAnswerMap()).build();
+                        entity(new Gson().toJson(new ReviewJSONService(userReview.getReviewQuestionAnswers())
+                                .getQuestionAnswerMap())).build();
             }
         }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
 
         return createInvalidReviewResponse();
     }
