@@ -31,5 +31,14 @@ public interface ReviewAPI {
      * or not
      */
     public Response saveReview(String reviewID, String fileContent);
-
+    
+    /**
+     * Produces an HTTP Response with the question answer map of a user's review
+     * 
+     * @param authenticationToken user's authentication token
+     * @param surveyID ID of the survey that the user is about
+     * @return HTTP Response indicating whether the question answer map was saved
+     * correctly or not
+     */
+    public Response getQuestionAnswerMap(String authenticationToken, String surveyID);
 }
