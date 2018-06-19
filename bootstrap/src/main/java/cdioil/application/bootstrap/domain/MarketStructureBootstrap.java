@@ -50,10 +50,11 @@ public class MarketStructureBootstrap {
                 qr, ean);
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {
-            File catFile = findCSVFile();
+            String catFile = findCSVFile();
+            File file;
             //Convert file to use a UTF-8 compliant path string
             try {
-                catFile = new File(URLDecoder.decode(catFile.getAbsolutePath(), "UTF-8"));
+                file = new File(URLDecoder.decode(catFile, "UTF-8"));
             } catch (UnsupportedEncodingException ex) {
                 Logger.getLogger(MarketStructureBootstrap.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -70,9 +71,9 @@ public class MarketStructureBootstrap {
      * Gets category file from resources
      * @return category file from resources
      */
-    private File findCSVFile() {
+    private String findCSVFile() {
         ClassLoader cl = getClass().getClassLoader();
-        return new File(cl.getResource(CAT_FILE).getFile());
+        return cl.getResource(CAT_FILE).getFile();
     }
     /**
      * Creates a dummy product for usage of the scan functionality

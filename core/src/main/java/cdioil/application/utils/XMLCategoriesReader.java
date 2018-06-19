@@ -2,6 +2,8 @@ package cdioil.application.utils;
 
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
+import cdioil.files.InputSchemaFiles;
+import cdioil.files.ValidatorXML;
 import cdioil.logger.ExceptionLogger;
 import cdioil.logger.LoggerFileNames;
 import java.io.File;
@@ -29,14 +31,18 @@ public class XMLCategoriesReader implements CategoriesReader {
      * List with the Categories that were read.
      */
     private List<Category> listCategories;
+     /**
+     * Schema file (XSD) used for validating the input file.
+     */
+    private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY);
 
     /**
      * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.
      *
      * @param file File to read
      */
-    public XMLCategoriesReader(File file) {
-        this.file = file;
+    public XMLCategoriesReader(String file) {
+        this.file = new File(file);
         listCategories = new LinkedList<>();
     }
 
@@ -47,6 +53,9 @@ public class XMLCategoriesReader implements CategoriesReader {
      */
     @Override
     public MarketStructure readCategories() {
+        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
+            return null;
+        }
         MarketStructure me = new MarketStructure();
         try {
             File xmlFile = file;
@@ -54,10 +63,7 @@ public class XMLCategoriesReader implements CategoriesReader {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
-
-            //lista_categorias
             Element lista_categorias = doc.getDocumentElement();
-            //<categoria>
             NodeList categorias = lista_categorias.getElementsByTagName("categoria");
             read(categorias, me);
         } catch (Exception e) {
@@ -149,7 +155,6 @@ public class XMLCategoriesReader implements CategoriesReader {
             }
         }
     }
-
     @Override
     public int getNumberOfCategoriesRead() {
         return listCategories.size();
