@@ -1,7 +1,9 @@
 package cdioil.application.utils;
 
 import cdioil.files.InvalidFileFormattingException;
+
 import static cdioil.files.FileReader.readFile;
+
 import cdioil.domain.BinaryQuestion;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.MultipleChoiceQuestionOption;
@@ -9,7 +11,19 @@ import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
-import java.io.File;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -119,12 +133,25 @@ public class CSVQuestionsReader implements QuestionsReader {
     private final File file;
 
     /**
+     * File name
+     */
+    private String fileName;
+
+    /**
+     * String with the path of the file converted from csv to XML
+     */
+    private static final String OUTPUT_FILE_PATH = "independent_questions_output_file_from_csv.xml";
+
+
+    /**
+     * Creates an instance of CSVQuestionsReader, receiving the name of the file to read.
      * Creates an instance of CSVQuestionsReader, receiving the name of the file
      * to read.
      *
      * @param filename Name of the file to read
      */
     public CSVQuestionsReader(String filename) {
+        this.fileName = filename;
         this.file = new File(filename);
     }
 
@@ -244,7 +271,7 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Reads a binary question from a CSV file.
      *
      * @param currentLine the line currently being read in the file
-     * @param offset number of cells skipped to reach the start of a question
+     * @param offset      number of cells skipped to reach the start of a question
      * @return binary question
      */
     private Question readBinaryQuestion(String[] currentLine, int offset) {
@@ -259,7 +286,7 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Reads a quantitative question from a CSV file.
      *
      * @param currentLine the line currently being read in the file
-     * @param offset number of cells skipped to reach the start of a question
+     * @param offset      number of cells skipped to reach the start of a question
      * @return quantitative question
      */
     private Question readQuantitativeQuestion(String[] currentLine, int offset) {
@@ -289,8 +316,10 @@ public class CSVQuestionsReader implements QuestionsReader {
      * and so some lines need to be skipped.
      *
      * @param currentLine line currently being read
-     * @param offset number of cells skipped to reach the start of the question
+     * @param offset      number of cells skipped to reach the start of the question
      * @param fileContent all of the file's lines
+     * @param currentIdx  index of the line currently being read
+     * @return an array of <code>Object</code> with two positions, where the first contains an updated value of the current line index, and the second contains an instance of <code>MultipleChoiceQuestion</code>.
      * @param currentIdx index of the line currently being read
      * @return an array of <code>Object</code> with two positions, where the
      * first contains an updated value of the current line index, and the second
@@ -355,55 +384,161 @@ public class CSVQuestionsReader implements QuestionsReader {
      * @return the list of the questions
      */
     @Override
-    public List<Question> readIndependentQuestions() {
+    public List<Question> readIndependentQuestions() throws IOException, ParserConfigurationException, TransformerException {
 
-        List<String> fileContent = readFile(file);
+//        List<String> fileContent = readFile(file);
+//
+//        if (fileContent == null) {
+//            return new ArrayList<>();
+//        }
+//
+//        if (!isIndependentQuestionsFileValid(fileContent)) {
+//            throw new InvalidFileFormattingException("Unrecognized file formatting");
+//        }
+//
+//        List<Question> independentQuestions = new ArrayList<>();
+//
+////        List<Question> newlyImportedQuestions = new LinkedList<>();
+////
+//        int numLines = fileContent.size();
+//
+//        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
+//
+//            String[] currentLine = fileContent.get(i).split(SPLITTER);
+//
+//            if (currentLine.length > 0) {
+//
+//                String questionType = currentLine[1].trim();
+//
+//                Question question = null;
+//
+//                if (questionType.equalsIgnoreCase(SN_QUESTION)) {
+//                    question = readBinaryQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
+//                } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
+//                    Object[] objects = readMultipleChoiceQuestion(currentLine, INDEPENDENT_FILE_OFFSET, fileContent, i);
+//                    i = (Integer) objects[0];
+//                    question = (Question) objects[1];
+//                } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
+//                    question = readQuantitativeQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
+//                }
+////
+//                if (question != null) {
+//                    independentQuestions.add(question);
+////                    newlyImportedQuestions.add(question);
+//                }
+//            }
+//        }
+//        return independentQuestions;
+////        return newlyImportedQuestions;
 
-        if (fileContent == null) {
-            return new ArrayList<>();
-        }
 
-        if (!isIndependentQuestionsFileValid(fileContent)) {
-            throw new InvalidFileFormattingException("Unrecognized file formatting");
-        }
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
-        List<Question> newlyImportedQuestions = new LinkedList<>();
 
-        int numLines = fileContent.size();
+            Document xmlFile = documentBuilder.newDocument();
 
-        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
+            Element rootElement = xmlFile.createElement("lista_questoes");
+            xmlFile.appendChild(rootElement);
 
-            String[] currentLine = fileContent.get(i).split(SPLITTER);
+            //csv reader
+            BufferedReader csvReader = new BufferedReader(new FileReader(fileName));
 
-            if (currentLine.length > 0) {
+            //First line in the csv file has the fields
+            String[] csvFields = null;
+            String[] csvValues;
 
-                String questionType = currentLine[1].trim();
+            String csvLine = csvReader.readLine();
+            if (csvLine != null) {
+                csvFields = csvLine.split(";", -1); // By putting -1 or 0 is as if it doesn't have limit
+            }
 
-                Question question = null;
+            int count;
+            while ((csvLine = csvReader.readLine()) != null) {
+                Element question = xmlFile.createElement("question"); //<--------------------------
+                String questionID = null;
+                String questionIDMultipleChoice = null;
+                String questionType = null;
+                String text = null;
+                String parameters = null;
+                String maxValue = null;
+
+                csvValues = csvLine.split(";", -1);
+                Element multipleChoiceQuestion = null;
+                int multipleChoiceQuestionsCount = 0;
+
+                for (int i = 0; i < csvValues.length; i++) {
+                    if (csvFields[i].equalsIgnoreCase("questaoID")) {
+                        questionID = csvValues[i];
+                    } else if (csvFields[i].equalsIgnoreCase("Tipo")) {
+                        questionType = csvValues[i];
+                    } else if (csvFields[i].equalsIgnoreCase("Texto")) {
+                        text = csvValues[i];
+                    } else if (csvFields[i].equalsIgnoreCase("Parametros")) {
+                        parameters = csvValues[i];
+                    } else if (i == maxValue.length() - 1) {
+                        maxValue = csvValues[i];
+                    }
+
+                }
 
                 if (questionType.equalsIgnoreCase(SN_QUESTION)) {
+                    Element binaryQuestion = xmlFile.createElement("BinaryQuestion");
+                    binaryQuestion.setAttribute("questionID", questionID);
+                    Element elementText = xmlFile.createElement("Text");
+                    elementText.appendChild(xmlFile.createTextNode(text));
+                    binaryQuestion.appendChild(question);
 
-                    question = readBinaryQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
-                } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
-
-                    Object[] objects = readMultipleChoiceQuestion(currentLine, INDEPENDENT_FILE_OFFSET, fileContent, i);
-                    i = (Integer) objects[0];
-                    question = (Question) objects[1];
                 } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
+                    Element quantitativeQuestion = xmlFile.createElement("QuantitativeQuestion");
+                    quantitativeQuestion.setAttribute("questionID", questionID);
+                    Element elementText = xmlFile.createElement("Text");
+                    elementText.appendChild(xmlFile.createTextNode(text));
+                    Element minValueElement = xmlFile.createElement("scaleMinValue");
+                    minValueElement.appendChild(xmlFile.createTextNode(parameters.substring(parameters.length() - 2)));
+                    Element maxValue1Element = xmlFile.createElement("scaleMaxValue");
+                    maxValue1Element.appendChild(xmlFile.createTextNode(maxValue.substring(maxValue.length() - 2)));
+                    quantitativeQuestion.appendChild(question);
+                } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
+                    if (questionIDMultipleChoice.equalsIgnoreCase(questionID)) {
+                        multipleChoiceQuestionsCount++;
+                    } else {
+                        questionIDMultipleChoice = questionID;
+                        multipleChoiceQuestionsCount = 0;
+                        multipleChoiceQuestion = xmlFile.createElement("MultipleChoiceQuestion");
+                        multipleChoiceQuestion.setAttribute("questionID", questionID);
+                        Element elementText = xmlFile.createElement("Text");
+                        elementText.appendChild(xmlFile.createTextNode(text));
+                    }
+                    Element option = xmlFile.createElement("Option");
+                    option.setAttribute("num", multipleChoiceQuestionsCount + "");
+                    option.setAttribute("text", text);
 
-                    question = readQuantitativeQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
                 }
 
-                if (question != null) {
-                    newlyImportedQuestions.add(question);
+                if (!questionIDMultipleChoice.equalsIgnoreCase(questionID) && multipleChoiceQuestion != null) {
+                    multipleChoiceQuestion.appendChild(question);
                 }
             }
-        }
 
-        return newlyImportedQuestions;
+        FileWriter fileWriter = new FileWriter(new File(OUTPUT_FILE_PATH));
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+
+        DOMSource source = new DOMSource(xmlFile);
+        StreamResult result = new StreamResult(fileWriter);
+
+        transformer.transform(source, result);
+
+        fileWriter.flush();
+
+        return null;
     }
 
     /**
+     * Checks if the content of the file is valid - not null and has all the expected identifiers properly split.
+     * // --- GOOD ---
      * Checks if the content of the file is valid - not null and has all the
      * expected identifiers properly split.
      *
@@ -425,4 +560,6 @@ public class CSVQuestionsReader implements QuestionsReader {
                 && line[2].equalsIgnoreCase(QUESTION_IDENTIFIER)
                 && line[3].equalsIgnoreCase(PARAMETER_IDENTIFIER));
     }
+
+
 }
