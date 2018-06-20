@@ -39,6 +39,10 @@
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>
+                <subresource name="User Answered Surveys" path = "/useransweredsurveys">
+                    <method>GET</method>
+                    <datatype>JSON</datatype>
+                </subresource>
             </subresources>
         </resource>
         <resource name = "Reviews" path = "/reviews">
@@ -52,6 +56,10 @@
 					<method>POST</method>
 					<datatype>JSON</datatype>
 				</subresource>
+                <subresource name = "Get Review Answer Map" path = "/userreviewmap">
+                    <method>GET</method>
+                    <datatype>JSON</datatype>
+                </subresource>
             </subresources>
         </resource>
     </resources>

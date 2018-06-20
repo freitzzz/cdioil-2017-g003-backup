@@ -66,4 +66,5 @@
     <string name="submit_suggestion_photo_hint">Clique na câmara para anexar uma foto à sua sugestão</string>
     <string name="functionality_not_implemented">Esta funcionalidade ainda não foi implementada!</string>
     <string name="exit">S A I R</string>
+    <string name="answered_surveys">Inquéritos Avaliados</string>
 </resources>
