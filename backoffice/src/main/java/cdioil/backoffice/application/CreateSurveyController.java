@@ -83,7 +83,7 @@ public class CreateSurveyController {
      *
      * @return all the independent questions
      */
-    public List<Question> independantQuestions() {
+    public List<Question> independentQuestions() {
         IndependentQuestionsLibraryRepositoryImpl independentRepo = new IndependentQuestionsLibraryRepositoryImpl();
         IndependentQuestionsLibrary independentQuestionsLibrary = independentRepo.findLibrary();
 

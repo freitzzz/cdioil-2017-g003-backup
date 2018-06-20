@@ -133,8 +133,9 @@ public class XMLQuestionsReader implements QuestionsReader {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         document = documentBuilder.newDocument();
 
-        document.getDocumentElement().normalize();
+        //document.getDocumentElement().normalize();
 
+        document.getElementsByTagName("lista_questoes");
         //Question
         NodeList nodeList = document.getElementsByTagName("question");
 
@@ -302,7 +303,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     /**
      * Creates a multiple choice question from XML nodes
      *
-     * @param bQuestionNodes child nodes of BinaryQuestion node
+     * @param mcQuestionNodes child nodes of BinaryQuestion node
      * @param id             attribute questionID of BinaryQuestion node
      * @return a new multiple choice if enough information was found within the
      * nodes, null if not
@@ -335,7 +336,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     /**
      * Creates a quantitative question from XML nodes
      *
-     * @param bQuestionNodes child nodes of BinaryQuestion node
+     * @param quantitativeQuestionNodes child nodes of BinaryQuestion node
      * @param id             attribute questionID of BinaryQuestion node
      * @return a new quantitative if enough information was found within the
      * nodes, null if not
