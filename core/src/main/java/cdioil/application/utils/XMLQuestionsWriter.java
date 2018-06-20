@@ -188,7 +188,8 @@ public class XMLQuestionsWriter {
 
                 Attr attrID = doc.createAttribute(QUESTION_ID_LABEL);
                 attrID.setValue(question.getQuestionID());
-                qElement.setAttributeNode(attrID);
+                //NO SONAR COMMENT BELOW IS DUE TO AN EXCEPTION WOULD BE ALREADY THROWN IF NULL
+                qElement.setAttributeNode(attrID);//NOSONAR 
 
                 questionElement.appendChild(qElement);
 

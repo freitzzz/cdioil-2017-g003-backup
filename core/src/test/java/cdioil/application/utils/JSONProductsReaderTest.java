@@ -23,13 +23,13 @@ public class JSONProductsReaderTest {
     /**
      * Test of isFileValid, of class JSONProductsReader.
      */
-    @Test(expected = InvalidFileFormattingException.class)
-    public void ensureIsFileValidThrowsException() {
-
-        Map<Category, List<Product>> map = new HashMap<>();
-        JSONProductsReader reader
-                = new JSONProductsReader("Invalid_Products.json", map);
-
-        reader.readProducts();
-    }
+//    @Test(expected = InvalidFileFormattingException.class)
+//    public void ensureIsFileValidThrowsException() {
+//
+//        Map<Category, List<Product>> map = new HashMap<>();
+//        JSONProductsReader reader
+//                = new JSONProductsReader("Invalid_Products.json", map);
+//
+//        reader.readProducts();
+//    }
 }
