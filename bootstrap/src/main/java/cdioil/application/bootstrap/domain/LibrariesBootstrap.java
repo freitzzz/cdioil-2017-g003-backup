@@ -143,6 +143,112 @@ public class LibrariesBootstrap {
         categoryQuestionsLibrary.addQuestion(q15, category);
         categoryQuestionsLibrary.addQuestion(q16, category);
         categoryQuestionsLibrary.addQuestion(q34, category);
+        
+        Category cookieCategory = marketRepo.
+                findCategoryByPath("10DC-2UN-203CAT");
+        
+        QuantitativeQuestionOption quantitativeOption1 = new QuantitativeQuestionOption(1.0);
+        QuantitativeQuestionOption quantitativeOption2 = new QuantitativeQuestionOption(2.0);
+        QuantitativeQuestionOption quantitativeOption3 = new QuantitativeQuestionOption(3.0);
+        QuantitativeQuestionOption quantitativeOption4 = new QuantitativeQuestionOption(4.0);
+        QuantitativeQuestionOption quantitativeOption5 = new QuantitativeQuestionOption(5.0);
+        QuantitativeQuestionOption quantitativeOption6 = new QuantitativeQuestionOption(6.0);
+        QuantitativeQuestionOption quantitativeOption7 = new QuantitativeQuestionOption(7.0);
+        QuantitativeQuestionOption quantitativeOption8 = new QuantitativeQuestionOption(8.0);
+        LinkedList<QuestionOption> quantitativeOptionList = new LinkedList<>();
+        quantitativeOptionList.add(quantitativeOption1);
+        quantitativeOptionList.add(quantitativeOption2);
+        quantitativeOptionList.add(quantitativeOption3);
+        quantitativeOptionList.add(quantitativeOption4);
+        quantitativeOptionList.add(quantitativeOption5);
+        quantitativeOptionList.add(quantitativeOption6);
+        quantitativeOptionList.add(quantitativeOption7);
+        quantitativeOptionList.add(quantitativeOption8);
+        
+        QuantitativeQuestion questionCQ1 = new QuantitativeQuestion("Classifique "
+                + "relativamente à Apreciação Global", "CQ1", quantitativeOptionList);
+        
+        categoryQuestionsLibrary.addQuestion(questionCQ1,cookieCategory);
+        
+        LinkedList<QuestionOption> optionList = new LinkedList<>();
+        MultipleChoiceQuestionOption option1 = new MultipleChoiceQuestionOption("Sabor");
+        MultipleChoiceQuestionOption option2 = new MultipleChoiceQuestionOption("Textura");
+        MultipleChoiceQuestionOption option3 = new MultipleChoiceQuestionOption("Imagem");
+        optionList.add(option1);
+        optionList.add(option2);
+        optionList.add(option3);
+        
+        MultipleChoiceQuestion questionCQ2 = new MultipleChoiceQuestion("Qual o parâmetro "
+                + "que mais gostou?","CQ2",optionList);
+        
+        categoryQuestionsLibrary.addQuestion(questionCQ2, cookieCategory);
+        
+        MultipleChoiceQuestion questionCQ3 = new MultipleChoiceQuestion("Qual o parâmetro "
+                + "que menos gostou?", "CQ3",optionList);
+        
+        categoryQuestionsLibrary.addQuestion(questionCQ3, cookieCategory);
+        
+        LinkedList<QuestionOption> multipleOptionList = new LinkedList<>();
+        MultipleChoiceQuestionOption mcOption1 = new MultipleChoiceQuestionOption("Demasiado Azedo");
+        MultipleChoiceQuestionOption mcOption2 = new MultipleChoiceQuestionOption("Demasiado Doce");
+        MultipleChoiceQuestionOption mcOption3 = new MultipleChoiceQuestionOption("Sem sabor");
+        MultipleChoiceQuestionOption mcOption4 = new MultipleChoiceQuestionOption("Demasiado Forte");
+        MultipleChoiceQuestionOption mcOption5 = new MultipleChoiceQuestionOption("Outro");
+        multipleOptionList.add(mcOption1);
+        multipleOptionList.add(mcOption2);
+        multipleOptionList.add(mcOption3);
+        multipleOptionList.add(mcOption4);
+        multipleOptionList.add(mcOption5);
+        
+        MultipleChoiceQuestion questionCQ4 = new MultipleChoiceQuestion("O que é que achou do "
+                + "Sabor?", "CQ4", multipleOptionList);
+        
+        categoryQuestionsLibrary.addQuestion(questionCQ4, cookieCategory);
+        
+        multipleOptionList = new LinkedList<>();
+        
+        mcOption1 = new MultipleChoiceQuestionOption("Demasiado Mole");
+        mcOption2 = new MultipleChoiceQuestionOption("Demasiado Rijo");
+        mcOption3 = new MultipleChoiceQuestionOption("Elevada agregação de alimentos");
+        mcOption4 = new MultipleChoiceQuestionOption("Baixa agregação de alimentos");
+        mcOption5 = new MultipleChoiceQuestionOption("Espessura elevada");
+        MultipleChoiceQuestionOption mcOption6 = new MultipleChoiceQuestionOption("Espessura reduzida");
+        MultipleChoiceQuestionOption mcOption7 = new MultipleChoiceQuestionOption("Outro");
+        
+        multipleOptionList.add(mcOption1);
+        multipleOptionList.add(mcOption2);
+        multipleOptionList.add(mcOption3);
+        multipleOptionList.add(mcOption4);
+        multipleOptionList.add(mcOption5);
+        multipleOptionList.add(mcOption6);
+        multipleOptionList.add(mcOption7);
+        
+        MultipleChoiceQuestion questionCQ5 = new MultipleChoiceQuestion("O que é que achou da "
+                + "Textura?", "CQ5", multipleOptionList);
+        
+        categoryQuestionsLibrary.addQuestion(questionCQ5,cookieCategory);
+        
+        multipleOptionList = new LinkedList<>();
+        
+        mcOption1 = new MultipleChoiceQuestionOption("Embalagem pouco apelativa");
+        mcOption2 = new MultipleChoiceQuestionOption("Artigo muito pequeno");
+        mcOption3 = new MultipleChoiceQuestionOption("Aspeto básico");
+        mcOption4 = new MultipleChoiceQuestionOption("Outro");
+        
+        multipleOptionList.add(mcOption1);
+        multipleOptionList.add(mcOption2);
+        multipleOptionList.add(mcOption3);
+        multipleOptionList.add(mcOption4);
+        
+        MultipleChoiceQuestion questionCQ6 = new MultipleChoiceQuestion("O que é que achou da "
+                + "Imagem?", "CQ6", multipleOptionList);
+        
+        categoryQuestionsLibrary.addQuestion(questionCQ6,cookieCategory);
+        
+        BinaryQuestion questionCQ7 = new BinaryQuestion("Caso não tivesse esta caraterística "
+                + "a sua satisfação global subiria pelo menos um ponto?","CQ7");
+        
+        categoryQuestionsLibrary.addQuestion(questionCQ7,cookieCategory);
     }
 
     /**
