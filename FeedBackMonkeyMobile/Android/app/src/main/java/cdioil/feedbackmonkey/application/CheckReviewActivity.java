@@ -27,7 +27,7 @@ public class CheckReviewActivity extends AppCompatActivity {
     /**
      * Constant that represents a Question Tag for the ListView Items.
      */
-    private final static String QUESTION_TAG = "Pergunta: ";
+    private final static String QUESTION_TAG = "\nPergunta: ";
     /**
      * Constant that represents an Answer Tag for the ListView Items.
      */
@@ -79,7 +79,7 @@ public class CheckReviewActivity extends AppCompatActivity {
             questionAnswerList.add(QUESTION_TAG
                     .concat(questions.get(i)
                             .concat("\n" + ANSWER_TAG
-                                    .concat(answers.get(i)))));
+                                    .concat(answers.get(i) + "\n"))));
         }
         return questionAnswerList;
     }

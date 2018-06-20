@@ -52,7 +52,7 @@
         <activity android:name=".application.QuestionActivity" />
         <activity android:name=".authz.UserProfileActivity" />
         <activity android:name=".authz.LoginActivity" />
-        <activity android:name=".application.CheckReviewActivity"></activity>
+        <activity android:name=".application.CheckReviewActivity" />
     </application>
 
 </manifest>

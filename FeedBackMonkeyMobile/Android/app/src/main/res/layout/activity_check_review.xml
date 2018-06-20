@@ -17,18 +17,21 @@
             android:id="@+id/answersGivenTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/zxing_possible_result_points"
+            android:fontFamily="@font/roboto_mono_medium"
             android:gravity="center"
             android:padding="8dp"
-            android:fontFamily="@font/roboto_mono_medium"
+            android:text="@string/question_answer_list"
             android:textColor="#3D3D3D"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="@string/question_answer_list" />
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/questionAnswerListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="16dp"
             android:padding="8dp" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
