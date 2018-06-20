@@ -45,14 +45,6 @@ public class CategoryTemplatesLibrary implements AggregateRoot<Map<Category, Tem
     public CategoryTemplatesLibrary() {
         this.library = new HashMap<>();
     }
-
-    /**
-     * Retrieves the library itself.
-     * @return the map with all templates.
-     */
-    public Map<Category, TemplateGroup> getLibrary() {
-        return library;
-    }
     
     /**
      * Returns a template group that is associated to a category
