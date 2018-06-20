@@ -1,0 +1,58 @@
+<!-- Schema Independent Questions -->
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name = "lista_questoes">
+		<xsd:complexType>
+			<xsd:sequence minOccurs = "1" maxOccurs = "unbounded">
+				<xsd:element name ="question" type = "questions"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name = "questions">
+			<xsd:choice>
+				<xsd:element name = "BinaryQuestion" type = "theBinaryQuestion"/>
+				<xsd:element name = "MultipleChoiceQuestion" type = "theMultipleChoiceQuestion"/>
+				<xsd:element name = "QuantitativeQuestion" type = "theQuantitativeQuestion"/>	
+			</xsd:choice>
+	</xsd:complexType>
+	
+	<xsd:complexType name = "theBinaryQuestion">
+		<xsd:sequence minOccurs = "0" maxOccurs = "1">
+			<xsd:element name = "Text" type = "xsd:string"/>
+		</xsd:sequence>
+		<xsd:attribute name = "questionID" type = "xsd:string" use = "required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name = "theMultipleChoiceQuestion">
+		<xsd:sequence minOccurs = "0" maxOccurs = "1">
+			<xsd:element name = "Text" type = "xsd:string"/>
+			<xsd:element name = "Option" minOccurs = "1" maxOccurs = "unbounded">
+			<xsd:complexType>
+				<xsd:attribute name = "num" type = "xsd:unsignedInt"/>
+				<xsd:attribute name = "text" type = "xsd:string" use = "required"/>
+			</xsd:complexType>
+		</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name = "questionID" type = "xsd:string" use = "required"/>
+	</xsd:complexType>
+		
+	<xsd:complexType name = "theQuantitativeQuestion">
+		<xsd:sequence minOccurs = "0" maxOccurs = "1">
+			<xsd:element name = "Text" type = "xsd:string"/>
+			<xsd:element name = "scaleMinValue" type = "minValue"/>
+			<xsd:element name = "scaleMaxValue" type = "maxValue"/>
+		</xsd:sequence>
+		<xsd:attribute name = "questionID" type = "xsd:string" use = "required"/>
+	</xsd:complexType>
+
+	<xsd:simpleType name = "minValue">
+		<xsd:restriction base = "xsd:unsignedLong"> 
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name = "maxValue">
+		<xsd:restriction base = "xsd:unsignedLong"/>
+	</xsd:simpleType>
+</xsd:schema>
