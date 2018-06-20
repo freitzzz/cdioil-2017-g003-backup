@@ -39,7 +39,7 @@
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>
-                <subresource name="User Answered Surveys" path = "/useransweredsurveys">
+                <subresource name="User Answered Surveys" path = "/useransweredsurveys/">
                     <method>GET</method>
                     <datatype>JSON</datatype>
                 </subresource>
