@@ -29,4 +29,11 @@ public final class QuestionJSONService {
         this.question=question.getQuestionText();
         this.type=question.getType().name();
     }
+    /**
+     * Returns the question text
+     * @return String with the question text
+     */
+    public String getQuestionText(){
+        return question;
+    }
 }

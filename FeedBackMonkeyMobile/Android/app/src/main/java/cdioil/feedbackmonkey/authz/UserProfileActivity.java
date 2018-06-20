@@ -181,6 +181,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         break;
                     default:
                         ToastNotification.show(UserProfileActivity.this, "Erro de conexão ao servidor, tente mais tarde");
+                        break;
                 }
             } catch (IOException e) {
                 ToastNotification.show(UserProfileActivity.this, getString(R.string.no_internet_connection));
@@ -195,13 +196,13 @@ public class UserProfileActivity extends AppCompatActivity {
      */
     private void startListSurveyActivity(List<SurveyService> surveyServiceList) {
         Intent listSurveyActivityIntent = new Intent(UserProfileActivity.this, ListSurveyActivity.class);
-        Bundle bundle = new Bundle(surveyServiceList.size() + 1);
+        Bundle bundle = new Bundle(surveyServiceList.size() + 2);
         bundle.putString("authenticationToken", authenticationToken);
         bundle.putString("sentFromProfileActivity", this.getClass().getSimpleName());
         for (int i = 0; i < surveyServiceList.size(); i++) {
             bundle.putSerializable("" + i, surveyServiceList.get(i));
         }
-        listSurveyActivityIntent.putExtras(bundle);
+        listSurveyActivityIntent.putExtra(ListSurveyActivity.class.getSimpleName(),bundle);
         startActivity(listSurveyActivityIntent);
     }
 

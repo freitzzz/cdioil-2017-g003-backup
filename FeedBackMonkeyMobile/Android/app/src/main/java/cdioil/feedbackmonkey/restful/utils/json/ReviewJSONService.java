@@ -7,39 +7,33 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * JSON Service that represents a user that is reviewing a product (answering a survey).
+ * ReviewJSONService class for the deserialization of the object.
  *
- * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
- * @author <a href="1161380@isep.ipp.pt">Joana Pinheiro</a>
+ * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
  * @since Version 5.0 of FeedbackMonkey
  */
 public class ReviewJSONService {
     /**
-     * Question Answer map of a review.
+     * Map with all the review answers in Question-Answers pair value format
      */
-    @SerializedName(value = "questionAsnwerMap", alternate = {"QUESTIONANSWERMAP", "questionanswermap"})
-    private Map<String, String> questionAnswerMap;
-
+    @SerializedName(value = "reviewAnswers", alternate = {"ReviewAnswers", "REVIEWANSWERS"})
+    private Map<QuestionJSONService, AnswerJSONService> reviewAnswers;
     /**
-     * Builds a new ReviewJSONService with the question answer map of the review
-     * being serialized
-     *
-     * @param questionAnswerMap question answer map of the review being serialized
+     * String with the Review suggestion
      */
-    public ReviewJSONService(Map<String, String> questionAnswerMap) {
-        this.questionAnswerMap = new HashMap<>();
-        for (Entry<String, String> entry : questionAnswerMap.entrySet()) {
-            this.questionAnswerMap.put(entry.getKey(), entry.getValue());
-        }
-    }
-
+    @SerializedName(value = "suggestion", alternate = {"Suggestion", "SUGGESTION"})
+    private String suggestion;
     /**
-     * Access method to the question answer map.
+     * Builds a Map<String,String> from a Map<QuestionJSONService,AnswerJSONService>
      *
-     * @return map with the questions and answers of a review
+     * @return question answer map of a user's review
      */
     public Map<String, String> getQuestionAnswerMap() {
-        return questionAnswerMap;
+        Map<String, String> questionAnswerStringMap = new HashMap<>();
+        for (Entry<QuestionJSONService, AnswerJSONService> entry : reviewAnswers.entrySet()) {
+            questionAnswerStringMap.put(entry.getKey().getQuestionText(), entry.getValue().getAnswer());
+        }
+        return questionAnswerStringMap;
     }
 }
 
