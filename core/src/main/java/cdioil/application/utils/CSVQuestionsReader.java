@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.transform.OutputKeys;
 
 /**
@@ -516,7 +518,8 @@ public class CSVQuestionsReader implements QuestionsReader {
                     Element option = xmlFile.createElement("Option");
                     option.setAttribute("num", multipleChoiceQuestionsCount + "");
                     option.setAttribute("text", text);
-                    multipleChoiceQuestion.appendChild(option);
+                    //NOSONAR COMMENT BELOW IS DUE TO AN EXCEPTION ALREADY BE THROWN
+                    multipleChoiceQuestion.appendChild(option);//NOSONAR
                 } else {
                     multipleChoiceQuestionsCount = 0;
                     multipleChoiceQuestion = xmlFile.createElement("MultipleChoiceQuestion");
@@ -545,6 +548,7 @@ public class CSVQuestionsReader implements QuestionsReader {
         fileWriter.flush();
 
         XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(OUTPUT_FILE_PATH);
+        closeStream(csvReader);
         return xmlQuestionsReader.readIndependentQuestions();
 
     }
@@ -572,6 +576,19 @@ public class CSVQuestionsReader implements QuestionsReader {
                 && line[1].equalsIgnoreCase(TYPE_IDENTIFIER)
                 && line[2].equalsIgnoreCase(QUESTION_IDENTIFIER)
                 && line[3].equalsIgnoreCase(PARAMETER_IDENTIFIER));
+    }
+    /**
+     * Closes (or attempts) a stream
+     * @param stream Closeable with the stream being close
+     */
+    private void closeStream(Closeable stream){
+        if(stream!=null){
+            try{
+                stream.close();
+            }catch(IOException ioException){
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ioException);
+            }
+        }
     }
 
 }
