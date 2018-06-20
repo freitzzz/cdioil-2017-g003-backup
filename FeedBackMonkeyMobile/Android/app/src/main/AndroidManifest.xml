@@ -28,11 +28,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <activity
             android:name=".application.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -49,7 +51,8 @@
         <activity android:name=".application.SubmitSuggestionActivity" />
         <activity android:name=".application.QuestionActivity" />
         <activity android:name=".authz.UserProfileActivity" />
-        <activity android:name=".authz.LoginActivity"/>
+        <activity android:name=".authz.LoginActivity" />
+        <activity android:name=".application.CheckReviewActivity"></activity>
     </application>
 
 </manifest>
