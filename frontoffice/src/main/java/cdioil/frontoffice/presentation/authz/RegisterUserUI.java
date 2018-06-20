@@ -20,19 +20,19 @@ public class RegisterUserUI {
     /**
      * Constant that represents the index of the name field
      */
-    private static final int NAME_FIELD_INDEX=2;
+    private static final int NAME_FIELD_INDEX=0;
     /**
      * Constant that represents the index of the phone number field
      */
-    private static final int PHONE_NUMBER_FIELD_INDEX=3;
+    private static final int PHONE_NUMBER_FIELD_INDEX=1;
     /**
      * Constant that represents the index of the location field
      */
-    private static final int LOCATION_FIELD_INDEX=0;
+    private static final int LOCATION_FIELD_INDEX=2;
     /**
      * Constant that represents the index of the birth date field
      */
-    private static final int BIRTH_DATE_FIELD_INDEX=1;
+    private static final int BIRTH_DATE_FIELD_INDEX=3;
     /**
      * Constant that represents the header of the use case
      */
@@ -66,11 +66,11 @@ public class RegisterUserUI {
      * Array Constant with all the obligatory fields used in the registration process
      */
     private static final String[] REGISTRATION_FIELDS={"Email: "
-            ,"Password: ","Name: ","Phone Number:"};
+            ,"Password: "};
     /**
      * Array Constant with all the optional fields used in the registration process
      */
-    private static final String[] OPTIONAL_REGISTRATION_FIELDS={"Location: ","Birth Date: "};
+    private static final String[] OPTIONAL_REGISTRATION_FIELDS={"Nome: ","Nº Telemóvel:","Localidade: ","Data de Nascimento: "};
     /**
      * Current controller
      */
@@ -91,12 +91,6 @@ public class RegisterUserUI {
                         case PASSWORD_FIELD_INDEX:
                             registerUserController.addPassword(Console.readLine(REGISTRATION_FIELDS[i]));
                             break;
-                        case NAME_FIELD_INDEX:
-                            registerUserController.addName(Console.readLine(REGISTRATION_FIELDS[i]));
-                            break;
-                        case PHONE_NUMBER_FIELD_INDEX:
-                            registerUserController.addPhoneNumber(Console.readLine(REGISTRATION_FIELDS[i]));
-                            break;
                     }
                 }catch(IllegalArgumentException|IndexOutOfBoundsException e){
                     Console.logError(e.getMessage());
@@ -109,10 +103,19 @@ public class RegisterUserUI {
             if(verifiyOptionalFields()){
                 for(int i=0;i<OPTIONAL_REGISTRATION_FIELDS.length;i++){
                     try{
-                        if(i==LOCATION_FIELD_INDEX){
-                            registerUserController.addLocation(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
-                        }else if(i==BIRTH_DATE_FIELD_INDEX){
-                            registerUserController.addBirthDate(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));    
+                        switch(i){
+                            case NAME_FIELD_INDEX:
+                                registerUserController.addName(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
+                                break;
+                            case PHONE_NUMBER_FIELD_INDEX:
+                                registerUserController.addPhoneNumber(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
+                                break;
+                            case LOCATION_FIELD_INDEX:
+                                registerUserController.addLocation(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
+                                break;
+                            case BIRTH_DATE_FIELD_INDEX:
+                                registerUserController.addBirthDate(Console.readLine(OPTIONAL_REGISTRATION_FIELDS[i]));
+                                break;
                         }
                     }catch(IllegalArgumentException|DateTimeParseException e){
                         Console.logError(e.getMessage());
