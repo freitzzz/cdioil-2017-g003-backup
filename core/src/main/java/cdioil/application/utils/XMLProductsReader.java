@@ -16,25 +16,14 @@ import java.util.logging.Level;
 import cdioil.files.FileWriter;
 import cdioil.domain.Category;
 import cdioil.domain.Product;
-import cdioil.domain.Code;
-import cdioil.domain.EAN;
 import cdioil.domain.SKU;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -169,12 +158,12 @@ public class XMLProductsReader implements ProductsReader {
     /**
      * Element in XML file that represents the quantity of the product.
      */
-    private static final String PRODUCT_QUANTITY_ELEMENT = "Quantidade";
+    private static final String PRODUCT_QUANTITY_ELEMENT = "quantidade";
 
     /**
      * Element in XML file that represents the unity of the product.
      */
-    private static final String PRODUCT_UNITY_ELEMENT = "Unidade";
+    private static final String PRODUCT_UNITY_ELEMENT = "unidade";
 
     /**
      * Builds an instance of XMLProductsReader, receiving the path of the file to read.

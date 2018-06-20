@@ -5,16 +5,16 @@
  */
 package cdioil.backoffice.application;
 
-import cdioil.application.utils.ProductsReader;
-import cdioil.application.utils.ProductsReaderFactory;
-import cdioil.domain.Category;
-import cdioil.domain.MarketStructure;
-import cdioil.domain.Product;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
+import cdioil.application.utils.ProductsReaderFactory;
+import cdioil.application.utils.ProductsReader;
+import cdioil.domain.MarketStructure;
+import cdioil.domain.Category;
+import cdioil.domain.Product;
+import java.util.Map.Entry;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**

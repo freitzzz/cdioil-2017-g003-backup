@@ -97,6 +97,7 @@ public class ExportTemplateUI {
 
         //2. User chooses the template
         boolean isTemplateIDValid = false;
+        Template template;
 
         while (!isTemplateIDValid) {
             String templateID = Console.readLine(requestSelectTemplate);
@@ -104,7 +105,7 @@ public class ExportTemplateUI {
                 return;
             }
 
-            Template template = ctrl.getChosenTemplate(templateID);
+            template = ctrl.getChosenTemplate(templateID);
             if (template == null) {
                 System.out.println(errorInvalidTemplate);
             } else {
@@ -113,7 +114,6 @@ public class ExportTemplateUI {
         }
 
         boolean isPathValid = false;
-
         while (!isPathValid) {
             //3. Inserts the path of the file
             String filePath = Console.readLine(requestInsertPath);
