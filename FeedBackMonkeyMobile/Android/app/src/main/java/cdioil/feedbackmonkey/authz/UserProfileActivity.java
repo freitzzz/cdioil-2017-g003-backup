@@ -202,7 +202,7 @@ public class UserProfileActivity extends AppCompatActivity {
         for (int i = 0; i < surveyServiceList.size(); i++) {
             bundle.putSerializable("" + i, surveyServiceList.get(i));
         }
-        listSurveyActivityIntent.putExtra(ListSurveyActivity.class.getSimpleName(),bundle);
+        listSurveyActivityIntent.putExtra(ListSurveyActivity.class.getSimpleName(), bundle);
         startActivity(listSurveyActivityIntent);
     }
 
@@ -217,22 +217,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.CAMERA},
                             MY_CAMERA_PERMISSION_CODE);
                 } else {
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                    String imageFileName = timeStamp + ".jpg";
-                    File storageDir = getFilesDir();
-                    File imageDir = new File(storageDir, "images");
-                    if (!imageDir.exists()) {
-                        imageDir.mkdir();
-                    }
-                    File imageFile = new File(imageDir, imageFileName);
-                    try {
-                        imageFile.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    pictureImagePath = imageFile.getAbsolutePath();
-                    Uri outputFileUri = GenericFileProvider.getUriForFile(getApplicationContext(),
-                            "cdioil.feedbackmonkey.utils.GenericFileProvider", imageFile);
+                    Uri outputFileUri = getOutputFileUri();
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
@@ -254,10 +239,37 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Uri outputFileUri = getOutputFileUri();
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         }
+    }
+
+    /**
+     * Saves a file with the profile picture in the app's folder.
+     *
+     * @return Uri of the file
+     */
+    private Uri getOutputFileUri() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = getFilesDir();
+        File imageDir = new File(storageDir, "images");
+        if (!imageDir.exists()) {
+            imageDir.mkdir();
+        }
+        File imageFile = new File(imageDir, imageFileName);
+        try {
+            imageFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        pictureImagePath = imageFile.getAbsolutePath();
+        return GenericFileProvider.getUriForFile(getApplicationContext(),
+                "cdioil.feedbackmonkey.utils.GenericFileProvider", imageFile);
     }
 
     /**
@@ -267,6 +279,7 @@ public class UserProfileActivity extends AppCompatActivity {
      * @param resultCode  result code
      * @param data        intent with the photo
      */
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             File imageFile = new File(pictureImagePath);
