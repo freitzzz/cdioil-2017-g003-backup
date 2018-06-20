@@ -255,7 +255,7 @@ public class UserProfileActivity extends AppCompatActivity {
      */
     private Uri getOutputFileUri() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = timeStamp + ".jpg";
+        String imageFileName = timeStamp + "_PROFILE_PICTURE.jpg";
         File storageDir = getFilesDir();
         File imageDir = new File(storageDir, "images");
         if (!imageDir.exists()) {
