@@ -47,6 +47,11 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Schema file (XSD) used for validating the input file.
      */
     private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY_QUESTIONS);
+
+    /**
+     * Schema file (XSD) used for validating the input file (independent questions).
+     */
+    private static final File SCHEMA_INDEPENDENT_QUESTIONS = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_INDEPENDENT_QUESTIONS);
     /**
      * name of question node in XML file
      */
@@ -109,7 +114,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
-        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
+        if (!ValidatorXML.validateFile(SCHEMA_INDEPENDENT_QUESTIONS, file)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
         Map<String, List<Question>> readQuestions = new HashMap<>();
@@ -128,6 +133,10 @@ public class XMLQuestionsReader implements QuestionsReader {
 
     @Override
     public List<Question> readIndependentQuestions() throws ParserConfigurationException {
+        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
+            throw new InvalidFileFormattingException("Unrecognized file formatting");
+        }
+
         List<Question> independentQuestions = new ArrayList<>();
         try {
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
