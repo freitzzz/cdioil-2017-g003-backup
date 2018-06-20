@@ -162,7 +162,7 @@ public class MainMenu {
                 case 9:
                     new ExportTemplateUI();
                 case 10:
-                    new ImportTemplateUI();
+                    new ImportTemplateUI((Manager) authenticationController.getUser());
                     break;
                 default:
                     System.out.println(errorInvalidOption);

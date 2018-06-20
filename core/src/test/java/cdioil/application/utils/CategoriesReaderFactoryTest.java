@@ -16,10 +16,9 @@ public class CategoriesReaderFactoryTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        File file = new File("test_pass.csv");
         assertEquals(CSVCategoriesReader.class,
-                CategoriesReaderFactory.create(file).getClass());
-        assertNull(CategoriesReaderFactory.create(new File("test_failure.fail")));
+                CategoriesReaderFactory.create("test_pass.csv").getClass());
+        assertNull(CategoriesReaderFactory.create("test_failure.fail"));
     }
     
 }

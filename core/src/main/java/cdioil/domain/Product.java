@@ -1,6 +1,7 @@
 package cdioil.domain;
 
 import cdioil.framework.domain.ddd.AggregateRoot;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,10 +62,9 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     /**
      * Instantiates a new Product with a given name, its SKU and quantity, and 0 or more codes.
      *
-     *
-     * @param name the product's name
-     * @param sku product's stock keeping unit
-     * @param codes 0 or more codes
+     * @param name     the product's name
+     * @param sku      product's stock keeping unit
+     * @param codes    0 or more codes
      * @param quantity quantity
      */
     public Product(String name, SKU sku, String quantity, Code... codes) {
@@ -87,17 +87,21 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     /**
      * Instantiates a new Product with a given name and brand, and 0 or more codes.
      *
-     * @param name Product's name
+     * @param name  Product's name
      * @param brand Product's brand
+     * @param sku   Product's stock keeping unit
      * @param codes 0 or more codes
      */
-    public Product(String name, String brand, Code... codes) {
-        if (name == null || brand == null || name.trim().isEmpty() || brand.trim().isEmpty()) {
+    public Product(String name, String brand, SKU sku, Code... codes) {
+        if (name == null || brand == null || sku == null || name.trim().isEmpty() || brand.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid parameters.");
         }
         this.name = name;
         this.brand = brand;
+        this.sku = sku;
+        this.quantity = "";
         this.codes.addAll(Arrays.asList(codes));
+        this.productImage = new Image(IMAGEM_PRODUTO_DEFAULT.getBytes());
     }
 
     /**
@@ -113,10 +117,8 @@ public class Product extends SurveyItem implements AggregateRoot<SKU> {
     /**
      * Method for changing the Product's current image.
      *
-     *
      * @param imagem Byte Array with the image's content
      * @return boolean true if the Image was altered successfully, false if an error has occured
-     *
      */
     public boolean changeProductImage(byte[] imagem) {
         try {

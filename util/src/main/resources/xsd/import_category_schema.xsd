@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="lista_categorias">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="categoria" type="CategoriaType" maxOccurs="unbounded" minOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="CategoriaType">
+		<xs:sequence>
+			<xs:element name="DC" type="DCUNUBType"/>
+			<xs:element name="UN" type="DCUNUBType"/>
+			<xs:element name="CAT" type="CATType"/>
+		</xs:sequence>
+	</xs:complexType>
+		
+	<!--xs:complexType name="DCType"-->
+	<xs:complexType name="DCUNUBType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute type="xs:integer" name="id"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<!--xs:complexType name="UNType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute type="xs:integer" name="id"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType-->
+	
+	<xs:complexType name="CATType">
+		<xs:sequence>
+			<xs:element name="descritivo_cat" type="xs:string" />
+			<xs:element name="lista_scat" type="ListaSCATType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute type="xs:integer" name="id"/>
+	</xs:complexType>
+	
+	<xs:complexType name="ListaSCATType">
+		<xs:sequence>
+			<xs:element name="SCAT" type="SCATType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="SCATType">
+		<xs:sequence>
+			<xs:element name="descritivo_scat" type="xs:string" />
+			<xs:element name="lista_ub" type="ListaUBType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute type="xs:integer" name="id"/>
+	</xs:complexType>
+	
+	<xs:complexType name="ListaUBType">
+		<xs:sequence>
+			<xs:element name="UB" type="DCUNUBType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+		  
+	<!--xs:complexType name="UBType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute type="xs:integer" name="id"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType-->
+
+</xs:schema>
