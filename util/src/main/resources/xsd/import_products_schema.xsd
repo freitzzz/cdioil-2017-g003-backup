@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
@@ -20,8 +20,10 @@ and open the template in the editor.
         <xs:sequence>
             <xs:element type="TCategoryPath" name="ID"/>
             <xs:element type="TCode" name="COD"/>
-            <xs:element type="xs:string" name="marca"/>
+            <xs:element type="xs:string" name="marca" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:string" name="descritivo"/>
+            <xs:element type="xs:positiveInteger" name="quantidade" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="xs:string" name="unidade" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
     
@@ -33,7 +35,7 @@ and open the template in the editor.
     
     <xs:simpleType name="TCode">
         <xs:restriction base="xs:positiveInteger">
-            <xs:pattern value="\d{13}"/>
+            <xs:pattern value="\d{6,13}"/>
         </xs:restriction>
     </xs:simpleType>    
 </xs:schema>

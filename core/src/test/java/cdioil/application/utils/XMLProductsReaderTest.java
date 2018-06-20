@@ -14,21 +14,21 @@ import java.util.Map;
 import org.junit.Test;
 
 /**
- * Tests of the class CSVProductsReader.
+ * Unit testing class for XMLProductsReader class.
  *
- * @author Ana Guerra (1161191)
+ * @author <a href="1160912@isep.ipp.pt">Rita Gonçalves</a>
  */
-public class CSVProductsReaderTest {
+public class XMLProductsReaderTest {
 
     /**
-     * Test of isFileValid, of class CSVProductsReader.
+     * Test of isFileValid, of class XMLProductsReader.
      */
     @Test(expected = InvalidFileFormattingException.class)
     public void ensureIsFileValidThrowsException() {
 
         Map<Category, List<Product>> map = new HashMap<>();
-        CSVProductsReader reader
-                = new CSVProductsReader("Invalid_Products.csv", map);
+        XMLProductsReader reader
+                = new XMLProductsReader("Invalid_Products.xml", map);
 
         reader.readProducts();
     }
