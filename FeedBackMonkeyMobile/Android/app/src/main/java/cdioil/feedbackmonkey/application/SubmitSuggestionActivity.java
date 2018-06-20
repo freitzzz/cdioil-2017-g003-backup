@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -93,29 +92,14 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
     /**
      * Sets on click listener to add a photo to the suggestion.
      */
-    private void configureSuggestionImageView(){
+    private void configureSuggestionImageView() {
         suggestionPhotoImageView.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.CAMERA},
                             MY_CAMERA_PERMISSION_CODE);
                 } else {
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                    String imageFileName = timeStamp + ".jpg";
-                    File storageDir = getFilesDir();
-                    File imageDir = new File(storageDir,"images");
-                    if(!imageDir.exists()){
-                        imageDir.mkdir();
-                    }
-                    File imageFile = new File(imageDir,imageFileName);
-                    try {
-                        imageFile.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    pictureImagePath = imageFile.getAbsolutePath();
-                    Uri outputFileUri = GenericFileProvider.getUriForFile(getApplicationContext(),
-                            "cdioil.feedbackmonkey.utils.GenericFileProvider",imageFile);
+                    Uri outputFileUri = getOutputFileUri();
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
@@ -137,10 +121,37 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Uri outputFileUri = getOutputFileUri();
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         }
+    }
+
+    /**
+     * Creates a file for the suggestion photo saves it in the app's folder.
+     *
+     * @return Uri of the file
+     */
+    private Uri getOutputFileUri() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = getFilesDir();
+        File imageDir = new File(storageDir, "images");
+        if (!imageDir.exists()) {
+            imageDir.mkdir();
+        }
+        File imageFile = new File(imageDir, imageFileName);
+        try {
+            imageFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        pictureImagePath = imageFile.getAbsolutePath();
+        return GenericFileProvider.getUriForFile(getApplicationContext(),
+                "cdioil.feedbackmonkey.utils.GenericFileProvider", imageFile);
     }
 
     /**
@@ -153,20 +164,20 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             File imageFile = new File(pictureImagePath);
-            if(imageFile.exists()){
+            if (imageFile.exists()) {
                 Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                 try {
                     ExifInterface exifInterface = new ExifInterface(imageFile.getAbsolutePath());
-                    int orientation =  exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                             1);
                     Matrix matrix = new Matrix();
-                    if(orientation == 8){
+                    if (orientation == 8) {
                         matrix.postRotate(270);
-                    }else if(orientation == 6){
+                    } else if (orientation == 6) {
                         matrix.postRotate(90);
                     }
-                    Bitmap rotatedImageBitmap = Bitmap.createBitmap(imageBitmap,0,0,
-                            imageBitmap.getWidth(),imageBitmap.getHeight(),matrix,true);
+                    Bitmap rotatedImageBitmap = Bitmap.createBitmap(imageBitmap, 0, 0,
+                            imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
                     suggestionPhotoImageView.setImageBitmap(rotatedImageBitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -176,32 +187,46 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets on click listener for the button.
-     * TODO Check if the suggestion is for a review or not.
+     * Sets on click listener for the send suggestion button.
      * TODO If a picture was taken, send it to the server.
      */
     private void configureSubmitSuggestionButton() {
         submitSuggestionButton.setOnClickListener(view -> {
-
+            String sentFromActivity = getIntent().getExtras().getString("sentFromActivity");
             String suggestionText = suggestionEditText.getText().toString();
-
             if (suggestionText.trim().isEmpty()) {
                 suggestionEditText.setError("A sugestão não pode ser vazia!");
                 return;
             }
 
-
-            ReviewXMLService xmlService = ReviewXMLService.instance();
-            try {
-                xmlService.saveSuggestion(suggestionEditText.getText().toString());
-            } catch (TransformerException e) {
-                e.printStackTrace();
+            if (sentFromActivity == null) {
+                //Suggestion that is not related to a review
+                if(photoTaken()){
+                    //TODO using the API User Profile Resource, send the suggestion text and the picture
+                }
+            } else if (sentFromActivity.equals(QuestionActivity.class.getSimpleName())) {
+                //Suggestion that is related to a review
+                ReviewXMLService xmlService = ReviewXMLService.instance();
+                try {
+                    xmlService.saveSuggestion(suggestionEditText.getText().toString());
+                    if(photoTaken()){
+                        //TODO Discuss how to add the photo to the suggestion (XML File or sent in a different way)
+                    }
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
             }
 
-//            Intent mainMenuIntent = new Intent(SubmitSuggestionActivity.this, MainMenuActivity.class);
-//            mainMenuIntent.putExtra("authenticationToken", authenticationToken);
-//            startActivity(mainMenuIntent);
             finish();
         });
+    }
+
+    /**
+     * Checks whether a photo was taken to add it to the suggestion.
+     *
+     * @return true if a picture was taken, false if otherwise
+     */
+    private boolean photoTaken(){
+        return pictureImagePath != null;
     }
 }

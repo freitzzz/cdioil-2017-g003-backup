@@ -55,6 +55,11 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
      */
     private int progressMade;
 
+    /**
+     * Creates the current activity
+     *
+     * @param savedInstanceState bundle with the previous state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +80,20 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
     }
 
 
-    private void stopReview(){
-        stopReviewButton.setOnClickListener(view ->{
+    /**
+     * Ends activity.
+     */
+    private void stopReview() {
+        stopReviewButton.setOnClickListener(view -> {
             finish();
         });
     }
 
+    /**
+     * Creates a fragment matching the type of the review's current question.
+     *
+     * @param onBackPressed boolean to know whether user pressed the back button or not
+     */
     private void loadQuestionInfo(boolean onBackPressed) {
         Bundle currentQuestionBundle = ReviewXMLService.instance().getCurrentQuestionBundle();
         questionTextView.setText(currentQuestionBundle.getString("questionText"));
@@ -141,16 +154,13 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
             wantToSubmitSuggestionDialog.setMessage("Quer submeter uma sugestão acerca do item avaliado?");
             wantToSubmitSuggestionDialog.setIcon(R.drawable.ic_info_black_18dp);
             wantToSubmitSuggestionDialog.setPositiveButton("Sim", (dialog, which) -> {
-
                 Intent submitSuggestionIntent = new Intent(QuestionActivity.this, SubmitSuggestionActivity.class);
                 submitSuggestionIntent.putExtra("authenticationToken", authenticationToken);
+                submitSuggestionIntent.putExtra("sentFromActivity", QuestionActivity.class.getSimpleName());
                 startActivity(submitSuggestionIntent);
                 finish();
             });
             wantToSubmitSuggestionDialog.setNegativeButton("Não", (dialog, which) -> {
-//                Intent skipSuggestionIntent = new Intent(QuestionActivity.this, MainMenuActivity.class);
-//                skipSuggestionIntent.putExtra("authenticationToken", authenticationToken);
-//                startActivity(skipSuggestionIntent);
                 finish();
             });
             final AlertDialog alertDialog = wantToSubmitSuggestionDialog.create();
@@ -162,6 +172,12 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         });
     }
 
+    /**
+     * Method that controls the flow of the review, saving the answer that was given by the user to
+     * the current question and fetching the next question.
+     *
+     * @param answer answer being provided
+     */
     @Override
     public void onQuestionAnswered(String answer) {
         try {
@@ -180,6 +196,10 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         }
     }
 
+    /**
+     * Method that undoes an answer given by the user and returns to the previous question of the
+     * review.
+     */
     @Override
     public void onBackPressed() {
         try {
