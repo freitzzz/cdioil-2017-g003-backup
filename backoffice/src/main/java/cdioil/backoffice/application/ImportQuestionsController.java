@@ -9,6 +9,8 @@ import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.HashSet;
 
 import java.util.Map;
@@ -111,7 +113,7 @@ public class ImportQuestionsController {
      * @param filename Name of the file
      * @return number of successfully imported questions
      */
-    public Integer importIndependentQuestions(String filename) throws ParserConfigurationException {
+    public Integer importIndependentQuestions(String filename) throws ParserConfigurationException, IOException, TransformerException {
 
         Integer numImportedQuestions = 0;
 

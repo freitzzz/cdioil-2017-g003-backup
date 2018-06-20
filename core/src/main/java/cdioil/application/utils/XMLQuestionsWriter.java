@@ -27,7 +27,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Exports a Template to a .xml file.
+ * Exports a Questions to a .xml file.
  *
  * @author João
  */

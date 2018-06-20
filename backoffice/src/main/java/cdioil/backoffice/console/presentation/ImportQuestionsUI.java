@@ -7,6 +7,9 @@ import cdioil.console.Console;
 import cdioil.domain.authz.Manager;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 
 /**
  * User Interface for use cases US-205 (import independent questions from file) and US-210 (import category questions from file).
@@ -109,7 +112,7 @@ public class ImportQuestionsUI {
                 } else if (fileType == INDEPENDENT_QUESTIONS_FILE_TYPE) {
                     try {
                         numImportedQuestions = controller.importIndependentQuestions(fileName);
-                    } catch (ParserConfigurationException exception) {
+                    } catch (ParserConfigurationException |IOException | TransformerException exception) {
                         System.out.println(errorWrongFileConfiguration);
                     }
                 }
