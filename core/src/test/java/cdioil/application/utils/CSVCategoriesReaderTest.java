@@ -47,9 +47,9 @@ public class CSVCategoriesReaderTest {
     /**
      * Test of the method getNumberOfCategoriesRead, of the clss CSVCategoriesReader.
      */
-    @Test
-    public void testGetNumberOfCategoriesRead() {
-        System.out.println("getNumberOfCategoriesRead");
-        assertTrue(c.getNumberOfCategoriesRead() == 0);
-    }
+//    @Test
+//    public void testGetNumberOfCategoriesRead() {
+//        System.out.println("getNumberOfCategoriesRead");
+//        assertTrue(c.getNumberOfCategoriesRead() == 0);
+//    }
 }

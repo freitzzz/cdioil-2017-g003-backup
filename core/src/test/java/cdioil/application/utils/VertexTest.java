@@ -110,12 +110,7 @@ public class VertexTest {
         Question q1 = new BinaryQuestion("This is a yes/no question", "A143");
         Vertex v1 = new Vertex(q1);
 
-        Question q2 = new BinaryQuestion("This is a yes/no question too", "A144");
-        Vertex v2 = new Vertex(q2);
-
-        Edge edge = new Edge(new BinaryQuestionOption(Boolean.FALSE), 0.0, v1, v2);
-
-        assertNull(v1.getAdjacentVertex(edge));
+        assertNull(v1.getAdjacentVertex(new BinaryQuestionOption(Boolean.FALSE)));
     }
 
     @Test
@@ -131,9 +126,7 @@ public class VertexTest {
 
         v1.addAdjacentVertex(edge, q2);
 
-        Edge fakeEdge = new Edge(new BinaryQuestionOption(Boolean.TRUE), 0.0, v1, v2);
-
-        assertNull(v1.getAdjacentVertex(fakeEdge));
+        assertNull(v1.getAdjacentVertex(new BinaryQuestionOption(Boolean.TRUE)));
     }
 
     @Test
@@ -149,7 +142,7 @@ public class VertexTest {
 
         v1.addAdjacentVertex(edge, q2);
 
-        assertEquals(q2, v1.getAdjacentVertex(edge));
+        assertEquals(q2, v1.getAdjacentVertex(new BinaryQuestionOption(Boolean.FALSE)));
 
         Question q3 = new BinaryQuestion("Yet another question", "A51");
         Vertex v3 = new Vertex(q3);
@@ -157,7 +150,7 @@ public class VertexTest {
 
         v1.addAdjacentVertex(edge, q3);
 
-        assertEquals(q3, v1.getAdjacentVertex(edge));
+        assertEquals(q3, v1.getAdjacentVertex(new BinaryQuestionOption(Boolean.FALSE)));
     }
 
     @Test

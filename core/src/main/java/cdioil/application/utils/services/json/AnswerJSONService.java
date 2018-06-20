@@ -28,4 +28,11 @@ public final class AnswerJSONService {
         this.answer=answer.getContent();
         this.type=answer.getClass().getSimpleName();
     }
+    /**
+     * Returns the answer's content
+     * @return String with the answer's content
+     */
+    public String getAnswer(){
+        return answer;
+    }
 }

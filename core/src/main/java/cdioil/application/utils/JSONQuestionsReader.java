@@ -119,7 +119,7 @@ public class JSONQuestionsReader implements QuestionsReader {
             xmlEventWriter.close();
             input.close();
 
-            FileWriter.writeFile(new File("caminho"), output.getBuffer().toString());
+            FileWriter.writeFile(new File(OUTPUT_FILE_PATH), output.getBuffer().toString());
 
         } catch (XMLStreamException | IOException ex) {
             Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);

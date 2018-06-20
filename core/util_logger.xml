@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-06-20T10:44:58</date>
+  <millis>1529487898865</millis>
+  <sequence>2</sequence>
+  <level>SEVERE</level>
+  <thread>1</thread>
+  <message>schema_reference.4: Failed to read schema document 'file:/C:/Users/Joana/Documents/ISEP/2%20Semestre/CDIO-IL/CDIOIL/core/file:/C:/Users/Joana/Documents/ISEP/2%20Semestre/CDIO-IL/CDIOIL/util/target/util-7.0-SNAPSHOT.jar!/xsd/import_category_questions_schema.xsd', because 1) could not find the document; 2) the document could not be read; 3) the root element of the document is not &lt;xsd:schema&gt;.</message>
+</record>
+</log>

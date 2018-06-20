@@ -1,6 +1,8 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.application.authz.AuthenticationController;
+import cdioil.application.utils.services.json.AnswerJSONService;
+import cdioil.application.utils.services.json.QuestionJSONService;
 import cdioil.domain.Answer;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
@@ -17,10 +19,11 @@ import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -132,12 +135,14 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (userReviews == null || userReviews.isEmpty()) {
             createNoReviewsFoundResponse();
         }
+
         for (Review userReview : userReviews) {
             if (userReview.getSurvey().equals(survey) && userReview.isFinished()) {
                 return Response.status(Status.OK).
-                        entity(new Gson().toJson(new ReviewJSONService(
-                                buildAnswerMap(userReview.getReviewQuestionAnswers()))
-                                .getQuestionAnswerMap())).build();
+                        entity(new GsonBuilder()
+                                .enableComplexMapKeySerialization().create()
+                                .toJson(new ReviewJSONService(userReview.getReviewQuestionAnswers(),
+                                        userReview.getSuggestion()))).build();
             }
         }
 
@@ -306,19 +311,5 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         return Response.status(Response.Status.NOT_FOUND)
                 .entity(JSON_REVIEWS_NOT_FOUND)
                 .build();
-    }
-
-    /**
-     * Builds a Map<Question,Answer> to a Map<String,String>
-     * @param reviewQuestionAnswers question answer map of a review
-     * 
-     * @return question answer map using Strings
-     */
-    private Map<String, String> buildAnswerMap(Map<Question, Answer> reviewQuestionAnswers) {
-       Map<String,String> answerStringMap = new HashMap<>();
-       reviewQuestionAnswers.entrySet().forEach((entry) -> {
-           answerStringMap.put(entry.getKey().getQuestionText(), entry.getValue().getContent());
-        });
-       return answerStringMap;
     }
 }

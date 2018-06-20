@@ -1,6 +1,7 @@
 package cdioil.application.utils;
 
 import cdioil.domain.Question;
+import cdioil.domain.QuestionOption;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -22,13 +23,13 @@ import javax.persistence.Version;
  * @author António Sousa [1161371]
  */
 @Entity
-@SequenceGenerator(name = "vertexSeq",initialValue = 1,allocationSize = 1)
+@SequenceGenerator(name = "vertexSeq", initialValue = 1, allocationSize = 1)
 public class Vertex implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "vertexSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vertexSeq")
     private long id;
 
     @Version
@@ -108,14 +109,16 @@ public class Vertex implements Serializable {
     /**
      * Retrieves an adjacent <code>Vertex</code> with a given <code>Edge</code>.
      *
-     * @param edge <code>Edge</code> connecting the two vertices.
+     * @param option <code>QuestionOption</code> contained in the
+     * <code>Edge</code> connecting this <code>Vertex</code> to the other
+     * <code>Vertex</code>
      * @return the element within the <code>Vertex</code> being connected with
      * the given <code>Edge</code>.
      */
-    public Question getAdjacentVertex(Edge edge) {
+    public Question getAdjacentVertex(QuestionOption option) {
 
         for (EdgeQuestion edgeQuestion : outgoingEdgeQuestions) {
-            if (edgeQuestion.getEdge().equals(edge)) {
+            if (edgeQuestion.getEdge().getElement().equals(option)) {
                 return edgeQuestion.getOutgoingQuestion();
             }
         }

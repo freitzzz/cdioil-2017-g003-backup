@@ -255,6 +255,25 @@ public class Graph implements Serializable {
     }
 
     /**
+     * Retrieves a <code>Question</code> adjacent to the given
+     * <code>Question</code> connected by the given
+     * <code>QuestionOption</code>.
+     *
+     * @param question Question adjacent to the returned Question 
+     * @param option QuestionOption connecting the two Questions
+     * @return Question adjacent to the given Question connected by the given
+     * QuestionOption
+     */
+    public Question adjacentQuestion(Question question, QuestionOption option) {
+
+        if (!vertexExists(firstQuestion)) {
+            return null;
+        }
+
+        return vertices.get(question).getAdjacentVertex(option);
+    }
+
+    /**
      * Returns all of the incoming edges of a Vertex containing the given
      * element.
      *
