@@ -38,7 +38,7 @@ Purpose of transformation follows.
 		<xsl:value-of select = "$NEW_LINE"/>
 		<xsl:text>Question ID</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:text>Question Text</xsl:text><xsl:value-of select = "$SEPARATOR"/>
-		<xsl:text>Tottal Answers</xsl:text><xsl:value-of select = "$SEPARATOR"/>
+		<xsl:text>Total Answers</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:text>Average</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:text>Standard Deviation</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:value-of select = "$NEW_LINE"/>
@@ -59,10 +59,9 @@ Purpose of transformation follows.
         <xsl:value-of select="$NEW_LINE"/>
 		<xsl:text>Quantitative Questions</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:value-of select = "$NEW_LINE"/>
-		<xsl:text>ID Questao</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:text>Question ID</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:text>Question Text</xsl:text><xsl:value-of select = "$SEPARATOR"/>
-		<xsl:text>Tottal Answers</xsl:text><xsl:value-of select = "$SEPARATOR"/>
+		<xsl:text>Total Answers</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:text>Average</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:text>Standard Deviation</xsl:text><xsl:value-of select = "$SEPARATOR"/>
 		<xsl:value-of select = "$NEW_LINE"/>

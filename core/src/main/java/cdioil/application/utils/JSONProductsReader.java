@@ -54,6 +54,11 @@ public class JSONProductsReader implements ProductsReader {
         this.repeatedProducts = repeatedProducts;
     }
 
+    /**
+     * Imports products from a JSON file, by converting it into a XML file.
+     *
+     * @return a map with the categories as keys and their products as values
+     */
     @Override
     public Map<Category, List<Product>> readProducts() {
         InputStream input = null;
@@ -67,23 +72,24 @@ public class JSONProductsReader implements ProductsReader {
             XMLEventReader reader = new JsonXMLInputFactory(config).createXMLEventReader(input);
             //XML writer
             XMLEventWriter writer = XMLOutputFactory.newInstance().createXMLEventWriter(output);
-            
+
             //Format output
             writer = new PrettyXMLEventWriter(writer);
-            
+
             //Copy reader to writer
             writer.add(reader);
-            
+
             reader.close();
             writer.close();
             input.close();
+            output.close();
             
             //Write XML content to file
             FileWriter.writeFile(new File(JSON_FILE_PATH), output.getBuffer().toString());
         } catch (IOException | XMLStreamException ex) {
             Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            if(input != null){
+        } finally {
+            if (input != null) {
                 try {
                     input.close();
                 } catch (IOException ex) {

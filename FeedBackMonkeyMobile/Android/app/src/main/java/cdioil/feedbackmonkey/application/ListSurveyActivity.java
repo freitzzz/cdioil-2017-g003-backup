@@ -114,10 +114,10 @@ public class ListSurveyActivity extends AppCompatActivity {
      */
     private void configureActivityStart(Bundle bundle){
         authenticationToken=bundle.getString("authenticationToken");
+        configureUserProfileBundle(bundle);
         int surveysToAdd=bundle.size()-1;
         System.out.println(surveysToAdd);
         currentSurveys=new ArrayList<>(surveysToAdd);
-        configureUserProfileBundle(bundle);
         for(int i=0;i<surveysToAdd;i++)currentSurveys.add((SurveyService)bundle.getSerializable(""+i));
         System.out.println(currentSurveys);
         currentPaginationID++;
@@ -131,6 +131,7 @@ public class ListSurveyActivity extends AppCompatActivity {
         String flag = bundle.getString("sentFromProfileActivity");
         if(flag != null && flag.equals(UserProfileActivity.class.getSimpleName())){
             userProfileActivityFlag = true;
+            bundle.remove("sentFromProfileActivity");
         }
     }
 

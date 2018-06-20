@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.xml.transform.OutputKeys;
 
 /**
  * Class used for importing Questions from a file with the .csv extension.
@@ -142,11 +143,10 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final String OUTPUT_FILE_PATH = "independent_questions_output_file_from_csv.xml";
 
-
     /**
-     * Creates an instance of CSVQuestionsReader, receiving the name of the file to read.
      * Creates an instance of CSVQuestionsReader, receiving the name of the file
-     * to read.
+     * to read. Creates an instance of CSVQuestionsReader, receiving the name of
+     * the file to read.
      *
      * @param filename Name of the file to read
      */
@@ -271,7 +271,7 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Reads a binary question from a CSV file.
      *
      * @param currentLine the line currently being read in the file
-     * @param offset      number of cells skipped to reach the start of a question
+     * @param offset number of cells skipped to reach the start of a question
      * @return binary question
      */
     private Question readBinaryQuestion(String[] currentLine, int offset) {
@@ -286,7 +286,7 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Reads a quantitative question from a CSV file.
      *
      * @param currentLine the line currently being read in the file
-     * @param offset      number of cells skipped to reach the start of a question
+     * @param offset number of cells skipped to reach the start of a question
      * @return quantitative question
      */
     private Question readQuantitativeQuestion(String[] currentLine, int offset) {
@@ -316,10 +316,12 @@ public class CSVQuestionsReader implements QuestionsReader {
      * and so some lines need to be skipped.
      *
      * @param currentLine line currently being read
-     * @param offset      number of cells skipped to reach the start of the question
+     * @param offset number of cells skipped to reach the start of the question
      * @param fileContent all of the file's lines
-     * @param currentIdx  index of the line currently being read
-     * @return an array of <code>Object</code> with two positions, where the first contains an updated value of the current line index, and the second contains an instance of <code>MultipleChoiceQuestion</code>.
+     * @param currentIdx index of the line currently being read
+     * @return an array of <code>Object</code> with two positions, where the
+     * first contains an updated value of the current line index, and the second
+     * contains an instance of <code>MultipleChoiceQuestion</code>.
      * @param currentIdx index of the line currently being read
      * @return an array of <code>Object</code> with two positions, where the
      * first contains an updated value of the current line index, and the second
@@ -430,117 +432,128 @@ public class CSVQuestionsReader implements QuestionsReader {
 //        }
 //        return independentQuestions;
 ////        return newlyImportedQuestions;
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
+        Document xmlFile = documentBuilder.newDocument();
 
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Element rootElement = xmlFile.createElement("lista_questoes");
+        xmlFile.appendChild(rootElement);
 
+        //csv reader
+        BufferedReader csvReader = new BufferedReader(new FileReader(fileName));
 
-            Document xmlFile = documentBuilder.newDocument();
+        //First line in the csv file has the fields
+        String[] csvFields = null;
+        String[] csvValues;
 
-            Element rootElement = xmlFile.createElement("lista_questoes");
-            xmlFile.appendChild(rootElement);
+        String csvLine = csvReader.readLine();
+        if (csvLine != null) {
+            csvFields = csvLine.split(";", -1); // By putting -1 or 0 is as if it doesn't have limit
+        }
 
-            //csv reader
-            BufferedReader csvReader = new BufferedReader(new FileReader(fileName));
+        int count;
 
-            //First line in the csv file has the fields
-            String[] csvFields = null;
-            String[] csvValues;
+        String questionIDMultipleChoice = "";
+        Element multipleChoiceQuestion = null;
+        int multipleChoiceQuestionsCount = 0;
+        while ((csvLine = csvReader.readLine()) != null) {
+            Element question = xmlFile.createElement("question"); //<--------------------------
+            String questionID = "";
+            String questionType = "";
+            String text = "";
+            String parameters = "";
+            String maxValue = "";
 
-            String csvLine = csvReader.readLine();
-            if (csvLine != null) {
-                csvFields = csvLine.split(";", -1); // By putting -1 or 0 is as if it doesn't have limit
-            }
+            csvValues = csvLine.split(";", -1);
 
-            int count;
-            while ((csvLine = csvReader.readLine()) != null) {
-                Element question = xmlFile.createElement("question"); //<--------------------------
-                String questionID = null;
-                String questionIDMultipleChoice = null;
-                String questionType = null;
-                String text = null;
-                String parameters = null;
-                String maxValue = null;
-
-                csvValues = csvLine.split(";", -1);
-                Element multipleChoiceQuestion = null;
-                int multipleChoiceQuestionsCount = 0;
-
-                for (int i = 0; i < csvValues.length; i++) {
-                    if (csvFields[i].equalsIgnoreCase("questaoID")) {
-                        questionID = csvValues[i];
-                    } else if (csvFields[i].equalsIgnoreCase("Tipo")) {
-                        questionType = csvValues[i];
-                    } else if (csvFields[i].equalsIgnoreCase("Texto")) {
-                        text = csvValues[i];
-                    } else if (csvFields[i].equalsIgnoreCase("Parametros")) {
-                        parameters = csvValues[i];
-                    } else if (i == maxValue.length() - 1) {
-                        maxValue = csvValues[i];
-                    }
-
+            for (int i = 0; i < csvFields.length; i++) {
+                if (csvFields[i].equalsIgnoreCase("questaoID")) {
+                    questionID = csvValues[i];
+                } else if (csvFields[i].equalsIgnoreCase("Tipo")) {
+                    questionType = csvValues[i];
+                } else if (csvFields[i].equalsIgnoreCase("Texto")) {
+                    text = csvValues[i];
+                } else if (csvFields[i].equalsIgnoreCase("Parametros")) {
+                    parameters = csvValues[i];
                 }
 
-                if (questionType.equalsIgnoreCase(SN_QUESTION)) {
-                    Element binaryQuestion = xmlFile.createElement("BinaryQuestion");
-                    binaryQuestion.setAttribute("questionID", questionID);
-                    Element elementText = xmlFile.createElement("Text");
-                    elementText.appendChild(xmlFile.createTextNode(text));
-                    binaryQuestion.appendChild(question);
+                if (csvValues.length > csvFields.length) {
+                    maxValue = csvValues[csvValues.length - 1];
+                }
 
-                } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
-                    Element quantitativeQuestion = xmlFile.createElement("QuantitativeQuestion");
-                    quantitativeQuestion.setAttribute("questionID", questionID);
-                    Element elementText = xmlFile.createElement("Text");
-                    elementText.appendChild(xmlFile.createTextNode(text));
-                    Element minValueElement = xmlFile.createElement("scaleMinValue");
-                    minValueElement.appendChild(xmlFile.createTextNode(parameters.substring(parameters.length() - 2)));
-                    Element maxValue1Element = xmlFile.createElement("scaleMaxValue");
-                    maxValue1Element.appendChild(xmlFile.createTextNode(maxValue.substring(maxValue.length() - 2)));
-                    quantitativeQuestion.appendChild(question);
-                } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
-                    if (questionIDMultipleChoice.equalsIgnoreCase(questionID)) {
-                        multipleChoiceQuestionsCount++;
-                    } else {
-                        questionIDMultipleChoice = questionID;
-                        multipleChoiceQuestionsCount = 0;
-                        multipleChoiceQuestion = xmlFile.createElement("MultipleChoiceQuestion");
-                        multipleChoiceQuestion.setAttribute("questionID", questionID);
-                        Element elementText = xmlFile.createElement("Text");
-                        elementText.appendChild(xmlFile.createTextNode(text));
-                    }
+            }
+
+            if (questionType.equalsIgnoreCase(SN_QUESTION)) {
+                Element binaryQuestion = xmlFile.createElement("BinaryQuestion");
+                binaryQuestion.setAttribute("questionID", questionID);
+                Element elementText = xmlFile.createElement("Text");
+                elementText.setTextContent(text);
+                binaryQuestion.appendChild(elementText);
+                question.appendChild(binaryQuestion);
+                rootElement.appendChild(question);
+
+            } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
+                Element quantitativeQuestion = xmlFile.createElement("QuantitativeQuestion");
+                quantitativeQuestion.setAttribute("questionID", questionID);
+                Element elementText = xmlFile.createElement("Text");
+                elementText.setTextContent(text);
+                quantitativeQuestion.appendChild(elementText);
+                Element minValueElement = xmlFile.createElement("scaleMinValue");
+                minValueElement.setTextContent(parameters.substring(parameters.indexOf("=") + 1));
+                quantitativeQuestion.appendChild(minValueElement);
+                Element maxValueElement = xmlFile.createElement("scaleMaxValue");
+                maxValueElement.setTextContent(maxValue.substring(maxValue.indexOf("=") + 1, maxValue.indexOf("\"")));
+                quantitativeQuestion.appendChild(maxValueElement);
+                question.appendChild(quantitativeQuestion);
+                rootElement.appendChild(question);
+            } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
+                if (multipleChoiceQuestion != null) {
+                    questionIDMultipleChoice = questionID;
+                }
+                if (questionIDMultipleChoice.equalsIgnoreCase(questionID)) {
+                    multipleChoiceQuestionsCount++;
                     Element option = xmlFile.createElement("Option");
                     option.setAttribute("num", multipleChoiceQuestionsCount + "");
                     option.setAttribute("text", text);
-
-                }
-
-                if (!questionIDMultipleChoice.equalsIgnoreCase(questionID) && multipleChoiceQuestion != null) {
-                    multipleChoiceQuestion.appendChild(question);
+                    multipleChoiceQuestion.appendChild(option);
+                } else {
+                    multipleChoiceQuestionsCount = 0;
+                    multipleChoiceQuestion = xmlFile.createElement("MultipleChoiceQuestion");
+                    question.appendChild(multipleChoiceQuestion);
+                    multipleChoiceQuestion.setAttribute("questionID", questionID);
+                    Element elementText = xmlFile.createElement("Text");
+                    elementText.setTextContent(text);
+                    multipleChoiceQuestion.appendChild(elementText);
+                    rootElement.appendChild(question);
                 }
             }
+        }
 
         FileWriter fileWriter = new FileWriter(new File(OUTPUT_FILE_PATH));
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
         DOMSource source = new DOMSource(xmlFile);
         StreamResult result = new StreamResult(fileWriter);
-
         transformer.transform(source, result);
 
         fileWriter.flush();
 
-        return null;
+        XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(OUTPUT_FILE_PATH);
+        return xmlQuestionsReader.readIndependentQuestions();
+
     }
 
     /**
-     * Checks if the content of the file is valid - not null and has all the expected identifiers properly split.
-     * // --- GOOD ---
      * Checks if the content of the file is valid - not null and has all the
-     * expected identifiers properly split.
+     * expected identifiers properly split. // --- GOOD --- Checks if the
+     * content of the file is valid - not null and has all the expected
+     * identifiers properly split.
      *
      * @param fileContent All the lines of the file
      * @return true, if the content is valid. Otherwise, returns false
@@ -560,6 +573,5 @@ public class CSVQuestionsReader implements QuestionsReader {
                 && line[2].equalsIgnoreCase(QUESTION_IDENTIFIER)
                 && line[3].equalsIgnoreCase(PARAMETER_IDENTIFIER));
     }
-
 
 }
