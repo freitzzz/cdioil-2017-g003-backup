@@ -126,7 +126,7 @@ public class SurveyComponent extends DefaultPanelView {
         });
 
         menuItem.addItem("Templates", VaadinIcons.BOOKMARK, command -> {
-            //TODO
+            UI.getCurrent().addWindow(new TemplateManagementWindow(authenticationController));
         });
 
         return settingsMenuBar;
