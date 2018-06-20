@@ -37,6 +37,10 @@ public final class SurveyServiceController {
      */
     private static final String USER_AVAILABLE_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys", "Available User Surveys");
     /**
+     * Constant that represents the user answered surveys resource path under survey resource
+     */
+    private static final String USER_ANSWERED_SURVEYS_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Surveys","User Answered Surveys");
+    /**
      * String with the current user authentication token
      */
     private final String authenticationToken;
@@ -81,6 +85,24 @@ public final class SurveyServiceController {
                         .concat(authenticationToken)
                         .concat("?paginationID="+(paginationID)))
                 .GET();
+        return getSurveysByResponse(response);
+    }
+
+    /**
+     * Method that returns the surveys a user has fully answered (which means their reviews are in a
+     * finished state) with a certain pagination ID
+     * @param paginationID Short with the surveys pagination ID
+     * @return List with all the surveys a user has fully answered
+     * @throws IOException Throws {@link IOException} if an error occurred during the surveys retrieval
+     */
+    public List<SurveyService> getUserAnsweredSurveys(short paginationID) throws IOException{
+        Response response = RESTRequest.create(BuildConfig.SERVER_URL
+                            .concat(FeedbackMonkeyAPI.getAPIEntryPoint()
+                                    .concat(SURVEYS_RESOURCE_PATH)
+                                    .concat(USER_ANSWERED_SURVEYS_RESOURCE_PATH)
+                                    .concat(authenticationToken)
+                                    .concat("?paginationID="+(paginationID)))).
+                GET();
         return getSurveysByResponse(response);
     }
 
