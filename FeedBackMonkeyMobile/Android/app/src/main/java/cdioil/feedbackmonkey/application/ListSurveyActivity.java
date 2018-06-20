@@ -117,11 +117,16 @@ public class ListSurveyActivity extends AppCompatActivity {
         int surveysToAdd=bundle.size()-1;
         System.out.println(surveysToAdd);
         currentSurveys=new ArrayList<>(surveysToAdd);
+        configureUserProfileBundle(bundle);
         for(int i=0;i<surveysToAdd;i++)currentSurveys.add((SurveyService)bundle.getSerializable(""+i));
         System.out.println(currentSurveys);
         currentPaginationID++;
     }
 
+    /**
+     * Sets a flag if this activity was started by UserProfileActivity
+     * @param bundle Bundle that was passed by another activity
+     */
     private void configureUserProfileBundle(Bundle bundle){
         String flag = bundle.getString("sentFromProfileActivity");
         if(flag != null && flag.equals(UserProfileActivity.class.getSimpleName())){
