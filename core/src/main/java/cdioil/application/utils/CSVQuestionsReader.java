@@ -132,7 +132,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     /**
      * String with the path of the file converted from csv to XML
      */
-    private static final String OUTPUT_FILE_PATH = "independent_questions_output_file.xml";
+    private static final String OUTPUT_FILE_PATH = "independent_questions_output_file_from_csv.xml";
 
 
     /**
