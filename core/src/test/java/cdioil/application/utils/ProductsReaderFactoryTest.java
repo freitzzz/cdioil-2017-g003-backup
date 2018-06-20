@@ -38,7 +38,7 @@ public class ProductsReaderFactoryTest {
     @Test
     public void testCreateJSONFileWorks() {
         System.out.println("create JSON file");
-        assertEquals(XMLProductsReader.class,
+        assertEquals(JSONProductsReader.class,
                 ProductsReaderFactory.create("test_pass.json", new HashMap<>()).getClass());
     }
 
