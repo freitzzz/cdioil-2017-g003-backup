@@ -661,6 +661,70 @@ public class GraphTest {
     }
 
     @Test
+    public void ensureAdjacentQuestionReturnsNullIfVertexHasNotBeenInserted() {
+
+        Graph g = new Graph();
+
+        Question question = new BinaryQuestion("This is a yes/no question", "A424");
+
+        assertNull(g.adjacentQuestion(question, question.getOptionList().get(0)));
+    }
+
+    @Test
+    public void ensureAdjacentQuestionReturnsNullIfQuestionIsNull() {
+
+        Graph g = new Graph();
+
+        Question question = new BinaryQuestion("This is a yes/no question", "A424");
+
+        assertNull(g.adjacentQuestion(question, question.getOptionList().get(0)));
+    }
+
+    @Test
+    public void ensureAdjacentQuestionReturnsNullIfOptionIsNull() {
+
+        Graph g = new Graph();
+
+        Question question = new BinaryQuestion("This is a yes/no question", "A424");
+
+        assertNull(g.adjacentQuestion(question, null));
+    }
+
+    @Test
+    public void ensureAdjacentQuestionReturnsNullIfNoMatchingOptionConnectsToAVertex() {
+
+        Graph g = new Graph();
+
+        Question question = new BinaryQuestion("This is a yes/no question", "A424");
+
+        Question nextQuestion = new BinaryQuestion("This is yet another yes/no question", "A123");
+
+        g.insertEdge(question, nextQuestion, question.getOptionList().get(1), 0);
+
+        assertNull(g.adjacentQuestion(question, question.getOptionList().get(0)));
+    }
+
+    @Test
+    public void ensureAdjacentQuestionReturnsCorrectQuestion() {
+
+        Graph g = new Graph();
+
+        Question question = new BinaryQuestion("This is a yes/no question", "A424");
+
+        Question nextQuestion = new BinaryQuestion("This is yet another yes/no question", "A123");
+
+        Question anotherQuestion = new BinaryQuestion("This s a completely different question", "A1243");
+
+        g.insertEdge(question, anotherQuestion, question.getOptionList().get(0), 0);
+        g.insertEdge(question, nextQuestion, question.getOptionList().get(1), 0);
+        
+        Question result = g.adjacentQuestion(question, question.getOptionList().get(0));
+        
+        assertEquals(result, anotherQuestion);
+        assertNotEquals(result, nextQuestion);
+    }
+
+    @Test
     public void ensureRemoveEdgesReturnsFalseIfNeitherOfTheElementsHaveBeenInserted() {
 
         Graph g = new Graph();

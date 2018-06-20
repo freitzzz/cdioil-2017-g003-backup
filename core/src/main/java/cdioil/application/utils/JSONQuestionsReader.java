@@ -103,13 +103,14 @@ public class JSONQuestionsReader implements QuestionsReader {
 
         try {
             input = new FileInputStream(file);
-            StringWriter output = new StringWriter();
+            File outFile = new File(OUTPUT_FILE_PATH);
+            OutputStream output = new FileOutputStream(outFile);
 
             JsonXMLConfig jsonXMLConfig = new JsonXMLConfigBuilder().multiplePI(false).build();
 
             XMLEventReader xmlEventReader = new JsonXMLInputFactory(jsonXMLConfig).createXMLEventReader(input);
 
-            XMLEventWriter xmlEventWriter = XMLOutputFactory.newInstance().createXMLEventWriter(output);
+            XMLEventWriter xmlEventWriter = XMLOutputFactory.newInstance().createXMLEventWriter(output, "UTF-8");
 
             xmlEventWriter = new PrettyXMLEventWriter(xmlEventWriter);
 
@@ -118,8 +119,6 @@ public class JSONQuestionsReader implements QuestionsReader {
             xmlEventReader.close();
             xmlEventWriter.close();
             input.close();
-
-            FileWriter.writeFile(new File(OUTPUT_FILE_PATH), output.getBuffer().toString());
 
         } catch (XMLStreamException | IOException ex) {
             Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
