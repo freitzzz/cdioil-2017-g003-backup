@@ -528,12 +528,14 @@ public class CSVQuestionsReader implements QuestionsReader {
 
         DOMSource source = new DOMSource(xmlFile);
         StreamResult result = new StreamResult(fileWriter);
-
+        new StreamResult(System.out);
         transformer.transform(source, result);
 
         fileWriter.flush();
 
-        return null;
+        XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(OUTPUT_FILE_PATH);
+        return xmlQuestionsReader.readIndependentQuestions();
+
     }
 
     /**
