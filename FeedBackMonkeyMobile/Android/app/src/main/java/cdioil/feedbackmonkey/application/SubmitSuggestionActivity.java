@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -188,32 +187,46 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets on click listener for the button.
-     * TODO Check if the suggestion is for a review or not.
+     * Sets on click listener for the send suggestion button.
      * TODO If a picture was taken, send it to the server.
      */
     private void configureSubmitSuggestionButton() {
         submitSuggestionButton.setOnClickListener(view -> {
-
+            String sentFromActivity = getIntent().getExtras().getString("sentFromActivity");
             String suggestionText = suggestionEditText.getText().toString();
-
             if (suggestionText.trim().isEmpty()) {
                 suggestionEditText.setError("A sugestão não pode ser vazia!");
                 return;
             }
 
-
-            ReviewXMLService xmlService = ReviewXMLService.instance();
-            try {
-                xmlService.saveSuggestion(suggestionEditText.getText().toString());
-            } catch (TransformerException e) {
-                e.printStackTrace();
+            if (sentFromActivity == null) {
+                //Suggestion that is not related to a review
+                if(photoTaken()){
+                    //TODO using the API User Profile Resource, send the suggestion text and the picture
+                }
+            } else if (sentFromActivity.equals(QuestionActivity.class.getSimpleName())) {
+                //Suggestion that is related to a review
+                ReviewXMLService xmlService = ReviewXMLService.instance();
+                try {
+                    xmlService.saveSuggestion(suggestionEditText.getText().toString());
+                    if(photoTaken()){
+                        //TODO Discuss how to add the photo to the suggestion (XML File or sent in a different way)
+                    }
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
             }
 
-//            Intent mainMenuIntent = new Intent(SubmitSuggestionActivity.this, MainMenuActivity.class);
-//            mainMenuIntent.putExtra("authenticationToken", authenticationToken);
-//            startActivity(mainMenuIntent);
             finish();
         });
+    }
+
+    /**
+     * Checks whether a photo was taken to add it to the suggestion.
+     *
+     * @return true if a picture was taken, false if otherwise
+     */
+    private boolean photoTaken(){
+        return pictureImagePath != null;
     }
 }
