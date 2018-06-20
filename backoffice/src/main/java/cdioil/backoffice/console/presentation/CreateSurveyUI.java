@@ -41,7 +41,7 @@ public class CreateSurveyUI {
     }
 
     private void independentQuestions(SurveyItem surveyItem, HashMap<SurveyItem, List<Question>> map) {
-        List<Question> indQuestions = controller.independantQuestions();
+        List<Question> indQuestions = controller.independentQuestions();
 
         for (int i = 0; i < indQuestions.size(); i++) {
             System.out.println((i + 1) + ". " + indQuestions.get(i) + "\n");

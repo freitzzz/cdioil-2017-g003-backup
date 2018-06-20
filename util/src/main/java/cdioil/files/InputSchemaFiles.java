@@ -14,6 +14,12 @@ package cdioil.files;
 public interface InputSchemaFiles {
 
     /**
+     * String XSD schema file's path. The XSD file is used for verifying XML files for importing independent questions.
+     */
+    public static final String LOCALIZATION_SCHEMA_PATH_INDEPENDENT_QUESTIONS = FilesUtils.convertStringToUTF8(
+            InputSchemaFiles.class.getClassLoader().getResource("xsd/import_independent_questions_schema.xsd").getFile());
+
+    /**
      * String XSD schema file's path. The XSD file is used for verifying XML files for importing products.
      */
     public static final String LOCALIZATION_SCHEMA_PATH = FilesUtils.convertStringToUTF8(

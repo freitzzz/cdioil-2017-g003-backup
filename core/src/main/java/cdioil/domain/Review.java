@@ -152,20 +152,18 @@ public class Review implements Serializable {
      * @return false if current question is the last one
      */
     public boolean answerQuestion(QuestionOption option) {
-        Iterable<Edge> outgoingEdges = answerGraph.outgoingEdges(currentQuestion);
-        // If there are no outgoing edges, maps the last answer and finishes
-        if (!outgoingEdges.iterator().hasNext()) {
+
+        Question nextQuestion = answerGraph.adjacentQuestion(currentQuestion, option);
+
+        // If the option leads to nothing the review ends
+        if (nextQuestion == null) {
             answers.put(currentQuestion, new Answer(option));
             reviewState = ReviewState.FINISHED; //state must also be updated
             return false;
         }
 
-        for (Edge edge : outgoingEdges) {
-            if (edge.getElement().equals(option)) {
-                answers.put(currentQuestion, new Answer(option));
-                currentQuestion = edge.getDestinationVertexElement();
-            }
-        }
+        answers.put(currentQuestion, new Answer(option));
+        currentQuestion = nextQuestion;
 
         return true;
     }
@@ -223,22 +221,25 @@ public class Review implements Serializable {
     public boolean hasSuggestion() {
         return suggestion != null;
     }
+
     /**
      * Returns the Review suggestion
+     *
      * @return String with review suggestion
      */
-    public String getSuggestion(){
-        return suggestion!=null ? suggestion.toString() : null;
+    public String getSuggestion() {
+        return suggestion != null ? suggestion.toString() : null;
     }
-    
+
     /**
      * Returns the Review's graph.
+     *
      * @return review's graph.
      */
-    public Graph getAnswerGraph(){
+    public Graph getAnswerGraph() {
         return answerGraph;
     }
-    
+
     /**
      * Review's hash code
      *
