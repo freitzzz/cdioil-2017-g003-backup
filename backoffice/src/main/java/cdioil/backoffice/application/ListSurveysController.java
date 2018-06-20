@@ -1,7 +1,7 @@
 package cdioil.backoffice.application;
 
 import cdioil.domain.Survey;
-import cdioil.framework.SurveyDTO;
+import cdioil.framework.dto.SurveyDTO;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 
 import java.util.ArrayList;

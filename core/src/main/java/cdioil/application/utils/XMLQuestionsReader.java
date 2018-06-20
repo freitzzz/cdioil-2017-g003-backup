@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import cdioil.domain.QuestionOption;
 import cdioil.files.InputSchemaFiles;
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.files.ValidatorXML;
 
 import java.io.File;
@@ -108,7 +109,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
         if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
-            return null;
+            throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
         Map<String, List<Question>> readQuestions = new HashMap<>();
         try {

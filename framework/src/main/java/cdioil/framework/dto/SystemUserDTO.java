@@ -67,4 +67,13 @@ public class SystemUserDTO extends GenericDTO implements DTO {
         put("email", email);
 
     }
+
+    /**
+     * ToString
+     * @return email
+     */
+    @Override
+    public String toString() {
+        return getEmail();
+    }
 }

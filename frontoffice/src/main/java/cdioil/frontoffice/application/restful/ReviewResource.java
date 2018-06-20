@@ -1,6 +1,8 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.application.authz.AuthenticationController;
+import cdioil.domain.Answer;
+import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
@@ -9,14 +11,20 @@ import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.application.api.ReviewAPI;
 import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_AUTHENTICATION_TOKEN;
 import static cdioil.frontoffice.application.restful.ResponseMessages.JSON_INVALID_USER;
+import cdioil.frontoffice.application.restful.json.ReviewJSONService;
 import cdioil.frontoffice.application.restful.xml.ReviewXMLService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import com.google.gson.Gson;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 /**
  * Resource class that holds all services related to reviewing a product
@@ -92,6 +100,50 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
                 : createValidReviewResponse(messageBody);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/userreviewmap/{authenticationToken}/{surveyID}")
+    @Override
+    public Response getQuestionAnswerMap(@PathParam("authenticationToken") String authenticationToken,
+            @PathParam("surveyID") String surveyID) {
+
+        AuthenticationController authenticationController = new AuthenticationController();
+
+        SystemUser user = authenticationController.getUserByAuthenticationToken(authenticationToken);
+
+        if (user == null) {
+            createInvalidAuthTokenResponse();
+        }
+
+        RegisteredUser registeredUser = authenticationController.getUserAsRegisteredUser(user);
+
+        if (registeredUser == null) {
+            createInvalidUserResponse();
+        }
+
+        Survey survey = new SurveyRepositoryImpl().find(Long.parseLong(surveyID));
+
+        if (survey == null) {
+            createSurveyNotFoundResponse();
+        }
+
+        List<Review> userReviews = registeredUser.getProfile().getReviews();
+
+        if (userReviews == null || userReviews.isEmpty()) {
+            createNoReviewsFoundResponse();
+        }
+        for (Review userReview : userReviews) {
+            if (userReview.getSurvey().equals(survey) && userReview.isFinished()) {
+                return Response.status(Status.OK).
+                        entity(new Gson().toJson(new ReviewJSONService(
+                                buildAnswerMap(userReview.getReviewQuestionAnswers()))
+                                .getQuestionAnswerMap())).build();
+            }
+        }
+
+        return createInvalidReviewResponse();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
@@ -104,22 +156,21 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
         String suggestion = ReviewXMLService.getSuggestion(fileContent);
 
-        if(reviewToAnswer == null){
+        if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
-        
-        for(QuestionOption answer : answers){
+
+        for (QuestionOption answer : answers) {
             reviewToAnswer.answerQuestion(answer);
         }
-        
-        if(suggestion != null){
+
+        if (suggestion != null) {
             reviewToAnswer.submitSuggestion(suggestion);
         }
 
-        
         reviewToAnswer = new ReviewRepositoryImpl().merge(reviewToAnswer);
-        
-        if(reviewToAnswer == null){
+
+        if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
 
@@ -229,18 +280,45 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
                 .entity(messageBody)
                 .build();
     }
-    
+
     /**
      * Creates a response with the status code 200, informing the user that the
      * review was successfully created.
-     * 
+     *
      * @param messageBody message body of the response
-     * @return <code>Response</code> informing the user that the review was submitted
-     * with success
+     * @return <code>Response</code> informing the user that the review was
+     * submitted with success
      */
-    private Response createSavedReviewWithSuccessResponse(){
+    private Response createSavedReviewWithSuccessResponse() {
         return Response.status(Response.Status.OK)
                 .entity(JSON_REVIEW_SAVED_WITH_SUCCESS)
                 .build();
+    }
+
+    /**
+     * Creates a response with the status code 404, informing the user that the
+     * review was not found.
+     *
+     * @return <code>Response</code> informing the user that the review wasn't
+     * found
+     */
+    private Response createNoReviewsFoundResponse() {
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(JSON_REVIEWS_NOT_FOUND)
+                .build();
+    }
+
+    /**
+     * Builds a Map<Question,Answer> to a Map<String,String>
+     * @param reviewQuestionAnswers question answer map of a review
+     * 
+     * @return question answer map using Strings
+     */
+    private Map<String, String> buildAnswerMap(Map<Question, Answer> reviewQuestionAnswers) {
+       Map<String,String> answerStringMap = new HashMap<>();
+       reviewQuestionAnswers.entrySet().forEach((entry) -> {
+           answerStringMap.put(entry.getKey().getQuestionText(), entry.getValue().getContent());
+        });
+       return answerStringMap;
     }
 }

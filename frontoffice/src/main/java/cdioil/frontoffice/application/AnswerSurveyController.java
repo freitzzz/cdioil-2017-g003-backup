@@ -260,7 +260,9 @@ public class AnswerSurveyController {
         //if the value is null then the review is being saved for the first time
         if (surveyReviewMap.get(selectedSurvey) == null) {
             loggedUser.getProfile().addReview(currentReview);
-            return new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
+            boolean successfulMerge=new ProfileRepositoryImpl().merge(loggedUser.getProfile()) != null;
+            updateRegisteredUserProfile();
+            return successfulMerge;
         }
         return saveUnfinishedReview();
     }

@@ -226,7 +226,7 @@ public class XMLProductsReader implements ProductsReader {
                                         + productElement.getElementsByTagName(PRODUCT_UNITY_ELEMENT).item(0).getTextContent();
                                 p = new Product(name, sku, quantity);
                             } else {
-                                Code code = new EAN(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                                SKU code = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
                                 String brand = brandNodeList.item(0).getTextContent();
                                 p = new Product(name, brand, code);
                             }

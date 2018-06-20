@@ -42,27 +42,20 @@ android {
 /*Dependencies go here*/
 /*implementation is the <dependency></dependency> for Android*/
 dependencies {
-
     //Zebra Crossing API (used for code scanning)
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
-
     //HTP API User for REST Requests
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-
     // https://mvnrepository.com/artifact/com.fasterxml/jackson-xml-databind
     //XML API used for serialization & deserialization
-
-    implementation group: 'com.fasterxml', name: 'jackson-xml-databind', version: '0.6.2'
+    implementation 'com.fasterxml:jackson-xml-databind:0.6.2'
     implementation 'com.fasterxml:aalto-xml:1.0.0'
-    implementation group: 'javax.xml.stream', name: 'stax-api', version: '1.0-2'
-
+    implementation 'javax.xml.stream:stax-api:1.0-2'
     //JSON API used for serialization & deserialization
     implementation 'com.google.code.gson:gson:2.8.4'
-
     //Android Animation Kit for Loading Bars (Spin Kit for Android)
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'
-
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'

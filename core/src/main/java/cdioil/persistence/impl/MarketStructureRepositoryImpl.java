@@ -73,6 +73,8 @@ public class MarketStructureRepositoryImpl extends BaseJPARepository<MarketStruc
         Query q = entityManager().createQuery("SELECT c FROM Category c WHERE c.categoryPath = :p_path");
         q.setParameter("p_path", path);
 
-        return (Category) q.getSingleResult();
+        List<Category> c = q.getResultList();
+        
+        return c.isEmpty() ? null : c.get(0);
     }
 }

@@ -1,9 +1,12 @@
 package cdioil.framework.dto;
 
+import java.util.List;
+
 public class QuestionDTO extends GenericDTO implements DTO {
 
-    public QuestionDTO(String type, String text, String questionType, String options) {
+    public QuestionDTO(String type, String text, String questionType, List<String> options) {
         super(type);
+
         setText(text);
         setQuestionType(questionType);
         setOptions(options);
@@ -25,11 +28,26 @@ public class QuestionDTO extends GenericDTO implements DTO {
         return super.get("questionType").toString();
     }
 
-    public String getOptions() {
-        return super.get("options").toString();
+    public List<String> getOptions() {
+        return (List)super.get("options");
     }
 
-    public void setOptions(String options) {
+    public void setOptions(List<String> options) {
         super.put("options", options);
+    }
+
+    @Override
+    public String toString() {
+        final String text = getText();
+        final String type = getQuestionType();
+
+        // Concatenate Options
+        StringBuilder options = new StringBuilder();
+        for (String option :
+                getOptions()) {
+            options.append(option + ",,");
+        }
+
+        return String.format("%s,,%ss,,%s", text, type, options);
     }
 }

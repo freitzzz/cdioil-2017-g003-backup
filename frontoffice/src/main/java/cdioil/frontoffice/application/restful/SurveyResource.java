@@ -8,9 +8,7 @@ import cdioil.domain.Survey;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.domain.authz.SystemUser;
 import cdioil.frontoffice.application.api.SurveyAPI;
-import cdioil.persistence.impl.MarketStructureRepositoryImpl;
-import cdioil.persistence.impl.ProductRepositoryImpl;
-import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.frontoffice.application.restful.xml.SurveyFluxXMLService;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,18 +33,19 @@ import javax.ws.rs.core.Response.Status;
 public final class SurveyResource implements SurveyAPI, ResponseMessages {
 
     /**
-     * List the Surveys via a JSON POST Request
+     * List the Surveys via a JSON GET Request
      *
      * @param authenticationToken String the authentication token
      * @param paginationID Short with the surveys pagination ID
+     * @param surveyFlux boolean true if the survey flux should be sent, false if not
      * @return Response with the JSON response with the list of the surveys
      */
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/useravailablesurveys/{authenticationToken}/")
     @Override
     public Response getSurveys(@PathParam("authenticationToken") String authenticationToken,
-            @QueryParam("paginationID") short paginationID) {
+            @QueryParam("paginationID") short paginationID,@QueryParam("surveyFlux")boolean surveyFlux) {
         if (paginationID < 0) {
             return createInvalidPaginationIDResponse();
         }
@@ -63,7 +62,47 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
         if (listTargetedSurvey == null || listTargetedSurvey.isEmpty()) {
             return createNoAvailableSurveysResponse();
         }
+        if(surveyFlux)return Response.status(Status.OK).entity(getSurveysAsXML(listTargetedSurvey)).build();
         return Response.status(Status.OK).entity(getSurveysAsJSON(listTargetedSurvey)).build();
+    }
+    
+    /**
+     * Gets the surveys a user has answered.
+     * 
+     * @param authenticationToken user's authentication token
+     * @param paginationID pagination ID so the list doesn't contain all surveys at once
+     * @return Response with the surveys a user has answered or an error Response in case 
+     * several errors happen
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/useransweredsurveys/{authenticationToken}/")
+    @Override
+    public Response getUserAnsweredSurveys(@PathParam("authenticationToken") String authenticationToken,
+            @QueryParam("paginationID") short paginationID){
+        
+        if(paginationID < 0){
+           createInvalidPaginationIDResponse();
+        }
+        
+        AuthenticationController authenticationController = new AuthenticationController();
+        
+        SystemUser user = authenticationController.getUserByAuthenticationToken(authenticationToken);
+        if(user == null){
+            createInvalidAuthTokenResponse();
+        }
+        
+        RegisteredUser registeredUser = authenticationController.getUserAsRegisteredUser(user);
+        if(registeredUser == null){
+            createInvalidUserResponse();
+        }
+        
+        List<Survey> answeredSurveys = new SurveyController().getUserAnsweredSurveys(registeredUser,
+                paginationID);
+        if(answeredSurveys == null || answeredSurveys.isEmpty()){
+            createNoAvailableSurveysResponse();
+        }
+        return Response.status(Status.OK).entity(getSurveysAsJSON(answeredSurveys)).build();
     }
 
     /**
@@ -162,7 +201,7 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
      * @return Response warning the user that the product does not exist
      */
     private Response createProductNotFoundResponse() {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.status(Status.BAD_REQUEST)
                 .entity(JSON_PRODUCT_NOT_FOUND)
                 .build();
     }
@@ -180,5 +219,13 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
             surveysAsJSON.add(new SurveyJSONService(surveys.get(i)));
         }
         return gson.toJson(surveysAsJSON);
+    }
+    /**
+     * Method that serializes a list of surveys into XML
+     * @param surveys List with all the surveys being serialized
+     * @return String with a XML document containg all surveys serialized
+     */
+    private String getSurveysAsXML(List<Survey> surveys){
+        return SurveyFluxXMLService.create().createSurveyListXML(surveys);
     }
 }

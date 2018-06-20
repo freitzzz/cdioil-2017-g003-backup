@@ -14,13 +14,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +29,10 @@ import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.services.SurveyService;
 import cdioil.feedbackmonkey.application.services.SurveyServiceController;
+import cdioil.feedbackmonkey.authz.UserProfileActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
 import cdioil.feedbackmonkey.restful.utils.RESTRequest;
-import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
+import cdioil.feedbackmonkey.restful.utils.json.ReviewJSONService;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 import cdioil.feedbackmonkey.utils.ToastNotification;
 import okhttp3.Response;
@@ -55,6 +54,10 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Constant that represents the new review resource path under reviews resource.
      */
     private static final String NEW_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Create New Review");
+    /**
+     * Constant that represents the get review answer map resource path under reviews resource.
+     */
+    private static final String GET_REVIEW_ANSWER_MAP_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews","Get Review Answer Map");
     /**
      * ListView that is hold by the scroll view
      */
@@ -87,6 +90,11 @@ public class ListSurveyActivity extends AppCompatActivity {
     private List<SurveyService> currentSurveys;
 
     /**
+     * Boolean flag to know if the activity was started by the UserProfileActivity or not.
+     */
+    private boolean userProfileActivityFlag;
+
+    /**
      * Creates the current activity.
      *
      * @param savedInstanceState Bundle with the previous state
@@ -94,6 +102,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userProfileActivityFlag = false;
         configureActivityStart(getIntent().getBundleExtra(ListSurveyActivity.class.getSimpleName()));
         setContentView(R.layout.activity_list_survey_activity);
         configure();
@@ -108,10 +117,23 @@ public class ListSurveyActivity extends AppCompatActivity {
         int surveysToAdd=bundle.size()-1;
         System.out.println(surveysToAdd);
         currentSurveys=new ArrayList<>(surveysToAdd);
+        configureUserProfileBundle(bundle);
         for(int i=0;i<surveysToAdd;i++)currentSurveys.add((SurveyService)bundle.getSerializable(""+i));
         System.out.println(currentSurveys);
         currentPaginationID++;
     }
+
+    /**
+     * Sets a flag if this activity was started by UserProfileActivity
+     * @param bundle Bundle that was passed by another activity
+     */
+    private void configureUserProfileBundle(Bundle bundle){
+        String flag = bundle.getString("sentFromProfileActivity");
+        if(flag != null && flag.equals(UserProfileActivity.class.getSimpleName())){
+            userProfileActivityFlag = true;
+        }
+    }
+
     /**
      * Configures the current view and view adapter properties.
      */
@@ -128,6 +150,41 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Configures the onItemClick event of the current list view
      */
     private void configureListViewOnItemClick(){
+
+        if(userProfileActivityFlag){
+            setOnItemClickListenerForAnsweredSurveys();
+        }else{
+            setOnItemClickListenerForAnswerSurvey();
+        }
+    }
+
+    private void setOnItemClickListenerForAnsweredSurveys(){
+        listSurveysListView.setOnItemClickListener((parent, view, position, id) ->{
+
+            //Start a new Thread responsible for establishing a connection to the HTTP server
+            Thread connectionThread = new Thread(requestReviewAnswerMap(position));
+            connectionThread.start();
+            try {
+                connectionThread.join();
+                if(reviewRestResponseCode == HttpsURLConnection.HTTP_OK){
+                    ReviewJSONService reviewJSONService = new Gson().fromJson(reviewRestResponseBody,ReviewJSONService.class);
+                    startCheckReviewActivity(reviewJSONService);
+                }else{
+                    //TODO: create message dialog informing user an error occurred
+                    ToastNotification.show(this,"Erro: " + reviewRestResponseCode);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+        });
+    }
+
+    /**
+     * Sets on item click listeners so the user can answer surveys
+     */
+    private void setOnItemClickListenerForAnswerSurvey() {
         listSurveysListView.setOnItemClickListener((parent, view, position, id) -> {
 
             //Start a new Thread responsible for establishing a connection to the HTTP server
@@ -198,10 +255,23 @@ public class ListSurveyActivity extends AppCompatActivity {
      * Starts a new question activity.
      */
     private void startQuestionActivity() {
-
         Intent questionIntent = new Intent(ListSurveyActivity.this, QuestionActivity.class);
         questionIntent.putExtra("authenticationToken", authenticationToken);
         startActivity(questionIntent);
+    }
+
+    /**
+     * Starts the SeeAnswersActivity.
+     */
+    private void startCheckReviewActivity(ReviewJSONService reviewJSONService){
+        Intent checkReviewActivityIntent = new Intent(ListSurveyActivity.this,CheckReviewActivity.class);
+        Bundle bundle = new Bundle();
+        ArrayList<String> questions = new ArrayList<>(reviewJSONService.getQuestionAnswerMap().keySet());
+        ArrayList<String> answers = new ArrayList<>(reviewJSONService.getQuestionAnswerMap().values());
+        bundle.putStringArrayList("questions",questions);
+        bundle.putStringArrayList("answers",answers);
+        checkReviewActivityIntent.putExtras(bundle);
+        startActivity(checkReviewActivityIntent);
     }
 
     /**
@@ -228,6 +298,34 @@ public class ListSurveyActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
                 ToastNotification.show(this, getString(R.string.no_internet_connection));
+            }
+        };
+    }
+
+    /**
+     * Creates a new REST Request for fetching a review answer map.
+     *
+     * @param position index of the list view's item that was clicked
+     * @return Runnable that processes the REST Response
+     */
+    private Runnable requestReviewAnswerMap(int position){
+        return () ->{
+            try{
+                String surveyID = currentSurveys.get(position).getSurveyID();
+                Response reviewAnswerMapResponse = RESTRequest.create(BuildConfig.SERVER_URL.
+                        concat(FeedbackMonkeyAPI.getAPIEntryPoint().
+                                concat(REVIEWS_RESOURCE_PATH).
+                                concat(GET_REVIEW_ANSWER_MAP_RESOURCE_PATH).
+                                concat("/" + authenticationToken)
+                                .concat("/" + surveyID))).
+                        GET();
+
+                reviewRestResponseCode = reviewAnswerMapResponse.code();
+                reviewRestResponseBody = reviewAnswerMapResponse.body().string();
+
+            }catch(IOException e){
+                e.printStackTrace();
+                ToastNotification.show(this,getString(R.string.no_internet_connection));
             }
         };
     }

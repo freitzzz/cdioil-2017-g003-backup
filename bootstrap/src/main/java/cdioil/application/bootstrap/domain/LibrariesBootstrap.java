@@ -5,10 +5,12 @@ import cdioil.domain.Category;
 import cdioil.domain.CategoryQuestionsLibrary;
 import cdioil.domain.CategoryTemplatesLibrary;
 import cdioil.domain.IndependentQuestionsLibrary;
+import cdioil.domain.IndependentTemplatesLibrary;
 import cdioil.domain.MultipleChoiceQuestion;
 import cdioil.domain.MultipleChoiceQuestionOption;
 import cdioil.domain.Product;
 import cdioil.domain.ProductQuestionsLibrary;
+import cdioil.domain.ProductTemplatesLibrary;
 import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.QuestionGroup;
@@ -18,8 +20,10 @@ import cdioil.domain.Template;
 import cdioil.persistence.impl.CategoryQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.CategoryTemplatesLibraryRepositoryImpl;
 import cdioil.persistence.impl.IndependentQuestionsLibraryRepositoryImpl;
+import cdioil.persistence.impl.IndependentTemplatesLibraryRepositoryImpl;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.ProductQuestionsLibraryRepositoryImpl;
+import cdioil.persistence.impl.ProductTemplatesLibraryRepositoryImpl;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,29 +43,47 @@ public class LibrariesBootstrap {
      * Creates all the question libraries and persists it in the database.
      */
     public LibrariesBootstrap() {
+        //QUESTION LIBRARIES REPOS
         CategoryQuestionsLibraryRepositoryImpl categoryQuestionsLibraryRepo
                 = new CategoryQuestionsLibraryRepositoryImpl();
-        CategoryTemplatesLibraryRepositoryImpl categoryTemplatesLibraryRepo
-                = new CategoryTemplatesLibraryRepositoryImpl();
         ProductQuestionsLibraryRepositoryImpl productQuestionsLibraryRepo
                 = new ProductQuestionsLibraryRepositoryImpl();
         IndependentQuestionsLibraryRepositoryImpl independentQuestionsLibraryRepo
                 = new IndependentQuestionsLibraryRepositoryImpl();
 
+        //TEMPLATE LIBRARIES REPOS
+        CategoryTemplatesLibraryRepositoryImpl categoryTemplatesLibraryRepo
+                = new CategoryTemplatesLibraryRepositoryImpl();
+        ProductTemplatesLibraryRepositoryImpl productTemplatesLibraryRepo
+                = new ProductTemplatesLibraryRepositoryImpl();
+        IndependentTemplatesLibraryRepositoryImpl independentTemplatesLibraryRepo
+                = new IndependentTemplatesLibraryRepositoryImpl();
+
+        //QUESTION LIBRRARIES
         CategoryQuestionsLibrary categoryQuestionsLibrary = new CategoryQuestionsLibrary();
-        CategoryTemplatesLibrary categoryTemplatesLibrary = new CategoryTemplatesLibrary();
         ProductQuestionsLibrary productQuestionsLibrary = new ProductQuestionsLibrary();
         IndependentQuestionsLibrary independentQuestionsLibrary = new IndependentQuestionsLibrary();
 
         bootstrapCategoryQuestionsLibrary(categoryQuestionsLibrary);
-        bootstrapCategoryTemplatesLibrary(categoryTemplatesLibrary);
-        bootstrapProductQuestionsLibrary(productQuestionsLibrary);
-        bootstrapIndependentQuestionsLibrary(independentQuestionsLibrary);
-
         categoryQuestionsLibraryRepo.add(categoryQuestionsLibrary);
-        categoryTemplatesLibraryRepo.add(categoryTemplatesLibrary);
+
+        bootstrapProductQuestionsLibrary(productQuestionsLibrary);
         productQuestionsLibraryRepo.add(productQuestionsLibrary);
+
+        bootstrapIndependentQuestionsLibrary(independentQuestionsLibrary);
         independentQuestionsLibraryRepo.add(independentQuestionsLibrary);
+
+        //TEMPLATE LIBRARIES
+        CategoryTemplatesLibrary categoryTemplatesLibrary = new CategoryTemplatesLibrary();
+        ProductTemplatesLibrary productTemplatesLibrary = new ProductTemplatesLibrary();
+        IndependentTemplatesLibrary independentTemplatesLibrary = new IndependentTemplatesLibrary();
+
+        bootstrapCategoryTemplatesLibrary(categoryTemplatesLibrary);
+        categoryTemplatesLibraryRepo.add(categoryTemplatesLibrary);
+
+        //TODO: add missing bootstrapping
+        productTemplatesLibraryRepo.add(productTemplatesLibrary);
+        independentTemplatesLibraryRepo.add(independentTemplatesLibrary);
     }
 
     /**
@@ -125,10 +147,11 @@ public class LibrariesBootstrap {
 
     /**
      * Adds all categories to the library
+     *
      * @param categoryQuestionsLibrary category questions library being built
      */
     private void addAllCategories(CategoryQuestionsLibrary categoryQuestionsLibrary) {
-        for(Category category : marketRepo.findMarketStructure().getAllCategories()){
+        for (Category category : marketRepo.findMarketStructure().getAllCategories()) {
             categoryQuestionsLibrary.addCategory(category);
         }
     }

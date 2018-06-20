@@ -6,8 +6,13 @@ import de.odysseus.staxon.json.JsonXMLConfig;
 import de.odysseus.staxon.json.JsonXMLConfigBuilder;
 import de.odysseus.staxon.json.JsonXMLInputFactory;
 import de.odysseus.staxon.xml.util.PrettyXMLEventWriter;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -32,9 +37,13 @@ public class JSONQuestionsReader implements QuestionsReader {
     private final File file;
 
     /**
+     * String with the file path of the converted file (from JSON to XML).
+     */
+    private static final String CAT_QUESTIONS_OUTPUT_PATH = "category_questions_output.xml";
+    /**
      * String with the path of the file converted from JSON to XML
      */
-    private static final String outputFilePath = "independent_questions_output_file.xml";
+    private static final String OUTPUT_FILE_PATH = "independent_questions_output_file.xml";
 
     /**
      * Creates an instance of JSONQuestionsReader, receiving the name of the
@@ -48,7 +57,44 @@ public class JSONQuestionsReader implements QuestionsReader {
 
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InputStream input = null;
+        try {
+            input = new FileInputStream(file);
+            //StringWriter output = new StringWriter();
+            File outFile = new File(CAT_QUESTIONS_OUTPUT_PATH);
+            OutputStream output = new FileOutputStream(outFile);
+
+            JsonXMLConfig config = new JsonXMLConfigBuilder().multiplePI(false).build();
+
+            //JSON reader
+            XMLEventReader reader = new JsonXMLInputFactory(config).createXMLEventReader(input);
+            //XML writer
+            XMLEventWriter writer = XMLOutputFactory.newInstance().createXMLEventWriter(output, "UTF-8");
+
+            //Format output
+            writer = new PrettyXMLEventWriter(writer);
+
+            //Copy reader to writer
+            writer.add(reader);
+
+            reader.close();
+            writer.close();
+            input.close();
+
+            //Write XML content to file
+            //FileWriter.writeFile(new File(CAT_QUESTIONS_OUTPUT_PATH), output.getBuffer().toString());
+        } catch (IOException | XMLStreamException ex) {
+            Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return new XMLQuestionsReader(CAT_QUESTIONS_OUTPUT_PATH).readCategoryQuestions();
     }
 
     @Override
@@ -73,12 +119,12 @@ public class JSONQuestionsReader implements QuestionsReader {
             xmlEventWriter.close();
             input.close();
 
-            FileWriter.writeFile(new File(outputFilePath), output.getBuffer().toString());
+            FileWriter.writeFile(new File(OUTPUT_FILE_PATH), output.getBuffer().toString());
 
         } catch (XMLStreamException | IOException ex) {
             Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if(input != null) {
+            if (input != null) {
                 try {
                     input.close();
                 } catch (IOException ex) {
@@ -87,7 +133,7 @@ public class JSONQuestionsReader implements QuestionsReader {
             }
         }
 
-        return new XMLQuestionsReader(outputFilePath).readIndependentQuestions();
+        return new XMLQuestionsReader(OUTPUT_FILE_PATH).readIndependentQuestions();
     }
 
 }

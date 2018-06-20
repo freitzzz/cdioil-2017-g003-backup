@@ -1,6 +1,6 @@
 package cdioil.backoffice.webapp.manager;
 
-import cdioil.framework.SurveyDTO;
+import cdioil.framework.dto.SurveyDTO;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 

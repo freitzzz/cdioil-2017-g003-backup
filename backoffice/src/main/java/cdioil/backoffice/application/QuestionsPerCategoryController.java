@@ -63,7 +63,7 @@ public class QuestionsPerCategoryController {
             }
 
             QuestionDTO dto = new QuestionDTO("question", q.getQuestionText(),
-                    q.getType().toString(), options.toString());
+                    q.getType().toString(), options);
             questions.add(dto);
         }
 

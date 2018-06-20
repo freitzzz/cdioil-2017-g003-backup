@@ -175,4 +175,10 @@ public interface ResponseMessages {
      * the user that the password was unable to be changed.
      */
     public static final String JSON_COMINHOS_CHANGE_FAILED = "{\n\t\"passwordchanged\":\"false\"\n}";
+    
+    /**
+     * Constant that represents the JSON used on the response message warning
+     * the user he has no reviews about a survey.
+     */
+    public static final String JSON_REVIEWS_NOT_FOUND = "{\n\t\"noreviewsfound\":\"true\"\n}";
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.persistence.impl;
 
 import cdioil.domain.Review;
@@ -14,8 +9,9 @@ import cdioil.persistence.ProfileRepository;
 import java.util.List;
 
 /**
+ * ProfileRepository Implementation class.
  *
- * @author ricar
+ * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
  */
 public class ProfileRepositoryImpl extends BaseJPARepository<Profile, Long>
         implements ProfileRepository {
