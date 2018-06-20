@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -90,7 +92,6 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     private static final String BINARY_QUESTION_NODE = "BinaryQuestion";
 
-
     /**
      * Creates an instance of XMLQuestionsReader, receiving the name of the file
      * to read.
@@ -121,110 +122,81 @@ public class XMLQuestionsReader implements QuestionsReader {
         } catch (IOException | ParserConfigurationException | SAXException e) {
             return null;
         }
+        System.out.println("MAP" + readQuestions);
         return readQuestions;
     }
 
     @Override
     public List<Question> readIndependentQuestions() throws ParserConfigurationException {
         List<Question> independentQuestions = new ArrayList<>();
-        Document document;
+        try {
+            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = dBuilder.parse(file);
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        document = documentBuilder.newDocument();
+            //Question
+            NodeList nodeList = document.getElementsByTagName("question");
 
-        document.getDocumentElement().normalize();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
 
-        //Question
-        NodeList nodeList = document.getElementsByTagName("question");
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+                    Element element = (Element) node;
+                    //Binary Question
+                    NodeList binaryQuestions = element.getElementsByTagName("BinaryQuestion");
+                    if (binaryQuestions != null) {
+                        for (int b = 0; b < binaryQuestions.getLength(); b++) {
+                            Node binary = binaryQuestions.item(b);
 
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                            if (binary.getNodeType() == Node.ELEMENT_NODE) {
+                                Question binaryQuestion = createBinaryQuestion(binary.getChildNodes(), binary.getAttributes().getNamedItem("questionID").getTextContent());
 
-                Element element = (Element) node;
-                //Binary Question
-                NodeList binaryQuestions = element.getElementsByTagName("BinaryQuestion");
+                                if (binaryQuestion != null) {
+                                    independentQuestions.add(binaryQuestion);
+                                }
 
-                if (binaryQuestions != null) {
-//                    for (int b = 0; b < binaryQuestions.getLength(); b++) {
-//                        Node binary = binaryQuestions.item(b);
-//
-//                        if (binary.getNodeType() == Node.ELEMENT_NODE) {
-//                            Element binaryQuestion = (Element) binary;
-//
-//                            binaryQuestion.getAttribute("questionID");
-//                            binaryQuestion.getAttribute("Text");
-//
-//                        }
-//                    }
-                    Question binaryQuestion = createBinaryQuestion(binaryQuestions, element.getAttribute("questionID"));
-
-                    if (binaryQuestion != null) {
-                        independentQuestions.add(binaryQuestion);
-                    }
-                }
-
-
-                NodeList multipleChoiceQuestions = element.getElementsByTagName("MultipleChoiceQuestion");
-
-                if (multipleChoiceQuestions != null) {
-                    for (int m = 0; m < multipleChoiceQuestions.getLength(); m++) {
-                        Node multiple = multipleChoiceQuestions.item(m);
-
-                        if (multiple.getNodeType() == Node.ELEMENT_NODE) {
-                            Element multipleQuestion = (Element) multiple;
-//
-//                            multipleQuestion.getAttribute("questionID");
-//                            multipleQuestion.getAttribute("Text");
-//                            NodeList options = multipleQuestion.getElementsByTagName("choice");
-//
-//                            for (int o = 0; o < options.getLength(); o++) {
-//                                Node option = options.item(o);
-//
-//                                if (option.getNodeType() == Node.ELEMENT_NODE) {
-//                                    Element oneOption = (Element) option;
-//                                    oneOption.getAttribute("text");
-//                                }
-//                            }
-
-                            independentQuestions.add(createMCQuestion(multipleChoiceQuestions, multipleQuestion.getAttribute("questionID")));
-
+                            }
                         }
                     }
-                }
 
-                //Quantitative Question
+                    NodeList multipleChoiceQuestions = element.getElementsByTagName("MultipleChoiceQuestion");
 
-                NodeList quantitativeQuestions = element.getElementsByTagName("QuantitativeQuestion");
+                    if (multipleChoiceQuestions != null) {
+                        for (int m = 0; m < multipleChoiceQuestions.getLength(); m++) {
+                            Node multiple = multipleChoiceQuestions.item(m);
 
-                if (quantitativeQuestions != null) {
-                    for (int q = 0; q < quantitativeQuestions.getLength(); q++) {
-                        Node quantitative = quantitativeQuestions.item(q);
-
-                        if (quantitative.getNodeType() == Node.ELEMENT_NODE) {
-                            Element quantitativeQuestion = (Element) quantitative;
-
-//                            quantitativeQuestion.getAttribute("questionID");
-//                            quantitativeQuestion.getAttribute("Text");
-//                            quantitativeQuestion.getAttribute("scaleMinValue");
-//                            quantitativeQuestion.getAttribute("scaleMaxValue");
-
-                            independentQuestions.add(crateQuantitativeQuestion(quantitativeQuestions, ((Element) quantitative).getAttribute("questionID")));
+                            if (multiple.getNodeType() == Node.ELEMENT_NODE) {
+                                Element multipleQuestion = (Element) multiple;
+                                independentQuestions.add(createMCQuestion(multiple.getChildNodes(), multipleQuestion.getAttribute("questionID")));
+                            }
                         }
                     }
-                }
 
+                    //Quantitative Question
+                    NodeList quantitativeQuestions = element.getElementsByTagName("QuantitativeQuestion");
+
+                    if (quantitativeQuestions != null) {
+                        for (int q = 0; q < quantitativeQuestions.getLength(); q++) {
+                            Node quantitative = quantitativeQuestions.item(q);
+                            if (quantitative.getNodeType() == Node.ELEMENT_NODE) {
+                                Element quantitativeQuestion = (Element) quantitative;
+                                independentQuestions.add(crateQuantitativeQuestion(quantitative.getChildNodes(), quantitativeQuestion.getAttribute("questionID")));
+                            }
+                        }
+                    }
+
+                }
             }
+            return independentQuestions;
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            return null;
         }
-        return independentQuestions;
     }
 
     /**
      * Iterates through category question XML nodes
      *
-     * @param childNodes    child nodes of root node
+     * @param childNodes child nodes of root node
      * @param readQuestions map of questions
      */
     private void iterateCategoryQuestionNodes(NodeList childNodes, Map<String, List<Question>> readQuestions) {
@@ -246,7 +218,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     /**
      * Iterates question content nodes
      *
-     * @param contentNodes  list of content nodes
+     * @param contentNodes list of content nodes
      * @param readQuestions map of questions
      */
     private void putContentOnMap(NodeList contentNodes, Map<String, List<Question>> readQuestions) {
@@ -285,7 +257,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a binary question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
-     * @param id             attribute questionID of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
      * @return a new binary question if enough information was found within the
      * nodes, null if not
      */
@@ -303,7 +275,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a multiple choice question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
-     * @param id             attribute questionID of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
      * @return a new multiple choice if enough information was found within the
      * nodes, null if not
      */
@@ -336,7 +308,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a quantitative question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
-     * @param id             attribute questionID of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
      * @return a new quantitative if enough information was found within the
      * nodes, null if not
      */
