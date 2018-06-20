@@ -67,4 +67,5 @@
     <string name="functionality_not_implemented">Esta funcionalidade ainda não foi implementada!</string>
     <string name="exit">S A I R</string>
     <string name="answered_surveys">Inquéritos Avaliados</string>
+    <string name="question_answer_list">Lista de Perguntas e Respostas</string>
 </resources>

@@ -168,7 +168,7 @@ public class ListSurveyActivity extends AppCompatActivity {
                 connectionThread.join();
                 if(reviewRestResponseCode == HttpsURLConnection.HTTP_OK){
                     ReviewJSONService reviewJSONService = new Gson().fromJson(reviewRestResponseBody,ReviewJSONService.class);
-                    startSeeAnswersActivity(reviewJSONService);
+                    startCheckReviewActivity(reviewJSONService);
                 }else{
                     //TODO: create message dialog informing user an error occurred
                     ToastNotification.show(this,"Erro: " + reviewRestResponseCode);
@@ -263,7 +263,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     /**
      * Starts the SeeAnswersActivity.
      */
-    private void startSeeAnswersActivity(ReviewJSONService reviewJSONService){
+    private void startCheckReviewActivity(ReviewJSONService reviewJSONService){
         Intent checkReviewActivityIntent = new Intent(ListSurveyActivity.this,CheckReviewActivity.class);
         Bundle bundle = new Bundle();
         ArrayList<String> questions = new ArrayList<>(reviewJSONService.getQuestionAnswerMap().keySet());

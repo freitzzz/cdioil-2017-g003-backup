@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/questionAnswerTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:lines="2"
+        android:textColor="#3D3D3D"
+        android:textSize="16sp"
+        tools:text="Pergunta: Quantas horas costuma dormir por dia?
+Resposta: Zero mano quem é que precisa de dormir xDDD" />
+</RelativeLayout>
