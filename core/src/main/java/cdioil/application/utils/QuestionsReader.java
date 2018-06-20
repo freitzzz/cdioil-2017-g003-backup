@@ -3,6 +3,9 @@ package cdioil.application.utils;
 import cdioil.domain.Question;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +30,6 @@ public interface QuestionsReader {
      *
      * @return list of questions read from file.
      */
-    List<Question> readIndependentQuestions() throws ParserConfigurationException;
+    List<Question> readIndependentQuestions() throws ParserConfigurationException, IOException, TransformerException;
 
 }
