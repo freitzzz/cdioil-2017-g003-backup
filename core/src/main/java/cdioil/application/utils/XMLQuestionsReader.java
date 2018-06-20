@@ -114,7 +114,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
-        if (!ValidatorXML.validateFile(SCHEMA_INDEPENDENT_QUESTIONS, file)) {
+        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
         Map<String, List<Question>> readQuestions = new HashMap<>();
@@ -133,7 +133,7 @@ public class XMLQuestionsReader implements QuestionsReader {
 
     @Override
     public List<Question> readIndependentQuestions() throws ParserConfigurationException {
-        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
+        if (!ValidatorXML.validateFile(SCHEMA_INDEPENDENT_QUESTIONS, file)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
 
