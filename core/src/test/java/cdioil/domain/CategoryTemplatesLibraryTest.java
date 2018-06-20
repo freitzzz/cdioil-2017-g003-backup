@@ -112,26 +112,6 @@ public class CategoryTemplatesLibraryTest {
     }
 
     /**
-     * Test of getLibrary method, of the class CategoryTemplatesLibrary.
-     */
-    @Test
-    public void testGetLibrary() {
-        System.out.println("getLibrary");
-        Category category = new Category("CategoryTest", "10DC-10UN-100CAT");
-        Template template = new SimpleTemplate("template");
-        template.addQuestion(new BinaryQuestion("Question", "324"));
-        CategoryTemplatesLibrary result = new CategoryTemplatesLibrary();
-        result.addCategory(category);
-        result.addTemplate(category, template);
-
-        CategoryTemplatesLibrary expected = new CategoryTemplatesLibrary();
-        expected.addCategory(category);
-        expected.addTemplate(category, template);
-
-        assertEquals("Should be equal!", expected.getLibrary(), result.getLibrary());
-    }
-
-    /**
      * Test of doesTemplateExist method, of class CategoryTemplatesLibrary.
      */
     @Test
