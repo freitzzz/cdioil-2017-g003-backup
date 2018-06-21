@@ -27,7 +27,7 @@ public class TemplateManagementWindow extends Window {
     /**
      * Controller Class
      */
-    private TemplateManagementController controller = new TemplateManagementController();
+    private transient TemplateManagementController controller = new TemplateManagementController();
 
     /**
      * Main Window Layout
@@ -42,7 +42,7 @@ public class TemplateManagementWindow extends Window {
     /**
      * All Templates List Data
      */
-    private List<TemplateDTO> allTemplatesData = new ArrayList<>();
+    private transient List<TemplateDTO> allTemplatesData = new ArrayList<>();
 
     /**
      * List that shows each selected template's questions
