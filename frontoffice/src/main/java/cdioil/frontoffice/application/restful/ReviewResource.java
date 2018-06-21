@@ -1,10 +1,7 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.application.authz.AuthenticationController;
-import cdioil.application.utils.services.json.AnswerJSONService;
-import cdioil.application.utils.services.json.QuestionJSONService;
-import cdioil.domain.Answer;
-import cdioil.domain.Question;
+import cdioil.domain.Image;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
@@ -18,12 +15,9 @@ import cdioil.frontoffice.application.restful.xml.ReviewXMLService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import java.util.HashMap;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import java.util.List;
-import java.util.Map;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -160,6 +154,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
         List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
         String suggestion = ReviewXMLService.getSuggestion(fileContent);
+        String suggestionImage = ReviewXMLService.getSuggestionImage(fileContent);
 
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
@@ -169,8 +164,15 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             reviewToAnswer.answerQuestion(answer);
         }
 
-        if (suggestion != null) {
-            reviewToAnswer.submitSuggestion(suggestion);
+        if (suggestionImage == null) {
+            if (suggestion != null) {
+                reviewToAnswer.submitSuggestion(suggestion);
+            }
+        }else{
+            if(suggestion != null){
+                byte[] imageBytes = Base64.decode(suggestionImage);
+                reviewToAnswer.submitSuggestionWithImage(suggestion,new Image(imageBytes));
+            }
         }
 
         reviewToAnswer = new ReviewRepositoryImpl().merge(reviewToAnswer);
