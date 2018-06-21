@@ -20,7 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import org.postgresql.util.Base64;
+import java.util.Base64;
 
 /**
  * Resource class that represents the resource that holds all profile services
@@ -84,7 +84,7 @@ public class UserProfileResource implements UserProfileAPI, ResponseMessages{
      */
     private Suggestion createSuggestion(boolean hasImage, SuggestionJSONService suggestionJSONService){
         if(hasImage){
-            byte[] imageBytes = Base64.decode(suggestionJSONService.getEncodedImageBytes());
+            byte[] imageBytes = Base64.getDecoder().decode(suggestionJSONService.getEncodedImageBytes());
             return new Suggestion(suggestionJSONService.getSuggestionText(),new Image(imageBytes));
         }else{
             return new Suggestion(suggestionJSONService.getSuggestionText());

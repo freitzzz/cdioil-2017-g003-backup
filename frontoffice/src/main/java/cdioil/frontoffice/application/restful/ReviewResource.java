@@ -16,7 +16,7 @@ import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
 import com.google.gson.GsonBuilder;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.util.Base64;
 import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
