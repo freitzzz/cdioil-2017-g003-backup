@@ -35,10 +35,12 @@ public class ImportCategoriesController implements Serializable {
         MarketStructure marketStructure = new MarketStructureRepositoryImpl().findMarketStructure();
         if (categoriesReader != null) {
             MarketStructure me = categoriesReader.readCategories();
-            for (Category cat : me.getAllCategories()) {
-                marketStructure.addCategory(cat);
-                if (new MarketStructureRepositoryImpl().merge(marketStructure) != null) {
-                    return marketStructure;
+            if (me != null) {
+                for (Category cat : me.getAllCategories()) {
+                    marketStructure.addCategory(cat);
+                    if (new MarketStructureRepositoryImpl().merge(marketStructure) != null) {
+                        return marketStructure;
+                    }
                 }
             }
         }

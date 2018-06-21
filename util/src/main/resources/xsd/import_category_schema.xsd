@@ -4,19 +4,18 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="categoria" type="CategoriaType" maxOccurs="unbounded" minOccurs="1"/>
-			</xs:sequence>
+                        </xs:sequence>
 		</xs:complexType>
 	</xs:element>
 
 	<xs:complexType name="CategoriaType">
 		<xs:sequence>
-			<xs:element name="DC" type="DCUNUBType"/>
-			<xs:element name="UN" type="DCUNUBType"/>
-			<xs:element name="CAT" type="CATType"/>
+			<xs:element name="dc" type="DCUNUBType"/>
+			<xs:element name="un" type="DCUNUBType"/>
+			<xs:element name="cat" type="CATType"/>
 		</xs:sequence>
 	</xs:complexType>
 		
-	<!--xs:complexType name="DCType"-->
 	<xs:complexType name="DCUNUBType">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
@@ -24,14 +23,6 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
-	<!--xs:complexType name="UNType">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute type="xs:integer" name="id"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType-->
 	
 	<xs:complexType name="CATType">
 		<xs:sequence>
@@ -43,7 +34,7 @@
 	
 	<xs:complexType name="ListaSCATType">
 		<xs:sequence>
-			<xs:element name="SCAT" type="SCATType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="scat" type="SCATType" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -57,16 +48,8 @@
 	
 	<xs:complexType name="ListaUBType">
 		<xs:sequence>
-			<xs:element name="UB" type="DCUNUBType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ub" type="DCUNUBType" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-		  
-	<!--xs:complexType name="UBType">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute type="xs:integer" name="id"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType-->
-
+		 
 </xs:schema>
