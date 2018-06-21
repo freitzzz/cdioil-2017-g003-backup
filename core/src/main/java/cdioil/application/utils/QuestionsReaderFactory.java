@@ -1,6 +1,7 @@
 package cdioil.application.utils;
 
 import cdioil.files.CommonFileExtensions;
+import java.io.File;
 
 /**
  * Factory de QuestionsReader.
@@ -27,7 +28,7 @@ public final class QuestionsReaderFactory {
             return new CSVQuestionsReader(filename);
         }
         if(filename.endsWith((CommonFileExtensions.XML_EXTENSION))){
-            return new XMLQuestionsReader(filename);
+            return new XMLQuestionsReader(new File(filename));
         }
         if(filename.endsWith((CommonFileExtensions.JSON_EXTENSION))){
             return new JSONQuestionsReader(filename);

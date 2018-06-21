@@ -84,6 +84,16 @@ public class CSVProductsReader implements ProductsReader {
     private static final String CSV_UNITY_IDENTIFIER = "Unidade";
 
     /**
+     * Product identifier in the XML file.
+     */
+    private static final String XML_PRODUCT_IDENTIFIER = "produto";
+
+    /**
+     * Products list identifier in the XML file.
+     */
+    private static final String XML_PRODUCTS_LIST_IDENTIFIER = "lista_produtos";
+
+    /**
      * Categories identifier in the XML file.
      */
     private static final String XML_CATEGORY_IDENTIFIER = "ID";
@@ -163,13 +173,12 @@ public class CSVProductsReader implements ProductsReader {
             DOMSource source = new DOMSource(doc);
             StringWriter output = new StringWriter();
             StreamResult result = new StreamResult(output);
-            
+
             transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            
+
             transformer.transform(source, result);
 
-            System.out.println(output.getBuffer().toString());
             //Write XML content to file
             FileWriter.writeFile(new File(CSV_FILE_PATH), output.getBuffer().toString());
         } catch (ParserConfigurationException | TransformerConfigurationException ex) {
@@ -187,33 +196,34 @@ public class CSVProductsReader implements ProductsReader {
      * @param fileContent Content of the CSV file
      */
     private void writeToDocument(Document doc, List<String> fileContent) {
-        Element rootElement = doc.createElement("lista_produtos");
+        Element rootElement = doc.createElement(XML_PRODUCTS_LIST_IDENTIFIER);
         doc.appendChild(rootElement);
         for (int i = IDENTIFIERS_LINE + 1; i < fileContent.size(); i++) {
             String[] line = fileContent.get(i).split(SPLITTER);
+            if (line.length == NUM_IDENTIFIERS) {
+                Element product = doc.createElement(XML_PRODUCT_IDENTIFIER);
+                rootElement.appendChild(product);
 
-            Element product = doc.createElement("produto");
-            rootElement.appendChild(product);
+                Element categoryPathElement = doc.createElement(XML_CATEGORY_IDENTIFIER);
+                categoryPathElement.setTextContent(line[0].replace(INVERTED_COMMAS, ' ').trim()); //Replace to remove trash from file
+                product.appendChild(categoryPathElement);
 
-            Element categoryPathElement = doc.createElement(XML_CATEGORY_IDENTIFIER);
-            categoryPathElement.setTextContent(line[0].replace(INVERTED_COMMAS, ' ').trim()); //Replace to remove trash from file
-            product.appendChild(categoryPathElement);
+                Element productCodeElement = doc.createElement(XML_CODE_IDENTIFIER);
+                productCodeElement.setTextContent(line[1].trim());
+                product.appendChild(productCodeElement);
 
-            Element productCodeElement = doc.createElement(XML_CODE_IDENTIFIER);
-            productCodeElement.setTextContent(line[1].trim());
-            product.appendChild(productCodeElement);
+                Element productNameElement = doc.createElement(XML_PRODUCT_NAME_IDENTIFIER);
+                productNameElement.setTextContent(line[2].trim());
+                product.appendChild(productNameElement);
 
-            Element productNameElement = doc.createElement(XML_PRODUCT_NAME_IDENTIFIER);
-            productNameElement.setTextContent(line[2].trim());
-            product.appendChild(productNameElement);
+                Element productQuantityElement = doc.createElement(XML_QUANTITY_IDENTIFIER);
+                productQuantityElement.setTextContent(line[3].trim());
+                product.appendChild(productQuantityElement);
 
-            Element productQuantityElement = doc.createElement(XML_QUANTITY_IDENTIFIER);
-            productQuantityElement.setTextContent(line[3].trim());
-            product.appendChild(productQuantityElement);
-
-            Element quantityUnityElement = doc.createElement(XML_UNITY_IDENTIFIER);
-            quantityUnityElement.setTextContent(line[4].replace(INVERTED_COMMAS, ' ').trim()); //Replace to remove trash from file
-            product.appendChild(quantityUnityElement);
+                Element quantityUnityElement = doc.createElement(XML_UNITY_IDENTIFIER);
+                quantityUnityElement.setTextContent(line[4].replace(INVERTED_COMMAS, ' ').trim()); //Replace to remove trash from file
+                product.appendChild(quantityUnityElement);
+            }
         }
     }
 
@@ -225,7 +235,6 @@ public class CSVProductsReader implements ProductsReader {
      */
     private boolean isFileValid(List<String> fileContent) {
         if (fileContent == null) {
-            System.out.println("tou null");
             return false;
         }
         String[] line = fileContent.get(IDENTIFIERS_LINE).split(SPLITTER);

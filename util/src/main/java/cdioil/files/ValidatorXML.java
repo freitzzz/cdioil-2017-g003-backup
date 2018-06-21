@@ -2,6 +2,7 @@ package cdioil.files;
 
 import cdioil.logger.ExceptionLogger;
 import cdioil.logger.LoggerFileNames;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -42,6 +43,10 @@ public class ValidatorXML {
     public static boolean validateFile(File schemaFile, File xmlFile) {
         return validateSchema(new StreamSource(schemaFile),new StreamSource(xmlFile));
     }
+    
+    public static boolean validateXMLDocument(String schemaDocument,String xmlDocument){
+        return validateSchema(stringAsSource(schemaDocument),stringAsSource(xmlDocument));
+    }
     /**
      * Method that validates if a XML document is valid or not
      * @param schemaDocument Source with the source from the schema document
@@ -55,7 +60,6 @@ public class ValidatorXML {
             Schema schema = schemaFactory.newSchema(schemaDocument);
 
             Validator validator = schema.newValidator();
-
             validator.validate(xmlDocument);
 
         } catch (SAXException | IOException ex) {
@@ -65,6 +69,14 @@ public class ValidatorXML {
         }
 
         return true;
+    }
+    /**
+     * Method that converts a String document as a Source
+     * @param sourceAsString String with the document
+     * @return Source with the source converted from the String document
+     */
+    private static Source stringAsSource(String sourceAsString){
+        return new StreamSource(new ByteArrayInputStream(sourceAsString.getBytes()));
     }
 
 }

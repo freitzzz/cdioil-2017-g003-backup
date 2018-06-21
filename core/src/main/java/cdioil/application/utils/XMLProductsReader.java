@@ -93,7 +93,7 @@ public class XMLProductsReader implements ProductsReader {
     /**
      * Name of the logger file.
      */
-    private static final String LOG_FILENAME = "Logger.csv";
+    private static final String LOG_FILENAME = "products_logger.csv";
 
     /**
      * Product identifier.
@@ -207,20 +207,20 @@ public class XMLProductsReader implements ProductsReader {
                         if (isProductPathValid(categoryPath)) {
                             NodeList brandNodeList = productElement.getElementsByTagName(PRODUCT_BRAND_ELEMENT);
                             String name = productElement.getElementsByTagName(PRODUCT_NAME_ELEMENT).item(0).getTextContent();
+                            SKU code = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
                             Product p;
 
-                            if (brandNodeList.getLength() == 0) {
-                                SKU sku = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                            if (brandNodeList.getLength() == 0) { //If the product doesn't have a brand, it means it follows the format from the CSV files 
                                 String quantity = productElement.getElementsByTagName(PRODUCT_QUANTITY_ELEMENT).item(0).getTextContent()
                                         + productElement.getElementsByTagName(PRODUCT_UNITY_ELEMENT).item(0).getTextContent();
-                                p = new Product(name, sku, quantity);
-                            } else {
-                                SKU code = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                                p = new Product(name, code, quantity);
+                            } else { //Otherwise, it means it follows the format from the JSON and XML files
                                 String brand = brandNodeList.item(0).getTextContent();
                                 p = new Product(name, brand, code);
                             }
 
                             Category category = getCategoryByPath(categoryPath);
+
                             if (category != null) {
                                 addProductToMap(category, p);
                             } else {
