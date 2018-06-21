@@ -116,6 +116,8 @@ public class Suggestion implements Serializable, ValueObject {
         if (suggestionText == null || suggestionText.isEmpty()) {
             throw new IllegalArgumentException("A sugestão não pode ser null "
                     + "ou vazia");
+        }else{
+            this.suggestionText = suggestionText;
         }
     }
 }
