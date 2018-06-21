@@ -1,5 +1,6 @@
 package cdioil.domain.authz;
 
+import cdioil.domain.Image;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -11,7 +12,7 @@ import static org.junit.Assert.*;
 public class SuggestionTest {
 
     /**
-     * Test of the constructores, of class Suggestion.
+     * Test of the constructors, of class Suggestion.
      */
     @Test
     public void testConstructor() {
@@ -23,7 +24,23 @@ public class SuggestionTest {
                 + "is empty", createSuggestion(""));
         assertNotNull("The condition should succeed because the suggestion text "
                 + "is valid", createSuggestion("text"));
+        assertNotNull("The condition should succeed because the suggestion text "
+                + "and the image are valid", new Suggestion("ola", new Image("ola".getBytes())));
+    }
 
+    /**
+     * Tests for the constructor that receives an Image
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorWithImage() {
+        assertNull("The condition should succeed because the suggestion text "
+                + "is null", new Suggestion(null, new Image("ola".getBytes())));
+        assertNull("The condition should succeed because the suggestion text "
+                + "is empty", new Suggestion("", new Image("ola".getBytes())));
+        assertNull("The condition should succeed because the image is null",
+                new Suggestion("ola", new Image(null)));
+        assertNull("The condition should succeed because the image is empty",
+                new Suggestion("ola", new Image("".getBytes())));
     }
 
     /**
@@ -37,9 +54,9 @@ public class SuggestionTest {
         int expResult = other.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
-        
+
         //Mutation test
-        assertNotEquals("".hashCode(),result);
+        assertNotEquals("".hashCode(), result);
     }
 
     /**

@@ -131,7 +131,7 @@ public class AdminPanelView extends MainLayoutView implements View {
         addButtonsToComponent();
 
         // The default right panel components
-        rightPanel.setContent(new UserManagementComponent());
+        rightPanel.setContent(new DashboardComponent());
     }
 
     /**
@@ -196,7 +196,7 @@ public class AdminPanelView extends MainLayoutView implements View {
      * Adds desired buttons to left panel
      */
     private void addButtonsToComponent() {
-        //addNewButtonToLeftPanel(dashboardBtn); //TODO
+        addNewButtonToLeftPanel(dashboardBtn);
         addNewButtonToLeftPanel(usersBtn);
         addNewButtonToLeftPanel(managersBtn);
         addNewButtonToLeftPanel(marketStructBtn);
