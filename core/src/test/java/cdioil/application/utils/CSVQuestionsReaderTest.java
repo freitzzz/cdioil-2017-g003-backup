@@ -33,14 +33,14 @@ public class CSVQuestionsReaderTest {
      */
     CSVQuestionsReader questionsReader;
 
-//    @Test(expected = InvalidFileFormattingException.class)
-//    public void ensureIsCategoryQuestionsFileValidThrowsException() {
-//
-//        CSVQuestionsReader reader = new CSVQuestionsReader("Invalid_Category_Questions.csv");
-//
-//        reader.readCategoryQuestions();
-//    }
+    @Test(expected = InvalidFileFormattingException.class)
+    public void ensureIsCategoryQuestionsFileValidThrowsException() {
 
+        CSVQuestionsReader reader = new CSVQuestionsReader("Invalid_Category_Questions.csv");
+
+        reader.readCategoryQuestions();
+    }
+//
 //    @Test
 //    public void testReadCategoryQuestions() {
 //        System.out.println("readCategoryQuestions");
