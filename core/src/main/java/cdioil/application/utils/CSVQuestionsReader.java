@@ -433,7 +433,8 @@ public class CSVQuestionsReader implements QuestionsReader {
         xmlFile.appendChild(rootElement);
 
         //csv reader
-        BufferedReader csvReader = new BufferedReader(new FileReader(fileName));
+        FileReader fileReader=new FileReader(fileName);
+        BufferedReader csvReader = new BufferedReader(fileReader);
 
         //First line in the csv file has the fields
         String[] csvFields = null;
@@ -537,6 +538,7 @@ public class CSVQuestionsReader implements QuestionsReader {
 
         XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(stringWriter.getBuffer().toString());
         closeStream(csvReader);
+        closeStream(fileReader);
         return xmlQuestionsReader.readIndependentQuestions();
 
     }

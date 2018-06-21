@@ -1,0 +1,31 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #5
+	
+	* Como Utilizador, quero poder ter acesso às respostas que dei a um inquérito avaliado.
+
+	______________________
+	
+	FORMATO BREVE
+	______________________
+
+	O utilizador inicia o processo de consulta de respostas a um inquérito avaliado.
+	O sistema lista as respostas que o utilizador deu a cada pergunta respondida.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------

@@ -1,0 +1,15 @@
+	
+
+	TEST PLAN
+
+	________________________________________________
+	CASO #1: Listagem de Inquéritos Avaliados
+	________________________________________________
+
+	1. Autenticar me no sistema.
+	2. Selecionar a opção de listar inquéritos avaliados
+	3. Obter lista de inquéritos que já avaliei.
+
+
+	Nota: Ver ficheiro US470_Testes_Postman.js onde se encontram
+	      os testes à API Rest.

@@ -11,6 +11,7 @@ import de.odysseus.staxon.json.JsonXMLConfig;
 import de.odysseus.staxon.json.JsonXMLConfigBuilder;
 import de.odysseus.staxon.json.JsonXMLInputFactory;
 import de.odysseus.staxon.xml.util.PrettyXMLEventWriter;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -54,11 +55,12 @@ public class JSONCategoriesReader implements CategoriesReader {
     @Override
     public MarketStructure readCategories() {
         InputStream input = null;
+        OutputStream output=null;
         try {
             input = new FileInputStream(new File(filePath));
 
             File outFile = new File(CAT_OUTPUT_PATH);
-            OutputStream output = new FileOutputStream(outFile);
+            output = new FileOutputStream(outFile);
 
             JsonXMLConfig config = new JsonXMLConfigBuilder().multiplePI(false).build();
 
@@ -81,13 +83,8 @@ public class JSONCategoriesReader implements CategoriesReader {
         } catch (IOException | XMLStreamException ex) {
             Logger.getLogger(JSONCategoriesReader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(JSONCategoriesReader.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            closeStream(input);
+            closeStream(output);
         }
         return xmlCatReader.readCategories();
     }
@@ -95,5 +92,18 @@ public class JSONCategoriesReader implements CategoriesReader {
     @Override
     public int getNumberOfCategoriesRead() {
         return xmlCatReader.getNumberOfCategoriesRead();
+    }
+    /**
+     * Closes (or attempts) a stream
+     * @param stream Closeable with the stream being close
+     */
+    private void closeStream(Closeable stream){
+        if(stream!=null){
+            try{
+                stream.close();
+            }catch(IOException ioException){
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ioException);
+            }
+        }
     }
 }
