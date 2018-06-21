@@ -91,7 +91,7 @@ public class Review implements Serializable {
     /**
      * Review's suggestion.
      */
-    @Embedded
+    @OneToOne(cascade = {CascadeType.ALL})
     private Suggestion suggestion;
 
     /**

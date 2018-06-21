@@ -57,6 +57,7 @@
     <class>cdioil.domain.SimpleTemplate</class>
     <class>cdioil.domain.IndependentTemplatesLibrary</class>
     <class>cdioil.domain.ProductTemplatesLibrary</class>
+    <class>cdioil.domain.authz.Suggestion</class>
     <properties>
       <!-->H2 Properties<-->
       <!--property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>
