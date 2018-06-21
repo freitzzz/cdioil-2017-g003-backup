@@ -170,7 +170,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             }
         }else{
             if(suggestion != null){
-                byte[] imageBytes = Base64.decode(suggestionImage);
+                byte[] imageBytes = Base64.getDecoder().decode(suggestionImage);
                 reviewToAnswer.submitSuggestionWithImage(suggestion,new Image(imageBytes));
             }
         }
