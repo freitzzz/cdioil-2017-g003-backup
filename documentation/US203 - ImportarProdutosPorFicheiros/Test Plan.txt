@@ -1,0 +1,47 @@
+
+	TEST PLAN
+
+	_______________________________________________
+	
+          CASO #1: Importar Produtos com ficheiro CSV
+	_______________________________________________
+
+
+	1. Fazer login com o e-mail de administrador sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção "Importar Produtos" (13)
+	3. Inserir o caminho do ficheiro CSV a ser importado.
+	4. Obter mensagem de sucesso.
+	5. Guardar na base de dados.
+	6. Verificar se o ficheiro de log foi gerado, caso existam produtos
+	   inválidos.
+
+	_______________________________________________
+	
+          CASO #2: Importar Produtos com ficheiro JSON
+	_______________________________________________
+
+
+	1. Fazer login com o e-mail de administrador sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção "Importar Produtos" (13)
+	3. Inserir o caminho do ficheiro JSON a ser importado.
+	4. Obter mensagem de sucesso.
+	5. Guardar na base de dados.
+	6. Verificar se o ficheiro de log foi gerado, caso existam produtos
+	   inválidos.
+
+	_______________________________________________
+	
+          CASO #3: Importar Produtos com ficheiro XML
+	_______________________________________________
+
+
+	1. Fazer login com o e-mail de administrador sonae.lover@sonae.pt e
+	   password Password123
+	2. Escolher a opção "Importar Produtos" (13)
+	3. Inserir o caminho do ficheiro XML a ser importado.
+	4. Obter mensagem de sucesso.
+	5. Guardar na base de dados.
+	6. Verificar se o ficheiro de log foi gerado, caso existam produtos
+	   inválidos.
