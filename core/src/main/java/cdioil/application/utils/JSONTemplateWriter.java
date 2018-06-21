@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
+import cdioil.domain.SurveyItem;
 import cdioil.domain.Template;
 import cdioil.files.FileWriter;
 import cdioil.xsl.XSLTransformer;
 import java.io.File;
+import java.util.List;
 
 /**
  * Exports a template to a JSON file.
@@ -53,5 +50,10 @@ public class JSONTemplateWriter implements TemplateWriter {
         return FileWriter.writeFile(new File(filePath), XSLTransformer.
                 create(XSLTemplateInfoDocuments.JSON_TEMPLATE_XSLT).
                 transform(xmlWriter.getXMLAsString()));
+    }
+
+    @Override
+    public boolean addSurveyItems(List<SurveyItem> surveyItems) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
