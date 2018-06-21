@@ -8,6 +8,7 @@ import cdioil.domain.MarketStructure;
 import cdioil.domain.Product;
 import cdioil.domain.QRCode;
 import cdioil.domain.SKU;
+import cdioil.files.FilesUtils;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 
 import java.io.File;
@@ -23,7 +24,8 @@ import java.util.logging.Logger;
  */
 public class MarketStructureBootstrap {
 
-    private static final String CAT_FILE = "Market_Structure.csv";
+    private static final String CAT_FILE = FilesUtils.convertStringToUTF8(MarketStructureBootstrap.class.getClassLoader().getResource("Market_Structure.csv").getFile());
+
 
     /**
      * Runs the market struct bootstrap.
@@ -50,30 +52,13 @@ public class MarketStructureBootstrap {
                 qr, ean);
         marketStruct = repo.findMarketStructure();
         if (marketStruct == null) {
-            String catFile = findCSVFile();
-            File file;
-            //Convert file to use a UTF-8 compliant path string
-            try {
-                file = new File(URLDecoder.decode(catFile, "UTF-8"));
-            } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(MarketStructureBootstrap.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            CSVCategoriesReader reader = new CSVCategoriesReader(catFile);
+            CSVCategoriesReader reader = new CSVCategoriesReader(CAT_FILE);
             marketStruct = reader.readCategories();
             cat.addProduct(prod);
             cat.addProduct(createDummyProduct());
             marketStruct.addCategory(cat);
             repo.add(marketStruct);
         }
-    }
-
-    /**
-     * Gets category file from resources
-     * @return category file from resources
-     */
-    private String findCSVFile() {
-        ClassLoader cl = getClass().getClassLoader();
-        return cl.getResource(CAT_FILE).getFile();
     }
     /**
      * Creates a dummy product for usage of the scan functionality
