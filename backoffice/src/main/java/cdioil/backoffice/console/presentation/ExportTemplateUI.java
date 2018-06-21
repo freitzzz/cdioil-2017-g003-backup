@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.backoffice.console.presentation;
 
 import cdioil.backoffice.application.ExportTemplateController;
 import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.console.Console;
 import cdioil.domain.Template;
+import cdioil.domain.authz.Manager;
 import java.util.List;
 
 /**
@@ -30,31 +26,38 @@ public class ExportTemplateUI {
      */
     private final String exitCode = localizationHandler.getMessageValue("option_exit");
     /**
-     * Represents a message that indicates the user to enter the exit code in order to exit the UI.
+     * Represents a message that indicates the user to enter the exit code in
+     * order to exit the UI.
      */
     private final String exitMessage = localizationHandler.getMessageValue("info_exit_message");
     /**
-     * Represents a message that indicates the user to select a template from those listed.
+     * Represents a message that indicates the user to select a template from
+     * those listed.
      */
     private final String requestSelectTemplate = localizationHandler.getMessageValue("request_select_template");
     /**
-     * Represents a message that indicates the user that the template was successfully exported.
+     * Represents a message that indicates the user that the template was
+     * successfully exported.
      */
     private final String exportationSucceeded = localizationHandler.getMessageValue("info_success_exporting_template");
     /**
-     * Represents a message that indicates the user to insert the path of the file.
+     * Represents a message that indicates the user to insert the path of the
+     * file.
      */
     private final String requestInsertPath = localizationHandler.getMessageValue("request_file_path");
     /**
-     * Represents a message that indicates the user that there was an error exporting the file.
+     * Represents a message that indicates the user that there was an error
+     * exporting the file.
      */
     private final String errorExportationFailed = localizationHandler.getMessageValue("error_exporting_template");
     /**
-     * Represents a message that indicates the user that there aren't any available templates.
+     * Represents a message that indicates the user that there aren't any
+     * available templates.
      */
     private final String errorNoTemplates = localizationHandler.getMessageValue("error_no_templates");
     /**
-     * Represents a message that informs the user that the template is not valid.
+     * Represents a message that informs the user that the template is not
+     * valid.
      */
     private final String errorInvalidTemplate = localizationHandler.getMessageValue("error_invalid_template");
     /**
@@ -66,15 +69,18 @@ public class ExportTemplateUI {
      */
     private final String separator = localizationHandler.getMessageValue("separator");
     /**
-     * Instance of Controller that intermediates the interactions between the manager and the domain classes.
+     * Instance of Controller that intermediates the interactions between the
+     * manager and the domain classes.
      */
     private final ExportTemplateController ctrl;
 
     /**
      * Creates the UI itself.
+     *
+     * @param manager
      */
-    public ExportTemplateUI() {
-        ctrl = new ExportTemplateController();
+    public ExportTemplateUI(Manager manager) {
+        ctrl = new ExportTemplateController(manager);
         doShow();
     }
 
@@ -86,7 +92,7 @@ public class ExportTemplateUI {
         System.out.println(exitMessage);
 
         //1. List all templates
-        List<Template> templates = ctrl.getAllTemplates();
+        List<String> templates = ctrl.getAllTemplates();
         if (!listAllTemplates(templates)) {
             System.out.println(errorNoTemplates);
             System.out.println(separator);
@@ -105,8 +111,8 @@ public class ExportTemplateUI {
                 return;
             }
 
-            template = ctrl.getChosenTemplate(templateID);
-            if (template == null) {
+            boolean isValid = ctrl.getChosenTemplate(templateID);
+            if (!isValid) {
                 System.out.println(errorInvalidTemplate);
             } else {
                 isTemplateIDValid = true;
@@ -137,14 +143,14 @@ public class ExportTemplateUI {
      * @param templates List with all templates
      * @return true, if there are template to list. Otherwise, returns false
      */
-    private boolean listAllTemplates(List<Template> templates) {
+    private boolean listAllTemplates(List<String> templates) {
         if (templates == null || templates.isEmpty()) {
             return false;
         }
         int cont = 1;
-        for (Template t : templates) {
+        for (String t : templates) {
             System.out.println("\n" + listAllTemplates + " " + cont + ":");
-            System.out.println(t.toString());
+            System.out.println(t);
             cont++;
         }
         return true;
