@@ -2,10 +2,12 @@ package cdioil.persistence.impl;
 
 import cdioil.application.domain.authz.UserAction;
 import cdioil.application.domain.authz.UserActionHistory;
+import cdioil.application.utils.LocalDateTimeAttributeConverter;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserActionHistoryRepository;
 import java.time.LocalDateTime;
+import javax.persistence.TemporalType;
 
 /**
  * Class that represents the UserActionHistory repository implementation
@@ -33,7 +35,7 @@ public class UserActionHistoryRepositoryImpl extends BaseJPARepository<UserActio
     @Override
     public long getNumberOfUserActions(LocalDateTime dateTimeX, LocalDateTime dateTimeY) {
         return (long)entityManager().createQuery("SELECT COUNT(UAH) FROM UserActionHistory UAH "
-                + "WHERE UAH.actionDateTime BETWEEN :dateTimeX AND :dateTimeY")
+                + "WHERE CAST(UAH.actionDateTime as timestamp) BETWEEN :dateTimeX AND :dateTimeY")
                 .setParameter("dateTimeX",dateTimeX)
                 .setParameter("dateTimeY",dateTimeY)
                 .getSingleResult();
@@ -50,7 +52,7 @@ public class UserActionHistoryRepositoryImpl extends BaseJPARepository<UserActio
     @Override
     public long getNumberOfCertainUserAction(LocalDateTime dateTimeX, LocalDateTime dateTimeY, UserAction userAction) {
         return (long)entityManager().createQuery("SELECT COUNT(UAH) FROM UserActionHistory UAH "
-                + "WHERE UAH.actionDateTime BETWEEN :dateTimeX AND :dateTimeY "
+                + "WHERE CAST(UAH.actionDateTime as timestamp) BETWEEN :dateTimeX AND :dateTimeY "
                 + "AND UAH.userAction = :userAction")
                 .setParameter("dateTimeX",dateTimeX)
                 .setParameter("dateTimeY",dateTimeY)
