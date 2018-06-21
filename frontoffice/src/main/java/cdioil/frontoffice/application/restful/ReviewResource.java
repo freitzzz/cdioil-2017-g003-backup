@@ -1,6 +1,8 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.application.authz.AuthenticationController;
+import cdioil.application.authz.UserActionHistoryController;
+import cdioil.application.domain.authz.UserAction;
 import cdioil.application.utils.services.json.AnswerJSONService;
 import cdioil.application.utils.services.json.QuestionJSONService;
 import cdioil.domain.Answer;
@@ -18,6 +20,7 @@ import cdioil.frontoffice.application.restful.xml.ReviewXMLService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -96,7 +99,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             //return a response warning the user that the profile could not be updated
             return createUnableToUpdateUserDataResponse();
         }
-
+        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
+                .logUserAction(UserAction.STARTED_ANSWER_SURVEY);
         String messageBody = ReviewXMLService.createReviewXML(newReview);
 
         return messageBody == null ? createInvalidReviewResponse()
@@ -178,7 +182,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
-
+//        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
+//                .logUserAction(UserAction.ENDED_ANSWER_SURVEY);
         return createSavedReviewWithSuccessResponse();
     }
 
