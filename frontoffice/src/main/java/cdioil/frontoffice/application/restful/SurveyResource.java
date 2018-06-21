@@ -82,25 +82,25 @@ public final class SurveyResource implements SurveyAPI, ResponseMessages {
             @QueryParam("paginationID") short paginationID){
         
         if(paginationID < 0){
-           createInvalidPaginationIDResponse();
+           return createInvalidPaginationIDResponse();
         }
         
         AuthenticationController authenticationController = new AuthenticationController();
         
         SystemUser user = authenticationController.getUserByAuthenticationToken(authenticationToken);
         if(user == null){
-            createInvalidAuthTokenResponse();
+            return createInvalidAuthTokenResponse();
         }
         
         RegisteredUser registeredUser = authenticationController.getUserAsRegisteredUser(user);
         if(registeredUser == null){
-            createInvalidUserResponse();
+            return createInvalidUserResponse();
         }
         
         List<Survey> answeredSurveys = new SurveyController().getUserAnsweredSurveys(registeredUser,
                 paginationID);
         if(answeredSurveys == null || answeredSurveys.isEmpty()){
-            createNoAvailableSurveysResponse();
+            return createNoAvailableSurveysResponse();
         }
         return Response.status(Status.OK).entity(getSurveysAsJSON(answeredSurveys)).build();
     }

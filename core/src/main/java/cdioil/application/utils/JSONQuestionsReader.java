@@ -1,18 +1,16 @@
 package cdioil.application.utils;
 
 import cdioil.domain.Question;
-import cdioil.files.FileWriter;
 import de.odysseus.staxon.json.JsonXMLConfig;
 import de.odysseus.staxon.json.JsonXMLConfigBuilder;
 import de.odysseus.staxon.json.JsonXMLInputFactory;
 import de.odysseus.staxon.xml.util.PrettyXMLEventWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,6 +20,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
 
 /**
  * Class used for importing Questions from a JSON file
@@ -37,15 +36,6 @@ public class JSONQuestionsReader implements QuestionsReader {
     private final File file;
 
     /**
-     * String with the file path of the converted file (from JSON to XML).
-     */
-    private static final String CAT_QUESTIONS_OUTPUT_PATH = "category_questions_output.xml";
-    /**
-     * String with the path of the file converted from JSON to XML
-     */
-    private static final String OUTPUT_FILE_PATH = "independent_questions_output_file.xml";
-
-    /**
      * Creates an instance of JSONQuestionsReader, receiving the name of the
      * file to read.
      *
@@ -58,11 +48,11 @@ public class JSONQuestionsReader implements QuestionsReader {
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
         InputStream input = null;
+        ByteArrayOutputStream output=null;
         try {
             input = new FileInputStream(file);
             //StringWriter output = new StringWriter();
-            File outFile = new File(CAT_QUESTIONS_OUTPUT_PATH);
-            OutputStream output = new FileOutputStream(outFile);
+            output = new ByteArrayOutputStream();
 
             JsonXMLConfig config = new JsonXMLConfigBuilder().multiplePI(false).build();
 
@@ -80,31 +70,25 @@ public class JSONQuestionsReader implements QuestionsReader {
             reader.close();
             writer.close();
             input.close();
-
+            return new XMLQuestionsReader(output.toString()).readCategoryQuestions();
             //Write XML content to file
             //FileWriter.writeFile(new File(CAT_QUESTIONS_OUTPUT_PATH), output.getBuffer().toString());
         } catch (IOException | XMLStreamException ex) {
-            Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JSONQuestionsReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            closeStream(output);
+            closeStream(input);
         }
-        return new XMLQuestionsReader(CAT_QUESTIONS_OUTPUT_PATH).readCategoryQuestions();
     }
 
     @Override
     public List<Question> readIndependentQuestions() throws ParserConfigurationException {
         InputStream input = null;
-
+        ByteArrayOutputStream output=null;
         try {
             input = new FileInputStream(file);
-            File outFile = new File(OUTPUT_FILE_PATH);
-            OutputStream output = new FileOutputStream(outFile);
+            output = new ByteArrayOutputStream();
 
             JsonXMLConfig jsonXMLConfig = new JsonXMLConfigBuilder().multiplePI(false).build();
 
@@ -119,20 +103,29 @@ public class JSONQuestionsReader implements QuestionsReader {
             xmlEventReader.close();
             xmlEventWriter.close();
             input.close();
-
-        } catch (XMLStreamException | IOException ex) {
-            Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
+            return new XMLQuestionsReader(output.toString()).readIndependentQuestions();
+        } catch (XMLStreamException | IOException|TransformerException ex) {
+            Logger.getLogger(JSONQuestionsReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(JSONProductsReader.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            closeStream(input);
+            closeStream(output);
         }
 
-        return new XMLQuestionsReader(OUTPUT_FILE_PATH).readIndependentQuestions();
+        
+    }
+    /**
+     * Closes (or attempts) a stream
+     * @param stream Closeable with the stream being close
+     */
+    private void closeStream(Closeable stream){
+        if(stream!=null){
+            try{
+                stream.close();
+            }catch(IOException ioException){
+                Logger.getLogger(JSONQuestionsReader.class.getName()).log(Level.SEVERE, null, ioException);
+            }
+        }
     }
 
 }

@@ -18,7 +18,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -29,6 +28,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.transform.OutputKeys;
 
 /**
@@ -123,10 +124,6 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private static final int INDEPENDENT_FILE_OFFSET = 0;
 
-    /**
-     * String with the file path of the converted file (from CSV to XML).
-     */
-    private static final String CAT_QUESTIONS_OUTPUT_PATH = "category_questions_csv_output.xml";
 
     /**
      * File being read.
@@ -138,10 +135,6 @@ public class CSVQuestionsReader implements QuestionsReader {
      */
     private String fileName;
 
-    /**
-     * String with the path of the file converted from csv to XML
-     */
-    private static final String OUTPUT_FILE_PATH = "independent_questions_output_file_from_csv.xml";
 
     /**
      * Creates an instance of CSVQuestionsReader, receiving the name of the file
@@ -172,7 +165,6 @@ public class CSVQuestionsReader implements QuestionsReader {
         if (!isCategoryQuestionsFileValid(fileContent)) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
-
         Map<String, List<Question>> readQuestions = new HashMap<>();
 
         //Put the list's size in a variable to avoid checking size every iteration
@@ -263,8 +255,8 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
         }
-        new XMLQuestionsWriter(CAT_QUESTIONS_OUTPUT_PATH).categoryQuestionsToXML(readQuestions);
-        return new XMLQuestionsReader(CAT_QUESTIONS_OUTPUT_PATH).readCategoryQuestions();
+        String xmlDocument=new XMLQuestionsWriter().categoryQuestionsToXML(readQuestions);
+        return new XMLQuestionsReader(xmlDocument).readCategoryQuestions();
     }
 
     /**
@@ -516,7 +508,8 @@ public class CSVQuestionsReader implements QuestionsReader {
                     Element option = xmlFile.createElement("Option");
                     option.setAttribute("num", multipleChoiceQuestionsCount + "");
                     option.setAttribute("text", text);
-                    multipleChoiceQuestion.appendChild(option);
+                    //NOSONAR COMMENT BELOW IS DUE TO AN EXCEPTION ALREADY BE THROWN
+                    multipleChoiceQuestion.appendChild(option);//NOSONAR
                 } else {
                     multipleChoiceQuestionsCount = 0;
                     multipleChoiceQuestion = xmlFile.createElement("MultipleChoiceQuestion");
@@ -530,7 +523,6 @@ public class CSVQuestionsReader implements QuestionsReader {
             }
         }
 
-        FileWriter fileWriter = new FileWriter(new File(OUTPUT_FILE_PATH));
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -538,13 +530,13 @@ public class CSVQuestionsReader implements QuestionsReader {
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
+        StringWriter stringWriter=new StringWriter();
         DOMSource source = new DOMSource(xmlFile);
-        StreamResult result = new StreamResult(fileWriter);
+        StreamResult result = new StreamResult(stringWriter);
         transformer.transform(source, result);
 
-        fileWriter.flush();
-
-        XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(OUTPUT_FILE_PATH);
+        XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(stringWriter.getBuffer().toString());
+        closeStream(csvReader);
         return xmlQuestionsReader.readIndependentQuestions();
 
     }
@@ -572,6 +564,19 @@ public class CSVQuestionsReader implements QuestionsReader {
                 && line[1].equalsIgnoreCase(TYPE_IDENTIFIER)
                 && line[2].equalsIgnoreCase(QUESTION_IDENTIFIER)
                 && line[3].equalsIgnoreCase(PARAMETER_IDENTIFIER));
+    }
+    /**
+     * Closes (or attempts) a stream
+     * @param stream Closeable with the stream being close
+     */
+    private void closeStream(Closeable stream){
+        if(stream!=null){
+            try{
+                stream.close();
+            }catch(IOException ioException){
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ioException);
+            }
+        }
     }
 
 }

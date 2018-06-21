@@ -115,25 +115,25 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         SystemUser user = authenticationController.getUserByAuthenticationToken(authenticationToken);
 
         if (user == null) {
-            createInvalidAuthTokenResponse();
+            return createInvalidAuthTokenResponse();
         }
 
         RegisteredUser registeredUser = authenticationController.getUserAsRegisteredUser(user);
 
         if (registeredUser == null) {
-            createInvalidUserResponse();
+            return createInvalidUserResponse();
         }
 
         Survey survey = new SurveyRepositoryImpl().find(Long.parseLong(surveyID));
 
         if (survey == null) {
-            createSurveyNotFoundResponse();
+            return createSurveyNotFoundResponse();
         }
 
         List<Review> userReviews = registeredUser.getProfile().getReviews();
 
         if (userReviews == null || userReviews.isEmpty()) {
-            createNoReviewsFoundResponse();
+            return createNoReviewsFoundResponse();
         }
 
         for (Review userReview : userReviews) {

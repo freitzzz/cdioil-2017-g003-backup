@@ -6,8 +6,7 @@ import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
-import cdioil.domain.Template;
-import java.io.File;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -33,10 +32,6 @@ import org.w3c.dom.Element;
  */
 public class XMLQuestionsWriter {
 
-    /**
-     * File with the file that is going to be written with all survey answers
-     */
-    private final File file;
     /**
      * Constant that represents the label used for the question list on the XML file
      */
@@ -91,20 +86,11 @@ public class XMLQuestionsWriter {
     private static final String CATID_LABEL = "CAT_ID";
     
     /**
-     * Builds a new XMLTemplateWriter with the file that is going to be written
-     *
-     * @param filename String with the filename that is going to be written
-     */
-    public XMLQuestionsWriter(String filename) {
-        this.file = new File(filename);
-    }
-
-    /**
      * Puts the .csv file content into an .xml file
      *
      * @param questionMap map of category paths and questions
      */
-    public void categoryQuestionsToXML(Map<String, List<Question>> questionMap) {
+    public String categoryQuestionsToXML(Map<String, List<Question>> questionMap) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
 
@@ -118,15 +104,18 @@ public class XMLQuestionsWriter {
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(file);
+            StringWriter stringWriter=new StringWriter();
+            StreamResult result = new StreamResult(stringWriter);
             try {
                 transformer.transform(source, result);
+                return stringWriter.getBuffer().toString();
             } catch (TransformerException ex) {
                 Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (ParserConfigurationException | TransformerConfigurationException ex) {
             Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     /**
@@ -188,7 +177,8 @@ public class XMLQuestionsWriter {
 
                 Attr attrID = doc.createAttribute(QUESTION_ID_LABEL);
                 attrID.setValue(question.getQuestionID());
-                qElement.setAttributeNode(attrID);
+                //NO SONAR COMMENT BELOW IS DUE TO AN EXCEPTION WOULD BE ALREADY THROWN IF NULL
+                qElement.setAttributeNode(attrID);//NOSONAR 
 
                 questionElement.appendChild(qElement);
 

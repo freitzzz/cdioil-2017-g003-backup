@@ -74,6 +74,17 @@ public class CheckReviewActivity extends AppCompatActivity {
         ArrayList<String> questionAnswerList = new ArrayList<>();
         ArrayList<String> questions = getIntent().getExtras().getStringArrayList("questions");
         ArrayList<String> answers = getIntent().getExtras().getStringArrayList("answers");
+        Boolean.toString(true);
+
+        for(int i = 0; i < answers.size(); i++){
+            if(answers.get(i).equalsIgnoreCase(Boolean.toString(true))){
+                answers.remove(i);
+                answers.add(i,"Sim");
+            }else if(answers.get(i).equalsIgnoreCase(Boolean.toString(false))){
+                answers.remove(i);
+                answers.add(i,"Não");
+            }
+        }
 
         for (int i = 0; i < questions.size(); i++) {
             questionAnswerList.add(QUESTION_TAG
