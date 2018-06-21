@@ -1,6 +1,7 @@
 package cdioil.application.utils;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -22,20 +23,31 @@ public final class SurveyTemplateElement {
     @XmlAttribute(name = "name")
     private String name;
     /**
-     * SurveyItems with the template survey items
-     */
-    @XmlElement(name = "SurveyItems")
-    private SurveyItemsElement templateSurveyItems;
-    /**
      * Questions with the template templateQuestions
      */
     @XmlElement(name = "Questions")
     private QuestionsElement templateQuestions;
     /**
+     * SurveyItems with the template survey items
+     */
+    @XmlElement(name = "SurveyItems")
+    private SurveyItemsElement templateSurveyItems;
+    /**
      * QuestionScript with the current template question script
      */
     @XmlElement(name = "QuestionScript")
     private QuestionScriptElement templateQuestionScript;
+
+    public SurveyTemplateElement() {
+        this.templateQuestions = new QuestionsElement();
+        this.templateSurveyItems = new SurveyItemsElement();
+        this.templateQuestionScript = new QuestionScriptElement();
+    }
+
+    public SurveyTemplateElement(String name) {
+        this();
+        this.name = name;
+    }
 
     /**
      * Returns the current Survey Template name
@@ -88,7 +100,11 @@ public final class SurveyTemplateElement {
             ,
             @XmlElement(name = "MultipleChoiceQuestion", type = MultipleChoiceQuestionElement.class)
         })
-        private List<QuestionElement> questions;
+        private final List<QuestionElement> questions;
+
+        public QuestionsElement() {
+            this.questions = new LinkedList<>();
+        }
 
         /**
          * Returns all template templateQuestions
@@ -98,12 +114,16 @@ public final class SurveyTemplateElement {
         public List<QuestionElement> getQuestions() {
             return questions;
         }
+
+        public boolean addQuestion(QuestionElement questionElement) {
+            return questions.add(questionElement);
+        }
     }
 
     /**
      * Class that represents a base question from the template
      */
-    public static class QuestionElement {
+    public static abstract class QuestionElement {
 
         /**
          * String that represents the id of a question
@@ -115,6 +135,14 @@ public final class SurveyTemplateElement {
          */
         @XmlElement(name = "Text")
         private String text;
+
+        public QuestionElement() {
+        }
+
+        public QuestionElement(String questionID, String text) {
+            this.id = questionID;
+            this.text = text;
+        }
 
         /**
          * Returns the String representing the question's text.
@@ -139,6 +167,14 @@ public final class SurveyTemplateElement {
      * Class that represents a binary question from the template
      */
     public static class BinaryQuestionElement extends QuestionElement {
+
+        public BinaryQuestionElement() {
+
+        }
+
+        public BinaryQuestionElement(String questionID, String text) {
+            super(questionID, text);
+        }
     }
 
     /**
@@ -151,7 +187,16 @@ public final class SurveyTemplateElement {
          */
         @XmlElements(
                 @XmlElement(name = "Option", type = OptionElement.class))
-        private List<OptionElement> questionOptions;
+        private final List<OptionElement> questionOptions;
+
+        public MultipleChoiceQuestionElement() {
+            this.questionOptions = new LinkedList<>();
+        }
+
+        public MultipleChoiceQuestionElement(String questionID, String text) {
+            super(questionID, text);
+            this.questionOptions = new LinkedList<>();
+        }
 
         /**
          * Returns all of the MultipleChoiceQuestion's options.
@@ -160,6 +205,10 @@ public final class SurveyTemplateElement {
          */
         public List<OptionElement> getQuestionOptions() {
             return questionOptions;
+        }
+
+        public boolean addOption(OptionElement option) {
+            return questionOptions.add(option);
         }
     }
 
@@ -178,6 +227,15 @@ public final class SurveyTemplateElement {
          */
         @XmlAttribute(name = "text")
         private String text;
+
+        public OptionElement() {
+
+        }
+
+        public OptionElement(int optionNumber, String text) {
+            this.optionNumber = optionNumber;
+            this.text = text;
+        }
 
         public int getOptionNumber() {
             return optionNumber;
@@ -204,6 +262,14 @@ public final class SurveyTemplateElement {
         @XmlElement(name = "scaleMaxValue")
         private double maxValueScale;
 
+        public QuantitativeQuestionElement() {
+        }
+
+        public QuantitativeQuestionElement(String questionID, String questionText, double minScaleValue, double maxScaleValue) {
+            this.minValueScale = minScaleValue;
+            this.maxValueScale = maxScaleValue;
+        }
+
         public double getMinScaleValue() {
             return minValueScale;
         }
@@ -226,7 +292,11 @@ public final class SurveyTemplateElement {
             ,
             @XmlElement(name = "Product", type = ProductElement.class, required = false)
         })
-        private List<SurveyItemElement> surveyItems;
+        private final List<SurveyItemElement> surveyItems;
+
+        public SurveyItemsElement() {
+            this.surveyItems = new LinkedList<>();
+        }
 
         /**
          * Returns the current template survey items
@@ -242,6 +312,9 @@ public final class SurveyTemplateElement {
      * Class that represents a survey item of the template
      */
     public static abstract class SurveyItemElement {
+
+        public SurveyItemElement() {
+        }
     }
 
     /**
@@ -254,6 +327,13 @@ public final class SurveyTemplateElement {
          */
         @XmlAttribute(name = "path")
         private String path;
+
+        public CategoryElement() {
+        }
+
+        public CategoryElement(String path) {
+            this.path = path;
+        }
 
         /**
          * Returns the Category's path attribute.
@@ -276,6 +356,13 @@ public final class SurveyTemplateElement {
         @XmlAttribute(name = "sku")
         private String sku;
 
+        public ProductElement() {
+        }
+
+        public ProductElement(String sku) {
+            this.sku = sku;
+        }
+
         /**
          * Returns the Product's SKU attribute.
          *
@@ -296,7 +383,11 @@ public final class SurveyTemplateElement {
          */
         @XmlElements(
                 @XmlElement(name = "Question"))
-        private List<ScriptedQuestionElement> scriptedQuestions;
+        private final List<ScriptedQuestionElement> scriptedQuestions;
+
+        public QuestionScriptElement() {
+            this.scriptedQuestions = new LinkedList<>();
+        }
 
         /**
          * Returns all the on reply questions of the template question script
@@ -306,6 +397,10 @@ public final class SurveyTemplateElement {
          */
         public List<ScriptedQuestionElement> getScriptedQuestions() {
             return scriptedQuestions;
+        }
+
+        public boolean addScriptedQuestion(ScriptedQuestionElement scriptedQuestion) {
+            return scriptedQuestions.add(scriptedQuestion);
         }
     }
 
@@ -326,7 +421,16 @@ public final class SurveyTemplateElement {
          */
         @XmlElements(
                 @XmlElement(name = "OnReply"))
-        private List<OnReplyElement> onReplyList;
+        private final List<OnReplyElement> onReplyList;
+
+        public ScriptedQuestionElement() {
+            this.onReplyList = new LinkedList<>();
+        }
+
+        public ScriptedQuestionElement(String questionID) {
+            this();
+            this.questionID = questionID;
+        }
 
         /**
          * Retrieves the question's ID.
@@ -344,6 +448,10 @@ public final class SurveyTemplateElement {
          */
         public List<OnReplyElement> getOnReplyList() {
             return onReplyList;
+        }
+
+        public boolean addOnReply(OnReplyElement onReply) {
+            return onReplyList.add(onReply);
         }
     }
 
@@ -364,6 +472,14 @@ public final class SurveyTemplateElement {
         @XmlAttribute(name = "option")
         private String onReplyOptions;
 
+        public OnReplyElement() {
+        }
+
+        public OnReplyElement(ScriptedQuestionElement nexQuestion, List<String> options) {
+            this.onReplyQuestion = nexQuestion;
+            setOnReplyOptions(options);
+        }
+
         /**
          * Retrieves the option leading to the next question.
          *
@@ -378,6 +494,18 @@ public final class SurveyTemplateElement {
             }
 
             return Arrays.asList(options);
+        }
+
+        private void setOnReplyOptions(List<String> options) {
+            String result = "";
+
+            for (String option : options) {
+                result = result.concat(option).concat(",");
+            }
+
+            result = result.substring(0, result.length() - 1);
+
+            this.onReplyOptions = result;
         }
 
         /**
