@@ -5,7 +5,6 @@ import cdioil.console.Console;
 import cdioil.domain.authz.RegisteredUser;
 import cdioil.logger.ExceptionLogger;
 import cdioil.logger.LoggerFileNames;
-import java.util.LinkedList;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -35,6 +34,7 @@ public class AnswerSurveyUI {
 
     /**
      * Constructor
+     *
      * @param loggedUser
      */
     public AnswerSurveyUI(RegisteredUser loggedUser) {
@@ -96,7 +96,7 @@ public class AnswerSurveyUI {
     private void showSurveys() {
         //Refresh surveys and their review status
         controller.findActiveSurveys();
-        
+
         List<String> surveys = controller.getSurveyDescriptions();
 
         if (surveys.isEmpty()) {
@@ -111,19 +111,21 @@ public class AnswerSurveyUI {
             System.out.println("Survey #" + i);
             System.out.println(surveys.get(i));
         }
-        
+
+        boolean isValid = false;
+        while (!isValid) {
+            int idx = Console.readInteger("Select a survey: ");
+            isValid = controller.selectSurvey(idx);
+        }
+
         answerSurvey();
     }
 
     private void answerSurvey() {
 
-        int idx;
+        int idx = 0;
         String option;
 
-        idx = Console.readInteger("Select a survey: ");
-
-        controller.selectSurvey(idx);
-        
         while (true) {
             boolean isValidOption = false;
 
@@ -132,16 +134,15 @@ public class AnswerSurveyUI {
                 System.out.println(controller.getQuestion());
                 List<String> options = controller.getCurrentQuestionOptions();
                 for (int i = 0; i < options.size(); i++) {
-                    System.out.println(i + options.get(i));
+                    System.out.println(i + "- " + options.get(i));
                 }
                 System.out.println("Type EXIT to leave at any time\n");
                 option = Console.readLine("Select an option or UNDO previous answer:\n");
 
                 if ("EXIT".equalsIgnoreCase(option)) {
                     if (controller.saveReview()) {
-                        System.out.println("A sua avaliacao foi gravada com sucesso. "
-                                + "Podera continuar a responder ao inquerito em qualquer"
-                                + " altura");
+                        System.out.println("Your review was saved successfully. "
+                                + "You may resume answering it at any time");
                         return;
                     }
                 } else if (option.matches(NUMERIC_REGEX)) {
@@ -150,7 +151,7 @@ public class AnswerSurveyUI {
                         isValidOption = true;
                     }
                 } else if ("UNDO".equalsIgnoreCase(option) && controller.undoAnswer()) {
-                        break;
+                    break;
                 }
             }
 
@@ -176,7 +177,7 @@ public class AnswerSurveyUI {
                 }
 
                 if (controller.saveReview()) {
-                    System.out.println("Avaliação submetida com sucesso!");
+                    System.out.println("Review submitted successfully!");
                 }
                 break;
             }

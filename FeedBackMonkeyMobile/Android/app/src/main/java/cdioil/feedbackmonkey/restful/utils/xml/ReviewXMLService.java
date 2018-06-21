@@ -357,7 +357,7 @@ public class ReviewXMLService {
     }
 
     /**
-     * Saves a user's suggestion of a review.
+     * Saves the user's review suggestion.
      *
      * @param suggestion Content of the suggestion submitted by the user
      */
@@ -374,6 +374,24 @@ public class ReviewXMLService {
         transformer.transform(input, xmlOutput);
     }
 
+    /**
+     * Saves the user's review suggestion with text and image.
+     *
+     * @param suggestion   Content of the suggestion submitted by the user
+     * @param imageContent Content of the suggestion's image being submitted by the the user
+     */
+    public void saveSuggestion(String suggestion, String imageContent) throws TransformerException {
+        saveSuggestion(suggestion);
+
+        Element suggestionElement = (Element) document.getElementsByTagName(ReviewFileTags.SUGGESTION_ELEMENT_TAG).item(0);
+        Element imageElement = (Element) suggestionElement.getElementsByTagName(ReviewFileTags.IMAGE_ELEMENT_TAG).item(0);
+        imageElement.setTextContent(imageContent);
+
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        Result xmlOutput = new StreamResult(reviewFile);
+        Source input = new DOMSource(document);
+        transformer.transform(input, xmlOutput);
+    }
 
     /**
      * Parses an XML review file. This method is static since it will not be used for review's that are currently being answered.

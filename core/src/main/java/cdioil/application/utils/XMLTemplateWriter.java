@@ -1,29 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cdioil.application.utils;
 
+import cdioil.application.utils.SurveyTemplateElement.*;
+import cdioil.domain.BinaryQuestion;
+import cdioil.domain.Category;
+import cdioil.domain.MultipleChoiceQuestion;
+import cdioil.domain.Product;
+import cdioil.domain.QuantitativeQuestion;
+import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
+import cdioil.domain.ScriptedTemplate;
+import cdioil.domain.SurveyItem;
 import cdioil.domain.Template;
+import cdioil.files.FileWriter;
 import java.io.File;
 import java.io.StringWriter;
+import java.io.Writer;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 /**
  * Exports a Template to a .xml file.
@@ -33,43 +32,14 @@ import org.w3c.dom.Element;
  */
 public class XMLTemplateWriter implements TemplateWriter {
 
-    /**
-     * Constant that represents the label used for the template identifier on the XML file
-     */
-    private static final String TEMPLATE_LABEL = "Template";
-    /**
-     * Constant that represents the label used for the question identifier on the XML file
-     */
-    private static final String QUESTION_LABEL = "Question";
-    /**
-     * Constant that represents the label used for the question text identifier on the XML file
-     */
-    private static final String QUESTIONTEXT_LABEL = "QuestionText";
-    /**
-     * Constant that represents the label used for the options identifier on the XML file
-     */
-    private static final String OPTIONS_LABEL = "Options";
-    /**
-     * Constant that represents the label used for the option identifier on the XML file
-     */
-    private static final String OPTION_LABEL = "Option";
-    /**
-     * Constant that represents the label used for the ID of the question identifier on the XML file
-     */
-    private static final String ID = "ID";
-    /**
-     * Constant that represents the label used for the title of the question identifier on the XML file
-     */
-    private static final String QUESTION_TITLE = "title";
+    private final String filename;
 
-    /**
-     * File with the file that is going to be written with all survey answers
-     */
-    private final File file;
     /**
      * Template to export.
      */
     private final Template template;
+
+    private final List<SurveyItem> surveyItems;
 
     /**
      * Builds a new XMLTemplateWriter with the file that is going to be written
@@ -78,101 +48,184 @@ public class XMLTemplateWriter implements TemplateWriter {
      * @param template Template to export
      */
     public XMLTemplateWriter(String filename, Template template) {
-        this.file = new File(filename);
+        this.filename = filename;
         this.template = template;
+        this.surveyItems = new LinkedList<>();
     }
 
-    /**
-     * Method that writes the template into a XML file.
-     *
-     * @return true if the file was successfully exported. Otherwise, returns false
-     */
+    @Override
+    public boolean addSurveyItems(List<SurveyItem> surveyItems) {
+        return this.surveyItems.addAll(surveyItems);
+    }
+
     @Override
     public boolean write() {
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder;
 
         try {
-            dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.newDocument();
-
-            writeTemplate(doc);
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(file);
-            try {
-                transformer.transform(source, result);
-            } catch (TransformerException ex) {
-                Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+            //Set template's title
+            SurveyTemplateElement templateElement = new SurveyTemplateElement(template.getTitle());
+            
+            QuestionsElement questionsElement = templateElement.getTemplateQuestions();
+            
+            Iterable<Question> templateQuestions = template.getQuestions();
+            
+            for (Question question : templateQuestions) {
+                questionsElement.addQuestion(buildQuestionElement(question));
             }
-        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
+            
+            List<SurveyItemElement> surveyItemElementList = templateElement.getTemplateSurveyItems().getSurveyItems();
+            for (SurveyItem item : surveyItems) {
+                if (item instanceof Category) {
+                    CategoryElement categoryElement = new CategoryElement(((Category) item).categoryPath());
+                    surveyItemElementList.add(categoryElement);
+                } else if (item instanceof Product) {
+                    ProductElement productElement = new ProductElement(((Product) item).getID().toString());
+                    surveyItemElementList.add(productElement);
+                }
+            }
+            
+            if (template instanceof ScriptedTemplate) {
+                buildQuestionScript(templateElement, ((ScriptedTemplate) template).getGraph());
+            }
+            
+            JAXBContext jaxbContext = JAXBContext.newInstance(SurveyTemplateElement.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            Writer writer = new StringWriter();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(jaxbContext, writer);
+            
+            return FileWriter.writeFile(new File(filename), ((StringWriter)writer).getBuffer().toString());
+            
+        } catch (JAXBException ex) {
             Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
-        return true;
     }
 
-    /**
-     * Writes the template into a XML file.
-     *
-     * @param doc Representation of the XML document
-     */
-    private void writeTemplate(Document doc) {
-        Element rootElement = doc.createElement(TEMPLATE_LABEL);
-        doc.appendChild(rootElement);
+    private QuestionScriptElement buildQuestionScript(SurveyTemplateElement templateElement, Graph graph) {
 
-        Attr attrTitle = doc.createAttribute(QUESTION_TITLE);
-        attrTitle.setValue(template.getTitle());
-        rootElement.setAttributeNode(attrTitle);
-        for (Question question : template.getQuestions()) {
-            Element questionElement = doc.createElement(QUESTION_LABEL);
-            rootElement.appendChild(questionElement);
+        QuestionScriptElement questionScript = templateElement.getTemplateQuestionScript();
 
-            Attr attrID = doc.createAttribute(ID);
-            attrID.setValue(question.getQuestionID());
-            questionElement.setAttributeNode(attrID);
+        Question question = graph.getFirstQuestion();
 
-            Element questionTextElement = doc.createElement(QUESTIONTEXT_LABEL);
-            questionTextElement.appendChild(doc.createTextNode(question.getQuestionText()));
-            questionElement.appendChild(questionTextElement);
+        ScriptedQuestionElement scriptedQuestion = new ScriptedQuestionElement(question.getQuestionID());
 
-            Element questionOptionsElement = doc.createElement(OPTIONS_LABEL);
-            questionElement.appendChild(questionOptionsElement);
+        questionScript.addScriptedQuestion(scriptedQuestion);
 
-            for (QuestionOption op : question.getOptionList()) {
-                Element questionOption = doc.createElement(OPTION_LABEL);
-                questionOption.appendChild(doc.createTextNode(op.toString()));
-                questionOptionsElement.appendChild(questionOption);
+        buildQuestionScriptRec(questionScript, graph, question, scriptedQuestion);
+
+        return questionScript;
+    }
+
+    private void buildQuestionScriptRec(QuestionScriptElement questionScriptElement, Graph graph, Question currentQuestion, ScriptedQuestionElement scriptedQuestion) {
+
+        if (currentQuestion == null) {
+            return;
+        }
+
+        Iterable<Question> adjacentQuestions = graph.adjacentQuestions(currentQuestion);
+
+        for (Question nextQuestion : adjacentQuestions) {
+
+            String nextQuestionID = nextQuestion.getQuestionID();
+
+            ScriptedQuestionElement nextScriptedQuestion = new ScriptedQuestionElement(nextQuestionID);
+
+            Iterable<Edge> edges = graph.edgesConnectingQuestions(currentQuestion, nextQuestion);
+
+            //Fill the options attribute
+            List<String> options = new LinkedList<>();
+            for (Edge connectingEdge : edges) {
+                options.add(connectingEdge.getElement().toString());
             }
+
+            OnReplyElement onReplyElement = new OnReplyElement(nextScriptedQuestion, options);
+
+            scriptedQuestion.addOnReply(onReplyElement);
+
+            buildQuestionScriptRec(questionScriptElement, graph, nextQuestion, nextScriptedQuestion);
         }
     }
 
+    private QuestionElement buildQuestionElement(Question question) {
+
+        String questionID = question.getQuestionID();
+
+        String questionText = question.getQuestionText();
+
+        if (question instanceof BinaryQuestion) {
+
+            BinaryQuestionElement questionElement = new BinaryQuestionElement(questionID, questionText);
+
+            return questionElement;
+
+        } else if (question instanceof MultipleChoiceQuestion) {
+
+            MultipleChoiceQuestionElement questionElement = new MultipleChoiceQuestionElement(questionID, questionText);
+
+            int optionNumber = 1;
+
+            for (QuestionOption option : question.getOptionList()) {
+
+                OptionElement optionElement = new OptionElement(optionNumber, option.toString());
+
+                optionNumber++;
+
+                questionElement.addOption(optionElement);
+            }
+
+            return questionElement;
+
+        } else if (question instanceof QuantitativeQuestion) {
+
+            double maximum = Double.MIN_VALUE;
+            double minimum = Double.MAX_VALUE;
+
+            for (QuestionOption option : question.getOptionList()) {
+
+                QuantitativeQuestionOption qntOption = (QuantitativeQuestionOption) option;
+
+                Double optionValue = qntOption.getContent();
+
+                if (Double.compare(optionValue, minimum) < 0) {
+                    minimum = optionValue;
+                }
+                if (Double.compare(optionValue, maximum) > 0) {
+                    maximum = optionValue;
+                }
+            }
+
+            return new QuantitativeQuestionElement(questionID, questionText, minimum, maximum);
+        }
+
+        return null;
+    }
+
     /**
-     * Returns a String with the content of a XML file with the template's information.
+     * Returns a String with the content of a XML file with the template's
+     * information.
      *
      * @return a String with the content of the XML file
      */
     public String getXMLAsString() {
-        try {
-            Document doc = DocumentBuilderFactory.newInstance().
-                    newDocumentBuilder().newDocument();
-
-            writeTemplate(doc);
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StringWriter stringWriter = new StringWriter();
-            StreamResult result = new StreamResult(stringWriter);
-            transformer.transform(source, result);
-            return stringWriter.getBuffer().toString();
-        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
-            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
-            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+//        try {
+//            Document doc = DocumentBuilderFactory.newInstance().
+//                    newDocumentBuilder().newDocument();
+//
+//            writeTemplate(doc);
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            DOMSource source = new DOMSource(doc);
+//            StringWriter stringWriter = new StringWriter();
+//            StreamResult result = new StreamResult(stringWriter);
+//            transformer.transform(source, result);
+//            return stringWriter.getBuffer().toString();
+//        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
+//            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (TransformerException ex) {
+//            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+        return "";
     }
 }

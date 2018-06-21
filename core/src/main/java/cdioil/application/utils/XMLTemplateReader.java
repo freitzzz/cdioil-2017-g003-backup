@@ -293,6 +293,10 @@ public class XMLTemplateReader implements TemplateReader {
         for (QuestionElement questionElement : templateQuestions.getQuestions()) {
 
             Question question = buildQuestion(questionElement);
+            /*question will only be null if an XML file contains unknown types of QuestionElement*/
+            if(question == null){
+                return; 
+            }
             String questionID = question.getQuestionID();
 
             template.addQuestion(question);

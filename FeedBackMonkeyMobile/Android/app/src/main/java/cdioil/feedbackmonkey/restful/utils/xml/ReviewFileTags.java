@@ -38,6 +38,11 @@ public interface ReviewFileTags {
     String TEXT_ELEMENT_TAG = "Text";
 
     /**
+     * Constant representing the Image element tag.
+     */
+    String IMAGE_ELEMENT_TAG = "Image";
+
+    /**
      * Constant representing the Answers element tag.
      */
     String ANSWERS_ELEMENT_TAG = "Answers";
