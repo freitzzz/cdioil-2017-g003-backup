@@ -16,25 +16,14 @@ import java.util.logging.Level;
 import cdioil.files.FileWriter;
 import cdioil.domain.Category;
 import cdioil.domain.Product;
-import cdioil.domain.Code;
-import cdioil.domain.EAN;
 import cdioil.domain.SKU;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -104,7 +93,7 @@ public class XMLProductsReader implements ProductsReader {
     /**
      * Name of the logger file.
      */
-    private static final String LOG_FILENAME = "Logger.csv";
+    private static final String LOG_FILENAME = "products_logger.csv";
 
     /**
      * Product identifier.
@@ -169,12 +158,12 @@ public class XMLProductsReader implements ProductsReader {
     /**
      * Element in XML file that represents the quantity of the product.
      */
-    private static final String PRODUCT_QUANTITY_ELEMENT = "Quantidade";
+    private static final String PRODUCT_QUANTITY_ELEMENT = "quantidade";
 
     /**
      * Element in XML file that represents the unity of the product.
      */
-    private static final String PRODUCT_UNITY_ELEMENT = "Unidade";
+    private static final String PRODUCT_UNITY_ELEMENT = "unidade";
 
     /**
      * Builds an instance of XMLProductsReader, receiving the path of the file to read.
@@ -218,20 +207,20 @@ public class XMLProductsReader implements ProductsReader {
                         if (isProductPathValid(categoryPath)) {
                             NodeList brandNodeList = productElement.getElementsByTagName(PRODUCT_BRAND_ELEMENT);
                             String name = productElement.getElementsByTagName(PRODUCT_NAME_ELEMENT).item(0).getTextContent();
+                            SKU code = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
                             Product p;
 
-                            if (brandNodeList.getLength() == 0) {
-                                SKU sku = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                            if (brandNodeList.getLength() == 0) { //If the product doesn't have a brand, it means it follows the format from the CSV files 
                                 String quantity = productElement.getElementsByTagName(PRODUCT_QUANTITY_ELEMENT).item(0).getTextContent()
                                         + productElement.getElementsByTagName(PRODUCT_UNITY_ELEMENT).item(0).getTextContent();
-                                p = new Product(name, sku, quantity);
-                            } else {
-                                SKU code = new SKU(productElement.getElementsByTagName(PRODUCT_CODE_ELEMENT).item(0).getTextContent());
+                                p = new Product(name, code, quantity);
+                            } else { //Otherwise, it means it follows the format from the JSON and XML files
                                 String brand = brandNodeList.item(0).getTextContent();
                                 p = new Product(name, brand, code);
                             }
 
                             Category category = getCategoryByPath(categoryPath);
+
                             if (category != null) {
                                 addProductToMap(category, p);
                             } else {

@@ -53,7 +53,7 @@ public class CreateSurveyWindow extends Window {
     /**
      * Twin Column Select Items/Data
      */
-    private List<SurveyItemDTO> surveyItemsData = new ArrayList<>();
+    private transient List<SurveyItemDTO> surveyItemsData = new ArrayList<>();
 
     /**
      * Selected Questions List Layout
@@ -68,7 +68,7 @@ public class CreateSurveyWindow extends Window {
     /**
      * Twin Column Select Users Items/Data
      */
-    private List<SystemUserDTO> usersData = new ArrayList<>();
+    private transient List<SystemUserDTO> usersData = new ArrayList<>();
 
     /**
      * Controller Class

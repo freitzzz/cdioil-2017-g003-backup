@@ -31,7 +31,7 @@ public final class CSVUsersReader implements UsersReader{
     /**
      * Constant that represents the identifier of the CSV file delimiter
      */
-    private static final String DELIMITER_IDENTIFIER=";";
+    private static final String DELIMITER_IDENTIFIER="([;])|(\\s*,\\s*)";
     /**
      * Constant that represents the number of the CSV line that contains the column identifiers 
      */

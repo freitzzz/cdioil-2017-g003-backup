@@ -20,8 +20,11 @@ import org.junit.Test;
  */
 public class CSVProductsReaderTest {
 
+    /**
+     * Test of isFileValid, of class CSVProductsReader.
+     */
     @Test(expected = InvalidFileFormattingException.class)
-    public void ensureIsProductsFileValidThrowsException() {
+    public void ensureIsFileValidThrowsException() {
 
         Map<Category, List<Product>> map = new HashMap<>();
         CSVProductsReader reader

@@ -13,22 +13,33 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import cdioil.domain.QuestionOption;
+import cdioil.files.FileReader;
+import cdioil.files.FilesUtils;
 import cdioil.files.InputSchemaFiles;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.files.ValidatorXML;
+import java.io.ByteArrayInputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -38,20 +49,27 @@ import org.xml.sax.SAXException;
  * @author Joana Pinheiro [1161380]
  */
 public class XMLQuestionsReader implements QuestionsReader {
-
-    /**
-     * File being read.
+    /** 
+     * 
+     * 
+     * 
+     * FIX SCHEMA DOCUMENTS (PUT THEM IN A INTERFACE)
+     * 
+     * 
+     * 
+     * 
      */
-    private final File file;
     /**
      * Schema file (XSD) used for validating the input file.
      */
-    private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY_QUESTIONS);
+    private static final String SCHEMA_FILE = FilesUtils.listAsString(
+            FileReader.readFile(new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY_QUESTIONS)));
 
     /**
      * Schema file (XSD) used for validating the input file (independent questions).
      */
-    private static final File SCHEMA_INDEPENDENT_QUESTIONS = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_INDEPENDENT_QUESTIONS);
+    private static final String SCHEMA_INDEPENDENT_QUESTIONS = FilesUtils.listAsString(
+            FileReader.readFile(new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_INDEPENDENT_QUESTIONS)));
     /**
      * name of question node in XML file
      */
@@ -96,15 +114,24 @@ public class XMLQuestionsReader implements QuestionsReader {
      * name of binary question node in XML file
      */
     private static final String BINARY_QUESTION_NODE = "BinaryQuestion";
-
+    
+    private Source source;
+    
     /**
      * Creates an instance of XMLQuestionsReader, receiving the name of the file
      * to read.
      *
-     * @param filename Name of the file to read
+     * @param file Name of the file to read
      */
-    public XMLQuestionsReader(String filename) {
-        this.file = new File(filename);
+    public XMLQuestionsReader(File file) {
+        this.source = new StreamSource(file);
+    }
+    /**
+     * Builds a new XMLQuestionReader with the XML Document as a whole String
+     * @param xmlDocument String with the XML document as a whole String
+     */
+    public XMLQuestionsReader(String xmlDocument){
+        this.source=new StreamSource(new ByteArrayInputStream(xmlDocument.getBytes()));
     }
 
     /**
@@ -114,33 +141,42 @@ public class XMLQuestionsReader implements QuestionsReader {
      */
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
-        if (!ValidatorXML.validateFile(SCHEMA_INDEPENDENT_QUESTIONS, file)) {
-            throw new InvalidFileFormattingException("Unrecognized file formatting");
+        try {
+            if (!ValidatorXML.validateXMLDocument(SCHEMA_FILE,sourceAsString(source))) {
+                throw new InvalidFileFormattingException("Unrecognized file formatting");
+            }
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLQuestionsReader.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InvalidFileFormattingException("Unrecognized xml document formatting");
         }
         Map<String, List<Question>> readQuestions = new HashMap<>();
         try {
+            resetStreamSource((StreamSource)source);
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = dBuilder.parse(file);
+            Document doc = dBuilder.parse(sourceToInputSource(source));
             if (doc.hasChildNodes()) {
                 iterateCategoryQuestionNodes(doc.getChildNodes(), readQuestions);
             }
         } catch (IOException | ParserConfigurationException | SAXException e) {
             return null;
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLQuestionsReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("MAP" + readQuestions);
         return readQuestions;
     }
 
     @Override
-    public List<Question> readIndependentQuestions() throws ParserConfigurationException {
-        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
+    public List<Question> readIndependentQuestions() throws ParserConfigurationException, TransformerException {
+        if (!ValidatorXML.validateXMLDocument(SCHEMA_INDEPENDENT_QUESTIONS,sourceAsString(source))) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
 
         List<Question> independentQuestions = new ArrayList<>();
         try {
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = dBuilder.parse(file);
+            resetStreamSource((StreamSource)source);
+            Document document = dBuilder.parse(sourceToInputSource(source));
 
             //document.getDocumentElement().normalize();
 
@@ -356,5 +392,39 @@ public class XMLQuestionsReader implements QuestionsReader {
             return new QuantitativeQuestion(text, id, scale);
         }
         return null;
+    }
+    /**
+     * Method that transforms a Source into an InputSource
+     * @param source Source with the source being transformed in a InputSource
+     * @return InputSource with the transformed source as InputSource
+     * @throws TransformerException Throws {@link TransformerException} if the source is not 
+     * a XML document
+     */
+    private InputSource sourceToInputSource(Source source) throws TransformerException{
+        Transformer transformer=TransformerFactory.newInstance().newTransformer();
+        StringWriter stringWriter=new StringWriter();
+        transformer.transform(source,new StreamResult(stringWriter));
+        ByteArrayInputStream inputStream=new ByteArrayInputStream(stringWriter.getBuffer().toString().getBytes());
+        return new InputSource(inputStream);
+    }
+    /**
+     * Method that transforms a Source into a String
+     * @param source Source with the source being transformed in a String
+     * @return String with the source as a String
+     * @throws TransformerException Throws {@link TransformerException} if the source is not 
+     * a XML document
+     */
+    private String sourceAsString(Source source) throws TransformerException{
+        Transformer transformer=TransformerFactory.newInstance().newTransformer();
+        StringWriter stringWriter=new StringWriter();
+        transformer.transform(source,new StreamResult(stringWriter));
+       return stringWriter.getBuffer().toString();
+    }
+    /**
+     * Resets a certain StreamSource
+     */
+    private void resetStreamSource(StreamSource source) throws IOException{
+        if(source.getInputStream()!=null)
+            source.getInputStream().reset();
     }
 }

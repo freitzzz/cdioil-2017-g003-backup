@@ -1,0 +1,11 @@
+	_________
+
+	DESIGN
+	_________
+
+
+   	Classes do domínio: Review, RegisteredUser, SystemUser, Profile, Survey
+   	Controller: AuthenticationController
+   	Repository: UserRepository, RegisteredUserRepository, SurveyRepository
+	Services: ReviewJSONService
+	Resource: ReviewResource

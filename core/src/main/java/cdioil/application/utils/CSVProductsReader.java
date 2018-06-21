@@ -2,17 +2,26 @@ package cdioil.application.utils;
 
 import cdioil.domain.Category;
 import cdioil.domain.Product;
-import cdioil.domain.SKU;
-import static cdioil.files.FileReader.readFile;
+import cdioil.files.FileReader;
 import cdioil.files.FileWriter;
 import cdioil.files.InvalidFileFormattingException;
-import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Imports products from a CSV file.
@@ -26,12 +35,7 @@ public class CSVProductsReader implements ProductsReader {
     /**
      * Semicolon used for splitting data within the file.
      */
-    private static final String FILE_SPLITTER = ";";
-
-    /**
-     * Separator of the path.
-     */
-    private static final String PATH_SPLITTER = "-";
+    private static final String SPLITTER = ";";
 
     /**
      * Inverted commas that may appear as trash in the file.
@@ -43,43 +47,6 @@ public class CSVProductsReader implements ProductsReader {
      */
     private static final Character QUESTION_MARK = '?';
 
-    //Category related constants
-    /**
-     * Categories' DC Identifier.
-     */
-    private static final String DC_IDENTIFIER = "DC";
-
-    /**
-     * Categories' UN Identifier.
-     */
-    private static final String UN_IDENTIFIER = "UN";
-
-    /**
-     * Categories' CAT Identifier.
-     */
-    private static final String CAT_IDENTIFIER = "CAT";
-
-    /**
-     * Categories' SCAT Identifier.
-     */
-    private static final String SCAT_IDENTIFIER = "SCAT";
-
-    /**
-     * Categories' UB Identifier.
-     */
-    private static final String UB_IDENTIFIER = "UB";
-
-    /**
-     * Scale used in the paths of the MarketStructure.
-     */
-    private static final String CATEGORIES_SCALE = "[0-9]+";
-
-    /**
-     * Regular expression to validate the path of the Category in the Market Structure.
-     */
-    private static final String PATH_REGEX = CATEGORIES_SCALE + DC_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UN_IDENTIFIER + PATH_SPLITTER
-            + CATEGORIES_SCALE + CAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + SCAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UB_IDENTIFIER;
-
     //Offsets
     /**
      * Number of the line that contains the identifiers of the columns.
@@ -88,43 +55,68 @@ public class CSVProductsReader implements ProductsReader {
     /**
      * Number of expected identifiers (columns) in the CSV file.
      */
-    private static final int NUM_IDENTIFIERS = 4;
-
-    /**
-     * Number of cells skipped in order to reach the start of a product.
-     */
-    private static final int PRODUCT_OFFSET = 1;
+    private static final int NUM_IDENTIFIERS = 5;
 
     //Header fields
     /**
-     * Categories identifier.
+     * Categories identifier in the CSV file.
      */
-    private static final String CATEGORY_IDENTIFIER = "ClasseID";
+    private static final String CSV_CATEGORY_IDENTIFIER = "ClasseID";
 
     /**
-     * SKU identifier.
+     * SKU identifier in the CSV file.
      */
-    private static final String SKU_IDENTIFIER = "ProdutoID";
+    private static final String CSV_CODE_IDENTIFIER = "ProdutoID";
 
     /**
-     * Product identifier.
+     * Product's name identifier in the CSV file.
      */
-    private static final String PRODUCT_IDENTIFIER = "Designacao";
+    private static final String CSV_PRODUCT_IDENTIFIER = "Designacao";
 
     /**
-     * Quantity (per unit) identifier.
+     * Quantity (per unit) identifier in the CSV file.
      */
-    private static final String QUANTITY_IDENTIFIER = "QuantidadeUnidade";
+    private static final String CSV_QUANTITY_IDENTIFIER = "Quantidade";
 
     /**
-     * Line identifier.
+     * Unity identifier in the CSV file.
      */
-    private static final String LINE_IDENTIFIER = "Linha";
+    private static final String CSV_UNITY_IDENTIFIER = "Unidade";
 
     /**
-     * Cause identifier.
+     * Product identifier in the XML file.
      */
-    private static final String CAUSE_IDENTIFIER = "Razão";
+    private static final String XML_PRODUCT_IDENTIFIER = "produto";
+
+    /**
+     * Products list identifier in the XML file.
+     */
+    private static final String XML_PRODUCTS_LIST_IDENTIFIER = "lista_produtos";
+
+    /**
+     * Categories identifier in the XML file.
+     */
+    private static final String XML_CATEGORY_IDENTIFIER = "ID";
+
+    /**
+     * EAN identifier in the XML file.
+     */
+    private static final String XML_CODE_IDENTIFIER = "COD";
+
+    /**
+     * Product's name identifier in the XML file.
+     */
+    private static final String XML_PRODUCT_NAME_IDENTIFIER = "descritivo";
+
+    /**
+     * Quantity (per unit) identifier in the XML file.
+     */
+    private static final String XML_QUANTITY_IDENTIFIER = CSV_QUANTITY_IDENTIFIER.toLowerCase();
+
+    /**
+     * Unity identifier in the XML file.
+     */
+    private static final String XML_UNITY_IDENTIFIER = CSV_UNITY_IDENTIFIER.toLowerCase();
 
     //Files
     /**
@@ -133,25 +125,9 @@ public class CSVProductsReader implements ProductsReader {
     private final File file;
 
     /**
-     * File to export.
+     * String with the file path of the converted file (from CSV to XML).
      */
-    private final File logFile;
-
-    /**
-     * Name of the logger file.
-     */
-    private static final String LOG_FILENAME = "Logger.csv";
-
-    /**
-     * Message added to the file content if the path of the category is not valid.
-     */
-    private static final String INVALID_CATEGORY_PATH_MESSAGE = "Caminho da categoria não válido!";
-
-    /**
-     * Message added to the file content if the category is not a leaf in the market strucure.
-     */
-    private static final String NOT_LEAF_CATEGORY_MESSAGE = "Categoria não folha, logo não é possível adicionar um produto!";
-
+    private static final String CSV_FILE_PATH = "csvToXml.xml";
 
     /**
      * Message displayed to the user if the file formatting is not recognized.
@@ -159,152 +135,96 @@ public class CSVProductsReader implements ProductsReader {
     private static final String INVALID_FILE_FORMATTING_MESSAGE = "Unrecognized file formatting";
 
     /**
-     * Message displayed to the user if the line formatting is not valid.
-     */
-    private static final String INVALID_LINE_FORMATTING_MESSAGE = "O formato dos produtos é inválido na linha ";
-
-    /**
      * Map that will hold all already existent products for the user to decide if they need to be updated or not.
      */
-    private final Map<Category, List<Product>> existentProducts;
+    private final Map<Category, List<Product>> repeatedProducts;
 
     /**
      * Creates an instance of CSVProductsReader, receiving the name of the file to read.
      *
      * @param filename Name of the file to read
-     * @param existentProducts Map that will hold all already existent products
+     * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated or not
      */
-    public CSVProductsReader(String filename, Map<Category, List<Product>> existentProducts) {
+    public CSVProductsReader(String filename, Map<Category, List<Product>> repeatedProducts) {
         this.file = new File(filename);
-        this.logFile = new File(LOG_FILENAME);
-        this.existentProducts = existentProducts;
+        this.repeatedProducts = repeatedProducts;
     }
 
     /**
-     * Reads a products from a CSV file.
+     * Imports products from a CSV file, by converting it into a XML file.
      *
-     * @return Map with the categories and list of products associated with them
+     * @return a map with the categories as keys and their products as values
      */
     @Override
     public Map<Category, List<Product>> readProducts() {
 
-        List<String> fileContent = readFile(file);
-        if (fileContent == null) {
-            return null;
-        }
+        List<String> fileContent = FileReader.readFile(file);
         if (!isFileValid(fileContent)) {
             throw new InvalidFileFormattingException(INVALID_FILE_FORMATTING_MESSAGE);
         }
 
-        Map<String, List<Product>> readProducts = new HashMap<>();
-        MarketStructureRepositoryImpl marketStructureRepository = new MarketStructureRepositoryImpl();
-        int numLines = fileContent.size();
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().
+                    newDocumentBuilder().newDocument();
 
-        Map<Integer, Integer> invalidProducts = new HashMap<>();
+            writeToDocument(doc, fileContent);
 
-        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StringWriter output = new StringWriter();
+            StreamResult result = new StreamResult(output);
 
-            String[] currentLine = fileContent.get(i).split(FILE_SPLITTER);
-            if (currentLine.length > 0) { //Doesn't read empty lines
+            transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
-                try {
-                    currentLine[0] = currentLine[0].replace(INVERTED_COMMAS, ' ').trim();
-                    String path = createProductPath(currentLine[0].trim());
-                    List<Category> list = marketStructureRepository.findCategoriesByPathPattern(path);
-                    if (isPathProductValid(path) && list.size() == 1) {
-                        Product product = createProduct(currentLine, PRODUCT_OFFSET);
-                        if (product != null && marketStructureRepository.findIfProductExists(product.productName())) {
-                            if (!readProducts.containsKey(path)) { // New products
-                                List<Product> newList = new LinkedList<>();
-                                newList.add(product);
-                                readProducts.put(path, newList);
-                            } else {
-                                readProducts.get(path).add(product);
-                            }
-                        } else { // Already existent products
-                            if (product != null) {
-                                if (existentProducts.containsKey(path)) {
-                                    existentProducts.get(path).add(product);
-                                } else {
-                                    List<Product> listE = new LinkedList<>();
-                                    listE.add(product);
-                                   // existentProducts.put(path, listE);
-                                }
-                            }
-                        }
-                    } else {
-                        if (!isPathProductValid(path)) {
-                            invalidProducts.put(i, 1);
-                        }
-                        if (list.size() != 1) {
-                            invalidProducts.put(i, 2);
-                        }
-                    }
-                } catch (IllegalArgumentException ex) {
-                    System.out.println(INVALID_LINE_FORMATTING_MESSAGE + i);
-                }
+            transformer.transform(source, result);
+
+            //Write XML content to file
+            FileWriter.writeFile(new File(CSV_FILE_PATH), output.getBuffer().toString());
+        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
+            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new XMLProductsReader(CSV_FILE_PATH, repeatedProducts).readProducts();
+    }
+
+    /**
+     * Writes the information about the products of the CSV file into a XML document.
+     *
+     * @param doc Document instance
+     * @param fileContent Content of the CSV file
+     */
+    private void writeToDocument(Document doc, List<String> fileContent) {
+        Element rootElement = doc.createElement(XML_PRODUCTS_LIST_IDENTIFIER);
+        doc.appendChild(rootElement);
+        for (int i = IDENTIFIERS_LINE + 1; i < fileContent.size(); i++) {
+            String[] line = fileContent.get(i).split(SPLITTER);
+            if (line.length == NUM_IDENTIFIERS) {
+                Element product = doc.createElement(XML_PRODUCT_IDENTIFIER);
+                rootElement.appendChild(product);
+
+                Element categoryPathElement = doc.createElement(XML_CATEGORY_IDENTIFIER);
+                categoryPathElement.setTextContent(line[0].replace(INVERTED_COMMAS, ' ').trim()); //Replace to remove trash from file
+                product.appendChild(categoryPathElement);
+
+                Element productCodeElement = doc.createElement(XML_CODE_IDENTIFIER);
+                productCodeElement.setTextContent(line[1].trim());
+                product.appendChild(productCodeElement);
+
+                Element productNameElement = doc.createElement(XML_PRODUCT_NAME_IDENTIFIER);
+                productNameElement.setTextContent(line[2].trim());
+                product.appendChild(productNameElement);
+
+                Element productQuantityElement = doc.createElement(XML_QUANTITY_IDENTIFIER);
+                productQuantityElement.setTextContent(line[3].trim());
+                product.appendChild(productQuantityElement);
+
+                Element quantityUnityElement = doc.createElement(XML_UNITY_IDENTIFIER);
+                quantityUnityElement.setTextContent(line[4].replace(INVERTED_COMMAS, ' ').trim()); //Replace to remove trash from file
+                product.appendChild(quantityUnityElement);
             }
         }
-        if (!invalidProducts.isEmpty()) {
-            addInvalidProdutctsToLogFile(invalidProducts);
-        }
-
-        return new HashMap<Category,List<Product>>();
-    }
-
-    /**
-     * Recreates the path of the product in the market structure.
-     *
-     * @param path String that represents the path of the product
-     * @return the path of the product in the market structure
-     */
-    private String createProductPath(String path) {
-        StringBuilder sb = new StringBuilder();
-
-        String dc = Character.toString(path.charAt(0)) + Character.toString(path.charAt(1));
-        sb.append(dc).append(DC_IDENTIFIER);
-
-        String un = Character.toString(path.charAt(2)) + Character.toString(path.charAt(3));
-        sb.append(PATH_SPLITTER).append(un).append(UN_IDENTIFIER);
-
-        String cat = Character.toString(path.charAt(4)) + Character.toString(path.charAt(5)) + Character.toString(path.charAt(6)) + Character.toString(path.charAt(7));
-        sb.append(PATH_SPLITTER).append(cat).append(CAT_IDENTIFIER);
-
-        String scat = Character.toString(path.charAt(8)) + Character.toString(path.charAt(9));
-        int scatVal = Integer.parseInt(scat);
-        sb.append(PATH_SPLITTER).append(scatVal).append(SCAT_IDENTIFIER);
-
-        String ub = Character.toString(path.charAt(10)) + Character.toString(path.charAt(11));
-        int ubVal = Integer.parseInt(ub);
-        sb.append(PATH_SPLITTER).append(ubVal).append(UB_IDENTIFIER);
-
-        return sb.toString();
-    }
-
-    /**
-     * Checks if the path of the product in the market structure is valid.
-     *
-     * @param path String to check (represents the path of the product)
-     * @return true, if the path is valid. Otherwise, returns false
-     */
-    private boolean isPathProductValid(String path) {
-        return path != null
-                && (path.matches(PATH_REGEX));
-    }
-
-    /**
-     * Reads a product from a CSV file.
-     *
-     * @param currentLine Line of the file currently being read
-     * @param offset Number of cells skipped to reach the start of a product
-     * @return the instance of Product
-     */
-    private Product createProduct(String[] currentLine, int offset) {
-        SKU sku = new SKU(currentLine[offset].trim());
-        String productName = currentLine[offset + 1].trim();
-        String quantity = currentLine[offset + 2].trim();
-
-        return new Product(productName, sku, quantity);
     }
 
     /**
@@ -317,40 +237,15 @@ public class CSVProductsReader implements ProductsReader {
         if (fileContent == null) {
             return false;
         }
-        String[] line = fileContent.get(IDENTIFIERS_LINE).split(FILE_SPLITTER);
+        String[] line = fileContent.get(IDENTIFIERS_LINE).split(SPLITTER);
 
+        //Remove trash from file
         line[0] = line[0].replace(QUESTION_MARK, ' ').trim();
-
-        return ((line.length == NUM_IDENTIFIERS)
-                && line[0].trim().contains(CATEGORY_IDENTIFIER)
-                && line[1].trim().equalsIgnoreCase(SKU_IDENTIFIER)
-                && line[2].trim().equalsIgnoreCase(PRODUCT_IDENTIFIER)
-                && line[3].trim().contains(QUANTITY_IDENTIFIER));
-    }
-
-    /**
-     * Adds all invalid lines from the imported file to a log file.
-     *
-     * The keys of the map represent the invalid lines. The mapped values represent the cause for that line being invalid.
-     *
-     * If value = 1, the line is invalid because the category path does not exist in the market structure; If value = 2, the line is invalid because the category is not a leaf and therefore, cannot hold products; If value = 3, the line is invalid because the product already exists in the market structure.
-     *
-     * @param invalidLines Map with the invalid lines of the file
-     */
-    private void addInvalidProdutctsToLogFile(Map<Integer, Integer> invalidLines) {
-        List<String> fileContent = new ArrayList<>();
-        String header = LINE_IDENTIFIER + FILE_SPLITTER + CAUSE_IDENTIFIER;
-        fileContent.add(header);
-        for (Map.Entry<Integer, Integer> entry : invalidLines.entrySet()) {
-            int line = entry.getKey();
-            int cause = invalidLines.get(line);
-            if (cause == 1) {
-                fileContent.add(line + FILE_SPLITTER + INVALID_CATEGORY_PATH_MESSAGE);
-            }
-            if (cause == 2) {
-                fileContent.add(line + FILE_SPLITTER + NOT_LEAF_CATEGORY_MESSAGE);
-            }
-           }
-        FileWriter.writeFile(logFile, fileContent);
+        return (line.length == NUM_IDENTIFIERS
+                && line[0].trim().contains(CSV_CATEGORY_IDENTIFIER)
+                && line[1].trim().equalsIgnoreCase(CSV_CODE_IDENTIFIER)
+                && line[2].trim().equalsIgnoreCase(CSV_PRODUCT_IDENTIFIER)
+                && line[3].trim().contains(CSV_QUANTITY_IDENTIFIER))
+                && line[4].trim().contains(CSV_UNITY_IDENTIFIER);
     }
 }

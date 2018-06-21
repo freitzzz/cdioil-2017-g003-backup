@@ -1,0 +1,31 @@
+	___________
+
+	ANÁLISE 
+	____________
+
+	USER STORY DE SPRINT #5
+	
+	* Como Utilizador, quero poder ter acesso à lista de inquéritos que já respondi.
+
+	______________________
+	
+	FORMATO BREVE
+	______________________
+
+	O utilizador inicia o processo de listagem de inquéritos já respondidos-
+	O sistema lista os inquéritos que o utilizador já respondeu.
+	______________________
+
+	REGRAS DE NEGÓCIO
+	_____________________
+
+
+	--------------------------------------------------------------
+
+	______________________
+		
+	TESTES UNITÁRIOS
+	_____________________
+
+
+	---------------------------------------------------------------

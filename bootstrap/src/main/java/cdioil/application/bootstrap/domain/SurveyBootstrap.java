@@ -140,10 +140,148 @@ public class SurveyBootstrap {
         for(int i=0;i<50;i++){
             surveyRepository.add(createDummyTargetSurvey(registeredUser,manager));
         }
+        
+        surveyRepository.add(createCookieSurvey());
+        
         Review r = new Review(survey);         
         new ReviewRepositoryImpl().merge(r);
     }
 
+    /**
+     * Creates a realistic survey about the Category "Cookies"
+     * @return survey about cookies
+     */
+    private Survey createCookieSurvey(){
+        Category category = marketStructureRepository.findCategoriesByIdentifierPattern("10DC-2UN-203CAT").get(0);
+        CategoryQuestionsLibrary categoryQuestionsLibrary = categoryQuestionsLibraryRepository.findCategoryQuestionsLibrary();
+        Set<Question> categoryQuestionsSet = categoryQuestionsLibrary.categoryQuestionSet(category);
+        List<String> questionIDList = new LinkedList<>(Arrays.asList("CQ1","CQ2","CQ3",
+                "CQ4","CQ5","CQ6","CQ7"));
+        List<Question> fetchedQuestions = new LinkedList<>();
+        Survey cookieSurvey;
+        
+        for(String questionID : questionIDList){
+            for(Question question : categoryQuestionsSet){
+                if(questionID.equalsIgnoreCase(question.getQuestionID())){
+                    fetchedQuestions.add(question);
+                }
+            }
+        }
+        List<SurveyItem> surveyItems = new LinkedList<>();
+        surveyItems.add(category);
+        cookieSurvey = new GlobalSurvey(surveyItems,
+                new TimePeriod(LocalDateTime.now(),
+                        LocalDateTime.of(2020, 1, 12, 12, 12)));
+        
+        Question questionCQ1 = fetchedQuestions.get(0);
+        Question questionCQ2 = fetchedQuestions.get(1);
+        Question questionCQ3 = fetchedQuestions.get(2);
+        Question questionCQ4 = fetchedQuestions.get(3);
+        Question questionCQ5 = fetchedQuestions.get(4);
+        Question questionCQ6 = fetchedQuestions.get(5);
+        Question questionCQ7 = fetchedQuestions.get(6);
+        
+        cookieSurvey.addQuestion(questionCQ1);
+        cookieSurvey.addQuestion(questionCQ2);
+        cookieSurvey.addQuestion(questionCQ3);
+        cookieSurvey.addQuestion(questionCQ4);
+        cookieSurvey.addQuestion(questionCQ5);
+        cookieSurvey.addQuestion(questionCQ6);
+        cookieSurvey.addQuestion(questionCQ7);
+        
+        /**
+         * Question CQ1 Flow
+         * Values 1,2,3 and 8 chosen as answers end the survey immediatly.
+         * Values 4 and 5 lead to question CQ2
+         * Values 6 and 7 lead to question CQ3
+         */
+        cookieSurvey.setNextQuestion(questionCQ1, questionCQ2, 
+                questionCQ1.getOptionList().get(3), 0);
+        cookieSurvey.setNextQuestion(questionCQ1, questionCQ2, 
+                questionCQ1.getOptionList().get(4), 0);
+        cookieSurvey.setNextQuestion(questionCQ1, questionCQ3, 
+                questionCQ1.getOptionList().get(5), 0);
+        cookieSurvey.setNextQuestion(questionCQ1, questionCQ3, 
+                questionCQ1.getOptionList().get(6), 0);
+        
+        /**
+         * Question CQ2 Flow
+         * Taste as answer leads to question CQ4
+         * Texture as answer leads to question CQ5
+         * Image as answer leads to question CQ6
+         */
+        cookieSurvey.setNextQuestion(questionCQ2, questionCQ4,
+                questionCQ2.getOptionList().get(0), 0);
+        cookieSurvey.setNextQuestion(questionCQ2, questionCQ5, 
+                questionCQ2.getOptionList().get(1), 0);
+        cookieSurvey.setNextQuestion(questionCQ2, questionCQ6, 
+                questionCQ2.getOptionList().get(2), 0);
+        
+         /**
+         * Question CQ3 Flow
+         * Taste as answer leads to question CQ4
+         * Texture as answer leads to question CQ5
+         * Image as answer leads to question CQ6
+         */
+        cookieSurvey.setNextQuestion(questionCQ3, questionCQ4,
+                questionCQ3.getOptionList().get(0), 0);
+        cookieSurvey.setNextQuestion(questionCQ3, questionCQ5, 
+                questionCQ3.getOptionList().get(1), 0);
+        cookieSurvey.setNextQuestion(questionCQ3, questionCQ6, 
+                questionCQ3.getOptionList().get(2), 0);
+        
+        /**
+         * Question CQ4 Flow
+         * Too sour, too sweet, flavourless, too strong as answers lead to
+         * question CQ7
+         * Other as answer finishes the survey
+         */
+        cookieSurvey.setNextQuestion(questionCQ4, questionCQ7,
+                questionCQ4.getOptionList().get(0),0);
+        cookieSurvey.setNextQuestion(questionCQ4, questionCQ7,
+                questionCQ4.getOptionList().get(1),0);
+        cookieSurvey.setNextQuestion(questionCQ4, questionCQ7,
+                questionCQ4.getOptionList().get(2),0);
+        cookieSurvey.setNextQuestion(questionCQ4, questionCQ7,
+                questionCQ4.getOptionList().get(3),0);
+        
+        /**
+         * Question CQ5 Flow
+         * Too soft, too stiff, high food aggregation, low food aggregation,
+         * too thick, too thin as answers lead to question CQ7
+         * Other as answer finishes the survey
+         */
+        cookieSurvey.setNextQuestion(questionCQ5, questionCQ7,
+                questionCQ5.getOptionList().get(0),0);
+        cookieSurvey.setNextQuestion(questionCQ5, questionCQ7,
+                questionCQ5.getOptionList().get(1),0);
+        cookieSurvey.setNextQuestion(questionCQ5, questionCQ7,
+                questionCQ5.getOptionList().get(2),0);
+        cookieSurvey.setNextQuestion(questionCQ5, questionCQ7,
+                questionCQ5.getOptionList().get(3),0);
+        cookieSurvey.setNextQuestion(questionCQ5, questionCQ7,
+                questionCQ5.getOptionList().get(4),0);
+        cookieSurvey.setNextQuestion(questionCQ5, questionCQ7,
+                questionCQ5.getOptionList().get(5),0);
+        
+        /**
+         * Question CQ6 Flow
+         * Package not appealing, article is too small, basic look as answers
+         * leads to question CQ7
+         * Other as answer finishes the survey
+         */
+        cookieSurvey.setNextQuestion(questionCQ6, questionCQ7,
+                questionCQ6.getOptionList().get(0),0);
+        cookieSurvey.setNextQuestion(questionCQ6, questionCQ7,
+                questionCQ6.getOptionList().get(1),0);
+        cookieSurvey.setNextQuestion(questionCQ6, questionCQ7,
+                questionCQ6.getOptionList().get(2),0);
+        
+        cookieSurvey.changeState(SurveyState.ACTIVE);
+        
+        return cookieSurvey;
+    }
+    
     /**
      * Creates the survey that is used for the stress test.
      *
