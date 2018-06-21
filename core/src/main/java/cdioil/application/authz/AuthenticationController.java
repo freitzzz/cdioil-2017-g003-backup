@@ -1,5 +1,6 @@
 package cdioil.application.authz;
 
+import cdioil.application.domain.authz.AuthenticationAction;
 import cdioil.application.domain.authz.AuthenticationService;
 import cdioil.application.domain.authz.LoginManagement;
 import cdioil.application.domain.authz.UserSession;
@@ -48,20 +49,25 @@ public final class AuthenticationController implements Serializable {
                 logSessionStart();
                 LoginManagement loginManagement = loginManagementRepo.find(new Email(email));
                 if(loginManagement == null){
+                    logValidLogin();
                     return true;
                 }
                 if(loginManagement.isUserLocked()){
                     currentUserSession = null;
+                    logInvalidLogin();
                     throw new AuthenticationException(AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED.toString(),
                             AuthenticationException.AuthenticationExceptionCause.ACCOUNT_LOCKED);
                 }else{
+                    logValidLogin();
                     return true;
                 }
             }else{
+                logValidLogin();
                 return true;
             }
         }catch(AuthenticationException authException){
             manageAccountLocks(authException, loginManagementRepo, email);
+            logInvalidLogin();
             throw authException;
         }
     }
@@ -246,5 +252,17 @@ public final class AuthenticationController implements Serializable {
     private void logSessionEnd(){
         currentUserSession.logSessionEnd();
         currentUserSession=new UserSessionRepositoryImpl().merge(currentUserSession);
+    }
+    /**
+     * Logs a invalid login
+     */
+    private void logInvalidLogin(){
+        new AuthenticationHistoryController().logAuthenticationAction(AuthenticationAction.INVALID_LOGIN);
+    }
+    /**
+     * Logs a valid login
+     */
+    private void logValidLogin(){
+        new AuthenticationHistoryController().logAuthenticationAction(AuthenticationAction.SUCCESFUL_LOGIN);
     }
 }
