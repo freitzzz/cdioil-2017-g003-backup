@@ -1,6 +1,8 @@
 package cdioil.backoffice.application;
 
+import cdioil.application.domain.authz.AuthenticationAction;
 import cdioil.application.domain.authz.UserAction;
+import cdioil.persistence.impl.AuthenticationHistoryRepositoryImpl;
 import cdioil.persistence.impl.UserActionHistoryRepositoryImpl;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
@@ -38,6 +40,24 @@ public final class TimeStatisticsController {
     public long getNumberOfSurveysAnswered(){
         return new UserActionHistoryRepositoryImpl()
                 .getNumberOfCertainUserAction(dateTimeX,dateTimeY,UserAction.ENDED_ANSWER_SURVEY);
+    }
+    /**
+     * Method that gets the number of valid logins on a certain time period
+     * @return Long with the number of valid logins on a certain time period
+     */
+    public long getNumberOfValidLogins(){
+        return new AuthenticationHistoryRepositoryImpl()
+                .getNumberOfCertainAuthenticationAction(dateTimeX,dateTimeY
+                        ,AuthenticationAction.SUCCESFUL_LOGIN);
+    }
+    /**
+     * Method that gets the number of invalid logins on a certain time period
+     * @return Long with the number of invalid logins on a certain time period
+     */
+    public long getNumberOfInvalidLogins(){
+        return new AuthenticationHistoryRepositoryImpl()
+                .getNumberOfCertainAuthenticationAction(dateTimeX,dateTimeY
+                        ,AuthenticationAction.INVALID_LOGIN);
     }
     /**
      * Method that verifies if a certain period of time is valid or not

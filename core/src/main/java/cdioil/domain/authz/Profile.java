@@ -15,15 +15,23 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
- * Profile class.
+ * Class that represents a User's profile
+ * 
+ * TODO Add missing unit tests
  *
  * @author João
  * @author <a href="1160907@isep.ipp.pt">João Freitas</a>
+ * * @author <a href="1160907@isep.ipp.pt">Gil Durão</a>
  */
 @Entity
 public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
-
+    /**
+     * Serialization UID.
+     */
     private static final long serialVersionUID = 1L;
+    /**
+     * Database ID.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -33,19 +41,26 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     @OneToOne
     private RegisteredUser registeredUser;
     /**
-     * list of the user's reviews
+     * List of the user's reviews
      */
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Review> reviews;
+    /**
+     * List of the user's suggestions
+     */
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    private List<Suggestion> suggestions;
 
     /**
      * Builds a new Profile of a certain Registered User
      *
-     * @param registeredUser RegisteredUser with the registered user that owns this profile
+     * @param registeredUser RegisteredUser with the registered user that owns
+     * this profile
      */
     public Profile(RegisteredUser registeredUser) {
         this.registeredUser = registeredUser;
         this.reviews = new ArrayList<>();
+        this.suggestions = new ArrayList<>();
     }
 
     /**
@@ -64,23 +79,56 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     }
 
     /**
-     * Adds a review to the list of reviews
+     * Access method to the list of suggestions
      *
-     * @param r review to add
-     * @return true if the review was added successfully, false if it was not added
+     * @return suggestion list
      */
-    public boolean addReview(Review r) {
-        return r != null ? reviews.add(r) : false;
+    public List<Suggestion> getSuggestions() {
+        return suggestions;
     }
 
     /**
-     * Removes a review to the list of reviews
+     * Adds a review to the list of reviews
      *
-     * @param r review to remove
-     * @return true if the review was removed successfully, false if it was not removed
-     */    
-    public boolean removeReview(Review r){
-        return r != null ? reviews.remove(r) : false;
+     * @param review review to add
+     * @return true if the review was added successfully, false if it was not
+     * added
+     */
+    public boolean addReview(Review review) {
+        return review != null ? reviews.add(review) : false;
+    }
+
+    /**
+     * Removes a review from the list of reviews
+     *
+     * @param review review to remove
+     * @return true if the review was removed successfully, false if it was not
+     * removed
+     */
+    public boolean removeReview(Review review) {
+        return review != null ? reviews.remove(review) : false;
+    }
+
+    /**
+     * Adds a suggestion to the list of suggestions
+     *
+     * @param suggestion suggestion to add
+     * @return true if the review was added successfully, false if it was not
+     * added
+     */
+    public boolean addSuggestion(Suggestion suggestion) {
+        return suggestion != null ? suggestions.add(suggestion) : false;
+    }
+
+    /**
+     * Removes a suggestion from the list of suggestions
+     *
+     * @param suggestion suggestion to remove
+     * @return true if the review was removed successfully, false if it was not
+     * removed
+     */
+    public boolean removeSuggestion(Suggestion suggestion) {
+        return suggestion != null ? suggestions.remove(suggestion) : false;
     }
 
     /**
@@ -129,5 +177,4 @@ public class Profile implements Serializable, AggregateRoot<RegisteredUser> {
     public RegisteredUser getID() {
         return registeredUser;
     }
-
 }

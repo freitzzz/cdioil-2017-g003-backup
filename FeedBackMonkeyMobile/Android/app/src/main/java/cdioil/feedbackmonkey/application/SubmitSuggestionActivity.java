@@ -19,16 +19,28 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.xml.transform.TransformerException;
 
+import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
+import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
+import cdioil.feedbackmonkey.restful.utils.RESTRequest;
+import cdioil.feedbackmonkey.restful.utils.json.SuggestionJSONService;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
 import cdioil.feedbackmonkey.utils.GenericFileProvider;
+import cdioil.feedbackmonkey.utils.ToastNotification;
+import okhttp3.Response;
+
+import static cdioil.feedbackmonkey.utils.ToastNotification.show;
 
 public class SubmitSuggestionActivity extends AppCompatActivity {
     /**
@@ -68,6 +80,16 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
      * String that holds the suggestion photo path.
      */
     private String pictureImagePath;
+
+    /**
+     * Int that holds the REST Response code when submitting a suggestion that is not related to a review.
+     */
+    private int restResponseCode;
+
+    /**
+     * String that holds the REST Response body when submitting a suggestion that is not related to a review.
+     */
+    private String restResponseBody;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,37 +210,164 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
 
     /**
      * Sets on click listener for the send suggestion button.
-     * TODO If a picture was taken, send it to the server.
      */
     private void configureSubmitSuggestionButton() {
         submitSuggestionButton.setOnClickListener(view -> {
-            String sentFromActivity = getIntent().getExtras().getString("sentFromActivity");
+            String sentFromActivity = getIntent().getExtras().getString("sentFromQuestionActivity");
             String suggestionText = suggestionEditText.getText().toString();
             if (suggestionText.trim().isEmpty()) {
                 suggestionEditText.setError("A sugestão não pode ser vazia!");
                 return;
             }
 
+            /**
+             * Check if it was UserProfileActivity that started SubmitSuggestionActivity or if it was
+             * QuestionActivity.
+             */
             if (sentFromActivity == null) {
-                //Suggestion that is not related to a review
-                if(photoTaken()){
-                    //TODO using the API User Profile Resource, send the suggestion text and the picture
+                /*
+
+                    Suggestion that is not related to a review
+
+                 */
+
+                String suggestionWithoutImageAsJSON = new Gson().
+                        toJson(new SuggestionJSONService(suggestionText, null));
+
+                runThreadForRESTRequest(suggestionWithoutImageAsJSON);
+
+                if (photoTaken()) {
+                    File imageFile = new File(pictureImagePath);
+                    String encodedImage = getFileBytesAsString(imageFile);
+                    runThreadForRESTRequest(new Gson().
+                            toJson(new SuggestionJSONService(suggestionText, encodedImage)));
                 }
+
             } else if (sentFromActivity.equals(QuestionActivity.class.getSimpleName())) {
-                //Suggestion that is related to a review
+                /*
+
+                  Suggestion that is related to a review
+
+                 */
                 ReviewXMLService xmlService = ReviewXMLService.instance();
                 try {
-                    xmlService.saveSuggestion(suggestionEditText.getText().toString());
-                    if(photoTaken()){
-                        //TODO Discuss how to add the photo to the suggestion (XML File or sent in a different way)
+                    if (photoTaken()) {
+                        saveSuggestionPhotoToReviewXMLFile(suggestionText, xmlService);
+                        showToastSuccessMessage();
+                    } else {
+                        xmlService.saveSuggestion(suggestionText);
+                        showToastSuccessMessage();
                     }
                 } catch (TransformerException e) {
                     e.printStackTrace();
                 }
             }
-
-            finish();
         });
+    }
+
+    /**
+     * Creates a new Thread to perform the REST Request to the server to submit a suggestion that is not
+     * related to a review
+     *
+     * @param suggestionAsJSON
+     */
+    private void runThreadForRESTRequest(String suggestionAsJSON) {
+        Thread connectionThread = new Thread(submitNotReviewRelatedSuggestion(suggestionAsJSON));
+
+        connectionThread.start();
+        try {
+            connectionThread.wait();
+            if (restResponseCode == HttpsURLConnection.HTTP_OK) {
+                showToastSuccessMessage();
+                finish();
+            } else {
+                show(this, "Ocorreu um erro na submissão da sugestão, por favor " +
+                        "tente novamente!");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Shows a success message through a Toast.
+     */
+    private void showToastSuccessMessage() {
+        runOnUiThread(() -> ToastNotification.show(SubmitSuggestionActivity.this,
+                "Sugestão submetida com sucesso!"));
+    }
+
+    /**
+     * Saves a suggestion's photo to a Review XML File
+     *
+     * @param suggestionText suggestion's text
+     * @param xmlService     ReviewXMLService instance for a Review
+     */
+    private void saveSuggestionPhotoToReviewXMLFile(String suggestionText, ReviewXMLService xmlService) {
+        File storageDir = getFilesDir();
+        File imageDir = new File(storageDir, "images");
+        File imageFile = new File(pictureImagePath);
+        String fileName = imageFile.getName();
+        String newFileName = imageDir.getAbsolutePath().concat("/")
+                .concat(fileName.substring(0, fileName.indexOf("."))
+                        .concat("_REVIEW_".concat(xmlService.getReviewID())
+                                .concat("_SUGGESTION_PHOTO").concat(".jpg")));
+        File newImageFile = new File(newFileName);
+        imageFile.renameTo(newImageFile);
+        imageFile.delete();
+        imageFile = newImageFile;
+        String encodedImage = getFileBytesAsString(imageFile);
+        try {
+            xmlService.saveSuggestion(suggestionText, encodedImage);
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Creates a Runnable that performs a REST Request to submit a suggestion that is not related to a
+     * review.
+     *
+     * @param json String with the suggestion in JSON Format that will be in the body of the request
+     * @return Runnable that performs a REST Request to submit a suggestion that is not related to a review.
+     */
+    private Runnable submitNotReviewRelatedSuggestion(String json) {
+        return () -> {
+            try {
+                Response response = RESTRequest.create(BuildConfig.SERVER_URL.
+                        concat(FeedbackMonkeyAPI.getAPIEntryPoint().
+                                concat(FeedbackMonkeyAPI.getResourcePath("User Profile").
+                                        concat(FeedbackMonkeyAPI.getSubResourcePath("User Profile",
+                                                "Save Suggestion").concat("/"+authenticationToken))))).
+                        withBody(json).
+                        withMediaType(RESTRequest.RequestMediaType.JSON).
+                        POST();
+                restResponseCode = response.code();
+                restResponseBody = response.body().string();
+            } catch (IOException e) {
+                show(SubmitSuggestionActivity.this, getString(R.string.no_internet_connection));
+                e.printStackTrace();
+            }
+        };
+    }
+
+    /**
+     * Converts a file to bytes and returns them as a String (uses Base64 to encode the bytes)
+     *
+     * @param file File we want to convert
+     * @return String with the Base 64 encoded bytes of a file
+     */
+    private String getFileBytesAsString(File file) {
+        Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+        /**
+         * The call of android.util.Base64 is needed here to have a broader range of API levels.
+         */
+        return android.util.Base64.encodeToString(imageBytes,
+                android.util.Base64.DEFAULT);
     }
 
     /**
@@ -226,7 +375,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
      *
      * @return true if a picture was taken, false if otherwise
      */
-    private boolean photoTaken(){
+    private boolean photoTaken() {
         return pictureImagePath != null;
     }
 }

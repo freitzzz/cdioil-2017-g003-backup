@@ -1,6 +1,9 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.application.authz.AuthenticationController;
+import cdioil.application.authz.UserActionHistoryController;
+import cdioil.application.domain.authz.UserAction;
+import cdioil.domain.Image;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
@@ -14,7 +17,9 @@ import cdioil.frontoffice.application.restful.xml.ReviewXMLService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import com.google.gson.GsonBuilder;
+import java.util.Base64;
 import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -88,7 +93,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             //return a response warning the user that the profile could not be updated
             return createUnableToUpdateUserDataResponse();
         }
-
+        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
+                .logUserAction(UserAction.STARTED_ANSWER_SURVEY);
         String messageBody = ReviewXMLService.createReviewXML(newReview);
 
         return messageBody == null ? createInvalidReviewResponse()
@@ -152,6 +158,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
 
         List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
         String suggestion = ReviewXMLService.getSuggestion(fileContent);
+        String suggestionImage = ReviewXMLService.getSuggestionImage(fileContent);
 
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
@@ -161,8 +168,15 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             reviewToAnswer.answerQuestion(answer);
         }
 
-        if (suggestion != null) {
-            reviewToAnswer.submitSuggestion(suggestion);
+        if (suggestionImage == null) {
+            if (suggestion != null) {
+                reviewToAnswer.submitSuggestion(suggestion);
+            }
+        }else{
+            if(suggestion != null){
+                byte[] imageBytes = Base64.getDecoder().decode(suggestionImage);
+                reviewToAnswer.submitSuggestionWithImage(suggestion,new Image(imageBytes));
+            }
         }
 
         reviewToAnswer = new ReviewRepositoryImpl().merge(reviewToAnswer);
@@ -170,7 +184,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
-
+//        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
+//                .logUserAction(UserAction.ENDED_ANSWER_SURVEY);
         return createSavedReviewWithSuccessResponse();
     }
 

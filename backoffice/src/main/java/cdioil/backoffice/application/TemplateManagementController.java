@@ -30,7 +30,7 @@ public class TemplateManagementController {
 
         for (CategoryTemplatesLibrary categoryTemplatesLibrary : templateLibrary) {
 
-            for (TemplateGroup templateGroup : categoryTemplatesLibrary.getLibrary().values()) {
+            for (TemplateGroup templateGroup : categoryTemplatesLibrary.getID().values()) {
                 templates.addAll(templateGroup.getTemplates());
             }
         }

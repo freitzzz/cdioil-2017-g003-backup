@@ -1,3 +1,11 @@
+#Ignore log files
+backoffice_logger.xml
+bootstrap_logger.xml
+core_logger.xml
+framework_logger.xml
+frontoffice_logger.xml
+util_logger.xml
+
 #C Object Files
 *.o
 

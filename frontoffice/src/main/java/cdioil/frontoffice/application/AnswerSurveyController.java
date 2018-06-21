@@ -118,8 +118,10 @@ public class AnswerSurveyController {
      * Selects a survey with a given index.
      *
      * @param index Index of the survey
+     * @return returns true - if a survey was selected successfully<p>false - otherwise
      */
-    public void selectSurvey(int index) {
+    public boolean selectSurvey(int index) {
+        
         int i = 0;
 
         //since maps don't retrieve items by index, the collection must be iterated over until the indices match
@@ -132,10 +134,11 @@ public class AnswerSurveyController {
                     currentReview = new Review(selectedSurvey);
                     loggedUser.getProfile().addReview(currentReview);
                 }
-                break;
+                return true;
             }
             i++;
         }
+        return false;
     }
 
     /**
