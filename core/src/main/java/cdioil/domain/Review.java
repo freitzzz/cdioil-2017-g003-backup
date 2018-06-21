@@ -91,7 +91,7 @@ public class Review implements Serializable {
     /**
      * Review's suggestion.
      */
-    @Embedded
+    @OneToOne(cascade = {CascadeType.ALL})
     private Suggestion suggestion;
 
     /**
@@ -200,6 +200,17 @@ public class Review implements Serializable {
     public boolean submitSuggestion(String suggestionText) {
         suggestion = new Suggestion(suggestionText);
         return true;
+    }
+    
+    /**
+     * TODO add unit tests for this method
+     * 
+     * Submits a suggestion with an image associated to this review.
+     * 
+     * @param suggestionText the suggestion's text
+     */
+    public void submitSuggestionWithImage(String suggestionText, Image suggestionImage){
+        suggestion = new Suggestion(suggestionText,suggestionImage);
     }
 
     /**

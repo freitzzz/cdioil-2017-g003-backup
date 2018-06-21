@@ -431,4 +431,19 @@ public class ReviewXMLService {
 
         return null;
     }
+    
+    public static String getSuggestionImage(String fileContent){
+        try{
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+            Element reviewElement = document.getDocumentElement();
+            
+            Element suggestionElement = (Element) reviewElement.getElementsByTagName(SUGGESTION_ELEMENT_TAG);
+            String imageBytes = suggestionElement.getElementsByTagName(IMAGE_ELEMENT_TAG).item(0).getTextContent();
+            return imageBytes == null || imageBytes.isEmpty() ? null : imageBytes;
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(ReviewXMLService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
  * of the user's review
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+ * @author <a href="1161371@isep.ipp.pt">António Sousa</a>
  */
 public class ReviewXMLService {
 
@@ -59,6 +60,10 @@ public class ReviewXMLService {
      * Map used for fetching the review's question elements by questionID.
      */
     private Map<String, Element> reviewQuestionElements;
+    /**
+     * String that holds the review ID.
+     */
+    private String reviewID;
 
     /**
      * Creates a new single instance of ReviewXMLService, if one does not already exist, or refers to the previously created instance.
@@ -78,12 +83,20 @@ public class ReviewXMLService {
         return instance;
     }
 
-
     /**
      * Private constructor used for instantiating data structures and hiding the implicit public one.
      */
     private ReviewXMLService() {
         reviewQuestionElements = new LinkedHashMap<>();
+    }
+
+    /**
+     * Returns the reviews ID
+     *
+     * @return String that holds the reviews ID
+     */
+    public String getReviewID(){
+        return reviewID;
     }
 
     /**
@@ -100,7 +113,7 @@ public class ReviewXMLService {
         Element reviewElement = document.getDocumentElement();
         String reviewID = reviewElement.getAttribute(ReviewFileTags.ID_ATTRIBUTE_TAG);
         String surveyID = reviewElement.getAttribute(ReviewFileTags.SURVEY_ID_ATTRIBUTE_TAG);
-
+        this.reviewID = reviewID;
         String separator = "_";
         String fileName = "review".concat(separator).concat(reviewID).concat(separator).concat(surveyID).concat(XML_EXTENSION);
         reviewFile = new File(dirFile, fileName);

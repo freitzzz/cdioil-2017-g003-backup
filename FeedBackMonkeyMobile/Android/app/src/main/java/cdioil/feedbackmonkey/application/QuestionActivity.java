@@ -156,7 +156,7 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
             wantToSubmitSuggestionDialog.setPositiveButton("Sim", (dialog, which) -> {
                 Intent submitSuggestionIntent = new Intent(QuestionActivity.this, SubmitSuggestionActivity.class);
                 submitSuggestionIntent.putExtra("authenticationToken", authenticationToken);
-                submitSuggestionIntent.putExtra("sentFromActivity", QuestionActivity.class.getSimpleName());
+                submitSuggestionIntent.putExtra("sentFromQuestionActivity", QuestionActivity.class.getSimpleName());
                 startActivity(submitSuggestionIntent);
                 finish();
             });
