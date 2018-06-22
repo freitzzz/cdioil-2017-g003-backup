@@ -5,7 +5,11 @@ import cdioil.backoffice.utils.BackOfficeLocalizationHandler;
 import cdioil.console.Console;
 import cdioil.domain.Template;
 import cdioil.domain.authz.Manager;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import java.util.List;
+import java.util.logging.Level;
+import javax.xml.bind.JAXBException;
 
 /**
  * User Interface for US-238 (Export template to a XML, CSV or JSON file).
@@ -103,7 +107,6 @@ public class ExportTemplateUI {
 
         //2. User chooses the template
         boolean isTemplateIDValid = false;
-        Template template;
 
         while (!isTemplateIDValid) {
             String templateID = Console.readLine(requestSelectTemplate);
@@ -128,11 +131,17 @@ public class ExportTemplateUI {
             }
 
             //4. Exports the file
-            if (!ctrl.exportTemplate(filePath)) {
+            try {
+                if (!ctrl.exportTemplate(filePath)) {
+                    System.out.println(errorExportationFailed);
+                } else {
+                    System.out.println(exportationSucceeded);
+                    isPathValid = true;
+                }
+
+            } catch (JAXBException e) {
                 System.out.println(errorExportationFailed);
-            } else {
-                System.out.println(exportationSucceeded);
-                isPathValid = true;
+                ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME, Level.SEVERE, e.getMessage());
             }
         }
     }

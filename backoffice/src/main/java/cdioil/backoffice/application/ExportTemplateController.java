@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.xml.bind.JAXBException;
 
 /**
  * Controller class for the User Story 238 - Export Template for a CSV, XML or
@@ -71,7 +72,7 @@ public class ExportTemplateController {
 
         //Add all the templates that are mapped to categories associated with the Manager
         for (Map.Entry<Category, TemplateGroup> entry : categoryTemplatesLibrary.getID().entrySet()) {
-            if (manager.isAssociatedWithCategory(entry.getKey())) {
+//            if (manager.isAssociatedWithCategory(entry.getKey())) {
             for (Template t : entry.getValue().getTemplates()) {
                 templates.add(t);
                 if (!templateItems.containsKey(t)) {
@@ -80,7 +81,7 @@ public class ExportTemplateController {
                 templateItems.get(t).add(entry.getKey());
                 templateStrings.add(t.toString());
             }
-            }
+//            }
         }
 
         for (Map.Entry<Product, TemplateGroup> entry : productTemplatesLibrary.getID().entrySet()) {
@@ -121,15 +122,18 @@ public class ExportTemplateController {
      * Exports the template to a file.
      *
      * @param filePath Path where the file will be stored
-     * @return
+     * @return true if the template was succesfully exported
+     * @throws javax.xml.bind.JAXBException if a JAXB error occurs
      */
-    public boolean exportTemplate(String filePath) {
+    public boolean exportTemplate(String filePath) throws JAXBException {
         TemplateWriter templateWriter = TemplateWriterFactory.create(filePath, template);
         if (templateWriter == null) {
             return false;
         }
         List<SurveyItem> items = templateItems.get(template);
-        templateWriter.addSurveyItems(items);
+        if (items != null) {
+            templateWriter.addSurveyItems(items);
+        }
         return templateWriter.write();
     }
 }

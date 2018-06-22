@@ -6,6 +6,7 @@ import cdioil.files.FileWriter;
 import cdioil.xsl.XSLTransformer;
 import java.io.File;
 import java.util.List;
+import javax.xml.bind.JAXBException;
 
 /**
  * Exports a template to a CSV file.
@@ -21,11 +22,8 @@ public class CSVTemplateWriter implements TemplateWriter {
      * Path of the file to export.
      */
     private final String filePath;
-
-    /**
-     * Template to export (content of the file).
-     */
-    private final Template template;
+    
+    private final XMLTemplateWriter xmlWriter;
 
     /**
      * Creates a new JSONTemplateWriter.
@@ -35,17 +33,11 @@ public class CSVTemplateWriter implements TemplateWriter {
      */
     public CSVTemplateWriter(String filePath, Template template) {
         this.filePath = filePath;
-        this.template = template;
+        this.xmlWriter = new XMLTemplateWriter(filePath, template);
     }
 
-    /**
-     * Exports the information about a template to a CSV file.
-     *
-     * @return true, if the file is successfully exported. Otherwise, returns false
-     */
     @Override
-    public boolean write() {
-        XMLTemplateWriter xmlWriter = new XMLTemplateWriter(filePath, template);
+    public boolean write() throws JAXBException {
         return FileWriter.writeFile(new File(filePath), XSLTransformer.
                 create(XSLTemplateInfoDocuments.CSV_TEMPLATE_XSLT).
                 transform(xmlWriter.getXMLAsString()));
@@ -53,7 +45,7 @@ public class CSVTemplateWriter implements TemplateWriter {
 
     @Override
     public boolean addSurveyItems(List<SurveyItem> surveyItems) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return xmlWriter.addSurveyItems(surveyItems);
     }
 
 }
