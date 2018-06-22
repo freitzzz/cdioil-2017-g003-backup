@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,7 @@ import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.services.RequestNewReviewController;
 import cdioil.feedbackmonkey.application.services.SurveyService;
 import cdioil.feedbackmonkey.application.services.SurveyServiceController;
+import cdioil.feedbackmonkey.authz.LoginActivity;
 import cdioil.feedbackmonkey.restful.exceptions.RESTfulException;
 import cdioil.feedbackmonkey.authz.UserProfileActivity;
 import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
@@ -55,6 +58,26 @@ import cdioil.feedbackmonkey.utils.WaitingDialog;
 import okhttp3.Response;
 
 public class MainMenuActivity extends AppCompatActivity {
+    /**
+     * Index for the MainMenuActivity's List View Item that starts ListSurveysActivity.
+     */
+    private static final int LIST_SURVEYS_INDEX = 0;
+    /**
+     * Index for the MainMenuActivity's List View Item that starts the code scan process.
+     */
+    private static final int SCAN_CODES_INDEX = 1;
+    /**
+     * Index for the MainMenuActivity's List View Item that starts UserProfileActivity.
+     */
+    private static final int USER_PROFILE_INDEX = 2;
+    /**
+     * Index for the MainMenuActivity's List View Item that starts SubmitSuggestionActivity.
+     */
+    private static final int SUBMIT_SUGGESTION_INDEX = 3;
+    /**
+     * Index for the MainMenuActivity's List View Item that starts the log out process.
+     */
+    private static final int LOGOUT_INDEX = 4;
     private static final int CURRENT_WINDOW_HEIGHT = Resources.getSystem().getDisplayMetrics().heightPixels;
     /**
      * Constant that represents the Reviews resource path.
@@ -64,10 +87,11 @@ public class MainMenuActivity extends AppCompatActivity {
      * Constant that represents the save review resource path.
      */
     private static final String SAVE_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Save Review");
-    private String[] menuOptions = {"Listar Inquéritos", "Scan de Códigos", "Perfil", "Partilhe as suas ideias connosco!"};
+    private String[] menuOptions = {"Listar Inquéritos", "Scan de Códigos", "Perfil", "Partilhe as suas ideias connosco!",
+    "Logout"};
     private int[] menuOptionImages = {R.drawable.survey_icon, R.drawable.code_search_icon, R.drawable.profile_icon,
-            R.drawable.question_mark};
-    private String[] menuBackgroundColors = {"#ffffff", "#ffd05b", "#ffffff", "#ffd05b"};
+            R.drawable.question_mark,R.drawable.logout_icon};
+    private String[] menuBackgroundColors = {"#ffffff", "#ffd05b", "#ffffff", "#ffd05b", "#ffffff"};
     private String authenticationToken;
     private int optionIndex;
     /**
@@ -84,7 +108,12 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         configureView();
-        authenticationToken = getIntent().getExtras().getString("authenticationToken");
+        authenticationToken = PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
+                getString(R.string.no_authentication_token));
+        if(authenticationToken.equals(getString(R.string.no_authentication_token))){
+            ToastNotification.show(this,"Não foi possível iniciar sessão, tente fazer login novamente!");
+            finish();
+        }
         fetchingSurveysWaitingDialog=WaitingDialog.create(this).setWaitingDialogTitle(getString(R.string.fetching_surveys_waiting_dialog));
     }
 
@@ -106,17 +135,20 @@ public class MainMenuActivity extends AppCompatActivity {
         ListView mainMenuListView = findViewById(R.id.mainMenuListView);
         mainMenuListView.setOnItemClickListener((adapterView, view, i, l) -> {
             switch (i) {
-                case 0:
+                case LIST_SURVEYS_INDEX:
                     prepareListSurveyActivityStart();
                     break;
-                case 1:
+                case SCAN_CODES_INDEX:
                     scanItemCode();
                     break;
-                case 2:
+                case USER_PROFILE_INDEX:
                     startUserProfileActivity();
                     break;
-                case 3:
+                case SUBMIT_SUGGESTION_INDEX:
                     startSuggestionActivity();
+                    break;
+                case LOGOUT_INDEX:
+                    deleteAuthenticationTokenFromSharedPreferences();
                     break;
             }
         });
@@ -126,6 +158,20 @@ public class MainMenuActivity extends AppCompatActivity {
             mainMenuItemListViewAdapter.add(i);
         }
     }
+
+    /**
+     * Deletes the current authentication token from the app's Shared Preferences and launches LoginActivity.
+     */
+    private void deleteAuthenticationTokenFromSharedPreferences(){
+        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("authenticationToken").apply();
+        if(PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
+                getString(R.string.no_authentication_token)).equals(getString(R.string.no_authentication_token))){
+            Intent backToLoginIntent = new Intent(MainMenuActivity.this, LoginActivity.class);
+            startActivity(backToLoginIntent);
+            finish();
+        }
+    }
+
     /**
      * Creates a finished reviews directory or fetches the existing one.
      *
@@ -428,29 +474,30 @@ public class MainMenuActivity extends AppCompatActivity {
         private void submitPendingReviews() {
 
             try {
-                File[] files = getFinishedReviewsDirectory().listFiles();
+                File[] reviewFiles = getFinishedReviewsDirectory().listFiles();
 
-                for (File f : files) {
+                for (File reviewFile : reviewFiles) {
 
-                    String fileContent = ReviewXMLService.parseReviewFile(f);
+                    String fileContent = ReviewXMLService.parseReviewFile(reviewFile);
 
-                    String reviewID = f.getName().split("_")[1];
+                    String reviewID = reviewFile.getName().split("_")[1];
 
-                    String surveyEndDate=ReviewXMLService.instance().getSurveyEndDate();
-                    String[] dateSplitted=surveyEndDate.split("-");
-                    String[] timeSplitted=surveyEndDate.split(":");
-                    Calendar endDate=new GregorianCalendar(Integer.parseInt(dateSplitted[0])
-                            ,Integer.parseInt(dateSplitted[1])
-                            ,Integer.parseInt(dateSplitted[2])
-                            ,Integer.parseInt(timeSplitted[0])
-                            ,Integer.parseInt(timeSplitted[1])
-                            ,Integer.parseInt(timeSplitted[2]));
-                    if(Calendar.getInstance().compareTo(endDate)>0) {
+                    String surveyEndDate=ReviewXMLService.getSurveyEndDate(fileContent);
+                    String[] parsedSurveyEndDate = surveyEndDate.split(" ");
+                    String[] dateSplit=parsedSurveyEndDate[0].split("-");
+                    String[] timeSplit=parsedSurveyEndDate[1].split(":");
+                    Calendar endDate=new GregorianCalendar(Integer.parseInt(dateSplit[0])
+                            ,Integer.parseInt(dateSplit[1])
+                            ,Integer.parseInt(dateSplit[2])
+                            ,Integer.parseInt(timeSplit[0])
+                            ,Integer.parseInt(timeSplit[1])
+                            ,Integer.parseInt(timeSplit[2]));
+                    if(Calendar.getInstance().compareTo(endDate)<0) {
                         String saveReviewURL = BuildConfig.SERVER_URL
                                 .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
                                 .concat(REVIEWS_RESOURCE_PATH)
                                 .concat(SAVE_REVIEW_RESOURCE_PATH)
-                                .concat("/")
+                                .concat("/" + authenticationToken + "/")
                                 .concat(reviewID);
 
                         Thread connectionThread = new Thread(() -> {
@@ -466,10 +513,12 @@ public class MainMenuActivity extends AppCompatActivity {
 
                         connectionThread.join();
                         if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
-                            f.delete();
+                            reviewFile.delete();
                         } else {
                             return;
                         }
+                    }else{
+                        reviewFile.delete();
                     }
                 }
             } catch (ParserConfigurationException | IOException | SAXException | InterruptedException | TransformerException e) {
