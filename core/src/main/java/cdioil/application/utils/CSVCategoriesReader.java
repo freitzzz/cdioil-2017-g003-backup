@@ -12,13 +12,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -221,17 +214,6 @@ public class CSVCategoriesReader implements CategoriesReader {
             writeCategories(doc, em);
 
             xmlCatReader = new XMLCategoriesReader(doc);
-
-//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//            Transformer transformer = transformerFactory.newTransformer();
-//            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//            DOMSource source = new DOMSource(doc);
-//            StreamResult result = new StreamResult(CAT_OUTPUT_PATH);
-//            try {
-//                transformer.transform(source, result);
-//            } catch (TransformerException ex) {
-//                Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         } catch (ParserConfigurationException /*| TransformerConfigurationException */ ex) {
             Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
         }

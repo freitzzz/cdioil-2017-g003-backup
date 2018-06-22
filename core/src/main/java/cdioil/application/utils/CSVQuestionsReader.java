@@ -17,11 +17,7 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.transform.OutputKeys;
 
 /**
  * Class used for importing Questions from a file with the .csv extension.
@@ -378,6 +373,9 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Reads a independent questions from a CSV file.
      *
      * @return the list of the questions
+     * @throws java.io.IOException
+     * @throws javax.xml.parsers.ParserConfigurationException
+     * @throws javax.xml.transform.TransformerException
      */
     @Override
     public List<Question> readIndependentQuestions() throws IOException, ParserConfigurationException, TransformerException {
@@ -402,8 +400,6 @@ public class CSVQuestionsReader implements QuestionsReader {
             if (csvLine != null) {
                 csvFields = csvLine.split(";", -1); // By putting -1 or 0 is as if it doesn't have limit
             }
-
-            int count;
 
             String questionIDMultipleChoice = "";
             Element multipleChoiceQuestion = null;
