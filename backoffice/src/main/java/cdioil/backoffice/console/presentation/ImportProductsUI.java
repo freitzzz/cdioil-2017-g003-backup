@@ -127,7 +127,7 @@ public class ImportProductsUI {
         } catch (InvalidFileFormattingException e) {
             System.out.println(errorInvalidFileFormat);
         } catch (TransformerException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 

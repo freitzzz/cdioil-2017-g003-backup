@@ -258,6 +258,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
                         xmlService.saveSuggestion(suggestionText);
                         showToastSuccessMessage();
                     }
+                    finish();
                 } catch (TransformerException e) {
                     e.printStackTrace();
                 }
@@ -269,7 +270,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
      * Creates a new Thread to perform the REST Request to the server to submit a suggestion that is not
      * related to a review
      *
-     * @param suggestionAsJSON
+     * @param suggestionAsJSON String representing a Suggestion in JSON Format
      */
     private void runThreadForRESTRequest(String suggestionAsJSON) {
         Thread connectionThread = new Thread(submitNotReviewRelatedSuggestion(suggestionAsJSON));
@@ -279,6 +280,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
             connectionThread.join();
             if (restResponseCode == HttpsURLConnection.HTTP_OK) {
                 showToastSuccessMessage();
+                deleteImageFile();
                 finish();
             } else {
                 show(this, "Ocorreu um erro na submissão da sugestão, por favor " +
@@ -288,6 +290,14 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Deletes a suggestion image file after it was sent to the server.
+     */
+    private void deleteImageFile(){
+        File fileToDelete = new File(pictureImagePath);
+        fileToDelete.delete();
     }
 
     /**
@@ -320,6 +330,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
         byte[] encodedImage = getFileBytes(imageFile);
         try {
             xmlService.saveSuggestion(suggestionText, encodedImage);
+            imageFile.delete();
         } catch (TransformerException e) {
             e.printStackTrace();
         }

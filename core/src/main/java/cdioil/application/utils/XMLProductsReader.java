@@ -80,7 +80,8 @@ public class XMLProductsReader implements ProductsReader {
     private static final String CATEGORIES_SCALE = "[0-9]+";
 
     /**
-     * Regular expression to validate the path of the Category in the Market Structure.
+     * Regular expression to validate the path of the Category in the Market
+     * Structure.
      */
     private static final String PATH_REGEX = CATEGORIES_SCALE + DC_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UN_IDENTIFIER + PATH_SPLITTER
             + CATEGORIES_SCALE + CAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + SCAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UB_IDENTIFIER;
@@ -119,12 +120,14 @@ public class XMLProductsReader implements ProductsReader {
     private static final String FILE_SPLITTER = ";";
 
     /**
-     * Message added to the file content if the path of the category is not valid.
+     * Message added to the file content if the path of the category is not
+     * valid.
      */
     private static final String INVALID_CATEGORY_PATH_MESSAGE = "Caminho da categoria não válido!";
 
     /**
-     * Message added to the file content if the category is not a leaf in the market strucure.
+     * Message added to the file content if the category is not a leaf in the
+     * market strucure.
      */
     private static final String NOT_LEAF_CATEGORY_MESSAGE = "Categoria não folha, logo não é possível adicionar um produto!";
 
@@ -134,7 +137,8 @@ public class XMLProductsReader implements ProductsReader {
     private final Map<Category, List<Product>> productsReadFromFile;
 
     /**
-     * Map that will hold all already existent products for the user to decide if they need to be updated or not.
+     * Map that will hold all already existent products for the user to decide
+     * if they need to be updated or not.
      */
     private final Map<Category, List<Product>> repeatedProducts;
 
@@ -144,7 +148,8 @@ public class XMLProductsReader implements ProductsReader {
     private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH);
 
     /**
-     * Element in XML file that represents the product's path in the market structure.
+     * Element in XML file that represents the product's path in the market
+     * structure.
      */
     private static final String CATEGORY_PATH_ELEMENT = "ID";
 
@@ -174,12 +179,15 @@ public class XMLProductsReader implements ProductsReader {
     private static final String PRODUCT_UNITY_ELEMENT = "unidade";
 
     /**
-     * Builds an instance of XMLProductsReader, receiving the path of the file to read.
+     * Builds an instance of XMLProductsReader, receiving the path of the file
+     * to read.
      *
      * @param filePath Path of the file
-     * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated or not
+     * @param repeatedProducts Map that will hold all already existent products
+     * for the user to decide if they need to be updated or not
      */
-    public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts) {Document xmlDocument1;
+    public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts) {
+        Document xmlDocument1;
         this.file = new File(filePath);
         xmlDocument1 = null;
         DocumentBuilder documentBuilder;
@@ -187,7 +195,7 @@ public class XMLProductsReader implements ProductsReader {
             documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             xmlDocument1 = documentBuilder.parse(file);
         } catch (IOException | ParserConfigurationException | SAXException ex) {
-            ex.printStackTrace();
+            System.out.println("constructor " + ex.getMessage());
         }
         xmlDocument = xmlDocument1;
         this.logFile = new File(LOG_FILENAME);
@@ -196,10 +204,12 @@ public class XMLProductsReader implements ProductsReader {
     }
 
     /**
-     * Builds an instance of XMLProductsReader, receiving the path of the file to read.
+     * Builds an instance of XMLProductsReader, receiving the path of the file
+     * to read.
      *
      * @param filePath Path of the file
-     * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated or not
+     * @param repeatedProducts Map that will hold all already existent products
+     * for the user to decide if they need to be updated or not
      */
     public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts, Document xmlDocument) {
         this.file = new File(filePath);
@@ -212,7 +222,8 @@ public class XMLProductsReader implements ProductsReader {
     /**
      * Reads the content of the received file.
      *
-     * @return a map with categories as keys and all products that were read as values
+     * @return a map with categories as keys and all products that were read as
+     * values
      */
     @Override
     public Map<Category, List<Product>> readProducts() throws TransformerException {
@@ -335,7 +346,8 @@ public class XMLProductsReader implements ProductsReader {
     }
 
     /**
-     * Adds a new product with a certain category to the map that holds all products from the file.
+     * Adds a new product with a certain category to the map that holds all
+     * products from the file.
      *
      * @param category Product's category (key)
      * @param product Product to add (value)

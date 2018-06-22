@@ -2,32 +2,35 @@ package cdioil.application.utils;
 
 import cdioil.domain.Category;
 import cdioil.domain.MarketStructure;
+import cdioil.files.FileReader;
+import cdioil.files.FilesUtils;
 import cdioil.files.InputSchemaFiles;
+import cdioil.files.InvalidFileFormattingException;
 import cdioil.files.ValidatorXML;
 import cdioil.logger.ExceptionLogger;
 import cdioil.logger.LoggerFileNames;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Imports Categories from XML files.
  *
  * @author Ana Guerra (1161191)
  */
-public class XMLCategoriesReader implements CategoriesReader {
-
-    /**
-     * File to read.
-     */
-    private final File file;
+public class XMLCategoriesReader extends Reader implements CategoriesReader {
     /**
      * List with the Categories that were read.
      */
@@ -84,6 +87,10 @@ public class XMLCategoriesReader implements CategoriesReader {
      * String with the UB identifier.
      */
     private static final String UB = "UB";
+    /**
+     * Document to import from
+     */
+    private transient Document doc;
 
     /**
      * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.
@@ -91,7 +98,23 @@ public class XMLCategoriesReader implements CategoriesReader {
      * @param file File to read
      */
     public XMLCategoriesReader(String file) {
-        this.file = new File(file);
+        DocumentBuilder dBuilder;
+        try {
+            dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            doc = dBuilder.parse(new File(file));
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            System.out.println("constructor " + e.getMessage());
+        }
+        listCategories = new LinkedList<>();
+    }
+    
+    /**
+     * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.
+     *
+     * @param doc
+     */
+    public XMLCategoriesReader(Document doc) {
+        this.doc = doc;
         listCategories = new LinkedList<>();
     }
 
@@ -102,15 +125,15 @@ public class XMLCategoriesReader implements CategoriesReader {
      */
     @Override
     public MarketStructure readCategories() {
-        if (!ValidatorXML.validateFile(SCHEMA_FILE, file)) {
-            return null;
+        try {
+            if (!ValidatorXML.validateXMLDocument(FilesUtils.listAsString(FileReader.readFile(SCHEMA_FILE)), documentToString(doc))) {
+                throw new InvalidFileFormattingException("Unrecognized file formatting");
+            }
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLCategoriesReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         MarketStructure me = new MarketStructure();
         try {
-            File xmlFile = file;
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
             Element lista_categorias = doc.getDocumentElement();
             NodeList categorias = lista_categorias.getElementsByTagName(CATEGORY);

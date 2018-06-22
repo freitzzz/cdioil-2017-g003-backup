@@ -435,6 +435,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     String fileContent = ReviewXMLService.parseReviewFile(f);
 
                     String reviewID = f.getName().split("_")[1];
+
                     String surveyEndDate=ReviewXMLService.instance().getSurveyEndDate();
                     String[] dateSplitted=surveyEndDate.split("-");
                     String[] timeSplitted=surveyEndDate.split(":");
