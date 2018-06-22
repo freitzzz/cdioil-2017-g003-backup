@@ -156,7 +156,8 @@ public class CSVProductsReader implements ProductsReader {
      * @return a map with the categories as keys and their products as values
      */
     @Override
-    public Map<Category, List<Product>> readProducts() {
+    public Map<Category, List<Product>> readProducts() throws TransformerException {
+        Document doc = null;
 
         List<String> fileContent = FileReader.readFile(file);
         if (!isFileValid(fileContent)) {
@@ -164,29 +165,15 @@ public class CSVProductsReader implements ProductsReader {
         }
 
         try {
-            Document doc = DocumentBuilderFactory.newInstance().
+            doc = DocumentBuilderFactory.newInstance().
                     newDocumentBuilder().newDocument();
 
             writeToDocument(doc, fileContent);
 
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StringWriter output = new StringWriter();
-            StreamResult result = new StreamResult(output);
-
-            transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-            transformer.transform(source, result);
-
-            //Write XML content to file
-            FileWriter.writeFile(new File(CSV_FILE_PATH), output.getBuffer().toString());
-        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
-            Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
+        } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLSurveyStatsWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new XMLProductsReader(CSV_FILE_PATH, repeatedProducts).readProducts();
+        return new XMLProductsReader(CSV_FILE_PATH, repeatedProducts, doc).readProducts();
     }
 
     /**

@@ -31,6 +31,8 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -434,32 +436,40 @@ public class MainMenuActivity extends AppCompatActivity {
 
                     String reviewID = f.getName().split("_")[1];
 
-                    String saveReviewURL = BuildConfig.SERVER_URL
-                            .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
-                            .concat(REVIEWS_RESOURCE_PATH)
-                            .concat(SAVE_REVIEW_RESOURCE_PATH)
-                            .concat("/" + authenticationToken + "/")
-                            .concat(reviewID);
-                    System.out.println("url !!!!");
-                    System.out.println(saveReviewURL);
-                    Thread connectionThread = new Thread(() -> {
-                        try {
-                            Response saveReviewResponse = RESTRequest.create(saveReviewURL)
-                                    .withMediaType(RESTRequest.RequestMediaType.XML).withBody(fileContent).POST();
-                            reviewRestResponseCode = saveReviewResponse.code();
-                            System.out.println("codigo >>>>> " + reviewRestResponseCode);
-                            System.out.println("body >>>>>>>>> " + saveReviewResponse.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    connectionThread.start();
+                    String surveyEndDate=ReviewXMLService.instance().getSurveyEndDate();
+                    String[] dateSplitted=surveyEndDate.split("-");
+                    String[] timeSplitted=surveyEndDate.split(":");
+                    Calendar endDate=new GregorianCalendar(Integer.parseInt(dateSplitted[0])
+                            ,Integer.parseInt(dateSplitted[1])
+                            ,Integer.parseInt(dateSplitted[2])
+                            ,Integer.parseInt(timeSplitted[0])
+                            ,Integer.parseInt(timeSplitted[1])
+                            ,Integer.parseInt(timeSplitted[2]));
+                    if(Calendar.getInstance().compareTo(endDate)>0) {
+                        String saveReviewURL = BuildConfig.SERVER_URL
+                                .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
+                                .concat(REVIEWS_RESOURCE_PATH)
+                                .concat(SAVE_REVIEW_RESOURCE_PATH)
+                                .concat("/")
+                                .concat(reviewID);
 
-                    connectionThread.join();
-                    if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
-                        f.delete();
-                    } else {
-                        return;
+                        Thread connectionThread = new Thread(() -> {
+                            try {
+                                Response saveReviewResponse = RESTRequest.create(saveReviewURL)
+                                        .withMediaType(RESTRequest.RequestMediaType.XML).withBody(fileContent).POST();
+                                reviewRestResponseCode = saveReviewResponse.code();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        connectionThread.start();
+
+                        connectionThread.join();
+                        if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
+                            f.delete();
+                        } else {
+                            return;
+                        }
                     }
                 }
             } catch (ParserConfigurationException | IOException | SAXException | InterruptedException | TransformerException e) {

@@ -5,15 +5,21 @@
  */
 package cdioil.application.utils;
 
+import cdioil.files.*;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import cdioil.files.InputSchemaFiles;
-import cdioil.files.ValidatorXML;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import java.io.StringWriter;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import cdioil.files.FileWriter;
+
 import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.domain.SKU;
@@ -89,6 +95,8 @@ public class XMLProductsReader implements ProductsReader {
      * Logger file with the invalid lines.
      */
     private final File logFile;
+
+    private final Document xmlDocument;
 
     /**
      * Name of the logger file.
@@ -171,11 +179,34 @@ public class XMLProductsReader implements ProductsReader {
      * @param filePath Path of the file
      * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated or not
      */
-    public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts) {
+    public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts) {Document xmlDocument1;
+        this.file = new File(filePath);
+        xmlDocument1 = null;
+        DocumentBuilder documentBuilder;
+        try {
+            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            xmlDocument1 = documentBuilder.parse(file);
+        } catch (IOException | ParserConfigurationException | SAXException ex) {
+            ex.printStackTrace();
+        }
+        xmlDocument = xmlDocument1;
+        this.logFile = new File(LOG_FILENAME);
+        this.productsReadFromFile = new HashMap<>();
+        this.repeatedProducts = repeatedProducts;
+    }
+
+    /**
+     * Builds an instance of XMLProductsReader, receiving the path of the file to read.
+     *
+     * @param filePath Path of the file
+     * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated or not
+     */
+    public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts, Document xmlDocument) {
         this.file = new File(filePath);
         this.logFile = new File(LOG_FILENAME);
         this.productsReadFromFile = new HashMap<>();
         this.repeatedProducts = repeatedProducts;
+        this.xmlDocument = xmlDocument;
     }
 
     /**
@@ -184,8 +215,8 @@ public class XMLProductsReader implements ProductsReader {
      * @return a map with categories as keys and all products that were read as values
      */
     @Override
-    public Map<Category, List<Product>> readProducts() {
-        if (isFileValid()) {
+    public Map<Category, List<Product>> readProducts() throws TransformerException {
+        if (isFileValid(xmlDocument)) {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
             try {
@@ -285,8 +316,8 @@ public class XMLProductsReader implements ProductsReader {
      *
      * @return true, if the file is valid. Otherwise, returns false
      */
-    private boolean isFileValid() {
-        return ValidatorXML.validateFile(SCHEMA_FILE, file);
+    private boolean isFileValid(Document document) throws TransformerException {
+        return ValidatorXML.validateXMLDocument(FilesUtils.listAsString(FileReader.readFile(SCHEMA_FILE)), documentToString(document));
     }
 
     /**
@@ -355,5 +386,32 @@ public class XMLProductsReader implements ProductsReader {
         fileContent.add(erroneousContent + FILE_SPLITTER + message);
 
         FileWriter.writeFile(logFile, fileContent);
+    }
+
+    /**
+     * Converts a document to a string
+     *
+     * @param doc document to convert
+     * @return String containing the document's information
+     */
+    private String documentToString(Document doc) throws TransformerException {
+
+        // Create dom source for the document
+        DOMSource domSource = new DOMSource(doc);
+
+        // Create a string writer
+        StringWriter stringWriter = new StringWriter();
+
+        // Create the result stream for the transform
+        StreamResult result = new StreamResult(stringWriter);
+
+        // Create a Transformer to serialize the document
+        TransformerFactory tFactory = TransformerFactory.newInstance();
+        Transformer transformer = tFactory.newTransformer();
+        transformer.setOutputProperty("indent", "yes");
+
+        // Transform the document to the result stream
+        transformer.transform(domSource, result);
+        return stringWriter.toString();
     }
 }

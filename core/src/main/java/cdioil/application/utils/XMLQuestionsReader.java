@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +33,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -50,7 +48,7 @@ import org.xml.sax.SAXException;
  * @author João
  * @author Joana Pinheiro [1161380]
  */
-public class XMLQuestionsReader implements QuestionsReader {
+public class XMLQuestionsReader extends Reader implements QuestionsReader {
 
     /**
      *
@@ -423,32 +421,5 @@ public class XMLQuestionsReader implements QuestionsReader {
         if (source.getInputStream() != null) {
             source.getInputStream().reset();
         }
-    }
-
-    /**
-     * Converts a document to a string
-     *
-     * @param doc document to convert
-     * @return String containing the document's information
-     */
-    private String documentToString(Document doc) throws TransformerException {
-
-        // Create dom source for the document
-        DOMSource domSource = new DOMSource(doc);
-
-        // Create a string writer
-        StringWriter stringWriter = new StringWriter();
-
-        // Create the result stream for the transform
-        StreamResult result = new StreamResult(stringWriter);
-
-        // Create a Transformer to serialize the document
-        TransformerFactory tFactory = TransformerFactory.newInstance();
-        Transformer transformer = tFactory.newTransformer();
-        transformer.setOutputProperty("indent", "yes");
-
-        // Transform the document to the result stream
-        transformer.transform(domSource, result);
-        return stringWriter.toString();
     }
 }

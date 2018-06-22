@@ -100,6 +100,11 @@ public class ReviewXMLService {
     }
 
     /**
+     * Returns the review
+     * @return
+     */
+    public String getSurveyEndDate(){return document.getElementById(ReviewFileTags.REVIEW_ELEMENT_TAG).getAttribute(ReviewFileTags.SURVEY_END_DATE_ATTRIBUTE);}
+    /**
      * Creates an XML File that will save the user's review information regarding a certain survey.
      *
      * @param fileContent String with the XML file content

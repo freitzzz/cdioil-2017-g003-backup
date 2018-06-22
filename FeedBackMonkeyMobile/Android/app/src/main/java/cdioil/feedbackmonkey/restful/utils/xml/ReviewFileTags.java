@@ -6,6 +6,10 @@ public interface ReviewFileTags {
      * Constant representing the Review element tag.
      */
      String REVIEW_ELEMENT_TAG = "Review";
+    /**
+     * Constant that represents the survey end date attribute
+     */
+    public static final String SURVEY_END_DATE_ATTRIBUTE="endDate";
 
     /**
      * Constant representing the ID attribute tag.
