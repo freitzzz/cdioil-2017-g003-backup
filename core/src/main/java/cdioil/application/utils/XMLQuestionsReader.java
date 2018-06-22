@@ -18,11 +18,9 @@ import cdioil.files.FilesUtils;
 import cdioil.files.InputSchemaFiles;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.files.ValidatorXML;
-import java.io.ByteArrayInputStream;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,7 +129,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * @param xmlDocument String with the XML document as a whole String
      */
     public XMLQuestionsReader(String xmlDocument){
-        this.source=new StreamSource(new ByteArrayInputStream(xmlDocument.getBytes()));
+        this.source=new StreamSource(xmlDocument);
     }
 
     /**
@@ -323,7 +321,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      *
      * @param mcQuestionNodes child nodes of BinaryQuestion node
      * @param id              attribute questionID of BinaryQuestion node
-     * @param bQuestionNodes  child nodes of BinaryQuestion node
+     * @param mcQuestionNodes  child nodes of BinaryQuestion node
      * @param id              attribute questionID of BinaryQuestion node
      * @return a new multiple choice if enough information was found within the
      * nodes, null if not
@@ -358,7 +356,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      *
      * @param quantitativeQuestionNodes child nodes of BinaryQuestion node
      * @param id                        attribute questionID of BinaryQuestion node
-     * @param bQuestionNodes            child nodes of BinaryQuestion node
+     * @param quantitativeQuestionNodes            child nodes of BinaryQuestion node
      * @param id                        attribute questionID of BinaryQuestion node
      * @return a new quantitative if enough information was found within the
      * nodes, null if not
