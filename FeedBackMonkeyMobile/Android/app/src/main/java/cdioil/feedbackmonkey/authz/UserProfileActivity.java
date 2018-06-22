@@ -216,14 +216,13 @@ public class UserProfileActivity extends AppCompatActivity {
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.CAMERA},
                             MY_CAMERA_PERMISSION_CODE);
-                } else {
-                    Uri outputFileUri = getOutputFileUri();
-                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 }
             }
+            Uri outputFileUri = getOutputFileUri();
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
         });
     }
 
