@@ -100,6 +100,11 @@ public class ReviewXMLService {
     }
 
     /**
+     * Returns the review
+     * @return
+     */
+    public String getSurveyEndDate(){return document.getElementById(ReviewFileTags.REVIEW_ELEMENT_TAG).getAttribute(ReviewFileTags.SURVEY_END_DATE_ATTRIBUTE);}
+    /**
      * Creates an XML File that will save the user's review information regarding a certain survey.
      *
      * @param fileContent String with the XML file content
@@ -393,12 +398,18 @@ public class ReviewXMLService {
      * @param suggestion   Content of the suggestion submitted by the user
      * @param imageContent Content of the suggestion's image being submitted by the the user
      */
-    public void saveSuggestion(String suggestion, String imageContent) throws TransformerException {
+    public void saveSuggestion(String suggestion, byte[] imageContent) throws TransformerException {
         saveSuggestion(suggestion);
 
         Element suggestionElement = (Element) document.getElementsByTagName(ReviewFileTags.SUGGESTION_ELEMENT_TAG).item(0);
         Element imageElement = (Element) suggestionElement.getElementsByTagName(ReviewFileTags.IMAGE_ELEMENT_TAG).item(0);
-        imageElement.setTextContent(imageContent);
+        StringBuilder stringBuilder = new StringBuilder(imageContent.length);
+        for( byte imageByte : imageContent){
+            stringBuilder.append(imageByte).append(':');
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        imageElement.setTextContent(stringBuilder.toString());
+        System.out.println(stringBuilder.toString());
 
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         Result xmlOutput = new StreamResult(reviewFile);

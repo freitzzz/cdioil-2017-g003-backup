@@ -87,6 +87,7 @@
         <Message messageId = "error_exporting_template" value = "Ocorreu um erro ao exportar o template!&#10;Verifique se o ficheiro é válido.&#10;"/>
         <Message messageId = "error_importing_categories" value = "Caminho de ficheiro não encontrado! Pretende continuar?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "Não foi importada nenhuma categoria."/>
+        <Message messageId = "error_exist_categories" value = "Verifique se já existem as categorias."/>
         <Message messageId = "error_no_surveys_available" value = "Não existem inquéritos.&#10;"/>
         <Message messageId = "error_no_templates" value = "Não existem templates.&#10;"/>
         <Message messageId = "error_select_a_valid_question_type" value = "Insira um tipo de questão válido:"/>

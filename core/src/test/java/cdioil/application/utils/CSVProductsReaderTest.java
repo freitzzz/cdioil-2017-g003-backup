@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 
+import javax.xml.transform.TransformerException;
+
 /**
  * Tests of the class CSVProductsReader.
  *
@@ -29,7 +31,11 @@ public class CSVProductsReaderTest {
         Map<Category, List<Product>> map = new HashMap<>();
         CSVProductsReader reader
                 = new CSVProductsReader("Invalid_Products.csv", map);
+        try {
+            reader.readProducts();
 
-        reader.readProducts();
+        } catch (TransformerException e) {
+
+        }
     }
 }

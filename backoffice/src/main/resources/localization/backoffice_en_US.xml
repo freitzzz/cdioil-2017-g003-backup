@@ -86,6 +86,7 @@
         <Message messageId = "error_exporting_template" value = "An error occurred while exporting the template!&#10;Please check if the file is valid.&#10;"/>
         <Message messageId = "error_importing_categories" value = "File path not found! Do you wish to try again?&#10;"/>   
         <Message messageId = "error_no_imported_categories" value = "No categories were imported."/>
+        <Message messageId = "error_exist_categories" value = "Check if categories already exist."/>
         <Message messageId = "error_no_surveys_available" value = "There are no surveys.&#10;"/>
         <Message messageId = "error_no_templates" value = "There are no templates.&#10;"/>
         <Message messageId = "error_select_a_valid_question_type" value = "Insert a valid question type:"/>

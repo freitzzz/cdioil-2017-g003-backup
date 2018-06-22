@@ -234,13 +234,13 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
                 String suggestionWithoutImageAsJSON = new Gson().
                         toJson(new SuggestionJSONService(suggestionText, null));
 
-                runThreadForRESTRequest(suggestionWithoutImageAsJSON);
-
                 if (photoTaken()) {
                     File imageFile = new File(pictureImagePath);
-                    String encodedImage = getFileBytesAsString(imageFile);
+                    byte[] encodedImage = getFileBytes(imageFile);
                     runThreadForRESTRequest(new Gson().
                             toJson(new SuggestionJSONService(suggestionText, encodedImage)));
+                }else{
+                    runThreadForRESTRequest(suggestionWithoutImageAsJSON);
                 }
 
             } else if (sentFromActivity.equals(QuestionActivity.class.getSimpleName())) {
@@ -258,6 +258,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
                         xmlService.saveSuggestion(suggestionText);
                         showToastSuccessMessage();
                     }
+                    finish();
                 } catch (TransformerException e) {
                     e.printStackTrace();
                 }
@@ -269,16 +270,17 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
      * Creates a new Thread to perform the REST Request to the server to submit a suggestion that is not
      * related to a review
      *
-     * @param suggestionAsJSON
+     * @param suggestionAsJSON String representing a Suggestion in JSON Format
      */
     private void runThreadForRESTRequest(String suggestionAsJSON) {
         Thread connectionThread = new Thread(submitNotReviewRelatedSuggestion(suggestionAsJSON));
 
         connectionThread.start();
         try {
-            connectionThread.wait();
+            connectionThread.join();
             if (restResponseCode == HttpsURLConnection.HTTP_OK) {
                 showToastSuccessMessage();
+                deleteImageFile();
                 finish();
             } else {
                 show(this, "Ocorreu um erro na submissão da sugestão, por favor " +
@@ -287,6 +289,15 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+    }
+
+    /**
+     * Deletes a suggestion image file after it was sent to the server.
+     */
+    private void deleteImageFile(){
+        File fileToDelete = new File(pictureImagePath);
+        fileToDelete.delete();
     }
 
     /**
@@ -316,9 +327,10 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
         imageFile.renameTo(newImageFile);
         imageFile.delete();
         imageFile = newImageFile;
-        String encodedImage = getFileBytesAsString(imageFile);
+        byte[] encodedImage = getFileBytes(imageFile);
         try {
             xmlService.saveSuggestion(suggestionText, encodedImage);
+            imageFile.delete();
         } catch (TransformerException e) {
             e.printStackTrace();
         }
@@ -338,7 +350,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
                         concat(FeedbackMonkeyAPI.getAPIEntryPoint().
                                 concat(FeedbackMonkeyAPI.getResourcePath("User Profile").
                                         concat(FeedbackMonkeyAPI.getSubResourcePath("User Profile",
-                                                "Save Suggestion").concat("/"+authenticationToken))))).
+                                                "Save Suggestion").concat("/"+authenticationToken).concat("?hasImage=true"))))).
                         withBody(json).
                         withMediaType(RESTRequest.RequestMediaType.JSON).
                         POST();
@@ -352,22 +364,18 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
     }
 
     /**
-     * Converts a file to bytes and returns them as a String (uses Base64 to encode the bytes)
+     * Converts a file to bytes and returns them
      *
      * @param file File we want to convert
      * @return String with the Base 64 encoded bytes of a file
      */
-    private String getFileBytesAsString(File file) {
+    private byte[] getFileBytes(File file) {
         Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
         byte[] imageBytes = byteArrayOutputStream.toByteArray();
-        /**
-         * The call of android.util.Base64 is needed here to have a broader range of API levels.
-         */
-        return android.util.Base64.encodeToString(imageBytes,
-                android.util.Base64.DEFAULT);
+        imageBitmap.recycle();
+        return imageBytes;
     }
 
     /**

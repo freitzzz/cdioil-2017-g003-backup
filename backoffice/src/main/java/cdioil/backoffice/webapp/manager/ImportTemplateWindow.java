@@ -96,7 +96,7 @@ public class ImportTemplateWindow extends Window {
         });
 
         uploadBtn.addFailedListener((Upload.FailedListener) failedEvent ->
-                Notification.show("Could not upload file", Notification.Type.ERROR_MESSAGE));
+                Notification.show("Ocorreu umerro ao fazer upload do ficheiro", Notification.Type.ERROR_MESSAGE));
 
         uploadBtn.addSucceededListener((Upload.SucceededListener) succeededEvent -> {
             try {
@@ -106,7 +106,7 @@ public class ImportTemplateWindow extends Window {
                         Level.SEVERE, e.getMessage());
             }
 
-            Notification.show("Success", Notification.Type.TRAY_NOTIFICATION);
+            Notification.show("Successo!", Notification.Type.TRAY_NOTIFICATION);
             this.close();
         });
 

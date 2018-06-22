@@ -5,6 +5,8 @@
  */
 package cdioil.application.utils;
 
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,9 +49,21 @@ public class CSVCategoriesReaderTest {
     /**
      * Test of the method getNumberOfCategoriesRead, of the clss CSVCategoriesReader.
      */
-//    @Test
-//    public void testGetNumberOfCategoriesRead() {
-//        System.out.println("getNumberOfCategoriesRead");
-//        assertTrue(c.getNumberOfCategoriesRead() == 0);
-//    }
+    @Test
+    public void testGetNumberOfCategoriesRead() {
+        System.out.println("getNumberOfCategoriesRead");
+        assertTrue(c.getNumberOfCategoriesRead() == 0);
+    }
+
+    /**
+     * Test of the method testIsFileValid, of the class CSVCategoriesReader.
+     */
+    public void testIsFileValid() {
+        System.out.println("isFileValid");
+        List<String> fileContent = null;
+        assertFalse("Ficheiros null não podem ser lidos", c.isFileValid(fileContent));
+        fileContent = new LinkedList<>();
+        fileContent.add("Campo1;Campo2;Campo3;Campo4;Campo5;Campo6;Campo7;Campo8;Campo9;Campo10");
+        assertTrue("Campos corretos", c.isFileValid(fileContent));
+    }
 }

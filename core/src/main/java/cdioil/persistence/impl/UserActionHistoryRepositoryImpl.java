@@ -2,12 +2,10 @@ package cdioil.persistence.impl;
 
 import cdioil.application.domain.authz.UserAction;
 import cdioil.application.domain.authz.UserActionHistory;
-import cdioil.application.utils.LocalDateTimeAttributeConverter;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.UserActionHistoryRepository;
 import java.time.LocalDateTime;
-import javax.persistence.TemporalType;
 
 /**
  * Class that represents the UserActionHistory repository implementation

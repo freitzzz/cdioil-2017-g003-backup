@@ -17,13 +17,13 @@ public final class SuggestionJSONService {
      * Image bytes that were encoded using Base64.
      */
     @SerializedName(value = "imageBytes", alternate = {"IMAGEBYTES", "imagebytes"})
-    private String encodedImageBytes;
+    private byte[] encodedImageBytes;
     /**
      * Builds a SuggestionJSONService object receiving the suggestion text and a String representing an images bytes.
      *
      * @param encodedImageBytes String that holds the Base64 encoded bytes of an image
      */
-    public SuggestionJSONService(String suggestionText, String encodedImageBytes) {
+    public SuggestionJSONService(String suggestionText, byte[] encodedImageBytes) {
         this.suggestionText = suggestionText;
         this.encodedImageBytes = encodedImageBytes;
     }
@@ -44,11 +44,11 @@ public final class SuggestionJSONService {
         return suggestionText;
     }
     /**
-     * Returns the encoded image bytes String.
+     * Image Bytes.
      * 
      * @return String holding the encoded image bytes.
      */
-    public String getEncodedImageBytes(){
+    public byte[] getImageBytes(){
         return encodedImageBytes;
     }
 }

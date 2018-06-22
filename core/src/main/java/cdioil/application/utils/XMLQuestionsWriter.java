@@ -6,7 +6,6 @@ import cdioil.domain.QuantitativeQuestion;
 import cdioil.domain.QuantitativeQuestionOption;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -14,13 +13,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -89,8 +81,9 @@ public class XMLQuestionsWriter {
      * Puts the .csv file content into an .xml file
      *
      * @param questionMap map of category paths and questions
+     * @return document
      */
-    public String categoryQuestionsToXML(Map<String, List<Question>> questionMap) {
+    public Document categoryQuestionsToXMLDocument(Map<String, List<Question>> questionMap) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
 
@@ -99,21 +92,9 @@ public class XMLQuestionsWriter {
             Document doc = dBuilder.newDocument();
 
             writeQuestions(doc, questionMap);
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            DOMSource source = new DOMSource(doc);
-            StringWriter stringWriter=new StringWriter();
-            StreamResult result = new StreamResult(stringWriter);
-            try {
-                transformer.transform(source, result);
-                return stringWriter.getBuffer().toString();
-            } catch (TransformerException ex) {
-                Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
-            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
+            return doc;
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLQuestionsWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

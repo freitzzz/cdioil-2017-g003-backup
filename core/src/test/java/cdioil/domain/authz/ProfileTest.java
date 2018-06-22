@@ -1,6 +1,5 @@
 package cdioil.domain.authz;
 
-import cdioil.domain.EAN;
 import cdioil.domain.GlobalSurvey;
 import cdioil.domain.Product;
 import cdioil.domain.QRCode;
@@ -30,22 +29,80 @@ public class ProfileTest {
         System.out.println("getReviews");
         List<SurveyItem> list1 = new ArrayList<>();
         list1.add(new Product("ProdutoTeste", new SKU("544231234"), "1 L", new QRCode("4324235")));
-        
+
         ArrayList<SurveyItem> list2 = new ArrayList<>();
-        list2.add(new Product("OutroProduto", new SKU("664239834"), "1 L", new QRCode("4765209")));        
-        
+        list2.add(new Product("OutroProduto", new SKU("664239834"), "1 L", new QRCode("4765209")));
+
         Review review1 = new Review(new GlobalSurvey(list1, new TimePeriod(LocalDateTime.MIN, LocalDateTime.MAX)));
         Review review2 = new Review(new GlobalSurvey(list2, new TimePeriod(LocalDateTime.MIN, LocalDateTime.MAX)));
 
         Profile profile = createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"), new Name("Lil", "Pump"), new Password("Password123"))));
         profile.addReview(review1);
         profile.addReview(review2);
-        
-        List<Review> expected = new ArrayList<>();  
+
+        List<Review> expected = new ArrayList<>();
         expected.add(review1);
         expected.add(review2);
-        
+
         assertEquals("Should be equal", expected, profile.getReviews());
+    }
+
+    /**
+     * Test of getSuggestions method, of class Profile.
+     */
+    @Test
+    public void testGetSuggestions() {
+        System.out.println("getSuggestions");
+        List<Suggestion> suggestionList = new ArrayList<>();
+
+        Profile profile = createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"), new Name("Lil", "Pump"), new Password("Password123"))));
+        assertEquals(suggestionList, profile.getSuggestions());
+
+        Suggestion suggestion = new Suggestion("Ola");
+
+        suggestionList.add(suggestion);
+
+        assertNotEquals(suggestionList, profile.getSuggestions());
+
+        profile.addSuggestion(suggestion);
+
+        assertEquals(suggestionList, profile.getSuggestions());
+    }
+
+    /**
+     * Test of addSuggestion method, of class Profile.
+     */
+    @Test
+    public void testAddSuggestion() {
+        System.out.println("addSuggestion");
+
+        Profile profile = createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"), new Name("Lil", "Pump"), new Password("Password123"))));
+
+        Suggestion suggestion = new Suggestion("Ola");
+
+        assertTrue(profile.addSuggestion(suggestion));
+
+        assertFalse(profile.addSuggestion(null));
+    }
+
+    /**
+     * Test of removeSuggestion method, of class Profile.
+     */
+    @Test
+    public void testRemoveSuggestion() {
+        System.out.println("removeSuggestion");
+
+        Profile profile = createProfile(new RegisteredUser(new SystemUser(new Email("asd@email.com"), new Name("Lil", "Pump"), new Password("Password123"))));
+
+        Suggestion suggestion = new Suggestion("Ola");
+
+        assertFalse(profile.removeSuggestion(suggestion));
+
+        assertFalse(profile.addSuggestion(null));
+
+        profile.addSuggestion(suggestion);
+
+        assertTrue(profile.removeSuggestion(suggestion));
     }
 
     /**

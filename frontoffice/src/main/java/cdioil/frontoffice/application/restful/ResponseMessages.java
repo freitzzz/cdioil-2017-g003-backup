@@ -192,5 +192,5 @@ public interface ResponseMessages {
      * Constant that represents the JSON used on the response message warning the user that the
      * suggestion (not related to a review) wasn't submitted with success.
      */
-    public static final String JSON_SUGGESTION_SUBMISSION_FAILED = "{\n\t\"suggestionsubmitted\":\"failed\"\n}";
+    public static final String JSON_SUGGESTION_SUBMISSION_FAILED = "{\n\t\"suggestionsubmitted\":\"false\"\n}";
 }

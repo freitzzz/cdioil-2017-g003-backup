@@ -17,11 +17,7 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.transform.OutputKeys;
 
 /**
  * Class used for importing Questions from a file with the .csv extension.
@@ -95,7 +90,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     /**
      * Question ID.
      */
-    private static final String ID_IDENTIFIER = "QuestaoID";
+    private static final String ID_IDENTIFIER = "questionID";
     /**
      * Type Identifier.
      */
@@ -120,6 +115,24 @@ public class CSVQuestionsReader implements QuestionsReader {
      * The number of cells skipped in order to reach the start of a new question in a file with independent questions.
      */
     private static final int INDEPENDENT_FILE_OFFSET = 0;
+    /**
+     * Binary Question Identifier.
+     */
+    private static final String BINARY_QUESTION_INDENTIFIER = "BinaryQuestion";
+    /**
+     * Multiple Choice Question Identifier.
+     */
+    private static final String MULTIPLE_CHOICE_QUESTION_IDENTIFIER = "MultipleChoiceQuestion";
+    /**
+     * Quantitative Question Identifier.
+     */
+    private static final String QUANTITATIVE_QUESTION_INDENTIFIER = "QuantitativeQuestion";
+
+    private static final String MAX_SCALE_IDENTIFIER = "scaleMaxValue";
+
+    private static final String MIN_SCALE_IDENTIFIER = "scaleMinValue";
+
+    private static final String TEXT_IDENTIFIER = "Text";
 
     /**
      * File being read.
@@ -248,7 +261,7 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
         }
-        String xmlDocument = new XMLQuestionsWriter().categoryQuestionsToXML(readQuestions);
+        Document xmlDocument = new XMLQuestionsWriter().categoryQuestionsToXMLDocument(readQuestions);
         return new XMLQuestionsReader(xmlDocument).readCategoryQuestions();
     }
 
@@ -360,54 +373,13 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Reads a independent questions from a CSV file.
      *
      * @return the list of the questions
+     * @throws java.io.IOException
+     * @throws javax.xml.parsers.ParserConfigurationException
+     * @throws javax.xml.transform.TransformerException
      */
     @Override
     public List<Question> readIndependentQuestions() throws IOException, ParserConfigurationException, TransformerException {
 
-//        List<String> fileContent = readFile(file);
-//
-//        if (fileContent == null) {
-//            return new ArrayList<>();
-//        }
-//
-//        if (!isIndependentQuestionsFileValid(fileContent)) {
-//            throw new InvalidFileFormattingException("Unrecognized file formatting");
-//        }
-//
-//        List<Question> independentQuestions = new ArrayList<>();
-//
-////        List<Question> newlyImportedQuestions = new LinkedList<>();
-////
-//        int numLines = fileContent.size();
-//
-//        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
-//
-//            String[] currentLine = fileContent.get(i).split(SPLITTER);
-//
-//            if (currentLine.length > 0) {
-//
-//                String questionType = currentLine[1].trim();
-//
-//                Question question = null;
-//
-//                if (questionType.equalsIgnoreCase(SN_QUESTION)) {
-//                    question = readBinaryQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
-//                } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
-//                    Object[] objects = readMultipleChoiceQuestion(currentLine, INDEPENDENT_FILE_OFFSET, fileContent, i);
-//                    i = (Integer) objects[0];
-//                    question = (Question) objects[1];
-//                } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
-//                    question = readQuantitativeQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
-//                }
-////
-//                if (question != null) {
-//                    independentQuestions.add(question);
-////                    newlyImportedQuestions.add(question);
-//                }
-//            }
-//        }
-//        return independentQuestions;
-////        return newlyImportedQuestions;
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
@@ -428,8 +400,6 @@ public class CSVQuestionsReader implements QuestionsReader {
             if (csvLine != null) {
                 csvFields = csvLine.split(";", -1); // By putting -1 or 0 is as if it doesn't have limit
             }
-
-            int count;
 
             String questionIDMultipleChoice = "";
             Element multipleChoiceQuestion = null;
@@ -508,20 +478,8 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-
-            StringWriter stringWriter = new StringWriter();
-            DOMSource source = new DOMSource(xmlFile);
-            StreamResult result = new StreamResult(stringWriter);
-            transformer.transform(source, result);
-
-            XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(stringWriter.getBuffer().toString());
+            XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(xmlFile);
             return xmlQuestionsReader.readIndependentQuestions();
-
         } finally {
             closeStream(csvReader);
             closeStream(fileReader);

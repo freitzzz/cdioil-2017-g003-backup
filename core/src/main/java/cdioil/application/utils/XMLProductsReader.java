@@ -5,15 +5,21 @@
  */
 package cdioil.application.utils;
 
+import cdioil.files.*;
 import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import cdioil.files.InputSchemaFiles;
-import cdioil.files.ValidatorXML;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import java.io.StringWriter;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import cdioil.files.FileWriter;
+
 import cdioil.domain.Category;
 import cdioil.domain.Product;
 import cdioil.domain.SKU;
@@ -74,7 +80,8 @@ public class XMLProductsReader implements ProductsReader {
     private static final String CATEGORIES_SCALE = "[0-9]+";
 
     /**
-     * Regular expression to validate the path of the Category in the Market Structure.
+     * Regular expression to validate the path of the Category in the Market
+     * Structure.
      */
     private static final String PATH_REGEX = CATEGORIES_SCALE + DC_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UN_IDENTIFIER + PATH_SPLITTER
             + CATEGORIES_SCALE + CAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + SCAT_IDENTIFIER + PATH_SPLITTER + CATEGORIES_SCALE + UB_IDENTIFIER;
@@ -89,6 +96,8 @@ public class XMLProductsReader implements ProductsReader {
      * Logger file with the invalid lines.
      */
     private final File logFile;
+
+    private final Document xmlDocument;
 
     /**
      * Name of the logger file.
@@ -111,12 +120,14 @@ public class XMLProductsReader implements ProductsReader {
     private static final String FILE_SPLITTER = ";";
 
     /**
-     * Message added to the file content if the path of the category is not valid.
+     * Message added to the file content if the path of the category is not
+     * valid.
      */
     private static final String INVALID_CATEGORY_PATH_MESSAGE = "Caminho da categoria não válido!";
 
     /**
-     * Message added to the file content if the category is not a leaf in the market strucure.
+     * Message added to the file content if the category is not a leaf in the
+     * market strucure.
      */
     private static final String NOT_LEAF_CATEGORY_MESSAGE = "Categoria não folha, logo não é possível adicionar um produto!";
 
@@ -126,7 +137,8 @@ public class XMLProductsReader implements ProductsReader {
     private final Map<Category, List<Product>> productsReadFromFile;
 
     /**
-     * Map that will hold all already existent products for the user to decide if they need to be updated or not.
+     * Map that will hold all already existent products for the user to decide
+     * if they need to be updated or not.
      */
     private final Map<Category, List<Product>> repeatedProducts;
 
@@ -136,7 +148,8 @@ public class XMLProductsReader implements ProductsReader {
     private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH);
 
     /**
-     * Element in XML file that represents the product's path in the market structure.
+     * Element in XML file that represents the product's path in the market
+     * structure.
      */
     private static final String CATEGORY_PATH_ELEMENT = "ID";
 
@@ -166,26 +179,55 @@ public class XMLProductsReader implements ProductsReader {
     private static final String PRODUCT_UNITY_ELEMENT = "unidade";
 
     /**
-     * Builds an instance of XMLProductsReader, receiving the path of the file to read.
+     * Builds an instance of XMLProductsReader, receiving the path of the file
+     * to read.
      *
      * @param filePath Path of the file
-     * @param repeatedProducts Map that will hold all already existent products for the user to decide if they need to be updated or not
+     * @param repeatedProducts Map that will hold all already existent products
+     * for the user to decide if they need to be updated or not
      */
     public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts) {
+        Document xmlDocument1;
         this.file = new File(filePath);
+        xmlDocument1 = null;
+        DocumentBuilder documentBuilder;
+        try {
+            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            xmlDocument1 = documentBuilder.parse(file);
+        } catch (IOException | ParserConfigurationException | SAXException ex) {
+            System.out.println("constructor " + ex.getMessage());
+        }
+        xmlDocument = xmlDocument1;
         this.logFile = new File(LOG_FILENAME);
         this.productsReadFromFile = new HashMap<>();
         this.repeatedProducts = repeatedProducts;
     }
 
     /**
+     * Builds an instance of XMLProductsReader, receiving the path of the file
+     * to read.
+     *
+     * @param filePath Path of the file
+     * @param repeatedProducts Map that will hold all already existent products
+     * for the user to decide if they need to be updated or not
+     */
+    public XMLProductsReader(String filePath, Map<Category, List<Product>> repeatedProducts, Document xmlDocument) {
+        this.file = new File(filePath);
+        this.logFile = new File(LOG_FILENAME);
+        this.productsReadFromFile = new HashMap<>();
+        this.repeatedProducts = repeatedProducts;
+        this.xmlDocument = xmlDocument;
+    }
+
+    /**
      * Reads the content of the received file.
      *
-     * @return a map with categories as keys and all products that were read as values
+     * @return a map with categories as keys and all products that were read as
+     * values
      */
     @Override
-    public Map<Category, List<Product>> readProducts() {
-        if (isFileValid()) {
+    public Map<Category, List<Product>> readProducts() throws TransformerException {
+        if (isFileValid(xmlDocument)) {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
             try {
@@ -285,8 +327,8 @@ public class XMLProductsReader implements ProductsReader {
      *
      * @return true, if the file is valid. Otherwise, returns false
      */
-    private boolean isFileValid() {
-        return ValidatorXML.validateFile(SCHEMA_FILE, file);
+    private boolean isFileValid(Document document) throws TransformerException {
+        return ValidatorXML.validateXMLDocument(FilesUtils.listAsString(FileReader.readFile(SCHEMA_FILE)), documentToString(document));
     }
 
     /**
@@ -304,7 +346,8 @@ public class XMLProductsReader implements ProductsReader {
     }
 
     /**
-     * Adds a new product with a certain category to the map that holds all products from the file.
+     * Adds a new product with a certain category to the map that holds all
+     * products from the file.
      *
      * @param category Product's category (key)
      * @param product Product to add (value)
@@ -355,5 +398,32 @@ public class XMLProductsReader implements ProductsReader {
         fileContent.add(erroneousContent + FILE_SPLITTER + message);
 
         FileWriter.writeFile(logFile, fileContent);
+    }
+
+    /**
+     * Converts a document to a string
+     *
+     * @param doc document to convert
+     * @return String containing the document's information
+     */
+    private String documentToString(Document doc) throws TransformerException {
+
+        // Create dom source for the document
+        DOMSource domSource = new DOMSource(doc);
+
+        // Create a string writer
+        StringWriter stringWriter = new StringWriter();
+
+        // Create the result stream for the transform
+        StreamResult result = new StreamResult(stringWriter);
+
+        // Create a Transformer to serialize the document
+        TransformerFactory tFactory = TransformerFactory.newInstance();
+        Transformer transformer = tFactory.newTransformer();
+        transformer.setOutputProperty("indent", "yes");
+
+        // Transform the document to the result stream
+        transformer.transform(domSource, result);
+        return stringWriter.toString();
     }
 }

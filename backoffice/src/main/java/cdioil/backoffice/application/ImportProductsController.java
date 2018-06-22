@@ -11,6 +11,8 @@ import cdioil.application.utils.ProductsReader;
 import cdioil.domain.MarketStructure;
 import cdioil.domain.Category;
 import cdioil.domain.Product;
+
+import javax.xml.transform.TransformerException;
 import java.util.Map.Entry;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +36,7 @@ public class ImportProductsController {
      *
      * @throws cdioil.files.InvalidFileFormattingException if the file's formatting is not consistent with the file guidelines
      */
-    public Integer importProducts(String filePath, Map<Category, List<Product>> repeatedProducts) {
+    public Integer importProducts(String filePath, Map<Category, List<Product>> repeatedProducts) throws TransformerException {
         ProductsReader productsReader = ProductsReaderFactory.create(filePath, repeatedProducts);
         Set<Product> successfullyImportedProducts = new HashSet<>();
 
