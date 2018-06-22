@@ -18,6 +18,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
+ * Imports Categories from XML files.
  *
  * @author Ana Guerra (1161191)
  */
@@ -30,8 +31,8 @@ public class XMLCategoriesReader implements CategoriesReader {
     /**
      * List with the Categories that were read.
      */
-    private List<Category> listCategories;
-     /**
+    private final List<Category> listCategories;
+    /**
      * Schema file (XSD) used for validating the input file.
      */
     private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY);
@@ -39,11 +40,11 @@ public class XMLCategoriesReader implements CategoriesReader {
      * String with the identifier to category.
      */
     private static final String CATEGORY = "categoria";
-     /**
+    /**
      * String with the identifier to list of the scats.
      */
     private static final String LIST_SCAT = "lista_scat";
-     /**
+    /**
      * String with the identifier to lists of the ubs.
      */
     private static final String LIST_UB = "lista_ub";
@@ -51,36 +52,36 @@ public class XMLCategoriesReader implements CategoriesReader {
      * String with the identifier to lists of the categories.
      */
     private static final String LIST_CATEGORIES = "lista_categorias";
-     /**
+    /**
      * String with the CAT identifier.
      */
     private static final String DEC_CAT = "descritivo_cat";
-     /**
-     * String with the  SCAT identifier.
+    /**
+     * String with the SCAT identifier.
      */
     private static final String DEC_SCAT = "descritivo_scat";
-     /**
-     * String with the  ID identifier.
+    /**
+     * String with the ID identifier.
      */
     private static final String ID = "id";
-     /**
-     * String with the  DC identifier.
+    /**
+     * String with the DC identifier.
      */
     private static final String DC = "DC";
-     /**
-     * String with the  UN identifier.
+    /**
+     * String with the UN identifier.
      */
     private static final String UN = "UN";
-     /**
-     * String with the  CAT identifier.
+    /**
+     * String with the CAT identifier.
      */
     private static final String CAT = "CAT";
-     /**
-     * String with the  SCAT identifier.
+    /**
+     * String with the SCAT identifier.
      */
     private static final String SCAT = "SCAT";
-     /**
-     * String with the  UB identifier.
+    /**
+     * String with the UB identifier.
      */
     private static final String UB = "UB";
 
@@ -95,9 +96,9 @@ public class XMLCategoriesReader implements CategoriesReader {
     }
 
     /**
-     * Imports Categories from a .csv file.
+     * Imports Categories from a XML file.
      *
-     * @return List with the Categories that were read. Null if the file is not valid
+     * @return MarketStructur with the Categories that were read. Null if the file is not valid
      */
     @Override
     public MarketStructure readCategories() {
@@ -121,6 +122,12 @@ public class XMLCategoriesReader implements CategoriesReader {
         return me;
     }
 
+    /**
+     * Reads the information os the XMl file
+     *
+     * @param categorias NodeList of the categories
+     * @param me MArketStructur
+     */
     public void read(NodeList categorias, MarketStructure me) {
 
         for (int i = 0; i < categorias.getLength(); i++) {
@@ -203,6 +210,12 @@ public class XMLCategoriesReader implements CategoriesReader {
             }
         }
     }
+
+    /**
+     * Returns the number of Categories in the list of Categories.
+     *
+     * @return the number of Categories that were read
+     */
     @Override
     public int getNumberOfCategoriesRead() {
         return listCategories.size();
