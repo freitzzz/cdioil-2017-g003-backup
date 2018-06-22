@@ -99,7 +99,7 @@ public final class AuthenticationController implements Serializable {
         if(currentUserSession==null){
             return false;
         }
-        //logSessionEnd();
+        logSessionEnd();
         currentUserSession=null;
         return true;
     }
@@ -176,6 +176,19 @@ public final class AuthenticationController implements Serializable {
      * @return boolean true with the current user session
      */
     public UserSession getUserSession(){return currentUserSession;}
+    /**
+     * Method that updates the current user
+     */
+    public void updateCurrentUser(){
+        currentUserSession=new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(currentUserSession.getUserToken());
+        if(currentUser instanceof Admin){
+            currentUser=getAdmin();
+        }else if(currentUser instanceof Manager){
+            currentUser=getManager();
+        }else{
+            currentUser=getRegisteredUser();
+        }
+    }
     /**
      * Method that returns the current session user
      * <br>Method to be deprecated very soon, only is here due to need on some 
