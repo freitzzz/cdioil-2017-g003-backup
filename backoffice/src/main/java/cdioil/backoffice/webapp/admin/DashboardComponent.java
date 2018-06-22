@@ -5,7 +5,6 @@ import cdioil.backoffice.webapp.DefaultPanelView;
 import cdioil.backoffice.webapp.utils.ImageUtils;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.DateField;
@@ -25,7 +24,7 @@ import java.time.LocalTime;
  */
 public class DashboardComponent extends DefaultPanelView {
 
-    private TimeStatisticsController controller;
+    private transient TimeStatisticsController controller;
 
     private GridLayout layout;
 

@@ -248,7 +248,7 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
         }
-        String xmlDocument = new XMLQuestionsWriter().categoryQuestionsToXML(readQuestions);
+        Document xmlDocument = new XMLQuestionsWriter().categoryQuestionsToXMLDocument(readQuestions);
         return new XMLQuestionsReader(xmlDocument).readCategoryQuestions();
     }
 
@@ -508,20 +508,19 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
             }
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//            Transformer transformer = transformerFactory.newTransformer();
+//            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+//            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+//
+//            StringWriter stringWriter = new StringWriter();
+//            DOMSource source = new DOMSource(xmlFile);
+//            StreamResult result = new StreamResult(stringWriter);
+//            transformer.transform(source, result);
 
-            StringWriter stringWriter = new StringWriter();
-            DOMSource source = new DOMSource(xmlFile);
-            StreamResult result = new StreamResult(stringWriter);
-            transformer.transform(source, result);
-
-            XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(stringWriter.getBuffer().toString());
+            XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(xmlFile);
             return xmlQuestionsReader.readIndependentQuestions();
-
         } finally {
             closeStream(csvReader);
             closeStream(fileReader);
