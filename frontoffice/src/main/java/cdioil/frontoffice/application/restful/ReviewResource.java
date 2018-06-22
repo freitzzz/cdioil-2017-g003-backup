@@ -162,7 +162,12 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             return createInvalidAuthTokenResponse();
         }
         Review reviewToAnswer = new ReviewRepositoryImpl().getUserReviewByID(registeredUser,Long.parseLong(reviewID));
+        
         if (reviewToAnswer == null) {
+            return createInvalidReviewResponse();
+        }
+        
+        if(reviewToAnswer.isFinished()){
             return createInvalidReviewResponse();
         }
         
