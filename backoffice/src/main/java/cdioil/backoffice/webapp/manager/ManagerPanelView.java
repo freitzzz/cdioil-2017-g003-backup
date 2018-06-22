@@ -103,6 +103,9 @@ public class ManagerPanelView extends MainLayoutView implements View {
         addNewButtonToLeftPanel(surveyButton);
     }
 
+    /**
+     * Configure Logout Btn
+     */
     private void configureLogoutBtn() {
         logoutBtn = new Button(LOGOUT_BUTTON_DESCRIPITION);
         logoutBtn.setIcon(VaadinIcons.EXIT);
