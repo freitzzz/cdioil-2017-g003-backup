@@ -107,6 +107,11 @@ public interface ReviewFileTags {
     String ANSWER_ELEMENT_TAG = "Answer";
 
     /**
+     * Constant representing the time element tag.
+     */
+    String TIME_ELEMENT_TAG = "Time";
+
+    /**
      * Constant representing the text attribute tag.
      */
     String TEXT_ATTRIBUTE_TAG = "text";

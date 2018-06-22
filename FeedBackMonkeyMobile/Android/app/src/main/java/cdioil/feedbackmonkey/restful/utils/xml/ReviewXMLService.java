@@ -130,6 +130,29 @@ public class ReviewXMLService {
     }
 
     /**
+     * Writes the time it took the user to answer a survey to the review XML File.
+     *
+     * @param time long representing the time it took the user to answer a survey (in seconds)
+     */
+    public void writeTime(long time){
+        Element timeElement = (Element) document.getElementsByTagName(ReviewFileTags.TIME_ELEMENT_TAG).item(0);
+        timeElement.setTextContent(Long.toString(time));
+    }
+
+    /**
+     * Returns the time it took the user to answer a survey (or part of it) in seconds
+     *
+     * @return long representing the time it took the user to answer a survey (or part of it) in seconds
+     */
+    public long getTime(){
+        Element element = document.createElement(ReviewFileTags.TIME_ELEMENT_TAG);
+        element.setTextContent("2");
+        document.getDocumentElement().appendChild(element);
+        Element timeElement = (Element) document.getElementsByTagName(ReviewFileTags.TIME_ELEMENT_TAG).item(0);
+        return Long.parseLong(timeElement.getTextContent());
+    }
+
+    /**
      * Creates an XML File that will save the user's review information regarding a certain survey.
      *
      * @param fileContent String with the XML file content
