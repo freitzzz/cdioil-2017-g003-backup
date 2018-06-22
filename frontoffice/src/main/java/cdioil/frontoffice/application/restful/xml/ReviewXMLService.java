@@ -444,7 +444,7 @@ public class ReviewXMLService {
             Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
             Element reviewElement = document.getDocumentElement();
             
-            Element suggestionElement = (Element) reviewElement.getElementsByTagName(SUGGESTION_ELEMENT_TAG);
+            Element suggestionElement = (Element) reviewElement.getElementsByTagName(SUGGESTION_ELEMENT_TAG).item(0);
             String imageBytes = suggestionElement.getElementsByTagName(IMAGE_ELEMENT_TAG).item(0).getTextContent();
             return imageBytes == null || imageBytes.isEmpty() ? null : imageBytes;
         } catch (ParserConfigurationException | SAXException | IOException ex) {

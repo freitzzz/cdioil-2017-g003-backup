@@ -382,50 +382,6 @@ public class CSVQuestionsReader implements QuestionsReader {
     @Override
     public List<Question> readIndependentQuestions() throws IOException, ParserConfigurationException, TransformerException {
 
-//        List<String> fileContent = readFile(file);
-//
-//        if (fileContent == null) {
-//            return new ArrayList<>();
-//        }
-//
-//        if (!isIndependentQuestionsFileValid(fileContent)) {
-//            throw new InvalidFileFormattingException("Unrecognized file formatting");
-//        }
-//
-//        List<Question> independentQuestions = new ArrayList<>();
-//
-////        List<Question> newlyImportedQuestions = new LinkedList<>();
-////
-//        int numLines = fileContent.size();
-//
-//        for (int i = IDENTIFIERS_LINE + 1; i < numLines; i++) {
-//
-//            String[] currentLine = fileContent.get(i).split(SPLITTER);
-//
-//            if (currentLine.length > 0) {
-//
-//                String questionType = currentLine[1].trim();
-//
-//                Question question = null;
-//
-//                if (questionType.equalsIgnoreCase(SN_QUESTION)) {
-//                    question = readBinaryQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
-//                } else if (questionType.equalsIgnoreCase(EM_QUESTION)) {
-//                    Object[] objects = readMultipleChoiceQuestion(currentLine, INDEPENDENT_FILE_OFFSET, fileContent, i);
-//                    i = (Integer) objects[0];
-//                    question = (Question) objects[1];
-//                } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
-//                    question = readQuantitativeQuestion(currentLine, INDEPENDENT_FILE_OFFSET);
-//                }
-////
-//                if (question != null) {
-//                    independentQuestions.add(question);
-////                    newlyImportedQuestions.add(question);
-//                }
-//            }
-//        }
-//        return independentQuestions;
-////        return newlyImportedQuestions;
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
@@ -525,17 +481,6 @@ public class CSVQuestionsReader implements QuestionsReader {
                     }
                 }
             }
-
-//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//            Transformer transformer = transformerFactory.newTransformer();
-//            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-//            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-//
-//            StringWriter stringWriter = new StringWriter();
-//            DOMSource source = new DOMSource(xmlFile);
-//            StreamResult result = new StreamResult(stringWriter);
-//            transformer.transform(source, result);
 
             XMLQuestionsReader xmlQuestionsReader = new XMLQuestionsReader(xmlFile);
             return xmlQuestionsReader.readIndependentQuestions();
