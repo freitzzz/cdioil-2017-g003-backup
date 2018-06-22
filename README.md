@@ -42,3 +42,4 @@ can be found [here](https://bitbucket.org/lei-isep/cdioil-2017-g003/wiki/Engenha
 - [Joana Pinheiro (1161380)](https://bitbucket.org/1161380/)
 - [Rita Gonçalves (1160912)](https://bitbucket.org/ritagsoraia/)
 - [Margarida Guerra (1161191)](https://bitbucket.org/MargaridaGuerra/)
+- [Gil Durão (1160936)](https://bitbucket.org/RicGD/)
