@@ -145,9 +145,6 @@ public class ReviewXMLService {
      * @return long representing the time it took the user to answer a survey (or part of it) in seconds
      */
     public long getTime(){
-        Element element = document.createElement(ReviewFileTags.TIME_ELEMENT_TAG);
-        element.setTextContent("2");
-        document.getDocumentElement().appendChild(element);
         Element timeElement = (Element) document.getElementsByTagName(ReviewFileTags.TIME_ELEMENT_TAG).item(0);
         return Long.parseLong(timeElement.getTextContent());
     }
