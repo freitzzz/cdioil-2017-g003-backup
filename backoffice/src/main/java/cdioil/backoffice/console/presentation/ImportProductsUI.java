@@ -11,6 +11,8 @@ import cdioil.files.InvalidFileFormattingException;
 import cdioil.console.Console;
 import cdioil.domain.Category;
 import cdioil.domain.Product;
+
+import javax.xml.transform.TransformerException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +126,8 @@ public class ImportProductsUI {
             }
         } catch (InvalidFileFormattingException e) {
             System.out.println(errorInvalidFileFormat);
+        } catch (TransformerException e) {
+            e.printStackTrace();
         }
     }
 
