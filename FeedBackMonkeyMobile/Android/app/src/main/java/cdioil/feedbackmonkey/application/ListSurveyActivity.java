@@ -14,13 +14,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.xml.sax.SAXException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.ParserConfigurationException;
@@ -57,7 +66,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     /**
      * Constant that represents the get review answer map resource path under reviews resource.
      */
-    private static final String GET_REVIEW_ANSWER_MAP_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews","Get Review Answer Map");
+    private static final String GET_REVIEW_ANSWER_MAP_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Get Review Answer Map");
     /**
      * ListView that is hold by the scroll view
      */
@@ -85,9 +94,13 @@ public class ListSurveyActivity extends AppCompatActivity {
      */
     private String reviewRestResponseBody;
     /**
-     * List with all current surveys displayed on the list
+     * List with all current surveys displayed on the list.
      */
     private List<SurveyService> currentSurveys;
+    /**
+     * Map that holds SurveyServices of the Surveys that have a saved pending review and its corresponding file.
+     */
+    private Map<SurveyService, File> pendingReviewsMap;
 
     /**
      * Boolean flag to know if the activity was started by the UserProfileActivity or not.
@@ -110,26 +123,31 @@ public class ListSurveyActivity extends AppCompatActivity {
 
     /**
      * Configures the activity start based on a bundle that was passed
+     *
      * @param bundle Bundle with the bundle which was brought by another activity
      */
-    private void configureActivityStart(Bundle bundle){
-        authenticationToken=bundle.getString("authenticationToken");
+    private void configureActivityStart(Bundle bundle) {
+        authenticationToken = bundle.getString("authenticationToken");
         configureUserProfileBundle(bundle);
-        int surveysToAdd=bundle.size()-1;
-        System.out.println(surveysToAdd);
-        currentSurveys=new ArrayList<>(surveysToAdd);
-        for(int i=0;i<surveysToAdd;i++)currentSurveys.add((SurveyService)bundle.getSerializable(""+i));
-        System.out.println(currentSurveys);
+        int surveysToAdd = bundle.size() - 1;
+        pendingReviewsMap = buildSurveyServiceFileMap();
+        currentSurveys = new ArrayList<>(surveysToAdd);
+
+        for (int i = 0; i < surveysToAdd; i++) {
+            SurveyService surveyService = (SurveyService) bundle.getSerializable("" + i);
+            currentSurveys.add(surveyService);
+        }
         currentPaginationID++;
     }
 
     /**
      * Sets a flag if this activity was started by UserProfileActivity
+     *
      * @param bundle Bundle that was passed by another activity
      */
-    private void configureUserProfileBundle(Bundle bundle){
+    private void configureUserProfileBundle(Bundle bundle) {
         String flag = bundle.getString("sentFromProfileActivity");
-        if(flag != null && flag.equals(UserProfileActivity.class.getSimpleName())){
+        if (flag != null && flag.equals(UserProfileActivity.class.getSimpleName())) {
             userProfileActivityFlag = true;
             bundle.remove("sentFromProfileActivity");
         }
@@ -150,29 +168,29 @@ public class ListSurveyActivity extends AppCompatActivity {
     /**
      * Configures the onItemClick event of the current list view
      */
-    private void configureListViewOnItemClick(){
+    private void configureListViewOnItemClick() {
 
-        if(userProfileActivityFlag){
+        if (userProfileActivityFlag) {
             setOnItemClickListenerForAnsweredSurveys();
-        }else{
+        } else {
             setOnItemClickListenerForAnswerSurvey();
         }
     }
 
-    private void setOnItemClickListenerForAnsweredSurveys(){
-        listSurveysListView.setOnItemClickListener((parent, view, position, id) ->{
+    private void setOnItemClickListenerForAnsweredSurveys() {
+        listSurveysListView.setOnItemClickListener((parent, view, position, id) -> {
 
             //Start a new Thread responsible for establishing a connection to the HTTP server
             Thread connectionThread = new Thread(requestReviewAnswerMap(position));
             connectionThread.start();
             try {
                 connectionThread.join();
-                if(reviewRestResponseCode == HttpsURLConnection.HTTP_OK){
-                    ReviewJSONService reviewJSONService = new Gson().fromJson(reviewRestResponseBody,ReviewJSONService.class);
+                if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
+                    ReviewJSONService reviewJSONService = new Gson().fromJson(reviewRestResponseBody, ReviewJSONService.class);
                     startCheckReviewActivity(reviewJSONService);
-                }else{
+                } else {
                     //TODO: create message dialog informing user an error occurred
-                    ToastNotification.show(this,"Erro: " + reviewRestResponseCode);
+                    ToastNotification.show(this, "Erro: " + reviewRestResponseCode);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -188,37 +206,52 @@ public class ListSurveyActivity extends AppCompatActivity {
     private void setOnItemClickListenerForAnswerSurvey() {
         listSurveysListView.setOnItemClickListener((parent, view, position, id) -> {
 
-            //Start a new Thread responsible for establishing a connection to the HTTP server
-            Thread connectionThread = new Thread(requestNewReview(position));
-            connectionThread.start();
+            SurveyService chosenSurveyService = currentSurveys.get(position);
+            File reviewFile = pendingReviewsMap.get(chosenSurveyService);
 
-            //wait for the connection thread in order to get the REST response containing review data
             try {
-                connectionThread.join();
-                if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
-                    try {
+                if (reviewFile != null) {
+                    /**
+                     * There is a pending review file saved locally.
+                     */
+                    ReviewXMLService.instance().resumeReview(reviewFile);
+                    startQuestionActivity();
+                    finish();
+                } else {
+                    /**
+                     * There is no pending review file saved locally, so a request must be made for a new review.
+                     * A file with the SurveyService in JSON format is also created for future use.
+                     */
+                    File surveyServiceFile = new File(getSurveyServicesDirectory(), "survey_".concat(chosenSurveyService.getSurveyID().concat(".json")));
 
-                        String fileContent = reviewRestResponseBody;
-
-                        //TODO: Add check when creating file, depending on whether or not that survey has a pending review
-                        ReviewXMLService.instance().createNewReviewFile(getPendingReviewsDirectory(), fileContent);
-                        startQuestionActivity();
-                        finish();
+                    try (FileOutputStream fileOutputStream = new FileOutputStream(surveyServiceFile)) {
+                        String surveyServiceAsJSON = new Gson().toJson(chosenSurveyService);
+                        fileOutputStream.write(surveyServiceAsJSON.getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
-                        ToastNotification.show(this,getString(R.string.no_internet_connection));
-                    } catch (ParserConfigurationException | SAXException e) {
-                        e.printStackTrace();
-                        ToastNotification.show(this, getString(R.string.error_parsing_file));
-                    } catch (Exception e) {
+                    }
+                    //Start a new Thread responsible for establishing a connection to the HTTP server
+                    Thread connectionThread = new Thread(requestNewReview(position));
+                    connectionThread.start();
+
+                    //wait for the connection thread in order to get the REST response containing review data
+                    try {
+                        connectionThread.join();
+                        if (reviewRestResponseCode == HttpsURLConnection.HTTP_OK) {
+                            String fileContent = reviewRestResponseBody;
+                            ReviewXMLService.instance().createNewReviewFile(getPendingReviewsDirectory(), fileContent);
+                            startQuestionActivity();
+                            finish();
+                        } else {
+                            //TODO: create messagediaolog informing user an error occured
+                            ToastNotification.show(this, "Erro: " + reviewRestResponseCode);
+                        }
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    //TODO: create messagediaolog informing user an error occured
-                    ToastNotification.show(this, "Erro: " + reviewRestResponseCode);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (ParserConfigurationException | SAXException | IOException e) {
+                ToastNotification.show(this, "Ocorreu um erro a carregar a sua avaliação!");
             }
         });
     }
@@ -226,16 +259,51 @@ public class ListSurveyActivity extends AppCompatActivity {
     /**
      * Configures the onLongItemClick event of the current list view
      */
-    private void configureListViewOnLongItemClick(){
-        listSurveysListView.setOnItemLongClickListener((adapterView, view, position, timeClicked)->{
-            SurveyDescriptionDialog surveyDialog=new SurveyDescriptionDialog(ListSurveyActivity.this
-                    ,currentSurveys.get(position));
+    private void configureListViewOnLongItemClick() {
+        listSurveysListView.setOnItemLongClickListener((adapterView, view, position, timeClicked) -> {
+            SurveyDescriptionDialog surveyDialog = new SurveyDescriptionDialog(ListSurveyActivity.this
+                    , currentSurveys.get(position));
             surveyDialog.show();
             return true;
         });
     }
+
+    /**
+     * Creates a survey services directory or fetches the existing one.
+     *
+     * @return survey services directory
+     */
+    private File getSurveyServicesDirectory() {
+        String surveyServices = "survey_services";
+
+        File filesDirectory = getFilesDir();
+
+        File surveyServicesDirectory = new File(filesDirectory, surveyServices);
+
+        if (!surveyServicesDirectory.exists()) {
+            surveyServicesDirectory.mkdir();
+        }
+
+        return surveyServicesDirectory;
+    }
+
+    /**
+     * Fetches all the survey IDs that have pending reviews.
+     *
+     * @return list of strings that contain the survey ID of a pending review
+     */
+    private Map<SurveyService, File> buildSurveyServiceFileMap() {
+        Map<SurveyService, File> result = new HashMap<>();
+        for (File file : getPendingReviewsDirectory().listFiles()) {
+            String surveyID = file.getName().split("_")[2].replace(".xml", "");
+            result.put(new SurveyService(surveyID), file);
+        }
+        return result;
+    }
+
     /**
      * Creates a pending reviews directory or fetches the existing one.
+     *
      * @return pending reviews directory
      */
     private File getPendingReviewsDirectory() {
@@ -262,15 +330,15 @@ public class ListSurveyActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts the SeeAnswersActivity.
+     * Starts the CheckReviewActivity.
      */
-    private void startCheckReviewActivity(ReviewJSONService reviewJSONService){
-        Intent checkReviewActivityIntent = new Intent(ListSurveyActivity.this,CheckReviewActivity.class);
+    private void startCheckReviewActivity(ReviewJSONService reviewJSONService) {
+        Intent checkReviewActivityIntent = new Intent(ListSurveyActivity.this, CheckReviewActivity.class);
         Bundle bundle = new Bundle();
         ArrayList<String> questions = new ArrayList<>(reviewJSONService.getQuestionAnswerMap().keySet());
         ArrayList<String> answers = new ArrayList<>(reviewJSONService.getQuestionAnswerMap().values());
-        bundle.putStringArrayList("questions",questions);
-        bundle.putStringArrayList("answers",answers);
+        bundle.putStringArrayList("questions", questions);
+        bundle.putStringArrayList("answers", answers);
         checkReviewActivityIntent.putExtras(bundle);
         startActivity(checkReviewActivityIntent);
     }
@@ -309,9 +377,9 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @param position index of the list view's item that was clicked
      * @return Runnable that processes the REST Response
      */
-    private Runnable requestReviewAnswerMap(int position){
-        return () ->{
-            try{
+    private Runnable requestReviewAnswerMap(int position) {
+        return () -> {
+            try {
                 String surveyID = currentSurveys.get(position).getSurveyID();
                 Response reviewAnswerMapResponse = RESTRequest.create(BuildConfig.SERVER_URL.
                         concat(FeedbackMonkeyAPI.getAPIEntryPoint().
@@ -324,9 +392,9 @@ public class ListSurveyActivity extends AppCompatActivity {
                 reviewRestResponseCode = reviewAnswerMapResponse.code();
                 reviewRestResponseBody = reviewAnswerMapResponse.body().string();
 
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
-                ToastNotification.show(this,getString(R.string.no_internet_connection));
+                ToastNotification.show(this, getString(R.string.no_internet_connection));
             }
         };
     }
@@ -367,7 +435,7 @@ public class ListSurveyActivity extends AppCompatActivity {
      * @throws IOException Throws IOException if an error occurred while sending the REST Request
      */
     private List<SurveyService> getNextSurveys() throws IOException {
-        return new SurveyServiceController(authenticationToken).getSurveysByPaginationID((short)currentPaginationID++);
+        return new SurveyServiceController(authenticationToken).getSurveysByPaginationID((short) currentPaginationID++);
     }
 
     /**

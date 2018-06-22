@@ -3,6 +3,7 @@ package cdioil.feedbackmonkey.application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -68,12 +69,8 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         progressBar = findViewById(R.id.answerSurveyProgressBar);
         stopReviewButton = findViewById(R.id.stopReviewButton);
 
-        if (getIntent().getExtras() != null) {
-            authenticationToken = getIntent().getExtras().getString("authenticationToken");
-        } else {
-            ToastNotification.show(this, "Não tem uma sessão");
-            return;
-        }
+        authenticationToken = PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
+                getString(R.string.no_authentication_token));
 
         loadQuestionInfo(false);
         stopReview();

@@ -118,6 +118,18 @@ public class ReviewXMLService {
     }
 
     /**
+     * Loads a pending review XML File.
+     *
+     * @param reviewFile pending review XML File to be loaded
+     */
+    public void resumeReview(File reviewFile) throws ParserConfigurationException, IOException, SAXException {
+        this.reviewFile = reviewFile;
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        document = documentBuilder.parse(this.reviewFile);
+        buildReviewQuestionElements();
+    }
+
+    /**
      * Creates an XML File that will save the user's review information regarding a certain survey.
      *
      * @param fileContent String with the XML file content

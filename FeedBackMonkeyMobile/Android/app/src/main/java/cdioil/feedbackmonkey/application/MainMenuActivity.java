@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -26,13 +25,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.xml.sax.SAXException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -88,9 +92,9 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     private static final String SAVE_REVIEW_RESOURCE_PATH = FeedbackMonkeyAPI.getSubResourcePath("Reviews", "Save Review");
     private String[] menuOptions = {"Listar Inquéritos", "Scan de Códigos", "Perfil", "Partilhe as suas ideias connosco!",
-    "Logout"};
+            "Logout"};
     private int[] menuOptionImages = {R.drawable.survey_icon, R.drawable.code_search_icon, R.drawable.profile_icon,
-            R.drawable.question_mark,R.drawable.logout_icon};
+            R.drawable.question_mark, R.drawable.logout_icon};
     private String[] menuBackgroundColors = {"#ffffff", "#ffd05b", "#ffffff", "#ffd05b", "#ffffff"};
     private String authenticationToken;
     private int optionIndex;
@@ -110,11 +114,11 @@ public class MainMenuActivity extends AppCompatActivity {
         configureView();
         authenticationToken = PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
                 getString(R.string.no_authentication_token));
-        if(authenticationToken.equals(getString(R.string.no_authentication_token))){
-            ToastNotification.show(this,"Não foi possível iniciar sessão, tente fazer login novamente!");
+        if (authenticationToken.equals(getString(R.string.no_authentication_token))) {
+            ToastNotification.show(this, "Não foi possível iniciar sessão, tente fazer login novamente!");
             finish();
         }
-        fetchingSurveysWaitingDialog=WaitingDialog.create(this).setWaitingDialogTitle(getString(R.string.fetching_surveys_waiting_dialog));
+        fetchingSurveysWaitingDialog = WaitingDialog.create(this).setWaitingDialogTitle(getString(R.string.fetching_surveys_waiting_dialog));
     }
 
     @Override
@@ -162,10 +166,10 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Deletes the current authentication token from the app's Shared Preferences and launches LoginActivity.
      */
-    private void deleteAuthenticationTokenFromSharedPreferences(){
+    private void deleteAuthenticationTokenFromSharedPreferences() {
         PreferenceManager.getDefaultSharedPreferences(this).edit().remove("authenticationToken").apply();
-        if(PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
-                getString(R.string.no_authentication_token)).equals(getString(R.string.no_authentication_token))){
+        if (PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
+                getString(R.string.no_authentication_token)).equals(getString(R.string.no_authentication_token))) {
             Intent backToLoginIntent = new Intent(MainMenuActivity.this, LoginActivity.class);
             startActivity(backToLoginIntent);
             finish();
@@ -209,7 +213,7 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(userProfileActivityIntent);
     }
 
-    private void startSuggestionActivity(){
+    private void startSuggestionActivity() {
         Intent submitSuggestionIntent = new Intent(MainMenuActivity.this, SubmitSuggestionActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("authenticationToken", authenticationToken);
@@ -264,36 +268,37 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Method that fetches all active surveys which products being reviewed
      * have a certain code which was previously scanned by the user
+     *
      * @param productCode String with the scanned product code
      * @return Runnable with the runnable which will fetch the active surveys which products
      * being reviewed have a certain scanned code
      */
-    private Runnable fetchScannedCodeSurveys(String productCode){
+    private Runnable fetchScannedCodeSurveys(String productCode) {
         return () -> {
             try {
                 runOnUiThread(this::showFetchingSurveysWaitingDialog);
                 List<SurveyService> surveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByProductCode(productCode);
-                if(surveysToAnswer.size()==1){
+                if (surveysToAnswer.size() == 1) {
                     startAnswerSurveyActivity(surveysToAnswer.get(0));
-                }else{
+                } else {
                     startListSurveyActivity(surveysToAnswer);
                 }
                 runOnUiThread(this::hideFetchingSurveysWaitingDialog);
-            }catch(RESTfulException restfulException){
+            } catch (RESTfulException restfulException) {
                 runOnUiThread(this::hideFetchingSurveysWaitingDialog);
-                switch(restfulException.getCode()){
+                switch (restfulException.getCode()) {
                     case HttpsURLConnection.HTTP_BAD_REQUEST:
-                        ToastNotification.show(MainMenuActivity.this,getString(R.string.no_surveys_with_certain_code));
+                        ToastNotification.show(MainMenuActivity.this, getString(R.string.no_surveys_with_certain_code));
                         break;
                     case HttpsURLConnection.HTTP_UNAUTHORIZED:
                         //#TO-DO: Authentication Token is not valid anymore, Go back to LoginActivity
                         break;
                     default:
-                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
+                        ToastNotification.show(MainMenuActivity.this, "MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
-            }catch(IOException ioException){
+            } catch (IOException ioException) {
                 runOnUiThread(this::hideFetchingSurveysWaitingDialog);
-                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
+                ToastNotification.show(MainMenuActivity.this, getString(R.string.no_internet_connection));
             }
         };
     }
@@ -301,76 +306,140 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Method fetches all active surveys that the current user can answer based on a
      * pagination ID
+     *
      * @return Runnable with the runnable action which will fetch the surveys to answer
      */
-    private Runnable fetchSurveysToAnswers(){
+    private Runnable fetchSurveysToAnswers() {
         return () -> {
+            List<SurveyService> surveysToAnswer = getLocalSurveyServices();
             try {
-                List<SurveyService> surveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByPaginationID((short)0);
-                startListSurveyActivity(surveysToAnswer);
-            }catch(RESTfulException restfulException){
-                switch(restfulException.getCode()){
-                    case HttpsURLConnection.HTTP_BAD_REQUEST:
-                        ToastNotification.show(MainMenuActivity.this,getString(R.string.no_available_surveys));
-                        break;
-                    case HttpsURLConnection.HTTP_UNAUTHORIZED:
-                        //#TO-DO: Authentication Token is not valid anymore, Go back to LoginActivity
-                        break;
-                    default:
-                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
+                List<SurveyService> newSurveysToAnswer = new SurveyServiceController(authenticationToken).getSurveysByPaginationID((short) 0);
+
+                for (SurveyService surveyService : newSurveysToAnswer) {
+                    if (!surveysToAnswer.contains(surveyService)) {
+                        surveysToAnswer.add(surveyService);
+                    }
                 }
-            }catch(IOException ioException){
-                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
+            } catch (RESTfulException restfulException) {
+                if (surveysToAnswer.isEmpty()) {
+                    switch (restfulException.getCode()) {
+                        case HttpsURLConnection.HTTP_BAD_REQUEST:
+                            ToastNotification.show(MainMenuActivity.this, getString(R.string.no_available_surveys));
+                            break;
+                        case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                            //#TO-DO: Authentication Token is not valid anymore, Go back to LoginActivity
+                            break;
+                        default:
+                            ToastNotification.show(MainMenuActivity.this, "MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
+                    }
+                }
+            } catch (IOException ioException) {
+                if (surveysToAnswer.isEmpty()) {
+                    ToastNotification.show(MainMenuActivity.this, getString(R.string.no_internet_connection));
+                }
+            } finally {
+                if (!surveysToAnswer.isEmpty()) {
+                    startListSurveyActivity(surveysToAnswer);
+                }
             }
         };
     }
+
     /**
      * Starts a ListSurveyActivity with a certain list of surveys
+     *
      * @param surveyServices List with the surveys to show on the ListSurveyActivity
      */
-    private void startListSurveyActivity(List<SurveyService> surveyServices){
-        Intent questionIntent = new Intent(MainMenuActivity.this,ListSurveyActivity.class);
-        Bundle bundle=new Bundle(surveyServices.size()+1);
+    private void startListSurveyActivity(List<SurveyService> surveyServices) {
+        Intent questionIntent = new Intent(MainMenuActivity.this, ListSurveyActivity.class);
+        Bundle bundle = new Bundle(surveyServices.size() + 1);
         bundle.putString("authenticationToken", authenticationToken);
-        for(int i=0;i<surveyServices.size();i++)bundle.putSerializable(""+i,surveyServices.get(i));
-        questionIntent.putExtra(ListSurveyActivity.class.getSimpleName(),bundle);
+        for (int i = 0; i < surveyServices.size(); i++) {
+            bundle.putSerializable("" + i, surveyServices.get(i));
+        }
+        questionIntent.putExtra(ListSurveyActivity.class.getSimpleName(), bundle);
         MainMenuActivity.this.startActivity(questionIntent);
     }
+
+    /**
+     * Creates a survey services directory or fetches the existing one.
+     *
+     * @return survey services directory
+     */
+    private File getSurveyServicesDirectory() {
+        String surveyServices = "survey_services";
+
+        File filesDirectory = getFilesDir();
+
+        File surveyServicesDirectory = new File(filesDirectory, surveyServices);
+
+        if (!surveyServicesDirectory.exists()) {
+            surveyServicesDirectory.mkdir();
+        }
+
+        return surveyServicesDirectory;
+    }
+
+    /**
+     * Add SurveyService instances from Files to currentSurveys list (these are surveys that already have
+     * pending reviews saved locally)
+     *
+     * @return list of strings that contain the survey ID of a pending review
+     */
+    private List<SurveyService> getLocalSurveyServices() {
+        List<SurveyService> surveyServiceList = new ArrayList<>();
+
+        for (File surveyServiceFile : getSurveyServicesDirectory().listFiles()) {
+            try (FileReader fileReader = new FileReader(surveyServiceFile.getAbsolutePath());
+                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+                SurveyService surveyService = new Gson().fromJson(bufferedReader, SurveyService.class);
+                surveyServiceList.add(surveyService);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return surveyServiceList;
+    }
+
+
     /**
      * Starts a new AnswerSurveyActivity with a certain SurveyService which represents
      * the survey being reviewed
      */
-    private void startAnswerSurveyActivity(SurveyService surveyService){
-        Thread requestReviewThread=new Thread(startReviewRequest(surveyService));
+    private void startAnswerSurveyActivity(SurveyService surveyService) {
+        Thread requestReviewThread = new Thread(startReviewRequest(surveyService));
         requestReviewThread.start();
 
     }
-    private Runnable startReviewRequest(SurveyService surveyService){
+
+    private Runnable startReviewRequest(SurveyService surveyService) {
         return () -> {
             try {
-                RequestNewReviewController requestNewReview=new RequestNewReviewController(surveyService);
+                RequestNewReviewController requestNewReview = new RequestNewReviewController(surveyService);
                 try {
-                    requestNewReview.createNewReview(requestNewReview.requestNewReview(authenticationToken),MainMenuActivity.this);
+                    requestNewReview.createNewReview(requestNewReview.requestNewReview(authenticationToken), MainMenuActivity.this);
                     Intent questionIntent = new Intent(MainMenuActivity.this, QuestionActivity.class);
                     questionIntent.putExtra("authenticationToken", authenticationToken);
                     MainMenuActivity.this.startActivity(questionIntent);
                 } catch (ParserConfigurationException | SAXException e) {
                     System.out.println(e.getMessage());
                 }
-            }catch(RESTfulException restfulException){
-                switch(restfulException.getCode()){
+            } catch (RESTfulException restfulException) {
+                switch (restfulException.getCode()) {
                     case HttpsURLConnection.HTTP_BAD_REQUEST:
                         //#TO-DO: There are a lot of codes here to treat
-                        ToastNotification.show(MainMenuActivity.this,"#TO-DO (400) newReview");
+                        ToastNotification.show(MainMenuActivity.this, "#TO-DO (400) newReview");
                         break;
                     case HttpsURLConnection.HTTP_NOT_FOUND:
-                        ToastNotification.show(MainMenuActivity.this,getString(R.string.survey_not_availalbe));
+                        ToastNotification.show(MainMenuActivity.this, getString(R.string.survey_not_availalbe));
                         break;
                     default:
-                        ToastNotification.show(MainMenuActivity.this,"MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
+                        ToastNotification.show(MainMenuActivity.this, "MENSAGEM DE ERRO CONEXAO AO SERVIDOR REST");
                 }
-            }catch(IOException ioException){
-                ToastNotification.show(MainMenuActivity.this,getString(R.string.no_internet_connection));
+            } catch (IOException ioException) {
+                ToastNotification.show(MainMenuActivity.this, getString(R.string.no_internet_connection));
             }
         };
     }
@@ -378,12 +447,17 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Shows the fetching surveys waiting dialog
      */
-    private void showFetchingSurveysWaitingDialog(){fetchingSurveysWaitingDialog.show();}
+    private void showFetchingSurveysWaitingDialog() {
+        fetchingSurveysWaitingDialog.show();
+    }
 
     /**
      * Hides the fetching surveys waiting dialog
      */
-    private void hideFetchingSurveysWaitingDialog(){fetchingSurveysWaitingDialog.hide();}
+    private void hideFetchingSurveysWaitingDialog() {
+        fetchingSurveysWaitingDialog.hide();
+    }
+
     /**
      * MainMenuItemListViewAdapter that represents a custom adapter used for the ListView that holds the
      * main menu options
@@ -482,17 +556,17 @@ public class MainMenuActivity extends AppCompatActivity {
 
                     String reviewID = reviewFile.getName().split("_")[1];
 
-                    String surveyEndDate=ReviewXMLService.getSurveyEndDate(fileContent);
+                    String surveyEndDate = ReviewXMLService.getSurveyEndDate(fileContent);
                     String[] parsedSurveyEndDate = surveyEndDate.split(" ");
-                    String[] dateSplit=parsedSurveyEndDate[0].split("-");
-                    String[] timeSplit=parsedSurveyEndDate[1].split(":");
-                    Calendar endDate=new GregorianCalendar(Integer.parseInt(dateSplit[0])
-                            ,Integer.parseInt(dateSplit[1])
-                            ,Integer.parseInt(dateSplit[2])
-                            ,Integer.parseInt(timeSplit[0])
-                            ,Integer.parseInt(timeSplit[1])
-                            ,Integer.parseInt(timeSplit[2]));
-                    if(Calendar.getInstance().compareTo(endDate)<0) {
+                    String[] dateSplit = parsedSurveyEndDate[0].split("-");
+                    String[] timeSplit = parsedSurveyEndDate[1].split(":");
+                    Calendar endDate = new GregorianCalendar(Integer.parseInt(dateSplit[0])
+                            , Integer.parseInt(dateSplit[1])
+                            , Integer.parseInt(dateSplit[2])
+                            , Integer.parseInt(timeSplit[0])
+                            , Integer.parseInt(timeSplit[1])
+                            , Integer.parseInt(timeSplit[2]));
+                    if (Calendar.getInstance().compareTo(endDate) < 0) {
                         String saveReviewURL = BuildConfig.SERVER_URL
                                 .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
                                 .concat(REVIEWS_RESOURCE_PATH)
@@ -517,7 +591,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         } else {
                             return;
                         }
-                    }else{
+                    } else {
                         reviewFile.delete();
                     }
                 }
