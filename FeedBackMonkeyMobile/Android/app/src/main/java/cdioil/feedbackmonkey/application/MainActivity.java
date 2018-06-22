@@ -1,13 +1,14 @@
 package cdioil.feedbackmonkey.application;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.authz.LoginActivity;
@@ -26,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.logo_splash);
         Animation splashAnimation = AnimationUtils.loadAnimation(this, R.anim.splash);
 
-        //TODO: launch main menu activity if user data is already present
-        Intent intent = new Intent(this, LoginActivity.class);
-
         imageView.startAnimation(splashAnimation);
 
         Thread timer = new Thread(() -> {
@@ -37,6 +35,18 @@ public class MainActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
+                Intent intent;
+                /**
+                 * If an authentication token is present launch MainMenuActivity so the User doesn't have
+                 * to perform the login again. If it isn't present launch LoginActivity.
+                 */
+                if(PreferenceManager.getDefaultSharedPreferences(this).
+                        getString("authenticationToken",getString(R.string.no_authentication_token)).
+                        equals(getString(R.string.no_authentication_token))){
+                    intent = new Intent(this, LoginActivity.class);
+                }else{
+                    intent = new Intent(this, MainMenuActivity.class);
+                }
                 initializeApplication();
                 startActivity(intent);
                 finish();

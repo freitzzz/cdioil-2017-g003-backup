@@ -266,6 +266,7 @@ public final class SurveyTemplateElement {
         }
 
         public QuantitativeQuestionElement(String questionID, String questionText, double minScaleValue, double maxScaleValue) {
+            super(questionID, questionText);
             this.minValueScale = minScaleValue;
             this.maxValueScale = maxScaleValue;
         }

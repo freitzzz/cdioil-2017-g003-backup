@@ -5,6 +5,7 @@ import cdioil.domain.Answer;
 import cdioil.domain.Question;
 import cdioil.domain.Review;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -138,6 +139,7 @@ public final class SurveyAnswersXMLService {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT,INDENTATION);
+            transformer.setOutputProperty(OutputKeys.ENCODING,Charset.defaultCharset().name());
             transformer.setOutputProperty(XML_INDENTATION_AMOUNT_PROPERTY,INDENTATION_AMOUNT);
             DOMSource source = new DOMSource(doc);
             StringWriter xmlDocument = new StringWriter();

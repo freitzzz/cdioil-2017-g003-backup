@@ -9,12 +9,15 @@ import cdioil.domain.Product;
 import cdioil.domain.ProductQuestionsLibrary;
 import cdioil.domain.Question;
 import cdioil.domain.QuestionOption;
+import cdioil.domain.SKU;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyItem;
 import cdioil.domain.TargetedSurvey;
 import cdioil.domain.Template;
+import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.RegisteredUser;
+import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.framework.dto.QuestionDTO;
 import cdioil.framework.dto.SurveyItemDTO;
@@ -27,6 +30,7 @@ import cdioil.persistence.impl.ProductQuestionsLibraryRepositoryImpl;
 import cdioil.persistence.impl.ProductRepositoryImpl;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
+import cdioil.persistence.impl.UserRepositoryImpl;
 import cdioil.time.TimePeriod;
 
 import java.time.LocalDateTime;
@@ -220,6 +224,7 @@ public class CreateSurveyController {
 
                 QuestionDTO questionDTO = new QuestionDTO("catQuestion",
                         catQuestion.getQuestionText(), catQuestion.getType().toString(), catQuestionOptions);
+                questionDTO.setSurveyItemID(cat.categoryPath());
 
                 result.add(questionDTO);
             }
@@ -245,7 +250,7 @@ public class CreateSurveyController {
 
                 QuestionDTO questionDTO = new QuestionDTO("prodQuestion",
                         prodQuestion.getQuestionText(), prodQuestion.getType().toString(), options);
-
+                questionDTO.setSurveyItemID(product.getID().toString());
                 result.add(questionDTO);
             }
         }
@@ -271,5 +276,157 @@ public class CreateSurveyController {
         }
 
         return usersDTOList;
+    }
+
+    public void createSurvey(List<SurveyItemDTO> surveyItemDTOList,
+                             LocalDateTime startDate, LocalDateTime endDate,
+                             List<SystemUserDTO> userDTOList, Manager manager,
+                             List<QuestionDTO> questionDTOList) {
+        // Repositories
+        MarketStructureRepositoryImpl mkRepo = new MarketStructureRepositoryImpl();
+        ProductRepositoryImpl productRepo = new ProductRepositoryImpl();
+        UserRepositoryImpl userRepo = new UserRepositoryImpl();
+        RegisteredUserRepositoryImpl registeredUserRepo = new RegisteredUserRepositoryImpl();
+        CategoryQuestionsLibraryRepositoryImpl catQuestionRepo =
+                new CategoryQuestionsLibraryRepositoryImpl();
+        ProductQuestionsLibraryRepositoryImpl prodQuestionsRepo =
+                new ProductQuestionsLibraryRepositoryImpl();
+        IndependentQuestionsLibraryRepositoryImpl independentQuestionsRepo =
+                new IndependentQuestionsLibraryRepositoryImpl();
+        SurveyRepositoryImpl surveyRepository = new SurveyRepositoryImpl();
+
+        // Needed variables for Survey Creation
+        List<SurveyItem> surveyItems = new ArrayList<>();
+
+        // Get Survey Items from DTO List
+        for (SurveyItemDTO dto :
+                surveyItemDTOList) {
+            if (dto.getType().equals("category")) {
+                // Search in Categories
+                Category cat = mkRepo.findCategoryByPath(dto.getItemID());
+                surveyItems.add(cat);
+            } else if (dto.getType().equals("product")) {
+                // Search in products
+                Product prod = productRepo.getProductBySKU(new SKU(dto.getItemID()));
+                surveyItems.add(prod);
+            }
+        }
+
+        Survey survey;
+
+        if (userDTOList.isEmpty()) { // Create new Global Survey
+            // Global Survey
+            survey = new GlobalSurvey(surveyItems,
+                    new TimePeriod(startDate, endDate));
+        } else {
+            // Targeted Survey
+            UsersGroup usersGroup = new UsersGroup(manager);
+
+            for (SystemUserDTO userDTO :
+                    userDTOList) {
+                SystemUser systemUser = userRepo.findByEmail(new Email(userDTO.getEmail()));
+                if (systemUser == null) {
+                    throw new IllegalArgumentException("Couldn't find SystemUser with email");
+                }
+
+                RegisteredUser user = registeredUserRepo.findBySystemUser(systemUser);
+
+                if (user == null) {
+                    throw new IllegalArgumentException("Couldn't retrieve user");
+                }
+
+                usersGroup.addUser(user);
+            }
+
+            survey = new TargetedSurvey(surveyItems,
+                    new TimePeriod(startDate, endDate), usersGroup);
+        }
+
+        if (survey == null) {
+            throw new IllegalArgumentException("Couldn't create survey");
+        }
+
+        // Fetch all Questions from QuestionDTO
+        List<Question> questions = new ArrayList<>();
+        A:
+        for (QuestionDTO questionDTO :
+                questionDTOList) {
+            Question question = null;
+
+            if (questionDTO.getType().equals("catQuestion")) {
+                // Get Category of question
+                Category questionCat = mkRepo.findCategoryByPath(questionDTO.getSurveyItemID());
+
+                B:
+                for (Question questionInCat :
+                        catQuestionRepo.findLibrary().categoryQuestionSet(questionCat)) {
+                    if (questionInCat.getQuestionText().equals(questionDTO.getText())) {
+                        question = questionInCat;
+                        break B;
+                    }
+                }
+
+            } else if (questionDTO.getType().equals("prodQuestion")) {
+                Product questionProd =
+                        productRepo.getProductBySKU(new SKU(questionDTO.getSurveyItemID()));
+
+                B:
+                for (Question questionInProd :
+                        prodQuestionsRepo.findProductQuestionLibrary().productQuestionSet(questionProd)) {
+                    if (questionInProd.getQuestionText().equals(questionDTO.getText())) {
+                        question = questionInProd;
+                        break B;
+                    }
+                }
+            } else if (questionDTO.getType().equals("independentQuestion")) {
+                //TODO independent questions
+            }
+
+            if (question == null) {
+                continue;
+            }
+
+            questions.add(question);
+        }
+
+
+        // Adds all questions from UI to survey
+        for (Question question :
+                questions) {
+            survey.addQuestion(question);
+        }
+
+        // Maps each question option to another question
+        for (int i = 0; i < questionDTOList.size(); i++) {
+            // Iterate through all question options
+            Question currentQuestion = questions.get(i);
+            QuestionDTO currentQuestionDTO = questionDTOList.get(i);
+
+            Map<String, String> flowMap = currentQuestionDTO.getQuestionOptionFlowMap();
+
+            for (String questionOptionText :
+                    currentQuestionDTO.getOptions()) {
+
+                Integer indexOfTargetQuestion = null;
+                try {
+                    indexOfTargetQuestion = Integer.valueOf(flowMap.get(questionOptionText));
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+
+                QuestionOption pathBetweenQuestions = null;
+
+                for (QuestionOption questionOption : currentQuestion.getOptionList()) {
+                    if (questionOption.toString().equals(questionOptionText)) {
+                        pathBetweenQuestions = questionOption;
+                    }
+                }
+
+                survey.setNextQuestion(currentQuestion, questions.get(indexOfTargetQuestion),
+                        pathBetweenQuestions, 0);
+            }
+        }
+
+        surveyRepository.add(survey);
     }
 }

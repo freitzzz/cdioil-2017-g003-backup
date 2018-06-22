@@ -13,28 +13,39 @@ import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateTimeField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupView;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.TwinColSelect;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Create new Survey Window
  */
 public class CreateSurveyWindow extends Window {
 
+    /**
+     * Success Message
+     */
+    private static final String SUCCESS_MESSAGE =
+            "Inquérito criado com sucesso";
     /**
      * Tab Sheet
      */
@@ -61,6 +72,11 @@ public class CreateSurveyWindow extends Window {
     private VerticalLayout selectedQuestionsLayout = new VerticalLayout();
 
     /**
+     * List of Selected Questions
+     */
+    private List<QuestionDTO> selectedQuestions = new ArrayList<>();
+
+    /**
      * Twin Column Select Users
      */
     private TwinColSelect<SystemUserDTO> usersTwinCol = new TwinColSelect<>();
@@ -69,6 +85,21 @@ public class CreateSurveyWindow extends Window {
      * Twin Column Select Users Items/Data
      */
     private transient List<SystemUserDTO> usersData = new ArrayList<>();
+
+    /**
+     * CheckBox Indeterminate
+     */
+    private CheckBox indeterminateCheckBox = new CheckBox("Indeterminado");
+
+    /**
+     * Start Date Time Field
+     */
+    private DateTimeField startDateField = new DateTimeField();
+
+    /**
+     * End Date Time Field
+     */
+    private DateTimeField endDateField = new DateTimeField();
 
     /**
      * Controller Class
@@ -117,9 +148,11 @@ public class CreateSurveyWindow extends Window {
         addSurveyItemsTab();
         addSurveyFlowTab();
         addUsersTab();
+        addTimePeriodTab();
 
         Label header = new Label("<h1>Novo Inquérito</h2>", ContentMode.HTML);
         Button confirmBtn = new Button("Confirmar", VaadinIcons.CHECK);
+        confirmBtn.addClickListener(confirmBtnClickListener());
         mainLayout.addComponents(header, tabSheet, confirmBtn);
 
         // Expand Ratios
@@ -213,6 +246,7 @@ public class CreateSurveyWindow extends Window {
              * concatenated in a string and then splitted
              */
             dragSource.setDataTransferText(question.toString());
+            dragSource.setDragData(question);
 
             panelLayout.addComponent(rowPanel);
         }
@@ -236,6 +270,63 @@ public class CreateSurveyWindow extends Window {
         addNewQuestionSlotToLayout();
 
         return selectedQuestionsPanel;
+    }
+
+    /**
+     * Confirm Button Click Listener
+     *
+     * @return ClickListener
+     */
+    private Button.ClickListener confirmBtnClickListener() {
+        return onClick -> {
+            // Populates each question option's map
+            for (int i = 0; i < selectedQuestions.size(); i++) {
+                SelectedQuestionRow currentRow =
+                        (SelectedQuestionRow) selectedQuestionsLayout.getComponent(i);
+
+                QuestionDTO currentQuestion = currentRow.assignedQuestion;
+
+                List<String> textFields = currentRow.getTextFieldValues();
+                for (int j = 0; j < textFields.size(); j++) {
+                    currentQuestion.addNextQuestion(currentQuestion.getOptions().get(j),
+                            textFields.get(j));
+                }
+
+            }
+
+            // Populate User List
+            List<SystemUserDTO> userList = new ArrayList<>();
+            for (SystemUserDTO suDTO : usersTwinCol.getValue()) {
+                userList.add(suDTO);
+            }
+
+            LocalDateTime startTime = startDateField.getValue();
+            LocalDateTime endTime = endDateField.getValue();
+
+            if (indeterminateCheckBox.getValue()) {
+                endTime = LocalDateTime.MAX;
+            }
+
+            try {
+                // Creates Survey
+                controller.createSurvey(surveyItemsData, startTime, endTime,
+                        userList, (Manager) authenticationController.getUser(),
+                        selectedQuestions);
+            } catch (Exception e) {
+                Notification error = new Notification(e.getMessage(),
+                        Notification.Type.ERROR_MESSAGE);
+                error.setDelayMsec(300);
+                error.show(UI.getCurrent().getPage());
+                return;
+            }
+
+            Notification alert =
+                    new Notification(SUCCESS_MESSAGE, Notification.Type.TRAY_NOTIFICATION);
+            alert.setDelayMsec(300);
+            alert.show(UI.getCurrent().getPage());
+
+            this.close();
+        };
     }
 
     /**
@@ -268,6 +359,11 @@ public class CreateSurveyWindow extends Window {
          * Remove Question from List Button
          */
         private Button removeQuestionBtn = new Button(VaadinIcons.MINUS_CIRCLE);
+
+        /**
+         * Question DTO that is assigned to this row
+         */
+        private QuestionDTO assignedQuestion;
 
         /**
          * Constructor
@@ -317,7 +413,12 @@ public class CreateSurveyWindow extends Window {
                             addNewQuestionSlotToLayout();
                         }
 
-                        updateNewQuestion(dropEvent.getDataTransferText());
+                        Optional<Object> optional = dropEvent.getDragData();
+                        if (optional.isPresent()) {
+                            QuestionDTO draggedQuestion = (QuestionDTO) optional.get();
+                            this.assignedQuestion = draggedQuestion;
+                            updateNewQuestion(draggedQuestion);
+                        }
                     }
                 });
             });
@@ -326,13 +427,10 @@ public class CreateSurveyWindow extends Window {
         /**
          * When a new question is dragged onto this panel,
          * updates components to show question information
-         * <p>
-         * Drag Transfer Data Format:
-         * QuestionText,,QuestionType,,Option1,,Option2,,
          *
-         * @param dragData dragged question text
+         * @param questionDTO question that was transfered
          */
-        private void updateNewQuestion(String dragData) {
+        private void updateNewQuestion(QuestionDTO questionDTO) {
             mainLayout.removeAllComponents();
 
             mainLayout.setMargin(new MarginInfo(true, false));
@@ -340,23 +438,23 @@ public class CreateSurveyWindow extends Window {
             final int questionIndexInLayout = selectedQuestionsLayout.getComponentCount();
             setCaption("Questão " + questionIndexInLayout);
 
-            String[] dragDataSplitted = dragData.split(",,");
-            questionLabel.setValue(dragDataSplitted[0]);
-            typeQuestionLabel.setValue(dragDataSplitted[1]);
 
-            // Process drag transfer data and populate option list
-            List<String> options = new ArrayList<>();
-            for (int i = 2; i < dragDataSplitted.length; i++) {
-                options.add(dragDataSplitted[i]);
-            }
-            questionOptionPopupContent = new QuestionOptionPopupContent(options);
+            selectedQuestions.add(questionDTO);
+
+            questionLabel.setValue(questionDTO.getText());
+            typeQuestionLabel.setValue(questionDTO.getQuestionType());
+
+            questionOptionPopupContent = new QuestionOptionPopupContent(questionDTO.getOptions());
 
             PopupView popup = new PopupView(questionOptionPopupContent);
             popup.setHideOnMouseOut(true);
 
             SelectedQuestionRow current = this;
-            removeQuestionBtn.addClickListener(clickAction ->
-                    selectedQuestionsLayout.removeComponent(current));
+            removeQuestionBtn.addClickListener(clickAction -> {
+                selectedQuestionsLayout.removeComponent(current);
+                selectedQuestions.remove(questionDTO);
+                refreshPanelIndices();
+            });
 
             mainLayout.addComponents(questionLabel, typeQuestionLabel,
                     popup, removeQuestionBtn);
@@ -365,6 +463,21 @@ public class CreateSurveyWindow extends Window {
             mainLayout.setExpandRatio(typeQuestionLabel, 0.2f);
             mainLayout.setExpandRatio(popup, 0.15f);
             mainLayout.setExpandRatio(removeQuestionBtn, 0.1f);
+
+            refreshPanelIndices();
+        }
+
+        /**
+         * Returns list of values of all text fields inside the popup view
+         *
+         * @return
+         */
+        public List<String> getTextFieldValues() {
+            return questionOptionPopupContent.getTextFieldValues();
+        }
+
+        public QuestionDTO getQuestionDTO() {
+            return assignedQuestion;
         }
 
         /**
@@ -446,6 +559,16 @@ public class CreateSurveyWindow extends Window {
 
                 return tfValues;
             }
+
+        }
+    }
+
+    /**
+     * Refreshes all Panel Indices
+     */
+    private void refreshPanelIndices() {
+        for (int i = 0; i < selectedQuestionsLayout.getComponentCount() - 1; i++) {
+            selectedQuestionsLayout.getComponent(i).setCaption("Questão " + i);
         }
     }
 
@@ -475,5 +598,39 @@ public class CreateSurveyWindow extends Window {
         userTab.addComponent(usersTwinCol);
 
         tabSheet.addTab(userTab);
+    }
+
+    /**
+     * Add Time Period Tab
+     */
+    private void addTimePeriodTab() {
+        VerticalLayout timeTab = new VerticalLayout();
+        timeTab.setCaption("Periodo de Tempo");
+        timeTab.setSizeFull();
+        timeTab.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
+        startDateField.setValue(LocalDateTime.now());
+        endDateField.setValue(LocalDateTime.now());
+
+        startDateField.setPlaceholder("Inicio");
+        endDateField.setPlaceholder("Fim");
+
+        indeterminateCheckBox.addValueChangeListener(valueChangeEvent -> {
+            startDateField.setEnabled(!valueChangeEvent.getValue());
+            endDateField.setEnabled(!valueChangeEvent.getValue());
+        });
+
+        HorizontalLayout hl = new HorizontalLayout();
+        hl.setSpacing(true);
+        hl.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        hl.setSizeFull();
+        hl.addComponents(startDateField, endDateField);
+
+        timeTab.addComponents(indeterminateCheckBox, hl);
+
+        timeTab.setExpandRatio(indeterminateCheckBox, 0.2f);
+        timeTab.setExpandRatio(hl, 0.8f);
+
+        tabSheet.addTab(timeTab);
     }
 }
