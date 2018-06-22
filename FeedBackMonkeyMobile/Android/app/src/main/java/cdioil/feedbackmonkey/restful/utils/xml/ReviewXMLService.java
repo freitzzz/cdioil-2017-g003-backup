@@ -95,15 +95,28 @@ public class ReviewXMLService {
      *
      * @return String that holds the reviews ID
      */
-    public String getReviewID(){
+    public String getReviewID() {
         return reviewID;
     }
 
     /**
      * Returns the review
+     *
      * @return
      */
-    public String getSurveyEndDate(){return document.getElementById(ReviewFileTags.REVIEW_ELEMENT_TAG).getAttribute(ReviewFileTags.SURVEY_END_DATE_ATTRIBUTE);}
+    public static String getSurveyEndDate(String fileContent) {
+        String surveyEndDate = "";
+        try {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+            surveyEndDate = document.getDocumentElement().getAttribute(ReviewFileTags.SURVEY_END_DATE_ATTRIBUTE);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }finally {
+            return surveyEndDate;
+        }
+    }
+
     /**
      * Creates an XML File that will save the user's review information regarding a certain survey.
      *
@@ -404,10 +417,10 @@ public class ReviewXMLService {
         Element suggestionElement = (Element) document.getElementsByTagName(ReviewFileTags.SUGGESTION_ELEMENT_TAG).item(0);
         Element imageElement = (Element) suggestionElement.getElementsByTagName(ReviewFileTags.IMAGE_ELEMENT_TAG).item(0);
         StringBuilder stringBuilder = new StringBuilder(imageContent.length);
-        for( byte imageByte : imageContent){
+        for (byte imageByte : imageContent) {
             stringBuilder.append(imageByte).append(':');
         }
-        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         imageElement.setTextContent(stringBuilder.toString());
         System.out.println(stringBuilder.toString());
 
