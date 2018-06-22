@@ -40,7 +40,7 @@ public class UserSession implements Serializable{
     /**
      * User with the session user
      */
-    @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.REFRESH})
     private SystemUser sessionUser;
     /**
      * String with the current user token
