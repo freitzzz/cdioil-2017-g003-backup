@@ -89,8 +89,9 @@ public class XMLQuestionsWriter {
      * Puts the .csv file content into an .xml file
      *
      * @param questionMap map of category paths and questions
+     * @return document
      */
-    public String categoryQuestionsToXML(Map<String, List<Question>> questionMap) {
+    public Document categoryQuestionsToXMLDocument(Map<String, List<Question>> questionMap) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
 
@@ -99,21 +100,9 @@ public class XMLQuestionsWriter {
             Document doc = dBuilder.newDocument();
 
             writeQuestions(doc, questionMap);
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            DOMSource source = new DOMSource(doc);
-            StringWriter stringWriter=new StringWriter();
-            StreamResult result = new StreamResult(stringWriter);
-            try {
-                transformer.transform(source, result);
-                return stringWriter.getBuffer().toString();
-            } catch (TransformerException ex) {
-                Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
-            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
+            return doc;
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLQuestionsWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

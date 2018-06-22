@@ -11,16 +11,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerException;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 /**
  * Class used for importing Questions from a JSON file
@@ -48,18 +53,16 @@ public class JSONQuestionsReader implements QuestionsReader {
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
         InputStream input = null;
-        ByteArrayOutputStream output=null;
         try {
             input = new FileInputStream(file);
-            //StringWriter output = new StringWriter();
-            output = new ByteArrayOutputStream();
+            StringWriter output = new StringWriter();
 
             JsonXMLConfig config = new JsonXMLConfigBuilder().multiplePI(false).build();
 
             //JSON reader
             XMLEventReader reader = new JsonXMLInputFactory(config).createXMLEventReader(input);
             //XML writer
-            XMLEventWriter writer = XMLOutputFactory.newInstance().createXMLEventWriter(output, "UTF-8");
+            XMLEventWriter writer = XMLOutputFactory.newInstance().createXMLEventWriter(output);
 
             //Format output
             writer = new PrettyXMLEventWriter(writer);
@@ -70,14 +73,22 @@ public class JSONQuestionsReader implements QuestionsReader {
             reader.close();
             writer.close();
             input.close();
-            return new XMLQuestionsReader(output.toString()).readCategoryQuestions();
-            //Write XML content to file
-            //FileWriter.writeFile(new File(CAT_QUESTIONS_OUTPUT_PATH), output.getBuffer().toString());
+            output.close();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder;
+            try {
+                builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(new InputSource(new StringReader(output.toString())));
+                output.close();
+                return new XMLQuestionsReader(doc).readCategoryQuestions();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         } catch (IOException | XMLStreamException ex) {
             Logger.getLogger(JSONQuestionsReader.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } finally {
-            closeStream(output);
             closeStream(input);
         }
     }
@@ -85,44 +96,57 @@ public class JSONQuestionsReader implements QuestionsReader {
     @Override
     public List<Question> readIndependentQuestions() throws ParserConfigurationException {
         InputStream input = null;
-        ByteArrayOutputStream output=null;
         try {
             input = new FileInputStream(file);
-            output = new ByteArrayOutputStream();
+            StringWriter output = new StringWriter();
 
-            JsonXMLConfig jsonXMLConfig = new JsonXMLConfigBuilder().multiplePI(false).build();
+            JsonXMLConfig config = new JsonXMLConfigBuilder().multiplePI(false).build();
 
-            XMLEventReader xmlEventReader = new JsonXMLInputFactory(jsonXMLConfig).createXMLEventReader(input);
+            //JSON reader
+            XMLEventReader reader = new JsonXMLInputFactory(config).createXMLEventReader(input);
+            //XML writer
+            XMLEventWriter writer = XMLOutputFactory.newInstance().createXMLEventWriter(output);
 
-            XMLEventWriter xmlEventWriter = XMLOutputFactory.newInstance().createXMLEventWriter(output, "UTF-8");
+            //Format output
+            writer = new PrettyXMLEventWriter(writer);
 
-            xmlEventWriter = new PrettyXMLEventWriter(xmlEventWriter);
+            //Copy reader to writer
+            writer.add(reader);
 
-            xmlEventWriter.add(xmlEventReader);
-
-            xmlEventReader.close();
-            xmlEventWriter.close();
+            reader.close();
+            writer.close();
             input.close();
-            return new XMLQuestionsReader(output.toString()).readIndependentQuestions();
-        } catch (XMLStreamException | IOException|TransformerException ex) {
+            output.close();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder;
+            try {
+                builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(new InputSource(new StringReader(output.toString())));
+                output.close();
+                return new XMLQuestionsReader(doc).readIndependentQuestions();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        } catch (XMLStreamException | IOException /*| TransformerException */ ex) {
             Logger.getLogger(JSONQuestionsReader.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } finally {
             closeStream(input);
-            closeStream(output);
         }
 
-        
     }
+
     /**
      * Closes (or attempts) a stream
+     *
      * @param stream Closeable with the stream being close
      */
-    private void closeStream(Closeable stream){
-        if(stream!=null){
-            try{
+    private void closeStream(Closeable stream) {
+        if (stream != null) {
+            try {
                 stream.close();
-            }catch(IOException ioException){
+            } catch (IOException ioException) {
                 Logger.getLogger(JSONQuestionsReader.class.getName()).log(Level.SEVERE, null, ioException);
             }
         }
