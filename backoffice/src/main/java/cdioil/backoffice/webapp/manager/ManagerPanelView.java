@@ -3,11 +3,15 @@ package cdioil.backoffice.webapp.manager;
 import cdioil.application.authz.AuthenticationController;
 import cdioil.backoffice.webapp.MainLayoutView;
 
+import cdioil.backoffice.webapp.authz.LoginView;
+import cdioil.backoffice.webapp.utils.PopupNotification;
 import com.vaadin.icons.VaadinIcons;
 
 import com.vaadin.navigator.View;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 
 /**
  * @author <a href="https://github.com/freitzzz">freitzzz</a>
@@ -19,16 +23,32 @@ public class ManagerPanelView extends MainLayoutView implements View {
     public static final String VIEW_NAME="Manager Panel";
 
     /**
-     * Constant that represents the title of the notification that pops up when an error occures
-     * while opening the Export Tab Page
+     * Constant that represents the description of the logout button
      */
-    private static final String ERROR_OPENING_EXPORT_TAB_TITLE="Ocorreu um erro ao abrir a pagina de exportação!";
-    
+    private static final String LOGOUT_BUTTON_DESCRIPITION = "Logout";
+
     /**
-     * Dashboard Button Caption
+     * Constant that represents the title of the popup notification that shows up if
+     * the user logout was successful
      */
-    private static final String DASHBOARD_BTN_CAPTION =
-            "Dashboard";
+    private static final String SUCCESSFUL_LOGOUT_TITLE="Logout bem sucedido";
+
+    /**
+     * Constant that represents the title of the popup notification that shows up if
+     * the user logout was successful
+     */
+    private static final String SUCCESSFUL_LOGOUT_MESSAGE="A sua conta foi desconectada com successo!";
+    /**
+     * Constant that represents the title of the popup notification that shows up if
+     * the user logout was not successful
+     */
+    private static final String INVALID_LOGOUT_TITLE="Erro no logout";
+
+    /**
+     * Constant that represents the title of the popup notification that shows up if
+     * the user logout was successful
+     */
+    private static final String INVALID_LOGOUT_MESSAGE="Ocorreu um erro ao desconectar a sua conta";
 
     /**
      * Survey Button Caption
@@ -37,37 +57,14 @@ public class ManagerPanelView extends MainLayoutView implements View {
             "Inquéritos";
 
     /**
-     * Import Button Caption
-     */
-    private static final String IMPORT_BTN_CAPTION =
-            "Importar";
-
-    /**
-     * Export Button Caption
-     */
-    private static final String EXPORT_BTN_CAPTION =
-            "Exportar";
-    
-
-    /**
-     * Dashboard Button
-     */
-    private Button dashboardBtn;
-
-    /**
      * Survey Button
      */
     private Button surveyButton;
 
     /**
-     * Import Button
+     * Logout Button
      */
-    private Button importBtn;
-
-    /**
-     * Export Button
-     */
-    private Button exportBtn;
+    private Button logoutBtn;
 
     /**
      * Authentication Controller Class
@@ -84,26 +81,15 @@ public class ManagerPanelView extends MainLayoutView implements View {
         this.authenticationController = authenticationController;
 
         configuration();
-        setRightPanelContents(new DashboardComponent());
+        setRightPanelContents(new SurveyComponent(authenticationController));
     }
 
     /**
      * Configures current page
      */
     private void configuration(){
-        configureHomeButton();
         configureSurveyButton();
-    }
-
-    /**
-     * Prepares Home Button
-     */
-    private void configureHomeButton() {
-        dashboardBtn = new Button(DASHBOARD_BTN_CAPTION, VaadinIcons.DASHBOARD);
-        dashboardBtn.addClickListener((Button.ClickEvent clickEvent) ->
-            setRightPanelContents(new DashboardComponent())
-        );
-        addNewButtonToLeftPanel(dashboardBtn);
+        configureLogoutBtn();
     }
 
     /**
@@ -117,30 +103,20 @@ public class ManagerPanelView extends MainLayoutView implements View {
         addNewButtonToLeftPanel(surveyButton);
     }
 
-    /**
-     * Prepares Import button
-     */
-    private void configureImportButton(){
-        importBtn = new Button(IMPORT_BTN_CAPTION, VaadinIcons.SIGN_IN);
-        importBtn.addClickListener(clickEvent -> 
-            setRightPanelContents(null)
-        );
-        addNewButtonToLeftPanel(importBtn);
-    }
-
-    /**
-     * Prepares Export button
-     */
-    private void configureExportButton(){
-        exportBtn = new Button(EXPORT_BTN_CAPTION, VaadinIcons.SIGN_OUT);
-        exportBtn.addClickListener(listener -> {
-            try {
-                setRightPanelContents(null);
-            } catch (IllegalStateException e) {
-                Notification.show(ERROR_OPENING_EXPORT_TAB_TITLE, Notification.Type.ERROR_MESSAGE);
+    private void configureLogoutBtn() {
+        logoutBtn = new Button(LOGOUT_BUTTON_DESCRIPITION);
+        logoutBtn.setIcon(VaadinIcons.EXIT);
+        logoutBtn.addClickListener((Button.ClickEvent clickEvent) -> {
+            if(authenticationController.logout()){
+                PopupNotification.show(SUCCESSFUL_LOGOUT_TITLE,SUCCESSFUL_LOGOUT_MESSAGE
+                        , Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_RIGHT);
+                UI.getCurrent().getNavigator().navigateTo(LoginView.VIEW_NAME);
+            }else{
+                PopupNotification.show(INVALID_LOGOUT_TITLE,INVALID_LOGOUT_MESSAGE
+                        ,Notification.Type.ERROR_MESSAGE,Position.TOP_RIGHT);
             }
         });
-        addNewButtonToLeftPanel(exportBtn);
-    }
 
+        addNewButtonToLeftPanel(logoutBtn);
+    }
 }
