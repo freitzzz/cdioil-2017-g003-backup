@@ -39,6 +39,5 @@ can be found [here](https://bitbucket.org/lei-isep/cdioil-2017-g003/wiki/Engenha
 
 ### Team
 
-- [Rita Gonçalves](1160912@isep.ipp.pt)
 - [Joana Pinheiro](1161380@isep.ipp.pt)
-- [Rita Gonçalves (1160912)](https://bitbucket.org/ritagsoraia/)
+- [Rita Gon�alves (1160912)](https://bitbucket.org/ritagsoraia/)
