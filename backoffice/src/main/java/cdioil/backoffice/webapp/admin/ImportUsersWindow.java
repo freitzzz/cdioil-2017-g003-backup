@@ -12,14 +12,28 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.logging.Level;
 
 /**
  * Window implementation of the ImportUsers US
  */
 public class ImportUsersWindow extends Window {
-
+    /**
+     * Constant that represents the message that occurres if an error ocures while uploading a file
+     */
+    private static final String ERROR_UPLOAD_FILE="Ocorreu um erro ao fazer upload do ficheiro";
+    /**
+     * Constant that represents the message that occurres if an error ocures while uploading a file
+     */
+    private static final String SUCCESS_MESSAGE="Successo!";
+    /**
+     * Constant that represents the message that occurres if an error ocures while uploading a file
+     */
+    private static final String IMPORT_USERS_CAPTION="Import Users";
+    /**
+     * Constant that represents the message that occurres if an error ocures while uploading a file
+     */
+    private static final String IMPORT_USERS_BUTTON_CAPTION="Import";
     /**
      * Controller class
      */
@@ -55,7 +69,7 @@ public class ImportUsersWindow extends Window {
      * Prepares all Window Components
      */
     private void prepareComponents() {
-        setCaption("Import Users");
+        setCaption(IMPORT_USERS_CAPTION);
         setDraggable(true);
         setModal(false);
         setResizable(false);
@@ -72,46 +86,37 @@ public class ImportUsersWindow extends Window {
     private void prepareMainLayout() {
         mainLayout.setSpacing(true);
 
-        Upload uploadBtn = new Upload(null, new Upload.Receiver() {
-            @Override
-            public OutputStream receiveUpload(String s, String s1) {
-                final String filename = s.substring(0, s.indexOf("."));
-                final String fileExtension = s.substring(s.indexOf("."));
-                try {
-                    tempFile = File.createTempFile(filename, fileExtension);
-                } catch (IOException e) {
-                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
-                            Level.SEVERE, e.getMessage());
-                }
-
-                try {
-                    return new FileOutputStream(tempFile);
-                } catch (FileNotFoundException e) {
-                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
-                            Level.SEVERE, e.getMessage());
-                    return null;
-                }
+        Upload uploadBtn = new Upload(null, (String s, String s1) -> {
+            final String filename = s.substring(0, s.indexOf("."));
+            final String fileExtension = s.substring(s.indexOf("."));
+            try {
+                tempFile = File.createTempFile(filename, fileExtension);
+            } catch (IOException e) {
+                ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                        Level.SEVERE, e.getMessage());
+            }
+            
+            try {
+                return new FileOutputStream(tempFile);
+            } catch (FileNotFoundException e) {
+                ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                        Level.SEVERE, e.getMessage());
+                return null;
             }
         });
 
-        uploadBtn.addFailedListener(new Upload.FailedListener() {
-            @Override
-            public void uploadFailed(Upload.FailedEvent failedEvent) {
-                Notification.show("Could not upload file", Notification.Type.ERROR_MESSAGE);
-            }
+        uploadBtn.addFailedListener((Upload.FailedEvent failedEvent) -> {
+            Notification.show(ERROR_UPLOAD_FILE, Notification.Type.ERROR_MESSAGE);
         });
 
-        uploadBtn.addSucceededListener(new Upload.SucceededListener() {
-            @Override
-            public void uploadSucceeded(Upload.SucceededEvent succeededEvent) {
-                controller.readUsers(tempFile.getAbsolutePath());
-
-                Notification.show("Success", Notification.Type.TRAY_NOTIFICATION);
-            }
+        uploadBtn.addSucceededListener((Upload.SucceededEvent succeededEvent) -> {
+            controller.readUsers(tempFile.getAbsolutePath());
+            
+            Notification.show(SUCCESS_MESSAGE, Notification.Type.TRAY_NOTIFICATION);
         });
 
         uploadBtn.setImmediateMode(false);
-        uploadBtn.setButtonCaption("Import");
+        uploadBtn.setButtonCaption(IMPORT_USERS_BUTTON_CAPTION);
 
         mainLayout.addComponent(uploadBtn);
     }
