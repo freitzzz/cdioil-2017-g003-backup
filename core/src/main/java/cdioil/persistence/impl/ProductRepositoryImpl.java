@@ -46,4 +46,13 @@ public class ProductRepositoryImpl extends BaseJPARepository<Product, Long> impl
         
         return p.isEmpty() ? null : p.get(0);
     }
+
+    public Product getProductByProductCode(String productCode) {
+        Query q = entityManager().createQuery("SELECT p FROM Product p WHERE p.sku.productCode = :p_productCode");
+        q.setParameter("p_productCode", productCode);
+
+        List<Product> p = (List<Product>)q.getResultList();
+
+        return p.isEmpty() ? null : p.get(0);
+    }
 }
