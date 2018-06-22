@@ -106,161 +106,146 @@ public class WhitelistManagementWindow extends Window {
         botLayout.setSizeUndefined();
         botLayout.setSpacing(true);
         addEditTextField.setWidth("100%");
-        addEditTextField.setPlaceholder("New entry");
+        addEditTextField.setPlaceholder("Novo dominio");
 
         Button addButton = new Button(VaadinIcons.PLUS);
-        addButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                Window addEntryWindow = new Window("Add Entry");
-                addEntryWindow.setResizable(false);
-                addEntryWindow.setModal(true);
-                addEntryWindow.center();
-
-                VerticalLayout vl = new VerticalLayout();
-                vl.setSizeUndefined();
-                vl.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-                addEditTextField.clear();
-                vl.addComponent(addEditTextField);
-
-                Button confirmBtn = new Button("Ok");
-                confirmBtn.setSizeUndefined();
-                confirmBtn.addClickListener(new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(Button.ClickEvent clickEvent) {
-                        try {
-                            final String newValue = addEditTextField.getValue();
-                            if (entriesDataProvider.contains(newValue)) {
-                                Notification n = new Notification("Already exists",
-                                        Notification.Type.ERROR_MESSAGE);
-                                n.setDelayMsec(1000);
-                                n.show(UI.getCurrent().getPage());
-                                addEntryWindow.close();
-                                return;
-                            }
-                            controller.addAuthorizedDomain(addEditTextField.getValue());
-                            entriesDataProvider.add(newValue);
-                            entries.getDataProvider().refreshAll();
-                            entries.deselectAll();
-                            Notification n = new Notification("Whitelist entry added with success",
-                                    Notification.Type.TRAY_NOTIFICATION);
-                            n.setDelayMsec(1000);
-                            n.show(UI.getCurrent().getPage());
-                        } catch (Exception e) {
-                            Notification n = new Notification("Error creating whitelist entry",
-                                    Notification.Type.ERROR_MESSAGE);
-                            n.setDelayMsec(1000);
-                            n.show(UI.getCurrent().getPage());
-                            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME
-                                    , Level.SEVERE, e.getMessage());
-                        } finally {
-                            addEntryWindow.close();
-                        }
-                    }
-                });
-                vl.addComponent(confirmBtn);
-                addEntryWindow.setContent(vl);
-                UI.getCurrent().addWindow(addEntryWindow);
-            }
-        });
-
-        deleteButton = new Button(VaadinIcons.MINUS);
-        deleteButton.setEnabled(false);
-        deleteButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                // Get selected domain
-                String selected = getSelectedString(); //TODO catch exception
-
-                // Remove from database
+        addButton.addClickListener((Button.ClickEvent clickEvent) -> {
+            Window addEntryWindow = new Window("Adicionar dominio");
+            addEntryWindow.setResizable(false);
+            addEntryWindow.setModal(true);
+            addEntryWindow.center();
+            
+            VerticalLayout vl = new VerticalLayout();
+            vl.setSizeUndefined();
+            vl.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            addEditTextField.clear();
+            vl.addComponent(addEditTextField);
+            
+            Button confirmBtn = new Button("Ok");
+            confirmBtn.setSizeUndefined();
+            confirmBtn.addClickListener((Button.ClickEvent clickEvent1) -> {
                 try {
-                    System.out.println(selected);
-                    controller.removeAuthorizedDomain(selected);
-                    // Remove from entries Data provider
-                    entriesDataProvider.remove(selected);
-
+                    final String newValue = addEditTextField.getValue();
+                    if (entriesDataProvider.contains(newValue)) {
+                        Notification n = new Notification("Dominio já existente",
+                                Notification.Type.ERROR_MESSAGE);
+                        n.setDelayMsec(1000);
+                        n.show(UI.getCurrent().getPage());
+                        addEntryWindow.close();
+                        return;
+                    }
+                    controller.addAuthorizedDomain(addEditTextField.getValue());
+                    entriesDataProvider.add(newValue);
                     entries.getDataProvider().refreshAll();
                     entries.deselectAll();
-                    Notification n = new Notification("Whitelist entry deleted with success",
+                    Notification n = new Notification("Dominio adicionado com sucesso",
                             Notification.Type.TRAY_NOTIFICATION);
                     n.setDelayMsec(1000);
                     n.show(UI.getCurrent().getPage());
                 } catch (Exception e) {
-                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME
-                            , Level.SEVERE, e.getMessage());
-                    Notification n = new Notification("Error deleting whitelist entry",
+                    Notification n = new Notification("Ocorreu um erro ao adicionar o dominio",
                             Notification.Type.ERROR_MESSAGE);
                     n.setDelayMsec(1000);
                     n.show(UI.getCurrent().getPage());
+                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME
+                            , Level.SEVERE, e.getMessage());
+                } finally {
+                    addEntryWindow.close();
                 }
+            });
+            vl.addComponent(confirmBtn);
+            addEntryWindow.setContent(vl);
+            UI.getCurrent().addWindow(addEntryWindow);
+        });
+
+        deleteButton = new Button(VaadinIcons.MINUS);
+        deleteButton.setEnabled(false);
+        deleteButton.addClickListener((Button.ClickEvent clickEvent) -> {
+            // Get selected domain
+            String selected = getSelectedString(); //TODO catch exception
+            
+            // Remove from database
+            try {
+                System.out.println(selected);
+                controller.removeAuthorizedDomain(selected);
+                // Remove from entries Data provider
+                entriesDataProvider.remove(selected);
+                
+                entries.getDataProvider().refreshAll();
+                entries.deselectAll();
+                Notification n = new Notification("Dominio eliminado com sucesso",
+                        Notification.Type.TRAY_NOTIFICATION);
+                n.setDelayMsec(1000);
+                n.show(UI.getCurrent().getPage());
+            } catch (Exception e) {
+                ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME
+                        , Level.SEVERE, e.getMessage());
+                Notification n = new Notification("Ocorreu um erro ao apagar o dominio",
+                        Notification.Type.ERROR_MESSAGE);
+                n.setDelayMsec(1000);
+                n.show(UI.getCurrent().getPage());
             }
         });
 
-        editButton = new Button("Edit");
+        editButton = new Button("Editar");
         editButton.setEnabled(false);
-        editButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                // Popup with textfield
-                Window editEntryWindow = new Window("Edit Whitelist Entry");
-                editEntryWindow.setResizable(false);
-                editEntryWindow.setModal(true);
-                editEntryWindow.center();
-
-                VerticalLayout vl = new VerticalLayout();
-                vl.setSizeUndefined();
-                vl.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-
-                addEditTextField.clear();
-                vl.addComponent(addEditTextField);
-
-                Button confirmBtn = new Button("Ok");
-                confirmBtn.setSizeUndefined();
-                confirmBtn.addClickListener(new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(Button.ClickEvent clickEvent) {
-                        try {
-                            // Get selected entry
-                            final String selected = getSelectedString();
-                            final String newValue = addEditTextField.getValue();
-
-                            if (entriesDataProvider.contains(newValue)) {
-                                Notification n = new Notification("Entry already exists",
-                                        Notification.Type.ERROR_MESSAGE);
-                                n.setDelayMsec(1000);
-                                n.show(UI.getCurrent().getPage());
-                                editEntryWindow.close();
-                                return;
-                            }
-
-                            controller.removeAuthorizedDomain(selected);
-                            controller.addAuthorizedDomain(newValue);
-                            entriesDataProvider.remove(selected);
-                            entriesDataProvider.add(newValue);
-                            entries.getDataProvider().refreshAll();
-                            entries.deselectAll();
-                            Notification n = new Notification("Whitelist entry added with success",
-                                    Notification.Type.TRAY_NOTIFICATION);
-                            n.setDelayMsec(1000);
-                            n.show(UI.getCurrent().getPage());
-                        } catch (Exception e) {
-                            ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
-                                    Level.SEVERE, e.getMessage());
-                            Notification n = new Notification("Error modifying whitelist entry",
-                                    Notification.Type.ERROR_MESSAGE);
-                            n.setDelayMsec(1000);
-                            n.show(UI.getCurrent().getPage());
-                        } finally {
-                            editEntryWindow.close();
-                        }
+        editButton.addClickListener((Button.ClickEvent clickEvent) -> {
+            // Popup with textfield
+            Window editEntryWindow = new Window("Editar dominio");
+            editEntryWindow.setResizable(false);
+            editEntryWindow.setModal(true);
+            editEntryWindow.center();
+            
+            VerticalLayout vl = new VerticalLayout();
+            vl.setSizeUndefined();
+            vl.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            
+            addEditTextField.clear();
+            vl.addComponent(addEditTextField);
+            
+            Button confirmBtn = new Button("Ok");
+            confirmBtn.setSizeUndefined();
+            confirmBtn.addClickListener((Button.ClickEvent clickEvent1) -> {
+                try {
+                    // Get selected entry
+                    final String selected = getSelectedString();
+                    final String newValue = addEditTextField.getValue();
+                    
+                    if (entriesDataProvider.contains(newValue)) {
+                        Notification n = new Notification("Dominio já existente",
+                                Notification.Type.ERROR_MESSAGE);
+                        n.setDelayMsec(1000);
+                        n.show(UI.getCurrent().getPage());
+                        editEntryWindow.close();
+                        return;
                     }
-                });
-                vl.addComponent(confirmBtn);
-
-                editEntryWindow.setContent(vl);
-
-                UI.getCurrent().addWindow(editEntryWindow);
-            }
+                    
+                    controller.removeAuthorizedDomain(selected);
+                    controller.addAuthorizedDomain(newValue);
+                    entriesDataProvider.remove(selected);
+                    entriesDataProvider.add(newValue);
+                    entries.getDataProvider().refreshAll();
+                    entries.deselectAll();
+                    Notification n = new Notification("Dominio adicionado com sucesso",
+                            Notification.Type.TRAY_NOTIFICATION);
+                    n.setDelayMsec(1000);
+                    n.show(UI.getCurrent().getPage());
+                } catch (Exception e) {
+                    ExceptionLogger.logException(LoggerFileNames.BACKOFFICE_LOGGER_FILE_NAME,
+                            Level.SEVERE, e.getMessage());
+                    Notification n = new Notification("Ocorreu um erro ao modificar o dominio",
+                            Notification.Type.ERROR_MESSAGE);
+                    n.setDelayMsec(1000);
+                    n.show(UI.getCurrent().getPage());
+                } finally {
+                    editEntryWindow.close();
+                }
+            });
+            vl.addComponent(confirmBtn);
+            
+            editEntryWindow.setContent(vl);
+            
+            UI.getCurrent().addWindow(editEntryWindow);
         });
 
         botLayout.addComponents(addButton, deleteButton, editButton);

@@ -137,6 +137,20 @@ public class QuestionGroupTest {
                 + "instances with the same question set and title", instance2,
                 instance3);
     }
+    
+    /**
+     * Test of toString method, of class QuestionGroup.
+     */
+    @Test
+    public void testToString(){
+        System.out.println("toString");
+        String title = "title";
+        QuestionGroup instance = createQuestionGroup(title);
+        QuestionGroup other = createQuestionGroup(title);
+        
+        assertEquals(instance.toString(),other.toString());
+        assertNotEquals(instance.toString(),null);
+    }
 
     /**
      * Builds a QuestionGroup instance.

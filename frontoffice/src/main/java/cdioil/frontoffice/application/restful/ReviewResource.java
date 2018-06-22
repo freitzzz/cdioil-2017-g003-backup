@@ -162,7 +162,12 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             return createInvalidAuthTokenResponse();
         }
         Review reviewToAnswer = new ReviewRepositoryImpl().getUserReviewByID(registeredUser,Long.parseLong(reviewID));
+        
         if (reviewToAnswer == null) {
+            return createInvalidReviewResponse();
+        }
+        
+        if(reviewToAnswer.isFinished()){
             return createInvalidReviewResponse();
         }
         
@@ -180,7 +185,11 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             }
         }else{
             if(suggestion != null){
-                byte[] imageBytes = Base64.getDecoder().decode(suggestionImage);
+                String[] imageBytesAsStrings = suggestionImage.split(":");
+                byte[] imageBytes = new byte[imageBytesAsStrings.length];
+                for(int i = 0; i < imageBytesAsStrings.length; i++){
+                    imageBytes[i] = Byte.parseByte(imageBytesAsStrings[i]);
+                }
                 reviewToAnswer.submitSuggestionWithImage(suggestion,new Image(imageBytes));
             }
         }

@@ -84,8 +84,7 @@ public class UserProfileResource implements UserProfileAPI, ResponseMessages{
      */
     private Suggestion createSuggestion(boolean hasImage, SuggestionJSONService suggestionJSONService){
         if(hasImage){
-            byte[] imageBytes = Base64.getDecoder().decode(suggestionJSONService.getEncodedImageBytes());
-            return new Suggestion(suggestionJSONService.getSuggestionText(),new Image(imageBytes));
+            return new Suggestion(suggestionJSONService.getSuggestionText(),new Image(suggestionJSONService.getImageBytes()));
         }else{
             return new Suggestion(suggestionJSONService.getSuggestionText());
         }
