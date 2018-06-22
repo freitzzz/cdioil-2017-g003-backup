@@ -25,6 +25,10 @@ public class SurveyItemDTO extends GenericDTO implements DTO {
         return super.get("itemID").toString();
     }
 
+    public String getType() {
+        return type();
+    }
+
     @Override
     public String toString() {
         return getName();
