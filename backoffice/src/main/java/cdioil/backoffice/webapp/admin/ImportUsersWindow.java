@@ -23,17 +23,21 @@ public class ImportUsersWindow extends Window {
      */
     private static final String ERROR_UPLOAD_FILE="Ocorreu um erro ao fazer upload do ficheiro";
     /**
-     * Constant that represents the message that occurres if an error ocures while uploading a file
+     * Constant that represents the message that occurres if the users were imported with success
      */
-    private static final String SUCCESS_MESSAGE="Successo!";
+    private static final String SUCCESS_MESSAGE="Utilizadores importados com sucesso!";
     /**
-     * Constant that represents the message that occurres if an error ocures while uploading a file
+     * Constant that represents the message that occurres if an error ocures while importing the users
      */
-    private static final String IMPORT_USERS_CAPTION="Import Users";
+    private static final String ERROR_MESSAGE="Ocorreu um erro ao importar os utilizadores!";
     /**
-     * Constant that represents the message that occurres if an error ocures while uploading a file
+     * Constant that represents the message of the Import Users dialog caption
      */
-    private static final String IMPORT_USERS_BUTTON_CAPTION="Import";
+    private static final String IMPORT_USERS_DIALOG_CAPTION="Importar Utilizadores";
+    /**
+     * Constant that represents the message of the Import Users button caption
+     */
+    private static final String IMPORT_USERS_BUTTON_CAPTION="Importar";
     /**
      * Controller class
      */
@@ -69,7 +73,7 @@ public class ImportUsersWindow extends Window {
      * Prepares all Window Components
      */
     private void prepareComponents() {
-        setCaption(IMPORT_USERS_CAPTION);
+        setCaption(IMPORT_USERS_DIALOG_CAPTION);
         setDraggable(true);
         setModal(false);
         setResizable(false);
@@ -110,9 +114,14 @@ public class ImportUsersWindow extends Window {
         });
 
         uploadBtn.addSucceededListener((Upload.SucceededEvent succeededEvent) -> {
-            controller.readUsers(tempFile.getAbsolutePath());
+            if(!controller.readUsers(tempFile.getAbsolutePath()).isEmpty()){
+                controller.saveUsers();
+                Notification.show(SUCCESS_MESSAGE, Notification.Type.TRAY_NOTIFICATION);
+            }else{
+                Notification.show(ERROR_MESSAGE, Notification.Type.TRAY_NOTIFICATION);
+            }
             
-            Notification.show(SUCCESS_MESSAGE, Notification.Type.TRAY_NOTIFICATION);
+            
         });
 
         uploadBtn.setImmediateMode(false);
