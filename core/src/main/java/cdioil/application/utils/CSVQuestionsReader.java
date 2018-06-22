@@ -95,7 +95,7 @@ public class CSVQuestionsReader implements QuestionsReader {
     /**
      * Question ID.
      */
-    private static final String ID_IDENTIFIER = "QuestaoID";
+    private static final String ID_IDENTIFIER = "questionID";
     /**
      * Type Identifier.
      */
@@ -120,6 +120,24 @@ public class CSVQuestionsReader implements QuestionsReader {
      * The number of cells skipped in order to reach the start of a new question in a file with independent questions.
      */
     private static final int INDEPENDENT_FILE_OFFSET = 0;
+    /**
+     * Binary Question Identifier.
+     */
+    private static final String BINARY_QUESTION_INDENTIFIER = "BinaryQuestion";
+    /**
+     * Multiple Choice Question Identifier.
+     */
+    private static final String MULTIPLE_CHOICE_QUESTION_IDENTIFIER = "MultipleChoiceQuestion";
+    /**
+     * Quantitative Question Identifier.
+     */
+    private static final String QUANTITATIVE_QUESTION_INDENTIFIER = "QuantitativeQuestion";
+
+    private static final String MAX_SCALE_IDENTIFIER = "scaleMaxValue";
+
+    private static final String MIN_SCALE_IDENTIFIER = "scaleMinValue";
+
+    private static final String TEXT_IDENTIFIER = "Text";
 
     /**
      * File being read.

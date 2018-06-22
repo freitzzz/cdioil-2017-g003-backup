@@ -51,6 +51,10 @@ public class ImportCategoriesUI {
      * Represents a message that informs the user that no category was imported.
      */
     private final String errorInvalidCategories = localizationHandler.getMessageValue("error_no_imported_categories");
+/**
+     * Represents a message that informs the user that exist the category.
+     */
+    private final String errorExistCategories = localizationHandler.getMessageValue("error_exist_categories");
 
     /**
      * Separator used for clarity.
@@ -92,6 +96,7 @@ public class ImportCategoriesUI {
             } else {
                 if (ctrl.getNumberOfCategoriesRead() == 0) {
                     System.out.println(errorInvalidCategories);
+                    System.out.println(errorExistCategories);
                 } else {
                     System.out.println(infoNumberCategoriesImported + " " + ctrl.getNumberOfCategoriesRead());
                     catched = true;
