@@ -319,7 +319,7 @@ public class SubmitSuggestionActivity extends AppCompatActivity {
         imageFile = newImageFile;
         byte[] encodedImage = getFileBytes(imageFile);
         try {
-            xmlService.saveSuggestion(suggestionText, "");
+            xmlService.saveSuggestion(suggestionText, encodedImage);
         } catch (TransformerException e) {
             e.printStackTrace();
         }
