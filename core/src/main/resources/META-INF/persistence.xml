@@ -59,6 +59,7 @@
     <class>cdioil.domain.ProductTemplatesLibrary</class>
     <class>cdioil.domain.authz.Suggestion</class>
     <class>cdioil.application.domain.authz.UserActionHistory</class>
+    <class>cdioil.application.domain.authz.AuthenticationHistory</class>
     <properties>
       <!-->H2 Properties<-->
       <!--property name="javax.persistence.jdbc.url" value="jdbc:h2:~/db/cdioil"/>

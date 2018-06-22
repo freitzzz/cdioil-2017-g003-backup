@@ -153,7 +153,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     @Path("/savereview/{authenticationToken}/{reviewID}")
     @Override
     public Response saveReview(@PathParam("authenticationToken")String authenticationToken,
-            @PathParam("reviewID") long reviewID, String fileContent) {
+            @PathParam("reviewID") String reviewID, String fileContent) {
         
         AuthenticationController authenticationController=new AuthenticationController();
         RegisteredUser registeredUser=authenticationController
@@ -161,8 +161,7 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if(registeredUser==null){
             return createInvalidAuthTokenResponse();
         }
-        Review reviewToAnswer = new ReviewRepositoryImpl().getUserReviewByID(registeredUser,reviewID);
-
+        Review reviewToAnswer = new ReviewRepositoryImpl().getUserReviewByID(registeredUser,Long.parseLong(reviewID));
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
@@ -170,7 +169,6 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
         String suggestion = ReviewXMLService.getSuggestion(fileContent);
         String suggestionImage = ReviewXMLService.getSuggestionImage(fileContent);
-
 
         for (QuestionOption answer : answers) {
             reviewToAnswer.answerQuestion(answer);

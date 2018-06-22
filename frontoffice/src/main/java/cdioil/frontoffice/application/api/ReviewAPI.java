@@ -31,7 +31,7 @@ public interface ReviewAPI {
      * @return HTTP Response indicating whether the review was saved correctly
      * or not
      */
-    public Response saveReview(String authenticationToken,long reviewID, String fileContent);
+    public Response saveReview(String authenticationToken,String reviewID, String fileContent);
     
     /**
      * Produces an HTTP Response with the question answer map of a user's review
