@@ -40,54 +40,6 @@ public class XMLCategoriesReader extends Reader implements CategoriesReader {
      */
     private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY);
     /**
-     * String with the identifier to category.
-     */
-    private static final String CATEGORY = "categoria";
-    /**
-     * String with the identifier to list of the scats.
-     */
-    private static final String LIST_SCAT = "lista_scat";
-    /**
-     * String with the identifier to lists of the ubs.
-     */
-    private static final String LIST_UB = "lista_ub";
-    /**
-     * String with the identifier to lists of the categories.
-     */
-    private static final String LIST_CATEGORIES = "lista_categorias";
-    /**
-     * String with the CAT identifier.
-     */
-    private static final String DEC_CAT = "descritivo_cat";
-    /**
-     * String with the SCAT identifier.
-     */
-    private static final String DEC_SCAT = "descritivo_scat";
-    /**
-     * String with the ID identifier.
-     */
-    private static final String ID = "id";
-    /**
-     * String with the DC identifier.
-     */
-    private static final String DC = "DC";
-    /**
-     * String with the UN identifier.
-     */
-    private static final String UN = "UN";
-    /**
-     * String with the CAT identifier.
-     */
-    private static final String CAT = "CAT";
-    /**
-     * String with the SCAT identifier.
-     */
-    private static final String SCAT = "SCAT";
-    /**
-     * String with the UB identifier.
-     */
-    private static final String UB = "UB";
-    /**
      * Document to import from
      */
     private transient Document doc;

@@ -6,6 +6,7 @@ import cdioil.persistence.AuthenticationHistoryRepository;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Class that represents the AuthenticationHistory repository implementation
@@ -52,8 +53,8 @@ public class AuthenticationHistoryRepositoryImpl extends BaseJPARepository<Authe
         return (long)entityManager().createQuery("SELECT COUNT(AH) FROM AuthenticationHistory AH "
                 + "WHERE CAST(AH.authenticationActionDateTime as timestamp) BETWEEN :dateTimeX AND :dateTimeY "
                 + "AND AH.authenticationAction = :authenticationAction")
-                .setParameter("dateTimeX",dateTimeX)
-                .setParameter("dateTimeY",dateTimeY)
+                .setParameter("dateTimeX",dateTimeX.format(DateTimeFormatter.ISO_DATE_TIME))
+                .setParameter("dateTimeY",dateTimeY.format(DateTimeFormatter.ISO_DATE_TIME))
                 .setParameter("authenticationAction",authenticationAction)
                 .getSingleResult();
     }

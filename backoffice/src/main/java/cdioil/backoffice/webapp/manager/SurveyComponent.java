@@ -129,6 +129,9 @@ public class SurveyComponent extends DefaultPanelView {
             UI.getCurrent().addWindow(new TemplateManagementWindow(authenticationController));
         });
 
+        menuItem.addItem("Perguntas por categoria",
+                VaadinIcons.QUESTION_CIRCLE, (MenuBar.Command) menuItem1
+                        -> UI.getCurrent().addWindow(new QuestionsPerCatWindow()));
         return settingsMenuBar;
     }
 

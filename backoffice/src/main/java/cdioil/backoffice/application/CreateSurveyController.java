@@ -307,7 +307,7 @@ public class CreateSurveyController {
                 surveyItems.add(cat);
             } else if (dto.getType().equals("product")) {
                 // Search in products
-                Product prod = productRepo.getProductBySKU(new SKU(dto.getItemID()));
+                Product prod = productRepo.getProductByProductCode(dto.getItemID().split(": ")[1]);
                 surveyItems.add(prod);
             }
         }

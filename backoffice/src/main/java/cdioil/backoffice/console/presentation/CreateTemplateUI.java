@@ -44,7 +44,6 @@ public class CreateTemplateUI {
         int catChosen = Console.readInteger("Please choose a category: (SELECT THE NUMBER)");
         category = categoriesForManager.get(catChosen - 1);
 
-
         do {
             while (menuCategory == -1) {
                 System.out.println("Would you like to add questions of the category to the template? (SELECT THE NUMBER)\n");
@@ -57,32 +56,38 @@ public class CreateTemplateUI {
 
                 categoryQuestions = controller.listQuestionsForCategory(category);
 
-                for (int i = 0; i < categoryQuestions.size(); i++) {
-                    System.out.println((i + 1) + ". " + categoryQuestions.get(i) + "\n");
+                if (categoryQuestions.size() != 0) {
+                    for (int i = 0; i < categoryQuestions.size(); i++) {
+                        System.out.println((i + 1) + ". " + categoryQuestions.get(i) + "\n");
+                    }
+
+                    boolean flagCategoryQuestions;
+                    do {
+                        flagCategoryQuestions = false;
+                        String insertedString = Console.readLine("Please choose the questions of the category (Separated by commas): (SELECT THE NUMBERS)\n");
+
+                        if (insertedString.contains(",")) {
+                            String[] catQuestionsChosen = insertedString.split(",");
+
+                            try {
+                                for (int i = 0; i < catQuestionsChosen.length; i++) {
+                                    questionsChosen.add(categoryQuestions.get(i));
+                                }
+                            } catch (IndexOutOfBoundsException ex) {
+                                flagCategoryQuestions = true;
+                                System.out.println("ERROR: Please choose within the range presented\n");
+                            }
+
+
+                        } else {
+                            questionsChosen.add(categoryQuestions.get(Integer.parseInt(insertedString) - 1));
+                        }
+                    } while (flagCategoryQuestions);
+
+                } else {
+                    System.out.println("Category doesn't have questions");
                 }
 
-                boolean flagCategoryQuestions;
-                do {
-                    flagCategoryQuestions = false;
-                    String insertedString = Console.readLine("Please choose the questions of the category (Separated by commas): (SELECT THE NUMBERS)\n");
-
-                    if (insertedString.contains(",")) {
-                        String[] catQuestionsChosen = insertedString.split(",");
-
-                        try {
-                            for (int i = 0; i < catQuestionsChosen.length; i++) {
-                                questionsChosen.add(categoryQuestions.get(i));
-                            }
-                        } catch (IndexOutOfBoundsException ex) {
-                            flagCategoryQuestions = true;
-                            System.out.println("ERROR: Please choose within the range presented\n");
-                        }
-
-
-                    } else {
-                        questionsChosen.add(categoryQuestions.get(Integer.parseInt(insertedString) - 1));
-                    }
-                } while (flagCategoryQuestions);
             }
 
             while (menuIndependent == -1) {
@@ -96,31 +101,37 @@ public class CreateTemplateUI {
 
                 independentQuestions = controller.listIndependentQuestions();
 
-                for (int i = 0; i < independentQuestions.size(); i++) {
-                    System.out.println((i + 1) + ". " + independentQuestions.get(i) + "\n");
+                if (independentQuestions.size() != 0) {
+                    for (int i = 0; i < independentQuestions.size(); i++) {
+                        System.out.println((i + 1) + ". " + independentQuestions.get(i) + "\n");
+                    }
+
+                    boolean flagIndependentQuestions;
+                    do {
+                        flagIndependentQuestions = false;
+                        try {
+                            String[] independentQuestionsChosen = Console.readLine("Please choose the questions (Separated by commas): (SELECT THE NUMBERS)\n").split(",");
+                            try {
+                                for (String question : independentQuestionsChosen) {
+                                    questionsChosen.add(independentQuestions.get(Integer.parseInt(question) - 1));
+                                }
+                            } catch (IndexOutOfBoundsException ex) {
+                                flagIndependentQuestions = true;
+                                System.out.println("ERROR: Please choose within the range presented\n");
+                            }
+
+                        } catch (IllegalArgumentException exception) {
+                            flagIndependentQuestions = true;
+                            System.out.println("ERROR: Please try again\n");
+                        }
+                    } while (flagIndependentQuestions);
+                } else {
+                    System.out.println("There are no independent questions available");
                 }
 
-                boolean flagIndependentQuestions;
-                do {
-                    flagIndependentQuestions = false;
-                    try {
-                        String[] independentQuestionsChosen = Console.readLine("Please choose the questions (Separated by commas): (SELECT THE NUMBERS)\n").split(",");
-                        try {
-                            for (String question : independentQuestionsChosen) {
-                                questionsChosen.add(independentQuestions.get(Integer.parseInt(question) - 1));
-                            }
-                        } catch (IndexOutOfBoundsException ex) {
-                            flagIndependentQuestions = true;
-                            System.out.println("ERROR: Please choose within the range presented\n");
-                        }
-
-                    } catch (IllegalArgumentException exception) {
-                        flagIndependentQuestions = true;
-                        System.out.println("ERROR: Please try again\n");
-                    }
-                } while (flagIndependentQuestions);
             }
         } while (menuCategory == 2 && menuIndependent == 2);
+
 
         title = Console.readLine("Please insert the name of the Template\n");
 
