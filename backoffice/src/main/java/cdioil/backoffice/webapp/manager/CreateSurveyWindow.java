@@ -74,7 +74,7 @@ public class CreateSurveyWindow extends Window {
     /**
      * List of Selected Questions
      */
-    private List<QuestionDTO> selectedQuestions = new ArrayList<>();
+    private transient List<QuestionDTO> selectedQuestions = new ArrayList<>();
 
     /**
      * Twin Column Select Users
@@ -363,7 +363,7 @@ public class CreateSurveyWindow extends Window {
         /**
          * Question DTO that is assigned to this row
          */
-        private QuestionDTO assignedQuestion;
+        private transient QuestionDTO assignedQuestion;
 
         /**
          * Constructor
