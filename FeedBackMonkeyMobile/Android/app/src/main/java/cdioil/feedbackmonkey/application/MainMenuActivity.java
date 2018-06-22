@@ -438,14 +438,17 @@ public class MainMenuActivity extends AppCompatActivity {
                             .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
                             .concat(REVIEWS_RESOURCE_PATH)
                             .concat(SAVE_REVIEW_RESOURCE_PATH)
-                            .concat("/")
+                            .concat("/" + authenticationToken + "/")
                             .concat(reviewID);
-
+                    System.out.println("url !!!!");
+                    System.out.println(saveReviewURL);
                     Thread connectionThread = new Thread(() -> {
                         try {
                             Response saveReviewResponse = RESTRequest.create(saveReviewURL)
                                     .withMediaType(RESTRequest.RequestMediaType.XML).withBody(fileContent).POST();
                             reviewRestResponseCode = saveReviewResponse.code();
+                            System.out.println("codigo >>>>> " + reviewRestResponseCode);
+                            System.out.println("body >>>>>>>>> " + saveReviewResponse.body().string());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

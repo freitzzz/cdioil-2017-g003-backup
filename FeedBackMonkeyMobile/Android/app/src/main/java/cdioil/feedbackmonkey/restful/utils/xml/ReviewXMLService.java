@@ -404,6 +404,7 @@ public class ReviewXMLService {
         }
         stringBuilder.deleteCharAt(stringBuilder.length()-1);
         imageElement.setTextContent(stringBuilder.toString());
+        System.out.println(stringBuilder.toString());
 
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         Result xmlOutput = new StreamResult(reviewFile);
