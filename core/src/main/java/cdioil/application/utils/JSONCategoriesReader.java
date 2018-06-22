@@ -6,7 +6,6 @@
 package cdioil.application.utils;
 
 import cdioil.domain.MarketStructure;
-import cdioil.files.FileWriter;
 import de.odysseus.staxon.json.JsonXMLConfig;
 import de.odysseus.staxon.json.JsonXMLConfigBuilder;
 import de.odysseus.staxon.json.JsonXMLInputFactory;
@@ -52,6 +51,11 @@ public class JSONCategoriesReader implements CategoriesReader {
         this.filePath = filePath;
     }
 
+    /**
+     * Imports Categories from a JSON file.
+     *
+     * @return MarketStructur with the Categories that were read. Null if the file is not valid
+     */
     @Override
     public MarketStructure readCategories() {
         InputStream input = null;
@@ -89,6 +93,11 @@ public class JSONCategoriesReader implements CategoriesReader {
         return xmlCatReader.readCategories();
     }
 
+    /**
+     * Returns the number of Categories in the list of Categories.
+     *
+     * @return the number of Categories that were read
+     */
     @Override
     public int getNumberOfCategoriesRead() {
         return xmlCatReader.getNumberOfCategoriesRead();

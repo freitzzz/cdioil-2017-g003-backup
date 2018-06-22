@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import cdioil.files.FileReader;
+import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -38,20 +39,24 @@ public class CSVCategoriesReader implements CategoriesReader {
      * Number of the line that contains the identifiers of the columns.
      */
     private static final int IDENTIFIERS_LINE = 0;
+    /**
+     * Number of the columns.
+     */
+    private static final int IDENTIFIERS_NUMBER = 10;
 
     /**
      * Capacity of the StringBuilder that stores the path of the Category.
      */
     private static final int CAPACITY = 128;
-     /**
+    /**
      * String with the identifier to category.
      */
     private static final String CATEGORY = "categoria";
-     /**
+    /**
      * String with the identifier to list of the scats.
      */
     private static final String LIST_SCAT = "lista_scat";
-     /**
+    /**
      * String with the identifier to lists of the ubs.
      */
     private static final String LIST_UB = "lista_ub";
@@ -59,36 +64,36 @@ public class CSVCategoriesReader implements CategoriesReader {
      * String with the identifier to lists of the categories.
      */
     private static final String LIST_CATEGORIES = "lista_categorias";
-     /**
+    /**
      * String with the CAT identifier.
      */
     private static final String DEC_CAT = "descritivo_cat";
-     /**
-     * String with the  SCAT identifier.
+    /**
+     * String with the SCAT identifier.
      */
     private static final String DEC_SCAT = "descritivo_scat";
-     /**
-     * String with the  ID identifier.
+    /**
+     * String with the ID identifier.
      */
     private static final String ID = "id";
-     /**
-     * String with the  DC identifier.
+    /**
+     * String with the DC identifier.
      */
     private static final String DC = "DC";
-     /**
-     * String with the  UN identifier.
+    /**
+     * String with the UN identifier.
      */
     private static final String UN = "UN";
-     /**
-     * String with the  CAT identifier.
+    /**
+     * String with the CAT identifier.
      */
     private static final String CAT = "CAT";
-     /**
-     * String with the  SCAT identifier.
+    /**
+     * String with the SCAT identifier.
      */
     private static final String SCAT = "SCAT";
-     /**
-     * String with the  UB identifier.
+    /**
+     * String with the UB identifier.
      */
     private static final String UB = "UB";
     /**
@@ -128,8 +133,11 @@ public class CSVCategoriesReader implements CategoriesReader {
      */
     @Override
     public MarketStructure readCategories() {
-        List<String> fileContent = FileReader.readFile(new File(file));
 
+        List<String> fileContent = FileReader.readFile(new File(file));
+        if (!isFileValid(fileContent)) {
+            return null;
+        }
         MarketStructure em = new MarketStructure();
 
         List<Category> lc = new LinkedList<>();
@@ -179,11 +187,29 @@ public class CSVCategoriesReader implements CategoriesReader {
                 }
             }
         }
-        writeXMLfile(em);
-        return xmlCatReader.readCategories();
-        //return em;
+        MarketStructure marketStructure = new MarketStructureRepositoryImpl().findMarketStructure();
+        if (marketStructure == null) {
+            return em;
+        } else {
+            writeXMLfile(em);
+            return xmlCatReader.readCategories();
+        }
     }
 
+    /**
+     * Verifica se o conteúdo do ficheiro é válido (se não é null e se o número de colunas é o esperado)
+     */
+    protected boolean isFileValid(List<String> fileCont) {
+        if (fileCont == null) {
+            return false;
+        }
+        return fileCont.get(IDENTIFIERS_LINE).split(SPLITTER).length == IDENTIFIERS_NUMBER;
+    }
+
+    /**
+     * Method that writes information from csv file to a XML file
+     * @param em 
+     */
     public void writeXMLfile(MarketStructure em) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
@@ -196,7 +222,6 @@ public class CSVCategoriesReader implements CategoriesReader {
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(CAT_OUTPUT_PATH);
@@ -210,6 +235,12 @@ public class CSVCategoriesReader implements CategoriesReader {
         }
     }
 
+    
+    /**
+     * Method that writes information from csv file to a Document
+     * @param doc Document
+     * @param em MarketStructur
+     */
     public void writeCategories(Document doc, MarketStructure em) {
         Element rootElement = doc.createElement(LIST_CATEGORIES);
         doc.appendChild(rootElement);
@@ -227,16 +258,26 @@ public class CSVCategoriesReader implements CategoriesReader {
 
                 Element categoryElement = doc.createElement(CATEGORY);
                 rootElement.appendChild(categoryElement);
-                Element dcElem = doc.createElement(DC.toLowerCase());
 
+                Element dcElem = doc.createElement(DC.toLowerCase());
                 Attr attrDC = doc.createAttribute(ID);
                 idDC = cat.categoryPathIdentifiers().get(0).replace(DC, "");
-                dcElem.setTextContent(cat.categoryName());
+                for (Category catName : em.getAllCategories()) {
+                    if (catName.categoryPath().equalsIgnoreCase(cat.categoryPathIdentifiers().get(0))) {
+                        dcElem.setTextContent(catName.categoryName());
+                    }
+                }
                 attrDC.setValue(idDC);
                 dcElem.setAttributeNode(attrDC);
+
                 categoryElement.appendChild(dcElem);
                 Element unElem = doc.createElement(UN.toLowerCase());
-                unElem.setTextContent(cat.categoryName());
+                for (Category catName : em.getAllCategories()) {
+                    if (catName.categoryPath().equalsIgnoreCase(cat.categoryPathIdentifiers().get(0) + "-"
+                            + cat.categoryPathIdentifiers().get(1))) {
+                        unElem.setTextContent(catName.categoryName());
+                    }
+                }
                 Attr attrUN = doc.createAttribute(ID);
                 idUN = cat.categoryPathIdentifiers().get(1).replace(UN, "");
                 attrUN.setValue(idUN);
@@ -250,7 +291,14 @@ public class CSVCategoriesReader implements CategoriesReader {
                 catElem.setAttributeNode(attrCAT);
 
                 Element elementDecCAT = doc.createElement(DEC_CAT);
-                elementDecCAT.appendChild(doc.createTextNode(cat.categoryName()));
+
+                for (Category catName : em.getAllCategories()) {
+                    if (catName.categoryPath().equalsIgnoreCase(cat.categoryPathIdentifiers().get(0) + "-"
+                            + cat.categoryPathIdentifiers().get(1) + "-"
+                            + cat.categoryPathIdentifiers().get(2))) {
+                        elementDecCAT.appendChild(doc.createTextNode(catName.categoryName()));
+                    }
+                }
 
                 catElem.appendChild(elementDecCAT);
 
@@ -268,14 +316,29 @@ public class CSVCategoriesReader implements CategoriesReader {
                 attrSCAT.setValue(idSCAT);
                 scatElem.setAttributeNode(attrSCAT);
                 Element elementDecSCAT = doc.createElement(DEC_SCAT);
-                elementDecSCAT.appendChild(doc.createTextNode(cat.categoryName()));
+                for (Category catName : em.getAllCategories()) {
+                    if (catName.categoryPath().equalsIgnoreCase(cat.categoryPathIdentifiers().get(0) + "-"
+                            + cat.categoryPathIdentifiers().get(1) + "-"
+                            + cat.categoryPathIdentifiers().get(2) + "-"
+                            + cat.categoryPathIdentifiers().get(3))) {
+                        elementDecSCAT.appendChild(doc.createTextNode(catName.categoryName()));
+                    }
+                }
                 scatElem.appendChild(elementDecSCAT);
                 if (cat.categoryPathIdentifiers().size() > 4) {
                     listaUBElem = doc.createElement(LIST_UB);
                     scatElem.appendChild(listaUBElem);
                     Element ubElem = doc.createElement(UB.toLowerCase());
                     listaUBElem.appendChild(ubElem);
-                    ubElem.setTextContent(cat.categoryName());
+                    for (Category catName : em.getAllCategories()) {
+                        if (catName.categoryPath().equalsIgnoreCase(cat.categoryPathIdentifiers().get(0) + "-"
+                                + cat.categoryPathIdentifiers().get(1) + "-"
+                                + cat.categoryPathIdentifiers().get(2) + "-"
+                                + cat.categoryPathIdentifiers().get(3) + "-"
+                                + cat.categoryPathIdentifiers().get(4))) {
+                            ubElem.setTextContent(catName.categoryName());
+                        }
+                    }
 
                     Attr attrUB = doc.createAttribute(ID);
                     idUB = cat.categoryPathIdentifiers().get(4).replace(UB, "");
@@ -294,7 +357,14 @@ public class CSVCategoriesReader implements CategoriesReader {
                     attrSCAT.setValue(idSCAT);
                     scatElem.setAttributeNode(attrSCAT);
                     Element elementDecSCAT = doc.createElement(DEC_SCAT);
-                    elementDecSCAT.appendChild(doc.createTextNode(cat.categoryName()));
+                    for (Category catName : em.getAllCategories()) {
+                        if (catName.categoryPath().equalsIgnoreCase(cat.categoryPathIdentifiers().get(0) + "-"
+                                + cat.categoryPathIdentifiers().get(1) + "-"
+                                + cat.categoryPathIdentifiers().get(2) + "-"
+                                + cat.categoryPathIdentifiers().get(3))) {
+                            elementDecSCAT.appendChild(doc.createTextNode(catName.categoryName()));
+                        }
+                    }
                     scatElem.appendChild(elementDecSCAT);
                     if (cat.categoryPathIdentifiers().size() > 4) {
                         listaUBElem = doc.createElement(LIST_UB);
@@ -302,7 +372,6 @@ public class CSVCategoriesReader implements CategoriesReader {
                         Element ubElem = doc.createElement(UB.toLowerCase());
                         listaUBElem.appendChild(ubElem);
                         ubElem.setTextContent(cat.categoryName());
-
                         Attr attrUB = doc.createAttribute(ID);
                         idUB = cat.categoryPathIdentifiers().get(4).replace(UB, "");
                         attrUB.setValue(idUB);
@@ -313,7 +382,6 @@ public class CSVCategoriesReader implements CategoriesReader {
                         Element ubElem = doc.createElement(UB.toLowerCase());
                         listaUBElem.appendChild(ubElem);
                         ubElem.setTextContent(cat.categoryName());
-
                         Attr attrUB = doc.createAttribute(ID);
                         idUB = cat.categoryPathIdentifiers().get(4).replace(UB, "");
                         attrUB.setValue(idUB);

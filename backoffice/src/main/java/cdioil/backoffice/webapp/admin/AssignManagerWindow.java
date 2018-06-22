@@ -48,7 +48,7 @@ public class AssignManagerWindow extends CategoryManagementWindow {
     private void checkIfUserIsNotAdminOrManager() {
         if (controller.isAdmin(getSelectedUserEmail())
                 || controller.isManager(getSelectedUserEmail())) {
-            throw new IllegalArgumentException("User is already Manager/Admin");
+            throw new IllegalArgumentException("O Utilizador já é um Admin/Gestor");
         }
     }
 

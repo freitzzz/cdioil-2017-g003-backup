@@ -2,6 +2,7 @@ package cdioil.persistence.impl;
 
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
+import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ReviewRepository;
@@ -64,4 +65,22 @@ public final class ReviewRepositoryImpl extends BaseJPARepository<Review, Long> 
         
         return q.getResultList().isEmpty() ? null : (Long) q.getSingleResult();
     }
+    /**
+     * Method that retrieves a certain Review of a certain user by it's ID
+     * @param registeredUser RegisteredUser with the user being fetched the review
+     * @param reviewID Long with the ID of the review
+     * @return Review with the fetched review of the user with a certain ID, or null 
+     * if no review was found
+     */
+    @Override
+    public Review getUserReviewByID(RegisteredUser registeredUser, long reviewID){
+        Query queryUserReviewID=entityManager().createQuery("SELECT RV FROM Review RV,Profile PF "
+                + "WHERE RV.id= :reviewID "
+                + "AND PF.registeredUser= :registeredUser "
+                + "AND RV MEMBER OF PF.reviews")
+                .setParameter("reviewID",reviewID)
+                .setParameter("registeredUser",registeredUser);
+        return !queryUserReviewID.getResultList().isEmpty() ? (Review)queryUserReviewID.getSingleResult() : null;
+    }
+    
 }

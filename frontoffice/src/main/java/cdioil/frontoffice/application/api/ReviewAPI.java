@@ -25,12 +25,13 @@ public interface ReviewAPI {
      * Produces an HTTP Response indicating whether a review was saved correctly
      * or not
      *
+     * @param authenticationToken String with the user authentication token
      * @param reviewID the review's database id
      * @param fileContent String that represents an XML File Content
      * @return HTTP Response indicating whether the review was saved correctly
      * or not
      */
-    public Response saveReview(String reviewID, String fileContent);
+    public Response saveReview(String authenticationToken,String reviewID, String fileContent);
     
     /**
      * Produces an HTTP Response with the question answer map of a user's review
