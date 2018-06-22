@@ -27,8 +27,11 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Create new Survey Window
@@ -59,6 +62,11 @@ public class CreateSurveyWindow extends Window {
      * Selected Questions List Layout
      */
     private VerticalLayout selectedQuestionsLayout = new VerticalLayout();
+
+    /**
+     * List of Selected Questions
+     */
+    private List<QuestionDTO> selectedQuestions = new ArrayList<>();
 
     /**
      * Twin Column Select Users
@@ -120,6 +128,7 @@ public class CreateSurveyWindow extends Window {
 
         Label header = new Label("<h1>Novo Inquérito</h2>", ContentMode.HTML);
         Button confirmBtn = new Button("Confirmar", VaadinIcons.CHECK);
+        confirmBtn.addClickListener(confirmBtnClickListener());
         mainLayout.addComponents(header, tabSheet, confirmBtn);
 
         // Expand Ratios
@@ -213,6 +222,7 @@ public class CreateSurveyWindow extends Window {
              * concatenated in a string and then splitted
              */
             dragSource.setDataTransferText(question.toString());
+            dragSource.setDragData(question);
 
             panelLayout.addComponent(rowPanel);
         }
@@ -236,6 +246,30 @@ public class CreateSurveyWindow extends Window {
         addNewQuestionSlotToLayout();
 
         return selectedQuestionsPanel;
+    }
+
+    private Button.ClickListener confirmBtnClickListener() {
+        return onClick -> {
+            // Populates each question option's map
+            for (int i = 0; i < selectedQuestions.size(); i++) {
+                SelectedQuestionRow currentRow =
+                        (SelectedQuestionRow)selectedQuestionsLayout.getComponent(i);
+
+                QuestionDTO currentQuestion = currentRow.assignedQuestion;
+
+                List<String> textFields = currentRow.getTextFieldValues();
+                for (int j = 0; j < textFields.size(); j++) {
+                    currentQuestion.addNextQuestion(currentQuestion.getOptions().get(j),
+                            textFields.get(j));
+                }
+
+            }
+
+            // Creates Survey
+            controller.createSurvey(surveyItemsData, LocalDateTime.now(), LocalDateTime.MAX,
+                    new ArrayList<>(), (Manager) authenticationController.getUser(),
+                    selectedQuestions);
+        };
     }
 
     /**
@@ -268,6 +302,11 @@ public class CreateSurveyWindow extends Window {
          * Remove Question from List Button
          */
         private Button removeQuestionBtn = new Button(VaadinIcons.MINUS_CIRCLE);
+
+        /**
+         * Question DTO that is assigned to this row
+         */
+        private QuestionDTO assignedQuestion;
 
         /**
          * Constructor
@@ -317,7 +356,12 @@ public class CreateSurveyWindow extends Window {
                             addNewQuestionSlotToLayout();
                         }
 
-                        updateNewQuestion(dropEvent.getDataTransferText());
+                        Optional<Object> optional = dropEvent.getDragData();
+                        if (optional.isPresent()) {
+                            QuestionDTO draggedQuestion = (QuestionDTO)optional.get();
+                            this.assignedQuestion = draggedQuestion;
+                            updateNewQuestion(draggedQuestion);
+                        }
                     }
                 });
             });
@@ -326,13 +370,10 @@ public class CreateSurveyWindow extends Window {
         /**
          * When a new question is dragged onto this panel,
          * updates components to show question information
-         * <p>
-         * Drag Transfer Data Format:
-         * QuestionText,,QuestionType,,Option1,,Option2,,
          *
-         * @param dragData dragged question text
+         * @param questionDTO question that was transfered
          */
-        private void updateNewQuestion(String dragData) {
+        private void updateNewQuestion(QuestionDTO questionDTO) {
             mainLayout.removeAllComponents();
 
             mainLayout.setMargin(new MarginInfo(true, false));
@@ -340,23 +381,23 @@ public class CreateSurveyWindow extends Window {
             final int questionIndexInLayout = selectedQuestionsLayout.getComponentCount();
             setCaption("Questão " + questionIndexInLayout);
 
-            String[] dragDataSplitted = dragData.split(",,");
-            questionLabel.setValue(dragDataSplitted[0]);
-            typeQuestionLabel.setValue(dragDataSplitted[1]);
 
-            // Process drag transfer data and populate option list
-            List<String> options = new ArrayList<>();
-            for (int i = 2; i < dragDataSplitted.length; i++) {
-                options.add(dragDataSplitted[i]);
-            }
-            questionOptionPopupContent = new QuestionOptionPopupContent(options);
+            selectedQuestions.add(questionDTO);
+
+            questionLabel.setValue(questionDTO.getText());
+            typeQuestionLabel.setValue(questionDTO.getQuestionType());
+
+            questionOptionPopupContent = new QuestionOptionPopupContent(questionDTO.getOptions());
 
             PopupView popup = new PopupView(questionOptionPopupContent);
             popup.setHideOnMouseOut(true);
 
             SelectedQuestionRow current = this;
-            removeQuestionBtn.addClickListener(clickAction ->
-                    selectedQuestionsLayout.removeComponent(current));
+            removeQuestionBtn.addClickListener(clickAction -> {
+                selectedQuestionsLayout.removeComponent(current);
+                selectedQuestions.remove(questionDTO);
+                refreshPanelIndices();
+            });
 
             mainLayout.addComponents(questionLabel, typeQuestionLabel,
                     popup, removeQuestionBtn);
@@ -365,6 +406,20 @@ public class CreateSurveyWindow extends Window {
             mainLayout.setExpandRatio(typeQuestionLabel, 0.2f);
             mainLayout.setExpandRatio(popup, 0.15f);
             mainLayout.setExpandRatio(removeQuestionBtn, 0.1f);
+
+            refreshPanelIndices();
+        }
+
+        /**
+         * Returns list of values of all text fields inside the popup view
+         * @return
+         */
+        public List<String> getTextFieldValues() {
+            return questionOptionPopupContent.getTextFieldValues();
+        }
+
+        public QuestionDTO getQuestionDTO() {
+            return assignedQuestion;
         }
 
         /**
@@ -446,6 +501,15 @@ public class CreateSurveyWindow extends Window {
 
                 return tfValues;
             }
+        }
+    }
+
+    /**
+     * Refreshes all Panel Indices
+     */
+    private void refreshPanelIndices() {
+        for (int i = 0; i < selectedQuestionsLayout.getComponentCount() - 1; i++) {
+            selectedQuestionsLayout.getComponent(i).setCaption("Questão " + i);
         }
     }
 

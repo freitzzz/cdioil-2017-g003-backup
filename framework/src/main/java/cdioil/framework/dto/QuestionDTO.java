@@ -1,15 +1,34 @@
 package cdioil.framework.dto;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QuestionDTO extends GenericDTO implements DTO {
+
+    private String type;
+
+    private Map<String, String> questionOptionFlowMap;
+
+    private String surveyItemID;
 
     public QuestionDTO(String type, String text, String questionType, List<String> options) {
         super(type);
 
+        setType(type);
         setText(text);
         setQuestionType(questionType);
         setOptions(options);
+
+        questionOptionFlowMap = new HashMap<>();
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getText() {
@@ -29,25 +48,26 @@ public class QuestionDTO extends GenericDTO implements DTO {
     }
 
     public List<String> getOptions() {
-        return (List)super.get("options");
+        return (List) super.get("options");
     }
 
     public void setOptions(List<String> options) {
         super.put("options", options);
     }
 
-    @Override
-    public String toString() {
-        final String text = getText();
-        final String type = getQuestionType();
+    public void addNextQuestion(String option, String index) {
+        questionOptionFlowMap.put(option, index);
+    }
 
-        // Concatenate Options
-        StringBuilder options = new StringBuilder();
-        for (String option :
-                getOptions()) {
-            options.append(option + ",,");
-        }
+    public Map<String, String> getQuestionOptionFlowMap() {
+        return questionOptionFlowMap;
+    }
 
-        return String.format("%s,,%ss,,%s", text, type, options);
+    public String getSurveyItemID() {
+        return surveyItemID;
+    }
+
+    public void setSurveyItemID(String surveyItemID) {
+        this.surveyItemID = surveyItemID;
     }
 }

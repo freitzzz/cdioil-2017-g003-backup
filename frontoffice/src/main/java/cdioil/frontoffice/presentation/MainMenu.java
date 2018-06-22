@@ -57,6 +57,7 @@ public class MainMenu {
                 case 1:
                     ChangeUserDataUI mui = new ChangeUserDataUI(getSystemUser());
                     mui.changeData();
+                    updateRegisteredUserProfile();
                     break;
                 case 2:
                     new AnswerSurveyUI(getRegisteredUser());
@@ -95,5 +96,11 @@ public class MainMenu {
             return (RegisteredUser) user;
         }
         return null;
+    }
+    /**
+     * Method that updates the current registered user profile
+     */
+    private void updateRegisteredUserProfile(){
+        authenticationController.updateCurrentUser();
     }
 }

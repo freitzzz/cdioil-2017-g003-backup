@@ -90,7 +90,7 @@ public class XMLCategoriesReader extends Reader implements CategoriesReader {
     /**
      * Document to import from
      */
-    private Document doc;
+    private transient Document doc;
 
     /**
      * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.

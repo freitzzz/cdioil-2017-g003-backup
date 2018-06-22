@@ -18,8 +18,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -41,6 +39,8 @@ public class XMLTemplateWriter implements TemplateWriter {
 
     private final List<SurveyItem> surveyItems;
 
+    private final SurveyTemplateElement templateElement;
+
     /**
      * Builds a new XMLTemplateWriter with the file that is going to be written
      *
@@ -51,6 +51,31 @@ public class XMLTemplateWriter implements TemplateWriter {
         this.filename = filename;
         this.template = template;
         this.surveyItems = new LinkedList<>();
+        this.templateElement = buildTemplate();
+    }
+
+    private SurveyTemplateElement buildTemplate() {
+        //Set template's title
+        SurveyTemplateElement templElement = new SurveyTemplateElement(template.getTitle());
+        QuestionsElement questionsElement = templElement.getTemplateQuestions();
+        Iterable<Question> templateQuestions = template.getQuestions();
+        for (Question question : templateQuestions) {
+            questionsElement.addQuestion(buildQuestionElement(question));
+        }
+        List<SurveyItemElement> surveyItemElementList = templElement.getTemplateSurveyItems().getSurveyItems();
+        for (SurveyItem item : surveyItems) {
+            if (item instanceof Category) {
+                CategoryElement categoryElement = new CategoryElement(((Category) item).categoryPath());
+                surveyItemElementList.add(categoryElement);
+            } else if (item instanceof Product) {
+                ProductElement productElement = new ProductElement(((Product) item).getID().toString());
+                surveyItemElementList.add(productElement);
+            }
+        }
+        if (template instanceof ScriptedTemplate) {
+            buildQuestionScript(templElement, ((ScriptedTemplate) template).getGraph());
+        }
+        return templElement;
     }
 
     @Override
@@ -59,47 +84,15 @@ public class XMLTemplateWriter implements TemplateWriter {
     }
 
     @Override
-    public boolean write() {
+    public boolean write() throws JAXBException {
 
-        try {
-            //Set template's title
-            SurveyTemplateElement templateElement = new SurveyTemplateElement(template.getTitle());
-            
-            QuestionsElement questionsElement = templateElement.getTemplateQuestions();
-            
-            Iterable<Question> templateQuestions = template.getQuestions();
-            
-            for (Question question : templateQuestions) {
-                questionsElement.addQuestion(buildQuestionElement(question));
-            }
-            
-            List<SurveyItemElement> surveyItemElementList = templateElement.getTemplateSurveyItems().getSurveyItems();
-            for (SurveyItem item : surveyItems) {
-                if (item instanceof Category) {
-                    CategoryElement categoryElement = new CategoryElement(((Category) item).categoryPath());
-                    surveyItemElementList.add(categoryElement);
-                } else if (item instanceof Product) {
-                    ProductElement productElement = new ProductElement(((Product) item).getID().toString());
-                    surveyItemElementList.add(productElement);
-                }
-            }
-            
-            if (template instanceof ScriptedTemplate) {
-                buildQuestionScript(templateElement, ((ScriptedTemplate) template).getGraph());
-            }
-            
-            JAXBContext jaxbContext = JAXBContext.newInstance(SurveyTemplateElement.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            Writer writer = new StringWriter();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(jaxbContext, writer);
-            
-            return FileWriter.writeFile(new File(filename), ((StringWriter)writer).getBuffer().toString());
-            
-        } catch (JAXBException ex) {
-            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+        JAXBContext jaxbContext = JAXBContext.newInstance(SurveyTemplateElement.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        Writer writer = new StringWriter();
+        marshaller.marshal(templateElement, writer);
+
+        return FileWriter.writeFile(new File(filename), ((StringWriter) writer).getBuffer().toString());
     }
 
     private QuestionScriptElement buildQuestionScript(SurveyTemplateElement templateElement, Graph graph) {
@@ -206,26 +199,16 @@ public class XMLTemplateWriter implements TemplateWriter {
      * information.
      *
      * @return a String with the content of the XML file
+     * @throws javax.xml.bind.JAXBException
      */
-    public String getXMLAsString() {
-//        try {
-//            Document doc = DocumentBuilderFactory.newInstance().
-//                    newDocumentBuilder().newDocument();
-//
-//            writeTemplate(doc);
-//
-//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-//            DOMSource source = new DOMSource(doc);
-//            StringWriter stringWriter = new StringWriter();
-//            StreamResult result = new StreamResult(stringWriter);
-//            transformer.transform(source, result);
-//            return stringWriter.getBuffer().toString();
-//        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
-//            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (TransformerException ex) {
-//            Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return null;
-        return "";
+    public String getXMLAsString() throws JAXBException {
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(SurveyTemplateElement.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        Writer writer = new StringWriter();
+        marshaller.marshal(templateElement, writer);
+
+        return ((StringWriter) writer).getBuffer().toString();
     }
 }

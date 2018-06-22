@@ -110,7 +110,7 @@ public class AssignManagerController {
         // Adicionar Manager
         Manager g = new Manager(su);
 
-        if (g.addCategories(categoriesToBeAdded)) {
+        if (!g.addCategories(categoriesToBeAdded)) {
             //TODO error adding categories
         }
 
