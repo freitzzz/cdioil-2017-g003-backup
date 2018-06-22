@@ -442,10 +442,13 @@ public class SignUpActivity extends AppCompatActivity {
 
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
+
+
         String restRequestBody;
         if (email.isEmpty() && password.isEmpty()) {
-            restRequestBody = new Gson().toJson(new RegistrationJSONService(null,
-                    null, null, null, null, null));
+            setErrorOnEditText(emailEditText,"Email inválido!");
+            setErrorOnEditText(passwordEditText,"Password inválida!");
+            return false;
         } else {
             restRequestBody = new Gson().toJson(new RegistrationJSONService(email, password,
                     null
@@ -485,8 +488,10 @@ public class SignUpActivity extends AppCompatActivity {
      */
     private RegistrationJSONService getRegistrationJSONService(Response restResponse) {
         try {
+            String ooo = restResponse.body().string();
+            System.out.println("ooo >>>" + ooo);
             return new Gson().
-                    fromJson(restResponse.body().string(), RegistrationJSONService.class);
+                    fromJson(ooo, RegistrationJSONService.class);
         } catch (IOException e) {
             ToastNotification.show(SignUpActivity.this, NO_INTERNET_CONNECTION);
             return null;

@@ -5,6 +5,7 @@ import cdioil.domain.authz.Email;
 import cdioil.domain.authz.Manager;
 import cdioil.domain.authz.Name;
 import cdioil.domain.authz.Password;
+import cdioil.domain.authz.Suggestion;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
@@ -134,6 +135,17 @@ public class ReviewTest {
     }
 
     /**
+     * Test of hasSuggestion method, of class Review.
+     */
+    @Test
+    public void ensureHasSuggestionWorks() {
+        System.out.println("ensureHasSuggestionWorks");
+        assertFalse(instance.hasSuggestion());
+        instance.submitSuggestion("ola");
+        assertTrue(instance.hasSuggestion());
+    }
+
+    /**
      * Test of undoAnswer method, of class Review.
      */
     @Test
@@ -179,6 +191,28 @@ public class ReviewTest {
     public void ensureSubmitSuggestionWorks() {
         System.out.println("ensureSubmitSuggestionWorks");
         assertTrue(instance.submitSuggestion("Suggestion 1"));
+    }
+
+    /**
+     * Test of submitSuggestionWithImage, of class Review.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureSubmitSuggestionWithImageThrowsExceptionWithInvalidValues() {
+        System.out.println("ensureSubmitSuggestionWithImageThrowsExceptionWithInvalidValues");
+        instance.submitSuggestionWithImage(null, new Image("ola".getBytes()));
+        instance.submitSuggestionWithImage("", new Image("ola".getBytes()));
+        instance.submitSuggestionWithImage("Suggestion", null);
+        instance.submitSuggestionWithImage("Suggestion", new Image("".getBytes()));
+    }
+
+    /**
+     * Test of submitSuggestionWithImage method, of class Review.
+     */
+    @Test
+    public void ensureSubmitSuggestionWithImageWorks() {
+        System.out.println("ensureSubmitSuggestionWithImageWorks");
+        instance.submitSuggestionWithImage("Suggestion", new Image("hello".getBytes()));
+        assertEquals("Suggestion", instance.getSuggestion());
     }
 
     /**
@@ -279,22 +313,24 @@ public class ReviewTest {
         assertEquals(result, expResult);
         assertNotEquals(result, null);
     }
+
     /**
      * Test of getSuggestion method, of class Review.
      */
     @Test
-    public void testGetSuggestion(){
+    public void testGetSuggestion() {
         System.out.println("getSuggestion");
-        Review review=createReview(instance.getSurvey());
-        assertNull("The condition must be succesful since the current review has no suggestion",review.getSuggestion());
+        Review review = createReview(instance.getSurvey());
+        assertNull("The condition must be succesful since the current review has no suggestion", review.getSuggestion());
         review.submitSuggestion("Grimes X Elon Musk <3");
-        assertNotNull("The condition must be succesful since the current review has a suggestion",review.getSuggestion());
+        assertNotNull("The condition must be succesful since the current review has a suggestion", review.getSuggestion());
     }
+
     /**
      * Test of getAnswerGraph method, of class Review.
      */
     @Test
-    public void testGetAnswerGraph(){
+    public void testGetAnswerGraph() {
         System.out.println("getAnswerGraph");
         TimePeriod timePeriod = new TimePeriod(LocalDateTime.of(1, Month.MARCH, 1, 1, 1),
                 LocalDateTime.of(2, Month.MARCH, 2, 2, 2));
@@ -307,19 +343,20 @@ public class ReviewTest {
         globalSurvey.addQuestion(firstQuestion);
         globalSurvey.setNextQuestion(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
         globalSurvey.setNextQuestion(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
-       
+
         Review review = new Review(globalSurvey);
-        
+
         Graph expected = new Graph();
         expected.insertEdge(firstQuestion, secondQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
         expected.insertEdge(firstQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.TRUE), 0);
-        
+
         assertEquals(review.getAnswerGraph(), expected);
-        
+
         globalSurvey.setNextQuestion(secondQuestion, thirdQuestion, new BinaryQuestionOption(Boolean.FALSE), 0);
-                
+
         assertNotEquals(globalSurvey.getGraphCopy(), expected);
     }
+
     /**
      * Builds a Review instance with a survey.
      *

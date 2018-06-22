@@ -62,5 +62,13 @@
                 </subresource>
             </subresources>
         </resource>
+        <resource name = "User Profile" path = "/userprofile">
+            <subresources>
+                <subresource name = "Save Suggestion" path = "/savesuggestion">
+                    <method>POST</method>
+                    <datatype>JSON</datatype>
+                </subresource>
+            </subresources>
+        </resource>
     </resources>
 </feedbackmonkeyapi>

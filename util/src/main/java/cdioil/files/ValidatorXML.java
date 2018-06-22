@@ -45,7 +45,8 @@ public class ValidatorXML {
     }
     
     public static boolean validateXMLDocument(String schemaDocument,String xmlDocument){
-        return validateSchema(stringAsSource(schemaDocument),stringAsSource(xmlDocument));
+        String newString = xmlDocument.replaceAll("[^\\x00-\\x7F]", "");
+        return validateSchema(stringAsSource(schemaDocument),stringAsSource(newString));
     }
     /**
      * Method that validates if a XML document is valid or not

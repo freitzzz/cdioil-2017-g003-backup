@@ -1,6 +1,5 @@
 package cdioil.domain;
 
-import cdioil.application.utils.Edge;
 import cdioil.application.utils.Graph;
 import cdioil.domain.authz.Suggestion;
 import java.io.Serializable;
@@ -10,7 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -91,7 +89,7 @@ public class Review implements Serializable {
     /**
      * Review's suggestion.
      */
-    @Embedded
+    @OneToOne(cascade = {CascadeType.ALL})
     private Suggestion suggestion;
 
     /**
@@ -200,6 +198,17 @@ public class Review implements Serializable {
     public boolean submitSuggestion(String suggestionText) {
         suggestion = new Suggestion(suggestionText);
         return true;
+    }
+    
+    /**
+     * 
+     * Submits a suggestion with an image associated to this review.
+     * 
+     * @param suggestionText the suggestion's text
+     * @param suggestionImage the suggestion's image
+     */
+    public void submitSuggestionWithImage(String suggestionText, Image suggestionImage){
+        suggestion = new Suggestion(suggestionText,suggestionImage);
     }
 
     /**

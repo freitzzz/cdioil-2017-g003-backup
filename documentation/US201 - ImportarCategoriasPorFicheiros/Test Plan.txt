@@ -3,11 +3,33 @@
 
 	_______________________________
 	
-          CASO #1: Importar Categorias
+          CASO #1: Importar Categorias com ficheiro CSV
 	_______________________________
 
 	1. Fazer login com o gestor sonae.lover@sonae.pt e password Password123.
 	2. Escolher a opção 7 "Importar Categoria(s)".
-	3. Introduzir nome do ficheiro com as categorias.
+	3. Introduzir o caminho do ficheiro com formato CSV com as categorias.
+	4. Mostrar todas as categorias importadas.
+	5. Guardar na base de dados.
+
+	_______________________________
+	
+          CASO #2: Importar Categorias com ficheiro XML
+	_______________________________
+
+	1. Fazer login com o gestor sonae.lover@sonae.pt e password Password123.
+	2. Escolher a opção 7 "Importar Categoria(s)".
+	3. Introduzir o caminho do ficheiro com formato XML com as categorias.
+	4. Mostrar todas as categorias importadas.
+	5. Guardar na base de dados.
+
+	_______________________________
+			
+          CASO #3: Importar Categorias com ficheiro JSON
+	_______________________________
+
+	1. Fazer login com o gestor sonae.lover@sonae.pt e password Password123.
+	2. Escolher a opção 7 "Importar Categoria(s)".
+	3. Introduzir o caminho do ficheiro com formato JSON com as categorias.
 	4. Mostrar todas as categorias importadas.
 	5. Guardar na base de dados.

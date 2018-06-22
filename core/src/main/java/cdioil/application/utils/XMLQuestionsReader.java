@@ -18,9 +18,12 @@ import cdioil.files.FilesUtils;
 import cdioil.files.InputSchemaFiles;
 import cdioil.files.InvalidFileFormattingException;
 import cdioil.files.ValidatorXML;
+import java.io.ByteArrayInputStream;
 
-import java.io.*;
-
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -47,27 +51,27 @@ import org.xml.sax.SAXException;
  * @author Joana Pinheiro [1161380]
  */
 public class XMLQuestionsReader implements QuestionsReader {
-    /** 
-     * 
-     * 
-     * 
+
+    /**
+     *
+     *
+     *
      * FIX SCHEMA DOCUMENTS (PUT THEM IN A INTERFACE)
-     * 
-     * 
-     * 
-     * 
+     *
+     *
+     *
+     *
      */
     /**
      * Schema file (XSD) used for validating the input file.
      */
-    private static final String SCHEMA_FILE = FilesUtils.listAsString(
-            FileReader.readFile(new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY_QUESTIONS)));
+    private static final File SCHEMA_FILE = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_CATEGORY_QUESTIONS);
 
     /**
-     * Schema file (XSD) used for validating the input file (independent questions).
+     * Schema file (XSD) used for validating the input file (independent
+     * questions).
      */
-    private static final String SCHEMA_INDEPENDENT_QUESTIONS = FilesUtils.listAsString(
-            FileReader.readFile(new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_INDEPENDENT_QUESTIONS)));
+    private static final File SCHEMA_INDEPENDENT_QUESTIONS = new File(InputSchemaFiles.LOCALIZATION_SCHEMA_PATH_INDEPENDENT_QUESTIONS);
     /**
      * name of question node in XML file
      */
@@ -112,9 +116,9 @@ public class XMLQuestionsReader implements QuestionsReader {
      * name of binary question node in XML file
      */
     private static final String BINARY_QUESTION_NODE = "BinaryQuestion";
-    
-    private Source source;
-    
+
+    private Document doc;
+
     /**
      * Creates an instance of XMLQuestionsReader, receiving the name of the file
      * to read.
@@ -122,14 +126,22 @@ public class XMLQuestionsReader implements QuestionsReader {
      * @param file Name of the file to read
      */
     public XMLQuestionsReader(File file) {
-        this.source = new StreamSource(file);
+        DocumentBuilder dBuilder;
+        try {
+            dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            doc = dBuilder.parse(file);
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            System.out.println("constructor " + e.getMessage());
+        }
     }
+
     /**
      * Builds a new XMLQuestionReader with the XML Document as a whole String
+     *
      * @param xmlDocument String with the XML document as a whole String
      */
-    public XMLQuestionsReader(String xmlDocument){
-        this.source=new StreamSource(xmlDocument);
+    public XMLQuestionsReader(Document xmlDocument) {
+        doc = xmlDocument;
     }
 
     /**
@@ -140,7 +152,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     @Override
     public Map<String, List<Question>> readCategoryQuestions() {
         try {
-            if (!ValidatorXML.validateXMLDocument(SCHEMA_FILE,sourceAsString(source))) {
+            if (!ValidatorXML.validateXMLDocument(FilesUtils.listAsString(FileReader.readFile(SCHEMA_FILE)), documentToString(doc))) {
                 throw new InvalidFileFormattingException("Unrecognized file formatting");
             }
         } catch (TransformerException ex) {
@@ -148,17 +160,8 @@ public class XMLQuestionsReader implements QuestionsReader {
             throw new InvalidFileFormattingException("Unrecognized xml document formatting");
         }
         Map<String, List<Question>> readQuestions = new HashMap<>();
-        try {
-            resetStreamSource((StreamSource)source);
-            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = dBuilder.parse(sourceToInputSource(source));
-            if (doc.hasChildNodes()) {
-                iterateCategoryQuestionNodes(doc.getChildNodes(), readQuestions);
-            }
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            return null;
-        } catch (TransformerException ex) {
-            Logger.getLogger(XMLQuestionsReader.class.getName()).log(Level.SEVERE, null, ex);
+        if (doc.hasChildNodes()) {
+            iterateCategoryQuestionNodes(doc.getChildNodes(), readQuestions);
         }
         System.out.println("MAP" + readQuestions);
         return readQuestions;
@@ -166,82 +169,72 @@ public class XMLQuestionsReader implements QuestionsReader {
 
     @Override
     public List<Question> readIndependentQuestions() throws ParserConfigurationException, TransformerException {
-        if (!ValidatorXML.validateXMLDocument(SCHEMA_INDEPENDENT_QUESTIONS,sourceAsString(source))) {
+        if (!ValidatorXML.validateXMLDocument(FilesUtils.listAsString(FileReader.readFile(SCHEMA_INDEPENDENT_QUESTIONS)), documentToString(doc))) {
             throw new InvalidFileFormattingException("Unrecognized file formatting");
         }
 
         List<Question> independentQuestions = new ArrayList<>();
-        try {
-            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            resetStreamSource((StreamSource)source);
-            Document document = dBuilder.parse(sourceToInputSource(source));
+        //Question
+        NodeList nodeList = doc.getElementsByTagName("question");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
 
-            //document.getDocumentElement().normalize();
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
 
-            //Question
-            NodeList nodeList = document.getElementsByTagName("question");
+                Element element = (Element) node;
+                //Binary Question
+                NodeList binaryQuestions = element.getElementsByTagName("BinaryQuestion");
+                if (binaryQuestions != null) {
+                    for (int b = 0; b < binaryQuestions.getLength(); b++) {
+                        Node binary = binaryQuestions.item(b);
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
+                        if (binary.getNodeType() == Node.ELEMENT_NODE) {
+                            Question binaryQuestion = createBinaryQuestion(binary.getChildNodes(), binary.getAttributes().getNamedItem("questionID").getTextContent());
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element element = (Element) node;
-                    //Binary Question
-                    NodeList binaryQuestions = element.getElementsByTagName("BinaryQuestion");
-                    if (binaryQuestions != null) {
-                        for (int b = 0; b < binaryQuestions.getLength(); b++) {
-                            Node binary = binaryQuestions.item(b);
-
-                            if (binary.getNodeType() == Node.ELEMENT_NODE) {
-                                Question binaryQuestion = createBinaryQuestion(binary.getChildNodes(), binary.getAttributes().getNamedItem("questionID").getTextContent());
-
-                                if (binaryQuestion != null) {
-                                    independentQuestions.add(binaryQuestion);
-                                }
-
+                            if (binaryQuestion != null) {
+                                independentQuestions.add(binaryQuestion);
                             }
+
                         }
                     }
-
-                    NodeList multipleChoiceQuestions = element.getElementsByTagName("MultipleChoiceQuestion");
-
-                    if (multipleChoiceQuestions != null) {
-                        for (int m = 0; m < multipleChoiceQuestions.getLength(); m++) {
-                            Node multiple = multipleChoiceQuestions.item(m);
-
-                            if (multiple.getNodeType() == Node.ELEMENT_NODE) {
-                                Element multipleQuestion = (Element) multiple;
-                                independentQuestions.add(createMCQuestion(multiple.getChildNodes(), multipleQuestion.getAttribute("questionID")));
-                            }
-                        }
-                    }
-
-                    //Quantitative Question
-                    NodeList quantitativeQuestions = element.getElementsByTagName("QuantitativeQuestion");
-
-                    if (quantitativeQuestions != null) {
-                        for (int q = 0; q < quantitativeQuestions.getLength(); q++) {
-                            Node quantitative = quantitativeQuestions.item(q);
-                            if (quantitative.getNodeType() == Node.ELEMENT_NODE) {
-                                Element quantitativeQuestion = (Element) quantitative;
-                                independentQuestions.add(crateQuantitativeQuestion(quantitative.getChildNodes(), quantitativeQuestion.getAttribute("questionID")));
-                            }
-                        }
-                    }
-
                 }
+
+                NodeList multipleChoiceQuestions = element.getElementsByTagName("MultipleChoiceQuestion");
+
+                if (multipleChoiceQuestions != null) {
+                    for (int m = 0; m < multipleChoiceQuestions.getLength(); m++) {
+                        Node multiple = multipleChoiceQuestions.item(m);
+
+                        if (multiple.getNodeType() == Node.ELEMENT_NODE) {
+                            Element multipleQuestion = (Element) multiple;
+                            independentQuestions.add(createMCQuestion(multiple.getChildNodes(), multipleQuestion.getAttribute("questionID")));
+                        }
+                    }
+                }
+
+                //Quantitative Question
+                NodeList quantitativeQuestions = element.getElementsByTagName("QuantitativeQuestion");
+
+                if (quantitativeQuestions != null) {
+                    for (int q = 0; q < quantitativeQuestions.getLength(); q++) {
+                        Node quantitative = quantitativeQuestions.item(q);
+                        if (quantitative.getNodeType() == Node.ELEMENT_NODE) {
+                            Element quantitativeQuestion = (Element) quantitative;
+                            independentQuestions.add(crateQuantitativeQuestion(quantitative.getChildNodes(), quantitativeQuestion.getAttribute("questionID")));
+                        }
+                    }
+                }
+
             }
-            return independentQuestions;
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            return null;
         }
+        System.out.println(independentQuestions);
+        return independentQuestions;
     }
 
     /**
      * Iterates through category question XML nodes
      *
-     * @param childNodes    child nodes of root node
+     * @param childNodes child nodes of root node
      * @param readQuestions map of questions
      */
     private void iterateCategoryQuestionNodes(NodeList childNodes, Map<String, List<Question>> readQuestions) {
@@ -263,7 +256,7 @@ public class XMLQuestionsReader implements QuestionsReader {
     /**
      * Iterates question content nodes
      *
-     * @param contentNodes  list of content nodes
+     * @param contentNodes list of content nodes
      * @param readQuestions map of questions
      */
     private void putContentOnMap(NodeList contentNodes, Map<String, List<Question>> readQuestions) {
@@ -302,7 +295,7 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a binary question from XML nodes
      *
      * @param bQuestionNodes child nodes of BinaryQuestion node
-     * @param id             attribute questionID of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
      * @return a new binary question if enough information was found within the
      * nodes, null if not
      */
@@ -320,9 +313,9 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a multiple choice question from XML nodes
      *
      * @param mcQuestionNodes child nodes of BinaryQuestion node
-     * @param id              attribute questionID of BinaryQuestion node
-     * @param mcQuestionNodes  child nodes of BinaryQuestion node
-     * @param id              attribute questionID of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
+     * @param bQuestionNodes child nodes of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
      * @return a new multiple choice if enough information was found within the
      * nodes, null if not
      */
@@ -355,9 +348,9 @@ public class XMLQuestionsReader implements QuestionsReader {
      * Creates a quantitative question from XML nodes
      *
      * @param quantitativeQuestionNodes child nodes of BinaryQuestion node
-     * @param id                        attribute questionID of BinaryQuestion node
-     * @param quantitativeQuestionNodes            child nodes of BinaryQuestion node
-     * @param id                        attribute questionID of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
+     * @param bQuestionNodes child nodes of BinaryQuestion node
+     * @param id attribute questionID of BinaryQuestion node
      * @return a new quantitative if enough information was found within the
      * nodes, null if not
      */
@@ -391,38 +384,71 @@ public class XMLQuestionsReader implements QuestionsReader {
         }
         return null;
     }
+
     /**
      * Method that transforms a Source into an InputSource
+     *
      * @param source Source with the source being transformed in a InputSource
      * @return InputSource with the transformed source as InputSource
-     * @throws TransformerException Throws {@link TransformerException} if the source is not 
-     * a XML document
+     * @throws TransformerException Throws {@link TransformerException} if the
+     * source is not a XML document
      */
-    private InputSource sourceToInputSource(Source source) throws TransformerException{
-        Transformer transformer=TransformerFactory.newInstance().newTransformer();
-        StringWriter stringWriter=new StringWriter();
-        transformer.transform(source,new StreamResult(stringWriter));
-        ByteArrayInputStream inputStream=new ByteArrayInputStream(stringWriter.getBuffer().toString().getBytes());
+    private InputSource sourceToInputSource(Source source) throws TransformerException {
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        StringWriter stringWriter = new StringWriter();
+        transformer.transform(source, new StreamResult(stringWriter));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(stringWriter.getBuffer().toString().getBytes());
         return new InputSource(inputStream);
     }
+
     /**
      * Method that transforms a Source into a String
+     *
      * @param source Source with the source being transformed in a String
      * @return String with the source as a String
-     * @throws TransformerException Throws {@link TransformerException} if the source is not 
-     * a XML document
+     * @throws TransformerException Throws {@link TransformerException} if the
+     * source is not a XML document
      */
-    private String sourceAsString(Source source) throws TransformerException{
-        Transformer transformer=TransformerFactory.newInstance().newTransformer();
-        StringWriter stringWriter=new StringWriter();
-        transformer.transform(source,new StreamResult(stringWriter));
-       return stringWriter.getBuffer().toString();
+    private String sourceAsString(Source source) throws TransformerException {
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        StringWriter stringWriter = new StringWriter();
+        transformer.transform(source, new StreamResult(stringWriter));
+        return stringWriter.getBuffer().toString();
     }
+
     /**
      * Resets a certain StreamSource
      */
-    private void resetStreamSource(StreamSource source) throws IOException{
-        if(source.getInputStream()!=null)
+    private void resetStreamSource(StreamSource source) throws IOException {
+        if (source.getInputStream() != null) {
             source.getInputStream().reset();
+        }
+    }
+
+    /**
+     * Converts a document to a string
+     *
+     * @param doc document to convert
+     * @return String containing the document's information
+     */
+    private String documentToString(Document doc) throws TransformerException {
+
+        // Create dom source for the document
+        DOMSource domSource = new DOMSource(doc);
+
+        // Create a string writer
+        StringWriter stringWriter = new StringWriter();
+
+        // Create the result stream for the transform
+        StreamResult result = new StreamResult(stringWriter);
+
+        // Create a Transformer to serialize the document
+        TransformerFactory tFactory = TransformerFactory.newInstance();
+        Transformer transformer = tFactory.newTransformer();
+        transformer.setOutputProperty("indent", "yes");
+
+        // Transform the document to the result stream
+        transformer.transform(domSource, result);
+        return stringWriter.toString();
     }
 }

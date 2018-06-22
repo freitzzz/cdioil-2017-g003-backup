@@ -78,6 +78,11 @@ public class ReviewXMLService {
     private static final String TEXT_ELEMENT_TAG = "Text";
 
     /**
+     * Constant representing the Image element tag.
+     */
+    private static final String IMAGE_ELEMENT_TAG = "Image";
+    
+    /**
      * Constant representing the Answers element tag.
      */
     private static final String ANSWERS_ELEMENT_TAG = "Answers";
@@ -146,6 +151,11 @@ public class ReviewXMLService {
      * Constant representing the option attribute tag.
      */
     private static final String OPTION_ATTRIBUTE_TAG = "option";
+    
+    /**
+     * Constant representing the end date attribute tag.
+     */
+    private static final String SURVEY_END_DATE_TAG = "endDate";
 
     /**
      * Builds an XML file for a given review and returns its content.
@@ -169,6 +179,7 @@ public class ReviewXMLService {
                 return null;
             }
             reviewElement.setAttribute(ID_ATTRIBUTE_TAG, reviewID.toString());
+            reviewElement.setAttribute(SURVEY_END_DATE_TAG, review.getSurvey().getSurveyEndDate());
 
             Long surveyID = new SurveyRepositoryImpl().getSurveyID(review.getSurvey());
             if (surveyID == null) {
@@ -189,6 +200,8 @@ public class ReviewXMLService {
             reviewElement.appendChild(suggestionElement);
             Element suggestionTextElement = doc.createElement(TEXT_ELEMENT_TAG);
             suggestionElement.appendChild(suggestionTextElement);
+            Element suggestionImageElement = doc.createElement(IMAGE_ELEMENT_TAG);
+            suggestionElement.appendChild(suggestionImageElement);
 
             Element answersElement = doc.createElement(ANSWERS_ELEMENT_TAG);
             reviewElement.appendChild(answersElement);
@@ -375,13 +388,13 @@ public class ReviewXMLService {
             Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
             Element reviewElement = document.getDocumentElement();
 
-            Element answerMapElement = (Element)reviewElement.getElementsByTagName(ANSWERS_ELEMENT_TAG).item(0);
+            Element answerMapElement = (Element) reviewElement.getElementsByTagName(ANSWERS_ELEMENT_TAG).item(0);
 
             NodeList answersNodeList = answerMapElement.getElementsByTagName(ANSWER_ELEMENT_TAG);
 
             for (int i = 0; i < answersNodeList.getLength(); i++) {
                 Element answerNode = (Element) answersNodeList.item(i);
-                
+
                 String answer = answerNode.getAttribute(TEXT_ATTRIBUTE_TAG);
 
                 if (answer.equals("true") || answer.equals("false")) {
@@ -413,15 +426,30 @@ public class ReviewXMLService {
 
             Element suggestionElement = (Element) reviewElement.getElementsByTagName(SUGGESTION_ELEMENT_TAG).item(0);
             String suggestion = suggestionElement.getElementsByTagName(TEXT_ELEMENT_TAG).item(0).getTextContent();
-            
-            if(suggestion != null && !suggestion.isEmpty()){
+
+            if (suggestion != null && !suggestion.isEmpty()) {
                 return suggestion;
             }
-            
+
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(ReviewXMLService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+        return null;
+    }
+    
+    public static String getSuggestionImage(String fileContent){
+        try{
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+            Element reviewElement = document.getDocumentElement();
+            
+            Element suggestionElement = (Element) reviewElement.getElementsByTagName(SUGGESTION_ELEMENT_TAG);
+            String imageBytes = suggestionElement.getElementsByTagName(IMAGE_ELEMENT_TAG).item(0).getTextContent();
+            return imageBytes == null || imageBytes.isEmpty() ? null : imageBytes;
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(ReviewXMLService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 }

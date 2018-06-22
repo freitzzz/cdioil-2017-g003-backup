@@ -2,6 +2,7 @@ package cdioil.persistence;
 
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
+import cdioil.domain.authz.RegisteredUser;
 import java.util.List;
 
 /**
@@ -23,4 +24,12 @@ public interface ReviewRepository {
      * @return the ID of the review
      */
     public abstract Long getReviewID(Review review);
+    /**
+     * Method that retrieves a certain Review of a certain user by it's ID
+     * @param registeredUser RegisteredUser with the user being fetched the review
+     * @param reviewID Long with the ID of the review
+     * @return Review with the fetched review of the user with a certain ID, or null 
+     * if no review was found
+     */
+    public abstract Review getUserReviewByID(RegisteredUser registeredUser,long reviewID);
 }

@@ -1,10 +1,9 @@
 package cdioil.frontoffice.application.restful;
 
 import cdioil.application.authz.AuthenticationController;
-import cdioil.application.utils.services.json.AnswerJSONService;
-import cdioil.application.utils.services.json.QuestionJSONService;
-import cdioil.domain.Answer;
-import cdioil.domain.Question;
+import cdioil.application.authz.UserActionHistoryController;
+import cdioil.application.domain.authz.UserAction;
+import cdioil.domain.Image;
 import cdioil.domain.QuestionOption;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
@@ -18,12 +17,10 @@ import cdioil.frontoffice.application.restful.xml.ReviewXMLService;
 import cdioil.persistence.impl.RegisteredUserRepositoryImpl;
 import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.SurveyRepositoryImpl;
-import com.google.gson.Gson;
+import cdioil.persistence.impl.UserSessionRepositoryImpl;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import java.util.HashMap;
+import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -96,7 +93,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
             //return a response warning the user that the profile could not be updated
             return createUnableToUpdateUserDataResponse();
         }
-
+        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
+                .logUserAction(UserAction.STARTED_ANSWER_SURVEY);
         String messageBody = ReviewXMLService.createReviewXML(newReview);
 
         return messageBody == null ? createInvalidReviewResponse()
@@ -152,25 +150,39 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/savereview/{reviewID}")
+    @Path("/savereview/{authenticationToken}/{reviewID}")
     @Override
-    public Response saveReview(@PathParam("reviewID") String reviewID, String fileContent) {
-
-        Review reviewToAnswer = new ReviewRepositoryImpl().find(Long.parseLong(reviewID));
-
-        List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
-        String suggestion = ReviewXMLService.getSuggestion(fileContent);
-
+    public Response saveReview(@PathParam("authenticationToken")String authenticationToken,
+            @PathParam("reviewID") String reviewID, String fileContent) {
+        
+        AuthenticationController authenticationController=new AuthenticationController();
+        RegisteredUser registeredUser=authenticationController
+                .getUserAsRegisteredUser(authenticationController.getUserByAuthenticationToken(authenticationToken));
+        if(registeredUser==null){
+            return createInvalidAuthTokenResponse();
+        }
+        Review reviewToAnswer = new ReviewRepositoryImpl().getUserReviewByID(registeredUser,Long.parseLong(reviewID));
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
+        
+        List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
+        String suggestion = ReviewXMLService.getSuggestion(fileContent);
+        String suggestionImage = ReviewXMLService.getSuggestionImage(fileContent);
 
         for (QuestionOption answer : answers) {
             reviewToAnswer.answerQuestion(answer);
         }
 
-        if (suggestion != null) {
-            reviewToAnswer.submitSuggestion(suggestion);
+        if (suggestionImage == null) {
+            if (suggestion != null) {
+                reviewToAnswer.submitSuggestion(suggestion);
+            }
+        }else{
+            if(suggestion != null){
+                byte[] imageBytes = Base64.getDecoder().decode(suggestionImage);
+                reviewToAnswer.submitSuggestionWithImage(suggestion,new Image(imageBytes));
+            }
         }
 
         reviewToAnswer = new ReviewRepositoryImpl().merge(reviewToAnswer);
@@ -178,7 +190,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
-
+        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
+                .logUserAction(UserAction.ENDED_ANSWER_SURVEY);
         return createSavedReviewWithSuccessResponse();
     }
 

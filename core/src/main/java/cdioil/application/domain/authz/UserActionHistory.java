@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,7 +40,7 @@ public class UserActionHistory implements Serializable {
     /**
      * UserAction with the action which the user did
      */
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserAction userAction;
     /**
      * Builds a new UserActionHistory with the action which a certain user did on 

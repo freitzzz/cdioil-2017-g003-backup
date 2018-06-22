@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
  * of the user's review
  *
  * @author <a href="1160936@isep.ipp.pt">Gil Durão</a>
+ * @author <a href="1161371@isep.ipp.pt">António Sousa</a>
  */
 public class ReviewXMLService {
 
@@ -59,6 +60,10 @@ public class ReviewXMLService {
      * Map used for fetching the review's question elements by questionID.
      */
     private Map<String, Element> reviewQuestionElements;
+    /**
+     * String that holds the review ID.
+     */
+    private String reviewID;
 
     /**
      * Creates a new single instance of ReviewXMLService, if one does not already exist, or refers to the previously created instance.
@@ -78,12 +83,20 @@ public class ReviewXMLService {
         return instance;
     }
 
-
     /**
      * Private constructor used for instantiating data structures and hiding the implicit public one.
      */
     private ReviewXMLService() {
         reviewQuestionElements = new LinkedHashMap<>();
+    }
+
+    /**
+     * Returns the reviews ID
+     *
+     * @return String that holds the reviews ID
+     */
+    public String getReviewID(){
+        return reviewID;
     }
 
     /**
@@ -100,7 +113,7 @@ public class ReviewXMLService {
         Element reviewElement = document.getDocumentElement();
         String reviewID = reviewElement.getAttribute(ReviewFileTags.ID_ATTRIBUTE_TAG);
         String surveyID = reviewElement.getAttribute(ReviewFileTags.SURVEY_ID_ATTRIBUTE_TAG);
-
+        this.reviewID = reviewID;
         String separator = "_";
         String fileName = "review".concat(separator).concat(reviewID).concat(separator).concat(surveyID).concat(XML_EXTENSION);
         reviewFile = new File(dirFile, fileName);
@@ -357,7 +370,7 @@ public class ReviewXMLService {
     }
 
     /**
-     * Saves a user's suggestion of a review.
+     * Saves the user's review suggestion.
      *
      * @param suggestion Content of the suggestion submitted by the user
      */
@@ -374,6 +387,24 @@ public class ReviewXMLService {
         transformer.transform(input, xmlOutput);
     }
 
+    /**
+     * Saves the user's review suggestion with text and image.
+     *
+     * @param suggestion   Content of the suggestion submitted by the user
+     * @param imageContent Content of the suggestion's image being submitted by the the user
+     */
+    public void saveSuggestion(String suggestion, String imageContent) throws TransformerException {
+        saveSuggestion(suggestion);
+
+        Element suggestionElement = (Element) document.getElementsByTagName(ReviewFileTags.SUGGESTION_ELEMENT_TAG).item(0);
+        Element imageElement = (Element) suggestionElement.getElementsByTagName(ReviewFileTags.IMAGE_ELEMENT_TAG).item(0);
+        imageElement.setTextContent(imageContent);
+
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        Result xmlOutput = new StreamResult(reviewFile);
+        Source input = new DOMSource(document);
+        transformer.transform(input, xmlOutput);
+    }
 
     /**
      * Parses an XML review file. This method is static since it will not be used for review's that are currently being answered.

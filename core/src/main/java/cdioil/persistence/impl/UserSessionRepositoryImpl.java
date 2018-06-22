@@ -37,4 +37,16 @@ public class UserSessionRepositoryImpl extends BaseJPARepository<UserSession,Lon
                 ? (SystemUser)queryUserByAuthenticationToken.getSingleResult() 
                 : null;
     }
+    /**
+     * Method that gets a certain UserSession by a certain authentication token
+     * @param authenticationToken String with the user authentication token
+     * @return UserSession with the the user session which has a certain authentication token, 
+     * false if not
+     */
+    public UserSession getUserSessionByAuthenticationToken(String authenticationToken){
+        Query userSessionQuery=entityManager().createQuery("SELECT US FROM UserSession US "
+                + "WHERE US.userToken= :authenticationToken")
+                .setParameter("authenticationToken",authenticationToken);
+        return !userSessionQuery.getResultList().isEmpty() ? (UserSession)userSessionQuery.getSingleResult() : null;
+    }
 }

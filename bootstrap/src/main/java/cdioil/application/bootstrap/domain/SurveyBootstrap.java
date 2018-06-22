@@ -115,9 +115,8 @@ public class SurveyBootstrap {
 
         survey.changeState(SurveyState.ACTIVE);
         surveyRepository.add(survey);
+        surveyRepository.add(createStressTestSurvey());
         surveyRepository.add(createDummySurveyForDummyProduct());
-        survey = createStressTestSurvey();
-        surveyRepository.add(survey);
 
         RegisteredUser registeredUser = new RegisteredUserRepositoryImpl()
                 .getUsersByDomain("email.com").get(0);
