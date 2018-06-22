@@ -100,15 +100,12 @@ public class CSVCategoriesReader implements CategoriesReader {
      * File to read.
      */
     private final String file;
-    /**
-     * String with the file path of the converted file (from JSON to XML).
-     */
-    private static final String CAT_OUTPUT_PATH = "csv_category_output.xml";
 
-    private final XMLCategoriesReader xmlCatReader = new XMLCategoriesReader(CAT_OUTPUT_PATH);
+    private XMLCategoriesReader xmlCatReader = null;
 
     /**
-     * Creates an instance of CSVCategoriesReader, receiving the name of the file to read.
+     * Creates an instance of CSVCategoriesReader, receiving the name of the
+     * file to read.
      *
      * @param file File to read
      */
@@ -123,13 +120,14 @@ public class CSVCategoriesReader implements CategoriesReader {
      */
     @Override
     public int getNumberOfCategoriesRead() {
-        return xmlCatReader.getNumberOfCategoriesRead();
+        return xmlCatReader == null ? 0 : xmlCatReader.getNumberOfCategoriesRead();
     }
 
     /**
      * Imports Categories from a .csv file.
      *
-     * @return List with the Categories that were read. Null if the file is not valid
+     * @return List with the Categories that were read. Null if the file is not
+     * valid
      */
     @Override
     public MarketStructure readCategories() {
@@ -197,7 +195,8 @@ public class CSVCategoriesReader implements CategoriesReader {
     }
 
     /**
-     * Verifica se o conteúdo do ficheiro é válido (se não é null e se o número de colunas é o esperado)
+     * Verifica se o conteúdo do ficheiro é válido (se não é null e se o número
+     * de colunas é o esperado)
      */
     protected boolean isFileValid(List<String> fileCont) {
         if (fileCont == null) {
@@ -208,7 +207,8 @@ public class CSVCategoriesReader implements CategoriesReader {
 
     /**
      * Method that writes information from csv file to a XML file
-     * @param em 
+     *
+     * @param em
      */
     public void writeXMLfile(MarketStructure em) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -220,24 +220,26 @@ public class CSVCategoriesReader implements CategoriesReader {
 
             writeCategories(doc, em);
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(CAT_OUTPUT_PATH);
-            try {
-                transformer.transform(source, result);
-            } catch (TransformerException ex) {
-                Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
+            xmlCatReader = new XMLCategoriesReader(doc);
+
+//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//            Transformer transformer = transformerFactory.newTransformer();
+//            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//            DOMSource source = new DOMSource(doc);
+//            StreamResult result = new StreamResult(CAT_OUTPUT_PATH);
+//            try {
+//                transformer.transform(source, result);
+//            } catch (TransformerException ex) {
+//                Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        } catch (ParserConfigurationException /*| TransformerConfigurationException */ ex) {
             Logger.getLogger(XMLTemplateWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    
     /**
      * Method that writes information from csv file to a Document
+     *
      * @param doc Document
      * @param em MarketStructur
      */
