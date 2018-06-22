@@ -38,9 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".application.BinaryQuestionActivity" />
-        <activity android:name=".application.QuantitativeQuestionActivity" />
-        <activity android:name=".application.MultipleChoiceQuestionActivity" />
         <activity android:name=".application.ListSurveyActivity" />
         <activity android:name=".application.MainMenuActivity" />
         <activity android:name=".authz.SignUpActivity" />

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -204,51 +205,49 @@ public class LoginActivity extends AppCompatActivity {
 
         sendCodeRequestButton.setOnClickListener(view1 -> {
 
-                String email = emailText.getText().toString().trim();
+            String email = emailText.getText().toString().trim();
 
-                if(email.isEmpty()){
-                    emailText.setError(getString(R.string.email_edit_text_error));
-                    return;
+            if (email.isEmpty()) {
+                emailText.setError(getString(R.string.email_edit_text_error));
+                return;
+            }
+
+            String jsonBodyContent = new Gson().toJson(new UserJSONService(email, null));
+
+            AtomicInteger responseCode = new AtomicInteger();
+            AtomicReference<String> responseBody = new AtomicReference<>();
+
+            Thread requestThread = new Thread(() -> {
+                try {
+                    Response response = RESTRequest.create(BuildConfig.SERVER_URL
+                            .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
+                            .concat(AUTHENTICATION_RESOURCE_PATH)
+                            .concat(REQUEST_ACTIVATION_CODE_RESOURCE_PATH))
+                            .withMediaType(RESTRequest.RequestMediaType.JSON)
+                            .withBody(jsonBodyContent).POST();
+
+                    responseCode.set(response.code());
+                    responseBody.set(response.body().string());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            });
 
-                String jsonBodyContent = new Gson().toJson(new UserJSONService(email, null));
-
-                AtomicInteger responseCode = new AtomicInteger();
-                AtomicReference<String> responseBody = new AtomicReference<>();
-
-                Thread requestThread = new Thread(() -> {
-                    try {
-                        Response response = RESTRequest.create(BuildConfig.SERVER_URL
-                                .concat(FeedbackMonkeyAPI.getAPIEntryPoint())
-                                .concat(AUTHENTICATION_RESOURCE_PATH)
-                                .concat(REQUEST_ACTIVATION_CODE_RESOURCE_PATH))
-                                .withMediaType(RESTRequest.RequestMediaType.JSON)
-                                .withBody(jsonBodyContent).POST();
-
-                        responseCode.set(response.code());
-                        responseBody.set(response.body().string());
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-
-                requestThread.start();
+            requestThread.start();
             try {
                 requestThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if(responseCode.get()==HttpsURLConnection.HTTP_OK){
+            if (responseCode.get() == HttpsURLConnection.HTTP_OK) {
                 showInsertPasswordRecoveryCodeDialog(email);
                 dialog.dismiss();
-            }
-            else if(responseCode.get() == HttpsURLConnection.HTTP_BAD_REQUEST){
+            } else if (responseCode.get() == HttpsURLConnection.HTTP_BAD_REQUEST) {
                 emailText.setError(getString(R.string.user_not_registered_error));
-            }else if(responseCode.get() == HttpsURLConnection.HTTP_UNAVAILABLE){
+            } else if (responseCode.get() == HttpsURLConnection.HTTP_UNAVAILABLE) {
                 ToastNotification.show(this, getString(R.string.email_dispatch_error));
-            }
-            else{
+            } else {
                 ToastNotification.show(this, "Erro: " + responseCode.toString());
             }
         });
@@ -259,7 +258,7 @@ public class LoginActivity extends AppCompatActivity {
      * Presents a dialog to the user so they can insert the password recovery code to change
      * their password.
      */
-    private void showInsertPasswordRecoveryCodeDialog(String email){
+    private void showInsertPasswordRecoveryCodeDialog(String email) {
         AlertDialog.Builder dialogBuilder =
                 new AlertDialog.Builder(this);
         dialogBuilder.setTitle(R.string.password_recovery_header);
@@ -279,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
 
             String code = passwordRecoveryCodeEditText.getText().toString().trim();
 
-            if(code.isEmpty()){
+            if (code.isEmpty()) {
                 passwordRecoveryCodeEditText.setError(getString(R.string.code_edit_text_error));
                 return;
             }
@@ -313,17 +312,15 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if(responseCode.get()== HttpsURLConnection.HTTP_OK){
+            if (responseCode.get() == HttpsURLConnection.HTTP_OK) {
                 showChangePasswordDialog(email, code);
                 dialog.dismiss();
-            }
-            else if(responseCode.get() == HttpsURLConnection.HTTP_BAD_REQUEST){
+            } else if (responseCode.get() == HttpsURLConnection.HTTP_BAD_REQUEST) {
                 //No need to check if a user exists since it's already verified in the previous dialog
-                if(responseBody.get().contains("validactivationcode")){
+                if (responseBody.get().contains("validactivationcode")) {
                     passwordRecoveryCodeEditText.setError(getString(R.string.invalid_code_edit_text_error));
                 }
-            }
-            else{
+            } else {
                 ToastNotification.show(this, "Erro: " + responseCode.toString());
             }
         });
@@ -331,7 +328,7 @@ public class LoginActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showChangePasswordDialog(String email, String code){
+    private void showChangePasswordDialog(String email, String code) {
         AlertDialog.Builder dialogBuilder =
                 new AlertDialog.Builder(this);
         dialogBuilder.setTitle(R.string.password_recovery_header);
@@ -351,14 +348,14 @@ public class LoginActivity extends AppCompatActivity {
 
             String firstPassword = newPasswordEditText.getText().toString();
 
-            if(firstPassword.isEmpty()){
+            if (firstPassword.isEmpty()) {
                 newPasswordEditText.setError(getString(R.string.empty_password_edit_text_error));
                 return;
             }
 
             String secondPassword = rewriteNewPasswordEditText.getText().toString();
 
-            if(!firstPassword.equals(secondPassword)){
+            if (!firstPassword.equals(secondPassword)) {
                 rewriteNewPasswordEditText.setError(getString(R.string.different_password_edit_text_error));
                 return;
             }
@@ -391,14 +388,14 @@ public class LoginActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if(responseCode.get()==HttpsURLConnection.HTTP_OK){
+            if (responseCode.get() == HttpsURLConnection.HTTP_OK) {
                 ToastNotification.show(this, getString(R.string.password_changed_success));
                 dialog.dismiss();
-            }else if(responseCode.get()==HttpsURLConnection.HTTP_BAD_REQUEST){
-                if(responseBody.get().contains("passwordchanged")){
+            } else if (responseCode.get() == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                if (responseBody.get().contains("passwordchanged")) {
                     newPasswordEditText.setError(getString(R.string.not_strong_password_edit_text_error));
                 }
-            }else{
+            } else {
                 ToastNotification.show(this, "Erro: " + responseCode.toString());
             }
         });
@@ -464,7 +461,19 @@ public class LoginActivity extends AppCompatActivity {
      * @return String with the user's authentication token
      */
     private String getAuthenticationToken(String jsonBody) {
-        return new Gson().fromJson(jsonBody, UserJSONService.class).getAuthenticationToken();
+        String authenticationToken = new Gson().fromJson(jsonBody, UserJSONService.class).getAuthenticationToken();
+        saveAuthenticationTokenInSharedPreferences(authenticationToken);
+        return authenticationToken;
+    }
+
+    /**
+     * Saves the user's authenticationToken to the app's Shared Preferences.
+     *
+     * @param authenticationToken String with the user's authentication token
+     */
+    private void saveAuthenticationTokenInSharedPreferences(String authenticationToken) {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("authenticationToken",
+                authenticationToken).apply();
     }
 
     /**
