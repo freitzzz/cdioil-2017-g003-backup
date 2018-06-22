@@ -150,19 +150,27 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/savereview/{reviewID}")
+    @Path("/savereview/{authenticationToken}/{reviewID}")
     @Override
-    public Response saveReview(@PathParam("reviewID") String reviewID, String fileContent) {
-
-        Review reviewToAnswer = new ReviewRepositoryImpl().find(Long.parseLong(reviewID));
-
-        List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
-        String suggestion = ReviewXMLService.getSuggestion(fileContent);
-        String suggestionImage = ReviewXMLService.getSuggestionImage(fileContent);
+    public Response saveReview(@PathParam("authenticationToken")String authenticationToken,
+            @PathParam("reviewID") long reviewID, String fileContent) {
+        
+        AuthenticationController authenticationController=new AuthenticationController();
+        RegisteredUser registeredUser=authenticationController
+                .getUserAsRegisteredUser(authenticationController.getUserByAuthenticationToken(authenticationToken));
+        if(registeredUser==null){
+            return createInvalidAuthTokenResponse();
+        }
+        Review reviewToAnswer = new ReviewRepositoryImpl().getUserReviewByID(registeredUser,reviewID);
 
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
+        
+        List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
+        String suggestion = ReviewXMLService.getSuggestion(fileContent);
+        String suggestionImage = ReviewXMLService.getSuggestionImage(fileContent);
+
 
         for (QuestionOption answer : answers) {
             reviewToAnswer.answerQuestion(answer);
@@ -184,8 +192,8 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         if (reviewToAnswer == null) {
             return createInvalidReviewResponse();
         }
-//        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
-//                .logUserAction(UserAction.ENDED_ANSWER_SURVEY);
+        new UserActionHistoryController(new UserSessionRepositoryImpl().getUserSessionByAuthenticationToken(authenticationToken))
+                .logUserAction(UserAction.ENDED_ANSWER_SURVEY);
         return createSavedReviewWithSuccessResponse();
     }
 
