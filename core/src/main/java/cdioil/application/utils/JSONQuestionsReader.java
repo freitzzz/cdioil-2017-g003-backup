@@ -1,11 +1,12 @@
 package cdioil.application.utils;
 
 import cdioil.domain.Question;
+import cdioil.logger.ExceptionLogger;
+import cdioil.logger.LoggerFileNames;
 import de.odysseus.staxon.json.JsonXMLConfig;
 import de.odysseus.staxon.json.JsonXMLConfigBuilder;
 import de.odysseus.staxon.json.JsonXMLInputFactory;
 import de.odysseus.staxon.xml.util.PrettyXMLEventWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -82,7 +83,7 @@ public class JSONQuestionsReader implements QuestionsReader {
                 output.close();
                 return new XMLQuestionsReader(doc).readCategoryQuestions();
             } catch (Exception e) {
-                e.printStackTrace();
+                ExceptionLogger.logException(LoggerFileNames.CORE_LOGGER_FILE_NAME, Level.SEVERE, e.getMessage());
             }
             return null;
         } catch (IOException | XMLStreamException ex) {
@@ -125,7 +126,7 @@ public class JSONQuestionsReader implements QuestionsReader {
                 output.close();
                 return new XMLQuestionsReader(doc).readIndependentQuestions();
             } catch (Exception e) {
-                e.printStackTrace();
+                ExceptionLogger.logException(LoggerFileNames.CORE_LOGGER_FILE_NAME, Level.SEVERE, e.getMessage());
             }
             return null;
         } catch (XMLStreamException | IOException /*| TransformerException */ ex) {
