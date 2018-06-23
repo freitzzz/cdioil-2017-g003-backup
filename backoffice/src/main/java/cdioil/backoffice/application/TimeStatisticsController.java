@@ -63,10 +63,10 @@ public final class TimeStatisticsController {
     /**
      * Method that gets the average time needed to answer a certain survey 
      * on a certain time period
-     * @return Float with the average time needed to answer a certain survey 
+     * @return Double with the average time needed to answer a certain survey 
      * on a certain time period
      */
-    public float getReviewsAnswerAverageTime(){
+    public double getReviewsAnswerAverageTime(){
         return new ReviewRepositoryImpl().getReviewsAverageTime(dateTimeX,dateTimeY);
     }
     /**

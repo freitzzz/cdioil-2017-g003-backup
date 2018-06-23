@@ -37,7 +37,7 @@ public interface ReviewRepository {
      * Method that retrives the reviews average time to answer between a certain time period
      * @param dateTimeX LocalDateTime with the time period start
      * @param dateTimeY LocalDateTime with the time period end
-     * @return Float with the average time to answer between a certain time period
+     * @return Double with the average time to answer between a certain time period
      */
-    public abstract float getReviewsAverageTime(LocalDateTime dateTimeX,LocalDateTime dateTimeY);
+    public abstract double getReviewsAverageTime(LocalDateTime dateTimeX,LocalDateTime dateTimeY);
 }
