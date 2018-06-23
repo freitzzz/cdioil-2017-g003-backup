@@ -54,7 +54,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".authz.UserProfileActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".authz.LoginActivity" 
+        <activity android:name=".authz.LoginActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".application.CheckReviewActivity"
             android:screenOrientation="portrait"/>

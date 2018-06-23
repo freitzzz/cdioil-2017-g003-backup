@@ -3,6 +3,7 @@ package cdioil.feedbackmonkey.authz;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,13 +37,18 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import cdioil.feedbackmonkey.BuildConfig;
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.application.ListSurveyActivity;
 import cdioil.feedbackmonkey.application.services.SurveyService;
 import cdioil.feedbackmonkey.application.services.SurveyServiceController;
 import cdioil.feedbackmonkey.restful.exceptions.RESTfulException;
+import cdioil.feedbackmonkey.restful.utils.FeedbackMonkeyAPI;
+import cdioil.feedbackmonkey.restful.utils.RESTRequest;
+import cdioil.feedbackmonkey.restful.utils.json.UserProfileJSONService;
 import cdioil.feedbackmonkey.utils.GenericFileProvider;
 import cdioil.feedbackmonkey.utils.ToastNotification;
+import okhttp3.Response;
 
 /**
  * Activity that presents the user's profile.
@@ -95,6 +104,14 @@ public class UserProfileActivity extends AppCompatActivity {
      * String that holds the users authenticationToken.
      */
     private String authenticationToken;
+    /**
+     * Int that holds the rest request code.
+     */
+    private int restResponseCode;
+    /**
+     * String that holds the rest request body.
+     */
+    private String restResponseBody;
 
     /**
      * Activity will execute this code when its created
@@ -129,10 +146,10 @@ public class UserProfileActivity extends AppCompatActivity {
     /**
      * Checks if a profile picture was already taken or not ands sets it to the image view if it already exists.
      */
-    private void checkIfProfilePictureExists(){
+    private void checkIfProfilePictureExists() {
         pictureImagePath = PreferenceManager.getDefaultSharedPreferences(this).getString("profilePicture",
                 getString(R.string.no_profile_picture));
-        if(!pictureImagePath.equals(getString(R.string.no_profile_picture))){
+        if (!pictureImagePath.equals(getString(R.string.no_profile_picture))) {
             setPictureOnImageView();
         }
     }
@@ -167,15 +184,66 @@ public class UserProfileActivity extends AppCompatActivity {
      * Configures the image and text views of this activity.
      */
     private void configureImageAndTextViews() {
-        /**
-         * TODO Replace hardcoded strings on TextViews with RESTRequests using the API's profile resource
-         */
-        nameTextView.setText("João Ferreira");
-        ageTextView.setText("52    Anos");
-        locationTextView.setText("Porto,  Portugal ");
-        badgeTextView.setText("Especialista  em Vinhos Tintos");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!authenticationToken.equals(getString(R.string.no_authentication_token))) {
+            UserProfileJSONService userProfileJSONService = getUserProfileJSONService();
+            if (userProfileJSONService != null) {
+                sharedPreferences.edit().putString("name",userProfileJSONService.getName()).apply();
+                sharedPreferences.edit().putString("age",userProfileJSONService.getAge()).apply();
+                sharedPreferences.edit().putString("location",userProfileJSONService.getLocation()).apply();
+                nameTextView.setText(userProfileJSONService.getName());
+                ageTextView.setText(userProfileJSONService.getAge() + "    Anos");
+                locationTextView.setText(userProfileJSONService.getLocation());
+                badgeTextView.setText(R.string.info_not_available);
+            } else {
+                nameTextView.setText("Nome");
+                ageTextView.setText("Idade  ");
+                locationTextView.setText("Localidade  ");
+                badgeTextView.setText("Badges");
+            }
+        } else {
+                nameTextView.setText(sharedPreferences.getString("name","Nome"));
+                ageTextView.setText(sharedPreferences.getString("age","Idade") + "    Anos");
+                locationTextView.setText(sharedPreferences.getString("location","Localidade"));
+                badgeTextView.setText(R.string.info_not_available);
+        }
         setProfilePicture();
+    }
 
+    /**
+     * Creates a new Thread to request a UserProfileJSONService from the server.
+     *
+     * @return UserProfileJSONService
+     */
+    private UserProfileJSONService getUserProfileJSONService() {
+        UserProfileJSONService userProfileJSONService = null;
+        Thread connectionThread = new Thread(() -> {
+            try {
+                Response response = RESTRequest.create(BuildConfig.SERVER_URL.
+                        concat(FeedbackMonkeyAPI.getAPIEntryPoint().
+                                concat(FeedbackMonkeyAPI.getResourcePath("User Profile").
+                                        concat(FeedbackMonkeyAPI.getSubResourcePath("User Profile",
+                                                "Get User Info").concat("/" + authenticationToken))))).
+                        withMediaType(RESTRequest.RequestMediaType.JSON).
+                        GET();
+                restResponseCode = response.code();
+                restResponseBody = response.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+        connectionThread.start();
+
+        try {
+            connectionThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (restResponseCode == HttpsURLConnection.HTTP_OK) {
+            userProfileJSONService = new Gson().fromJson(restResponseBody, UserProfileJSONService.class);
+        }
+        return userProfileJSONService;
     }
 
     /**

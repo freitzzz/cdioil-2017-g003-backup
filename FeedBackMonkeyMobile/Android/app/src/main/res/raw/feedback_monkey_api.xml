@@ -68,6 +68,10 @@
                     <method>POST</method>
                     <datatype>JSON</datatype>
                 </subresource>
+                <subresource name = "Get User Info" path = "/userinfo">
+                    <method>GET</method>
+                    <datatype>JSON</datatype>
+                </subresource>
             </subresources>
         </resource>
     </resources>

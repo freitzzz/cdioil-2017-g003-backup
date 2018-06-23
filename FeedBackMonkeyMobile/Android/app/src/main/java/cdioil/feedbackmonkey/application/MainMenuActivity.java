@@ -176,6 +176,9 @@ public class MainMenuActivity extends AppCompatActivity {
             sharedPreferences.edit().remove("profilePicture").apply();
         }
         sharedPreferences.edit().remove("authenticationToken").apply();
+        sharedPreferences.edit().remove("name").apply();
+        sharedPreferences.edit().remove("age").apply();
+        sharedPreferences.edit().remove("location").apply();
         if (sharedPreferences.getString("authenticationToken", getString(R.string.no_authentication_token)).
                 equals(getString(R.string.no_authentication_token))) {
             Intent backToLoginIntent = new Intent(MainMenuActivity.this, LoginActivity.class);
