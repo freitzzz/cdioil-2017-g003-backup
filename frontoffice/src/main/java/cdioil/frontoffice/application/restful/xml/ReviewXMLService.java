@@ -81,7 +81,7 @@ public class ReviewXMLService {
      * Constant representing the Image element tag.
      */
     private static final String IMAGE_ELEMENT_TAG = "Image";
-    
+
     /**
      * Constant representing the Answers element tag.
      */
@@ -151,11 +151,16 @@ public class ReviewXMLService {
      * Constant representing the option attribute tag.
      */
     private static final String OPTION_ATTRIBUTE_TAG = "option";
-    
+
     /**
      * Constant representing the end date attribute tag.
      */
     private static final String SURVEY_END_DATE_TAG = "endDate";
+
+    /**
+     * Constant representing the time element tag.
+     */
+    private static final String TIME_ELEMENT_TAG = "Time";
 
     /**
      * Builds an XML file for a given review and returns its content.
@@ -202,6 +207,10 @@ public class ReviewXMLService {
             suggestionElement.appendChild(suggestionTextElement);
             Element suggestionImageElement = doc.createElement(IMAGE_ELEMENT_TAG);
             suggestionElement.appendChild(suggestionImageElement);
+
+            Element timeElement = doc.createElement(TIME_ELEMENT_TAG);
+            timeElement.setTextContent("0");
+            reviewElement.appendChild(timeElement);
 
             Element answersElement = doc.createElement(ANSWERS_ELEMENT_TAG);
             reviewElement.appendChild(answersElement);
@@ -437,13 +446,13 @@ public class ReviewXMLService {
 
         return null;
     }
-    
-    public static String getSuggestionImage(String fileContent){
-        try{
+
+    public static String getSuggestionImage(String fileContent) {
+        try {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
             Element reviewElement = document.getDocumentElement();
-            
+
             Element suggestionElement = (Element) reviewElement.getElementsByTagName(SUGGESTION_ELEMENT_TAG).item(0);
             String imageBytes = suggestionElement.getElementsByTagName(IMAGE_ELEMENT_TAG).item(0).getTextContent();
             return imageBytes == null || imageBytes.isEmpty() ? null : imageBytes;
@@ -451,5 +460,20 @@ public class ReviewXMLService {
             Logger.getLogger(ReviewXMLService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public static long getTime(String fileContent) {
+        try {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(fileContent)));
+
+            Element reviewElement = document.getDocumentElement();
+
+            Element timeElement = (Element) reviewElement.getElementsByTagName(TIME_ELEMENT_TAG).item(0);
+            return Long.parseLong(timeElement.getTextContent());
+        } catch (SAXException | IOException | ParserConfigurationException ex) {
+            Logger.getLogger(ReviewXMLService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 }

@@ -174,7 +174,10 @@ public class ReviewResource implements ReviewAPI, ResponseMessages {
         List<QuestionOption> answers = ReviewXMLService.getAnswerList(fileContent);
         String suggestion = ReviewXMLService.getSuggestion(fileContent);
         String suggestionImage = ReviewXMLService.getSuggestionImage(fileContent);
-
+        long timeToAnswer = ReviewXMLService.getTime(fileContent);
+        
+        reviewToAnswer.setTimeToAnswer(timeToAnswer);
+        
         for (QuestionOption answer : answers) {
             reviewToAnswer.answerQuestion(answer);
         }
