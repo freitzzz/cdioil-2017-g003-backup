@@ -310,6 +310,24 @@ public class SystemUser implements DTOable, Serializable, AggregateRoot<Email> {
     public Name getName() {
         return name;
     }
+    
+    /**
+     * Method that returns the user's location
+     * 
+     * @return user's location
+     */
+    public Location getLocation(){
+        return location;
+    }
+    
+    /**
+     * Method that returns the user's birth date
+     * 
+     * @return user's birth date
+     */
+    public BirthDate getBirthDate(){
+        return birthDate;
+    }
 
     /**
      * Method that merges a current imported SystemUser with a certain SystemUser

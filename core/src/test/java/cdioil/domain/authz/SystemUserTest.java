@@ -76,6 +76,32 @@ public class SystemUserTest {
                 name, new Password("Precious3"));
         assertEquals(name, instance.getName());
     }
+    
+    /**
+     * Test of getLocation method, of class SystemUser.
+     */
+    @Test
+    public void testGetLocation(){
+        System.out.println("getLocation");
+        Location location = new Location("Lil Pump's Mansion");
+        SystemUser sysUser = new SystemUser(new Email("lilpump@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"),
+                new PhoneNumber("939999999"), location,
+                new BirthDate(LocalDate.of(1222, Month.MARCH, 23)));
+        assertEquals(location,sysUser.getLocation());
+    }
+    
+    /**
+     * Test of getBirthDate method, of class SystemUser.
+     */
+    @Test
+    public void testGetBirthDate(){
+        System.out.println("getBirthDate");
+        BirthDate birthDate = new BirthDate(LocalDate.of(1222, Month.MARCH, 23));
+        SystemUser sysUser = new SystemUser(new Email("lilpump@gmail.com"), new Name("Gollum", "Smeagol"), new Password("Precious3"),
+                new PhoneNumber("939999999"), new Location("Lil Pump's Mansion"),
+                birthDate);
+        assertEquals(birthDate,sysUser.getBirthDate());
+    }
 
     /**
      * Test of isImported method, of class SystemUser.
