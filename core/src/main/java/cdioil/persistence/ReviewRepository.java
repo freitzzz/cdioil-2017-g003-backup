@@ -3,6 +3,7 @@ package cdioil.persistence;
 import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.authz.RegisteredUser;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -32,4 +33,11 @@ public interface ReviewRepository {
      * if no review was found
      */
     public abstract Review getUserReviewByID(RegisteredUser registeredUser,long reviewID);
+    /**
+     * Method that retrives the reviews average time to answer between a certain time period
+     * @param dateTimeX LocalDateTime with the time period start
+     * @param dateTimeY LocalDateTime with the time period end
+     * @return Float with the average time to answer between a certain time period
+     */
+    public abstract float getReviewsAverageTime(LocalDateTime dateTimeX,LocalDateTime dateTimeY);
 }

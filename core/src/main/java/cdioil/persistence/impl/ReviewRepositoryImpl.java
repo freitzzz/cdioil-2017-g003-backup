@@ -6,6 +6,7 @@ import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.ReviewRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -82,5 +83,18 @@ public final class ReviewRepositoryImpl extends BaseJPARepository<Review, Long> 
                 .setParameter("registeredUser",registeredUser);
         return !queryUserReviewID.getResultList().isEmpty() ? (Review)queryUserReviewID.getSingleResult() : null;
     }
-    
+    /**
+     * Method that retrives the reviews average time to answer between a certain time period
+     * @param dateTimeX LocalDateTime with the time period start
+     * @param dateTimeY LocalDateTime with the time period end
+     * @return Float with the average time to answer between a certain time period
+     */
+    @Override
+    public float getReviewsAverageTime(LocalDateTime dateTimeX,LocalDateTime dateTimeY){
+        return (float)entityManager().createQuery("SELECT AVG(RE.timeToAnswer) FROM Review RE "
+                + "WHERE CAST(RE.finishedReviewTime AS timestamp) BETWEEN :dateTimeX AND :dateTimeY")
+                .setParameter("dateTimeX",dateTimeX)
+                .setParameter("dateTimeY",dateTimeY)
+                .getSingleResult();
+    }
 }

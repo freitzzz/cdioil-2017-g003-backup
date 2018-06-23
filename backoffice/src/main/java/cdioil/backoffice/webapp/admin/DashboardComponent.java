@@ -174,7 +174,7 @@ public class DashboardComponent extends DefaultPanelView {
         updateLabel(valueLbl1, String.valueOf(controller.getNumberOfSurveysAnswered()));
         updateLabel(valueLbl2, String.valueOf(controller.getNumberOfValidLogins()));
         updateLabel(valueLbl3, String.valueOf(controller.getNumberOfInvalidLogins()));
-        updateLabel(valueLbl4, "1.2 minutos");// TODO placeholder value
+        updateLabel(valueLbl4, String.valueOf(controller.getReviewsAnswerAverageTime()));
     }
 
     /**

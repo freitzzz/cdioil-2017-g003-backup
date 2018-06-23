@@ -3,6 +3,7 @@ package cdioil.backoffice.application;
 import cdioil.application.domain.authz.AuthenticationAction;
 import cdioil.application.domain.authz.UserAction;
 import cdioil.persistence.impl.AuthenticationHistoryRepositoryImpl;
+import cdioil.persistence.impl.ReviewRepositoryImpl;
 import cdioil.persistence.impl.UserActionHistoryRepositoryImpl;
 import cdioil.time.TimePeriod;
 import java.time.LocalDateTime;
@@ -58,6 +59,15 @@ public final class TimeStatisticsController {
         return new AuthenticationHistoryRepositoryImpl()
                 .getNumberOfCertainAuthenticationAction(dateTimeX,dateTimeY
                         ,AuthenticationAction.INVALID_LOGIN);
+    }
+    /**
+     * Method that gets the average time needed to answer a certain survey 
+     * on a certain time period
+     * @return Float with the average time needed to answer a certain survey 
+     * on a certain time period
+     */
+    public float getReviewsAnswerAverageTime(){
+        return new ReviewRepositoryImpl().getReviewsAverageTime(dateTimeX,dateTimeY);
     }
     /**
      * Method that verifies if a certain period of time is valid or not
