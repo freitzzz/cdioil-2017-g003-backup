@@ -72,32 +72,44 @@ public class ExportTemplateController {
 
         //Add all the templates that are mapped to categories associated with the Manager
         for (Map.Entry<Category, TemplateGroup> entry : categoryTemplatesLibrary.getID().entrySet()) {
-//            if (manager.isAssociatedWithCategory(entry.getKey())) {
-            for (Template t : entry.getValue().getTemplates()) {
-                templates.add(t);
-                if (!templateItems.containsKey(t)) {
-                    templateItems.put(t, new LinkedList<>());
+            if (manager.isAssociatedWithCategory(entry.getKey())) {
+                for (Template t : entry.getValue().getTemplates()) {
+                    //Add the template and its respective text representation to the lists
+                    if (!templates.contains(t)) {
+                        templates.add(t);
+                        templateStrings.add(t.toString());
+                    }
+
+                    //Add to list of items mapped to the template
+                    if (!templateItems.containsKey(t)) {
+                        templateItems.put(t, new LinkedList<>());
+                    }
+                    templateItems.get(t).add(entry.getKey());
                 }
-                templateItems.get(t).add(entry.getKey());
-                templateStrings.add(t.toString());
             }
-//            }
         }
 
+        //Add all the templates mapped to products
         for (Map.Entry<Product, TemplateGroup> entry : productTemplatesLibrary.getID().entrySet()) {
             for (Template t : entry.getValue().getTemplates()) {
-                templates.add(t);
+                if (!templates.contains(t)) {
+                    templates.add(t);
+                    templateStrings.add(t.toString());
+                }
+                
+                //Add to list of items mapped to the template
                 if (!templateItems.containsKey(t)) {
                     templateItems.put(t, new LinkedList<>());
                 }
                 templateItems.get(t).add(entry.getKey());
-                templateStrings.add(t.toString());
             }
         }
 
         for (Template t : independentTemplatesLibrary.getID()) {
-            templates.add(t);
-            templateStrings.add(t.toString());
+            if (templates.contains(t)) {
+                templates.add(t);
+                templateStrings.add(t.toString());
+            }
         }
 
         return templateStrings;
