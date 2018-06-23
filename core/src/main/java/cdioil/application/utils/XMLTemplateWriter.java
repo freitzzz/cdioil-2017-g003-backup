@@ -39,8 +39,6 @@ public class XMLTemplateWriter implements TemplateWriter {
 
     private final List<SurveyItem> surveyItems;
 
-    private final SurveyTemplateElement templateElement;
-
     /**
      * Builds a new XMLTemplateWriter with the file that is going to be written
      *
@@ -51,7 +49,6 @@ public class XMLTemplateWriter implements TemplateWriter {
         this.filename = filename;
         this.template = template;
         this.surveyItems = new LinkedList<>();
-        this.templateElement = buildTemplate();
     }
 
     private SurveyTemplateElement buildTemplate() {
@@ -90,8 +87,8 @@ public class XMLTemplateWriter implements TemplateWriter {
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         Writer writer = new StringWriter();
-        marshaller.marshal(templateElement, writer);
-
+        marshaller.marshal(buildTemplate(), writer);
+        
         return FileWriter.writeFile(new File(filename), ((StringWriter) writer).getBuffer().toString());
     }
 
@@ -207,7 +204,7 @@ public class XMLTemplateWriter implements TemplateWriter {
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         Writer writer = new StringWriter();
-        marshaller.marshal(templateElement, writer);
+        marshaller.marshal(buildTemplate(), writer);
 
         return ((StringWriter) writer).getBuffer().toString();
     }
