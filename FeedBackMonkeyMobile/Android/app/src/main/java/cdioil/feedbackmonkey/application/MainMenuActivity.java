@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -33,7 +34,6 @@ import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,7 +152,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     startSuggestionActivity();
                     break;
                 case LOGOUT_INDEX:
-                    deleteAuthenticationTokenFromSharedPreferences();
+                    deleteInfoFromSharedPreferences();
                     break;
             }
         });
@@ -166,10 +166,18 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Deletes the current authentication token from the app's Shared Preferences and launches LoginActivity.
      */
-    private void deleteAuthenticationTokenFromSharedPreferences() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("authenticationToken").apply();
-        if (PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
-                getString(R.string.no_authentication_token)).equals(getString(R.string.no_authentication_token))) {
+    private void deleteInfoFromSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String profilePicFilePath = sharedPreferences.getString("profilePicture",
+                getString(R.string.no_profile_picture));
+        if (!profilePicFilePath.equals(getString(R.string.no_profile_picture))) {
+            File file = new File(profilePicFilePath);
+            file.delete();
+            sharedPreferences.edit().remove("profilePicture").apply();
+        }
+        sharedPreferences.edit().remove("authenticationToken").apply();
+        if (sharedPreferences.getString("authenticationToken", getString(R.string.no_authentication_token)).
+                equals(getString(R.string.no_authentication_token))) {
             Intent backToLoginIntent = new Intent(MainMenuActivity.this, LoginActivity.class);
             startActivity(backToLoginIntent);
             finish();

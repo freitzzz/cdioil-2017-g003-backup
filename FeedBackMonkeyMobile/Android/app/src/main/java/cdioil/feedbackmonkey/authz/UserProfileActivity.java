@@ -13,6 +13,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
@@ -120,8 +121,46 @@ public class UserProfileActivity extends AppCompatActivity {
         contestBadgeListButton = findViewById(R.id.contestBadgeListButton);
         suggestionListButton = findViewById(R.id.suggestionListButton);
         authenticationToken = getIntent().getExtras().getString("authenticationToken");
+        checkIfProfilePictureExists();
         configureImageAndTextViews();
         configureButtons();
+    }
+
+    /**
+     * Checks if a profile picture was already taken or not ands sets it to the image view if it already exists.
+     */
+    private void checkIfProfilePictureExists(){
+        pictureImagePath = PreferenceManager.getDefaultSharedPreferences(this).getString("profilePicture",
+                getString(R.string.no_profile_picture));
+        if(!pictureImagePath.equals(getString(R.string.no_profile_picture))){
+            setPictureOnImageView();
+        }
+    }
+
+    /**
+     * Sets an image to profilePhotoImageView.
+     */
+    private void setPictureOnImageView() {
+        File imageFile = new File(pictureImagePath);
+        if (imageFile.exists()) {
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            try {
+                ExifInterface exifInterface = new ExifInterface(imageFile.getAbsolutePath());
+                int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        1);
+                Matrix matrix = new Matrix();
+                if (orientation == 8) {
+                    matrix.postRotate(270);
+                } else if (orientation == 6) {
+                    matrix.postRotate(90);
+                }
+                Bitmap rotatedImageBitmap = Bitmap.createBitmap(imageBitmap, 0, 0,
+                        imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
+                profilePhotoImageView.setImageBitmap(rotatedImageBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -267,6 +306,8 @@ public class UserProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         pictureImagePath = imageFile.getAbsolutePath();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("profilePicture",
+                pictureImagePath).apply();
         return GenericFileProvider.getUriForFile(getApplicationContext(),
                 "cdioil.feedbackmonkey.utils.GenericFileProvider", imageFile);
     }
@@ -281,26 +322,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            File imageFile = new File(pictureImagePath);
-            if (imageFile.exists()) {
-                Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                try {
-                    ExifInterface exifInterface = new ExifInterface(imageFile.getAbsolutePath());
-                    int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                            1);
-                    Matrix matrix = new Matrix();
-                    if (orientation == 8) {
-                        matrix.postRotate(270);
-                    } else if (orientation == 6) {
-                        matrix.postRotate(90);
-                    }
-                    Bitmap rotatedImageBitmap = Bitmap.createBitmap(imageBitmap, 0, 0,
-                            imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
-                    profilePhotoImageView.setImageBitmap(rotatedImageBitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            setPictureOnImageView();
         }
     }
 }
