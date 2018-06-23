@@ -110,7 +110,7 @@ public class ExportTemplateUI {
 
         while (!isTemplateIDValid) {
             String templateID = Console.readLine(requestSelectTemplate);
-            if (templateID != null && templateID.equalsIgnoreCase(exitCode)) {
+            if (templateID.equalsIgnoreCase(exitCode)) {
                 return;
             }
 
@@ -126,10 +126,15 @@ public class ExportTemplateUI {
         while (!isPathValid) {
             //3. Inserts the path of the file
             String filePath = Console.readLine(requestInsertPath);
-            if (filePath != null && filePath.equalsIgnoreCase(exitCode)) {
+            if (filePath.equalsIgnoreCase(exitCode)) {
                 return;
             }
 
+            //Do not allow for empty path
+            if(filePath.trim().isEmpty()){
+                continue;
+            }
+            
             //4. Exports the file
             try {
                 if (!ctrl.exportTemplate(filePath)) {
