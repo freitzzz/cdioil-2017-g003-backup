@@ -7,8 +7,6 @@ import cdioil.domain.CategoryTemplatesLibrary;
 import cdioil.domain.IndependentTemplatesLibrary;
 import cdioil.domain.Product;
 import cdioil.domain.ProductTemplatesLibrary;
-import cdioil.domain.Question;
-import cdioil.domain.SKU;
 import cdioil.domain.SurveyItem;
 import cdioil.domain.SurveyItemType;
 import cdioil.domain.Template;
@@ -19,7 +17,6 @@ import cdioil.persistence.impl.MarketStructureRepositoryImpl;
 import cdioil.persistence.impl.ProductRepositoryImpl;
 import cdioil.persistence.impl.ProductTemplatesLibraryRepositoryImpl;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,18 +34,12 @@ public class ImportTemplateController {
     private final Manager manager;
 
     /**
-     * Map associating questionID to the respective Question
-     */
-    private final Map<String, Question> questionMap;
-
-    /**
      * Instantiates the controller.
      *
      * @param manager currently logged in manager
      */
     public ImportTemplateController(Manager manager) {
         this.manager = manager;
-        this.questionMap = new LinkedHashMap<>();
     }
 
     /**
@@ -117,7 +108,7 @@ public class ImportTemplateController {
 
                     for (String sku : itemIdentifiers) {
 
-                        Product p = productRepo.getProductBySKU(new SKU(sku));
+                        Product p = productRepo.getProductBySKU(sku);
 
                         if (p == null) {
                             return false;
@@ -147,9 +138,15 @@ public class ImportTemplateController {
 
                 if (surveyItem instanceof Category) {
 
+                    //If the category already has an entry in the library then it won't be added
+                    catTempLib.addCategory((Category) surveyItem);
+
                     added = catTempLib.addTemplate((Category) surveyItem, template);
 
                 } else if (surveyItem instanceof Product) {
+
+                    //If the product already has an entry in the library then it won't be added
+                    prodTempLib.addProduct((Product) surveyItem);
 
                     added = prodTempLib.addTemplate((Product) surveyItem, template);
                 }
