@@ -8,7 +8,6 @@ import cdioil.domain.IndependentTemplatesLibrary;
 import cdioil.domain.Product;
 import cdioil.domain.ProductTemplatesLibrary;
 import cdioil.domain.Question;
-import cdioil.domain.SKU;
 import cdioil.domain.SurveyItem;
 import cdioil.domain.SurveyItemType;
 import cdioil.domain.Template;
@@ -117,7 +116,7 @@ public class ImportTemplateController {
 
                     for (String sku : itemIdentifiers) {
 
-                        Product p = productRepo.getProductBySKU(new SKU(sku));
+                        Product p = productRepo.getProductBySKU((sku));
 
                         if (p == null) {
                             return false;
