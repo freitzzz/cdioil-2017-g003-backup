@@ -3,6 +3,7 @@ package cdioil.domain;
 import cdioil.application.utils.Graph;
 import cdioil.domain.authz.Suggestion;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -91,7 +92,10 @@ public class Review implements Serializable {
      */
     @OneToOne(cascade = {CascadeType.ALL})
     private Suggestion suggestion;
-
+    /**
+     * LocalDateTime with the date time where the review was finished
+     */
+    private LocalDateTime finishedReviewDateTime;
     /**
      * Empty constructor of class Review for JPA.
      */
@@ -157,6 +161,7 @@ public class Review implements Serializable {
         if (nextQuestion == null) {
             answers.put(currentQuestion, new Answer(option));
             reviewState = ReviewState.FINISHED; //state must also be updated
+            finishedReviewDateTime=LocalDateTime.now();
             return false;
         }
 
