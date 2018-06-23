@@ -38,18 +38,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".application.ListSurveyActivity" />
-        <activity android:name=".application.MainMenuActivity" />
-        <activity android:name=".authz.SignUpActivity" />
+        <activity android:name=".application.ListSurveyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".application.MainMenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".authz.SignUpActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
-        <activity android:name=".application.SubmitSuggestionActivity" />
-        <activity android:name=".application.QuestionActivity" />
-        <activity android:name=".authz.UserProfileActivity" />
-        <activity android:name=".authz.LoginActivity" />
-        <activity android:name=".application.CheckReviewActivity" />
+        <activity android:name=".application.SubmitSuggestionActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".application.QuestionActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".authz.UserProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".authz.LoginActivity" 
+            android:screenOrientation="portrait"/>
+        <activity android:name=".application.CheckReviewActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
