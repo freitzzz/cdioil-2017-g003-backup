@@ -49,6 +49,11 @@ public class Review implements Serializable {
     private long version;
 
     /**
+     * Time (in seconds) that a User took to fully answer a Review.
+     */
+    private long timeToAnswer;
+
+    /**
      * Copy of the survey's graph, defining the overall flow of the survey.
      */
     /*The Graph stored in this instance of Review is a copy of the Survey's Graph, 
@@ -108,11 +113,21 @@ public class Review implements Serializable {
             throw new IllegalArgumentException("O inquérito não pode ser "
                     + "null");
         }
+        this.timeToAnswer = 0;
         this.survey = survey;
         this.answerGraph = survey.getGraphCopy();
         this.answers = new LinkedHashMap<>();
         this.currentQuestion = answerGraph.getFirstQuestion();
         this.reviewState = ReviewState.PENDING;
+    }
+
+    /**
+     * Sets the time that a User took to answer the Review.
+     *
+     * @param timeToAnswer time that the user took
+     */
+    public void setTimeToAnswer(long timeToAnswer) {
+        this.timeToAnswer = timeToAnswer;
     }
 
     /**
@@ -199,16 +214,16 @@ public class Review implements Serializable {
         suggestion = new Suggestion(suggestionText);
         return true;
     }
-    
+
     /**
-     * 
+     *
      * Submits a suggestion with an image associated to this review.
-     * 
+     *
      * @param suggestionText the suggestion's text
      * @param suggestionImage the suggestion's image
      */
-    public void submitSuggestionWithImage(String suggestionText, Image suggestionImage){
-        suggestion = new Suggestion(suggestionText,suggestionImage);
+    public void submitSuggestionWithImage(String suggestionText, Image suggestionImage) {
+        suggestion = new Suggestion(suggestionText, suggestionImage);
     }
 
     /**
