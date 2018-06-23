@@ -107,6 +107,8 @@ public class DashboardComponent extends DefaultPanelView {
 
         headerLayout.addComponent(topBarLayout);
         headerLayout.setComponentAlignment(topBarLayout, Alignment.MIDDLE_RIGHT);
+
+        headerLayout.setExpandRatio(topBarLayout, 0.7f);
     }
 
     /**
@@ -174,7 +176,18 @@ public class DashboardComponent extends DefaultPanelView {
         updateLabel(valueLbl1, String.valueOf(controller.getNumberOfSurveysAnswered()));
         updateLabel(valueLbl2, String.valueOf(controller.getNumberOfValidLogins()));
         updateLabel(valueLbl3, String.valueOf(controller.getNumberOfInvalidLogins()));
-        updateLabel(valueLbl4, String.valueOf(controller.getReviewsAnswerAverageTime()));
+        updateLabel(valueLbl4,
+                String.valueOf(secondsToMinutes(controller.getReviewsAnswerAverageTime())));
+    }
+
+    /**
+     * Converts a double value, in seconds, to minutes in the form
+     * of a String representation
+     * @param reviewsAnswerAverageTime raw value
+     * @return formatted String, in minutes
+     */
+    private String secondsToMinutes(double reviewsAnswerAverageTime) {
+        return String.format("%.1f minutos", (reviewsAnswerAverageTime / 60));
     }
 
     /**
@@ -185,8 +198,5 @@ public class DashboardComponent extends DefaultPanelView {
      */
     private void updateLabel(Label lbl, String value) {
         lbl.setValue("<h2>" + value + "</h2>");
-    }
-
-    private void treatDateValues(LocalDateTime x, LocalDateTime y) {
     }
 }

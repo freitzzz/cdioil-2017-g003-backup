@@ -46,3 +46,4 @@ can be found [here](https://bitbucket.org/lei-isep/cdioil-2017-g003/wiki/Engenha
 - [***Gil Durão (1160936)***](https://bitbucket.org/RicGD/)
 - [***João Moreira (1160928)***](https://bitbucket.org/JSMoreira)
 - [***António Sousa (1161371)***](https://bitbucket.org/i161371/)
+- [***Pedro Portela (1150792)***](https://bitbucket.org/pedro_portela/)
