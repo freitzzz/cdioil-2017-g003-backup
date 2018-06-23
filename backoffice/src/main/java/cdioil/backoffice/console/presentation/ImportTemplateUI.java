@@ -86,6 +86,10 @@ public class ImportTemplateUI {
                 return;
             }
 
+            if (filePath.trim().isEmpty()) {
+                continue;
+            }
+
             boolean imported = false;
 
             try {

@@ -161,6 +161,7 @@ public class MainMenu {
                     break;
                 case 9:
                     new ExportTemplateUI((Manager)authenticationController.getUser());
+                    break;
                 case 10:
                     new ImportTemplateUI((Manager) authenticationController.getUser());
                     break;
