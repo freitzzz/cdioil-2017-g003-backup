@@ -70,4 +70,5 @@
     <string name="question_answer_list">A sua avaliação</string>
     <string name="reviewed_surveys_title">Inquéritos Avaliados</string>
     <string name="no_authentication_token">noAuthToken</string>
+    <string name="no_profile_picture">noProfilePicture</string>
 </resources>
