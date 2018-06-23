@@ -2,6 +2,7 @@ package cdioil.feedbackmonkey.application.services;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import cdioil.feedbackmonkey.restful.utils.json.SurveyJSONService;
 
@@ -61,6 +62,14 @@ public final class SurveyService implements Serializable{
     }
 
     /**
+     * Builds a new SurveyService based on a String that holds a surveyID
+     * @param surveyID String that holds the survey's ID
+     */
+    public SurveyService(String surveyID){
+        this.surveyID = surveyID;
+    }
+
+    /**
      * Returns the survey ID
      * @return String with the survey ID
      */
@@ -86,4 +95,16 @@ public final class SurveyService implements Serializable{
      */
     public List<String> getSurveyItems(){return surveyItems;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SurveyService that = (SurveyService) o;
+        return Objects.equals(surveyID, that.surveyID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(surveyID);
+    }
 }

@@ -7,29 +7,34 @@ import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.DateField;
+import com.vaadin.ui.DateTimeField;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * Dashboard component for the Admin Panel
  */
 public class DashboardComponent extends DefaultPanelView {
 
+    /**
+     * Controller Class
+     */
     private transient TimeStatisticsController controller;
 
+    /**
+     * Main Layout
+     */
     private GridLayout layout;
 
-    private DateField startDateField = new DateField();
-    private DateField endDateField = new DateField();
+    private DateTimeField startDateField = new DateTimeField();
+    private DateTimeField endDateField = new DateTimeField();
 
     private Label valueLbl1 = new Label();
     private Label valueLbl2 = new Label();
@@ -42,7 +47,8 @@ public class DashboardComponent extends DefaultPanelView {
     public DashboardComponent() {
         super("Dashboard");
 
-        controller = new TimeStatisticsController(LocalDateTime.MIN, LocalDateTime.MAX);
+        controller = new TimeStatisticsController(LocalDateTime.now().minusDays(7),
+                LocalDateTime.now());
 
         setProperties();
         prepareComponents();
@@ -53,6 +59,9 @@ public class DashboardComponent extends DefaultPanelView {
         setExpandRatio(layout, 0.9f);
     }
 
+    /**
+     * Sets window properties
+     */
     private void setProperties() {
         layout = new GridLayout(2, 2);
         layout.setSizeFull();
@@ -68,6 +77,9 @@ public class DashboardComponent extends DefaultPanelView {
         preparePanels();
     }
 
+    /**
+     * Prepares date pickers
+     */
     private void prepareDatePickers() {
         Responsive.makeResponsive(headerLayout);
         HorizontalLayout topBarLayout = new HorizontalLayout();
@@ -76,43 +88,54 @@ public class DashboardComponent extends DefaultPanelView {
         startDateField.setPlaceholder("Inicio");
         endDateField.setPlaceholder("Fim");
 
-        startDateField.setValue(LocalDate.MIN);
-        endDateField.setValue(LocalDate.now());
-
         Button updateBtn = new Button("Atualizar");
         updateBtn.addClickListener(onClick -> {
-            controller = new TimeStatisticsController(
-                    LocalDateTime.of(startDateField.getValue(), LocalTime.MIN),
-                    LocalDateTime.of(endDateField.getValue(), LocalTime.MAX));
+            try {
+                controller = new TimeStatisticsController(startDateField.getValue(),
+                        endDateField.getValue());
+            } catch (IllegalArgumentException e) {
+                Notification.show("Intervalo de tempo inválido",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
 
             refreshStatistics();
         });
 
         // Create search/filter
-        topBarLayout.addComponents(new DateField(), new DateField(), updateBtn);
+        topBarLayout.addComponents(startDateField, endDateField, updateBtn);
 
         headerLayout.addComponent(topBarLayout);
         headerLayout.setComponentAlignment(topBarLayout, Alignment.MIDDLE_RIGHT);
     }
 
+    /**
+     * Prepare all panels
+     */
     private void preparePanels() {
-        updateLabel(valueLbl1, String.valueOf(controller.getNumberOfSurveysAnswered()));
         layout.addComponent(createDashboardItem("Inquéritos Respondidos",
                 "/WEB-INF/dashboard/survey.png", valueLbl1));
 
-        updateLabel(valueLbl2, "456");// TODO placeholder value
         layout.addComponent(createDashboardItem("Logins Aceites",
                 "/WEB-INF/dashboard/check.png", valueLbl2));
 
-        updateLabel(valueLbl3, "20");// TODO placeholder value
         layout.addComponent(createDashboardItem("Logins Falhados",
                 "/WEB-INF/dashboard/error.png", valueLbl3));
 
-        updateLabel(valueLbl4, "126");// TODO placeholder value
         layout.addComponent(createDashboardItem("Tempo Médio Inquérito",
                 "/WEB-INF/dashboard/timer.png", valueLbl4));
+
+        refreshStatistics();
     }
 
+    /**
+     * Creates a new DashBoard item
+     *
+     * @param title   item
+     * @param imgPath image path
+     * @param label   label
+     * @return Panel
+     */
     private Panel createDashboardItem(String title, String imgPath, Label label) {
         VerticalLayout panelLayout = new VerticalLayout();
         panelLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
@@ -144,11 +167,26 @@ public class DashboardComponent extends DefaultPanelView {
         return panel;
     }
 
+    /**
+     * Refreshes statistics to accommodate new Time Period
+     */
     private void refreshStatistics() {
-
+        updateLabel(valueLbl1, String.valueOf(controller.getNumberOfSurveysAnswered()));
+        updateLabel(valueLbl2, String.valueOf(controller.getNumberOfValidLogins()));
+        updateLabel(valueLbl3, String.valueOf(controller.getNumberOfInvalidLogins()));
+        updateLabel(valueLbl4, "1.2 minutos");// TODO placeholder value
     }
 
+    /**
+     * Updates a given label
+     *
+     * @param lbl   label
+     * @param value new value
+     */
     private void updateLabel(Label lbl, String value) {
         lbl.setValue("<h2>" + value + "</h2>");
+    }
+
+    private void treatDateValues(LocalDateTime x, LocalDateTime y) {
     }
 }

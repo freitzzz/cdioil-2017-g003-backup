@@ -88,6 +88,6 @@ public abstract class Code<T extends Serializable> implements Serializable, Valu
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ": " + productCode.toString() + "\n";
+        return getClass().getSimpleName() + ": " + productCode.toString();
     }
 }

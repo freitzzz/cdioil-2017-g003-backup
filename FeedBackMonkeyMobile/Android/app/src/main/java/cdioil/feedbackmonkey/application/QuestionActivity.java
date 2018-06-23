@@ -3,6 +3,7 @@ package cdioil.feedbackmonkey.application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -16,13 +17,14 @@ import android.widget.TextView;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import cdioil.feedbackmonkey.R;
 import cdioil.feedbackmonkey.restful.utils.xml.ReviewXMLService;
-import cdioil.feedbackmonkey.utils.ToastNotification;
 
 /**
  * Activity responsible for listing a question and its options.
@@ -56,6 +58,16 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
     private int progressMade;
 
     /**
+     * Timer to measure the ammount of time a user takes to answer a review.
+     */
+    private Timer timer;
+
+    /**
+     * Long to count the time a user takes to answer a review.
+     */
+    private long count;
+
+    /**
      * Creates the current activity
      *
      * @param savedInstanceState bundle with the previous state
@@ -67,16 +79,44 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
         questionTextView = findViewById(R.id.question);
         progressBar = findViewById(R.id.answerSurveyProgressBar);
         stopReviewButton = findViewById(R.id.stopReviewButton);
-
-        if (getIntent().getExtras() != null) {
-            authenticationToken = getIntent().getExtras().getString("authenticationToken");
-        } else {
-            ToastNotification.show(this, "Não tem uma sessão");
-            return;
-        }
+        count = ReviewXMLService.instance().getTime();
+        startTimer();
+        authenticationToken = PreferenceManager.getDefaultSharedPreferences(this).getString("authenticationToken",
+                getString(R.string.no_authentication_token));
 
         loadQuestionInfo(false);
         stopReview();
+    }
+
+    /**
+     * Stop the Timer.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopTimer();
+    }
+
+    /**
+     * Starts the timer to measure the amount of time a user takes to answer a review.
+     */
+    private void startTimer() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(() -> count++);
+            }
+        }, 1000, 1000);
+    }
+
+    /**
+     * Stops the Timer object.
+     */
+    private void stopTimer() {
+        System.out.println("stopTimer count >>>>" + count);
+        timer.cancel();
+        ReviewXMLService.instance().writeTime(count);
     }
 
 
@@ -164,6 +204,7 @@ public class QuestionActivity extends AppCompatActivity implements OnAnswerListe
                 finish();
             });
             final AlertDialog alertDialog = wantToSubmitSuggestionDialog.create();
+            alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.setOnShowListener(dialog -> {
                 alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3d3d3d"));
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3d3d3d"));

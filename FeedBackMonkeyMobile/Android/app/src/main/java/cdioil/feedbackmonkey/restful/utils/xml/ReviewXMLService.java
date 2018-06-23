@@ -118,6 +118,38 @@ public class ReviewXMLService {
     }
 
     /**
+     * Loads a pending review XML File.
+     *
+     * @param reviewFile pending review XML File to be loaded
+     */
+    public void resumeReview(File reviewFile) throws ParserConfigurationException, IOException, SAXException {
+        this.reviewFile = reviewFile;
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        document = documentBuilder.parse(this.reviewFile);
+        buildReviewQuestionElements();
+    }
+
+    /**
+     * Writes the time it took the user to answer a survey to the review XML File.
+     *
+     * @param time long representing the time it took the user to answer a survey (in seconds)
+     */
+    public void writeTime(long time){
+        Element timeElement = (Element) document.getElementsByTagName(ReviewFileTags.TIME_ELEMENT_TAG).item(0);
+        timeElement.setTextContent(Long.toString(time));
+    }
+
+    /**
+     * Returns the time it took the user to answer a survey (or part of it) in seconds
+     *
+     * @return long representing the time it took the user to answer a survey (or part of it) in seconds
+     */
+    public long getTime(){
+        Element timeElement = (Element) document.getElementsByTagName(ReviewFileTags.TIME_ELEMENT_TAG).item(0);
+        return Long.parseLong(timeElement.getTextContent());
+    }
+
+    /**
      * Creates an XML File that will save the user's review information regarding a certain survey.
      *
      * @param fileContent String with the XML file content

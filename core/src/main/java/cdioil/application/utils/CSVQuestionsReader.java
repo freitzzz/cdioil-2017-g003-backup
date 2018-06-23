@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * @author Ana Guerra (1161191)
  * @author António Sousa [1161371]
  */
-public class CSVQuestionsReader implements QuestionsReader {
+public class CSVQuestionsReader extends Reader implements QuestionsReader {
 
     /**
      * Character used for splitting data within the file.
@@ -67,26 +67,6 @@ public class CSVQuestionsReader implements QuestionsReader {
      * Multiple Choice Question.
      */
     private static final String EM_QUESTION = "EM";
-    /**
-     * Categories' DC Identifier.
-     */
-    private static final String DC_IDENTIFIER = "DC";
-    /**
-     * Categories' UN Identifier.
-     */
-    private static final String UN_IDENTIFIER = "UN";
-    /**
-     * Categories' CAT Identifier.
-     */
-    private static final String CAT_IDENTIFIER = "CAT";
-    /**
-     * Categories' SCAT Identifier.
-     */
-    private static final String SCAT_IDENTIFIER = "SCAT";
-    /**
-     * Categories' UB Identifier.
-     */
-    private static final String UB_IDENTIFIER = "UB";
     /**
      * Question ID.
      */
@@ -190,30 +170,30 @@ public class CSVQuestionsReader implements QuestionsReader {
                     if (!dc.isEmpty()) {
 
                         StringBuilder sb = new StringBuilder(dc);
-                        sb.append(DC_IDENTIFIER);
+                        sb.append(DC);
                         String un = currentLine[1].trim();
 
                         if (!un.isEmpty()) {
 
-                            sb.append(PATH_IDENTIFIER).append(un).append(UN_IDENTIFIER);
+                            sb.append(PATH_IDENTIFIER).append(un).append(UN);
 
                             String cat = currentLine[2].trim();
 
                             if (!cat.isEmpty()) {
 
-                                sb.append(PATH_IDENTIFIER).append(cat).append(CAT_IDENTIFIER);
+                                sb.append(PATH_IDENTIFIER).append(cat).append(CAT);
 
                                 String scat = currentLine[3].trim();
 
                                 if (!scat.isEmpty()) {
 
-                                    sb.append(PATH_IDENTIFIER).append(scat).append(SCAT_IDENTIFIER);
+                                    sb.append(PATH_IDENTIFIER).append(scat).append(SCAT);
 
                                     String ub = currentLine[4].trim();
 
                                     if (!ub.trim().isEmpty()) {
 
-                                        sb.append(PATH_IDENTIFIER).append(ub).append(UB_IDENTIFIER);
+                                        sb.append(PATH_IDENTIFIER).append(ub).append(UB);
                                     }
                                 }
                             }
@@ -358,11 +338,11 @@ public class CSVQuestionsReader implements QuestionsReader {
         line[0] = line[0].replace('?', ' ').trim();
 
         return ((line.length == MIN_NUM_IDENTIFIERS || line.length == MAX_NUM_IDENTIFIERS)
-                && line[0].contains(HASHTAG_IDENTIFIER + DC_IDENTIFIER)
-                && line[1].equalsIgnoreCase(HASHTAG_IDENTIFIER + UN_IDENTIFIER)
-                && line[2].equalsIgnoreCase(HASHTAG_IDENTIFIER + CAT_IDENTIFIER)
-                && line[3].equalsIgnoreCase(HASHTAG_IDENTIFIER + SCAT_IDENTIFIER)
-                && line[4].equalsIgnoreCase(HASHTAG_IDENTIFIER + UB_IDENTIFIER)
+                && line[0].contains(HASHTAG_IDENTIFIER + DC)
+                && line[1].equalsIgnoreCase(HASHTAG_IDENTIFIER + UN)
+                && line[2].equalsIgnoreCase(HASHTAG_IDENTIFIER + CAT)
+                && line[3].equalsIgnoreCase(HASHTAG_IDENTIFIER + SCAT)
+                && line[4].equalsIgnoreCase(HASHTAG_IDENTIFIER + UB)
                 && line[5].equalsIgnoreCase(ID_IDENTIFIER)
                 && line[6].equalsIgnoreCase(TYPE_IDENTIFIER)
                 && line[7].equalsIgnoreCase(QUESTION_IDENTIFIER)
@@ -432,8 +412,8 @@ public class CSVQuestionsReader implements QuestionsReader {
                 }
 
                 if (questionType.equalsIgnoreCase(SN_QUESTION)) {
-                    Element binaryQuestion = xmlFile.createElement("BinaryQuestion");
-                    binaryQuestion.setAttribute("questionID", questionID);
+                    Element binaryQuestion = xmlFile.createElement(BINARY_QUESTION_INDENTIFIER);
+                    binaryQuestion.setAttribute(ID_IDENTIFIER, questionID);
                     Element elementText = xmlFile.createElement("Text");
                     elementText.setTextContent(text);
                     binaryQuestion.appendChild(elementText);
@@ -441,15 +421,15 @@ public class CSVQuestionsReader implements QuestionsReader {
                     rootElement.appendChild(question);
 
                 } else if (questionType.equalsIgnoreCase(ESC_QUESTION)) {
-                    Element quantitativeQuestion = xmlFile.createElement("QuantitativeQuestion");
-                    quantitativeQuestion.setAttribute("questionID", questionID);
+                    Element quantitativeQuestion = xmlFile.createElement(QUANTITATIVE_QUESTION_INDENTIFIER);
+                    quantitativeQuestion.setAttribute(ID_IDENTIFIER, questionID);
                     Element elementText = xmlFile.createElement("Text");
                     elementText.setTextContent(text);
                     quantitativeQuestion.appendChild(elementText);
-                    Element minValueElement = xmlFile.createElement("scaleMinValue");
+                    Element minValueElement = xmlFile.createElement(MIN_SCALE_IDENTIFIER);
                     minValueElement.setTextContent(parameters.substring(parameters.indexOf("=") + 1));
                     quantitativeQuestion.appendChild(minValueElement);
-                    Element maxValueElement = xmlFile.createElement("scaleMaxValue");
+                    Element maxValueElement = xmlFile.createElement(MAX_SCALE_IDENTIFIER);
                     maxValueElement.setTextContent(maxValue.substring(maxValue.indexOf("=") + 1, maxValue.indexOf("\"")));
                     quantitativeQuestion.appendChild(maxValueElement);
                     question.appendChild(quantitativeQuestion);
@@ -467,9 +447,9 @@ public class CSVQuestionsReader implements QuestionsReader {
                         multipleChoiceQuestion.appendChild(option);//NOSONAR
                     } else {
                         multipleChoiceQuestionsCount = 0;
-                        multipleChoiceQuestion = xmlFile.createElement("MultipleChoiceQuestion");
+                        multipleChoiceQuestion = xmlFile.createElement(MULTIPLE_CHOICE_QUESTION_IDENTIFIER);
                         question.appendChild(multipleChoiceQuestion);
-                        multipleChoiceQuestion.setAttribute("questionID", questionID);
+                        multipleChoiceQuestion.setAttribute(ID_IDENTIFIER, questionID);
                         Element elementText = xmlFile.createElement("Text");
                         elementText.setTextContent(text);
                         multipleChoiceQuestion.appendChild(elementText);

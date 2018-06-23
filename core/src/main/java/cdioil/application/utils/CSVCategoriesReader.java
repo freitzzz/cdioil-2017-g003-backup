@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
  *
  * @author Rita Gonçalves (1160912)
  */
-public class CSVCategoriesReader implements CategoriesReader {
+public class CSVCategoriesReader extends Reader implements CategoriesReader {
 
     /**
      * Splitter of the columns of the file.
@@ -41,54 +41,7 @@ public class CSVCategoriesReader implements CategoriesReader {
      * Capacity of the StringBuilder that stores the path of the Category.
      */
     private static final int CAPACITY = 128;
-    /**
-     * String with the identifier to category.
-     */
-    private static final String CATEGORY = "categoria";
-    /**
-     * String with the identifier to list of the scats.
-     */
-    private static final String LIST_SCAT = "lista_scat";
-    /**
-     * String with the identifier to lists of the ubs.
-     */
-    private static final String LIST_UB = "lista_ub";
-    /**
-     * String with the identifier to lists of the categories.
-     */
-    private static final String LIST_CATEGORIES = "lista_categorias";
-    /**
-     * String with the CAT identifier.
-     */
-    private static final String DEC_CAT = "descritivo_cat";
-    /**
-     * String with the SCAT identifier.
-     */
-    private static final String DEC_SCAT = "descritivo_scat";
-    /**
-     * String with the ID identifier.
-     */
-    private static final String ID = "id";
-    /**
-     * String with the DC identifier.
-     */
-    private static final String DC = "DC";
-    /**
-     * String with the UN identifier.
-     */
-    private static final String UN = "UN";
-    /**
-     * String with the CAT identifier.
-     */
-    private static final String CAT = "CAT";
-    /**
-     * String with the SCAT identifier.
-     */
-    private static final String SCAT = "SCAT";
-    /**
-     * String with the UB identifier.
-     */
-    private static final String UB = "UB";
+    
     /**
      * File to read.
      */

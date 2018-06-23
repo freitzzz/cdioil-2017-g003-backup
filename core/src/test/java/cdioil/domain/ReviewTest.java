@@ -9,6 +9,7 @@ import cdioil.domain.authz.Suggestion;
 import cdioil.domain.authz.SystemUser;
 import cdioil.domain.authz.UsersGroup;
 import cdioil.time.TimePeriod;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.LinkedHashMap;
@@ -65,6 +66,27 @@ public class ReviewTest {
         Survey targetedSurvey = new TargetedSurvey(list, timePeriod, userGroup);
         assertNotNull("The condition should succeed because the targeted survey "
                 + "is valid", createReview(targetedSurvey));
+    }
+    
+    /**
+     * Test of method setTimeToAnswer, of class Review
+     * 
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException 
+     */
+    @Test
+    public void testSetTimeToAnswer() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException{
+        System.out.println("setTimeToAnswer");
+        long timeToAnswer = 60;
+        instance.setTimeToAnswer(timeToAnswer);
+        
+        Field timeToAnswerField = instance.getClass().getDeclaredField("timeToAnswer");
+        timeToAnswerField.setAccessible(true);
+        
+        long result = timeToAnswerField.getLong(instance);
+        
+        assertEquals(result, timeToAnswer);
     }
 
     /**
