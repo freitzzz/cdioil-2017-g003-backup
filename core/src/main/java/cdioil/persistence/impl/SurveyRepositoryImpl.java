@@ -2,6 +2,7 @@ package cdioil.persistence.impl;
 
 import cdioil.domain.GlobalSurvey;
 import cdioil.domain.Product;
+import cdioil.domain.Review;
 import cdioil.domain.Survey;
 import cdioil.domain.SurveyState;
 import cdioil.domain.TargetedSurvey;
@@ -9,7 +10,9 @@ import cdioil.domain.authz.RegisteredUser;
 import cdioil.persistence.BaseJPARepository;
 import cdioil.persistence.PersistenceUnitNameCore;
 import cdioil.persistence.SurveyRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.persistence.Query;
 import java.util.List;
@@ -113,7 +116,7 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
         if(userTargetedSurveys!=null)allUserSurveys.addAll(userTargetedSurveys);
         int surveysRemaining=SURVEYS_FETCH_LIMIT-allUserSurveys.size();
         if(surveysRemaining==0)return allUserSurveys;
-        List<Survey> activeGlobalSurveys=getActiveGlobalSurveysByIndexLimit(paginationIndex,surveysRemaining);
+        List<Survey> activeGlobalSurveys=getActiveGlobalSurveysByIndexLimit(registeredUser,paginationIndex,surveysRemaining);;
         if(activeGlobalSurveys!=null)allUserSurveys.addAll(activeGlobalSurveys);
         return allUserSurveys;
     }
@@ -126,18 +129,52 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      * by a certain pagination id
      */
     private List<Survey> getUserTargetedSurveys(RegisteredUser user,int paginationID){
+        LocalDateTime currentDateTime=LocalDateTime.now().minusDays(1);
         int nextLimit=paginationID*SURVEYS_FETCH_LIMIT;
-        Query queryTargetedPagination = entityManager()
-                .createQuery("SELECT t FROM TargetedSurvey t WHERE t.state = :surveyState "
-                + "AND :idUser MEMBER OF t.targetAudience.users")
+        Query queryPagination=entityManager().createQuery("SELECT TS FROM TargetedSurvey TS "
+                + "WHERE TS.state= :surveyState "
+                + "AND :idUser MEMBER OF TS.targetAudience.users")
                 .setParameter("surveyState", SurveyState.ACTIVE)
                 .setParameter("idUser",user)
                 .setFirstResult(paginationID)
                 .setMaxResults(nextLimit+SURVEYS_FETCH_LIMIT);
-        if (queryTargetedPagination.getResultList().isEmpty()) {
-            return null;
-        }
-        return queryTargetedPagination.getResultList();
+        Query queryUserReviews=entityManager().createQuery("SELECT RV FROM Profile PF,Review RV "
+                + "WHERE PF.registeredUser=:registeredUser "
+                + "AND CAST(RV.finishedReviewDateTime AS timestamp) BETWEEN :currentDateTime AND RV.finishedReviewDateTime "
+                + "AND RV MEMBER OF PF.reviews")
+                .setParameter("registeredUser",user)
+                .setParameter("currentDateTime",currentDateTime);
+        List<Survey> userSurveys=queryPagination.getResultList();
+        if(userSurveys.isEmpty())return null;
+        List<Review> userReviewedSurveys=queryUserReviews.getResultList();
+        if(userReviewedSurveys.isEmpty())return userSurveys;
+        userReviewedSurveys.forEach((userReview) -> {
+            if(userSurveys.contains(userReview.getSurvey())){
+                userSurveys.remove(userReview.getSurvey());
+            }
+        });
+        return userSurveys;
+////        Query queryTargetedPagination = entityManager()
+////                .createQuery("SELECT t FROM TargetedSurvey t "
+////                        + "WHERE t.state = :surveyState "
+////                        + "AND :idUser MEMBER OF t.targetAudience.users "
+////                        + "AND t NOT IN (SELECT TS FROM TargetedSurvey WHERE TS.finishedReviewDateTime EXISTS"
+////                                                                        + "(SELECT RV.survey.finishedReviewDateTime FROM Profile PF,Review RV "
+////                                                                        + "WHERE PF.registeredUser=:registeredUser "
+////                                                                        + "AND RV.finishedReviewDateTime<= :currentDateTime "
+////                                                                        + "AND RV MEMBER OF PF.reviews)) "
+////                ,TargetedSurvey.class)                     //  + "AND TYPE(RV.survey) IN :classX)")
+////                .setParameter("surveyState", SurveyState.ACTIVE)
+////                .setParameter("idUser",user)
+////                .setParameter("registeredUser",user)
+////                .setParameter("currentDateTime",currentDateTime)
+////                //.setParameter("classX",Arrays.asList(TargetedSurvey.class))
+////                .setFirstResult(paginationID)
+////                .setMaxResults(nextLimit+SURVEYS_FETCH_LIMIT);
+////        if (queryTargetedPagination.getResultList().isEmpty()) {
+////            return null;
+////        }
+        //return queryTargetedPagination.getResultList();
     }
     /**
      * Method that gets active global surveys based on a certain index for pagination
@@ -145,14 +182,31 @@ public class SurveyRepositoryImpl extends BaseJPARepository<Survey, Long> implem
      * @param leftFetchedSurveys Integer with the remaining surveys to fill the limit to fetch
      * @return List with all the global surveys based on certain index for pagination
      */
-    private List<Survey> getActiveGlobalSurveysByIndexLimit(int paginationIndex,int leftFetchedSurveys){
+    private List<Survey> getActiveGlobalSurveysByIndexLimit(RegisteredUser registeredUser
+            ,int paginationIndex,int leftFetchedSurveys){
+        LocalDateTime currentDateTime=LocalDateTime.now().minusDays(1);
         int nextLimit=paginationIndex*SURVEYS_FETCH_LIMIT;
         Query query=entityManager().createQuery("SELECT GB FROM GlobalSurvey GB "
                 + "WHERE GB.state=:activeState")
                 .setParameter("activeState",SurveyState.ACTIVE)
                 .setFirstResult(nextLimit)
-                .setMaxResults((nextLimit+SURVEYS_FETCH_LIMIT)-leftFetchedSurveys);
-        return !query.getResultList().isEmpty() ? query.getResultList() : null;
+                .setMaxResults((nextLimit+leftFetchedSurveys));
+        Query queryUserReviews=entityManager().createQuery("SELECT RV FROM Profile PF,Review RV "
+                + "WHERE PF.registeredUser=:registeredUser "
+                + "AND CAST(RV.finishedReviewDateTime AS timestamp) BETWEEN :currentDateTime AND RV.finishedReviewDateTime "
+                + "AND RV MEMBER OF PF.reviews")
+                .setParameter("registeredUser",registeredUser)
+                .setParameter("currentDateTime",currentDateTime);
+        List<Survey> userSurveys=query.getResultList();
+        if(userSurveys.isEmpty())return null;
+        List<Review> userReviewedSurveys=queryUserReviews.getResultList();
+        if(userReviewedSurveys.isEmpty())return userSurveys;
+        userReviewedSurveys.forEach((userReview) -> {
+            if(userSurveys.contains(userReview.getSurvey())){
+                userSurveys.remove(userReview.getSurvey());
+            }
+        });
+        return userSurveys;
     }
     
     /**
