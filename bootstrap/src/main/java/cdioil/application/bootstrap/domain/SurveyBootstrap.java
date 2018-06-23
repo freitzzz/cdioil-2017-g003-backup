@@ -125,7 +125,7 @@ public class SurveyBootstrap {
         UsersGroup usersGroup = new UsersGroup(manager);
         usersGroup.addUser(registeredUser);
         survey = new TargetedSurvey(surveyItems,
-                new TimePeriod(LocalDateTime.now(), LocalDateTime.of(2099,Month.JULY,31,15,55)), usersGroup);
+                new TimePeriod(LocalDateTime.now(), LocalDateTime.of(2099,Month.JULY,30,15,55)), usersGroup);
         survey.changeState(SurveyState.ACTIVE);
         survey.addQuestion(firstQuestion);
         survey.addQuestion(secondQuestion);
@@ -136,10 +136,6 @@ public class SurveyBootstrap {
         survey.setNextQuestion(firstQuestion, thirdQuestion,
                 firstQuestion.getOptionList().get(1), 0); //false
         surveyRepository.add(survey);
-        for(int i=0;i<50;i++){
-            surveyRepository.add(createDummyTargetSurvey(registeredUser,manager));
-        }
-        
         surveyRepository.add(createCookieSurvey());
         
         Review r = new Review(survey);         

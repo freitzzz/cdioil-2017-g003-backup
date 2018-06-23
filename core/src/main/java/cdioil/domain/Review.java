@@ -100,7 +100,8 @@ public class Review implements Serializable {
     /**
      * LocalDateTime with the date time where the review was finished
      */
-    private LocalDateTime finishedReviewDateTime;
+    //NO SONAR COMMENT BELOW IS DUE TO LOCALDATETIME NOT BEING ABLE TO BE PERSITED WITH JPA 2.1
+    private LocalDateTime finishedReviewDateTime;//NOSONAR
     /**
      * Empty constructor of class Review for JPA.
      */

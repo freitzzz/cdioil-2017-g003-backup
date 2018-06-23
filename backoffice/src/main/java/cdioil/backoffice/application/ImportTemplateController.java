@@ -107,7 +107,7 @@ public class ImportTemplateController {
                 } else if (itemType == SurveyItemType.PRODUCT) {
 
                     for (String sku : itemIdentifiers) {
-
+                        
                         Product p = productRepo.getProductBySKU(sku);
 
                         if (p == null) {
