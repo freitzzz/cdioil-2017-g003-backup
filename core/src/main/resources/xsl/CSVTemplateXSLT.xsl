@@ -16,15 +16,15 @@
 		Template Information
 		Template title:;<xsl:value-of select= "@name"/>
 		;<!-- Semicolon for Excel spacing -->
+		<xsl:apply-templates/>
+	</xsl:template>
+
+	<xsl:template match = "Questions">
 		Questions:
-		<xsl:for-each select = "./*">
-			<xsl:apply-templates select = "BinaryQuestion | QuantitativeQuestion | MultipleChoiceQuestion">
+		<xsl:for-each select = "BinaryQuestion | QuantitativeQuestion | MultipleChoiceQuestion">
+			<xsl:apply-templates select = ".">
 			;<!-- Semicolon for Excel spacing -->
 			</xsl:apply-templates>
-		</xsl:for-each>
-		QuestionScript
-		<xsl:for-each select = "./*">
-			<xsl:apply-templates select = "Question"/>
 		</xsl:for-each>
 	</xsl:template>
 
@@ -47,6 +47,21 @@
 		</xsl:for-each>
 	</xsl:template>
 
+	<xsl:template match = "SurveyItems">
+		SurveyItems
+		<xsl:for-each select = "Category | Product">
+			<xsl:apply-templates select = "."/>
+		</xsl:for-each>
+	</xsl:template>
+	
+	<xsl:template match = "Category">
+	;Category;path;<xsl:value-of select = "@path"/>;
+	</xsl:template>
+	
+	<xsl:template match = "Product">
+	;Product;sku;<xsl:value-of select = "@sku"/>;
+	</xsl:template>
+	
 	<xsl:template match = "Question">
 	;QuestionID;<xsl:value-of select = "@questionID"/>
 		<xsl:if test = "OnReply">
@@ -57,6 +72,13 @@
 	<xsl:template match = "OnReply">
 	;OnReply;option<xsl:value-of select = "@option"/>
 		<xsl:apply-templates select = "Question"/>
+	</xsl:template>
+
+	<xsl:template match = "QuestionScript">
+		QuestionScript
+		<xsl:for-each select = "Question">
+			<xsl:apply-templates select = "."/>
+		</xsl:for-each>	
 	</xsl:template>
 
 </xsl:stylesheet>
