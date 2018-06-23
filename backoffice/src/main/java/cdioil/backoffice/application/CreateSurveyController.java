@@ -368,7 +368,7 @@ public class CreateSurveyController {
 
             } else if (questionDTO.getType().equals("prodQuestion")) {
                 Product questionProd =
-                        productRepo.getProductBySKU(new SKU(questionDTO.getSurveyItemID()));
+                        productRepo.getProductBySKU(questionDTO.getSurveyItemID());
 
                 B:
                 for (Question questionInProd :

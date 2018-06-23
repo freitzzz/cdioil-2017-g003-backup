@@ -1,7 +1,6 @@
 package cdioil.persistence;
 
 import cdioil.domain.Product;
-import cdioil.domain.SKU;
 import java.util.List;
 
 /**
@@ -24,8 +23,8 @@ public interface ProductRepository {
 
     /**
      * Retrieves a product with a given SKU.
-     * @param sku product's stock keeping unit (SKU)
+     * @param skuCode product's stock keeping unit (SKU) code
      * @return product with a matching SKU
      */
-    public Product getProductBySKU(SKU sku);
+    public Product getProductBySKU(String skuCode);
 }
